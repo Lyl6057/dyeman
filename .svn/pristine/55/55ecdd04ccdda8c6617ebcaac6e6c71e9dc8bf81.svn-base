@@ -1,0 +1,2 @@
+webpackJsonp([52],{"0Xxy":function(e,n){},OFZC:function(e,n,t){"use strict";Object.defineProperty(n,"__esModule",{value:!0});var r={render:function(){var e=this.$createElement,n=this._self._c||e;return n("div",{attrs:{id:"name"}},[n("view-container",[this._v("订单库存查询 ")])],1)},staticRenderFns:[]};var o=t("VU/8")({name:"",components:{},data:function(){return{}},watch:{},methods:{},created:function(){},mounted:function(){},beforeDestroy:function(){}},r,!1,function(e){t("0Xxy")},null,null);n.default=o.exports}});
+//# sourceMappingURL=52.0c5b824f3c5544f8167f.js.map
