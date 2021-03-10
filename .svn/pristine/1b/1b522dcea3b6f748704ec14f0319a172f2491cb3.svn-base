@@ -1,0 +1,771 @@
+<template>
+  <div id="choice">
+    <el-dialog
+      id="choiceDlg"
+      :visible.sync="choiceV"
+      :width="dlgWidth"
+      top="10vh"
+      :fullscreen="dlgWidth === '100%'"
+      append-to-body
+      :close-on-click-modal="false"
+      :before-close="closeBefore"
+      v-if="choiceV"
+    >
+      <!-- <view-container :title="choiceTle"> -->
+      <el-tabs type="border-card" v-model="tab" @tab-click="handleClick">
+        <el-tab-pane name="tab1" :label="choiceTle">
+          <div class="btnList">
+            <el-button type="primary" @click="choice">选择</el-button>
+            <el-button
+              type="primary"
+              @click="query"
+              v-if="choiceTle != '送货单明细'"
+              >查询</el-button
+            >
+            <el-button type="warning" @click="close">关闭</el-button>
+          </div>
+          <div class="formBox">
+            <avue-form ref="form" :option="choiceF" v-model="form"></avue-form>
+          </div>
+          <div class="crudBox">
+            <avue-crud
+              ref="crud"
+              :option="choiceC"
+              :data="crud"
+              :page.sync="page"
+              v-loading="loading"
+              @on-load="query"
+              @row-dblclick="handleRowDBLClick"
+              @current-row-change="cellClick"
+              @selection-change="selectionChange"
+            >
+            </avue-crud>
+          </div>
+        </el-tab-pane>
+        <el-tab-pane name="tab2" label="行政" v-if="choiceTle === '五金'">
+          <div class="btnList">
+            <el-button type="primary" @click="choice">选择</el-button>
+            <el-button type="primary" @click="query">查询</el-button>
+            <el-button type="warning" @click="close">关闭</el-button>
+          </div>
+          <div class="formBox">
+            <avue-form ref="form" :option="choiceF" v-model="form"></avue-form>
+          </div>
+          <div class="crudBox" style="margin-top: -15px">
+            <avue-crud
+              ref="crud"
+              :option="choiceC"
+              :data="crud"
+              :page.sync="page"
+              v-loading="loading"
+              @on-load="query"
+              @row-dblclick="handleRowDBLClick"
+              @current-row-change="cellClick"
+            >
+            </avue-crud>
+          </div>
+        </el-tab-pane>
+      </el-tabs>
+      <!-- </view-container> -->
+    </el-dialog>
+  </div>
+</template>
+<script>
+import {
+  IncomingYarnF,
+  IncomingYarnC,
+  getIncoming,
+  getPurDelivery,
+  PurDeliveryF,
+  PurDeliveryC,
+  getPurYarnsPo,
+  PurYarnsPoF,
+  PurYarnsPoC,
+  getBasYarnsData,
+  BasYarnsDataF,
+  BasYarnsDataC,
+  getBasCustomer,
+  BasCustomerF,
+  BasCustomerC,
+  getWhseRetratyarn,
+  WhseRetratyarnF,
+  WhseRetratyarnC,
+  getEmbryogenesis,
+  EmbryogenesisF,
+  EmbryogenesisC,
+  getBasCalico,
+  BasCalicoF,
+  BasCalicoC,
+  getPurCalicoPo,
+  PurCalicoPoF,
+  PurCalicoPoC,
+  WhseCalicoPackBarCodeF,
+  WhseCalicoPackBarCodeC,
+  getWhseCalicoPackBarCode,
+  getWhseFinishedclothpackBarcode,
+  getSalPoDtlaList,
+  SalPoDtlaListF,
+  SalPoDtlaListC,
+  BasChemicalmatC,
+  BasChemicalmatF,
+  getBasChemicalmat,
+  getPurChemicalpo,
+  PurChemicalpoF,
+  PurChemicalpoC,
+  getWhseChemicalPlan,
+  WhseChemicalPlanF,
+  WhseChemicalPlanC,
+  purDelisingleDtla,
+  //來輔料登记
+  getSalIncomacc,
+  SalIncomaccF,
+  SalIncomaccC,
+  //來輔料登记明細
+  IncomingYarnDtlC,
+  IncomingYarnDtlF,
+  getIncomingDtl,
+  // 生產輔料
+  getProductivesupplies,
+  ProductivesuppliesF,
+  ProductivesuppliesC,
+  // 生產輔料採購單
+  PurMaterialspoF,
+  PurMaterialspoC,
+  getPurMaterialspo,
+  // 外厂輔料配料计划
+  getWhseRetmaterialsPlan,
+  WhseRetmaterialsPlanF,
+  WhseRetmaterialsPlanC,
+  // 外厂胚布配料计划
+  getWhseMaterialoutPlan,
+  WhseMaterialoutPlanF,
+  WhseMaterialoutPlanC,
+  // 外厂纱线配料计划
+  getWhseRetyarninoutPlan,
+  WhseRetyarninoutPlanC,
+  WhseRetyarninoutPlanF,
+  // 五金採購單
+  getPurHardwarepo,
+  PurHardwarepoF,
+  PurHardwarepoC,
+  // 五金
+  getBasHardwarearticles,
+  BasHardwarearticlesF,
+  BasHardwarearticlesC,
+  // 行政
+  getBasAdsuppliesarticles,
+  BasAdsuppliesarticlesF,
+  BasAdsuppliesarticlesC,
+  // 货运计划
+  getshipPlan,
+  shipPlanF,
+  shipPlanC,
+  // 订单胚布资料
+  getOrderPb,
+  OrderPbF,
+  OrderPbC,
+  // 胚布疋号资料
+  getPbDltb,
+  PbDltbF,
+  PbDltbC,
+  // 胚布入仓明细
+  getPbDetali,
+  PbDetaliF,
+  PbDetaliC,
+  // 员工
+  getPersonList,
+  PersonF,
+  PersonC,
+  // 送货单明细
+  getPurDeliveryDetail,
+  PurDeliveryDF,
+  PurDeliveryDC,
+  // 染化料
+  getPurChemicalpo2,
+  // 申购单
+  getSingle,
+  SingleF,
+  SingleC,
+  // 申购单明细
+  getSingleDtl,
+  SingleDtlF,
+  SingleDtlC,
+  // 申请领用单
+  getPurApplication,
+  purApplicationF,
+  purApplicationC,
+  // 申请领用单明细
+  getPurApplicationDtl,
+  purApplicationDtlF,
+  purApplicationDtlC,
+  //  色号信息
+  getSalColor,
+  SalColorF,
+  SalColorC,
+  //  色号资料
+  getTapcolor,
+  TapcolorF,
+  TapcolorC,
+  // 五金/行政入仓明细
+  getCalicoinDtla,
+  calicoinDtlaF,
+  calicoinDtlaC,
+  //  貨位
+  getLoc,
+  locC,
+  locF,
+  // 指令單明細
+  instructDtlF,
+  instructDtlC,
+  getInstructDtl,
+} from "@/const/whse";
+export default {
+  name: "",
+  components: {},
+  props: {
+    choiceV: Boolean,
+    choiceTle: String,
+    dlgWidth: String,
+    choiceQ: Object,
+  },
+  data() {
+    return {
+      page: {
+        pageSize: 10,
+        currentPage: 1,
+        total: 0,
+      },
+      loading: false,
+      choiceC: {},
+      crud: [],
+      choiceF: {},
+      form: {},
+      pick: {},
+      getData: Function,
+      tab: "tab1",
+      chooseData: [],
+    };
+  },
+  watch: {},
+  methods: {
+    // 查询
+    query() {
+      this.loading = true;
+      if (this.choiceTle === "选择胚布入仓明细") {
+        this.$set(this.choiceC.column[2], "hide", false);
+      }
+      if (this.choiceTle === "选择五金/行政入仓明细") {
+        this.choiceF.column[0].dicData = this.choiceF.column[0].dicData.filter(
+          (val) => {
+            return (
+              val.label.indexOf("五金") != -1 || val.label.indexOf("行政") != -1
+            );
+          }
+        );
+        this.$set(this.choiceC.column[2], "hide", false);
+        this.$set(
+          this.form,
+          "materialType",
+          this.choiceF.column[0].dicData[0].value
+        );
+      }
+      if (this.choiceTle === "选择生产辅料入仓明细") {
+        this.choiceF.column[0].dicData = this.choiceF.column[0].dicData.filter(
+          (val) => {
+            return val.label.indexOf("生產輔料") != -1;
+          }
+        );
+        this.$set(
+          this.form,
+          "materialType",
+          this.choiceF.column[0].dicData[0].value
+        );
+        this.$set(this.choiceC.column[2], "hide", false);
+      }
+      //   if (
+      //   this.choiceTle === "选择五金/行政入仓明细" ||
+      //   this.choiceTle === "选择生产辅料入仓明细"
+      // ) {
+      //   this.form.materialType = this.choiceF.column[0].dicData[0].value;
+      // }
+      for (var key in this.form) {
+        if (this.form[key] === "") {
+          delete this.form[key];
+        }
+      }
+      for (var key in this.choiceQ) {
+        if (this.choiceQ[key] === "") {
+          delete this.choiceQ[key];
+        }
+      }
+      if (this.choiceTle === "染化料申购採購單") {
+        this.form.type = 5;
+      }
+      if (this.choiceTle === "送貨單") {
+        purDelisingleDtla({ purNo: this.choiceQ.purNo }).then((res) => {
+          if (res.data.length === 0) {
+            this.loading = false;
+            return;
+          }
+          this.form.purDeliveryoid = res.data[0].purDeliveryFk;
+          this.getData(
+            Object.assign({
+              rows: this.page.pageSize,
+              start: this.page.currentPage,
+              purDeliveryoid: this.form.purDeliveryoid,
+            })
+          ).then((res) => {
+            let records = res.data;
+            this.page.total = records.total;
+            this.crud = records.records;
+
+            if (this.crud === undefined || this.crud.length === 0) {
+              this.loading = false;
+              return;
+            }
+            this.crud.forEach((item, index) => {
+              item.index = index + 1;
+              if (index === this.crud.length - 1) {
+                setTimeout(() => {
+                  this.loading = false;
+                }, 200);
+              }
+            });
+          });
+        });
+      } else {
+        this.getData(
+          Object.assign(this.form, this.choiceQ, {
+            rows: this.page.pageSize,
+            start: this.page.currentPage,
+          })
+        ).then((res) => {
+          let records = res.data;
+          this.page.total = records.total;
+          this.crud = records.records;
+
+          if (this.crud === undefined || this.crud.length === 0) {
+            if (
+              this.choiceTle === "选择胚布入仓明细" ||
+              this.choiceTle === "选择五金/行政入仓明细" ||
+              this.choiceTle === "选择生产辅料入仓明细"
+            ) {
+              this.$set(this.choiceC.column[2], "hide", true);
+            }
+            this.loading = false;
+            return;
+          }
+          this.crud.forEach((item, index) => {
+            if (this.choiceTle === "選擇貨位") {
+              item.warehouseName = item.warehouseId;
+            }
+            if (this.choiceTle === "胚布訂單") {
+              item.poNo = item.salPoFk;
+            }
+            if (
+              this.choiceTle === "染化料来料" ||
+              this.choiceTle === "來胚登記"
+            ) {
+              item.custName = item.custCode;
+            }
+            if (this.choiceTle === "來輔料登記") {
+              item.custName = item.custNo;
+            }
+            if (this.choiceTle === "胚布編碼") {
+              // item.clothNo = item.basEmbryoidclothFk;
+              item.clothName = item.basEmbryoidclothFk;
+            }
+            if (this.choiceTle === "客戶編號") {
+              item.custId = item.custCode;
+            }
+            if (this.choiceTle === "選擇紗線採購單") {
+              item.purNo = item.poNo;
+            }
+            if (this.choiceTle === "選擇退紗通知單") {
+              item.yarnsName = item.yarnsId;
+            }
+            if (
+              this.choiceTle === "选择五金/行政入仓明细" ||
+              this.choiceTle === "选择生产辅料入仓明细"
+            ) {
+              item.materialName = item.materialNum;
+              item.model = item.materialNum;
+              item.itemspec = item.materialNum;
+            }
+            if (this.choiceTle === "紗線系統編號") {
+              if (item.functions != null && item.functions != "") {
+                let data = [];
+                item.functions.split(";").forEach((items, index) => {
+                  data[index] = items;
+                });
+                item.functions = data;
+              }
+            }
+            if (this.choiceTle === "选择胚布疋号资料") {
+              item.prodNo = item.whseCalicoinDtlaFk;
+            }
+            if (this.choiceTle === "送货单明细") {
+              item.materialNum = item.purSinglepoDtlFk;
+              item.chinName = item.purSinglepoDtlFk;
+            }
+            this.$nextTick(() => {
+              if (
+                this.choiceTle === "选择胚布入仓明细" ||
+                this.choiceTle === "选择五金/行政入仓明细" ||
+                this.choiceTle === "选择生产辅料入仓明细"
+              ) {
+                this.$set(this.choiceC.column[2], "hide", true);
+              }
+            });
+            item.index = index + 1;
+            if (index === this.crud.length - 1) {
+              setTimeout(() => {
+                this.loading = false;
+              }, 200);
+            }
+          });
+        });
+      }
+    },
+    // 选择
+    choice() {
+      this.$emit(
+        "choiceData",
+        this.chooseData.length > 0 ? this.chooseData : this.pick
+      );
+    },
+    closeBefore(done) {
+      for (var key in this.pick) {
+        delete this.pick[key];
+      }
+      this.$emit("close");
+    },
+    close() {
+      for (var key in this.pick) {
+        delete this.pick[key];
+      }
+      this.$emit("close");
+    },
+    handleRowDBLClick(val) {
+      // this.pick = val;
+      // this.choice();
+    },
+    cellClick(val) {
+      this.pick = val;
+    },
+    handleClick(tab) {
+      if (this.choiceTle === "五金") {
+        if (this.tab === "tab1") {
+          this.choiceC = BasHardwarearticlesC;
+          this.choiceF = BasHardwarearticlesF;
+          this.getData = getBasHardwarearticles;
+        } else {
+          this.choiceC = BasAdsuppliesarticlesC;
+          this.choiceF = BasAdsuppliesarticlesF;
+          this.getData = getBasAdsuppliesarticles;
+        }
+        this.query();
+      } else {
+        return;
+      }
+    },
+    selectionChange(val) {
+      this.chooseData = val;
+    },
+  },
+  created() {
+    switch (this.choiceTle) {
+      case "選擇指令單明細":
+        this.choiceC = instructDtlC;
+        this.choiceF = instructDtlF;
+        this.getData = getInstructDtl;
+        break;
+      case "選擇來紗登記":
+        this.choiceC = IncomingYarnC;
+        this.choiceF = IncomingYarnF;
+        this.getData = getIncoming;
+        break;
+      case "選擇來紗登記明細":
+        this.choiceC = IncomingYarnDtlC;
+        this.choiceF = IncomingYarnDtlF;
+        this.getData = getIncomingDtl;
+        break;
+      case "來胚登記":
+        this.choiceC = EmbryogenesisC;
+        this.choiceF = EmbryogenesisF;
+        this.getData = getEmbryogenesis;
+        break;
+      case "來輔料登記":
+        this.choiceC = SalIncomaccC;
+        this.choiceF = SalIncomaccF;
+        this.getData = getSalIncomacc;
+        break;
+
+      case "染化料来料":
+        this.choiceC = EmbryogenesisC;
+        this.choiceF = EmbryogenesisF;
+        this.getData = getEmbryogenesis;
+        break;
+      case "選擇紗線系統編號":
+        this.choiceC = BasYarnsDataC;
+        this.choiceF = BasYarnsDataF;
+        this.getData = getBasYarnsData;
+        break;
+      case "胚布編碼":
+        this.choiceC = BasCalicoC;
+        this.choiceF = BasCalicoF;
+        this.getData = getBasCalico;
+        break;
+      case "选择化工原料":
+        this.choiceC = BasChemicalmatC;
+        this.choiceF = BasChemicalmatF;
+        this.getData = getBasChemicalmat;
+        break;
+      case "五金":
+        this.choiceC = BasHardwarearticlesC;
+        this.choiceF = BasHardwarearticlesF;
+        this.getData = getBasHardwarearticles;
+        break;
+      case "行政":
+        this.choiceC = BasAdsuppliesarticlesC;
+        this.choiceF = BasAdsuppliesarticlesF;
+        this.getData = getBasAdsuppliesarticles;
+        break;
+      case "生產輔料":
+        this.choiceC = ProductivesuppliesC;
+        this.choiceF = ProductivesuppliesF;
+        this.getData = getProductivesupplies;
+        break;
+      case "胚布採購單":
+        this.choiceC = PurCalicoPoC;
+        this.choiceF = PurCalicoPoF;
+        this.getData = getPurCalicoPo;
+        break;
+      case "染化料申购採購單":
+        this.choiceC = PurChemicalpoC;
+        this.choiceF = PurChemicalpoF;
+        this.getData = getPurChemicalpo;
+        break;
+      case "染化料採購單":
+        this.choiceC = PurChemicalpoC;
+        this.choiceF = PurChemicalpoF;
+        this.getData = getPurChemicalpo2;
+        break;
+      case "生產輔料採購單":
+        this.choiceC = PurMaterialspoC;
+        this.choiceF = PurMaterialspoF;
+        this.getData = getPurMaterialspo;
+        break;
+      case "五金採購單":
+        this.choiceC = PurHardwarepoC;
+        this.choiceF = PurHardwarepoF;
+        this.getData = getPurHardwarepo;
+        break;
+      case "胚布貨物包":
+        this.choiceC = WhseCalicoPackBarCodeC;
+        this.choiceF = WhseCalicoPackBarCodeF;
+        this.getData = getWhseCalicoPackBarCode;
+        this.choiceF.column[1].display = true;
+        this.choiceF.column[2].display = false;
+        this.choiceC.column[2].hide = true;
+        this.choiceC.column[3].hide = false;
+        this.choiceC.column[7].label = "码卡号";
+        break;
+      case "成品布貨物包":
+        this.choiceC = WhseCalicoPackBarCodeC;
+        this.choiceF = WhseCalicoPackBarCodeF;
+        this.getData = getWhseFinishedclothpackBarcode;
+        this.choiceF.column[1].display = false;
+        this.choiceF.column[2].display = true;
+        this.choiceC.column[3].hide = true;
+        this.choiceC.column[2].hide = false;
+        this.choiceC.column[7].label = "布票号";
+        break;
+      case "胚布訂單":
+        this.choiceC = SalPoDtlaListC;
+        this.choiceF = SalPoDtlaListF;
+        this.getData = getSalPoDtlaList;
+        break;
+      case "選擇送貨單":
+        this.choiceC = PurDeliveryC;
+        this.choiceF = PurDeliveryF;
+        this.getData = getPurDelivery;
+        break;
+      case "選擇紗線採購單":
+        this.choiceC = PurYarnsPoC;
+        this.choiceF = PurYarnsPoF;
+        this.getData = getPurYarnsPo;
+        break;
+
+      case "选择客戶":
+        this.choiceC = BasCustomerC;
+        this.choiceF = BasCustomerF;
+        this.getData = getBasCustomer;
+        break;
+      case "選擇退紗通知單":
+        this.choiceC = WhseRetratyarnC;
+        this.choiceF = WhseRetratyarnF;
+        this.getData = getWhseRetratyarn;
+        break;
+      case "外厂染化料配料计划":
+        this.choiceC = WhseChemicalPlanC;
+        this.choiceF = WhseChemicalPlanF;
+        this.getData = getWhseChemicalPlan;
+        break;
+      case "外厂輔料配料计划":
+        this.choiceC = WhseRetmaterialsPlanC;
+        this.choiceF = WhseRetmaterialsPlanF;
+        this.getData = getWhseRetmaterialsPlan;
+        break;
+      case "外厂胚布配料计划":
+        this.choiceC = WhseMaterialoutPlanC;
+        this.choiceF = WhseMaterialoutPlanF;
+        this.getData = getWhseMaterialoutPlan;
+        break;
+      case "選擇外厂纱线配料计划":
+        this.choiceC = WhseRetyarninoutPlanC;
+        this.choiceF = WhseRetyarninoutPlanF;
+        this.getData = getWhseRetyarninoutPlan;
+        break;
+      case "货运计划编号":
+        this.choiceC = shipPlanC;
+        this.choiceF = shipPlanF;
+        this.getData = getshipPlan;
+        break;
+      case "选择订单胚布资料":
+        this.choiceC = OrderPbC;
+        this.choiceF = OrderPbF;
+        this.getData = getOrderPb;
+        break;
+      case "选择胚布疋号资料":
+        this.choiceC = PbDltbC;
+        this.choiceF = PbDltbF;
+        this.getData = getPbDltb;
+        break;
+      case "选择胚布入仓明细":
+        this.choiceC = PbDetaliC;
+        this.choiceF = PbDetaliF;
+        this.getData = getPbDetali;
+        break;
+      case "选择五金/行政入仓明细":
+        this.choiceC = calicoinDtlaC;
+        this.choiceF = calicoinDtlaF;
+        this.getData = getCalicoinDtla;
+        break;
+      case "选择生产辅料入仓明细":
+        this.choiceC = calicoinDtlaC;
+        this.choiceF = calicoinDtlaF;
+        this.getData = getCalicoinDtla;
+        break;
+      case "领用人":
+        this.choiceC = PersonC;
+        this.choiceF = PersonF;
+        this.getData = getPersonList;
+        break;
+      case "送货单明细":
+        this.choiceC = PurDeliveryDC;
+        this.choiceF = PurDeliveryDF;
+        this.getData = getPurDeliveryDetail;
+        break;
+      case "申购单":
+        this.choiceC = SingleC;
+        this.choiceF = SingleF;
+        this.getData = getSingle;
+        break;
+      case "申购单资料":
+        this.choiceC = SingleDtlC;
+        this.choiceF = SingleDtlF;
+        this.getData = getSingleDtl;
+        break;
+      case "选择申请领用单":
+        this.choiceC = purApplicationC;
+        this.choiceF = purApplicationF;
+        this.getData = getPurApplication;
+        this.choiceF.column[0].dicData = this.choiceF.column[0].dicData.filter(
+          (val) => {
+            return val.label === "五金用品" || val.label === "行政用品";
+          }
+        );
+        this.form.applyCategory = this.choiceF.column[0].dicData[0].value;
+        break;
+      case "选择申请领用单明细":
+        this.choiceC = purApplicationDtlC;
+        this.choiceF = purApplicationDtlF;
+        this.getData = getPurApplicationDtl;
+        break;
+      case "选择色号信息":
+        this.choiceC = SalColorC;
+        this.choiceF = SalColorF;
+        this.getData = getSalColor;
+        break;
+      case "选择色号资料":
+        this.choiceC = TapcolorC;
+        this.choiceF = TapcolorF;
+        this.getData = getTapcolor;
+        break;
+      case "選擇貨位":
+        this.choiceC = locC;
+        this.choiceF = locF;
+        this.getData = getLoc;
+        break;
+      default:
+        break;
+    }
+  },
+  mounted() {},
+  beforeDestroy() {},
+};
+</script>
+<style lang='stylus'>
+#choiceDlg {
+  .el-radio, .el-radio--medium.is-bordered .el-radio__label, .el-radio__label {
+    font-size: 16px;
+    height: 30px;
+  }
+
+  .el-dialog__body {
+    padding: 0 !important;
+  }
+
+  .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item {
+    margin-bottom: 10px;
+  }
+
+  .el-dialog__header {
+    padding: 0px;
+  }
+
+  .el-dialog__headerbtn {
+    top: 5px;
+    color: #000;
+    font-size: 22px;
+    z-index: 999;
+  }
+
+  .formBox {
+    margin-bottom: 0px;
+  }
+
+  // .el-button--mini, .el-button--small {
+  // font-size: 16px;
+  // }
+
+  // .el-button--mini, .el-button--mini.is-round {
+  // padding: 5px 10px;
+  // }
+  .avue-crud__menu {
+    min-height: 0 !important;
+    height: 0 !important;
+  }
+
+  .el-tabs__item {
+    font-size: 18px;
+    line-height: 30px;
+    height: 30px;
+  }
+
+  .el-tag--mini {
+    display: none;
+  }
+}
+</style>
