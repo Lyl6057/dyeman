@@ -119,6 +119,13 @@ import {
   WhseChemicalPlanF,
   WhseChemicalPlanC,
   purDelisingleDtla,
+  // 来原料登记
+  getChemical,
+  chemicalF,
+  chemicalC,
+  getChemicalDtl,
+  chemicalDtlF,
+  chemicalDtlC,
   //來輔料登记
   getSalIncomacc,
   SalIncomaccF,
@@ -408,6 +415,43 @@ export default {
             });
           });
         });
+      } else if (this.choiceTle === "選擇來原料登記明細") {
+        getChemical({
+          rows: 10,
+          start: 1,
+        }).then((res) => {
+          if (res.data.records.length === 0) {
+            this.loading = false;
+          }
+          for (var key in this.form) {
+            if (this.form[key] === "") {
+              delete this.form[key];
+            }
+          }
+          this.getData(
+            Object.assign(this.form, {
+              chemicalIncomaccFk: res.data.records[0].chemicalIncomaccoid,
+              rows: this.page.pageSize,
+              start: this.page.currentPage,
+            })
+          ).then((Res) => {
+            let records = Res.data;
+            this.page.total = records.total;
+            this.crud = records.records;
+            if (this.crud.length === 0) {
+              this.loading = false;
+            }
+            this.crud.forEach((item, index) => {
+              item.index = index + 1;
+              item.bcMatname = item.basChemicalmatFk;
+              if (index === this.crud.length - 1) {
+                setTimeout(() => {
+                  this.loading = false;
+                }, 200);
+              }
+            });
+          });
+        });
       } else {
         this.getData(
           Object.assign(this.form, this.choiceQ, {
@@ -438,7 +482,7 @@ export default {
               item.poNo = item.salPoFk;
             }
             if (
-              this.choiceTle === "染化料来料" ||
+              this.choiceTle === "選擇來料登記" ||
               this.choiceTle === "選擇來胚登記"
             ) {
               item.custName = item.custCode;
@@ -581,10 +625,15 @@ export default {
         this.getData = getSalIncomacc;
         break;
 
-      case "染化料来料":
-        this.choiceC = EmbryogenesisC;
-        this.choiceF = EmbryogenesisF;
-        this.getData = getEmbryogenesis;
+      case "選擇來原料登記":
+        this.choiceC = chemicalC;
+        this.choiceF = chemicalF;
+        this.getData = getChemical;
+        break;
+      case "選擇來原料登記明細":
+        this.choiceC = chemicalDtlC;
+        this.choiceF = chemicalDtlF;
+        this.getData = getChemicalDtl;
         break;
       case "選擇紗線系統編號":
         this.choiceC = BasYarnsDataC;

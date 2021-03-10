@@ -91,6 +91,7 @@ export function rsxkr1F(_this) {
       //   prop: "finStatus",
       //   span: 6,
       //   placeholder: " ",
+      //   disabled: true,
       //   type: "select",
       //   display: _this.hide != '4' && _this.hide != '5' ? true : false,
       //   dicData:
@@ -120,7 +121,7 @@ export function rsxkr2F(_this) {
         placeholder: " ",
         type: "datetime", format: "yyyy-MM-dd",
         valueFormat: "yyyy-MM-dd",
-        disabled: true
+        disabled: false
       },
       {
         label: "入倉類型",

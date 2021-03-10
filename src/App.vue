@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-24 08:12:20
  * @LastEditors: Lyl
- * @LastEditTime: 2021-03-10 09:56:09
+ * @LastEditTime: 2021-03-10 17:18:17
  * @Description: 
 -->
 <template>
@@ -45,8 +45,8 @@ export default {
     //     this.big = true;
     //   }
     // };
-
-    getUcmlUser({ usrLogin: parent.userID }).then((Res) => {
+    // parent.userID
+    getUcmlUser({ usrLogin: "admin" }).then((Res) => {
       // 登錄用戶oid
       // this.$store.dispatch("setUsers", Res.data.ucmlUseroid);
       this.setUsers(Res.data.ucmlUseroid);

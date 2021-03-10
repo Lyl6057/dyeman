@@ -319,9 +319,17 @@ export function delRhlDetali(id) {
 }
 
 // 疋号信息
+export function getRhlPhList(params) {
+  return axios({
+    url: '/api/whseChemicalinDtlb/v1.0/list',
+    method: 'get',
+    params: params
+  })
+}
+
 export function getRhlPh(params) {
   return axios({
-    url: '/api/whseChemicalinDtlb/v1.0/listByPage',
+    url: '/api/whseChemicalinDtlb/v1.0/page',
     method: 'get',
     params: params
   })

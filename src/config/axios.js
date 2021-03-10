@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-23 08:03:49
  * @LastEditors: Lyl
- * @LastEditTime: 2021-03-10 09:53:30
+ * @LastEditTime: 2021-03-10 17:18:36
  * @Description: 
  */
 import axios from 'axios';
@@ -24,9 +24,9 @@ let db = parent.dbID ? parent.dbID.toUpperCase() : 'YGTEST'
 let userId = ""
 
 // parent.userID
-// getUcmlUser({ usrLogin: parent.userID }).then((Res) => { // 登錄用戶oid
-//   userId = Res.data.ucmlUseroid;
-// });
+getUcmlUser({ usrLogin: "admin" }).then((Res) => { // 登錄用戶oid
+  userId = Res.data.ucmlUseroid;
+});
 // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 // axios.defaults.headers.get['Content-Type'] = 'application/x-www-form-urlencoded';
 axios.defaults.headers = {

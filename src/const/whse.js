@@ -13,6 +13,7 @@ let yarnsCollected = getDIC("pur_yarnsCollected")
 let basHardware = getDicT("basHardware", "topcategoryName", "basHardwareoid")
 let basAdsupplies = getDicT("basAdsupplies", "topcategoryName", "basAdsuppliesoid")
 let matUnit = getDIC("bas_matUnit")
+let basChemical = getXDicT("basChemicalmat/v1.0/list")
 
 // 加工指令單明細
 export function getInstructDtl(params) {
@@ -476,6 +477,174 @@ export const EmbryogenesisDtlC = {
     {
       label: "單位",
       prop: "weightUnit",
+      width: 100,
+      align: "right",
+      type: "select",
+      dicData: matUnit,
+    },
+
+  ]
+
+}
+
+
+// 来原料登记
+export function getChemical(params) {
+  return axios({
+    url: '/api/pages',
+    method: 'get',
+    params: params
+  })
+}
+export const chemicalF = {
+  submitBtn: false,
+  emptyBtn: false,
+  labelWidth: 130,
+  menuBtn: false,
+  menu: false,
+  column: [
+    {
+      label: "登记编号",
+      prop: "registerNo",
+      span: 8,
+      placeholder: " ",
+    },
+    {
+      label: "客户",
+      prop: "custNo",
+      span: 8,
+      placeholder: " ",
+      type: "select",
+      dicData: cust1,
+    },
+    {
+      label: "来料日期",
+      prop: "inDate",
+      span: 8,
+      placeholder: " ",
+      type: "datetime",
+      format: "yyyy-MM-dd HH:mm:ss",
+      valueFormat: "yyyy-MM-dd HH:mm:ss",
+    },
+  ]
+
+}
+export const chemicalC = {
+  menu: false,
+  addBtn: false,
+  border: true,
+  highlightCurrentRow: true,
+  height: "calc(100vh - 445px)",
+  refreshBtn: false,
+  columnBtn: false,
+  page: true,
+  column: [
+    {
+      prop: "index",
+      label: "#",
+      width: 50,
+      align: "center",
+    },
+    {
+      label: "登记编号",
+      prop: "registerNo",
+    },
+    // {
+    //   label: "客户编号",
+    //   prop: "custCode",
+    //   type: "select",
+    //   dicData: cust2,
+    // },
+    {
+      label: "客户名称",
+      prop: "custNo",
+      type: "select",
+      dicData: cust1,
+    },
+    {
+      label: "来料日期",
+      prop: "inDate",
+      type: "datetime",
+      align: "center",
+      format: "yyyy-MM-dd HH:mm:ss",
+      valueFormat: "yyyy-MM-dd HH:mm:ss",
+    },
+  ]
+
+}
+
+// 来原料登记明細
+export function getChemicalDtl(params) {
+  return axios({
+    url: '/api/chemicalIncomaccDtl/page',
+    method: 'get',
+    params: params
+  })
+}
+export const chemicalDtlF = {
+  submitBtn: false,
+  emptyBtn: false,
+  labelWidth: 130,
+  menuBtn: false,
+  menu: false,
+  column: [
+    {
+      label: "化工原料編號",
+      prop: "chemicalIncomaccFk",
+      span: 6,
+      placeholder: " ",
+    },
+  ]
+
+}
+export const chemicalDtlC = {
+  menu: false,
+  addBtn: false,
+  border: true,
+  highlightCurrentRow: true,
+  height: "calc(100vh - 200px)",
+  refreshBtn: false,
+  columnBtn: false,
+  selection: true,
+  page: true,
+  column: [
+    {
+      prop: "index",
+      label: "#",
+      width: 50,
+      align: "center",
+    },
+    {
+      label: "化工原料登记編號",
+      prop: "basChemicalmatFk",
+      width: 150,
+      type: "select",
+      props: {
+        label: "bcCode",
+        value: "basChemicalmatoid"
+      },
+      dicData: basChemical
+    },
+    {
+      label: "化工原料名称",
+      prop: "bcMatname",
+      type: "select",
+      props: {
+        label: "bcMatname",
+        value: "basChemicalmatoid"
+      },
+      dicData: basChemical,
+      width: 350
+    },
+    {
+      label: "重量",
+      prop: "incomQty",
+      width: 100,
+      align: "right"
+    },
+    {
+      label: "單位",
+      prop: "chemicalQty",
       width: 100,
       align: "right",
       type: "select",

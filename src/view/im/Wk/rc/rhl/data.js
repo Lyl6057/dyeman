@@ -1,5 +1,6 @@
 import { getDIC, getDicT, getXDicT, postDicT } from '@/config'
 
+let customer = getDicT("basCustomer", "custName", "custCode")
 export function rhl1F(_this) {
   return {
     submitBtn: false,
@@ -17,8 +18,8 @@ export function rhl1F(_this) {
         prop: "yinDate",
         span: 6,
         placeholder: " ",
-        type: "datetime", format: "yyyy-MM-dd HH:mm:ss",
-        valueFormat: "yyyy-MM-dd HH:mm:ss",
+        type: "datetime", format: "yyyy-MM-dd",
+        valueFormat: "yyyy-MM-dd",
       },
 
       {
@@ -88,6 +89,7 @@ export function rhl2F(_this) {
         prop: "yinId",
         span: 6,
         placeholder: " ",
+        disabled: true
 
       },
       {
@@ -97,8 +99,8 @@ export function rhl2F(_this) {
         placeholder: " ",
         type: "datetime",
 
-        format: "yyyy-MM-dd HH:mm:ss",
-        valueFormat: "yyyy-MM-dd HH:mm:ss",
+        format: "yyyy-MM-dd",
+        valueFormat: "yyyy-MM-dd",
       },
       {
         label: "采购单号",
@@ -191,22 +193,30 @@ export function rhl2F(_this) {
         span: 6,
         placeholder: " ",
         display: _this.hide === "1" ? true : false,
-        disabled: false,
+        disabled: !_this.isAdd,
         click: () => {
-          _this.choiceField = "registerNo"
-          _this.choiceV = !_this.choiceV
-          _this.oldData = _this.chooseData
-          _this.choiceTarget = _this.form
-          _this.choiceTle = '染化料来料'
+          if (_this.isAdd) {
+            _this.choiceField = "registerNo"
+            _this.choiceV = !_this.choiceV
+            _this.dlgWidth = "60%";
+            _this.choiceTarget = _this.form
+            _this.choiceTle = '選擇來原料登記'
+          }
         },
+        change: () => {
+          _this.mx = []
+          _this.chooseData = {}
+        }
       },
       {
         label: "客户",
-        prop: "custId",
+        prop: "custName",
         span: 6,
         placeholder: " ",
         display: _this.hide === "1" ? true : false,
-        disabled: true
+        disabled: true,
+        type: "select",
+        dicData: customer,
       },
       {
         label: "检验状态",
@@ -214,7 +224,7 @@ export function rhl2F(_this) {
         span: 6,
         placeholder: " ",
         type: "select",
-        disabled: false,
+        disabled: true,
         display: true,
         dicData:
           getDIC('whse_yinstatus')
@@ -341,7 +351,7 @@ export function rhl1C(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: _this.hide === '5' ? "calc(100vh - 250px)" : "calc(100vh - 285px)",
+    height: _this.hide === '5' ? "calc(100vh - 250px)" : "calc(100vh - 275px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
@@ -384,7 +394,7 @@ export function rhl1C(_this) {
         label: "入仓编号",
         prop: "yinId",
         cell: false,
-        width: 200,
+        width: 160,
         change: (val) => {
           if (val.value === '') {
             _this.iptChange(_this.chooseData);
@@ -407,8 +417,8 @@ export function rhl1C(_this) {
         prop: "yinDate",
         cell: false,
         type: "datetime",
-        format: "yyyy-MM-dd HH:mm:ss",
-        valueFormat: "yyyy-MM-dd HH:mm:ss",
+        format: "yyyy-MM-dd",
+        valueFormat: "yyyy-MM-dd",
         focus: (val) => {
           _this.iptChange(_this.chooseData);
         },
@@ -417,14 +427,14 @@ export function rhl1C(_this) {
             _this.iptChange(_this.chooseData);
           }
         },
-        width: 190,
+        width: 160,
         align: "center",
       },
       {
         label: "来料编号",
         prop: "registerNo",
-        cell: true,
-        width: 200,
+        cell: false,
+        width: 180,
         hide: _this.hide === "1" ? false : true,
         change: (val) => {
           if (val.value === '') {
@@ -445,9 +455,9 @@ export function rhl1C(_this) {
         prop: "custId",
         cell: false,
         hide: _this.hide === "1" ? false : true,
-        width: 150,
+        width: 120,
         type: "select",
-        dicData: getDicT("salEmbryogenesis", "custCode", "registerNo"),
+        dicData: getDicT("", "custNo", "registerNo"),
         // click: (val) => {
         //   _this.choiceV = !_this.choiceV
         //   _this.choiceField = "custId";
@@ -463,9 +473,9 @@ export function rhl1C(_this) {
         prop: "custName",
         cell: false,
         type: "select",
-        dicData: getDicT("basCustomer", "custName", "custCode"),
+        dicData: customer,
         hide: _this.hide === "1" ? false : true,
-        width: 150,
+        width: 280,
         // click: (val) => {
         //   _this.choiceV = !_this.choiceV
         //   _this.choiceField = "custId";
@@ -681,7 +691,7 @@ export function rhl2C(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 325px)",
+    height: "calc(100vh - 315px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
@@ -707,29 +717,16 @@ export function rhl2C(_this) {
         hide: true,
       },
       {
-        label: "染化料编码",
+        label: "化工原料編號",
         prop: "chemicalId",
         cell: false,
-        width: 180,
-        placeholder: "請選擇染化料編碼",
-        click: (val) => {
-          // _this.choiceV = !_this.choiceV
-          // _this.choiceField = "chemicalId";
-          // _this.oldData = _this.chooseData;
-          // _this.choiceTarget = _this.oldData;
-          // _this.choiceTle = "化工原料";
-          _this.iptChange(_this.chooseData);
-
-        },
+        width: 140,
       },
       {
-        label: "染化料名称",
+        label: "化工原料名称",
         prop: "chemicalName",
         cell: false,
-        width: 180,
-        click: (val) => {
-          _this.iptChange(_this.chooseData);
-        },
+        width: 250,
       },
       // {
       //   label: "染化料英文名稱 ",
@@ -793,11 +790,15 @@ export function rhl2C(_this) {
       {
         label: "批号",
         prop: "batchNo",
-        cell: false,
-        width: 220,
-        click: (val) => {
-          _this.iptChange(_this.chooseData);
-        },
+        cell: true,
+        width: 180,
+        change: () => {
+          _this.$nextTick(() => {
+            _this.chooseData.list.forEach((item, index) => {
+              item.batchNo = _this.chooseData.batchNo
+            })
+          })
+        }
       },
       // {
       //   label: "疋号",
@@ -812,15 +813,15 @@ export function rhl2C(_this) {
       {
         label: "重量",
         prop: "weight",
-        cell: false,
+        cell: true,
         width: 100,
         align: "right",
 
       },
       {
-        label: "重量单位",
+        label: "单位",
         prop: "weightUnit",
-        cell: false,
+        cell: true,
         width: 100,
         type: "select",
         dicData: getDIC("bas_matUnit"),
@@ -842,10 +843,10 @@ export function rhl3C(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 325px)",
+    height: "calc(100vh - 278px)",
     refreshBtn: false,
     columnBtn: false,
-    page: true,
+    page: false,
     roykey: "whseChemicalinDtlboid",
     showSummary: true,
     sumColumnList: [
@@ -870,7 +871,7 @@ export function rhl3C(_this) {
       {
         label: "批号",
         prop: "batchNo",
-        cell: true, width: 220,
+        cell: true, width: 180,
         change: (val) => {
           _this.iptPhChange(_this.choosePhData);
         },

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-24 08:12:20
  * @LastEditors: Lyl
- * @LastEditTime: 2021-03-05 16:28:49
+ * @LastEditTime: 2021-03-11 16:25:03
  * @Description: 
 -->
 <template>
@@ -71,9 +71,11 @@ export default {
   },
   watch: {
     inData() {
-      this.$refs.crud.setCurrentRow(this.inData.loc[0] || {});
-      if (this.inData.loc.length === 0) {
-        this.query();
+      if (this.inData.loc) {
+        this.$refs.crud.setCurrentRow(this.inData.loc[0] || {});
+        if (this.inData.loc.length === 0) {
+          this.query();
+        }
       }
     },
   },

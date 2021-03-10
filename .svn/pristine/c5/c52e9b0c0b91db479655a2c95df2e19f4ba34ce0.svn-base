@@ -1,0 +1,69 @@
+@font-face {
+  font-family: '1';
+  src: url('Amaze.ttf');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: '2';
+  src: url('Aucoinextbol.ttf');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: '3';
+  src: url('CIVICBK0.ttf');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: '4';
+  src: url('Imitari.ttf');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: '5';
+  src: url('Aucoinextbol.ttf');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: '6';
+  src: url('estensil.ttf');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: '7';
+  src: url('Fernando.ttf');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: '8';
+  src: url('kanit.ttf');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: '9';
+  src: url('MonoidRetina.ttf');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: '10';
+  src: url('orangejuice.ttf');
+  font-weight: normal;
+  font-style: normal;
+}

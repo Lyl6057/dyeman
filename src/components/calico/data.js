@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-24 08:12:20
  * @LastEditors: Lyl
- * @LastEditTime: 2021-03-09 15:33:18
+ * @LastEditTime: 2021-03-10 17:08:39
  * @Description: 
  */
 import {
@@ -86,7 +86,7 @@ export function loc1C(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 280px)",
+    height: "calc(100vh - 275px)",
     refreshBtn: false,
     columnBtn: false,
     page: false,
@@ -108,7 +108,7 @@ export function loc1C(_this) {
       label: "批號",
       prop: "batchNo",
       cell: true,
-      width: 160,
+      width: 140,
     },
     {
       label: "疋號",
@@ -121,14 +121,14 @@ export function loc1C(_this) {
       label: "重量",
       prop: "weight",
       cell: true,
-      width: 100,
+      width: 80,
       align: "right",
     },
     {
       label: "單位",
       prop: "weightUnit",
       cell: true,
-      width: 100,
+      width: 80,
       type: "select",
       dicData: getDIC("bas_matUnit"),
     },
@@ -136,7 +136,7 @@ export function loc1C(_this) {
       label: "客人布票号",
       prop: "custTicket",
       cell: true,
-      width: 140,
+      width: 120,
     },
     {
       label: "貨位碼",

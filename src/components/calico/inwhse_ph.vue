@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-24 08:12:20
  * @LastEditors: Lyl
- * @LastEditTime: 2021-03-09 17:40:04
+ * @LastEditTime: 2021-03-10 16:51:25
  * @Description: 
 -->
 <template>
@@ -136,6 +136,7 @@ export default {
           });
           setTimeout(() => {
             this.loc1C.showSummary = true;
+
             this.loading = false;
           }, 200);
         });

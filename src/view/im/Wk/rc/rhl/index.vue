@@ -9,6 +9,12 @@
             @click="add"
             >新增</el-button
           >
+          <el-button
+            type="success"
+            :disabled="Object.keys(chooseData).length === 0"
+            @click="handleRowDBLClick(chooseData)"
+            >修改</el-button
+          >
           <el-button type="danger" @click="del">删除</el-button>
           <!-- <el-button
             type="success"
@@ -189,6 +195,12 @@ export default {
           this.page.total = records.total;
           this.changeList = [];
           this.crud = records.records;
+          this.crud.sort((a, b) => {
+            return (
+              b.yinId.substring(b.yinId.length - 6) -
+              a.yinId.substring(a.yinId.length - 6)
+            );
+          });
           this.crud.forEach((item, index) => {
             item.finStatus = String(item.finStatus);
             item.index = index + 1;
@@ -196,21 +208,11 @@ export default {
             // item.custCode = item.registerNo;
             item.custId = item.registerNo;
             item.suppId = item.purNo;
-            let _this = this;
-            _this.$nextTick(() => {
-              document
-                .getElementsByClassName("el-table__row")
-                [index].addEventListener(
-                  "input",
-                  function () {
-                    _this.iptChange(item);
-                  },
-                  false
-                );
+            this.$nextTick(() => {
               this.$set(item, "custName", item.$custId);
               if (index === this.crud.length - 1) {
                 this.everyThing.mainC.column[11].hide = true;
-                _this.loading = false;
+                this.loading = false;
               }
             });
           });
@@ -349,9 +351,9 @@ export default {
         });
     },
     cellClick(val) {
-      this.oldData.$cellEdit = false;
-      this.$set(val, "$cellEdit", true);
-      this.oldData = val;
+      // this.oldData.$cellEdit = false;
+      // this.$set(val, "$cellEdit", true);
+      // this.oldData = val;
       this.chooseData = val;
     },
     save() {
@@ -399,7 +401,6 @@ export default {
       document.getElementsByClassName("el-dialog__headerbtn")[0].click();
     },
     choiceData(val) {
-      console.log(val);
       if (Object.keys(val).length === 0) {
         this.choiceV = false;
         return;

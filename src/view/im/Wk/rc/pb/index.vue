@@ -3,13 +3,14 @@
     <view-container :title="data.type.split('_')[0]">
       <div class="btnList">
         <el-button type="primary" @click="add">新增</el-button>
-        <el-button type="danger" @click="del">删除</el-button>
         <el-button
           type="success"
-          :disabled="changeList.length === 0"
-          @click="save"
-          >保存</el-button
+          :disabled="Object.keys(chooseData).length === 0"
+          @click="handleRowDBLClick(chooseData)"
+          >修改</el-button
         >
+        <el-button type="danger" @click="del">删除</el-button>
+
         <!-- <el-button type="warning" @click="ruleV = true">編號規則配置</el-button> -->
         <!-- <el-button type="warning" @click="getData">取消</el-button> -->
         <el-button type="primary" @click="getData">查询</el-button>

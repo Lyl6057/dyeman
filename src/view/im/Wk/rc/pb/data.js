@@ -102,7 +102,7 @@ export function rcpb2F(_this) {
         span: 6,
         placeholder: " ",
         type: "datetime",
-        disabled: true, format: "yyyy-MM-dd",
+        disabled: false, format: "yyyy-MM-dd",
         valueFormat: "yyyy-MM-dd",
       },
 
@@ -169,7 +169,7 @@ export function rcpb2F(_this) {
       {
         label: "财务状态",
         prop: "finStatus",
-        display: _this.hide === "1" || _this.hide === "2" ? true : false,
+        display: _this.hide === "2" ? true : false,
         span: 6,
         placeholder: " ",
         type: "select",

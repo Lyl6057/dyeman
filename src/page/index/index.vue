@@ -1,3 +1,10 @@
+<!--
+ * @Author: Lyl
+ * @Date: 2021-03-10 14:20:44
+ * @LastEditors: Lyl
+ * @LastEditTime: 2021-03-10 16:35:16
+ * @Description: 
+-->
 <template>
   <div id="top">
     <el-container>
@@ -5,7 +12,7 @@
         <!-- <el-header>
           <top />
         </el-header> -->
-        <!-- <div style="height: 50px; background: #000"></div> -->
+        <div style="height: 50px; background: #000"></div>
         <el-main class="mainBox">
           <el-row>
             <el-col :span="left">

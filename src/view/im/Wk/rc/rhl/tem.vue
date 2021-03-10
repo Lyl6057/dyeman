@@ -5,7 +5,9 @@
         <!-- <el-button type="primary" @click="getDetail">查询</el-button> -->
         <!-- <el-button type="primary" @click="add">新增</el-button>
         <el-button type="danger" @click="del">删除</el-button> -->
-        <el-button type="success" @click="saveAll">保存</el-button>
+        <el-button type="success" @click="saveAll" :loading="loading"
+          >保存</el-button
+        >
         <!-- <el-button type="warning" @click="getDetail">取消</el-button> -->
         <el-button type="warning" @click="close">关闭</el-button>
       </div>
@@ -13,9 +15,9 @@
         <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
       </div>
       <el-row class="crudBox">
-        <el-col :span="15">
+        <el-col :span="14">
           <view-container :title="datas.type.split('_')[0] + '入库明细'">
-            <div style="margin-bottom: 2px" class="btnList">
+            <div class="btnList">
               <el-button
                 type="primary"
                 @click="add"
@@ -30,44 +32,64 @@
                 >保存</el-button
               > -->
             </div>
-            <avue-crud
-              ref="mx"
-              :option="mxOp"
-              v-loading="loading"
-              :data="mx"
-              :page.sync="page"
-              @current-row-change="cellClick"
-              @on-load="getDetail"
-            ></avue-crud> </view-container
+            <div class="crudBox">
+              <avue-crud
+                ref="dlgcrud"
+                :option="mxOp"
+                v-loading="loading"
+                :data="mx"
+                :page.sync="page"
+                @current-row-change="cellClick"
+                @on-load="getDetail"
+              ></avue-crud></div></view-container
         ></el-col>
-        <el-col :span="9">
-          <view-container :title="datas.type.split('_')[0] + '入库批号资料'">
-            <div style="margin-bottom: 2px" class="btnList">
-              <el-button type="primary" @click="addPh">新增</el-button>
-              <el-button type="danger" @click="delPh">删除</el-button>
-              <!-- <el-button
+        <el-col :span="10">
+          <el-tabs v-model="tabs" type="border-card">
+            <el-tab-pane
+              :label="datas.type.split('_')[0] + '入库批号资料'"
+              name="ph"
+            >
+              <div class="btnList">
+                <el-button type="primary" @click="addPh">新增</el-button>
+                <el-button type="danger" @click="delPh">删除</el-button>
+                <!-- <el-button
                 type="success"
                 :disabled="changePhList.length === 0"
                 @click="savePh"
                 >保存</el-button
               > -->
-            </div>
-            <avue-crud
-              ref="count"
-              id="count"
-              v-loading="ctLoading"
-              :option="countOp"
-              :page.sync="phPage"
-              :data="chooseData.list"
-              @current-row-change="cellPhClick"
-            ></avue-crud> </view-container
-        ></el-col>
+              </div>
+              <div class="crudBox">
+                <avue-crud
+                  ref="count"
+                  id="count"
+                  v-loading="ctLoading"
+                  :option="countOp"
+                  :data="chooseData.list"
+                  @current-row-change="cellPhClick"
+                ></avue-crud>
+              </div>
+            </el-tab-pane>
+            <el-tab-pane
+              :label="datas.type.split('_')[0] + '入库明細貨位'"
+              name="loc"
+            >
+              <loction
+                ref="loc"
+                :inData="chooseData"
+                :api="everyThing"
+                :form="form"
+                type="化工原料"
+              ></loction>
+            </el-tab-pane>
+          </el-tabs>
+        </el-col>
       </el-row>
       <choice
         :choiceV="choiceV"
         :choiceTle="choiceTle"
         :choiceQ="choiceQ"
-        dlgWidth="60%"
+        :dlgWidth="dlgWidth"
         @choiceData="choiceData"
         @close="choiceV = false"
         v-if="choiceV"
@@ -83,13 +105,18 @@ import {
   addRhlDetali,
   updateRhlDetali,
   delRhlDetali,
-  getRhlPh,
+  getRhlPhList,
   addRhlPhDetali,
   updateRhlPhDetali,
   delRhlPhDetali,
   addRhl,
   updateRhl,
+  getRhlLoc,
+  addRhlLoc,
+  updateRhlLoc,
+  delRhlLoc,
 } from "@/api/im/Wk/rc";
+import loction from "@/components/location/index";
 export default {
   props: {
     datas: Object,
@@ -101,6 +128,7 @@ export default {
   name: "",
   components: {
     choice: choice,
+    loction: loction,
   },
   data() {
     return {
@@ -136,13 +164,20 @@ export default {
       choiceField: "",
       choiceQ: {},
       modified: false,
+      dlgWidth: "60%",
+      tabs: "ph",
+      everyThing: {
+        getLoc: getRhlLoc,
+        delLoc: delRhlLoc,
+        addLoc: addRhlLoc,
+        updateLoc: updateRhlLoc,
+      },
     };
   },
   watch: {},
   methods: {
     getDetail() {
       if (this.isAdd) {
-        console.log(this.addList);
         this.addList.forEach((item, i) => {
           item.index = 1 + i;
           item.chemicalId = item.materialNum;
@@ -181,7 +216,7 @@ export default {
           if (index === this.mx.length - 1) {
             this.mxOp.showSummary = true;
             setTimeout(() => {
-              this.$refs.mx.setCurrentRow(this.mx[0]);
+              this.$refs.dlgcrud.setCurrentRow(this.mx[0] || {});
               this.loading = false;
             }, 200);
           }
@@ -210,15 +245,13 @@ export default {
       this.ctLoading = true;
       this.countOp.showSummary = false;
       this.changePhList = [];
-      getRhlPh({
+      getRhlPhList({
         whseChemicalinDtlaFk: this.chooseData.whseChemicalinDtlaoid,
         rows: this.phPage.pageSize,
         start: this.phPage.currentPage,
       }).then((res) => {
-        let records = res.data;
-        this.phPage.total = records.total;
-        let data = [];
-        data = records.records;
+        console.log(":wwww");
+        let data = res.data;
         if (data.length === 0) {
           this.ctLoading = false;
         }
@@ -253,21 +286,21 @@ export default {
       //   // this.choiceQ.pu
       //   return;
       // }
-      if (Object.keys(this.oldData).length > 0) {
-        this.oldData.$cellEdit = false;
-      }
+      // if (Object.keys(this.oldData).length > 0) {
+      //   this.oldData.$cellEdit = false;
+      // }
       this.choiceV = !this.choiceV;
-      this.choiceField = "chemicalId";
-      this.oldData = this.chooseData;
-      this.choiceTarget = this.oldData;
-      this.choiceTle = "选择化工原料";
+      // this.choiceField = "chemicalId";
+      this.dlgWidth = "100%";
+      this.choiceTarget = {};
+      this.choiceTle = "選擇來原料登記明細";
       // this.mx.push({
       //   index: this.mx.length + 1,
       //   $cellEdit: true,
       //   custId: this.detail.custName,
       //   whseChemicalinFk: this.detail.whseChemicalinoid,
       // });
-      // this.$refs.mx.setCurrentRow(this.mx[this.mx.length - 1]);
+      // this.$refs.dlgcrud.setCurrentRow(this.mx[this.mx.length - 1]);
       // this.iptChange(this.mx[this.mx.length - 1]);
       // this.oldData = this.mx[this.mx.length - 1];
     },
@@ -290,8 +323,9 @@ export default {
       this.$refs.count.setCurrentRow(
         this.chooseData.list[this.chooseData.list.length - 1]
       );
-      this.iptPhChange(this.chooseData.list[this.chooseData.list.length - 1]);
-      this.oldPhData = this.chooseData.list[this.chooseData.list.length - 1];
+      this.$nextTick(() => {
+        this.$toTableLow(this, "count");
+      });
       this.ctLoading = false;
     },
     iptChange(val) {
@@ -331,19 +365,15 @@ export default {
       }
     },
     del() {
+      console.log(this.chooseData);
       if (Object.keys(this.chooseData).length === 0) {
         this.$tip.error("请选择要删除的数据!");
         return;
       }
       if (!this.chooseData.whseChemicalinDtlaoid) {
         this.mx.splice(this.chooseData.index - 1, 1);
-        for (let i = 0; i < this.changeList.length; i++) {
-          if (this.changeList[i].index === this.chooseData.index) {
-            this.changeList.splice(i, 1);
-            this.$refs.mx.setCurrentRow(this.mx[this.mx.length - 1] || {});
-            return;
-          }
-        }
+        this.$refs.dlgcrud.setCurrentRow(this.mx[this.mx.length - 1] || {});
+        return;
       }
       this.$tip
         .cofirm(
@@ -430,9 +460,11 @@ export default {
       this.chooseData = val;
       if (!this.chooseData.list) {
         this.chooseData.list = [];
+        this.getPh();
       }
-      this.getPh();
-      console.log("cell");
+      if (!this.chooseData.loc) {
+        this.chooseData.loc = [];
+      }
     },
     cellPhClick(val) {
       this.oldPhData.$cellEdit = false;
@@ -482,10 +514,11 @@ export default {
       this.$tip.success("保存成功!");
     },
     saveAll() {
-      if (this.form.purNo === "" || this.form.deliNo === "") {
-        this.$tip.warning("入库资料中的采购/送货单号不能为空!");
-        return;
-      }
+      this.loading = true;
+      // if (this.form.purNo === "" || this.form.deliNo === "") {
+      //   this.$tip.warning("入库资料中的采购/送货单号不能为空!");
+      //   return;
+      // }
       if (this.form.yinId === "" || this.form.yinDate === null) {
         this.$tip.warning("入库资料中的入仓编号/日期不能为空!");
         return;
@@ -505,17 +538,20 @@ export default {
           }
         }
       }
+
       this.modified = true;
       if (this.form.whseChemicalinoid) {
         updateRhl(this.form).then((res) => {
           if (this.mx.length === 0) {
             this.$tip.success("保存成功!");
+            this.loading = false;
           }
           // this.$emit("getData");
           let addDtla = (item, i) => {
             return new Promise((resolve, reject) => {
               let data = JSON.parse(JSON.stringify(item));
               data.list = [];
+              data.loc = [];
               if (item.whseChemicalinDtlaoid) {
                 resolve();
                 // 修改
@@ -546,8 +582,20 @@ export default {
                   }
                 });
               }
+              if (this.mx[i].loc) {
+                this.mx[i].loc.forEach((item) => {
+                  item.whseChemicalinDtlaFk = this.mx[i].whseChemicalinDtlaoid;
+                  if (!item.whseChemicalinDtlcoid) {
+                    addRhlLoc(item).then((res) => {
+                      item.whseChemicalinDtlcoid = res.data.data;
+                    });
+                  } else {
+                    updateRhlLoc(item).then((res) => {});
+                  }
+                });
+              }
               if (i === this.mx.length - 1) {
-                this.changeList = [];
+                this.loading = false;
                 // this.getDetail();
                 this.$tip.success("保存成功!");
               }
@@ -557,6 +605,7 @@ export default {
       } else {
         addRhl(this.form).then((res) => {
           if (this.mx.length === 0) {
+            this.loading = false;
             this.$tip.success("保存成功!");
           }
           this.form.whseChemicalinoid = res.data.data;
@@ -565,6 +614,7 @@ export default {
             return new Promise((resolve, reject) => {
               let data = JSON.parse(JSON.stringify(item));
               data.list = [];
+              data.loc = [];
               if (item.whseChemicalinDtlaoid) {
                 resolve();
                 // 修改
@@ -595,8 +645,20 @@ export default {
                   }
                 });
               }
+              if (this.mx[i].loc) {
+                this.mx[i].loc.forEach((item) => {
+                  item.whseChemicalinDtlaFk = this.mx[i].whseChemicalinDtlaoid;
+                  if (!item.whseChemicalinDtlcoid) {
+                    addRhlLoc(item).then((res) => {
+                      item.whseChemicalinDtlcoid = res.data.data;
+                    });
+                  } else {
+                    updateRhlLoc(item).then((res) => {});
+                  }
+                });
+              }
               if (i === this.mx.length - 1) {
-                this.changeList = [];
+                this.loading = false;
                 // this.getDetail();
                 this.$tip.success("保存成功!");
               }
@@ -610,7 +672,34 @@ export default {
         this.choiceV = false;
         return;
       }
-      if (this.choiceTle === "送货单明细") {
+      if (this.choiceTle === "選擇來原料登記") {
+        this.choiceTarget.custName = val.$custNo;
+        this.choiceTarget.custCode = val.custNo;
+      } else if (this.choiceTle === "選擇來原料登記明細") {
+        val.forEach((item, i) => {
+          item.weight = item.incomQty;
+          item.weightUnit = item.chemicalQty;
+          item.chemicalId = item.$basChemicalmatFk;
+          item.chemicalName = item.$bcMatname;
+          item.loc = [];
+          item.list = [
+            {
+              batchNo: item.batchNo,
+              index: 1,
+              weight: item.weight,
+              weightUnit: item.weightUnit,
+            },
+          ];
+        });
+        this.mx = this.$unique(this.mx.concat(val), "chemicalId");
+        this.page.total = this.mx.length;
+        this.mx.forEach((item, i) => {
+          item.index = i + 1;
+          if (i === this.mx.length - 1) {
+            this.$refs.dlgcrud.setCurrentRow(this.mx[this.mx.length - 1]);
+          }
+        });
+      } else if (this.choiceTle === "送货单明细") {
         val.forEach((item, i) => {
           item.chemicalId = item.$materialNum;
           item.chemicalName = item.$chinName;
@@ -626,7 +715,7 @@ export default {
         this.mx.forEach((item, i) => {
           item.index = i + 1;
         });
-        this.$refs.mx.setCurrentRow(this.mx[this.mx.length - 1]);
+        this.$refs.dlgcrud.setCurrentRow(this.mx[this.mx.length - 1]);
       } else if (this.choiceTle === "化工原料") {
         val.forEach((item, i) => {
           item.chemicalId = item.bcCode;
@@ -640,11 +729,8 @@ export default {
         this.mx.forEach((item, i) => {
           item.index = i + 1;
         });
-        this.$refs.mx.setCurrentRow(this.mx[this.mx.length - 1]);
+        this.$refs.dlgcrud.setCurrentRow(this.mx[this.mx.length - 1]);
       } else {
-        this.oldData.$cellEdit = false;
-
-        this.choiceTarget[this.choiceField] = val[this.choiceField];
         if (
           this.choiceTle == "染化料申购採購單" ||
           this.choiceTle == "染化料採購單"
@@ -659,13 +745,14 @@ export default {
         }
 
         this.choiceTarget.chemicalId = val.bcCode;
-
         this.choiceTarget.chemicalName = val.bcMatname;
         this.choiceTarget.bcMatengname = val.bcMatengname;
         this.choiceTarget.bcColor = val.bcColor;
         this.choiceTarget.bcForce = val.bcForce;
-        this.oldData.$cellEdit = true;
       }
+      this.oldData.$cellEdit = false;
+      this.choiceTarget[this.choiceField] = val[this.choiceField];
+      this.oldData.$cellEdit = true;
 
       // for (var key in val) {
       //   delete val[key];
@@ -686,6 +773,7 @@ export default {
   mounted() {
     this.form = this.detail;
     this.getDetail();
+    this.form.sysCreatedby = this.$store.state.userOid;
   },
   beforeDestroy() {},
 };
