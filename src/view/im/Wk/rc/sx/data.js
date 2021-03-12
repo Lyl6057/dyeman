@@ -194,6 +194,13 @@ export function rsxkr2F(_this) {
         },
         change: () => {
           _this.mx = []
+          _this.chooseData = {}
+          _this.$nextTick(() => {
+            if (_this.form.registerNo === '') {
+              _this.form.custName = ""
+            }
+          })
+
         }
       },
       {

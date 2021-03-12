@@ -446,7 +446,7 @@ export function delYlDtla(id) {
 // 疋号信息
 export function getYlDtlb(params) {
   return axios({
-    url: '/api/whseDyesalInDtlb/page',
+    url: '/api/whseDyesalInDtlb',
     method: 'get',
     params: params
   })

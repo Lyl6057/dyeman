@@ -68,6 +68,12 @@ export default [
         name: "rc_rhl",
         component: resolve => require(["@/view/im/Wk/rc/rhl/index"], resolve),
       },
+      //  染化料入仓
+      {
+        path: "/rc_yl",
+        name: "rc_yl",
+        component: resolve => require(["@/view/im/Wk/rc/yl/index"], resolve),
+      },
       //  生产辅料入仓
       {
         path: "/rc_scfl",

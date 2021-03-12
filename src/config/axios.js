@@ -2,12 +2,10 @@
  * @Author: Lyl
  * @Date: 2021-01-23 08:03:49
  * @LastEditors: Lyl
- * @LastEditTime: 2021-03-10 17:18:36
+ * @LastEditTime: 2021-03-12 14:54:24
  * @Description: 
  */
 import axios from 'axios';
-import { getUcmlUser } from "@/const/whse.js";
-import { getDIC, getDicT, getNowTime, unique, toTableLow } from '../config/index'
 import {
   Message
 } from 'element-ui'
@@ -22,11 +20,14 @@ axios.defaults.validateStatus = function (status) {
 // axios.defaults.withCredentials = true; // 跨域请求，允许保存cookie
 let db = parent.dbID ? parent.dbID.toUpperCase() : 'YGTEST'
 let userId = ""
-
 // parent.userID
-getUcmlUser({ usrLogin: "admin" }).then((Res) => { // 登錄用戶oid
-  userId = Res.data.ucmlUseroid;
-});
+// axios({
+//   url: '/api/ucmlUser',
+//   method: 'get',
+//   params: { usrLogin: parent.userID }
+// }).then((Res) => { // 登錄用戶oid
+//   userId = Res.data.ucmlUseroid;
+// });
 // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 // axios.defaults.headers.get['Content-Type'] = 'application/x-www-form-urlencoded';
 axios.defaults.headers = {

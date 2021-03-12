@@ -2,41 +2,41 @@
 export const menuData = _this => {
   return {
     menu: [
-      {
-        menuName: _this.$t("menuData.ProductionName"),
-        index: "0",
-        icon: "el-icon-edit-outline",
-        children: [
-          {
-            menuName: _this.$t("menuData.Production[1].name"),
-            index: "/ProWorkflowInfo"
-          },
-          // {
-          //   menuName: _this.$t('menuData.Production[0].name'),
-          //   index: "/ProSchedule"
-          // },
-          // {
-          //   menuName: "生产排期明细",
-          //   index: "/ProScheduleDetail"
-          // },
-          {
-            menuName: _this.$t("menuData.Production[4].name"),
-            index: "/proSalSchedule"
-          },
-          {
-            menuName: _this.$t("menuData.Production[0].name"),
-            index: "/EquipmentSchedule"
-          },
-          {
-            menuName: _this.$t("menuData.Production[6].name"),
-            index: "/EquipmentType"
-          },
-          {
-            menuName: "打印",
-            index: "/print"
-          }
-        ]
-      },
+      // {
+      //   menuName: _this.$t("menuData.ProductionName"),
+      //   index: "0",
+      //   icon: "el-icon-edit-outline",
+      //   children: [
+      //     {
+      //       menuName: _this.$t("menuData.Production[1].name"),
+      //       index: "/ProWorkflowInfo"
+      //     },
+      //     // {
+      //     //   menuName: _this.$t('menuData.Production[0].name'),
+      //     //   index: "/ProSchedule"
+      //     // },
+      //     // {
+      //     //   menuName: "生产排期明细",
+      //     //   index: "/ProScheduleDetail"
+      //     // },
+      //     {
+      //       menuName: _this.$t("menuData.Production[4].name"),
+      //       index: "/proSalSchedule"
+      //     },
+      //     {
+      //       menuName: _this.$t("menuData.Production[0].name"),
+      //       index: "/EquipmentSchedule"
+      //     },
+      //     {
+      //       menuName: _this.$t("menuData.Production[6].name"),
+      //       index: "/EquipmentType"
+      //     },
+      //     {
+      //       menuName: "打印",
+      //       index: "/print"
+      //     }
+      //   ]
+      // },
       // 产品管理
       // {
       //   menuName: '产品管理',
@@ -323,99 +323,99 @@ export const menuData = _this => {
       //   ]
       // },
       //  化验室
-      {
-        menuName: '化驗室',
-        index: "10",
-        icon: "el-icon-s-order",
-        name: "Laboratory",
-        children: [
-          {
-            menuName: '1.色号资料',
-            index: "/colorMng"
-          },
-          {
-            menuName: '2.色号打办记录',
-            index: "/colorPlay"
-          },
-          // {
-          //   menuName: '复办送板',
-          //   index: "/Arrange"
-          // },
-          {
-            menuName: "3." + _this.$t("menuData.Laboratory[3].name"),
-            index: "/Arran"
-          },
-          // {
-          //   menuName: "4." + _this.$t("menuData.Laboratory[2].name"),
-          //   index: "/Big"
-          // },
+      // {
+      //   menuName: '化驗室',
+      //   index: "10",
+      //   icon: "el-icon-s-order",
+      //   name: "Laboratory",
+      //   children: [
+      //     {
+      //       menuName: '1.色号资料',
+      //       index: "/colorMng"
+      //     },
+      //     {
+      //       menuName: '2.色号打办记录',
+      //       index: "/colorPlay"
+      //     },
+      //     // {
+      //     //   menuName: '复办送板',
+      //     //   index: "/Arrange"
+      //     // },
+      //     {
+      //       menuName: "3." + _this.$t("menuData.Laboratory[3].name"),
+      //       index: "/Arran"
+      //     },
+      //     // {
+      //     //   menuName: "4." + _this.$t("menuData.Laboratory[2].name"),
+      //     //   index: "/Big"
+      //     // },
 
-          {
-            menuName: "4.成品检验报告",
-            index: "/FabricOrder"
-          },
-          {
-            menuName: "5.工序检验报告",
-            index: "/FabricProcess"
-          },
-          {
-            menuName: "6.胚布检验报告",
-            index: "/dyeFabric"
-          },
-          {
-            menuName: "7.染化料检验报告",
-            index: "/dyeStuff"
-          },
-          {
-            menuName: "8.纱线检验报告",
-            index: "/dyeYarn"
-          },
-          {
-            menuName: "9.检验报告附件",
-            index: "/reportAccry"
-          }
-        ]
-      },
-      // //品质
-      {
-        menuName: _this.$t("caidan.pzgl"),
-        index: "6",
-        icon: "el-icon-set-up",
-        children: [
-          {
-            menuName: "1." + _this.$t("caidan.zlxmgl"),
-            index: "/quaLity"
-          },
-          {
-            menuName: "2." + _this.$t("caidan.hysjc"),
-            index: "/Laboratory"
-          },
-          {
-            menuName: "3." + _this.$t("caidan.psgl"),
-            index: "/Color"
-          },
-          {
-            menuName: "4." + _this.$t("caidan.jctj"),
-            index: "/Count"
-          },
-          // {
-          //   menuName: "测试页面",
-          //   index: "/demo"
-          // },
-          // {
-          //   menuName: "5.决策树",
-          //   index: "/Policy"
-          // },
-          {
-            menuName: "5.质量检验标准",
-            index: "/Standard"
-          },
-          {
-            menuName: "6.检测项目基础定义",
-            index: "/testItem"
-          }
-        ]
-      },
+      //     {
+      //       menuName: "4.成品检验报告",
+      //       index: "/FabricOrder"
+      //     },
+      //     {
+      //       menuName: "5.工序检验报告",
+      //       index: "/FabricProcess"
+      //     },
+      //     {
+      //       menuName: "6.胚布检验报告",
+      //       index: "/dyeFabric"
+      //     },
+      //     {
+      //       menuName: "7.染化料检验报告",
+      //       index: "/dyeStuff"
+      //     },
+      //     {
+      //       menuName: "8.纱线检验报告",
+      //       index: "/dyeYarn"
+      //     },
+      //     {
+      //       menuName: "9.检验报告附件",
+      //       index: "/reportAccry"
+      //     }
+      //   ]
+      // },
+      // // //品质
+      // {
+      //   menuName: _this.$t("caidan.pzgl"),
+      //   index: "6",
+      //   icon: "el-icon-set-up",
+      //   children: [
+      //     {
+      //       menuName: "1." + _this.$t("caidan.zlxmgl"),
+      //       index: "/quaLity"
+      //     },
+      //     {
+      //       menuName: "2." + _this.$t("caidan.hysjc"),
+      //       index: "/Laboratory"
+      //     },
+      //     {
+      //       menuName: "3." + _this.$t("caidan.psgl"),
+      //       index: "/Color"
+      //     },
+      //     {
+      //       menuName: "4." + _this.$t("caidan.jctj"),
+      //       index: "/Count"
+      //     },
+      //     // {
+      //     //   menuName: "测试页面",
+      //     //   index: "/demo"
+      //     // },
+      //     // {
+      //     //   menuName: "5.决策树",
+      //     //   index: "/Policy"
+      //     // },
+      //     {
+      //       menuName: "5.质量检验标准",
+      //       index: "/Standard"
+      //     },
+      //     {
+      //       menuName: "6.检测项目基础定义",
+      //       index: "/testItem"
+      //     }
+      //   ]
+      // },
     ]
   };
 

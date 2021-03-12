@@ -14,6 +14,7 @@ let basHardware = getDicT("basHardware", "topcategoryName", "basHardwareoid")
 let basAdsupplies = getDicT("basAdsupplies", "topcategoryName", "basAdsuppliesoid")
 let matUnit = getDIC("bas_matUnit")
 let basChemical = getXDicT("basChemicalmat/v1.0/list")
+let basPigment = getXDicT("basPigment")
 
 // 加工指令單明細
 export function getInstructDtl(params) {
@@ -590,9 +591,15 @@ export const chemicalDtlF = {
   column: [
     {
       label: "化工原料編號",
-      prop: "chemicalIncomaccFk",
+      prop: "basChemicalmatFk",
       span: 6,
       placeholder: " ",
+      type: "tree",
+      props: {
+        label: "bcCode",
+        value: "basChemicalmatoid"
+      },
+      dicData: basChemical
     },
   ]
 
@@ -634,6 +641,179 @@ export const chemicalDtlC = {
         value: "basChemicalmatoid"
       },
       dicData: basChemical,
+      width: 350
+    },
+    {
+      label: "重量",
+      prop: "incomQty",
+      width: 100,
+      align: "right"
+    },
+    {
+      label: "單位",
+      prop: "chemicalQty",
+      width: 100,
+      align: "right",
+      type: "select",
+      dicData: matUnit,
+    },
+
+  ]
+
+}
+
+// 来顏料登记
+export function getPigment(params) {
+  return axios({
+    url: '/api/pigmentIncomacc/page',
+    method: 'get',
+    params: params
+  })
+}
+export const pigmentF = {
+  submitBtn: false,
+  emptyBtn: false,
+  labelWidth: 130,
+  menuBtn: false,
+  menu: false,
+  column: [
+    {
+      label: "登记编号",
+      prop: "registerNo",
+      span: 8,
+      placeholder: " ",
+    },
+    {
+      label: "客户",
+      prop: "custNo",
+      span: 8,
+      placeholder: " ",
+      type: "select",
+      dicData: cust1,
+    },
+    {
+      label: "来料日期",
+      prop: "inDate",
+      span: 8,
+      placeholder: " ",
+      type: "datetime",
+      format: "yyyy-MM-dd HH:mm:ss",
+      valueFormat: "yyyy-MM-dd HH:mm:ss",
+    },
+  ]
+
+}
+export const pigmentC = {
+  menu: false,
+  addBtn: false,
+  border: true,
+  highlightCurrentRow: true,
+  height: "calc(100vh - 445px)",
+  refreshBtn: false,
+  columnBtn: false,
+  page: true,
+  column: [
+    {
+      prop: "index",
+      label: "#",
+      width: 50,
+      align: "center",
+    },
+    {
+      label: "登记编号",
+      prop: "registerNo",
+    },
+    // {
+    //   label: "客户编号",
+    //   prop: "custCode",
+    //   type: "select",
+    //   dicData: cust2,
+    // },
+    {
+      label: "客户名称",
+      prop: "custNo",
+      type: "select",
+      dicData: cust1,
+    },
+    {
+      label: "来料日期",
+      prop: "inDate",
+      type: "datetime",
+      align: "center",
+      format: "yyyy-MM-dd HH:mm:ss",
+      valueFormat: "yyyy-MM-dd HH:mm:ss",
+    },
+  ]
+
+}
+
+// 来顏料登记明細
+export function getPigmentDtl(params) {
+  return axios({
+    url: '/api/pigmentIncomaccDtl/page',
+    method: 'get',
+    params: params
+  })
+}
+export const pigmentDtlF = {
+  submitBtn: false,
+  emptyBtn: false,
+  labelWidth: 130,
+  menuBtn: false,
+  menu: false,
+  column: [
+    {
+      label: "顏料編號",
+      prop: "chemicalIncomaccFk",
+      span: 6,
+      placeholder: " ",
+      type: "tree",
+      props: {
+        label: "bcCode",
+        value: "basPigmentnewoid"
+      },
+      dicData: basPigment
+    },
+  ]
+
+}
+export const pigmentDtlC = {
+  menu: false,
+  addBtn: false,
+  border: true,
+  highlightCurrentRow: true,
+  height: "calc(100vh - 200px)",
+  refreshBtn: false,
+  columnBtn: false,
+  selection: true,
+  page: true,
+  column: [
+    {
+      prop: "index",
+      label: "#",
+      width: 50,
+      align: "center",
+    },
+    {
+      label: "顏料登记編號",
+      prop: "basPigmentnewFk",
+      width: 150,
+      type: "select",
+      props: {
+        label: "bcCode",
+        value: "basPigmentnewoid"
+      },
+      dicData: basPigment
+    },
+    {
+      label: "顏料名称",
+      prop: "cnnamelong",
+      type: "select",
+      props: {
+        label: "cnnamelong",
+        value: "basPigmentnewoid"
+      },
+      dicData: basPigment,
       width: 350
     },
     {

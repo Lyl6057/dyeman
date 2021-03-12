@@ -346,9 +346,9 @@ export default {
 
             {
               click: () => {
-                this.toView("rc_rhl", "客人来料_1");
+                this.toView("rc_rhl", "客人来原料_1");
               },
-              title: "客人来料",
+              title: "客人来原料",
               icon: "el-icon-user-solid",
               color: "#409EFF",
               // content: "客人来化工原料入库看板",
@@ -390,6 +390,15 @@ export default {
               title: "颜料入库",
               icon: "yx-icf-cailiaogongcheng",
               color: "#606266",
+            },
+            {
+              click: () => {
+                this.toView("rc_yl", "客人来顏料_1");
+              },
+              title: "客人来顏料",
+              icon: "el-icon-user-solid",
+              color: "#409EFF",
+              // content: "客人来化工原料入库看板",
             },
             {
               click: () => {

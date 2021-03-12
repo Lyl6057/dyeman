@@ -246,13 +246,8 @@ export default {
       }
       if (!this.chooseData.whseYarninDtloid) {
         this.mx.splice(this.chooseData.index - 1, 1);
-        for (let i = 0; i < this.changeList.length; i++) {
-          if (this.changeList[i].index === this.chooseData.index) {
-            this.changeList.splice(i, 1);
-            this.$refs.dlgcrud.setCurrentRow(this.mx[this.mx.length - 1]);
-            return;
-          }
-        }
+        this.$refs.dlgcrud.setCurrentRow(this.mx[this.mx.length - 1]);
+        return;
       }
       this.$tip
         .cofirm(

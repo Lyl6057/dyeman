@@ -25,12 +25,6 @@
                 >新增</el-button
               >
               <el-button type="danger" @click="del">删除</el-button>
-              <!-- <el-button
-                type="success"
-                :disabled="changeList.length === 0"
-                @click="save"
-                >保存</el-button
-              > -->
             </div>
             <div class="crudBox">
               <avue-crud
@@ -52,12 +46,6 @@
               <div class="btnList">
                 <el-button type="primary" @click="addPh">新增</el-button>
                 <el-button type="danger" @click="delPh">删除</el-button>
-                <!-- <el-button
-                type="success"
-                :disabled="changePhList.length === 0"
-                @click="savePh"
-                >保存</el-button
-              > -->
               </div>
               <div class="crudBox">
                 <avue-crud
@@ -101,20 +89,20 @@
 import { rhl2C, rhl2F, rhl3C } from "./data";
 import choice from "@/components/choice";
 import {
-  getRhlDetali,
-  addRhlDetali,
-  updateRhlDetali,
-  delRhlDetali,
-  getRhlPhList,
-  addRhlPhDetali,
-  updateRhlPhDetali,
-  delRhlPhDetali,
-  addRhl,
-  updateRhl,
-  getRhlLoc,
-  addRhlLoc,
-  updateRhlLoc,
-  delRhlLoc,
+  getYlDtla,
+  addYlDtla,
+  updateYlDtla,
+  delYlDtla,
+  getYlDtlb,
+  addYlDtlb,
+  updateYlDtlb,
+  delYlDtlb,
+  getYl,
+  updateYl,
+  getYlLoc,
+  addYlLoc,
+  updateYlLoc,
+  delYlLoc,
 } from "@/api/im/Wk/rc";
 import loction from "@/components/location/index";
 export default {
@@ -167,10 +155,10 @@ export default {
       dlgWidth: "60%",
       tabs: "ph",
       everyThing: {
-        getLoc: getRhlLoc,
-        delLoc: delRhlLoc,
-        addLoc: addRhlLoc,
-        updateLoc: updateRhlLoc,
+        getLoc: getYlLoc,
+        delLoc: delYlLoc,
+        addLoc: addYlLoc,
+        updateLoc: updateYlLoc,
       },
     };
   },
@@ -194,7 +182,7 @@ export default {
       this.changePhList = [];
       this.mx = [];
       this.mxOp.showSummary = false;
-      getRhlDetali({
+      getYlDtla({
         rows: this.page.pageSize,
         start: this.page.currentPage,
         whseChemicalinFk: this.detail.whseChemicalinoid,
@@ -245,7 +233,7 @@ export default {
       this.ctLoading = true;
       this.countOp.showSummary = false;
       this.changePhList = [];
-      getRhlPhList({
+      getYlDtlb({
         whseChemicalinDtlaFk: this.chooseData.whseChemicalinDtlaoid,
         rows: this.phPage.pageSize,
         start: this.phPage.currentPage,
@@ -290,14 +278,14 @@ export default {
       // }
       if (this.hide === "1") {
         if (this.form.registerNo === "" || this.form.registerNo === null) {
-          this.$tip.error("請先選擇來原料登記編號!");
+          this.$tip.error("請先選擇來顏料登記編號!");
           return;
         }
         this.choiceV = !this.choiceV;
         // this.choiceField = "chemicalId";
         this.dlgWidth = "100%";
         this.choiceTarget = {};
-        this.choiceTle = "選擇來原料登記明細";
+        this.choiceTle = "選擇來顏料登記明細";
       }
 
       // this.mx.push({
@@ -389,7 +377,7 @@ export default {
           {}
         )
         .then(() => {
-          delRhlDetali(this.chooseData.whseChemicalinDtlaoid)
+          delYlDtla(this.chooseData.whseChemicalinDtlaoid)
             .then((res) => {
               if (res.data.code === 200) {
                 this.$tip.success("删除成功");
@@ -436,7 +424,7 @@ export default {
           {}
         )
         .then(() => {
-          delRhlPhDetali(this.choosePhData.whseChemicalinDtlboid)
+          delYlDtlb(this.choosePhData.whseChemicalinDtlboid)
             .then((res) => {
               if (res.data.code === 200) {
                 this.$tip.success("删除成功");
@@ -477,47 +465,6 @@ export default {
       this.oldPhData = val;
       this.choosePhData = val;
     },
-    save() {
-      for (let i = 0; i < this.changeList.length; i++) {
-        if (
-          !this.changeList[i].chemicalId ||
-          !this.changeList[i].chemicalName
-        ) {
-          this.$tip.error("染化料编码/染化料名称不能为空!");
-          return;
-        }
-      }
-      this.changeList.forEach((item, index) => {
-        item.custId = this.detail.custName;
-        item.whseChemicalinFk = this.detail.whseChemicalinoid;
-        if (item.whseChemicalinDtlaoid) {
-          updateRhlDetali(item).then((res) => {});
-        } else {
-          addRhlDetali(item).then((res) => {});
-        }
-      });
-      this.getDetail();
-      this.$tip.success("保存成功!");
-    },
-    savePh() {
-      for (let i = 0; i < this.changePhList.length; i++) {
-        if (!this.changePhList[i].batchNo) {
-          this.$tip.error("批号不能为空!");
-          this.canLeave = true;
-          return;
-        }
-      }
-      this.changePhList.forEach((item, index) => {
-        if (item.whseChemicalinDtlboid) {
-          updateRhlPhDetali(item).then((res) => {});
-        } else {
-          addRhlPhDetali(item).then((res) => {});
-        }
-      });
-      this.canLeave = false;
-      this.getPh();
-      this.$tip.success("保存成功!");
-    },
     saveAll() {
       this.loading = true;
       // if (this.form.purNo === "" || this.form.deliNo === "") {
@@ -546,7 +493,7 @@ export default {
 
       this.modified = true;
       if (this.form.whseChemicalinoid) {
-        updateRhl(this.form).then((res) => {
+        updateYl(this.form).then((res) => {
           if (this.mx.length === 0) {
             this.$tip.success("保存成功!");
             this.loading = false;
@@ -558,14 +505,14 @@ export default {
               data.list = [];
               data.loc = [];
               if (item.whseChemicalinDtlaoid) {
-                updateRhlDetali(data).then((res) => {
+                updateYlDtla(data).then((res) => {
                   resolve();
                 });
                 // 修改
               } else {
                 // 新增
                 data.whseChemicalinFk = this.detail.whseChemicalinoid;
-                addRhlDetali(data).then((res) => {
+                addYlDtla(data).then((res) => {
                   item.whseChemicalinDtlaoid = res.data.data;
                   resolve();
                 });
@@ -581,11 +528,11 @@ export default {
                 this.mx[i].list.forEach((item) => {
                   item.whseChemicalinDtlaFk = this.mx[i].whseChemicalinDtlaoid;
                   if (!item.whseChemicalinDtlboid) {
-                    addRhlPhDetali(item).then((res) => {
+                    addYlDtlb(item).then((res) => {
                       item.whseChemicalinDtlboid = res.data.data;
                     });
                   } else {
-                    updateRhlPhDetali(item).then((res) => {});
+                    updateYlDtlb(item).then((res) => {});
                   }
                 });
               }
@@ -593,11 +540,11 @@ export default {
                 this.mx[i].loc.forEach((item) => {
                   item.whseChemicalinDtlaFk = this.mx[i].whseChemicalinDtlaoid;
                   if (!item.whseChemicalinDtlcoid) {
-                    addRhlLoc(item).then((res) => {
+                    addYlLoc(item).then((res) => {
                       item.whseChemicalinDtlcoid = res.data.data;
                     });
                   } else {
-                    updateRhlLoc(item).then((res) => {});
+                    updateYlLoc(item).then((res) => {});
                   }
                 });
               }
@@ -610,7 +557,7 @@ export default {
           });
         });
       } else {
-        addRhl(this.form).then((res) => {
+        getYl(this.form).then((res) => {
           if (this.mx.length === 0) {
             this.loading = false;
             this.$tip.success("保存成功!");
@@ -623,14 +570,14 @@ export default {
               data.list = [];
               data.loc = [];
               if (item.whseChemicalinDtlaoid) {
-                updateRhlDetali(data).then((res) => {
+                updateYlDtla(data).then((res) => {
                   resolve();
                 });
                 // 修改
               } else {
                 // 新增
                 data.whseChemicalinFk = this.form.whseChemicalinoid;
-                addRhlDetali(data).then((res) => {
+                addYlDtla(data).then((res) => {
                   item.whseChemicalinDtlaoid = res.data.data;
                   resolve();
                 });
@@ -646,11 +593,11 @@ export default {
                 this.mx[i].list.forEach((item) => {
                   item.whseChemicalinDtlaFk = this.mx[i].whseChemicalinDtlaoid;
                   if (!item.whseChemicalinDtlboid) {
-                    addRhlPhDetali(item).then((res) => {
+                    addYlDtlb(item).then((res) => {
                       item.whseChemicalinDtlboid = res.data.data;
                     });
                   } else {
-                    updateRhlPhDetali(item).then((res) => {});
+                    updateYlDtlb(item).then((res) => {});
                   }
                 });
               }
@@ -658,11 +605,11 @@ export default {
                 this.mx[i].loc.forEach((item) => {
                   item.whseChemicalinDtlaFk = this.mx[i].whseChemicalinDtlaoid;
                   if (!item.whseChemicalinDtlcoid) {
-                    addRhlLoc(item).then((res) => {
+                    addYlLoc(item).then((res) => {
                       item.whseChemicalinDtlcoid = res.data.data;
                     });
                   } else {
-                    updateRhlLoc(item).then((res) => {});
+                    updateYlLoc(item).then((res) => {});
                   }
                 });
               }
@@ -681,15 +628,15 @@ export default {
         this.choiceV = false;
         return;
       }
-      if (this.choiceTle === "選擇來原料登記") {
+      if (this.choiceTle === "選擇來顏料登記") {
         this.choiceTarget.custName = val.$custNo;
         this.choiceTarget.custCode = val.custNo;
-      } else if (this.choiceTle === "選擇來原料登記明細") {
+      } else if (this.choiceTle === "選擇來顏料登記明細") {
         val.forEach((item, i) => {
           item.weight = item.incomQty;
           item.weightUnit = item.chemicalQty;
-          item.chemicalId = item.$basChemicalmatFk;
-          item.chemicalName = item.$bcMatname;
+          item.chemicalId = item.$basPigmentnewFk;
+          item.chemicalName = item.$cnnamelong;
           item.loc = [];
           item.list = [
             {

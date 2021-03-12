@@ -1,3 +1,10 @@
+/*
+ * @Author: Lyl
+ * @Date: 2021-03-10 14:05:06
+ * @LastEditors: Lyl
+ * @LastEditTime: 2021-03-12 11:32:36
+ * @Description: 
+ */
 'use strict'
 // Template version: 1.3.1
 // see http://vuejs-templates.github.io/webpack for documentation.
@@ -11,8 +18,8 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/api': {
-        // target: "http://112.91.115.70:8099/dmps/api/",
-        target: "http://10.0.168.127:8091/api/",
+        target: "http://112.91.115.70:8099/dmps/api/",
+        // target: "http://10.0.168.127:8091/api/",
         changeOrigin: true,
         pathRewrite: {
           '^/api': ''

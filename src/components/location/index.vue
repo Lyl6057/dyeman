@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-24 08:12:20
  * @LastEditors: Lyl
- * @LastEditTime: 2021-03-11 16:25:03
+ * @LastEditTime: 2021-03-12 14:31:55
  * @Description: 
 -->
 <template>
@@ -118,7 +118,7 @@ export default {
       if (this.inData && Object.keys(this.inData).length != 0) {
         this.choiceV = true;
       } else {
-        this.$tip.error("請先選擇明顯");
+        this.$tip.error("請先選擇入倉明細!");
       }
     },
     del() {

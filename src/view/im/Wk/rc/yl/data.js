@@ -109,55 +109,6 @@ export function rhl2F(_this) {
         placeholder: " ",
         disabled: true,
         display: _this.hide != '2' && _this.hide != "8" ? false : true,
-        click: (val) => {
-          // if (_this.mx.length > 0) {
-          //   _this.$tip
-          //     .cofirm(
-          //       "採購單號變化將同時清空對應的明細，是否繼續？",
-          //       _this,
-          //       {}
-          //     )
-          //     .then(() => {
-          //       if (_this.hide === '8') {
-          //         _this.choiceV = !_this.choiceV
-          //         _this.choiceField = "purNo";
-          //         // _this.oldData = _this.chooseData;
-          //         _this.choiceTarget = _this.form;
-          //         _this.choiceTle = "染化料申购採購單";
-          //         // _this.iptChange(_this.chooseData);
-          //       } else {
-          //         _this.choiceV = !_this.choiceV
-          //         _this.choiceField = "purNo";
-          //         // _this.oldData = _this.chooseData;
-          //         _this.choiceTarget = _this.form;
-          //         _this.choiceTle = "染化料採購單";
-          //         // _this.iptChange(_this.chooseData);
-          //       }
-          //     })
-          // } else {
-          //   if (_this.hide === '8') {
-          //     _this.choiceV = !_this.choiceV
-          //     _this.choiceField = "purNo";
-          //     // _this.oldData = _this.chooseData;
-          //     _this.choiceTarget = _this.form;
-          //     _this.choiceTle = "染化料申购採購單";
-          //     // _this.iptChange(_this.chooseData);
-          //   } else {
-          // _this.choiceV = !_this.choiceV
-          // _this.choiceField = "purNo";
-          // // _this.oldData = _this.chooseData;
-          // _this.choiceTarget = _this.form;
-          // _this.choiceTle = "染化料採購單";
-          // _this.iptChange(_this.chooseData);
-          //   }
-          // }
-        },
-        // change: () => {
-        //   if (_this.isAdd) {
-        //     _this.form.deliNo = ''
-        //   }
-
-        // }
       },
       {
         label: "送货单号",
@@ -166,26 +117,6 @@ export function rhl2F(_this) {
         placeholder: " ",
         display: _this.hide != '2' && _this.hide != "8" ? false : true,
         disabled: true,
-        // click: (val) => {
-        //   if (!_this.form.purNo) {
-        //     _this.$tip.error("請先選擇採購單號！")
-        //     return
-        //   }
-        //   _this.choiceV = !_this.choiceV
-        //   // _this.choiceQ.deliType = 'chemical'
-        //   _this.choiceField = "deliNo"
-        //   // _this.oldData = _this.chooseData
-        //   _this.choiceQ.purNo = _this.oldData.purNo
-        //   _this.choiceTarget = _this.form
-        //   _this.choiceTle = '送貨單'
-        // },
-        // change: () => {
-        //   if (_this.isAdd) {
-        //     _this.mx = []
-        //     _this.chooseData = {}
-        //   }
-
-        // }
       },
       {
         label: "来料编号",
@@ -200,18 +131,12 @@ export function rhl2F(_this) {
             _this.choiceV = !_this.choiceV
             _this.dlgWidth = "60%";
             _this.choiceTarget = _this.form
-            _this.choiceTle = '選擇來原料登記'
+            _this.choiceTle = '選擇來顏料登記'
           }
         },
         change: () => {
           _this.mx = []
           _this.chooseData = {}
-          _this.$nextTick(() => {
-            if (_this.form.registerNo === '') {
-              _this.form.custName = ""
-            }
-          })
-
         }
       },
       {
@@ -244,14 +169,6 @@ export function rhl2F(_this) {
         display: _this.hide === "5" ? true : false,
         type: "select",
         dicData: getDicT("vWhseChemicalPlan", "refName", "refCode"),
-        // click: () => {
-        //   _this.choiceField = "factoryId"
-        //   _this.choiceV = !_this.choiceV
-        //   _this.oldData = _this.chooseData
-        //   _this.choiceTarget = _this.form
-        //   _this.choiceTle = '外厂染化料配料计划',
-        //     _this.iptChange(_this.chooseData);
-        // },
       },
       {
         label: "操作员",
@@ -363,11 +280,6 @@ export function rhl1C(_this) {
     page: true,
     column: [
       {
-        label: "染化料入仓OID",
-        prop: "whseChemicalinoid",
-        hide: true,
-      },
-      {
         label: "#",
         prop: "index",
         width: 50,
@@ -380,14 +292,6 @@ export function rhl1C(_this) {
         type: "datetime",
         format: "yyyy-MM-dd HH:mm:ss",
         valueFormat: "yyyy-MM-dd HH:mm:ss",
-        focus: (val) => {
-          _this.iptChange(_this.chooseData);
-        },
-        change: (val) => {
-          if (val.value === '') {
-            _this.iptChange(_this.chooseData);
-          }
-        },
         align: "center",
       },
 
@@ -401,11 +305,6 @@ export function rhl1C(_this) {
         prop: "yinId",
         cell: false,
         width: 160,
-        change: (val) => {
-          if (val.value === '') {
-            _this.iptChange(_this.chooseData);
-          }
-        },
       },
       {
         label: "入仓类型",
@@ -413,10 +312,7 @@ export function rhl1C(_this) {
         cell: false,
         width: 100,
         type: "select",
-        dicData: getDIC('Whse_CalicoType'),
-        change: (val) => {
-          _this.iptChange(_this.chooseData);
-        },
+        dicData: getDIC('Whse_DyesType'),
       },
       {
         label: "入仓日期",
@@ -425,14 +321,6 @@ export function rhl1C(_this) {
         type: "datetime",
         format: "yyyy-MM-dd",
         valueFormat: "yyyy-MM-dd",
-        focus: (val) => {
-          _this.iptChange(_this.chooseData);
-        },
-        change: (val) => {
-          if (val.value === '') {
-            _this.iptChange(_this.chooseData);
-          }
-        },
         width: 160,
         align: "center",
       },
@@ -442,19 +330,7 @@ export function rhl1C(_this) {
         cell: false,
         width: 180,
         hide: _this.hide === "1" ? false : true,
-        change: (val) => {
-          if (val.value === '') {
-            _this.iptChange(_this.chooseData);
-          }
-        },
         placeholder: "請選擇来料编号",
-        // click: () => {
-        //   _this.choiceField = "registerNo"
-        //   _this.choiceV = !_this.choiceV
-        //   _this.oldData = _this.chooseData
-        //   _this.choiceTarget = _this.oldData
-        //   _this.choiceTle = '染化料来料'
-        // },
       },
       {
         label: "客戶編號",
@@ -464,15 +340,6 @@ export function rhl1C(_this) {
         width: 120,
         type: "select",
         dicData: getDicT("", "custNo", "registerNo"),
-        // click: (val) => {
-        //   _this.choiceV = !_this.choiceV
-        //   _this.choiceField = "custId";
-        //   _this.oldData = _this.chooseData;
-        //   _this.choiceTarget = _this.oldData;
-        //   _this.choiceTle = "客戶編號";
-        //   _this.iptChange(_this.chooseData);
-        // },
-        // placeholder: "請選擇客戶編號"
       },
       {
         label: "客戶名称",
@@ -482,15 +349,6 @@ export function rhl1C(_this) {
         dicData: customer,
         hide: _this.hide === "1" ? false : true,
         width: 280,
-        // click: (val) => {
-        //   _this.choiceV = !_this.choiceV
-        //   _this.choiceField = "custId";
-        //   _this.oldData = _this.chooseData;
-        //   _this.choiceTarget = _this.oldData;
-        //   _this.choiceTle = "客戶編號";
-        //   _this.iptChange(_this.chooseData);
-        // },
-        // placeholder: "請選擇客戶編號"
       },
       {
         label: "采购单号",
@@ -498,29 +356,6 @@ export function rhl1C(_this) {
         cell: false,
         hide: _this.hide === "2" || _this.hide === "8" ? false : true,
         width: 180,
-        change: (val) => {
-          if (val.value === '') {
-            _this.iptChange(_this.chooseData);
-          }
-        },
-        click: (val) => {
-          // if (_this.hide === '8') {
-          //   _this.choiceV = !_this.choiceV
-          //   _this.choiceField = "purNo";
-          //   _this.oldData = _this.chooseData;
-          //   _this.choiceTarget = _this.oldData;
-          //   _this.choiceTle = "染化料申购採購單";
-          //   _this.iptChange(_this.chooseData);
-          // } else {
-          //   _this.choiceV = !_this.choiceV
-          //   _this.choiceField = "purNo";
-          //   _this.oldData = _this.chooseData;
-          //   _this.choiceTarget = _this.oldData;
-          //   _this.choiceTle = "染化料採購單";
-          //   _this.iptChange(_this.chooseData);
-          // }
-
-        },
       },
       {
         label: "供應商编号",
@@ -528,11 +363,6 @@ export function rhl1C(_this) {
         cell: false,
         hide: _this.hide === "8" ? false : true,
         width: 120,
-        change: (val) => {
-          if (val.value === '') {
-            _this.iptChange(_this.chooseData);
-          }
-        },
         type: "select",
         dicData: getDicT("purSinglepo", "suppId", "poNo")
       },
@@ -542,11 +372,6 @@ export function rhl1C(_this) {
         cell: false,
         hide: _this.hide === "8" ? false : true,
         width: 300,
-        // change: (val) => {
-        //   if (val.value === '') {
-        //     _this.iptChange(_this.chooseData);
-        //   }
-        // },
         type: "select",
         dicData: getDicT("basSupplier", "suppName", "suppId",),
       },
@@ -556,24 +381,6 @@ export function rhl1C(_this) {
         hide: _this.hide === "2" || _this.hide === "8" ? false : true,
         cell: false,
         width: 180,
-        change: (val) => {
-          if (val.value === '') {
-            _this.iptChange(_this.chooseData);
-          }
-        },
-        click: (val) => {
-          if (!_this.chooseData.purNo) {
-            _this.$tip.error("請先選擇採購單號！")
-            return
-          }
-          _this.choiceV = !_this.choiceV
-          // _this.choiceQ.deliType = 'chemical'
-          _this.choiceField = "deliNo"
-          _this.oldData = _this.chooseData
-          _this.choiceQ.purNo = _this.oldData.purNo
-          _this.choiceTarget = _this.oldData
-          _this.choiceTle = '送貨單'
-        },
       },
 
 
@@ -589,9 +396,8 @@ export function rhl1C(_this) {
           _this.choiceV = !_this.choiceV
           _this.oldData = _this.chooseData
           _this.choiceTarget = _this.oldData
-          _this.choiceTle = '外厂染化料配料计划',
-            _this.iptChange(_this.chooseData);
-        },
+          _this.choiceTle = '外厂染化料配料计划'
+        }
       },
       {
         label: "加工厂名稱",
@@ -615,9 +421,6 @@ export function rhl1C(_this) {
         type: "select",
         dicData: getDIC('whse_yinstatus'),
         hide: _this.hide === '5' ? true : false,
-        change: (val) => {
-          _this.iptChange(_this.chooseData);
-        },
       },
       {
         label: "财务状态",
@@ -628,9 +431,6 @@ export function rhl1C(_this) {
         type: "select",
         dicData:
           getDIC('whse_finStatus'),
-        click: (val) => {
-          _this.iptChange(_this.chooseData);
-        },
       },
       {
         label: "操作员",
@@ -676,14 +476,6 @@ export function rhl1C(_this) {
         width: 180,
         format: "yyyy-MM-dd HH:mm:ss",
         valueFormat: "yyyy-MM-dd HH:mm:ss",
-        focus: (val) => {
-          _this.iptChange(_this.chooseData);
-        },
-        change: (val) => {
-          if (val.value === '') {
-            _this.iptChange(_this.chooseData);
-          }
-        },
         align: "center",
       },
     ],
@@ -723,13 +515,13 @@ export function rhl2C(_this) {
         hide: true,
       },
       {
-        label: "化工原料編號",
+        label: "顏料編號",
         prop: "chemicalId",
         cell: false,
         width: 140,
       },
       {
-        label: "化工原料名称",
+        label: "顏料名称",
         prop: "chemicalName",
         cell: false,
         width: 250,
@@ -739,9 +531,6 @@ export function rhl2C(_this) {
       //   prop: "bcMatengname",
       //   cell: false,
       //   width: 180,
-      //   click: (val) => {
-      //     _this.iptChange(_this.chooseData);
-      //   },
       //   props: {
       //     label: "bcMatengname",
       //     value: "bcCode"
@@ -754,9 +543,6 @@ export function rhl2C(_this) {
       //   prop: "bcColor",
       //   cell: false,
       //   width: 100,
-      //   click: (val) => {
-      //     _this.iptChange(_this.chooseData);
-      //   },
       //   props: {
       //     label: "bcColor",
       //     value: "bcCode"
@@ -780,18 +566,12 @@ export function rhl2C(_this) {
       //   prop: "prodNo",
       //   cell: true,
       //   width: 150,
-      //   click: (val) => {
-      //     _this.iptChange(_this.chooseData);
-      //   },
       // },
       // {
       //   label: "码卡号",
       //   prop: "fabticket",
       //   cell: true,
       //   width: 150,
-      //   click: (val) => {
-      //     _this.iptChange(_this.chooseData);
-      //   },
       // },
       {
         label: "批号",
@@ -812,9 +592,6 @@ export function rhl2C(_this) {
       //   cell: true,
       //   width: 100,
       //   align: "right",
-      //   click: (val) => {
-      //     _this.iptChange(_this.chooseData);
-      //   },
       // },
       {
         label: "重量",

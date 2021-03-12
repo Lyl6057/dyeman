@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-24 08:12:20
  * @LastEditors: Lyl
- * @LastEditTime: 2021-03-10 17:18:17
+ * @LastEditTime: 2021-03-12 15:36:01
  * @Description: 
 -->
 <template>
@@ -31,7 +31,8 @@
 </template>
 <script>
 import { mapActions } from "vuex";
-import { getUcmlUser } from "@/const/whse.js";
+import axios from "axios";
+// import { getUcmlUser } from "@/const/whse.js";
 export default {
   name: "App",
   data() {
@@ -46,7 +47,11 @@ export default {
     //   }
     // };
     // parent.userID
-    getUcmlUser({ usrLogin: "admin" }).then((Res) => {
+    axios({
+      url: "/api/ucmlUser",
+      method: "get",
+      params: { usrLogin: "admin" },
+    }).then((Res) => {
       // 登錄用戶oid
       // this.$store.dispatch("setUsers", Res.data.ucmlUseroid);
       this.setUsers(Res.data.ucmlUseroid);
