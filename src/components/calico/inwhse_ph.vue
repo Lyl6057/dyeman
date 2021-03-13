@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-24 08:12:20
  * @LastEditors: Lyl
- * @LastEditTime: 2021-03-10 16:51:25
+ * @LastEditTime: 2021-03-13 11:16:35
  * @Description: 
 -->
 <template>
@@ -13,7 +13,7 @@
       <el-button type="primary" @click="batchAdd">批量生成</el-button>
     </div>
 
-    <div class="crudBox" style="margin-top: -6px">
+    <div class="crudBox">
       <avue-crud
         ref="crud"
         id="inwhse_ph"

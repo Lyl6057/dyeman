@@ -524,7 +524,7 @@ export function rhl2C(_this) {
         label: "顏料名称",
         prop: "chemicalName",
         cell: false,
-        width: 250,
+        width: 350,
       },
       // {
       //   label: "染化料英文名稱 ",
@@ -573,42 +573,42 @@ export function rhl2C(_this) {
       //   cell: true,
       //   width: 150,
       // },
-      {
-        label: "批号",
-        prop: "batchNo",
-        cell: true,
-        width: 180,
-        change: () => {
-          _this.$nextTick(() => {
-            _this.chooseData.list.forEach((item, index) => {
-              item.batchNo = _this.chooseData.batchNo
-            })
-          })
-        }
-      },
       // {
-      //   label: "疋号",
-      //   prop: "countingNo",
+      //   label: "批号",
+      //   prop: "batchNo",
+      //   cell: true,
+      //   width: 180,
+      //   change: () => {
+      //     _this.$nextTick(() => {
+      //       _this.chooseData.list.forEach((item, index) => {
+      //         item.batchNo = _this.chooseData.batchNo
+      //       })
+      //     })
+      //   }
+      // },
+      // // {
+      // //   label: "疋号",
+      // //   prop: "countingNo",
+      // //   cell: true,
+      // //   width: 100,
+      // //   align: "right",
+      // // },
+      // {
+      //   label: "重量",
+      //   prop: "weight",
       //   cell: true,
       //   width: 100,
       //   align: "right",
-      // },
-      {
-        label: "重量",
-        prop: "weight",
-        cell: true,
-        width: 100,
-        align: "right",
 
-      },
-      {
-        label: "单位",
-        prop: "weightUnit",
-        cell: true,
-        width: 100,
-        type: "select",
-        dicData: getDIC("bas_matUnit"),
-      },
+      // },
+      // {
+      //   label: "单位",
+      //   prop: "weightUnit",
+      //   cell: true,
+      //   width: 100,
+      //   type: "select",
+      //   dicData: getDIC("bas_matUnit"),
+      // },
       {
         label: "客户编号",
         prop: "custId",

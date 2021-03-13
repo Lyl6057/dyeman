@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-24 08:12:20
  * @LastEditors: Lyl
- * @LastEditTime: 2021-03-10 17:08:39
+ * @LastEditTime: 2021-03-13 11:19:53
  * @Description: 
  */
 import {
@@ -108,13 +108,13 @@ export function loc1C(_this) {
       label: "批號",
       prop: "batchNo",
       cell: true,
-      width: 140,
+      // width: 130,
     },
     {
       label: "疋號",
       prop: "countingNo",
       cell: true,
-      width: 80,
+      width: 70,
       align: "right",
     },
     {
@@ -128,7 +128,7 @@ export function loc1C(_this) {
       label: "單位",
       prop: "weightUnit",
       cell: true,
-      width: 80,
+      width: 70,
       type: "select",
       dicData: getDIC("bas_matUnit"),
     },

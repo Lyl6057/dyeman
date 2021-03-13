@@ -438,7 +438,7 @@ export function updateYlDtla(params) {
 }
 export function delYlDtla(id) {
   return axios({
-    url: '/api/whseDyesalInDtla?whseDyesainDtlaoid=' + id,
+    url: '/api/whseDyesalInDtla?whseDyesalInDtlaoid=' + id,
     method: 'delete',
   })
 }

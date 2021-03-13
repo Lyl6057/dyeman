@@ -15,7 +15,7 @@
         <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
       </div>
       <el-row class="crudBox">
-        <el-col :span="14">
+        <el-col :span="12">
           <view-container :title="datas.type.split('_')[0] + '入库明细'">
             <div class="btnList">
               <el-button
@@ -37,7 +37,7 @@
                 @on-load="getDetail"
               ></avue-crud></div></view-container
         ></el-col>
-        <el-col :span="10">
+        <el-col :span="12">
           <el-tabs v-model="tabs" type="border-card">
             <el-tab-pane
               :label="datas.type.split('_')[0] + '入库批号资料'"
@@ -97,7 +97,7 @@ import {
   addYlDtlb,
   updateYlDtlb,
   delYlDtlb,
-  getYl,
+  addYl,
   updateYl,
   getYlLoc,
   addYlLoc,
@@ -185,7 +185,7 @@ export default {
       getYlDtla({
         rows: this.page.pageSize,
         start: this.page.currentPage,
-        whseChemicalinFk: this.detail.whseChemicalinoid,
+        whseDyesalinFk: this.detail.whseDyesalinoid,
       }).then((res) => {
         let records = res.data;
         this.page.total = records.total;
@@ -212,6 +212,7 @@ export default {
       });
     },
     getPh() {
+      console.log(this.chooseData);
       if (this.isAdd) {
         if (this.chooseData.list) {
           if (this.chooseData.list.length != 0) {
@@ -220,7 +221,7 @@ export default {
         }
         return;
       }
-      if (!this.chooseData.whseChemicalinDtlaoid) {
+      if (!this.chooseData.whseDyesainDtlaoid) {
         this.chooseData.list = [];
         return;
       }
@@ -234,9 +235,9 @@ export default {
       this.countOp.showSummary = false;
       this.changePhList = [];
       getYlDtlb({
-        whseChemicalinDtlaFk: this.chooseData.whseChemicalinDtlaoid,
-        rows: this.phPage.pageSize,
-        start: this.phPage.currentPage,
+        whseDyesainDtlaFk: this.chooseData.whseDyesainDtlaoid,
+        // rows: this.phPage.pageSize,
+        // start: this.phPage.currentPage,
       }).then((res) => {
         let data = res.data;
         if (data.length === 0) {
@@ -363,21 +364,21 @@ export default {
         this.$tip.error("请选择要删除的数据!");
         return;
       }
-      if (!this.chooseData.whseChemicalinDtlaoid) {
+      if (!this.chooseData.whseDyesalInDtlaoid) {
         this.mx.splice(this.chooseData.index - 1, 1);
         this.$refs.dlgcrud.setCurrentRow(this.mx[this.mx.length - 1] || {});
         return;
       }
       this.$tip
         .cofirm(
-          "是否确定删除染化料编码为 【 " +
+          "是否确定删除化工原料编码为 【 " +
             this.chooseData.chemicalId +
             " 】 的数据?",
           this,
           {}
         )
         .then(() => {
-          delYlDtla(this.chooseData.whseChemicalinDtlaoid)
+          delYlDtla(this.chooseData.whseDyesalInDtlaoid)
             .then((res) => {
               if (res.data.code === 200) {
                 this.$tip.success("删除成功");
@@ -403,7 +404,7 @@ export default {
         this.$tip.error("请选择要删除的数据!");
         return;
       }
-      if (!this.choosePhData.whseChemicalinDtlboid) {
+      if (!this.choosePhData.whseDyesainDtlboid) {
         this.chooseData.list.splice(this.choosePhData.index - 1, 1);
         this.chooseData.list.forEach((item, i) => {
           item.index = i + 1;
@@ -424,7 +425,7 @@ export default {
           {}
         )
         .then(() => {
-          delYlDtlb(this.choosePhData.whseChemicalinDtlboid)
+          delYlDtlb(this.choosePhData.whseDyesainDtlboid)
             .then((res) => {
               if (res.data.code === 200) {
                 this.$tip.success("删除成功");
@@ -454,6 +455,8 @@ export default {
       if (!this.chooseData.list) {
         this.chooseData.list = [];
         this.getPh();
+      } else {
+        this.$refs.count.setCurrentRow(this.chooseData.list[0]);
       }
       if (!this.chooseData.loc) {
         this.chooseData.loc = [];
@@ -492,7 +495,7 @@ export default {
       }
 
       this.modified = true;
-      if (this.form.whseChemicalinoid) {
+      if (this.form.whseDyesalinoid) {
         updateYl(this.form).then((res) => {
           if (this.mx.length === 0) {
             this.$tip.success("保存成功!");
@@ -504,16 +507,16 @@ export default {
               let data = JSON.parse(JSON.stringify(item));
               data.list = [];
               data.loc = [];
-              if (item.whseChemicalinDtlaoid) {
+              if (item.whseDyesainDtlaoid) {
                 updateYlDtla(data).then((res) => {
                   resolve();
                 });
                 // 修改
               } else {
                 // 新增
-                data.whseChemicalinFk = this.detail.whseChemicalinoid;
+                data.whseDyesalinFk = this.detail.whseDyesalinoid;
                 addYlDtla(data).then((res) => {
-                  item.whseChemicalinDtlaoid = res.data.data;
+                  item.whseDyesainDtlaoid = res.data.data;
                   resolve();
                 });
               }
@@ -526,10 +529,10 @@ export default {
             for (let i = 0; i < this.mx.length; i++) {
               if (this.mx[i].list) {
                 this.mx[i].list.forEach((item) => {
-                  item.whseChemicalinDtlaFk = this.mx[i].whseChemicalinDtlaoid;
-                  if (!item.whseChemicalinDtlboid) {
+                  item.whseDyesainDtlaFk = this.mx[i].whseDyesainDtlaoid;
+                  if (!item.whseDyesainDtlboid) {
                     addYlDtlb(item).then((res) => {
-                      item.whseChemicalinDtlboid = res.data.data;
+                      item.whseDyesainDtlboid = res.data.data;
                     });
                   } else {
                     updateYlDtlb(item).then((res) => {});
@@ -538,10 +541,10 @@ export default {
               }
               if (this.mx[i].loc) {
                 this.mx[i].loc.forEach((item) => {
-                  item.whseChemicalinDtlaFk = this.mx[i].whseChemicalinDtlaoid;
-                  if (!item.whseChemicalinDtlcoid) {
+                  item.whseDyesainDtlaFk = this.mx[i].whseDyesainDtlaoid;
+                  if (!item.whseDyesainDtlcoid) {
                     addYlLoc(item).then((res) => {
-                      item.whseChemicalinDtlcoid = res.data.data;
+                      item.whseDyesainDtlcoid = res.data.data;
                     });
                   } else {
                     updateYlLoc(item).then((res) => {});
@@ -557,28 +560,28 @@ export default {
           });
         });
       } else {
-        getYl(this.form).then((res) => {
+        addYl(this.form).then((res) => {
           if (this.mx.length === 0) {
             this.loading = false;
             this.$tip.success("保存成功!");
           }
-          this.form.whseChemicalinoid = res.data.data;
+          this.form.whseDyesalinoid = res.data.data;
           // this.$emit("getData");
           let addDtla = (item, i) => {
             return new Promise((resolve, reject) => {
               let data = JSON.parse(JSON.stringify(item));
               data.list = [];
               data.loc = [];
-              if (item.whseChemicalinDtlaoid) {
+              if (item.whseDyesainDtlaoid) {
                 updateYlDtla(data).then((res) => {
                   resolve();
                 });
                 // 修改
               } else {
                 // 新增
-                data.whseChemicalinFk = this.form.whseChemicalinoid;
+                data.whseDyesalinFk = this.form.whseDyesalinoid;
                 addYlDtla(data).then((res) => {
-                  item.whseChemicalinDtlaoid = res.data.data;
+                  item.whseDyesainDtlaoid = res.data.data;
                   resolve();
                 });
               }
@@ -591,10 +594,10 @@ export default {
             for (let i = 0; i < this.mx.length; i++) {
               if (this.mx[i].list) {
                 this.mx[i].list.forEach((item) => {
-                  item.whseChemicalinDtlaFk = this.mx[i].whseChemicalinDtlaoid;
-                  if (!item.whseChemicalinDtlboid) {
+                  item.whseDyesainDtlaFk = this.mx[i].whseDyesainDtlaoid;
+                  if (!item.whseDyesainDtlboid) {
                     addYlDtlb(item).then((res) => {
-                      item.whseChemicalinDtlboid = res.data.data;
+                      item.whseDyesainDtlboid = res.data.data;
                     });
                   } else {
                     updateYlDtlb(item).then((res) => {});
@@ -603,10 +606,10 @@ export default {
               }
               if (this.mx[i].loc) {
                 this.mx[i].loc.forEach((item) => {
-                  item.whseChemicalinDtlaFk = this.mx[i].whseChemicalinDtlaoid;
-                  if (!item.whseChemicalinDtlcoid) {
+                  item.whseDyesainDtlaFk = this.mx[i].whseDyesainDtlaoid;
+                  if (!item.whseDyesainDtlcoid) {
                     addYlLoc(item).then((res) => {
-                      item.whseChemicalinDtlcoid = res.data.data;
+                      item.whseDyesainDtlcoid = res.data.data;
                     });
                   } else {
                     updateYlLoc(item).then((res) => {});

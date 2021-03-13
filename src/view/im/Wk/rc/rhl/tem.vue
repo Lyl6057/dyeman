@@ -15,7 +15,7 @@
         <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
       </div>
       <el-row class="crudBox">
-        <el-col :span="14">
+        <el-col :span="12">
           <view-container :title="datas.type.split('_')[0] + '入库明细'">
             <div class="btnList">
               <el-button
@@ -43,7 +43,7 @@
                 @on-load="getDetail"
               ></avue-crud></div></view-container
         ></el-col>
-        <el-col :span="10">
+        <el-col :span="12">
           <el-tabs v-model="tabs" type="border-card">
             <el-tab-pane
               :label="datas.type.split('_')[0] + '入库批号资料'"
@@ -236,6 +236,7 @@ export default {
         this.chooseData.list = [];
         return;
       }
+
       if (this.chooseData.list) {
         if (this.chooseData.list.length != 0) {
           this.$refs.count.setCurrentRow(this.chooseData.list[0]);
@@ -247,8 +248,8 @@ export default {
       this.changePhList = [];
       getRhlPhList({
         whseChemicalinDtlaFk: this.chooseData.whseChemicalinDtlaoid,
-        rows: this.phPage.pageSize,
-        start: this.phPage.currentPage,
+        // rows: this.phPage.pageSize,
+        // start: this.phPage.currentPage,
       }).then((res) => {
         let data = res.data;
         if (data.length === 0) {
@@ -258,6 +259,7 @@ export default {
           item.index = index + 1;
           if (index === data.length - 1) {
             this.chooseData.list = data;
+            // this.$refs.count.setCurrentRow(this.chooseData.list[0]);
             this.countOp.showSummary = true;
             this.ctLoading = false;
           }
@@ -466,6 +468,8 @@ export default {
       if (!this.chooseData.list) {
         this.chooseData.list = [];
         this.getPh();
+      } else {
+        this.$refs.count.setCurrentRow(this.chooseData.list[0]);
       }
       if (!this.chooseData.loc) {
         this.chooseData.loc = [];
@@ -519,7 +523,6 @@ export default {
       this.$tip.success("保存成功!");
     },
     saveAll() {
-      this.loading = true;
       // if (this.form.purNo === "" || this.form.deliNo === "") {
       //   this.$tip.warning("入库资料中的采购/送货单号不能为空!");
       //   return;
@@ -543,7 +546,7 @@ export default {
           }
         }
       }
-
+      this.loading = true;
       this.modified = true;
       if (this.form.whseChemicalinoid) {
         updateRhl(this.form).then((res) => {

@@ -19,9 +19,9 @@
         <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
       </div>
       <el-row class="crudBox">
-        <el-col :span="hide != '6' && hide != '7' ? 14 : 24">
+        <el-col :span="hide != '6' && hide != '7' ? 12 : 24">
           <view-container :title="datas.type.split('_')[0] + '入库明细'">
-            <div style="margin-bottom: 2px" class="btnList">
+            <div class="btnList">
               <el-button type="primary" @click="add">新增</el-button>
               <el-button type="danger" @click="del">删除</el-button>
             </div>
@@ -37,7 +37,7 @@
               ></avue-crud>
             </div> </view-container
         ></el-col>
-        <el-col :span="10" v-if="hide != '6' && hide != '7'">
+        <el-col :span="12" v-if="hide != '6' && hide != '7'">
           <view-container :title="datas.type.split('_')[0] + '入库批号资料'">
             <!-- <div style="margin-bottom: 0px" class="btnList">
               <el-button type="primary" @click="addPh">新增</el-button>
@@ -478,22 +478,22 @@ export default {
         this.hide === "1" &&
         (this.form.yinId === "" || this.form.registerNo === "")
       ) {
-        this.$tip.error("入仓编号/纱线登记编号不能为空!");
+        this.$tip.error("入仓编号/登记编号不能为空!");
         return;
       }
       for (let i = 0; i < this.mx.length; i++) {
-        if (!this.mx[i].batchNo) {
-          this.$tip.error("批号不能为空!");
-          return;
-        }
-        if (!this.mx[i].weight || !this.mx[i].weightUnit) {
-          this.$tip.error("入倉重量/单位不能为空!");
-          return;
-        }
-        if (!this.mx[i].countingNo) {
-          this.$tip.error("入仓疋數不能为空!");
-          return;
-        }
+        // if (!this.mx[i].batchNo) {
+        //   this.$tip.error("批号不能为空!");
+        //   return;
+        // }
+        // if (!this.mx[i].weight || !this.mx[i].weightUnit) {
+        //   this.$tip.error("入倉重量/单位不能为空!");
+        //   return;
+        // }
+        // if (!this.mx[i].countingNo) {
+        //   this.$tip.error("入仓疋數不能为空!");
+        //   return;
+        // }
         for (let j = 0; j < this.mx[i].loc.length; j++) {
           if (!this.mx[i].loc[j].weight || !this.mx[i].loc[j].weightUnit) {
             this.$tip.error("入仓批號重量不能为空!");
@@ -652,16 +652,16 @@ export default {
           item.countingNo = item.countingNum;
           item.weiUnit = item.weightUnit;
           item.loc = [];
-          for (let i = 0; i < Number(item.countingNo); i++) {
-            let wei = item.weight / Number(item.countingNo);
-            item.loc.push({
-              index: i + 1,
-              countingNo: i + 1,
-              batchNo: item.batchNo,
-              weight: wei,
-              weightUnit: item.weightUnit,
-            });
-          }
+          // for (let i = 0; i < Number(item.countingNo); i++) {
+          //   let wei = item.weight / Number(item.countingNo);
+          item.loc.push({
+            index: 1,
+            countingNo: 1,
+            batchNo: item.batchNo,
+            weight: item.weight,
+            weightUnit: item.weightUnit,
+          });
+          // }
         });
         // this.mx = this.mx.concat(val);
         this.mx = this.$unique(this.mx.concat(val), "batchNo");

@@ -562,91 +562,91 @@ export function rcpb2C(_this) {
         label: "胚布名称",
         prop: "clothName",
         cell: false,
-        width: 450,
+        // width: 500,
         hide: _this.hide === '6' || _this.hide === '7' ? true : false,
         click: (val) => {
         },
       },
-      {
-        label: "货位码",
-        prop: "locationCode",
-        hide: true,
-      },
+      // {
+      //   label: "货位码",
+      //   prop: "locationCode",
+      //   hide: true,
+      // },
 
-      {
-        label: "客户编号",
-        prop: "custId",
-        cell: false,
-        width: 150,
-        hide: true,
-        // type: "select",
-        // click: (val) => {
-        //   _this.choiceV = !_this.choiceV
-        //   _this.choiceField = "custId";
-        //   _this.oldData = _this.chooseData;
-        //   _this.choiceTarget = _this.oldData;
-        //   _this.choiceTle = "客戶編號";
-        //   _this.iptChange(_this.chooseData);
-        // },
-      },
-      {
-        label: "码卡号",
-        prop: "fabticket",
-        cell: true,
-        width: 140,
-        hide: _this.hide === '6' || _this.hide === '4' ? true : false,
-      },
-      {
-        label: "批号",
-        prop: "batchNo",
-        hide: _this.hide === '6' || _this.hide === '4' || _this.hide === '7' ? true : false,
-        cell: true,
-        width: 150,
-        change: () => {
-          _this.$nextTick(() => {
-            _this.chooseData.loc.forEach((item, index) => {
-              item.batchNo = _this.chooseData.batchNo
-            })
-          })
+      // {
+      //   label: "客户编号",
+      //   prop: "custId",
+      //   cell: false,
+      //   width: 150,
+      //   hide: true,
+      //   // type: "select",
+      //   // click: (val) => {
+      //   //   _this.choiceV = !_this.choiceV
+      //   //   _this.choiceField = "custId";
+      //   //   _this.oldData = _this.chooseData;
+      //   //   _this.choiceTarget = _this.oldData;
+      //   //   _this.choiceTle = "客戶編號";
+      //   //   _this.iptChange(_this.chooseData);
+      //   // },
+      // },
+      // {
+      //   label: "码卡号",
+      //   prop: "fabticket",
+      //   cell: true,
+      //   width: 140,
+      //   hide: _this.hide === '6' || _this.hide === '4' ? true : false,
+      // },
+      // {
+      //   label: "批号",
+      //   prop: "batchNo",
+      //   hide: _this.hide === '6' || _this.hide === '4' || _this.hide === '7' ? true : false,
+      //   cell: true,
+      //   width: 150,
+      //   change: () => {
+      //     _this.$nextTick(() => {
+      //       _this.chooseData.loc.forEach((item, index) => {
+      //         item.batchNo = _this.chooseData.batchNo
+      //       })
+      //     })
 
-        }
-      },
-      {
-        label: "疋數",
-        prop: "countingNo",
-        hide: _this.hide === '4' ? true : false,
-        cell: _this.hide != '6' ? true : false,
-        width: 100,
-        align: "right",
-      },
+      //   }
+      // },
+      // {
+      //   label: "疋數",
+      //   prop: "countingNo",
+      //   hide: _this.hide === '4' ? true : false,
+      //   cell: _this.hide != '6' ? true : false,
+      //   width: 100,
+      //   align: "right",
+      // },
 
-      {
-        label: "来胚入仓_FK",
-        prop: "whseCalicoinFk",
-        hide: true,
-      },
+      // {
+      //   label: "来胚入仓_FK",
+      //   prop: "whseCalicoinFk",
+      //   hide: true,
+      // },
 
 
-      {
-        label: "重量",
-        prop: "weight",
-        hide: _this.hide === '4' || _this.hide === '7' ? true : false,
-        cell: _this.hide != '6' ? true : false,
-        width: 100,
-        align: "right",
+      // {
+      //   label: "重量",
+      //   prop: "weight",
+      //   hide: _this.hide === '4' || _this.hide === '7' ? true : false,
+      //   cell: _this.hide != '6' ? true : false,
+      //   width: 100,
+      //   align: "right",
 
-      },
+      // },
 
-      {
-        label: "重量单位",
-        prop: "weightUnit",
-        hide: _this.hide === '4' || _this.hide === '7' ? true : false,
-        cell: _this.hide != '6' ? true : false,
-        width: 100,
-        type: "select",
-        dicData: getDIC("bas_matUnit"),
+      // {
+      //   label: "重量单位",
+      //   prop: "weightUnit",
+      //   hide: _this.hide === '4' || _this.hide === '7' ? true : false,
+      //   cell: _this.hide != '6' ? true : false,
+      //   width: 100,
+      //   type: "select",
+      //   dicData: getDIC("bas_matUnit"),
 
-      }
+      // }
     ]
   }
 
@@ -686,7 +686,7 @@ export function rcpb3C(_this) {
       {
         label: "批号",
         prop: "batchNo",
-        cell: true, width: 180,
+        cell: true, width: 170,
 
         // click: (val) => {
         //   _this.iptPhChange(_this.choosePhData);
@@ -696,7 +696,7 @@ export function rcpb3C(_this) {
         label: "疋号",
         prop: "countingNo",
         cell: true,
-        width: 80,
+        width: 70,
         align: "right",
         // click: (val) => {
         //   _this.iptPhChange(_this.choosePhData);
