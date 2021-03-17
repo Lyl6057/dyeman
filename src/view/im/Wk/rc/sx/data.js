@@ -353,15 +353,7 @@ export function rsxkr1C(_this) {
         type: "datetime",
         format: "yyyy-MM-dd",
         valueFormat: "yyyy-MM-dd",
-        focus: (val) => {
-          _this.iptChange(_this.chooseData);
-        },
-        change: (val) => {
-          if (val.value === '') {
-            _this.iptChange(_this.chooseData);
-          }
-        },
-        width: 200,
+        width: 140,
         align: "center",
       },
       {

@@ -1,4 +1,4 @@
-import { getDIC, getDicT, postDicT, getXDicT } from '@/config/index'
+import { getDIC, getDicT, postDicT } from '@/config/index'
 export function rsxkr1F(_this) {
   return {
     submitBtn: false,
@@ -35,13 +35,13 @@ export function rsxkr1F(_this) {
         display: _this.hide === '2' || _this.hide === '6' ? true : false,
       },
       {
-        label: "輔料登记编号",
+        label: "纱线登记编号",
         prop: "registerNo",
         span: 6,
         placeholder: " ",
         // type: "select",
         display: _this.hide === '1' ? true : false,
-        // placeholder: "請選擇輔料登记编号",
+        // placeholder: "請選擇纱线登记编号",
         // click: () => {
 
         //   _this.choiceV = !_this.choiceV
@@ -147,7 +147,7 @@ export function rsxkr2F(_this) {
             _this.dlgWidth = "100%";
             _this.choiceV = !_this.choiceV
             _this.choiceTarget = _this.form
-            _this.choiceTle = '選擇輔料採購單'
+            _this.choiceTle = '選擇紗線採購單'
           }
           if (_this.form.purNo === '' || _this.form.purNo === null) {
             _this.form.deliNo = ''
@@ -177,7 +177,7 @@ export function rsxkr2F(_this) {
         },
       },
       {
-        label: "輔料登记编号",
+        label: "纱线登记编号",
         prop: "registerNo",
         span: 6,
         placeholder: " ",
@@ -189,7 +189,7 @@ export function rsxkr2F(_this) {
             _this.dlgWidth = "60%";
             _this.choiceV = !_this.choiceV
             _this.choiceTarget = _this.form
-            _this.choiceTle = '選擇來輔料登記'
+            _this.choiceTle = '選擇來紗登記'
           }
         },
         change: () => {
@@ -229,7 +229,7 @@ export function rsxkr2F(_this) {
             _this.choiceV = !_this.choiceV
             _this.dlgWidth = "100%"
             _this.choiceTarget = {}
-            _this.choiceTle = '選擇外厂輔料配料计划'
+            _this.choiceTle = '選擇外厂纱线配料计划'
           }
         },
       },
@@ -295,7 +295,7 @@ export function rsxkr1C(_this) {
     page: true,
     column: [
       {
-        label: "輔料入仓OID",
+        label: "纱线入仓OID",
         prop: "whseYarninoid",
         hide: true,
       },
@@ -312,6 +312,14 @@ export function rsxkr1C(_this) {
         type: "datetime",
         format: "yyyy-MM-dd HH:mm:ss",
         valueFormat: "yyyy-MM-dd HH:mm:ss",
+        focus: (val) => {
+          _this.iptChange(_this.chooseData);
+        },
+        change: (val) => {
+          if (val.value === '') {
+            _this.iptChange(_this.chooseData);
+          }
+        },
       },
 
       {
@@ -323,7 +331,12 @@ export function rsxkr1C(_this) {
         label: "入仓编号",
         prop: "yinId",
         cell: true,
-        width: 180,
+        width: 200,
+        change: (val) => {
+          if (val.value === '') {
+            _this.iptChange(_this.chooseData);
+          }
+        },
       },
       {
         label: "入倉類型",
@@ -340,7 +353,15 @@ export function rsxkr1C(_this) {
         type: "datetime",
         format: "yyyy-MM-dd",
         valueFormat: "yyyy-MM-dd",
-        width: 140,
+        focus: (val) => {
+          _this.iptChange(_this.chooseData);
+        },
+        change: (val) => {
+          if (val.value === '') {
+            _this.iptChange(_this.chooseData);
+          }
+        },
+        width: 200,
         align: "center",
       },
       {
@@ -349,6 +370,11 @@ export function rsxkr1C(_this) {
         cell: true,
         hide: _this.hide === '2' || _this.hide === '6' ? false : true,
         width: 220,
+        change: (val) => {
+          if (val.value === '') {
+            _this.iptChange(_this.chooseData);
+          }
+        },
         placeholder: "請選擇採購單號",
         click: () => {
           _this.choiceV = !_this.choiceV;
@@ -356,7 +382,7 @@ export function rsxkr1C(_this) {
           // _this.choiceQ.purType = '5'
           _this.oldData = _this.chooseData
           _this.choiceTarget = _this.oldData;
-          _this.choiceTle = '選擇輔料採購單';
+          _this.choiceTle = '選擇紗線採購單';
         }
       },
       {
@@ -379,15 +405,20 @@ export function rsxkr1C(_this) {
           _this.choiceTarget = _this.oldData
           _this.choiceTle = '選擇送貨單'
         },
+        change: (val) => {
+          if (val.value === '') {
+            _this.iptChange(_this.chooseData);
+          }
+        },
         placeholder: "請選擇送貨單號"
       },
       {
-        label: "輔料登记编号",
+        label: "纱线登记编号",
         prop: "registerNo",
         cell: true,
-        width: 160,
+        width: 180,
         type: "select",
-        placeholder: "請選擇輔料登记编号",
+        placeholder: "請選擇纱线登记编号",
         hide: _this.hide === '1' ? false : true,
         click: () => {
           _this.choiceField = "registerNo"
@@ -395,6 +426,11 @@ export function rsxkr1C(_this) {
           _this.oldData = _this.chooseData
           _this.choiceTarget = _this.oldData
           _this.choiceTle = '選擇來紗登記'
+        },
+        change: (val) => {
+          if (val.value === '') {
+            _this.iptChange(_this.chooseData);
+          }
         },
       },
       {
@@ -404,7 +440,7 @@ export function rsxkr1C(_this) {
         hide: _this.hide === '1' ? false : true,
         width: 150,
         type: "select",
-        dicData: getDicT("salIncomacc", "custNo", "registerNo"),
+        dicData: getDicT("salIncomingyarn", "custCode", "registerNo"),
       },
       {
         label: "客戶名称",
@@ -413,7 +449,7 @@ export function rsxkr1C(_this) {
         hide: _this.hide === "1" ? false : true,
         type: "select",
         dicData: getDicT("basCustomer", "custName", "custCode"),
-        width: 280,
+        width: 200,
       },
 
       {
@@ -423,6 +459,11 @@ export function rsxkr1C(_this) {
         width: 120,
         type: "select",
         dicData: getDIC('whse_yinstatus'),
+        change: (val) => {
+
+          _this.iptChange(_this.chooseData);
+
+        },
       },
 
       {
@@ -457,6 +498,9 @@ export function rsxkr1C(_this) {
         type: "select",
         dicData:
           getDIC('whse_finStatus'),
+        click: (val) => {
+          _this.iptChange(_this.chooseData);
+        },
       },
       {
         label: "操作員",
@@ -501,6 +545,14 @@ export function rsxkr1C(_this) {
         width: 180,
         format: "yyyy-MM-dd HH:mm:ss",
         valueFormat: "yyyy-MM-dd HH:mm:ss",
+        focus: (val) => {
+          _this.iptChange(_this.chooseData);
+        },
+        change: (val) => {
+          if (val.value === '') {
+            _this.iptChange(_this.chooseData);
+          }
+        },
         align: "center",
       },
     ],
@@ -517,13 +569,29 @@ export function rsxkr2C(_this) {
     refreshBtn: false,
     columnBtn: false,
     page: true,
+    roykey: "whseYarninDtloid",
     showSummary: true,
     sumColumnList: [
       {
         label: " ",
-        name: 'poQty',
+        name: 'cartonNum',
         type: 'sum',
       },
+      {
+        label: " ",
+        name: 'weight',
+        type: 'sum'
+      },
+      {
+        label: " ",
+        name: 'whseNum',
+        type: 'sum'
+      },
+      {
+        label: " ",
+        name: 'cartonWei',
+        type: 'sum'
+      }
     ],
     column: [
       {
@@ -534,45 +602,183 @@ export function rsxkr2C(_this) {
 
       },
       {
-        label: "材料编号",
-        prop: "materialNum",
-        cell: false,
-        width: 140,
-        placeholder: "請選擇材料编号",
+        label: "纱线入仓明细OID",
+        prop: "whseYarninDtloid",
+        hide: true,
       },
       {
-        label: "材料名稱",
-        prop: "materialName",
+        label: "生產單號",
+        prop: "poNo",
         cell: false,
-        width: 290,
+        hide: _this.hide != '4' ? true : false,
+        width: 150,
+        placeholder: "請選擇生產單號",
         type: "select",
-        props: {
-          label: "chinName",
-          value: "hardwareId"
-        },
-        dicData: getXDicT("basProductivesupplies")
+        dicData: getDicT("whseRetratyarnnotice", "poNo", "yarnsId"),
+        // click: (val) => {
+        //   _this.choiceV = !_this.choiceV
+        //   _this.choiceField = "poNo";
+        //   _this.oldData = _this.chooseData;
+        //   _this.choiceTarget = _this.oldData;
+        //   _this.choiceTle = "退紗通知單";
+        // },
       },
       {
-        label: "批号",
+        label: "紗線系統編號",
+        prop: "yarnsId",
+        cell: false,
+        width: 120,
+        placeholder: "請選擇紗線系統編號",
+        click: (val) => {
+          // _this.choiceV = !_this.choiceV
+          // _this.choiceField = "yarnsId";
+          // _this.oldData = _this.chooseData;
+          // _this.choiceTarget = _this.oldData;
+          // _this.choiceTle = "紗線系統編號";
+          // _this.iptChange(_this.chooseData);
+        },
+        change: (val) => {
+          _this.iptChange(_this.chooseData);
+        },
+      },
+      {
+        label: "紗線名称",
+        prop: "yarnsName",
+        cell: false,
+        width: 350,
+        type: "select",
+        dicData: getDicT("basYarnsData", "yarnsName", "yarnsId"),
+        change: (val) => {
+          _this.iptChange(_this.chooseData);
+        },
+      },
+      // {
+      //   label: "客戶編號",
+      //   prop: "custId",
+      //   cell: false,
+      //   hide: _this.hide === "1" ? false : true,
+      //   width: 100,
+      //   // type: "select",
+      //   // dicData: getDicT("salEmbryogenesis", "custCode", "registerNo"),
+      // },
+      {
+        label: "纱批/批号",
         prop: "batchNo",
+        cell: _this.hide != '5',
+        width: 150,
+        click: (val) => {
+          _this.iptChange(_this.chooseData);
+        },
+
+      },
+
+      // {
+      //   label: "每箱锭数",
+      //   prop: "everySpindle",
+      //   cell: true,
+      //   width: 120,
+      //   align: "right",
+      //   hide: _this.hide === '4' ? true : false,
+      //   click: (val) => {
+      //     _this.iptChange(_this.chooseData);
+      //   },
+      // },
+      // {
+      //   label: "尾箱锭数",
+      //   prop: "tailSpindle",
+      //   cell: true,
+      //   width: 120,
+      //   hide: _this.hide === '4' ? true : false,
+      //   align: "right",
+      //   click: (val) => {
+      //     _this.iptChange(_this.chooseData);
+      //   },
+      // },
+
+      {
+        label: "纱牌",
+        prop: "yarnsCard",
+        cell: true,
+        hide: _this.hide === '4' || _this.hide === '5' ? true : false,
+        width: 180,
+        click: (val) => {
+          _this.iptChange(_this.chooseData);
+        },
+      },
+      {
+        label: "产地",
+        prop: "placeOrigin",
         cell: true,
         width: 150,
+        hide: _this.hide === '4' || _this.hide === '5' ? true : false,
+        type: "select",
+        dicData: getDIC("Whse_Origin"),
+        click: (val) => {
+          _this.iptChange(_this.chooseData);
+        },
       },
       {
-        label: "数量",
-        prop: "poQty",
-        cell: true,
+        label: "箱数",
+        prop: "cartonNum",
+        cell: false,
         width: 100,
         align: "right",
+        click: (val) => {
+          _this.iptChange(_this.chooseData);
+        },
+        hide: _this.hide === '4' || _this.hide === '5' ? true : false
+      },
+      {
+        label: _this.hide === '5' ? "发料重量" : "送货单重量",
+        prop: "cartonWei",
+        cell: false,
+        width: 120,
+        hide: _this.hide === '4' ? true : false,
+        align: "right",
+        click: (val) => {
+          _this.iptChange(_this.chooseData);
+        },
+      },
+      {
+        label: _this.hide === '5' ? "退回箱数" : "入倉箱數",
+        prop: "whseNum",
+        cell: true,
+        hide: _this.hide === '4' ? true : false,
+        width: 100,
+        align: "right",
+        click: (val) => {
+          _this.iptChange(_this.chooseData);
+        },
+      },
+      {
+        label: "入倉重量",
+        prop: "weight",
+        cell: true,
+        width: 100,
+
+        align: "right",
+        click: (val) => {
+          _this.iptChange(_this.chooseData);
+        },
       },
       {
         label: "单位",
-        prop: "unitQty",
+        prop: "weightUnit",
         cell: true,
         width: 100,
         type: "select",
         dicData: getDIC("bas_matUnit"),
+        click: (val) => {
+          _this.iptChange(_this.chooseData);
+        },
       },
+
+
+      {
+        label: "纱线入仓_FK",
+        prop: "whseYarninFk",
+        hide: true,
+      }
     ],
   }
 
@@ -616,28 +822,38 @@ export function backYarn(_this) {
         prop: "poNo",
         cell: true,
         width: 150,
-        placeholder: "請選擇輔料系統編號",
+        placeholder: "請選擇紗線系統編號",
         click: (val) => {
           _this.choiceV = !_this.choiceV
           _this.choiceField = "yarnsId";
           _this.oldData = _this.chooseData;
           _this.choiceTarget = _this.oldData;
-          _this.choiceTle = "輔料系統編號";
+          _this.choiceTle = "紗線系統編號";
+          _this.iptChange(_this.chooseData);
+        },
+        change: (val) => {
+          _this.iptChange(_this.chooseData);
         },
       },
       {
-        label: "輔料描述",
+        label: "紗線描述",
         prop: "yarnsName",
         cell: false,
         width: 350,
         type: "select",
         dicData: getDicT("basYarnsData", "yarnsName", "yarnsId"),
+        change: (val) => {
+          _this.iptChange(_this.chooseData);
+        },
       },
       {
         label: "纱批/批号",
         prop: "batchNo",
         cell: true,
         width: 200,
+        click: (val) => {
+          _this.iptChange(_this.chooseData);
+        },
 
       },
       {
@@ -646,6 +862,9 @@ export function backYarn(_this) {
         cell: true,
         width: 120,
         align: "right",
+        click: (val) => {
+          _this.iptChange(_this.chooseData);
+        },
       },
       // {
       //   label: "每箱锭数",
@@ -673,6 +892,9 @@ export function backYarn(_this) {
         cell: true,
         width: 120,
         align: "right",
+        click: (val) => {
+          _this.iptChange(_this.chooseData);
+        },
       },
       {
         label: "单位",
@@ -681,12 +903,18 @@ export function backYarn(_this) {
         width: 100,
         type: "select",
         dicData: getDIC("bas_matUnit"),
+        click: (val) => {
+          _this.iptChange(_this.chooseData);
+        },
       },
       {
         label: "纱牌",
         prop: "yarnsCard",
         cell: true,
         width: 180,
+        click: (val) => {
+          _this.iptChange(_this.chooseData);
+        },
       },
       {
         label: "产地",
@@ -695,6 +923,9 @@ export function backYarn(_this) {
         width: 150,
         type: "select",
         dicData: getDIC("Whse_Origin"),
+        click: (val) => {
+          _this.iptChange(_this.chooseData);
+        },
       },
       {
         label: "入仓数量",
@@ -702,6 +933,9 @@ export function backYarn(_this) {
         cell: true,
         width: 120,
         align: "right",
+        click: (val) => {
+          _this.iptChange(_this.chooseData);
+        },
       },
       {
         label: "客戶編號",
@@ -715,6 +949,7 @@ export function backYarn(_this) {
           _this.oldData = _this.chooseData;
           _this.choiceTarget = _this.oldData;
           _this.choiceTle = "选择客戶";
+          _this.iptChange(_this.chooseData);
         },
         placeholder: "請選擇客戶編號"
       },
@@ -724,9 +959,12 @@ export function backYarn(_this) {
         cell: true,
         width: 120,
         align: "right",
+        click: (val) => {
+          _this.iptChange(_this.chooseData);
+        },
       },
       {
-        label: "輔料入仓_FK",
+        label: "纱线入仓_FK",
         prop: "whseYarninFk",
         hide: true,
       }

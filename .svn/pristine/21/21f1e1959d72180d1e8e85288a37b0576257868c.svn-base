@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-24 08:12:20
  * @LastEditors: Lyl
- * @LastEditTime: 2021-03-16 16:20:59
+ * @LastEditTime: 2021-03-12 14:31:55
  * @Description: 
 -->
 <template>
@@ -84,8 +84,7 @@ export default {
       if (
         !this.inData.whseYarninDtloid &&
         !this.inData.whseChemicalinDtlaoid &&
-        !this.inData.whseDyesainDtlaoid &&
-        !this.inData.whseAccessoriesDtloid
+        !this.inData.whseDyesainDtlaoid
       ) {
         return; // 沒有通行證 不給請求數據
       }
@@ -98,7 +97,6 @@ export default {
           whseYarninDtlFk: this.inData.whseYarninDtloid,
           whseChemicalinDtlaFk: this.inData.whseChemicalinDtlaoid,
           whseDyesainDtlaFk: this.inData.whseDyesainDtlaoid,
-          whseAccessoriesDtlFk: this.inData.whseAccessoriesDtloid,
         })
         .then((res) => {
           let records = res.data;
@@ -132,8 +130,7 @@ export default {
       if (
         !this.chooseData.whseYarninDtlaoid &&
         !this.chooseData.whseChemicalinDtlcoid &&
-        !this.chooseData.whseDyesainDtlcoid &&
-        !this.chooseData.whseAccessoriesDtlaoid
+        !this.chooseData.whseDyesainDtlcoid
       ) {
         this.inData.loc.splice(this.chooseData.index - 1, 1);
         this.$refs.crud.setCurrentRow(this.inData.loc[0] || {});
@@ -154,8 +151,6 @@ export default {
                 ? this.chooseData.whseYarninDtlaoid
                 : this.type === "化工原料"
                 ? this.chooseData.whseChemicalinDtlcoid
-                : this.type === "生產輔料"
-                ? this.chooseData.whseAccessoriesDtlaoid
                 : this.chooseData.whseDyesainDtlcoid
             )
             .then((res) => {

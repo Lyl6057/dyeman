@@ -563,33 +563,3 @@ export function delScflDetali(id) {
     method: 'delete',
   })
 }
-
-export function getScflLoc(params) {
-  return axios({
-    url: '/api/whseAccessoriesDtla/v1.0/listByPage',
-    method: 'get',
-    params: params
-  })
-}
-export function addScflLoc(params) {
-  return axios({
-    url: '/api/whseAccessoriesDtla/v1.0/save',
-    method: 'post',
-    params: params
-  })
-}
-
-export function updateScflLoc(params) {
-  return axios({
-    url: '/api/whseAccessoriesDtla/v1.0/updateById',
-    method: 'put',
-    params: params
-  })
-}
-
-export function delScflLoc(id) {
-  return axios({
-    url: '/api/whseAccessoriesDtla/v1.0/removeById?id=' + id,
-    method: 'delete',
-  })
-}

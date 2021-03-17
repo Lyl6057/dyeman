@@ -16,6 +16,17 @@
             >修改</el-button
           >
           <el-button type="danger" @click="del">删除</el-button>
+          <!-- <el-button
+            type="success"
+            :disabled="changeList.length === 0"
+            @click="save"
+            >保存</el-button
+          > -->
+          <!-- <el-button type="warning" @click="ruleV = true" v-if="hide != 8"
+            >編號規則配置</el-button
+          > -->
+
+          <!-- <el-button type="warning" @click="getData">取消</el-button> -->
           <el-button type="primary" @click="getData">查询</el-button>
           <el-button type="warning" @click="close">关闭</el-button>
         </div>
@@ -105,7 +116,13 @@ import plan from "./plan";
 import rule from "@/components/rule";
 import { baseCodeSupply } from "@/api/index";
 import { getUcmlUser } from "@/const/whse.js";
-import { getYl, delYl } from "@/api/im/Wk/rc";
+import {
+  getRhl,
+  getRhlDetali,
+  addRhl,
+  updateRhl,
+  delRhl,
+} from "@/api/im/Wk/rc";
 import choice from "@/components/choice";
 import { rhl1F, rhl1C, rhl2C, rhl2F } from "./data";
 export default {
@@ -159,14 +176,14 @@ export default {
         dlgC1: rhl2C,
         dlgC2: {},
         dlgPp: "24:0",
-        fc: getYl,
+        fc: getRhl,
       };
       for (var key in this.form) {
         if (this.form[key] === "") {
           delete this.form[key];
         }
       }
-      getYl(
+      getRhl(
         Object.assign(this.form, {
           rows: this.page.pageSize,
           start: this.page.currentPage,
@@ -249,22 +266,59 @@ export default {
           });
         });
       }
+
+      // this.crud.push(data);
+      // this.$refs.crud.setCurrentRow(this.crud[this.crud.length - 1]);
+      // this.iptChange(this.crud[this.crud.length - 1]);
+      // this.oldData = this.crud[this.crud.length - 1];
+      // this.$nextTick(() => {
+      //   // 绑定 输入 事件
+      //   let _this = this;
+      //   document
+      //     .getElementsByClassName("el-table__row")
+      //     [_this.crud.length - 1].addEventListener(
+      //       "input",
+      //       function () {
+      //         _this.iptChange(_this.oldData);
+      //       },
+      //       false
+      //     );
+      // });
+    },
+    iptChange(val) {
+      if (this.changeList.length === 0) {
+        this.changeList.push(val);
+      } else {
+        for (let i = 0; i < this.changeList.length; i++) {
+          if (val.index === this.changeList[i].index) {
+            this.changeList[i] = val;
+            return;
+          }
+          if (
+            this.changeList.length - 1 === i &&
+            this.changeList[i].index != val.index
+          ) {
+            this.changeList.push(val);
+          }
+        }
+      }
     },
     del() {
       if (Object.keys(this.chooseData).length === 0) {
         this.$tip.error("请选择要删除的数据!");
         return;
       }
-      if (!this.chooseData.whseDyesalinoid) {
+      if (!this.chooseData.whseChemicalinoid) {
         this.crud.splice(this.chooseData.index - 1, 1);
-        this.changeList.splice(i, 1);
-        if (this.crud.length > 0) {
-          this.crud.forEach((item, index) => {
-            item.index = index + 1;
-          });
-          this.$refs.crud.setCurrentRow(this.crud[this.crud.length - 1]);
+        for (let i = 0; i < this.changeList.length; i++) {
+          if (this.changeList[i].index === this.chooseData.index) {
+            this.changeList.splice(i, 1);
+            if (this.crud.length > 0) {
+              this.$refs.crud.setCurrentRow(this.crud[this.crud.length - 1]);
+            }
+            return;
+          }
         }
-        return;
       }
       this.$tip
         .cofirm(
@@ -273,15 +327,12 @@ export default {
           {}
         )
         .then(() => {
-          delYl(this.chooseData.whseDyesalinoid)
+          delRhl(this.chooseData.whseChemicalinoid)
             .then((res) => {
               if (res.data.code === 200) {
                 this.$tip.success("删除成功");
                 this.crud.splice(this.chooseData.index - 1, 1);
                 if (this.crud.length > 0) {
-                  this.crud.forEach((item, index) => {
-                    item.index = index + 1;
-                  });
                   this.$refs.crud.setCurrentRow(
                     this.crud[this.crud.length - 1]
                   );
@@ -304,6 +355,47 @@ export default {
       // this.$set(val, "$cellEdit", true);
       // this.oldData = val;
       this.chooseData = val;
+    },
+    save() {
+      for (let i = 0; i < this.changeList.length; i++) {
+        if (
+          this.hide === "1" &&
+          (!this.changeList[i].yinId || !this.changeList[i].registerNo)
+        ) {
+          this.$tip.error("入仓编号/来料编号不能为空!");
+          return;
+        }
+        if (
+          this.hide === "2" &&
+          (!this.changeList[i].yinId || !this.changeList[i].purNo)
+        ) {
+          this.$tip.error("入仓编号/採購單號不能为空/送货單號!");
+          return;
+        }
+        if (
+          this.hide === "8" &&
+          (!this.changeList[i].yinId ||
+            !this.changeList[i].purNo ||
+            !this.changeList[i].deliNo)
+        ) {
+          this.$tip.error("入仓编号/採購單號不能为空/送货單號!");
+          return;
+        }
+      }
+      this.changeList.forEach((item, index) => {
+        if (item.finStatus === "null") {
+          item.finStatus = "";
+        }
+        if (item.whseChemicalinoid) {
+          updateRhl(item).then((res) => {});
+        } else {
+          addRhl(item).then((res) => {
+            item.whseChemicalinoid = res.data.data;
+          });
+        }
+      });
+      // this.getData();
+      this.$tip.success("保存成功!");
     },
     close() {
       document.getElementsByClassName("el-dialog__headerbtn")[0].click();

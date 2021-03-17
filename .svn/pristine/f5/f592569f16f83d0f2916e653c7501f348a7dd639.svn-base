@@ -339,7 +339,7 @@ export function rhl1C(_this) {
         hide: _this.hide === "1" ? false : true,
         width: 120,
         type: "select",
-        dicData: getDicT("pigmentIncomacc", "custNo", "registerNo"),
+        dicData: getDicT("", "custNo", "registerNo"),
       },
       {
         label: "客戶名称",

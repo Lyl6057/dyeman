@@ -24,7 +24,7 @@
                 v-if="hide != '8' && hide != '2'"
                 >新增</el-button
               >
-              <el-button type="danger" @click="del">刪除</el-button>
+              <el-button type="danger" @click="del">删除</el-button>
             </div>
             <div class="crudBox">
               <avue-crud
@@ -212,6 +212,7 @@ export default {
       });
     },
     getPh() {
+      console.log(this.chooseData);
       if (this.isAdd) {
         if (this.chooseData.list) {
           if (this.chooseData.list.length != 0) {
@@ -363,8 +364,7 @@ export default {
         this.$tip.error("请选择要删除的数据!");
         return;
       }
-      console.log(this.chooseData);
-      if (!this.chooseData.whseDyesainDtlaoid) {
+      if (!this.chooseData.whseDyesalInDtlaoid) {
         this.mx.splice(this.chooseData.index - 1, 1);
         this.$refs.dlgcrud.setCurrentRow(this.mx[this.mx.length - 1] || {});
         return;
@@ -378,7 +378,7 @@ export default {
           {}
         )
         .then(() => {
-          delYlDtla(this.chooseData.whseDyesainDtlaoid)
+          delYlDtla(this.chooseData.whseDyesalInDtlaoid)
             .then((res) => {
               if (res.data.code === 200) {
                 this.$tip.success("删除成功");

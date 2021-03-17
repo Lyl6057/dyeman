@@ -430,7 +430,7 @@ export default {
             },
             {
               click: () => {
-                this.toView("rc_scfl", "客人来辅料_1");
+                this.toView("rc_scfl", "客人来料_1");
               },
               title: "客人来料",
               icon: "el-icon-user-solid",

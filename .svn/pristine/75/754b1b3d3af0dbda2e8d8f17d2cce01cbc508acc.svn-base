@@ -5,13 +5,14 @@
         <el-button type="primary" @click="add">新增</el-button>
         <el-button
           type="success"
-          :disabled="Object.keys(detail).length === 0"
-          @click="handleRowDBLClick(detail)"
+          :disabled="Object.keys(chooseData).length === 0"
+          @click="handleRowDBLClick(chooseData)"
           >修改</el-button
         >
         <el-button type="danger" @click="del">删除</el-button>
 
         <!-- <el-button type="warning" @click="ruleV = true">編號規則配置</el-button> -->
+        <!-- <el-button type="warning" @click="getData">取消</el-button> -->
         <el-button type="primary" @click="getData">查询</el-button>
         <el-button type="warning" @click="close">关闭</el-button>
       </div>
@@ -34,8 +35,7 @@
               @on-load="getData"
               @row-dblclick="handleRowDBLClick"
               @current-row-change="cellClick"
-            >
-            </avue-crud> </view-container
+            ></avue-crud> </view-container
         ></el-col>
         <!-- <el-col :span="10">
           <view-container :title="data.type.split('_')[0] + '明细'">
@@ -59,19 +59,10 @@
           ref="tem"
           :datas="data"
           :detail="detail"
-          :everyThing="everyThing"
           :hide="hide"
           :isAdd="isAdd"
           @close="temClose"
         ></tem-dlg>
-        <!-- <back-yarn
-          v-else
-          ref="backYarn"
-          :datas="data"
-          :detail="detail"
-          :everyThing="everyThing"
-          :hide="hide"
-        ></back-yarn> -->
       </el-dialog>
       <el-dialog
         id="wkRuleDlg"
@@ -100,30 +91,18 @@
   </div>
 </template>
 <script>
-// import backYarn from "./backYarn";
 import tem from "./tem";
 import rule from "@/components/rule";
 import choice from "@/components/choice";
-import {
-  getScfl,
-  getScflDetali,
-  addSx,
-  updateSx,
-  delScfl,
-  getScflLoc,
-  addScflLoc,
-  updateScflLoc,
-  delScflLoc,
-} from "@/api/im/Wk/rc";
 import { baseCodeSupply, baseCodeSupplyEx } from "@/api/index";
-import { rsxkr1F, rsxkr1C, rsxkr2C, rsxkr2F } from "./data";
+import { getPb, getPbDetali, addPb, updatePb, delPb } from "@/api/im/Wk/rc";
+import { rcpb1F, rcpb1C, rcpb2C, rcpb2F } from "./data";
 export default {
   name: "",
   components: {
     temDlg: tem,
     ruleDlg: rule,
     choice: choice,
-    // backYarn: backYarn,
   },
   data() {
     return {
@@ -147,7 +126,7 @@ export default {
       changeList: [],
       ruleV: false,
       choiceV: false,
-      choiceTle: "來紗登記",
+      choiceTle: "來胚布登記",
       choiceTarget: {},
       choiceField: "",
       choiceQ: {},
@@ -159,29 +138,23 @@ export default {
     getData() {
       this.loading = true;
       this.oldData = {};
-      this.detail = {};
       this.chooseData = {};
       this.changeList = [];
       this.everyThing = {
-        mainF: rsxkr1F(this),
-        mainC: rsxkr1C(this),
-        dlgF1: rsxkr2F,
-        dlgC1: rsxkr2C,
+        mainF: rcpb1F(this),
+        mainC: rcpb1C(this),
+        dlgF1: rcpb2F(this),
+        dlgC1: rcpb2C,
         dlgC2: {},
         dlgPp: "24:0",
-        fc: getScfl,
-        getLoc: getScflLoc,
-        addLoc: addScflLoc,
-        delLoc: delScflLoc,
-        updateLoc: updateScflLoc,
+        fc: getPb,
       };
-
       for (var key in this.form) {
         if (this.form[key] === "") {
           delete this.form[key];
         }
       }
-      getScfl(
+      getPb(
         Object.assign(this.form, {
           rows: this.page.pageSize,
           start: this.page.currentPage,
@@ -201,8 +174,9 @@ export default {
           this.crud.forEach((item, index) => {
             item.finStatus = String(item.finStatus);
             item.index = index + 1;
-            item.factoryName = item.factoryId;
             item.custId = item.registerNo;
+            item.factoryName = item.factoryId;
+
             this.$nextTick(() => {
               this.$set(item, "custName", item.$custId);
               if (index === this.crud.length - 1) {
@@ -259,10 +233,17 @@ export default {
         this.$tip.error("请选择要删除的数据!");
         return;
       }
-      if (!this.chooseData.whseAccessoriesinoid) {
+      if (!this.chooseData.whseCalicoinoid) {
         this.crud.splice(this.chooseData.index - 1, 1);
-        this.$refs.crud.setCurrentRow(this.crud[this.crud.length - 1]);
-        return;
+        for (let i = 0; i < this.changeList.length; i++) {
+          if (this.changeList[i].index === this.chooseData.index) {
+            this.changeList.splice(i, 1);
+            this.$refs.crud.setCurrentRow(
+              this.crud[this.crud.length - 1] || {}
+            );
+            return;
+          }
+        }
       }
       this.$tip
         .cofirm(
@@ -271,20 +252,12 @@ export default {
           {}
         )
         .then(() => {
-          delScfl(this.chooseData.whseAccessoriesinoid)
+          delPb(this.chooseData.whseCalicoinoid)
             .then((res) => {
               if (res.data.code === 200) {
                 this.$tip.success("删除成功");
                 this.crud.splice(this.chooseData.index - 1, 1);
-                if (this.crud.length > 0) {
-                  this.$refs.crud.setCurrentRow(
-                    this.crud[this.crud.length - 1]
-                  );
-                }
-                this.crud.forEach((item, index) => {
-                  item.index = index + 1;
-                });
-                // this.getData();
+                this.getData();
               } else {
                 this.$tip.error("删除失败");
               }
@@ -301,40 +274,26 @@ export default {
       // this.oldData.$cellEdit = false;
       // this.$set(val, "$cellEdit", true);
       // this.oldData = val;
-      this.detail = val;
       this.chooseData = val;
     },
     save() {
       for (let i = 0; i < this.changeList.length; i++) {
-        // if (
-        //   !this.changeList[i].yinId ||
-        //   (!this.changeList[i].registerNo && this.hide === "1")
-        // ) {
-        //   this.$tip.error("入仓编号/紗線編號不能为空!");
-        //   return;
-        // }
-        // if (
-        //   !this.changeList[i].yinId ||
-        //   (!this.changeList[i].purNo && this.hide === "2")
-        // ) {
-        //   this.$tip.error("入仓编号/採購單號不能为空!");
-        //   return;
-        // }
+        if (!this.changeList[i].yinId) {
+          this.$tip.error("入仓编号不能为空!");
+          return;
+        }
       }
       this.changeList.forEach((item, index) => {
-        // item.finStatus = Number(item.finStatus);
         if (item.finStatus === "null") {
           item.finStatus = "";
         }
-        if (item.whseYarninoid) {
-          updateSx(item).then((res) => {});
+        if (item.whseCalicoinoid) {
+          updatePb(item).then((res) => {});
         } else {
-          addSx(item).then((res) => {
-            item.whseYarninoid = res.data.data;
-          });
+          addPb(item).then((res) => {});
         }
       });
-      // this.getData();
+      this.getData();
       this.$tip.success("保存成功!");
     },
     close() {
@@ -343,7 +302,10 @@ export default {
     handleRowDBLClick(val) {
       this.detail = val;
       this.isAdd = false;
-      this.choiceV = false;
+      if (!this.detail.whseCalicoinoid) {
+        this.$tip.warning("请先保存入仓资料!");
+        return;
+      }
       this.dialogVisible = true;
     },
     choiceData(val) {
@@ -351,17 +313,14 @@ export default {
         this.choiceV = false;
         return;
       }
-
-      // if (this.choiceTle === "採購單") {
-      //   this.choiceQ.suppId = val.suppId;
-      // }
       this.oldData.$cellEdit = false;
       this.choiceTarget[this.choiceField] = val[this.choiceField];
-      if (this.choiceTle === "外厂纱线配料计划") {
+      this.choiceTarget.custId = val.custCode;
+      this.choiceTarget.custName = val.custCode;
+      if (this.choiceTle === "外厂胚布配料计划") {
         this.choiceTarget.factoryId = val.refCode;
         this.choiceTarget.factoryName = val.refCode;
       }
-
       this.oldData.$cellEdit = true;
 
       for (var key in val) {
@@ -381,7 +340,7 @@ export default {
   },
   created() {},
   mounted() {
-    // this.getData();
+    // console.log(JSON.parse(localStorage.getItem('imWk')).type.split("_")[1] === "1");
   },
   beforeDestroy() {},
 };
