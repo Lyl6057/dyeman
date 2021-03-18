@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:48:57
  * @LastEditors: Lyl
- * @LastEditTime: 2021-02-03 17:25:11
+ * @LastEditTime: 2021-03-18 10:55:37
  * @Description: 
 -->
 <template>
@@ -134,7 +134,7 @@ export default {
 </script>
 <style lang='stylus'>
 #clothFlyYl {
-  height: calc(100vh - 340px);
+  height: calc(100vh - 380px);
   width: 100%;
   overflow: auto;
   display: flex;

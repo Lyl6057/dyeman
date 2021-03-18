@@ -46,7 +46,7 @@ export const instructDtlF = {
     },
 
     {
-      label: "紗線編號",
+      label: "材料編號",
       prop: "materialId",
       span: 8,
       placeholder: " ",
@@ -83,12 +83,12 @@ export const instructDtlC = {
       width: 140
     },
     {
-      label: "紗線編號",
+      label: "材料編號",
       prop: "materialId",
       width: 140
     },
     {
-      label: "紗線名稱",
+      label: "材料名稱",
       prop: "materialName",
       width: 350
     },
@@ -938,28 +938,18 @@ export const SalIncomaccDtlF = {
   menu: false,
   column: [
     {
-      label: "登记编号",
-      prop: "registerNo",
+      label: "輔料編號",
+      prop: "basProductivesuppliesFk",
       span: 6,
       placeholder: " ",
+      type: "tree",
+      props: {
+        label: "hardwareId",
+        value: "basProductivesuppliesoid"
+      },
+      dicData: basProductivesupplies
     },
-    {
-      label: "客户",
-      prop: "custNo",
-      span: 6,
-      placeholder: " ",
-      type: "select",
-      dicData: cust1,
-    },
-    {
-      label: "来料日期",
-      prop: "embryoDate",
-      span: 6,
-      placeholder: " ",
-      type: "datetime",
-      format: "yyyy-MM-dd HH:mm:ss",
-      valueFormat: "yyyy-MM-dd HH:mm:ss",
-    },
+
   ]
 
 }
@@ -1866,19 +1856,19 @@ export const WhseCalicoPackBarCodeF = {
       label: "货物包码",
       prop: "barcode",
       placeholder: " ",
-      span: 8,
+      span: 6,
     },
     {
       label: "生产单号",
       prop: "prodNo",
-      span: 8,
+      span: 6,
       display: true,
       placeholder: " ",
     },
     {
       label: "缸号",
       prop: "batchNo",
-      span: 8,
+      span: 6,
       display: true,
       placeholder: " ",
     },
@@ -1892,9 +1882,10 @@ export const WhseCalicoPackBarCodeC = {
   addBtn: false,
   border: true,
   highlightCurrentRow: true,
-  height: "calc(100vh - 445px)",
+  height: "calc(100vh - 200px)",
   refreshBtn: false,
   columnBtn: false,
+  selection: true,
   page: true,
   column: [
     {
@@ -1906,39 +1897,39 @@ export const WhseCalicoPackBarCodeC = {
     {
       label: "货物包码",
       prop: "barcode",
-      width: 250,
+      width: 200,
       hide: false
     },
     {
       label: "缸号",
       prop: "batchNo",
       span: 8,
-      width: 250,
+      width: 200,
       hide: false
     },
     {
       label: "生产单号",
       prop: "prodNo",
       hide: false,
-      width: 280
+      width: 200
     },
     {
       label: "疋数",
       prop: "countingNo",
-      width: 120,
+      width: 100,
       align: "right"
     },
 
     {
       label: "重量",
       prop: "weight",
-      width: 120,
+      width: 100,
       align: "right"
     },
     {
       label: "重量单位",
       prop: "weightUnit",
-      width: 120,
+      width: 100,
       type: "select",
       dicData: matUnit
     },
@@ -3108,7 +3099,7 @@ export const BasCustomerC = {
   addBtn: false,
   border: true,
   highlightCurrentRow: true,
-  height: "calc(100vh - 290px)",
+  height: "calc(100vh - 200px)",
   refreshBtn: false,
   columnBtn: false,
   page: true,
@@ -3122,6 +3113,7 @@ export const BasCustomerC = {
     {
       label: "客戶名稱",
       prop: "custName",
+      width: 280
     },
     {
       label: "客戶編號",
@@ -3133,6 +3125,16 @@ export const BasCustomerC = {
       prop: "custType",
       type: "select",
       dicData: getDIC("bas_customer_type")
+    },
+    {
+      label: "客戶狀態",
+      prop: "state",
+      type: "select",
+      dicData: getDIC("bas_customer_state")
+    },
+    {
+      label: "营业执照",
+      prop: "busLicense",
     },
     {
       label: "備註",
@@ -3378,25 +3380,25 @@ export const WhseMaterialoutPlanF = {
     {
       label: "加工廠代號",
       prop: "refCode",
-      span: 8,
+      span: 6,
       placeholder: " ",
     },
     {
       label: "加工廠名稱",
       prop: "refName",
-      span: 8,
+      span: 6,
       placeholder: " ",
     },
     {
       label: "胚布名称",
       prop: "clothName",
-      span: 8,
+      span: 6,
       placeholder: " ",
     },
     {
       label: "配料计划编号",
       prop: "retBatch",
-      span: 8,
+      span: 6,
       placeholder: " ",
     },
     // {
@@ -3414,7 +3416,7 @@ export const WhseMaterialoutPlanC = {
   addBtn: false,
   border: true,
   highlightCurrentRow: true,
-  height: "calc(100vh - 445px)",
+  height: "calc(100vh - 200px)",
   refreshBtn: false,
   columnBtn: false,
   page: true,
@@ -3428,16 +3430,18 @@ export const WhseMaterialoutPlanC = {
     {
       label: "加工廠代號",
       prop: "refCode",
+      width: 120
     },
     {
       label: "加工廠名稱",
       prop: "refName",
       type: "select",
+      width: 220
     },
     {
       label: "外厂配料计划编号",
       prop: "retBatch",
-      width: 220
+      width: 150
     },
     // {
     //   label: "生產單號",
@@ -3446,6 +3450,7 @@ export const WhseMaterialoutPlanC = {
     {
       label: "胚布编号",
       prop: "calicoId",
+      width: 140
     },
     {
       label: "胚布名称",
@@ -3454,13 +3459,15 @@ export const WhseMaterialoutPlanC = {
     {
       label: "重量",
       prop: "weight",
-      align: "right"
+      align: "right",
+      width: 120
     },
     {
       label: "單位",
       prop: "weightUnit",
       type: "select",
       dicData: matUnit,
+      width: 120
     }
   ]
 
@@ -3682,7 +3689,7 @@ export const OrderPbF = {
     {
       label: "订单号",
       prop: "salPoFk",
-      span: 8,
+      span: 6,
       placeholder: " ",
       type: "tree",
       dicData: postDicT("salPoList", "poNo", "salPooid"),
@@ -3691,7 +3698,7 @@ export const OrderPbF = {
     {
       label: "布料编号",
       prop: "fabId",
-      span: 8,
+      span: 6,
       placeholder: " ",
     },
 
@@ -3704,9 +3711,10 @@ export const OrderPbC = {
   addBtn: false,
   border: true,
   highlightCurrentRow: true,
-  height: "calc(100vh - 206px)",
+  height: "calc(100vh - 200px)",
   refreshBtn: false,
   columnBtn: false,
+  selection: true,
   page: true,
   column: [
     {
@@ -3750,19 +3758,19 @@ export const OrderPbC = {
       width: 120,
       dicData: matUnit
     },
-    {
-      label: "单价",
-      prop: "unitPrice",
-      width: 120,
-      align: "right"
-    },
-    {
-      label: "单价单位",
-      prop: "priceUnit",
-      type: "select",
-      width: 120,
-      dicData: matUnit
-    },
+    // {
+    //   label: "单价",
+    //   prop: "unitPrice",
+    //   width: 120,
+    //   align: "right"
+    // },
+    // {
+    //   label: "单价单位",
+    //   prop: "priceUnit",
+    //   type: "select",
+    //   width: 120,
+    //   dicData: matUnit
+    // },
   ]
 
 }

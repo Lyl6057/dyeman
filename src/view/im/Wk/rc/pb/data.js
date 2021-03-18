@@ -160,6 +160,64 @@ export function rcpb2F(_this) {
         disabled: true
       },
       {
+        label: "入仓类型",
+        prop: "yinType",
+        cell: false,
+        type: "select",
+        dicData: getDIC('Whse_CalicoType'),
+        span: 6,
+        display: _this.hide === '6' || _this.hide === '4' || _this.hide === '7',
+        disabled: true
+      },
+      {
+        label: "加工廠",
+        prop: "factoryId",
+        cell: false,
+        type: "select",
+        dicData: getDicT("vWhseMaterialoutPlan", "refName", "refCode"),
+        span: 6,
+        display: _this.hide === '5',
+        disabled: !_this.isAdd,
+        click: () => {
+          _this.choiceV = !_this.choiceV;
+          _this.choiceField = "factoryId";
+          // this.choiceQ.registerNo = this.form;
+          _this.choiceTarget = _this.form;
+          _this.dlgWidth = "100%";
+          _this.choiceTle = "選擇外厂胚布配料計劃";
+
+        }
+      },
+      {
+        label: "加工指令單",
+        prop: "instructId",
+        cell: false,
+        span: 6,
+        display: _this.hide === '5',
+        disabled: !_this.isAdd,
+        type: "select",
+        dicData:
+          getDicT('viWhseProcessinstruct', "instructId", "instructId"),
+        // click: () => {
+        //   _this.choiceV = !_this.choiceV;
+        //   _this.choiceField = "instructId";
+        //   this.choiceQ.registerNo = this.form;
+        //   _this.choiceTarget = _this.form;
+        //   _this.dlgWidth = "100%";
+        //   _this.choiceTle = "選擇指令單明細";
+
+        // }
+        change: () => {
+          _this.$nextTick(() => {
+            if (_this.form.instructId === '' || _this.form.instructId === null) {
+              _this.mx = []
+              _this.chooseData = {}
+            }
+          })
+
+        }
+      },
+      {
         label: "检验状态",
         prop: "yinStatus",
         span: 6,
@@ -276,7 +334,7 @@ export function rcpb1C(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: _this.hide === '1' || _this.hide === '2' ? 'calc(100vh - 275px)' : 'calc(100vh - 300px)',
+    height: _this.hide === '6' || _this.hide === '4' || _this.hide === '5' || _this.hide === '7' ? 'calc(100vh - 233px)' : 'calc(100vh - 275px)',
     refreshBtn: false,
     columnBtn: false,
     page: true,
@@ -406,7 +464,7 @@ export function rcpb1C(_this) {
         label: "加工厂代號",
         prop: "factoryId",
         cell: true,
-        hide: _this.hide === "5" || _this.hide === "7" ? false : true,
+        hide: _this.hide === "5" ? false : true,
         width: 150,
         placeholder: "请选择加工厂代號",
         click: () => {
@@ -422,7 +480,7 @@ export function rcpb1C(_this) {
         label: "加工厂名稱",
         prop: "factoryName",
         cell: false,
-        hide: _this.hide === "5" || _this.hide === "7" ? false : true,
+        hide: _this.hide === "5" ? false : true,
         width: 150,
         type: "select",
         dicData: getDicT("vWhseMaterialoutPlan", "refName", "refCode")
@@ -493,7 +551,7 @@ export function rcpb2C(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: _this.hide === '1' || _this.hide === '2' ? 'calc(100vh - 310px)' : 'calc(100vh - 285px)',
+    height: 'calc(100vh - 310px)',
     refreshBtn: false,
     columnBtn: false,
     page: true,
@@ -527,18 +585,18 @@ export function rcpb2C(_this) {
       {
         label: "生產單號",
         prop: "prodNo",
-        cell: true,
-        width: 280,
+        cell: false,
+        width: 140,
         hide: _this.hide === '6' || _this.hide === '4' || _this.hide === '7' ? false : true,
         placeholder: "請選擇生產單號",
         click: (val) => {
-          _this.choiceV = !_this.choiceV
-          _this.choiceField = "prodNo";
-          _this.oldData = _this.chooseData;
-          _this.choiceTarget = _this.oldData;
-          if (_this.hide === '6' || _this.hide === '7') {
-            _this.choiceTle = "胚布貨物包";
-          }
+          // _this.choiceV = !_this.choiceV
+          // _this.choiceField = "prodNo";
+          // _this.oldData = _this.chooseData;
+          // _this.choiceTarget = _this.oldData;
+          // if (_this.hide === '6' || _this.hide === '7') {
+          //   _this.choiceTle = "胚布貨物包";
+          // }
           if (_this.hide === '4') {
             _this.choiceTle = "胚布訂單";
           }
@@ -562,16 +620,40 @@ export function rcpb2C(_this) {
         label: "胚布名称",
         prop: "clothName",
         cell: false,
-        // width: 500,
+        width: 650,
         hide: _this.hide === '6' || _this.hide === '7' ? true : false,
         click: (val) => {
         },
       },
-      // {
-      //   label: "货位码",
-      //   prop: "locationCode",
-      //   hide: true,
-      // },
+      {
+        label: "疋數",
+        prop: "countingNo",
+        hide: _this.hide === '6' || _this.hide === '7' || _this.hide === '5' ? false : true,
+        cell: true,
+        width: 100,
+        align: "right",
+      },
+      {
+        label: "码卡号",
+        prop: "fabticket",
+        cell: true,
+        width: 140,
+        hide: _this.hide === '6' || _this.hide === '7' ? false : true,
+      },
+      {
+        label: "货位码",
+        prop: "locationCode",
+        cell: true,
+        hide: _this.hide === '6' || _this.hide === '7' ? false : true,
+        width: 180,
+        click: () => {
+          _this.dlgWidth = "100%"
+          _this.choiceV = !_this.choiceV
+          _this.choiceField = "locationCode";
+          _this.choiceTarget = _this.chooseData;
+          _this.choiceTle = "選擇貨位";
+        }
+      },
 
       // {
       //   label: "客户编号",
@@ -589,13 +671,7 @@ export function rcpb2C(_this) {
       //   //   _this.iptChange(_this.chooseData);
       //   // },
       // },
-      // {
-      //   label: "码卡号",
-      //   prop: "fabticket",
-      //   cell: true,
-      //   width: 140,
-      //   hide: _this.hide === '6' || _this.hide === '4' ? true : false,
-      // },
+
       // {
       //   label: "批号",
       //   prop: "batchNo",
@@ -611,14 +687,7 @@ export function rcpb2C(_this) {
 
       //   }
       // },
-      // {
-      //   label: "疋數",
-      //   prop: "countingNo",
-      //   hide: _this.hide === '4' ? true : false,
-      //   cell: _this.hide != '6' ? true : false,
-      //   width: 100,
-      //   align: "right",
-      // },
+
 
       // {
       //   label: "来胚入仓_FK",
@@ -627,15 +696,14 @@ export function rcpb2C(_this) {
       // },
 
 
-      // {
-      //   label: "重量",
-      //   prop: "weight",
-      //   hide: _this.hide === '4' || _this.hide === '7' ? true : false,
-      //   cell: _this.hide != '6' ? true : false,
-      //   width: 100,
-      //   align: "right",
-
-      // },
+      {
+        label: "重量",
+        prop: "weight",
+        hide: _this.hide != '5',
+        cell: true,
+        width: 100,
+        align: "right",
+      },
 
       // {
       //   label: "重量单位",

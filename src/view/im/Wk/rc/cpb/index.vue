@@ -4,6 +4,20 @@
       <div class="btnList">
         <!-- <el-button type="warning" @click="getData">取消</el-button> -->
         <!-- <el-button type="warning" @click="ruleV = true">編號規則配置</el-button> -->
+
+        <el-button type="primary" @click="add">新增</el-button>
+        <el-button
+          type="success"
+          :disabled="Object.keys(chooseData).length === 0"
+          @click="handleRowDBLClick(chooseData)"
+          >修改</el-button
+        >
+        <el-button
+          type="danger"
+          @click="del"
+          :disabled="Object.keys(chooseData).length === 0"
+          >删除</el-button
+        >
         <el-button type="primary" @click="getData">查询</el-button>
         <el-button type="warning" @click="close">关闭</el-button>
       </div>
@@ -15,18 +29,8 @@
         ></avue-form>
       </div>
       <el-row class="crudBox">
-        <el-col :span="12">
+        <el-col :span="24">
           <view-container :title="data.type.split('_')[0] + '入库'">
-            <div class="btnList" style="margin-bottom: 2px">
-              <el-button type="primary" @click="add">新增</el-button>
-              <el-button type="danger" @click="del">删除</el-button>
-              <el-button
-                type="success"
-                :disabled="changeList.length === 0"
-                @click="save"
-                >保存</el-button
-              >
-            </div>
             <avue-crud
               ref="crud"
               id="crud"
@@ -36,9 +40,10 @@
               v-loading="loading"
               @on-load="getData"
               @current-row-change="cellClick"
+              @row-dblclick="handleRowDBLClick"
             ></avue-crud> </view-container
         ></el-col>
-        <el-col :span="12">
+        <!-- <el-col :span="12">
           <view-container :title="data.type.split('_')[0] + '入库明细'">
             <tem-dlg
               ref="tem"
@@ -46,21 +51,25 @@
               :everyThing="everyThing"
               :hide="hide"
             ></tem-dlg></view-container
-        ></el-col>
+        ></el-col> -->
       </el-row>
       <el-dialog
-        id="wkRuleDlg"
-        :visible.sync="ruleV"
-        width="50%"
+        id="sxrcDlg"
+        :visible.sync="dialogVisible"
+        width="100%"
         append-to-body
         :close-on-click-modal="false"
-        v-if="ruleV"
+        :close-on-press-escape="false"
+        v-if="dialogVisible"
       >
-        <rule-dlg
-          ref="rule"
-          :rcType="'whse_in'"
-          @close="ruleV = false"
-        ></rule-dlg>
+        <tem-dlg
+          ref="tem"
+          :datas="data"
+          :detail="detail"
+          :hide="hide"
+          :isAdd="isAdd"
+          @close="temClose"
+        ></tem-dlg>
       </el-dialog>
       <choice
         :choiceV="choiceV"
@@ -76,8 +85,7 @@
 </template>
 <script>
 import tem from "./tem";
-import rule from "@/components/rule";
-import { baseCodeSupply } from "@/api/index";
+import { baseCodeSupply, baseCodeSupplyEx } from "@/api/index";
 import {
   getCpb,
   getCpbDetali,
@@ -91,7 +99,6 @@ export default {
   name: "",
   components: {
     temDlg: tem,
-    ruleDlg: rule,
     choice: choice,
   },
   data() {
@@ -131,8 +138,8 @@ export default {
       this.everyThing = {
         mainF: rsxkr1F(this),
         mainC: rsxkr1C(this),
-        dlgF1: rsxkr2F,
-        dlgC1: rsxkr2C,
+        dlgF1: rsxkr2F(this),
+        dlgC1: rsxkr2C(this),
         dlgC2: {},
         dlgPp: "24:0",
       };
@@ -157,6 +164,12 @@ export default {
           if (this.crud.length === 0) {
             this.loading = false;
           }
+          this.crud.sort((a, b) => {
+            return (
+              b.yinId.substring(b.yinId.length - 6) -
+              a.yinId.substring(a.yinId.length - 6)
+            );
+          });
           // if (Object.keys(this.chooseData).length > 0) {
           //   this.$refs.crud.setCurrentRow(this.crud[this.chooseData.index - 1]);
           // } else {
@@ -178,40 +191,20 @@ export default {
         });
     },
     add() {
-      if (
-        this.crud.length > 0 &&
-        !this.crud[this.crud.length - 1].whseFinishedclothinoid
-      ) {
-        return;
-      }
-      if (Object.keys(this.oldData).length > 0) {
-        this.oldData.$cellEdit = false;
-      }
       let data = {
         index: this.crud.length + 1,
         $cellEdit: true,
         yinType: this.hide,
         yinId: "",
+        yinDate: this.$getNowTime(),
+        yinStatus: "1",
+        finStatus: "0",
       };
-      baseCodeSupply({ code: "whse_in" }).then((res) => {
+      baseCodeSupplyEx({ code: "whse_in" }).then((res) => {
         data.yinId = res.data.data;
-      });
-      this.crud.push(data);
-      this.$refs.crud.setCurrentRow(this.crud[this.crud.length - 1]);
-      this.iptChange(this.crud[this.crud.length - 1]);
-      this.oldData = this.crud[this.crud.length - 1];
-      this.$nextTick(() => {
-        // 绑定 输入 事件
-        let _this = this;
-        document
-          .getElementsByClassName("el-table__row")
-          [_this.crud.length - 1].addEventListener(
-            "input",
-            function () {
-              _this.iptChange(_this.oldData);
-            },
-            false
-          );
+        this.isAdd = true;
+        this.detail = data;
+        this.dialogVisible = true;
       });
     },
     iptChange(val) {
@@ -248,7 +241,11 @@ export default {
         }
       }
       this.$tip
-        .cofirm("是否确定删除", this, {})
+        .cofirm(
+          "是否确定删除入仓编号为 【 " + this.chooseData.yinId + " 】 的数据?",
+          this,
+          {}
+        )
         .then(() => {
           delCpb(this.chooseData.whseFinishedclothinoid)
             .then((res) => {
@@ -268,40 +265,17 @@ export default {
           this.$tip.warning("取消操作");
         });
     },
-    cellClick(val) {
-      if (this.$refs.tem.canLeave) {
-        this.oldData.$cellEdit = false;
-        this.$set(val, "$cellEdit", true);
-        this.oldData = val;
-        this.chooseData = val;
-        this.$refs.tem.canLeave = false;
+    handleRowDBLClick(val) {
+      this.detail = val;
+      this.isAdd = false;
+      if (!this.detail.whseFinishedclothinoid) {
+        this.$tip.warning("请先保存入仓资料!");
         return;
       }
-      if (this.$refs.tem.changeList.length > 0) {
-        this.$tip
-          .cofirm("是否保存当前修改的批号资料?", this, {})
-          .then(() => {
-            this.$refs.tem.save();
-            this.$nextTick(() => {
-              this.$refs.crud.setCurrentRow(this.oldData);
-            });
-          })
-          .catch((err) => {
-            this.oldData.$cellEdit = false;
-            this.$set(val, "$cellEdit", true);
-            this.oldData = val;
-            this.chooseData = val;
-            this.$refs.tem.detail = val;
-            this.$refs.tem.getDetail();
-          });
-      } else {
-        this.oldData.$cellEdit = false;
-        this.$set(val, "$cellEdit", true);
-        this.oldData = val;
-        this.chooseData = val;
-        this.$refs.tem.detail = val;
-        this.$refs.tem.getDetail();
-      }
+      this.dialogVisible = true;
+    },
+    cellClick(val) {
+      this.chooseData = val;
     },
     save() {
       for (let i = 0; i < this.changeList.length; i++) {
@@ -325,6 +299,12 @@ export default {
     },
     close() {
       document.getElementsByClassName("el-dialog__headerbtn")[0].click();
+    },
+    temClose(val) {
+      if (val) {
+        this.getData();
+      }
+      this.dialogVisible = false;
     },
     choiceData(val) {
       if (Object.keys(val).length === 0) {

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-01 14:06:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-02-02 15:15:19
+ * @LastEditTime: 2021-03-17 20:51:28
  * @Description:
  */
 
@@ -24,4 +24,22 @@ export function getCodeSupply(params) {
     method: 'get',
   })
 }
+
+
+// 新增佈飛记录
+export function addBf(data) {
+  return axios({
+    url: '/api/proClothNote/save',
+    method: 'post',
+    params: data
+  })
+}
+// 打印佈飛
+export function printBf(id) {
+  return axios({
+    url: '/api/proClothNote/printing?id=' + id,
+    method: 'get',
+  })
+}
+
 

@@ -413,7 +413,7 @@ export function rhl1C(_this) {
         cell: false,
         width: 100,
         type: "select",
-        dicData: getDIC('Whse_CalicoType'),
+        dicData: getDIC('Whse_ChemType'),
         change: (val) => {
           _this.iptChange(_this.chooseData);
         },

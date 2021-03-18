@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-02-03 17:26:50
+ * @LastEditTime: 2021-03-18 11:05:21
  * @Description: 
 -->
 <template>
@@ -13,7 +13,9 @@
       v-loading="wLoading"
     >
       <div class="btnList">
-        <el-button type="success" @click="print">打印</el-button>
+        <el-button type="success" @click="print" :disabled="printCtr"
+          >打印</el-button
+        >
         <el-button type="primary" @click="setPreview">预览</el-button>
         <el-button type="warning" @click="close">关闭</el-button>
       </div>
@@ -29,7 +31,7 @@
 </template>
 <script>
 import { mainCrud } from "./data";
-import { getCodeSupply } from "./api";
+import { getCodeSupply, addBf, printBf } from "./api";
 import { getDIC, getDicT, getXDicT, postDicT, preFixInt } from "@/config";
 import { baseCodeSupplyEx } from "@/api/index";
 import preview from "./preview";
@@ -60,8 +62,8 @@ export default {
       choiceQ: {},
       dlgWidth: "60%",
       codeSupplyNum: 0,
-      code: getDIC("bas_companyCode"),
       previewData: {},
+      printCtr: false,
     };
   },
   watch: {},
@@ -81,73 +83,6 @@ export default {
           this.wLoading = false;
         }, 500);
       });
-    },
-    save() {
-      if (this.form.colorNo === "" || this.form.colorDepth === "") {
-        this.$tip.error("色号/颜色深度不能为空!");
-        return;
-      } else if (
-        this.form.custColorBh === "" ||
-        this.form.colorBh === "" ||
-        this.form.colorChn === ""
-      ) {
-        this.$tip.error("客色号/颜色编号/颜色中文不能为空!");
-        return;
-      } else if (this.form.custCode === "" || this.form.colorDate === "") {
-        this.$tip.error("客户/日期不能为空!");
-        return;
-      } else if (this.form.fabCode === "" || this.form.fabricDesc === "") {
-        this.$tip.error("面料/面料中文描述不能为空!");
-        return;
-      } else if (
-        this.form.colorLights === "" ||
-        this.form.lapDyetype === "" ||
-        this.form.colorStandard === ""
-      ) {
-        this.$tip.error("第一光源 /染色类别/对色标准不能为空!");
-        return;
-      } else if (this.form.recN0 === "") {
-        this.$tip.error("档案编号不能为空!");
-        return;
-      }
-      this.wLoading = true;
-      this.refresh = true;
-      if (this.form.labTapcoloroid) {
-        // update
-        updateLabTapcolor(this.form)
-          .then((res) => {
-            this.wLoading = false;
-            this.$tip.success("保存成功!");
-          })
-          .catch((err) => {
-            this.wLoading = false;
-            this.$tip.error("保存失败!" + err);
-          });
-      } else {
-        // add
-        if (this.form.deputyLights.length > 0) {
-          let data = "";
-          this.form.deputyLights.forEach((item, i) => {
-            if (i === this.form.deputyLights.length - 1) {
-              data += item;
-            } else {
-              data += item + ",";
-            }
-          });
-          this.form.deputyLights = data;
-        }
-        addLabTapcolor(this.form)
-          .then((res) => {
-            baseCodeSupply({ code: "color_num" }).then((res) => {});
-            this.form.labTapcoloroid = res.data.data;
-            this.wLoading = false;
-            this.$tip.success("保存成功!");
-          })
-          .catch((err) => {
-            this.wLoading = false;
-            this.$tip.error("保存失败!" + err);
-          });
-      }
     },
     setPreview() {
       this.$refs.form.validate((valid, done) => {
@@ -171,23 +106,68 @@ export default {
             )
             .then(() => {
               this.wLoading = true;
-              // delLabTapcolor(this.detail.labTapcoloroid)
-              //   .then((res) => {
-              //     if (res.data.code === 200) {
-              //       this.$tip.success("删除成功");
-              //       this.crud.splice(this.detail.index - 1, 1);
-              //       this.query();
-              //     } else {
-              //       this.$tip.error("删除失败");
-              //     }
-              //   })
-              //   .catch((err) => {
-              //     this.$tip.error("删除失败!");
-              //   });
-
-              setTimeout(() => {
-                this.wLoading = false;
-              }, 500);
+              let arr = [];
+              for (let i = 0; i < this.form.ps; i++) {
+                arr.push({
+                  breadth: this.form.actualWidth,
+                  clothWeight: 100,
+                  eachNumber: this.form.qsph + i,
+                  fabricName: this.form.calicoType,
+                  gramWeight: this.form.weight,
+                  isPrinted: false,
+                  loomNo: this.form.equipmentCode,
+                  workNo: this.form.zjgh,
+                  madeDate: this.$getNowTime(),
+                  noteCode: this.form.bph + (this.form.qsph + i),
+                  poNo: this.form.poNo,
+                  printedTime: this.$getNowTime(),
+                  proBatchNumber: this.form.spi,
+                  proColor: this.form.colorName,
+                  proName: this.form.workName,
+                  schId: this.form.salSchId,
+                  // lenUnit: "1",
+                  machineCode: this.form.stepCode,
+                  // proSpec: "test",
+                  salPooid: this.form.salSchId,
+                  tempId: this.form.salSchId,
+                  weightUnit: this.form.workUnit,
+                  // clothLength: 200,
+                  // customerName: "test",
+                });
+              }
+              let add = (item, i) => {
+                return new Promise((resolve, reject) => {
+                  addBf(item)
+                    .then((res) => {
+                      item.noteId = res.data.data;
+                      resolve();
+                    })
+                    .catch((err) => {
+                      this.$tip.warning("打印失败");
+                      this.wLoading = false;
+                    });
+                });
+              };
+              let promiseArr = arr.map((item, i) => {
+                return add(item, i);
+              });
+              Promise.all(promiseArr).then((res) => {
+                baseCodeSupply({ code: "cloth_fly" }).then((res) => {});
+                arr.forEach((item, i) => {
+                  printBf(item.noteId)
+                    .then((res) => {})
+                    .catch((err) => {
+                      this.$tip.warning("打印失败");
+                      this.wLoading = false;
+                    });
+                  if (i === arr.length - 1) {
+                    setTimeout(() => {
+                      this.printCtr = true;
+                      this.wLoading = false;
+                    }, 500);
+                  }
+                });
+              });
             })
             .catch((err) => {
               this.$tip.warning("取消操作");

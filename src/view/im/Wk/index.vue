@@ -1047,7 +1047,7 @@ export default {
     margin-top: 0 !important;
     height: 100%;
     margin: 0 !important;
-    background-color: rgb(2, 26, 60);
+    // background-color: rgb(2, 26, 60);
     overflow: hidden;
   }
 

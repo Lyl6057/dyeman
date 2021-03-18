@@ -73,8 +73,18 @@ export function rsxkr2F(_this) {
         span: 6,
         placeholder: " ",
         type: "datetime",
-        format: "yyyy-MM-dd HH:mm:ss",
-        valueFormat: "yyyy-MM-dd HH:mm:ss",
+        format: "yyyy-MM-dd",
+        valueFormat: "yyyy-MM-dd",
+        disabled: true
+      },
+      {
+        label: "入仓类型",
+        prop: "yinType",
+        cell: false,
+        type: "select",
+        dicData: getDIC('Whse_FinishedclothType'),
+        span: 6,
+        display: _this.hide === "2" ? false : true,
         disabled: true
       },
       {
@@ -82,20 +92,47 @@ export function rsxkr2F(_this) {
         prop: "custName",
         span: 6,
         placeholder: " ",
-        disabled: true,
+        disabled: false,
         type: "select",
         display: _this.hide === "2" ? true : false,
         dicData:
-          getDicT('basCustomer', 'custName', 'custName')
+          getDicT('basCustomer', 'custName', 'custName'),
+        click: () => {
+          _this.choiceV = !_this.choiceV;
+          _this.choiceField = "custName";
+          _this.choiceTarget = _this.form;
+          _this.dlgWidth = "100%";
+          _this.choiceTle = "选择客戶";
+        }
       },
       {
         label: "客人通知单",
         prop: "custNotice",
         span: 6,
         placeholder: " ",
-        disabled: true
+        disabled: false,
+        display: _this.hide === "2" ? true : false,
       },
 
+      {
+        label: "检验状态",
+        prop: "yinStatus",
+        span: 6,
+        placeholder: " ",
+
+        type: "select",
+        disabled: true,
+        dicData:
+          getDIC('whse_yinstatus')
+      },
+      {
+        label: "備註",
+        prop: "remarks",
+        span: 18,
+        placeholder: " ",
+        disabled: false,
+        display: _this.hide === "2" ? true : false,
+      },
     ],
   }
 
@@ -107,7 +144,7 @@ export function rsxkr1C(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 290px)",
+    height: "calc(100vh - 230px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
@@ -130,14 +167,6 @@ export function rsxkr1C(_this) {
         type: "datetime",
         format: "yyyy-MM-dd HH:mm:ss",
         valueFormat: "yyyy-MM-dd HH:mm:ss",
-        focus: (val) => {
-          _this.iptChange(_this.chooseData);
-        },
-        change: (val) => {
-          if (val.value === '') {
-            _this.iptChange(_this.chooseData);
-          }
-        },
         align: "center",
       },
 
@@ -151,55 +180,32 @@ export function rsxkr1C(_this) {
         prop: "yinId",
         cell: true,
         width: 160,
-        change: (val) => {
-
-          _this.iptChange(_this.chooseData);
-
-        },
       },
       {
         label: "入仓类型",
         prop: "yinType",
         cell: false,
-        width: 140,
+        width: 120,
         type: "select",
         dicData: getDIC('Whse_FinishedclothType'),
-        change: (val) => {
-
-          _this.iptChange(_this.chooseData);
-
-        },
       },
       {
         label: "入仓日期",
         prop: "yinDate",
         cell: true,
         type: "datetime",
-        format: "yyyy-MM-dd HH:mm:ss",
-        valueFormat: "yyyy-MM-dd HH:mm:ss",
-        focus: (val) => {
-          _this.iptChange(_this.chooseData);
-        },
-        change: (val) => {
-          if (val.value === '') {
-            _this.iptChange(_this.chooseData);
-          }
-        },
-        width: 190,
+        format: "yyyy-MM-dd",
+        valueFormat: "yyyy-MM-dd",
+        width: 140,
         align: "center",
       },
 
       {
-        label: "客户",
+        label: "客户名稱",
         prop: "custName",
         cell: true,
         hide: _this.hide === "2" ? false : true,
-        width: 150,
-        change: (val) => {
-          if (val.value === '') {
-            _this.iptChange(_this.chooseData);
-          }
-        },
+        width: 280,
         click: () => {
           _this.choiceV = !_this.choiceV;
           _this.choiceField = "custName";
@@ -207,7 +213,6 @@ export function rsxkr1C(_this) {
           _this.oldData = _this.chooseData
           _this.choiceTarget = _this.oldData;
           _this.choiceTle = "选择客戶";
-          _this.iptChange(_this.chooseData);
         },
       },
       {
@@ -216,14 +221,6 @@ export function rsxkr1C(_this) {
         cell: false,
         width: 150,
         hide: true,
-        change: (val) => {
-          if (val.value === '') {
-            _this.iptChange(_this.chooseData);
-          }
-        },
-        click: () => {
-          _this.iptChange(_this.chooseData);
-        },
       },
 
       {
@@ -231,15 +228,7 @@ export function rsxkr1C(_this) {
         prop: "custNotice",
         cell: true,
         hide: _this.hide === "2" ? false : true,
-        width: 150,
-        change: (val) => {
-          if (val.value === '') {
-            _this.iptChange(_this.chooseData);
-          }
-        },
-        click: () => {
-          _this.iptChange(_this.chooseData);
-        },
+        width: 120,
       },
 
       {
@@ -250,14 +239,6 @@ export function rsxkr1C(_this) {
         hide: _this.hide != '2' ? false : true,
         type: "select",
         dicData: getDIC('whse_yinstatus'),
-        change: (val) => {
-          if (val.value === '') {
-            _this.iptChange(_this.chooseData);
-          }
-        },
-        click: () => {
-          _this.iptChange(_this.chooseData);
-        }
       },
       {
         label: "财务状态",
@@ -268,14 +249,6 @@ export function rsxkr1C(_this) {
         hide: _this.hide === '1' ? false : true,
         dicData:
           getDIC('whse_finStatus'),
-        change: (val) => {
-          if (val.value === '') {
-            _this.iptChange(_this.chooseData);
-          }
-        },
-        click: () => {
-          _this.iptChange(_this.chooseData);
-        }
       },
       {
         label: "备注",
@@ -283,9 +256,6 @@ export function rsxkr1C(_this) {
         cell: true,
         hide: _this.hide === '2' ? false : true,
         width: 250,
-        change: (val) => {
-          _this.iptChange(_this.chooseData);
-        },
       },
       {
         label: "创建用户",
@@ -326,14 +296,6 @@ export function rsxkr1C(_this) {
         width: 180,
         format: "yyyy-MM-dd HH:mm:ss",
         valueFormat: "yyyy-MM-dd HH:mm:ss",
-        focus: (val) => {
-          _this.iptChange(_this.chooseData);
-        },
-        change: (val) => {
-          if (val.value === '') {
-            _this.iptChange(_this.chooseData);
-          }
-        },
         align: "center",
       },
     ],
@@ -346,7 +308,7 @@ export function rsxkr2C(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 290px)",
+    height: _this.hide === '2' ? "calc(100vh - 310px)" : "calc(100vh - 265px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
@@ -380,61 +342,61 @@ export function rsxkr2C(_this) {
       {
         label: "缸号",
         prop: "batchNo",
-        cell: true,
+        cell: _this.hide === '2' ? true : false,
         width: 230,
-        click: () => {
-          if (_this.hide != 2) {
-            _this.choiceV = !_this.choiceV;
-            _this.choiceField = "batchNo";
-            // _this.choiceQ.purType = '5'
-            _this.oldData = _this.chooseData
-            _this.choiceTarget = _this.oldData;
-            _this.choiceTle = "成品布貨物包";
-            _this.iptChange(_this.chooseData);
-          }
+        // click: () => {
+        //   if (_this.hide != 2) {
+        //     _this.choiceV = !_this.choiceV;
+        //     _this.choiceField = "batchNo";
+        //     // _this.choiceQ.purType = '5'
+        //     _this.oldData = _this.chooseData
+        //     _this.choiceTarget = _this.oldData;
+        //     _this.choiceTle = "成品布貨物包";
+        //   }
 
-        },
-      },
-      {
-        label: "疋数",
-        prop: "countingNo",
-        cell: _this.hide === '1' || _this.hide === '3' ? false : true,
-        width: 120,
-        align: "right",
-        click: (val) => {
-          _this.iptChange(_this.chooseData);
-        },
-      },
-      {
-        label: "重量",
-        prop: "weight",
-        cell: _this.hide === '1' || _this.hide === '3' ? false : true,
-        width: 120,
-        align: "right",
-        click: (val) => {
-          _this.iptChange(_this.chooseData);
-        },
-      },
-      {
-        label: "重量单位",
-        prop: "weightUnit",
-        cell: _this.hide === '1' || _this.hide === '3' ? false : true,
-        width: 100,
-        type: "select",
-        click: (val) => {
-          _this.iptChange(_this.chooseData);
-        },
-        type: "select",
-        dicData: getDIC("bas_matUnit")
+        // },
       },
       {
         label: "布票号",
         prop: "fabticket",
-        cell: _this.hide === '1' || _this.hide === '3' ? false : true,
+        cell: true,
         width: 230,
-        click: (val) => {
-          _this.iptChange(_this.chooseData);
-        },
+      },
+      {
+        label: "疋数",
+        prop: "countingNo",
+        cell: true,
+        width: 120,
+        align: "right",
+      },
+      {
+        label: "重量",
+        prop: "weight",
+        cell: true,
+        width: 120,
+        align: "right",
+      },
+      {
+        label: "单位",
+        prop: "weightUnit",
+        cell: true,
+        width: 100,
+        type: "select",
+        type: "select",
+        dicData: getDIC("bas_matUnit")
+      },
+      {
+        label: "货位码",
+        prop: "locationCode",
+        cell: true,
+        width: 180,
+        click: () => {
+          _this.dlgWidth = "100%"
+          _this.choiceV = !_this.choiceV
+          _this.choiceField = "locationCode";
+          _this.choiceTarget = _this.chooseData;
+          _this.choiceTle = "選擇貨位";
+        }
       },
       {
         label: "成品布入仓",

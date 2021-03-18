@@ -790,7 +790,7 @@ export default {
         this.choiceF = PurHardwarepoF;
         this.getData = getPurHardwarepo;
         break;
-      case "胚布貨物包":
+      case "選擇胚布貨物包":
         this.choiceC = WhseCalicoPackBarCodeC;
         this.choiceF = WhseCalicoPackBarCodeF;
         this.getData = getWhseCalicoPackBarCode;
@@ -800,7 +800,7 @@ export default {
         this.choiceC.column[3].hide = false;
         this.choiceC.column[7].label = "码卡号";
         break;
-      case "成品布貨物包":
+      case "選擇成品布貨物包":
         this.choiceC = WhseCalicoPackBarCodeC;
         this.choiceF = WhseCalicoPackBarCodeF;
         this.getData = getWhseFinishedclothpackBarcode;
@@ -846,7 +846,7 @@ export default {
         this.choiceF = WhseRetmaterialsPlanF;
         this.getData = getWhseRetmaterialsPlan;
         break;
-      case "外厂胚布配料计划":
+      case "選擇外厂胚布配料計劃":
         this.choiceC = WhseMaterialoutPlanC;
         this.choiceF = WhseMaterialoutPlanF;
         this.getData = getWhseMaterialoutPlan;
@@ -861,7 +861,7 @@ export default {
         this.choiceF = shipPlanF;
         this.getData = getshipPlan;
         break;
-      case "选择订单胚布资料":
+      case "選擇訂單胚布資料":
         this.choiceC = OrderPbC;
         this.choiceF = OrderPbF;
         this.getData = getOrderPb;

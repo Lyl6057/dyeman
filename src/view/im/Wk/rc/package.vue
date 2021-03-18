@@ -254,7 +254,7 @@ export default {
   created() {
     switch (this.data.type.split("_")[0]) {
       case "胚布貨物包":
-        this.crudOp = WhseCalicoPackBarCodeC;
+        this.crudOp = JSON.parse(JSON.stringify(WhseCalicoPackBarCodeC));
         this.formOp = WhseCalicoPackBarCodeF;
         this.getData = getWhseCalicoPackBarCode;
         this.addData = addWhseCalicoPackBarCode;
@@ -267,7 +267,7 @@ export default {
         break;
       case "成品布貨物包":
         //  Finishedcloth
-        this.crudOp = WhseCalicoPackBarCodeC;
+        this.crudOp = JSON.parse(JSON.stringify(WhseCalicoPackBarCodeC));
         this.formOp = WhseCalicoPackBarCodeF;
         this.getData = getWhseFinishedclothpackBarcode;
         this.addData = addWhseFinishedclothpackBarcode;
@@ -281,7 +281,8 @@ export default {
       default:
         break;
     }
-    this.crudOp.height = " calc(100vh - 230px)";
+    this.crudOp.height = "calc(100vh - 192px)";
+    this.crudOp.selection = false;
     // this.crudOp.column[1].hide = false;
     // this.formOp.column[0].display = true;
     this.crudOp.column.forEach((item, index) => {
@@ -292,7 +293,7 @@ export default {
   },
   mounted() {},
   beforeDestroy() {
-    this.crudOp.height = " calc(100vh - 457px)";
+    // this.crudOp.height = " calc(100vh - 457px)";
   },
 };
 </script>

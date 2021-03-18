@@ -124,7 +124,7 @@ export default {
       formOp: rcpb2F(this),
       mxOp: rcpb2C(this),
       countOp: rcpb3C(this),
-      mx: [{ index: 1 }],
+      mx: [],
       count: [],
       ctLoading: false,
       form: {},
@@ -190,7 +190,7 @@ export default {
           item.weiUnit = item.weightUnit;
           item.custId = this.detail.custName;
           setTimeout(() => {
-            this.$refs.dlgcrud.setCurrentRow(this.mx[this.mx.length - 1]);
+            this.$refs.dlgcrud.setCurrentRow(this.mx[0]);
             this.mxOp.showSummary = true;
             this.loading = false;
           }, 200);
@@ -262,24 +262,34 @@ export default {
         this.choiceTle = "選擇來胚登記明細";
         // return;
       }
-      // if (
-      //   this.mx.length > 0 &&
-      //   !this.mx[this.mx.length - 1].whseCalicoinDtlaoid
-      // ) {
-      //   return;
-      // }
-      // if (Object.keys(this.oldData).length > 0) {
-      //   this.oldData.$cellEdit = false;
-      // }
-      // this.mx.push({
-      //   index: this.mx.length + 1,
-      //   $cellEdit: true,
-      //   custId: this.detail.custName,
-      //   whseCalicoinFk: this.detail.whseCalicoinoid,
-      // });
-      // this.$refs.mx.setCurrentRow(this.mx[this.mx.length - 1]);
-      // this.iptChange(this.mx[this.mx.length - 1]);
-      // this.oldData = this.mx[this.mx.length - 1];
+      if (this.hide === "6" || this.hide === "7") {
+        this.choiceV = !this.choiceV;
+        // this.choiceField = "calicoId";
+        // this.choiceQ.registerNo = this.form.registerNo;
+        this.choiceTarget = {};
+        this.dlgWidth = "100%";
+        this.choiceTle = "選擇胚布貨物包";
+        // return;
+      }
+      if (this.hide === "4") {
+        this.choiceV = !this.choiceV;
+        // this.choiceField = "calicoId";
+
+        this.choiceTarget = {};
+        this.dlgWidth = "100%";
+        this.choiceTle = "選擇訂單胚布資料";
+        // return;
+      }
+      if (this.hide === "5") {
+        if (this.form.instructId === "" || this.form.instructId === null) {
+          this.$tip.error("请先选择加工指令單號!");
+          return;
+        }
+        this.choiceV = !this.choiceV;
+        this.choiceQ.materialType = "2";
+        this.dlgWidth = "100%";
+        this.choiceTle = "選擇指令單明細";
+      }
     },
     addPh() {
       if (Object.keys(this.chooseData).length === 0) {
@@ -369,14 +379,13 @@ export default {
       }
       if (!this.chooseData.whseCalicoinDtlaoid) {
         this.mx.splice(this.chooseData.index - 1, 1);
-        for (let i = 0; i < this.changeList.length; i++) {
-          if (this.changeList[i].index === this.chooseData.index) {
-            this.changeList.splice(i, 1);
-            this.$refs.mx.setCurrentRow(this.mx[this.mx.length - 1] || {});
-            return;
-          }
+        this.chooseData = {};
+        if (this.mx.length > 0) {
+          this.$refs.dlgcrud.setCurrentRow(this.mx[0]);
         }
+        return;
       }
+
       let tle = "";
 
       if (this.hide != "6") {
@@ -396,6 +405,7 @@ export default {
               if (res.data.code === 200) {
                 this.$tip.success("删除成功");
                 this.mx.splice(this.chooseData.index - 1, 1);
+                this.chooseData = {};
                 this.getDetail();
               } else {
                 this.$tip.error("删除失败");
@@ -494,14 +504,28 @@ export default {
         //   this.$tip.error("入仓疋數不能为空!");
         //   return;
         // }
-        for (let j = 0; j < this.mx[i].loc.length; j++) {
-          if (!this.mx[i].loc[j].weight || !this.mx[i].loc[j].weightUnit) {
-            this.$tip.error("入仓批號重量不能为空!");
-            return;
+        if (this.mx[i].loc) {
+          for (let j = 0; j < this.mx[i].loc.length; j++) {
+            if (!this.mx[i].loc[j].weight || !this.mx[i].loc[j].weightUnit) {
+              this.$tip.error("入仓批號重量不能为空!");
+              return;
+            }
+            if (!this.mx[i].loc[j].batchNo) {
+              this.$tip.error("入仓批號不能为空!");
+              return;
+            }
           }
+        }
+        if (this.hide === "6" && !this.mx[i].countingNo) {
+          this.$tip.error("入仓疋数不能为空!");
+          return;
         }
       }
       this.saved = true;
+
+      if (this.form.finStatus === "" || this.form.finStatus === "null") {
+        this.form.finStatus = "1";
+      }
       if (this.form.whseCalicoinoid) {
         updatePb(this.form).then((Res) => {
           if (this.mx.length === 0) {
@@ -513,21 +537,22 @@ export default {
             return new Promise((resolve, reject) => {
               let data = JSON.parse(JSON.stringify(item));
               data.loc = [];
-              this.mx.forEach((item, i) => {
-                if (item.whseCalicoinDtlaoid) {
-                  // 更新
-                  updatePbDetali(data).then((res) => {
-                    resolve();
-                  });
-                } else {
-                  // 新增
-                  data.whseCalicoinFk = this.form.whseCalicoinoid;
-                  addPbDetali(data).then((res) => {
-                    item.whseCalicoinDtlaoid = res.data.data;
-                    resolve();
-                  });
-                }
-              });
+              // this.mx.forEach((item, i) => {
+              //   console.log(data);
+              if (item.whseCalicoinDtlaoid) {
+                // 更新
+                updatePbDetali(data).then((res) => {
+                  resolve();
+                });
+              } else {
+                // 新增
+                data.whseCalicoinFk = this.form.whseCalicoinoid;
+                addPbDetali(data).then((res) => {
+                  item.whseCalicoinDtlaoid = res.data.data;
+                  resolve();
+                });
+              }
+              // });
             });
           };
           let promiseArr = this.mx.map((item, i) => {
@@ -567,21 +592,20 @@ export default {
             return new Promise((resolve, reject) => {
               let data = JSON.parse(JSON.stringify(item));
               data.loc = [];
-              this.mx.forEach((item, i) => {
-                if (item.whseCalicoinDtlaoid) {
-                  // 更新
-                  updatePbDetali(data).then((res) => {
-                    resolve();
-                  });
-                } else {
-                  // 新增
-                  data.whseCalicoinFk = this.form.whseCalicoinoid;
-                  addPbDetali(data).then((res) => {
-                    item.whseCalicoinDtlaoid = res.data.data;
-                    resolve();
-                  });
-                }
-              });
+
+              if (item.whseCalicoinDtlaoid) {
+                // 更新
+                updatePbDetali(data).then((res) => {
+                  resolve();
+                });
+              } else {
+                // 新增
+                data.whseCalicoinFk = this.form.whseCalicoinoid;
+                addPbDetali(data).then((res) => {
+                  item.whseCalicoinDtlaoid = res.data.data;
+                  resolve();
+                });
+              }
             });
           };
           let promiseArr = this.mx.map((item, i) => {
@@ -639,7 +663,7 @@ export default {
       }
       this.oldData.$cellEdit = false;
       this.choiceTarget.yarnsName = val.yarnsId;
-      this.choiceTarget[this.choiceField] = val[this.choiceField];
+      // this.choiceTarget[this.choiceField] = val[this.choiceField];
       this.oldData.$cellEdit = true;
       if (this.choiceTle === "選擇來胚登記") {
         this.choiceTarget.custName = val.$custCode;
@@ -681,14 +705,73 @@ export default {
       if (this.choiceTle === "胚布編碼") {
         this.choiceTarget.clothName = val.$clothName;
       }
-      if (this.choiceTle === "胚布貨物包") {
-        if (this.hide === "6") {
-          this.choiceTarget.weight = val.weight;
-          this.choiceTarget.weightUnit = val.weightUnit;
-        }
-        this.choiceTarget.prodNo = val.prodNo;
-        this.choiceTarget.fabticket = val.fabticket;
-        this.choiceTarget.countingNo = val.countingNo;
+      if (this.choiceTle === "選擇胚布貨物包") {
+        // if (this.hide === "6") {
+        // this.mx = this.mx.concat(val);
+        this.mx = this.$unique(this.mx.concat(val), "prodNo");
+        this.page.total = this.mx.length;
+        this.mx.forEach((item, i) => {
+          item.index = i + 1;
+          if (i === this.mx.length - 1) {
+            this.$refs.dlgcrud.setCurrentRow(this.mx[this.mx.length - 1]);
+          }
+        });
+        // }
+        // this.choiceTarget.prodNo = val.prodNo;
+        // this.choiceTarget.fabticket = val.fabticket;
+        // this.choiceTarget.countingNo = val.countingNo;
+      }
+      if (this.choiceTle === "選擇指令單明細") {
+        val.forEach((item, i) => {
+          item.calicoId = item.materialId;
+          item.clothName = item.materialName;
+          item.loc = [];
+          item.loc.push({
+            batchNo: "",
+            countingNo: 1,
+            index: 1,
+            weight: item.weight,
+            weightUnit: item.weightUnit,
+          });
+        });
+        this.mx = this.mx.concat(val);
+        // this.mx = this.$unique(this.mx.concat(val), "prodNo");
+        this.page.total = this.mx.length;
+        this.mx.forEach((item, i) => {
+          item.index = i + 1;
+          if (i === this.mx.length - 1) {
+            this.$refs.dlgcrud.setCurrentRow(this.mx[this.mx.length - 1]);
+          }
+        });
+      }
+      if (this.choiceTle === "選擇訂單胚布資料") {
+        val.forEach((item, i) => {
+          item.prodNo = item.$salPoFk;
+          item.calicoId = item.fabId;
+          item.clothName = item.fabName;
+          item.loc = [];
+          item.loc.push({
+            batchNo: "",
+            countingNo: 1,
+            index: 1,
+            weight: item.fabQty,
+            weightUnit: item.qtyUnit,
+          });
+        });
+        this.mx = this.$unique(this.mx.concat(val), "prodNo");
+        this.page.total = this.mx.length;
+        this.mx.forEach((item, i) => {
+          item.index = i + 1;
+          if (i === this.mx.length - 1) {
+            this.$refs.dlgcrud.setCurrentRow(this.mx[this.mx.length - 1]);
+          }
+        });
+      }
+      if (this.choiceTle === "選擇貨位") {
+        this.chooseData.locationCode = val[0].locationCode;
+      }
+      if (this.choiceTle === "選擇外厂胚布配料計劃") {
+        this.form.factoryId = val.refCode;
       }
       for (var key in val) {
         delete val[key];

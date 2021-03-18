@@ -331,7 +331,7 @@ export function rsxkr1C(_this) {
         cell: false,
         width: 120,
         type: "select",
-        dicData: getDIC('Whse_yinType'),
+        dicData: getDIC('Whse_AccessoriesType'),
       },
       {
         label: "入仓日期",

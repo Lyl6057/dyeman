@@ -172,7 +172,7 @@ export function rhl1C(_this) {
       cell: false,
       width: 100,
       type: "select",
-      dicData: _this.data === '化工原料' || _this.data === '颜料' ? getDIC('Whse_CalicoType') : getDIC('Whse_AccessoriesType'),
+      dicData: _this.data === '化工原料' || _this.data === '颜料' ? getDIC('Whse_CalicoType') : _this.data === '紗線' ? getDIC('Whse_yinType') : getDIC('Whse_AccessoriesType'),
 
     },
     {
