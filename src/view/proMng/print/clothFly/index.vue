@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-02-03 08:27:43
+ * @LastEditTime: 2021-03-19 10:56:57
  * @Description: 
 -->
 <template>
@@ -90,6 +90,9 @@ export default {
       });
     },
     print() {
+      if (Object.keys(this.detail).length === 0) {
+        return;
+      }
       this.detail.pz = 25;
       this.detail.qsph = 1;
       this.dialogVisible = true;

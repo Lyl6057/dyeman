@@ -19,21 +19,21 @@ export function rsxkr1F(_this) {
         type: "datetime", format: "yyyy-MM-dd",
         valueFormat: "yyyy-MM-dd",
       },
-      {
-        label: "採購單號",
-        prop: "purNo",
-        span: 6,
-        placeholder: " ",
-        // type: "select",
-        // placeholder: "請選擇採購單號",
-        // click: () => {
-        //   _this.choiceV = !_this.choiceV;
-        //   _this.choiceField = "purNo";
-        //   _this.choiceTarget = _this.form;
-        //   _this.choiceTle = '採購單';
-        // },
-        display: _this.hide === '2' || _this.hide === '6' ? true : false,
-      },
+      // {
+      //   label: "採購單號",
+      //   prop: "purNo",
+      //   span: 6,
+      //   placeholder: " ",
+      //   // type: "select",
+      //   // placeholder: "請選擇採購單號",
+      //   // click: () => {
+      //   //   _this.choiceV = !_this.choiceV;
+      //   //   _this.choiceField = "purNo";
+      //   //   _this.choiceTarget = _this.form;
+      //   //   _this.choiceTle = '採購單';
+      //   // },
+      //   display: _this.hide === '2' || _this.hide === '6' ? true : false,
+      // },
       {
         label: "輔料登记编号",
         prop: "registerNo",
@@ -51,22 +51,22 @@ export function rsxkr1F(_this) {
         // },
       },
 
-      {
-        label: "送货单号",
-        prop: "deliNo",
-        span: 6,
-        placeholder: " ",
-        // placeholder: "請選擇送货单号",
-        display: _this.hide === '2' || _this.hide === '6' ? true : false,
-        // type: "select",
-        // click: () => {
-        //   _this.choiceV = !_this.choiceV
-        //   _this.choiceQ.deliType = 'yarns'
-        //   _this.choiceField = "deliNo"
-        //   _this.choiceTarget = _this.form
-        //   _this.choiceTle = '送貨單'
-        // },
-      },
+      // {
+      //   label: "送货单号",
+      //   prop: "deliNo",
+      //   span: 6,
+      //   placeholder: " ",
+      //   // placeholder: "請選擇送货单号",
+      //   display: _this.hide === '2' || _this.hide === '6' ? true : false,
+      //   // type: "select",
+      //   // click: () => {
+      //   //   _this.choiceV = !_this.choiceV
+      //   //   _this.choiceQ.deliType = 'yarns'
+      //   //   _this.choiceField = "deliNo"
+      //   //   _this.choiceTarget = _this.form
+      //   //   _this.choiceTle = '送貨單'
+      //   // },
+      // },
       //           {
       //   label: "创建日期",
       //   prop: "sysCreated",
@@ -134,47 +134,95 @@ export function rsxkr2F(_this) {
         dicData: getDIC('Whse_yinType'),
 
       },
+      // {
+      //   label: "採購單號",
+      //   prop: "purNo",
+      //   span: 6,
+      //   placeholder: " ",
+      //   disabled: _this.isAdd ? false : true,
+      //   display: _this.hide === '2' || _this.hide === '6' ? true : false,
+      //   click: () => {
+      //     if (_this.isAdd) {
+      //       _this.choiceField = "purNo"
+      //       _this.dlgWidth = "100%";
+      //       _this.choiceV = !_this.choiceV
+      //       _this.choiceTarget = _this.form
+      //       _this.choiceTle = '選擇輔料採購單'
+      //     }
+      //     if (_this.form.purNo === '' || _this.form.purNo === null) {
+      //       _this.form.deliNo = ''
+      //     }
+      //   },
+      // },
+      // {
+      //   label: "送货单号",
+      //   prop: "deliNo",
+      //   span: 6,
+      //   placeholder: " ",
+      //   display: _this.hide === '2' || _this.hide === '6' ? true : false,
+      //   disabled: _this.isAdd ? false : true,
+      //   click: () => {
+      //     if (!_this.form.purNo) {
+      //       _this.$tip.error("请先选择采购单号!");
+      //       return
+      //     }
+      //     if (_this.isAdd) {
+      //       _this.choiceField = "deliNo"
+      //       _this.choiceQ.deliType = 'yarns'
+      //       _this.dlgWidth = "60%";
+      //       _this.choiceV = !_this.choiceV
+      //       _this.choiceTarget = _this.form
+      //       _this.choiceTle = '選擇送貨單'
+      //     }
+      //   },
+      // },
       {
-        label: "採購單號",
-        prop: "purNo",
+        label: "加工厂名稱",
+        prop: "factoryId",
+        cell: false,
+        type: "select",
+        dicData: getDicT("vWhseRetyarninoutPlan", "refName", "refCode"),
         span: 6,
-        placeholder: " ",
-        disabled: _this.isAdd ? false : true,
-        display: _this.hide === '2' || _this.hide === '6' ? true : false,
+        display: _this.hide === '6',
+        disabled: !_this.isAdd,
         click: () => {
-          if (_this.isAdd) {
-            _this.choiceField = "purNo"
-            _this.dlgWidth = "100%";
-            _this.choiceV = !_this.choiceV
-            _this.choiceTarget = _this.form
-            _this.choiceTle = '選擇輔料採購單'
-          }
-          if (_this.form.purNo === '' || _this.form.purNo === null) {
-            _this.form.deliNo = ''
-          }
-        },
+          _this.choiceV = !_this.choiceV;
+          _this.choiceField = "factoryId";
+          // this.choiceQ.registerNo = this.form;
+          _this.choiceTarget = _this.form;
+          _this.dlgWidth = "100%";
+          _this.choiceTle = "選擇外厂輔料配料计划";
+
+        }
       },
       {
-        label: "送货单号",
-        prop: "deliNo",
+        label: "加工指令單",
+        prop: "instructId",
+        cell: false,
         span: 6,
-        placeholder: " ",
-        display: _this.hide === '2' || _this.hide === '6' ? true : false,
-        disabled: _this.isAdd ? false : true,
-        click: () => {
-          if (!_this.form.purNo) {
-            _this.$tip.error("请先选择采购单号!");
-            return
-          }
-          if (_this.isAdd) {
-            _this.choiceField = "deliNo"
-            _this.choiceQ.deliType = 'yarns'
-            _this.dlgWidth = "60%";
-            _this.choiceV = !_this.choiceV
-            _this.choiceTarget = _this.form
-            _this.choiceTle = '選擇送貨單'
-          }
-        },
+        display: _this.hide === '6',
+        disabled: !_this.isAdd,
+        type: "select",
+        dicData:
+          getDicT('viWhseProcessinstruct', "instructId", "instructId"),
+        // click: () => {
+        //   _this.choiceV = !_this.choiceV;
+        //   _this.choiceField = "instructId";
+        //   this.choiceQ.registerNo = this.form;
+        //   _this.choiceTarget = _this.form;
+        //   _this.dlgWidth = "100%";
+        //   _this.choiceTle = "選擇指令單明細";
+
+        // }
+        change: () => {
+          _this.$nextTick(() => {
+            if (_this.form.instructId === '' || _this.form.instructId === null) {
+              _this.mx = []
+              _this.chooseData = {}
+            }
+          })
+
+        }
       },
       {
         label: "輔料登记编号",
@@ -213,39 +261,6 @@ export function rsxkr2F(_this) {
         disabled: true,
         type: "select",
         dicData: getDicT("basCustomer", "custName", "custCode"),
-      },
-      {
-        label: "外发加工厂",
-        prop: "factoryId",
-        span: 6,
-        placeholder: " ",
-        display: _this.hide === '5' ? true : false,
-        disabled: _this.isAdd ? false : true,
-        type: "select",
-        dicData: getDicT("vWhseRetyarninoutPlan", "refName", "refCode"),
-        click: () => {
-          if (_this.isAdd) {
-            _this.choiceField = "factoryName"
-            _this.choiceV = !_this.choiceV
-            _this.dlgWidth = "100%"
-            _this.choiceTarget = {}
-            _this.choiceTle = '選擇外厂輔料配料计划'
-          }
-        },
-      },
-      {
-        label: "加工指令單",
-        prop: "instructId",
-        span: 6,
-        placeholder: " ",
-        display: _this.hide === '5' ? true : false,
-        disabled: _this.isAdd ? false : true,
-        type: "select",
-        dicData:
-          getDicT('viWhseProcessinstruct', "instructId", "instructId"),
-        change: () => {
-          _this.mx = []
-        }
       },
       {
         label: "检验状态",
@@ -343,44 +358,44 @@ export function rsxkr1C(_this) {
         width: 140,
         align: "center",
       },
-      {
-        label: "採購單號",
-        prop: "purNo",
-        cell: true,
-        hide: _this.hide === '2' || _this.hide === '6' ? false : true,
-        width: 220,
-        placeholder: "請選擇採購單號",
-        click: () => {
-          _this.choiceV = !_this.choiceV;
-          _this.choiceField = "purNo";
-          // _this.choiceQ.purType = '5'
-          _this.oldData = _this.chooseData
-          _this.choiceTarget = _this.oldData;
-          _this.choiceTle = '選擇輔料採購單';
-        }
-      },
-      {
-        label: "送貨單号",
-        prop: "deliNo",
-        cell: true,
-        width: 180,
-        type: "select",
-        hide: _this.hide === '2' || _this.hide === '6' ? false : true,
-        click: (val) => {
-          if (!_this.chooseData.purNo) {
-            _this.$tip.error("請先選擇採購單號！")
-            return
-          }
-          _this.choiceV = !_this.choiceV
-          _this.choiceQ.deliType = 'yarns'
-          _this.choiceField = "deliNo"
-          _this.oldData = _this.chooseData
-          // _this.choiceQ.purNo = this.oldData.purNo
-          _this.choiceTarget = _this.oldData
-          _this.choiceTle = '選擇送貨單'
-        },
-        placeholder: "請選擇送貨單號"
-      },
+      // {
+      //   label: "採購單號",
+      //   prop: "purNo",
+      //   cell: true,
+      //   hide: _this.hide === '2' || _this.hide === '6' ? false : true,
+      //   width: 220,
+      //   placeholder: "請選擇採購單號",
+      //   click: () => {
+      //     _this.choiceV = !_this.choiceV;
+      //     _this.choiceField = "purNo";
+      //     // _this.choiceQ.purType = '5'
+      //     _this.oldData = _this.chooseData
+      //     _this.choiceTarget = _this.oldData;
+      //     _this.choiceTle = '選擇輔料採購單';
+      //   }
+      // },
+      // {
+      //   label: "送貨單号",
+      //   prop: "deliNo",
+      //   cell: true,
+      //   width: 180,
+      //   type: "select",
+      //   hide: _this.hide === '2' || _this.hide === '6' ? false : true,
+      //   click: (val) => {
+      //     if (!_this.chooseData.purNo) {
+      //       _this.$tip.error("請先選擇採購單號！")
+      //       return
+      //     }
+      //     _this.choiceV = !_this.choiceV
+      //     _this.choiceQ.deliType = 'yarns'
+      //     _this.choiceField = "deliNo"
+      //     _this.oldData = _this.chooseData
+      //     // _this.choiceQ.purNo = this.oldData.purNo
+      //     _this.choiceTarget = _this.oldData
+      //     _this.choiceTle = '選擇送貨單'
+      //   },
+      //   placeholder: "請選擇送貨單號"
+      // },
       {
         label: "輔料登记编号",
         prop: "registerNo",

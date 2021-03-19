@@ -150,6 +150,55 @@ export function rhl2F(_this) {
         dicData: customer,
       },
       {
+        label: "加工厂名稱",
+        prop: "factoryId",
+        span: 6,
+        placeholder: " ",
+        disabled: false,
+        display: _this.hide === "5" ? true : false,
+        type: "select",
+        dicData: getDicT("vWhseChemicalPlan", "refName", "refCode"),
+        click: () => {
+          _this.choiceV = !_this.choiceV;
+          _this.choiceField = "factoryId";
+          // this.choiceQ.registerNo = this.form;
+          _this.choiceTarget = _this.form;
+          _this.dlgWidth = "100%";
+          _this.choiceTle = "選擇外廠化工原料配料計劃";
+
+
+        },
+      },
+      {
+        label: "加工指令單",
+        prop: "instructId",
+        cell: false,
+        span: 6,
+        display: _this.hide === '5',
+        disabled: !_this.isAdd,
+        type: "select",
+        dicData:
+          getDicT('viWhseProcessinstruct', "instructId", "instructId"),
+        // click: () => {
+        //   _this.choiceV = !_this.choiceV;
+        //   _this.choiceField = "instructId";
+        //   this.choiceQ.registerNo = this.form;
+        //   _this.choiceTarget = _this.form;
+        //   _this.dlgWidth = "100%";
+        //   _this.choiceTle = "選擇指令單明細";
+
+        // }
+        change: () => {
+          _this.$nextTick(() => {
+            if (_this.form.instructId === '' || _this.form.instructId === null) {
+              _this.mx = []
+              _this.chooseData = {}
+            }
+          })
+
+        }
+      },
+      {
         label: "检验状态",
         prop: "yinStatus",
         span: 6,
@@ -160,16 +209,7 @@ export function rhl2F(_this) {
         dicData:
           getDIC('whse_yinstatus')
       },
-      {
-        label: "加工厂名稱",
-        prop: "factoryId",
-        span: 6,
-        placeholder: " ",
-        disabled: false,
-        display: _this.hide === "5" ? true : false,
-        type: "select",
-        dicData: getDicT("vWhseChemicalPlan", "refName", "refCode"),
-      },
+
       {
         label: "操作员",
         prop: "sysCreatedby",
@@ -274,7 +314,7 @@ export function rhl1C(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: _this.hide === '5' ? "calc(100vh - 250px)" : "calc(100vh - 275px)",
+    height: _this.hide === '5' ? "calc(100vh - 232px)" : "calc(100vh - 275px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
@@ -408,11 +448,7 @@ export function rhl1C(_this) {
         type: "select",
         dicData: getDicT("vWhseChemicalPlan", "refName", "refCode")
       },
-      {
-        label: "指令单",
-        prop: "instructId",
-        hide: true,
-      },
+
       {
         label: "检验状态",
         prop: "yinStatus",

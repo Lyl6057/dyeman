@@ -491,6 +491,15 @@ export default {
         this.$tip.error("入仓编号/登记编号不能为空!");
         return;
       }
+      if (this.hide === "5" && !this.form.factoryId) {
+        this.$tip.error("入库资料中的加工廠不能为空!");
+        return;
+      }
+      if (this.hide === "5" && !this.form.instructId) {
+        this.$tip.error("入库资料中的加工指令單號不能为空!");
+        return;
+      }
+
       for (let i = 0; i < this.mx.length; i++) {
         // if (!this.mx[i].batchNo) {
         //   this.$tip.error("批号不能为空!");

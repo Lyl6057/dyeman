@@ -224,6 +224,55 @@ export function rhl2F(_this) {
         type: "select",
         dicData: customer,
       },
+
+      {
+        label: "加工厂名稱",
+        prop: "factoryId",
+        cell: false,
+        type: "select",
+        dicData: getDicT("vWhseChemicalPlan", "refName", "refCode"),
+        span: 6,
+        display: _this.hide === '5',
+        disabled: !_this.isAdd,
+        click: () => {
+          _this.choiceV = !_this.choiceV;
+          _this.choiceField = "factoryId";
+          // this.choiceQ.registerNo = this.form;
+          _this.choiceTarget = _this.form;
+          _this.dlgWidth = "100%";
+          _this.choiceTle = "選擇外廠化工原料配料計劃";
+
+        }
+      },
+      {
+        label: "加工指令單",
+        prop: "instructId",
+        cell: false,
+        span: 6,
+        display: _this.hide === '5',
+        disabled: !_this.isAdd,
+        type: "select",
+        dicData:
+          getDicT('viWhseProcessinstruct', "instructId", "instructId"),
+        // click: () => {
+        //   _this.choiceV = !_this.choiceV;
+        //   _this.choiceField = "instructId";
+        //   this.choiceQ.registerNo = this.form;
+        //   _this.choiceTarget = _this.form;
+        //   _this.dlgWidth = "100%";
+        //   _this.choiceTle = "選擇指令單明細";
+
+        // }
+        change: () => {
+          _this.$nextTick(() => {
+            if (_this.form.instructId === '' || _this.form.instructId === null) {
+              _this.mx = []
+              _this.chooseData = {}
+            }
+          })
+
+        }
+      },
       {
         label: "检验状态",
         prop: "yinStatus",
@@ -234,24 +283,6 @@ export function rhl2F(_this) {
         display: true,
         dicData:
           getDIC('whse_yinstatus')
-      },
-      {
-        label: "加工厂名稱",
-        prop: "factoryId",
-        span: 6,
-        placeholder: " ",
-        disabled: false,
-        display: _this.hide === "5" ? true : false,
-        type: "select",
-        dicData: getDicT("vWhseChemicalPlan", "refName", "refCode"),
-        // click: () => {
-        //   _this.choiceField = "factoryId"
-        //   _this.choiceV = !_this.choiceV
-        //   _this.oldData = _this.chooseData
-        //   _this.choiceTarget = _this.form
-        //   _this.choiceTle = '外厂染化料配料计划',
-        //     _this.iptChange(_this.chooseData);
-        // },
       },
       {
         label: "操作员",
@@ -357,7 +388,7 @@ export function rhl1C(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: _this.hide === '5' ? "calc(100vh - 250px)" : "calc(100vh - 275px)",
+    height: _this.hide === '5' ? "calc(100vh - 232px)" : "calc(100vh - 275px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
@@ -400,7 +431,7 @@ export function rhl1C(_this) {
         label: "入仓编号",
         prop: "yinId",
         cell: false,
-        width: 160,
+        width: 180,
         change: (val) => {
           if (val.value === '') {
             _this.iptChange(_this.chooseData);
@@ -697,7 +728,7 @@ export function rhl2C(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 315px)",
+    height: "calc(100vh - 312px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
@@ -849,7 +880,7 @@ export function rhl3C(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 278px)",
+    height: "calc(100vh - 275px)",
     refreshBtn: false,
     columnBtn: false,
     page: false,

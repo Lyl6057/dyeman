@@ -411,6 +411,15 @@ export default {
             },
             {
               click: () => {
+                this.toView("rc_yl", "外发厂退回_5");
+              },
+              title: "外发厂退回",
+              icon: "el-icon-s-home",
+              color: "#ccc",
+              // content: "外发厂化工原料退回看板",
+            },
+            {
+              click: () => {
                 this.toView("rc_sg", "颜料_4");
               },
               title: "申购颜料",
@@ -446,15 +455,15 @@ export default {
               color: "#409EFF",
               // content: "采购生产辅料入库看板",
             },
-            {
-              click: () => {
-                this.toView("rc_scfl", "本厂余料回仓_4");
-              },
-              title: "本厂余料回仓",
-              icon: "el-icon-s-home",
-              color: "#ccc",
-              // content: "本厂余料回仓入库看板",
-            },
+            // {
+            //   click: () => {
+            //     this.toView("rc_scfl", "本厂余料回仓_4");
+            //   },
+            //   title: "本厂余料回仓",
+            //   icon: "el-icon-s-home",
+            //   color: "#ccc",
+            //   // content: "本厂余料回仓入库看板",
+            // },
             {
               click: () => {
                 this.toView("rc_scfl", "外发厂余料回仓_6");

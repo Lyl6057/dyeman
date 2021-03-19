@@ -203,13 +203,19 @@ export default {
             item.index = index + 1;
             item.factoryName = item.factoryId;
             item.custId = item.registerNo;
-            this.$nextTick(() => {
-              this.$set(item, "custName", item.$custId);
-              if (index === this.crud.length - 1) {
-                this.everyThing.mainC.column[10].hide = true;
+            if (index === this.crud.length - 1) {
+              setTimeout(() => {
+                if (this.hide === "1") {
+                  this.$nextTick(() => {
+                    this.crud.forEach((item, i) => {
+                      this.$set(item, "custName", item.$custId);
+                    });
+                  });
+                }
+                this.everyThing.mainC.column[8].hide = true;
                 this.loading = false;
-              }
-            });
+              }, 200);
+            }
           });
           if (this.crud.length === 0) {
             this.loading = false;

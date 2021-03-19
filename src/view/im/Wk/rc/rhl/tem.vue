@@ -116,6 +116,7 @@ import {
   updateRhlLoc,
   delRhlLoc,
 } from "@/api/im/Wk/rc";
+import { baseCodeSupply } from "@/api/index";
 import loction from "@/components/location/index";
 export default {
   props: {
@@ -300,8 +301,17 @@ export default {
         this.dlgWidth = "100%";
         this.choiceTarget = {};
         this.choiceTle = "選擇來原料登記明細";
+      } else if (this.hide === "5") {
+        if (this.form.instructId === "" || this.form.instructId === null) {
+          this.$tip.error("请先选择加工指令單號!");
+          return;
+        }
+        this.choiceV = !this.choiceV;
+        this.choiceQ.materialType = "3";
+        this.choiceTarget = {};
+        this.dlgWidth = "100%";
+        this.choiceTle = "選擇指令單明細";
       }
-
       // this.mx.push({
       //   index: this.mx.length + 1,
       //   $cellEdit: true,
@@ -384,7 +394,7 @@ export default {
       }
       this.$tip
         .cofirm(
-          "是否确定删除染化料编码为 【 " +
+          "是否确定删除原料编码为 【 " +
             this.chooseData.chemicalId +
             " 】 的数据?",
           this,
@@ -528,7 +538,15 @@ export default {
       //   return;
       // }
       if (this.form.yinId === "" || this.form.yinDate === null) {
-        this.$tip.warning("入库资料中的入仓编号/日期不能为空!");
+        this.$tip.error("入库资料中的入仓编号/日期不能为空!");
+        return;
+      }
+      if (this.hide === "5" && !this.form.factoryId) {
+        this.$tip.error("入库资料中的加工廠不能为空!");
+        return;
+      }
+       if (this.hide === "5" && !this.form.instructId) {
+        this.$tip.error("入库资料中的加工指令單號不能为空!");
         return;
       }
       for (let i = 0; i < this.mx.length; i++) {
@@ -541,7 +559,7 @@ export default {
             !this.mx[i].list[j].weight ||
             !this.mx[i].list[j].weightUnit
           ) {
-            this.$tip.warning("入仓批号明细中的批号/重量/单位不能为空!");
+            this.$tip.error("入仓批号明细中的批号/重量/单位不能为空!");
             return;
           }
         }
@@ -614,6 +632,7 @@ export default {
         });
       } else {
         addRhl(this.form).then((res) => {
+          baseCodeSupply({ code: "whse_in" }).then((res) => {});
           if (this.mx.length === 0) {
             this.loading = false;
             this.$tip.success("保存成功!");
@@ -684,7 +703,32 @@ export default {
         this.choiceV = false;
         return;
       }
-      if (this.choiceTle === "選擇來原料登記") {
+      this.oldData.$cellEdit = false;
+      this.choiceTarget[this.choiceField] = val[this.choiceField];
+      this.oldData.$cellEdit = true;
+      if (this.choiceTle === "選擇指令單明細") {
+        val.forEach((item, i) => {
+          item.chemicalId = item.materialId;
+          item.chemicalName = item.materialName;
+          item.list = [];
+          item.list.push({
+            batchNo: "",
+            countingNo: 1,
+            index: 1,
+            weight: item.weight,
+            weightUnit: item.weightUnit,
+          });
+        });
+        this.mx = this.mx.concat(val);
+        // this.mx = this.$unique(this.mx.concat(val), "prodNo");
+        this.page.total = this.mx.length;
+        this.mx.forEach((item, i) => {
+          item.index = i + 1;
+          if (i === this.mx.length - 1) {
+            this.$refs.dlgcrud.setCurrentRow(this.mx[this.mx.length - 1]);
+          }
+        });
+      } else if (this.choiceTle === "選擇來原料登記") {
         this.choiceTarget.custName = val.$custNo;
         this.choiceTarget.custCode = val.custNo;
       } else if (this.choiceTle === "選擇來原料登記明細") {
@@ -749,11 +793,8 @@ export default {
         ) {
           this.choiceTarget.purNo = val.poNo;
         }
-        if (this.choiceTle == "外厂染化料配料计划") {
-          this.mx = this.mx.concat(val);
-          this.mx.forEach((item, i) => {
-            item.index = i + 1;
-          });
+        if (this.choiceTle == "選擇外廠化工原料配料計劃") {
+          this.form.factoryId = val.refCode;
         }
 
         this.choiceTarget.chemicalId = val.bcCode;
@@ -762,9 +803,6 @@ export default {
         this.choiceTarget.bcColor = val.bcColor;
         this.choiceTarget.bcForce = val.bcForce;
       }
-      this.oldData.$cellEdit = false;
-      this.choiceTarget[this.choiceField] = val[this.choiceField];
-      this.oldData.$cellEdit = true;
 
       // for (var key in val) {
       //   delete val[key];

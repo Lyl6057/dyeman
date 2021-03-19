@@ -35,20 +35,20 @@ export const instructDtlF = {
     {
       label: "指令單編號",
       prop: "instructId",
-      span: 8,
+      span: 6,
       placeholder: " ",
     },
     {
       label: "批號",
       prop: "batchNo",
-      span: 8,
+      span: 6,
       placeholder: " ",
     },
 
     {
       label: "材料編號",
       prop: "materialId",
-      span: 8,
+      span: 6,
       placeholder: " ",
     },
   ]
@@ -60,7 +60,7 @@ export const instructDtlC = {
   addBtn: false,
   border: true,
   highlightCurrentRow: true,
-  height: "calc(100vh - 20px)",
+  height: "calc(100vh - 200px)",
   refreshBtn: false,
   columnBtn: false,
   selection: true,
@@ -3165,25 +3165,25 @@ export const WhseChemicalPlanF = {
     {
       label: "加工廠代號",
       prop: "refCode",
-      span: 8,
+      span: 6,
       placeholder: " ",
     },
     {
       label: "加工廠名稱",
       prop: "refName",
-      span: 8,
+      span: 6,
       placeholder: " ",
     },
     {
       label: "染化料名称",
       prop: "chemicalName",
-      span: 8,
+      span: 6,
       placeholder: " ",
     },
     {
       label: "配料计划编号",
       prop: "retBatch",
-      span: 8,
+      span: 6,
       placeholder: " ",
     },
     // {
@@ -3201,10 +3201,10 @@ export const WhseChemicalPlanC = {
   addBtn: false,
   border: true,
   highlightCurrentRow: true,
-  height: "calc(100vh - 445px)",
+  height: "calc(100vh - 200px)",
   refreshBtn: false,
   columnBtn: false,
-  selection: true,
+  selection: false,
   page: true,
   column: [
     {
@@ -3273,25 +3273,25 @@ export const WhseRetmaterialsPlanF = {
     {
       label: "加工廠代號",
       prop: "refCode",
-      span: 8,
+      span: 6,
       placeholder: " ",
     },
     {
       label: "加工廠名稱",
       prop: "refName",
-      span: 8,
+      span: 6,
       placeholder: " ",
     },
     {
       label: "辅料名称",
       prop: "matName",
-      span: 8,
+      span: 6,
       placeholder: " ",
     },
     {
       label: "配料计划编号",
       prop: "retBatch",
-      span: 8,
+      span: 6,
       placeholder: " ",
     },
     // {
@@ -3309,7 +3309,7 @@ export const WhseRetmaterialsPlanC = {
   addBtn: false,
   border: true,
   highlightCurrentRow: true,
-  height: "calc(100vh - 445px)",
+  height: "calc(100vh - 200px)",
   refreshBtn: false,
   columnBtn: false,
   page: true,

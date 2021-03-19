@@ -203,7 +203,7 @@ export default {
         this.choiceTarget = {};
         this.choiceField = "poNo";
         this.choiceTle = "選擇退紗通知單";
-      } else if (this.hide === "5") {
+      } else if (this.hide === "6") {
         if (this.form.instructId === "" || this.form.instructId === null) {
           this.$tip.error("请先选择加工指令單!");
           return;
@@ -212,7 +212,7 @@ export default {
         this.choiceV = !this.choiceV;
         this.dlgWidth = "100%";
         this.choiceTarget = {};
-        this.choiceQ.typeExplain = "纱线";
+        this.choiceQ.typeExplain = "生产辅料";
         this.choiceTle = "選擇指令單明細";
       }
     },
@@ -289,6 +289,14 @@ export default {
         (this.form.yinId === "" || this.form.registerNo === "")
       ) {
         this.$tip.error("入仓编号/纱线登记编号不能为空!");
+        return;
+      }
+      if (this.hide === "6" && !this.form.factoryId) {
+        this.$tip.error("入库资料中的加工廠不能为空!");
+        return;
+      }
+      if (this.hide === "6" && !this.form.instructId) {
+        this.$tip.error("入库资料中的加工指令單號不能为空!");
         return;
       }
       for (let i = 0; i < this.mx.length; i++) {
@@ -420,6 +428,25 @@ export default {
         return;
       }
       this.oldData.$cellEdit = false;
+      this.choiceTarget[this.choiceField] = val[this.choiceField];
+      this.oldData.$cellEdit = true;
+      if (this.choiceTle === "選擇指令單明細") {
+        val.forEach((item, i) => {
+          item.materialNum = item.materialId;
+          item.materialName = item.materialName;
+          item.poQty = item.weight;
+          item.unitQty = item.weightUnit;
+        });
+        this.mx = this.mx.concat(val);
+        // this.mx = this.$unique(this.mx.concat(val), "prodNo");
+        this.page.total = this.mx.length;
+        this.mx.forEach((item, i) => {
+          item.index = i + 1;
+          if (i === this.mx.length - 1) {
+            this.$refs.dlgcrud.setCurrentRow(this.mx[this.mx.length - 1]);
+          }
+        });
+      }
       if (this.choiceTle === "選擇來輔料登記") {
         this.choiceTarget.custName = val.$custNo;
         this.choiceTarget.custCode = val.custNo;
@@ -427,9 +454,8 @@ export default {
       if (this.choiceTle === "退紗通知單") {
         this.choiceTarget.yarnsId = val.yarnsId;
       }
-      if (this.choiceTle === "選擇外厂纱线配料计划") {
+      if (this.choiceTle === "選擇外厂輔料配料计划") {
         this.form.factoryId = val.refCode;
-        this.form.factoryName = val.refName;
       }
       if (this.choiceTle === "選擇指令單明細") {
         val.forEach((item, i) => {
@@ -475,9 +501,6 @@ export default {
         this.page.total = this.mx.length;
       }
       this.page.total = this.mx.length;
-      this.choiceTarget.yarnsName = val.yarnsId;
-      this.choiceTarget[this.choiceField] = val[this.choiceField];
-      this.oldData.$cellEdit = true;
 
       for (var key in val) {
         delete val[key];

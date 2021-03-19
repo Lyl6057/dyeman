@@ -6,7 +6,7 @@
           <vxe-table
             :data="tableData"
             :border="tbOption.border"
-            :edit-config="{trigger: 'click', mode: 'cell'}"
+            :edit-config="{ trigger: 'click', mode: 'cell' }"
             show-overflow
           >
             <vxe-table-column
@@ -16,13 +16,17 @@
               :title="item.label"
               :width="item.width"
               :align="item.align"
-              :edit-render="{name: 'input', immediate: true, attrs: {type: 'text'}}"
+              :edit-render="{
+                name: 'input',
+                immediate: true,
+                attrs: { type: 'text' },
+              }"
             ></vxe-table-column>
           </vxe-table>
         </div>
       </el-col>
       <el-col :span="14">
-        <div class="box" style="width:800px;overflow:auto;">
+        <div class="box" style="width: 800px; overflow: auto">
           <canvas id="myCanvas"></canvas>
         </div>
       </el-col>
@@ -30,9 +34,6 @@
   </div>
 </template>
 
-<script>
-export default {};
-</script>
 
 <script>
 import {

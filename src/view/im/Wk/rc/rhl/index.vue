@@ -114,7 +114,7 @@
 import tem from "./tem";
 import plan from "./plan";
 import rule from "@/components/rule";
-import { baseCodeSupply } from "@/api/index";
+import { baseCodeSupplyEx } from "@/api/index";
 import { getUcmlUser } from "@/const/whse.js";
 import {
   getRhl,
@@ -208,16 +208,22 @@ export default {
             // item.custCode = item.registerNo;
             item.custId = item.registerNo;
             item.suppId = item.purNo;
-            this.$nextTick(() => {
-              this.$set(item, "custName", item.$custId);
-              if (index === this.crud.length - 1) {
-                this.everyThing.mainC.column[11].hide = true;
+            if (index === this.crud.length - 1) {
+              setTimeout(() => {
+                if (this.hide === "1") {
+                  this.$nextTick(() => {
+                    this.crud.forEach((item, i) => {
+                      this.$set(item, "custName", item.$custId);
+                    });
+                  });
+                }
+                this.everyThing.mainC.column[8].hide = true;
                 this.loading = false;
-              }
-            });
+              }, 200);
+            }
           });
           if (this.crud.length === 0) {
-            this.everyThing.mainC.column[11].hide = true;
+            // this.everyThing.mainC.column[8].hide = true;
             this.loading = false;
           }
         })
@@ -239,7 +245,7 @@ export default {
           deliNo: val[0].deliNo,
         };
         this.addList = val;
-        baseCodeSupply({ code: "whse_in" }).then((res) => {
+        baseCodeSupplyEx({ code: "whse_in" }).then((res) => {
           data.yinId = res.data.data;
           getUcmlUser({ usrLogin: parent.userID }).then((Res) => {
             data.sysCreatedby = Res.data.ucmlUseroid;
@@ -257,7 +263,7 @@ export default {
           yinStatus: "1",
           finStatus: "0",
         };
-        baseCodeSupply({ code: "whse_in" }).then((res) => {
+        baseCodeSupplyEx({ code: "whse_in" }).then((res) => {
           data.yinId = res.data.data;
           getUcmlUser({ usrLogin: parent.userID }).then((Res) => {
             data.sysCreatedby = Res.data.ucmlUseroid;

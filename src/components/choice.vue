@@ -152,7 +152,7 @@ import {
   PurMaterialspoF,
   PurMaterialspoC,
   getPurMaterialspo,
-  // 外厂輔料配料计划
+  // 選擇外厂輔料配料计划
   getWhseRetmaterialsPlan,
   WhseRetmaterialsPlanF,
   WhseRetmaterialsPlanC,
@@ -836,12 +836,12 @@ export default {
         this.choiceF = WhseRetratyarnF;
         this.getData = getWhseRetratyarn;
         break;
-      case "外厂染化料配料计划":
+      case "選擇外廠化工原料配料計劃":
         this.choiceC = WhseChemicalPlanC;
         this.choiceF = WhseChemicalPlanF;
         this.getData = getWhseChemicalPlan;
         break;
-      case "外厂輔料配料计划":
+      case "選擇外厂輔料配料计划":
         this.choiceC = WhseRetmaterialsPlanC;
         this.choiceF = WhseRetmaterialsPlanF;
         this.getData = getWhseRetmaterialsPlan;
