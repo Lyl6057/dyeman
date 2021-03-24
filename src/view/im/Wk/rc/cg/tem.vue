@@ -431,8 +431,8 @@ export default {
         .then((res) => {
           let records = res.data;
           this.phPage.total = records.total;
-          let data = [];
-          data = records.records;
+          let data = res.data;
+          // data = records.records;
           if (data.length === 0) {
             this.ctLoading = false;
           }
@@ -528,7 +528,6 @@ export default {
           start: 1,
         })
         .then((res) => {
-          console.log(res);
           let records = res.data;
           let data = [];
           data = records.records;

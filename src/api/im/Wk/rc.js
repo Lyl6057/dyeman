@@ -329,7 +329,7 @@ export function getRhlPhList(params) {
 
 export function getRhlPh(params) {
   return axios({
-    url: '/api/whseChemicalinDtlb/v1.0/page',
+    url: '/api/whseChemicalinDtlb/v1.0/list',
     method: 'get',
     params: params
   })

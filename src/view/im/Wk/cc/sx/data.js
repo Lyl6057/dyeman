@@ -1,6 +1,6 @@
-import { getDIC, getDicT, postDicT } from '@/config/index'
+import { getDIC, getXDicT, getDicT, postDicT } from '@/config/index'
 
-
+let whsehouse = getDicT("whseWarehouse", "warehouseName", "whseWarehouseoid")
 export function rsxkr1F(_this) {
   return {
     submitBtn: false,
@@ -27,7 +27,7 @@ export function rsxkr1F(_this) {
         prop: "batchNumber",
         span: 6,
         placeholder: " ",
-        display: _this.hide === "1" || _this.hide === "1" ? true : false,
+        display: _this.hide === "1" || _this.hide === "2" ? true : false,
       },
     ],
   }
@@ -43,15 +43,16 @@ export function rsxkr2F(_this) {
         prop: "retCode",
         span: 6,
         placeholder: " ",
+        disabled: true
       },
       {
         label: "出倉日期",
         prop: "retDate",
         span: 6,
         placeholder: " ",
-        type: "datetime",
-        format: "yyyy-MM-dd HH:mm:ss",
-        valueFormat: "yyyy-MM-dd HH:mm:ss",
+        type: "date",
+        format: "yyyy-MM-dd",
+        valueFormat: "yyyy-MM-dd",
       },
       {
         label: "出仓类型",
@@ -62,36 +63,48 @@ export function rsxkr2F(_this) {
         dicData: getDIC('Whse_out_type'),
       },
 
-      {
-        label: "生產單號",
-        prop: "prOn",
-        span: 6,
-        placeholder: " ",
-        disabled: true
-      },
+      // {
+      //   label: "生產單號",
+      //   prop: "prOn",
+      //   span: 6,
+      //   placeholder: " ",
+      //   disabled: true
+      // },
       {
         label: "配料单号",
         prop: "batchNumber",
         span: 6,
         placeholder: " ",
-        disabled: true
-      },
-      {
-        label: "纱线编号",
-        prop: "yarnsId",
-        cell: true,
-        span: 6,
-        placeholder: " ",
-        disabled: true
+        disabled: true,
+        display: _this.hide === "1" || _this.hide === "2" ? true : false,
 
       },
       {
-        label: "重量",
-        prop: "weight",
+        label: "调入仓",
+        prop: "traIn",
         cell: true,
         span: 6,
+        display: _this.hide === "5",
+        type: "select",
+        dicData: whsehouse
+      },
+      {
+        label: "调出仓",
+        prop: "traOut",
+        cell: true,
+        span: 6,
+        display: _this.hide === "5",
+        type: "select",
+        dicData: whsehouse
+      },
+      {
+        label: "备注",
+        prop: "retRemarks",
+        cell: true,
+        span: 12,
         placeholder: " ",
-        disabled: true
+        disabled: false,
+        display: _this.hide != "2"
       },
 
     ],
@@ -105,7 +118,7 @@ export function rsxkr1C(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 280px)",
+    height: "calc(100vh - 230px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
@@ -128,14 +141,6 @@ export function rsxkr1C(_this) {
         type: "datetime",
         format: "yyyy-MM-dd HH:mm:ss",
         valueFormat: "yyyy-MM-dd HH:mm:ss",
-        focus: (val) => {
-          _this.iptChange(_this.chooseData);
-        },
-        change: (val) => {
-          if (val.value === '') {
-            _this.iptChange(_this.chooseData);
-          }
-        },
         align: "center",
       },
 
@@ -149,9 +154,6 @@ export function rsxkr1C(_this) {
         prop: "retCode",
         cell: true,
         width: 160,
-        change: (val) => {
-          _this.iptChange(_this.chooseData);
-        },
       },
       {
         label: "出仓类型",
@@ -160,76 +162,24 @@ export function rsxkr1C(_this) {
         width: 90,
         type: "select",
         dicData: getDIC('Whse_out_type'),
-        change: (val) => {
-          _this.iptChange(_this.chooseData);
-        },
       },
       {
         label: "出倉日期",
         prop: "retDate",
         cell: true,
-        type: "datetime",
-        format: "yyyy-MM-dd HH:mm:ss",
-        valueFormat: "yyyy-MM-dd HH:mm:ss",
-        focus: (val) => {
-          _this.iptChange(_this.chooseData);
-        },
-        change: (val) => {
-          if (val.value === '') {
-            _this.iptChange(_this.chooseData);
-          }
-        },
+        type: "date",
+        format: "yyyy-MM-dd",
+        valueFormat: "yyyy-MM-dd",
         align: "center",
         width: 190,
       },
-      {
-        label: "调入仓",
-        prop: "traIn",
-        cell: true,
-        width: 120,
-        hide: _this.hide === "5" ? false : true,
-        change: (val) => {
-          if (val.value === '') {
-            _this.iptChange(_this.chooseData);
-          }
-        },
-        click: () => {
-          _this.iptChange(_this.chooseData);
-        },
-        type: "select",
-        dicData: getDicT("whseWarehouse", "warehouseName", "whseWarehouseoid"),
-      },
-      {
-        label: "调出仓",
-        prop: "traOut",
-        cell: true,
-        width: 120,
-        hide: _this.hide === "5" ? false : true,
-        change: (val) => {
-          if (val.value === '') {
-            _this.iptChange(_this.chooseData);
-          }
-        },
-        type: "select",
-        dicData: getDicT("whseWarehouse", "warehouseName", "whseWarehouseoid"),
-        click: () => {
-          _this.iptChange(_this.chooseData);
-        }
-      },
+
       {
         label: "配料单号",
         prop: "batchNumber",
         cell: true,
         width: 180,
         hide: _this.hide === "1" || _this.hide === "2" ? false : true,
-        change: (val) => {
-          if (val.value === '') {
-            _this.iptChange(_this.chooseData);
-          }
-        },
-        click: () => {
-          _this.iptChange(_this.chooseData);
-        },
         // type: "select",
         // dicData:
         //   getDicT('basCustomer', 'custCode', 'custCode')
@@ -253,7 +203,7 @@ export function rsxkr2C(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 280px)",
+    height: "calc(100vh - 236px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
@@ -262,6 +212,10 @@ export function rsxkr2C(_this) {
       {
         label: ' ',
         name: 'weight',
+        type: 'sum',
+      }, {
+        label: ' ',
+        name: 'everySpindle',
         type: 'sum',
       },
     ],
@@ -281,21 +235,21 @@ export function rsxkr2C(_this) {
       {
         label: "設備编号",
         prop: "equId",
-        cell: true,
+        cell: false,
         width: 120,
         hide: _this.hide != '1',
       },
       {
         label: "设备名称",
         prop: "equName",
-        cell: true,
-        width: 150,
+        cell: false,
+        width: 180,
         hide: _this.hide != '1',
       },
       {
         label: "加工厂代号",
         prop: "refCode",
-        cell: true,
+        cell: false,
         hide: _this.hide != '2',
         width: 120,
       },
@@ -303,7 +257,7 @@ export function rsxkr2C(_this) {
         label: "加工厂名稱",
         prop: "refName",
         hide: _this.hide != '2',
-        cell: true,
+        cell: false,
         width: 120,
       },
       {
@@ -311,21 +265,21 @@ export function rsxkr2C(_this) {
         prop: "yinId",
         hide: true,
         // hide: _this.hide != '4',
-        width: 180,
+        width: 130,
         // type: "select",
         // dicData: getDicT("whseYarnin/v1.0/list", "batchNo", "yinId"),
       },
       {
         label: "纱线系统编号",
         prop: "yarnsId",
-        cell: true,
-        width: 120,
+        cell: false,
+        width: 130,
       },
       {
         label: "纱线名称",
         prop: "yarnsName",
-        cell: true,
-        width: 450,
+        cell: false,
+        // width: 450,
         type: "select",
         dicData: getDicT("basYarnsData", "yarnsName", "yarnsId"),
       },
@@ -333,8 +287,15 @@ export function rsxkr2C(_this) {
       {
         label: "批次/批号",
         prop: "batchNo",
-        cell: true,
+        cell: false,
         width: 180,
+      },
+      {
+        label: "锭数",
+        prop: "everySpindle",
+        cell: true,
+        width: 100,
+        align: "right",
       },
       {
         label: "重量",
@@ -363,6 +324,9 @@ export function rsxkr2C(_this) {
   }
 
 }
+
+let yarninDtl = getXDicT("whseYarninDtl/v1.0/list")
+let yarnin = getXDicT("whseYarnin/v1.0/list")
 // 退客人明细
 export function rsxkr3C(_this) {
   return {
@@ -401,20 +365,78 @@ export function rsxkr3C(_this) {
         hide: true,
       },
       {
+        label: "採購入庫編號",
+        prop: "whseYarninDtlFk",
+        cell: false,
+        width: 150,
+        props: {
+          label: "whseYarninFk",
+          value: "whseYarninDtloid"
+        },
+        type: "select",
+        dicData: yarninDtl,
+      },
+      {
+        label: "採購入庫編號",
+        prop: "whseYarninFk",
+        cell: false,
+        width: 150,
+        props: {
+          label: "yinId",
+          value: "whseYarninoid"
+        },
+        type: "select",
+        dicData: yarnin,
+      },
+      {
         label: "纱线系统编号",
         prop: "yarnsId",
-        cell: true,
+        cell: false,
         width: 140,
         type: "select",
-        dicData: getDicT("whseYarninDtl/v1.0/list", "yarnsId", "whseYarninDtloid"),
+        props: {
+          label: "yarnsId",
+          value: "whseYarninDtloid"
+        },
+        dicData: yarninDtl,
+      },
+      {
+        label: "纱线名稱",
+        prop: "yarnsName",
+        cell: false,
+        // width: 140,
+        type: "select",
+        // props: {
+        //   label: "yarnsName",
+        //   value: "whseYarninDtloid"
+        // },
+        dicData: getDicT("basYarnsData", "yarnsName", "yarnsId"),
       },
       {
         label: "批次/批号",
         prop: "batchNo",
-        cell: true,
-        width: 180,
+        cell: false,
+        width: 160,
         type: "select",
-        dicData: getDicT("whseYarninDtl/v1.0/list", "batchNo", "whseYarninDtloid"),
+        props: {
+          label: "batchNo",
+          value: "whseYarninDtloid"
+        },
+        dicData: yarninDtl,
+      },
+      {
+        label: "入倉重量",
+        prop: "weight",
+        cell: false,
+        width: 100,
+        align: "right",
+        type: "select",
+        props: {
+          label: "weight",
+          value: "whseYarninDtloid"
+        },
+        dicData: yarninDtl,
+        hide: _this.hide == '4' || _this.hide == '3' ? false : true
       },
       {
         label: "退回重量",
@@ -469,7 +491,7 @@ export function planCrud(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 209px)",
+    height: "calc(100vh - 200px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
@@ -489,107 +511,80 @@ export function planCrud(_this) {
       {
         label: "计划编号",
         prop: "retBatch",
-        cell: true,
+        cell: false,
         width: 150,
-        click: (val) => {
-          _this.iptChange(_this.chooseData);
-        },
 
       },
 
       {
         label: "設備编号",
         prop: "equId",
-        cell: true,
+        cell: false,
         width: 120,
         hide: _this.hide != '1'
-        // click: (val) => {
-        //   _this.iptChange(_this.chooseData);
-        // },
 
       },
       {
         label: "设备名称",
         prop: "equName",
-        cell: true,
+        cell: false,
         width: 120,
         hide: _this.hide != '1'
       },
       {
         label: "加工厂代号",
         prop: "refCode",
-        cell: true,
+        cell: false,
         width: 120,
         hide: _this.hide != '2'
-        // click: (val) => {
-        //   _this.iptChange(_this.chooseData);
-        // },
 
       },
       {
         label: "加工厂名称",
         prop: "refName",
-        cell: true,
+        cell: false,
         width: 120,
         hide: _this.hide != '2'
       },
       {
         label: "生產單號",
         prop: "prOn",
-        cell: true,
+        cell: false,
         width: 180,
-        click: (val) => {
-          _this.iptChange(_this.chooseData);
-        },
       },
       {
         label: "纱线编号",
         prop: "yarnsId",
-        cell: true,
+        cell: false,
         width: 120,
-        click: (val) => {
-          _this.iptChange(_this.chooseData);
-        },
 
       },
       {
         label: "纱线名称",
         prop: "yarnsName",
-        cell: true,
+        cell: false,
         width: 250,
-        click: (val) => {
-          _this.iptChange(_this.chooseData);
-        },
       },
 
       {
         label: "批号",
         prop: "batchNo",
-        cell: true,
+        cell: false,
         width: 180,
-        click: (val) => {
-          _this.iptChange(_this.chooseData);
-        },
       },
       {
         label: "重量",
         prop: "weight",
-        cell: true,
+        cell: false,
         width: 100,
         align: "right",
-        click: (val) => {
-          _this.iptChange(_this.chooseData);
-        },
       },
       {
         label: "锭数",
         prop: "everySpindle",
-        cell: true,
+        cell: false,
         align: "right",
         width: 100,
-        click: (val) => {
-          _this.iptChange(_this.chooseData);
-        },
       },
     ],
   }
@@ -624,9 +619,6 @@ export function PlanOutCrud(_this) {
         prop: "retBatch",
         cell: true,
         width: 150,
-        click: (val) => {
-          _this.iptChange(_this.chooseData);
-        },
 
       },
 
@@ -636,9 +628,6 @@ export function PlanOutCrud(_this) {
         cell: true,
         width: 120,
         hide: _this.hide != '1'
-        // click: (val) => {
-        //   _this.iptChange(_this.chooseData);
-        // },
 
       },
       {
@@ -654,9 +643,6 @@ export function PlanOutCrud(_this) {
         cell: true,
         width: 120,
         hide: _this.hide != '2'
-        // click: (val) => {
-        //   _this.iptChange(_this.chooseData);
-        // },
 
       },
       {
@@ -671,18 +657,12 @@ export function PlanOutCrud(_this) {
         prop: "prOn",
         cell: true,
         width: 140,
-        click: (val) => {
-          _this.iptChange(_this.chooseData);
-        },
       },
       {
         label: "纱线编号",
         prop: "yarnsId",
         cell: true,
         width: 120,
-        click: (val) => {
-          _this.iptChange(_this.chooseData);
-        },
 
       },
       {
@@ -690,9 +670,6 @@ export function PlanOutCrud(_this) {
         prop: "yarnsName",
         cell: true,
         width: 250,
-        click: (val) => {
-          _this.iptChange(_this.chooseData);
-        },
       },
 
       {
@@ -701,9 +678,6 @@ export function PlanOutCrud(_this) {
         cell: true,
         width: 180,
         align: "right",
-        click: (val) => {
-          _this.iptChange(_this.chooseData);
-        },
       },
       {
         label: "重量",
@@ -711,9 +685,6 @@ export function PlanOutCrud(_this) {
         cell: true,
         width: 100,
         align: "right",
-        click: (val) => {
-          _this.iptChange(_this.chooseData);
-        },
       },
       {
         label: "锭数",
@@ -721,9 +692,6 @@ export function PlanOutCrud(_this) {
         cell: true,
         align: "right",
         width: 100,
-        click: (val) => {
-          _this.iptChange(_this.chooseData);
-        },
       },
     ],
   }
@@ -839,9 +807,6 @@ export function whseRetreatCrud(_this) {
         prop: "retBatch",
         cell: true,
         width: 150,
-        click: (val) => {
-          _this.iptChange(_this.chooseData);
-        },
 
       },
 
@@ -851,9 +816,6 @@ export function whseRetreatCrud(_this) {
         cell: true,
         width: 120,
         hide: _this.hide != '1'
-        // click: (val) => {
-        //   _this.iptChange(_this.chooseData);
-        // },
 
       },
       {
@@ -869,9 +831,6 @@ export function whseRetreatCrud(_this) {
         cell: true,
         width: 120,
         hide: _this.hide != '2'
-        // click: (val) => {
-        //   _this.iptChange(_this.chooseData);
-        // },
 
       },
       {
@@ -886,18 +845,12 @@ export function whseRetreatCrud(_this) {
         prop: "prOn",
         cell: true,
         width: 180,
-        click: (val) => {
-          _this.iptChange(_this.chooseData);
-        },
       },
       {
         label: "纱线编号",
         prop: "yarnsId",
         cell: true,
         width: 120,
-        click: (val) => {
-          _this.iptChange(_this.chooseData);
-        },
 
       },
       {
@@ -905,9 +858,6 @@ export function whseRetreatCrud(_this) {
         prop: "yarnsName",
         cell: true,
         width: 250,
-        click: (val) => {
-          _this.iptChange(_this.chooseData);
-        },
       },
 
       {
@@ -915,9 +865,6 @@ export function whseRetreatCrud(_this) {
         prop: "batchNo",
         cell: true,
         width: 180,
-        click: (val) => {
-          _this.iptChange(_this.chooseData);
-        },
       },
       {
         label: "重量",
@@ -925,9 +872,6 @@ export function whseRetreatCrud(_this) {
         cell: true,
         width: 100,
         align: "right",
-        click: (val) => {
-          _this.iptChange(_this.chooseData);
-        },
       },
       {
         label: "锭数",
@@ -935,9 +879,6 @@ export function whseRetreatCrud(_this) {
         cell: true,
         align: "right",
         width: 100,
-        click: (val) => {
-          _this.iptChange(_this.chooseData);
-        },
       },
     ],
   }

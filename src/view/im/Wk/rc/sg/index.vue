@@ -131,6 +131,19 @@ import {
   addRhlPhDetali,
   updateRhlPhDetali,
   delRhlPhDetali,
+  // 顏料
+  getYl,
+  delYl,
+  addYl,
+  updateYl,
+  getYlDtla,
+  addYlDtla,
+  updateYlDtla,
+  delYlDtla,
+  getYlDtlb,
+  addYlDtlb,
+  updateYlDtlb,
+  delYlDtlb,
   //  生产辅料
   getScfl,
   delScfl,
@@ -161,6 +174,8 @@ import {
   getVpnvex, // 染化料分配
   getChemicalinAlloc,
   addChemicalinAlloc,
+  getDyesainAlloc,
+  addDyesainAlloc,
   // 五金/行政/辅料入仓分配
   getAccessoriesinAlloc,
   addAccessoriesinAlloc,
@@ -277,21 +292,21 @@ export default {
           this.everyThing.addAlloc = addChemicalinAlloc;
           break;
         case "颜料":
-          this.everyThing.get = getRhl;
-          this.everyThing.del = delRhl;
-          this.everyThing.update = updateRhl;
-          this.everyThing.add = addRhl;
+          this.everyThing.get = getYl;
+          this.everyThing.del = delYl;
+          this.everyThing.update = updateYl;
+          this.everyThing.add = addYl;
           this.everyThing.getPlan = getVpnvex;
-          this.everyThing.getDetail = getRhlDetali;
-          this.everyThing.addDetail = addRhlDetali;
-          this.everyThing.updateDetail = updateRhlDetali;
-          this.everyThing.delDetail = delRhlDetali;
-          this.everyThing.getPh = getRhlPh;
-          this.everyThing.addPh = addRhlPhDetali;
-          this.everyThing.updatePh = updateRhlPhDetali;
-          this.everyThing.delPh = delRhlPhDetali;
-          this.everyThing.getAlloc = getChemicalinAlloc;
-          this.everyThing.addAlloc = addChemicalinAlloc;
+          this.everyThing.getDetail = getYlDtla;
+          this.everyThing.addDetail = addYlDtla;
+          this.everyThing.updateDetail = updateYlDtla;
+          this.everyThing.delDetail = delYlDtla;
+          this.everyThing.getPh = getYlDtlb;
+          this.everyThing.addPh = addYlDtlb;
+          this.everyThing.updatePh = updateYlDtlb;
+          this.everyThing.delPh = delYlDtlb;
+          this.everyThing.getAlloc = getDyesainAlloc;
+          this.everyThing.addAlloc = addDyesainAlloc;
           break;
         default:
           break;

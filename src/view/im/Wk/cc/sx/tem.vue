@@ -1,69 +1,56 @@
 <template>
   <div id="rcDetail">
-    <!-- <div class="formBox">
-      <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
-    </div> -->
-    <el-row class="">
-      <div class="btnList" style="margin-bottom: 2px">
-        <!-- <el-button type="primary" @click="getDetail">查询</el-button> -->
-        <el-button type="primary" @click="add">新增</el-button>
-        <el-button type="danger" @click="del">删除</el-button>
-        <el-button type="success" @click="save">保存</el-button>
-        <!-- <el-button type="warning" @click="getDetail">取消</el-button>
-        <el-button type="warning" @click="close">关闭</el-button> -->
-      </div>
-      <avue-crud
-        ref="dlgcrud"
-        :option="mxOp"
-        v-loading="loading"
-        :data="mx"
-        :page.sync="page"
-        @current-row-change="cellClick"
-      ></avue-crud>
-    </el-row>
-    <el-dialog
-      id="sxPlanDlg"
-      :visible.sync="sxV"
-      append-to-body
-      fullscreen
-      :close-on-click-modal="false"
-      :close-on-press-escape="false"
-      :before-close="sxclose"
-      v-if="sxV"
+    <view-container
+      :title="datas.type.split('_')[0] + '出庫單'"
+      v-loading="loading"
     >
-      <view-container :title="dlgTle">
-        <div class="btnList">
-          <el-button type="success" @click="check">選擇</el-button>
-          <el-button type="primary" @click="getSxData">查询</el-button>
-          <el-button type="warning" @click="sxclose">关闭</el-button>
-        </div>
-        <div class="formBox">
-          <avue-form
-            ref="sxform"
-            :option="sxformOp"
-            v-model="sxform"
-          ></avue-form>
-        </div>
-        <div class="crudBox">
+      <div class="btnList">
+        <el-button type="success" @click="save">保存</el-button>
+        <el-button type="primary" @click="add">新增</el-button>
+        <el-button
+          type="danger"
+          @click="del"
+          :disabled="Object.keys(chooseData).length === 0"
+          >删除</el-button
+        >
+        <el-button type="warning" @click="close">关闭</el-button>
+      </div>
+      <div class="formBox">
+        <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
+      </div>
+      <view-container :title="datas.type.split('_')[0] + '出庫單明細'">
+        <div class="crudBox" style="margin-top: 2px">
           <avue-crud
-            ref="sxcrud"
-            id="sxcrud"
-            :option="outcrudOp"
-            :data="sxcrud"
-            :page.sync="sxpage"
-            v-loading="loading"
-            @on-load="getSxData"
-            @selection-change="sxselectionChange"
+            ref="dlgcrud"
+            id="mx"
+            :option="mxOp"
+            :data="mx"
+            :page.sync="page"
+            @on-load="getDetail"
+            @current-row-change="cellClick"
           ></avue-crud>
         </div>
       </view-container>
-    </el-dialog>
+    </view-container>
+    <choice
+      :choiceV="choiceV"
+      :choiceTle="choiceTle"
+      :choiceQ="choiceQ"
+      :dlgWidth="dlgWidth"
+      @choiceData="choiceData"
+      @close="choiceV = false"
+      v-if="choiceV"
+    ></choice>
   </div>
 </template>
 <script>
 import { rsxkr2C, rsxkr2F, sxForm, rsxkr3C } from "./data";
 import { getSx, getSxDetali } from "@/api/im/Wk/rc";
+import { baseCodeSupply } from "@/api/index";
+import choice from "@/components/choice";
 import {
+  updateSx,
+  addSx,
   getSxCcDetali,
   addSxDetali,
   updateSxDetali,
@@ -84,9 +71,13 @@ export default {
     datas: Object,
     everyThing: Object,
     hide: String,
+    detail: Object,
+    isAdd: Boolean,
   },
   name: "",
-  components: {},
+  components: {
+    choice: choice,
+  },
   data() {
     return {
       loading: false,
@@ -95,7 +86,7 @@ export default {
         currentPage: 1,
         total: 0,
       },
-      detail: {},
+
       formOp: rsxkr2F(this),
       mxOp: rsxkr2C(this),
       mx: [],
@@ -109,10 +100,10 @@ export default {
       sxV: false,
       sxformOp: sxForm(),
       sxform: {},
-      outform: {},
-      outformOp: rsxkr2F(),
-      outcrudOp: rsxkr2C(this),
-      outcrud: [],
+      form: {},
+      formOp: rsxkr2F(this),
+      mxOp: rsxkr2C(this),
+      mx: [],
       sxcrud: [],
       sxpage: {},
       sxloading: false,
@@ -120,23 +111,19 @@ export default {
       planData: {},
       func: {},
       dlgTle: "選擇紗線配料",
+      saved: false,
+      choiceV: false,
+      choiceTle: "來紗登記",
+      choiceTarget: {},
+      choiceField: "",
+      choiceQ: {},
+      dlgWidth: "60%",
     };
   },
   watch: {},
   methods: {
     getDetail() {
       this.loading = true;
-      if (
-        Object.keys(this.detail).length === 0 ||
-        (!this.detail.whseRetyarninoid &&
-          !this.detail.whseRetreatoid &&
-          !this.detail.whseTransferoid)
-      ) {
-        this.mx = [];
-        this.mxOp.showSummary = false;
-        this.loading = false;
-        return;
-      }
       this.func.getDetail = getSxCcDetali;
       this.func.delDetail = delSxDetali;
       this.func.addDetail = addSxDetali;
@@ -155,6 +142,31 @@ export default {
         this.func.updateDetail = updateSxTransferDtl;
         this.mxOp = rsxkr3C(this);
       }
+      if (this.isAdd) {
+        if (this.hide === "1" || this.hide === "2") {
+          this.detail.list.index = 1;
+          this.mx.push(Object.assign(this.detail.list, { $cellEdit: true }));
+          this.page.total = this.mx.length;
+        }
+        if (this.hide === "3" || this.hide === "4" || this.hide === "5") {
+          this.mxOp.column[2].hide = true;
+        }
+        // this.$refs.dlgcrud.setCurrentRow();
+        this.loading = false;
+        return;
+      }
+      if (
+        Object.keys(this.detail).length === 0 ||
+        (!this.detail.whseRetyarninoid &&
+          !this.detail.whseRetreatoid &&
+          !this.detail.whseTransferoid)
+      ) {
+        this.mx = [];
+        this.mxOp.showSummary = false;
+        this.loading = false;
+        return;
+      }
+
       this.func
         .getDetail({
           rows: this.page.pageSize,
@@ -167,50 +179,100 @@ export default {
           let records = res.data;
           this.page.total = records.total;
           this.mx = records.records;
-          console.log(this.mx);
           this.oldData = {};
           this.chooseData = {};
-          this.$refs.dlgcrud.setCurrentRow();
+
           if (this.mx.length === 0) {
+            if (this.hide === "3" || this.hide === "4" || this.hide === "5") {
+              this.$set(this.mxOp.column[2], "hide", true);
+            }
             this.loading = false;
+            return;
           }
+          this.$refs.dlgcrud.setCurrentRow(this.mx[0]);
           this.mx.forEach((item, index) => {
             item.index = index + 1;
             if (this.hide === "3" || this.hide === "4" || this.hide === "5") {
               item.batchNo = item.whseYarninDtlFk;
               item.yarnsId = item.whseYarninDtlFk;
+              item.weight = item.whseYarninDtlFk;
             }
             if (index === this.mx.length - 1) {
               this.mxOp.showSummary = true;
-              this.loading = false;
+              this.$nextTick(() => {
+                if (
+                  this.hide === "3" ||
+                  this.hide === "4" ||
+                  this.hide === "5"
+                ) {
+                  this.mx.forEach((items, indexs) => {
+                    this.$set(items, "whseYarninFk", items.$whseYarninDtlFk);
+                    this.$set(items, "yarnsName", items.$yarnsId);
+                    //  items.whseYarninFk = items.$whseYarninDtlFk;
+                    //   items.yarnsName = items.$yarnsId;
+                    if (indexs === this.mx.length - 1) {
+                      // this.mxOp.column[2].hide = true;
+                      this.$set(this.mxOp.column[2], "hide", true);
+                      setTimeout(() => {
+                        this.mxOp.showSummary = true;
+                        this.loading = false;
+                      }, 200);
+                    }
+                  });
+                } else {
+                  setTimeout(() => {
+                    this.mxOp.showSummary = true;
+                    this.loading = false;
+                  }, 200);
+                }
+              });
             }
           });
         });
     },
     add() {
-      if (Object.keys(this.detail).length === 0) {
-        this.$tip.error("请先选择出库明细");
-        return;
-      } else if (
-        !this.detail.whseRetyarninoid &&
-        !this.detail.whseTransferoid &&
-        !this.detail.whseRetreatoid
-      ) {
-        this.$tip.error("请先保存出库资料");
-        return;
+      if (this.hide === "1") {
+        this.choiceV = !this.choiceV;
+        this.choiceQ.retBatch = this.form.batchNumber;
+        // this.choiceTarget = this.chooseData;
+        this.dlgWidth = "100%";
+        this.choiceTle = "選擇本厂纱线配料计划";
+      } else if (this.hide === "2") {
+        this.choiceV = !this.choiceV;
+        this.choiceQ.retBatch = this.form.batchNumber;
+        // this.choiceTarget = this.chooseData;
+        this.dlgWidth = "100%";
+        this.choiceTle = "選擇外厂纱线配料计划";
+      } else if (this.hide === "4" || this.hide === "3" || this.hide === "5") {
+        this.choiceV = !this.choiceV;
+        // this.choiceQ.retBatch = this.form.batchNumber;
+        // this.choiceTarget = this.chooseData;
+        this.dlgWidth = "100%";
+        this.choiceTle = "選擇紗線入庫明細";
       }
-      // if (Object.keys(this.oldData).length > 0) {
-      //   this.oldData.$cellEdit = false;
+      // if (Object.keys(this.detail).length === 0) {
+      //   this.$tip.error("请先选择出库明细");
+      //   return;
+      // } else if (
+      //   !this.detail.whseRetyarninoid &&
+      //   !this.detail.whseTransferoid &&
+      //   !this.detail.whseRetreatoid
+      // ) {
+      //   this.$tip.error("请先保存出库资料");
+      //   return;
       // }
-      this.outcrudOp.column[2].hide = true;
-      this.outcrudOp.column[3].hide = true;
-      this.outcrudOp.column[4].hide = true;
-      this.outcrudOp.column[5].hide = true;
-      this.outcrudOp.column[6].hide = this.hide != "4";
-      this.outcrudOp.selection = true;
-      this.outcrudOp.showSummary = false;
-      this.outcrudOp.height = "calc(100vh - 213px)";
-      this.sxV = true;
+      // // if (Object.keys(this.oldData).length > 0) {
+      // //   this.oldData.$cellEdit = false;
+      // // }
+      // this.mxOp.column[2].hide = true;
+      // this.mxOp.column[3].hide = true;
+      // this.mxOp.column[4].hide = true;
+      // this.mxOp.column[5].hide = true;
+      // this.mxOp.column[6].hide = this.hide != "4";
+      // this.mxOp.selection = true;
+      // this.mxOp.showSummary = false;
+      // this.mxOp.height = "calc(100vh - 213px)";
+      // this.sxV = true;
     },
     del() {
       if (
@@ -226,11 +288,22 @@ export default {
         !this.chooseData.whseTransferDtloid
       ) {
         this.mx.splice(this.chooseData.index - 1, 1);
+        this.mx.forEach((item, i) => {
+          item.index = i + 1;
+        });
         this.$refs.dlgcrud.setCurrentRow(this.mx[this.mx.length - 1]);
         return;
       }
       this.$tip
-        .cofirm("是否确定删除", this, {})
+        .cofirm(
+          "是否确定删除批号为 【 " +
+            (this.hide === "3" || this.hide === "4" || this.hide === "5"
+              ? this.chooseData.$batchNo
+              : this.chooseData.batchNo) +
+            " 】 的数据?",
+          this,
+          {}
+        )
         .then(() => {
           this.func
             .delDetail(
@@ -244,6 +317,9 @@ export default {
               if (res.data.code === 200) {
                 this.$tip.success("删除成功");
                 this.mx.splice(this.chooseData.index - 1, 1);
+                this.mx.forEach((item, i) => {
+                  item.index = i + 1;
+                });
                 this.getDetail();
               } else {
                 this.$tip.error("删除失败");
@@ -258,11 +334,13 @@ export default {
         });
     },
     cellClick(val) {
+      this.oldData.$cellEdit = false;
+      this.$set(val, "$cellEdit", true);
       this.oldData = val;
       this.chooseData = val;
     },
     close() {
-      document.getElementsByClassName("el-dialog__headerbtn")[3].click();
+      this.$emit("close", this.saved);
     },
     getSxData() {
       this.sxloading = true;
@@ -423,38 +501,122 @@ export default {
       this.sxclose();
     },
     save() {
-      this.loading = true;
-      let data = this.mx.concat(this.sxcheckList);
-      if (data.length === 0) {
-        this.loading = false;
+      this.outloading = true;
+      if ((this.hide === "1" || this.hide === "2") && !this.form.batchNumber) {
+        this.$tip.error("出库资料中配料单号不能为空!");
+        return;
       }
-      data.forEach((item, index) => {
-        if (
-          !item.whseRetyarninDtloid &&
-          !item.whseRetreatDtloid &&
-          !item.whseTransferDtloid
-        ) {
-          item.whseRetyarninFk = this.detail.whseRetyarninoid;
-          item.whseRetreatFk = this.detail.whseRetreatoid;
-          item.whseTransferFk = this.detail.whseTransferoid;
-          this.func.addDetail(item).then((res) => {});
+      if (this.hide === "5" && (!this.form.traOut || !this.form.traIn)) {
+        this.$tip.error("出库资料中調出入倉不能为空!");
+        return;
+      }
+      for (let i = 0; i < this.mx.length; i++) {
+        if (this.hide === "3" || this.hide === "4") {
+          if (!this.mx[i].retWeight || !this.mx[i].retCompany) {
+            this.$tip.error("出库明细的退回重量/单位不能为空!");
+            return;
+          }
+        } else if (this.hide === "5") {
+          if (!this.mx[i].traWeight || !this.mx[i].traCompany) {
+            this.$tip.error("出库明细的調倉重量/单位不能为空!");
+            return;
+          }
+        } else {
+          if (!this.mx[i].weight || !this.mx[i].weightUnit) {
+            this.$tip.error("出库明细的重量/单位不能为空!");
+            return;
+          }
         }
-        if (index === data.length - 1) {
-          this.getDetail();
-          this.$tip.success("保存成功!");
-        }
-      });
-      this.changeList = [];
+      }
+      if (
+        this.form.whseRetyarninoid ||
+        this.form.whseRetreatoid ||
+        this.form.whseTransferoid
+      ) {
+        this.everyThing.updateF(this.form).then((res) => {
+          if (this.mx.length === 0) {
+            this.$tip.success("保存成功");
+            this.canSave = false;
+            this.$emit("save2reset");
+            this.outloading = false;
+          }
+          this.mx.forEach((item, index) => {
+            item.yarnsName = item.$yarnsName;
+            if (
+              item.whseRetyarninDtloid ||
+              item.whseRetreatDtloid ||
+              item.whseTransferDtloid
+            ) {
+              this.func.updateDetail(item).then((res) => {});
+            } else {
+              item.whseRetyarninFk = this.form.whseRetyarninoid;
+              item.whseRetreatFk = this.form.whseRetreatoid;
+              item.whseTransferFk = this.form.whseTransferoid;
+              item.whseYarninDtlFk = item.whseYarninDtloid;
+              this.func.addDetail(item).then((res) => {
+                item.whseRetyarninDtloid = res.data.data;
+                item.whseRetreatDtloid = res.data.data;
+                item.whseTransferDtloid = res.data.data;
+              });
+            }
+            if (index === this.mx.length - 1) {
+              this.$tip.success("保存成功");
+              // this.canSave = false;
+              this.$emit("save2reset");
+              this.outloading = false;
+            }
+          });
+        });
+      } else {
+        this.everyThing.addF(this.form).then((res) => {
+          this.form.whseRetyarninoid = res.data.data;
+          this.form.whseRetreatoid = res.data.data;
+          this.form.whseTransferoid = res.data.data;
+          baseCodeSupply({ code: "whse_out" }).then((res) => {});
+          if (this.mx.length === 0) {
+            this.$tip.success("保存成功");
+            this.canSave = false;
+            this.$emit("save2reset");
+            this.outloading = false;
+          }
+          this.mx.forEach((item, index) => {
+            item.yarnsName = item.$yarnsName;
+            if (
+              item.whseRetyarninDtloid ||
+              item.whseRetreatDtloid ||
+              item.whseTransferDtloid
+            ) {
+              this.func.updateDetail(item).then((res) => {});
+            } else {
+              item.whseRetyarninFk = this.form.whseRetyarninoid;
+              item.whseRetreatFk = this.form.whseRetreatoid;
+              item.whseTransferFk = this.form.whseTransferoid;
+              item.whseYarninDtlFk = item.whseYarninDtloid;
+              this.func.addDetail(item).then((res) => {
+                item.whseRetyarninDtloid = res.data.data;
+                item.whseRetreatDtloid = res.data.data;
+                item.whseTransferDtloid = res.data.data;
+              });
+            }
+            if (index === this.mx.length - 1) {
+              this.$tip.success("保存成功");
+              // this.canSave = false;
+              this.$emit("save2reset");
+              this.outloading = false;
+            }
+          });
+        });
+      }
     },
     sxclose() {
-      this.outcrudOp.column[2].hide = this.hide === "1" ? false : true;
-      this.outcrudOp.column[3].hide = this.hide === "1" ? false : true;
-      this.outcrudOp.column[4].hide = this.hide === "2" ? false : true;
-      this.outcrudOp.column[5].hide = this.hide === "2" ? false : true;
-      this.outcrudOp.column[6].hide = true;
-      this.outcrudOp.selection = false;
-      this.outcrudOp.showSummary = true;
-      this.outcrudOp.height = "calc(100vh - 300px)";
+      this.mxOp.column[2].hide = this.hide === "1" ? false : true;
+      this.mxOp.column[3].hide = this.hide === "1" ? false : true;
+      this.mxOp.column[4].hide = this.hide === "2" ? false : true;
+      this.mxOp.column[5].hide = this.hide === "2" ? false : true;
+      this.mxOp.column[6].hide = true;
+      this.mxOp.selection = false;
+      this.mxOp.showSummary = true;
+      this.mxOp.height = "calc(100vh - 300px)";
       this.sxcheckList = [];
       this.sxV = false;
     },
@@ -462,13 +624,64 @@ export default {
       const res = new Map();
       return arr.filter((item) => !res.has(item[val]) && res.set(item[val], 1));
     },
+    choiceData(val) {
+      if (Object.keys(val).length === 0) {
+        this.choiceV = false;
+        return;
+      }
+      // // this.choiceTarget[this.choiceField] = val[this.choiceField];
+      // this.oldData.$cellEdit = true;
+      if (this.choiceTle === "選擇本厂纱线配料计划") {
+        this.mx = this.$unique(this.mx.concat(val), "batchNo");
+        this.page.total = this.mx.length;
+        this.mx.forEach((item, i) => {
+          item.index = i + 1;
+          item.$cellEdit = true;
+          if (i === this.mx.length - 1) {
+            this.$refs.dlgcrud.setCurrentRow(this.mx[this.mx.length - 1]);
+          }
+        });
+      }
+      if (this.choiceTle === "選擇外厂纱线配料计划") {
+        this.mx = this.$unique(this.mx.concat(val), "batchNo");
+        this.page.total = this.mx.length;
+        this.mx.forEach((item, i) => {
+          item.index = i + 1;
+          item.$cellEdit = true;
+          if (i === this.mx.length - 1) {
+            this.$refs.dlgcrud.setCurrentRow(this.mx[this.mx.length - 1]);
+          }
+        });
+      }
+      if (this.choiceTle === "選擇紗線入庫明細") {
+        val.forEach((item, i) => {
+          item.yarnsName = item.yarnsId;
+        });
+        this.mx = this.$unique(this.mx.concat(val), "$whseYarninFk");
+        this.page.total = this.mx.length;
+        this.mx.forEach((item, i) => {
+          item.index = i + 1;
+          // item.yarnsName = item.yarnsId;
+          item.retCompany = item.weightUnit;
+          // item.$cellEdit = true;
+          if (i === this.mx.length - 1) {
+            this.$refs.dlgcrud.setCurrentRow(this.mx[this.mx.length - 1]);
+          }
+        });
+      }
+      for (var key in val) {
+        delete val[key];
+      }
+      for (var key in this.choiceQ) {
+        delete this.choiceQ[key];
+      }
+      this.choiceV = false;
+    },
   },
   created() {},
   mounted() {
     this.form = this.detail;
-    if (this.hide === "3" || this.hide === "4" || this.hide === "5") {
-      this.mxOp = rsxkr3C(this);
-    }
+    this.form.sysCreatedby = this.$store.state.userOid;
     // this.getDetail();
   },
   beforeDestroy() {},

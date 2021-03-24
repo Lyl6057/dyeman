@@ -10,6 +10,20 @@
             v-if="hide != '1' && hide != '2'"
             >編號規則配置</el-button
           > -->
+          <!-- <el-button type="success" @click="save">保存</el-button> -->
+          <el-button
+            type="success"
+            :disabled="Object.keys(chooseData).length === 0"
+            @click="handleRowDBLClick(chooseData)"
+            >修改</el-button
+          >
+          <el-button
+            type="primary"
+            @click="add"
+            v-if="hide != '1' && hide != '2'"
+            >新增</el-button
+          >
+          <el-button type="danger" @click="del">删除</el-button>
           <el-button type="primary" @click="getData">查询</el-button>
           <el-button type="warning" @click="close">关闭</el-button>
         </div>
@@ -21,35 +35,20 @@
           ></avue-form>
         </div>
         <el-row class="crudBox">
-          <el-col :span="hide === '5' ? 12 : 10">
-            <view-container :title="data.type.split('_')[0] + '出库资料'">
-              <div class="btnList" style="margin-bottom: 2px">
-                <el-button
-                  type="primary"
-                  @click="add"
-                  v-if="hide != '1' && hide != '2'"
-                  >新增</el-button
-                >
-                <el-button type="danger" @click="del">删除</el-button>
-                <el-button
-                  type="success"
-                  :disabled="changeList.length === 0"
-                  @click="save"
-                  >保存</el-button
-                >
-              </div>
-              <avue-crud
-                ref="mainCrud"
-                id="crud"
-                :option="everyThing.mainC"
-                :data="crud"
-                :page.sync="page"
-                v-loading="loading"
-                @on-load="getData"
-                @current-row-change="cellClick"
-              ></avue-crud> </view-container
-          ></el-col>
-          <el-col :span="hide === '5' ? 12 : 14">
+          <view-container :title="data.type.split('_')[0] + '出库资料'">
+            <avue-crud
+              ref="mainCrud"
+              id="crud"
+              :option="everyThing.mainC"
+              :data="crud"
+              :page.sync="page"
+              v-loading="loading"
+              @on-load="getData"
+              @current-row-change="cellClick"
+              @row-dblclick="handleRowDBLClick"
+            ></avue-crud>
+          </view-container>
+          <!-- <el-col :span="hide === '5' ? 12 : 14">
             <view-container :title="data.type.split('_')[0] + '出库明细'">
               <tem-dlg
                 ref="tem"
@@ -57,7 +56,7 @@
                 :everyThing="everyThing"
                 :hide="hide"
               ></tem-dlg></view-container
-          ></el-col>
+          ></el-col> -->
         </el-row>
       </el-tab-pane>
       <el-tab-pane
@@ -68,31 +67,38 @@
         <tab-plan
           :hide="hide"
           @close="close"
+          @add="add"
           :tle="data.type.split('_')[0]"
-          @save2reset="getData"
         ></tab-plan>
       </el-tab-pane>
     </el-tabs>
     <el-dialog
-      id="wkRuleDlg"
-      :visible.sync="ruleV"
+      id="sxrcDlg"
+      :visible.sync="dialogVisible"
+      width="100%"
       append-to-body
       :close-on-click-modal="false"
-      v-if="ruleV"
+      :close-on-press-escape="false"
+      v-if="dialogVisible"
     >
-      <rule-dlg
-        ref="rule"
-        :rcType="'whse_out'"
-        @close="ruleV = false"
-      ></rule-dlg>
+      <tem-dlg
+        ref="tem"
+        :datas="data"
+        :detail="detail"
+        :hide="hide"
+        :isAdd="isAdd"
+        :everyThing="everyThing"
+        @close="dialogVisible = false"
+        v-if="dialogVisible"
+        @save2reset="getData"
+      ></tem-dlg>
     </el-dialog>
   </div>
 </template>
 <script>
 import tem from "./tem";
 import plan from "./plan";
-import rule from "@/components/rule";
-import { baseCodeSupply } from "@/api/index";
+import { baseCodeSupplyEx } from "@/api/index";
 import {
   getSx,
   addSx,
@@ -112,7 +118,6 @@ export default {
   name: "",
   components: {
     temDlg: tem,
-    ruleDlg: rule,
     tabPlan: plan,
   },
   data() {
@@ -137,6 +142,7 @@ export default {
       changeList: [],
       tabs: "tabs1",
       ruleV: false,
+      isAdd: false,
     };
   },
   watch: {},
@@ -147,7 +153,7 @@ export default {
       this.everyThing = {
         mainF: rsxkr1F(this),
         mainC: rsxkr1C(this),
-        dlgF1: rsxkr2F,
+        dlgF1: rsxkr2F(this),
         dlgC1: rsxkr2C(this),
         dlgC2: {},
         dlgPp: "24:0",
@@ -190,6 +196,12 @@ export default {
           if (this.crud.length === 0) {
             this.loading = false;
           }
+          this.crud.sort((a, b) => {
+            return (
+              b.retCode.substring(b.retCode.length - 6) -
+              a.retCode.substring(a.retCode.length - 6)
+            );
+          });
           this.crud.forEach((item, index) => {
             item.finStatus = String(item.finStatus);
             item.index = index + 1;
@@ -206,44 +218,24 @@ export default {
           this.loading = false;
         });
     },
-    add() {
-      if (
-        this.crud.length > 0 &&
-        !this.crud[this.crud.length - 1].whseRetyarninoid &&
-        !this.crud[this.crud.length - 1].whseRetreatoid &&
-        !this.crud[this.crud.length - 1].whseTransferoid
-      ) {
-        return;
-      }
-      if (Object.keys(this.oldData).length > 0) {
-        this.oldData.$cellEdit = false;
-      }
+    add(val) {
       let data = {
         index: this.crud.length + 1,
         $cellEdit: true,
         retType: this.hide,
         retCode: "",
-        retDate: this.getNowTime(),
+        retDate: this.$getNowTime(),
+        batchNumber: val.retBatch,
+        list: val,
+        // yinStatus: "1",
+        // finStatus: "0",
       };
-      baseCodeSupply({ code: "whse_out" }).then((res) => {
+      // data = Object.assign(data, val);
+      baseCodeSupplyEx({ code: "whse_out" }).then((res) => {
         data.retCode = res.data.data;
-      });
-      this.crud.push(data);
-      this.$refs.mainCrud.setCurrentRow(this.crud[this.crud.length - 1]);
-      this.iptChange(this.crud[this.crud.length - 1]);
-      this.oldData = this.crud[this.crud.length - 1];
-      this.$nextTick(() => {
-        // 绑定 输入 事件
-        let _this = this;
-        document
-          .getElementsByClassName("el-table__row")
-          [_this.crud.length - 1].addEventListener(
-            "input",
-            function () {
-              _this.iptChange(_this.oldData);
-            },
-            false
-          );
+        this.isAdd = true;
+        this.detail = data;
+        this.dialogVisible = true;
       });
     },
     iptChange(val) {
@@ -275,16 +267,20 @@ export default {
         !this.chooseData.whseTransferoid
       ) {
         this.crud.splice(this.chooseData.index - 1, 1);
-        for (let i = 0; i < this.changeList.length; i++) {
-          if (this.changeList[i].index === this.chooseData.index) {
-            this.changeList.splice(i, 1);
-            this.$refs.mainCrud.setCurrentRow(this.crud[this.crud.length - 1]);
-            return;
-          }
-        }
+        this.crud.forEach((item, i) => {
+          item.index = i + 1;
+        });
+        this.$refs.mainCrud.setCurrentRow(this.crud[this.crud.length - 1]);
+        return;
       }
       this.$tip
-        .cofirm("是否确定删除", this, {})
+        .cofirm(
+          "是否确定删除出仓编号为 【 " +
+            this.chooseData.retCode +
+            " 】 的数据?",
+          this,
+          {}
+        )
         .then(() => {
           this.everyThing
             .delF(
@@ -312,32 +308,12 @@ export default {
         });
     },
     cellClick(val) {
-      if (this.$refs.tem.changeList.length > 0) {
-        this.$tip
-          .cofirm("是否保存当前选择的纱线配料资料?", this, {})
-          .then(() => {
-            this.$refs.tem.save();
-            this.$nextTick(() => {
-              this.$refs.mainCrud.setCurrentRow(this.oldData);
-            });
-          })
-          .catch((err) => {
-            this.oldData.$cellEdit = false;
-            this.$set(val, "$cellEdit", true);
-            this.oldData = val;
-            this.chooseData = val;
-            this.$refs.tem.detail = val;
-            this.$refs.tem.changeList = [];
-            this.$refs.tem.getDetail();
-          });
-      } else {
-        this.oldData.$cellEdit = false;
-        this.$set(val, "$cellEdit", true);
-        this.oldData = val;
-        this.chooseData = val;
-        this.$refs.tem.detail = val;
-        this.$refs.tem.getDetail();
-      }
+      this.chooseData = val;
+    },
+    handleRowDBLClick(val) {
+      this.isAdd = false;
+      this.detail = val;
+      this.dialogVisible = true;
     },
     save() {
       for (let i = 0; i < this.changeList.length; i++) {

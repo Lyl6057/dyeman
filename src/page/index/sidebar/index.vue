@@ -38,8 +38,8 @@ export default {
     };
   },
   created() {
-    // this.$router.push({ path: "basics" }); // 生产管理
-    this.$router.push({ path: "imWl" });
+    this.$router.push({ path: "basics" }); // 生产管理
+    // this.$router.push({ path: "imWl" });
     // this.$router.push({ path: "colorMng" });
     // this.$router.push({ path: "quaLity" });
   },

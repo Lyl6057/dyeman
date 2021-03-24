@@ -10,6 +10,12 @@
             v-if="hide != '1' && hide != '2'"
             >新增</el-button
           >
+          <el-button
+            type="success"
+            :disabled="Object.keys(chooseData).length === 0"
+            @click="handleRowDBLClick(chooseData)"
+            >修改</el-button
+          >
           <el-button type="danger" @click="del">删除</el-button>
           <el-button
             type="success"
@@ -102,8 +108,11 @@
         :datas="data"
         :everyThing="everyThing"
         :hide="hide"
-        :detail="chooseData"
+        :detail="detail"
+        :isAdd="isAdd"
+        :isPlan="false"
         @close="temV = false"
+        @updateList="getData"
       ></temDlg>
     </el-dialog>
     <choice
@@ -122,7 +131,7 @@ import tem from "./tem";
 import plan from "./plan";
 import rule from "@/components/rule";
 import choice from "@/components/choice";
-import { baseCodeSupply } from "@/api/index";
+import { baseCodeSupplyEx } from "@/api/index";
 import {
   getMaterial,
   addMaterial,
@@ -194,6 +203,7 @@ export default {
       choiceTarget: {},
       choiceField: "",
       choiceQ: {},
+      isAdd: false,
     };
   },
   watch: {},
@@ -260,6 +270,22 @@ export default {
           if (this.crud.length === 0) {
             this.loading = false;
           }
+
+          if (this.hide === "6") {
+            this.crud.sort((a, b) => {
+              return (
+                b.woOutno.substring(b.woOutno.length - 6) -
+                a.woOutno.substring(a.woOutno.length - 6)
+              );
+            });
+          } else {
+            this.crud.sort((a, b) => {
+              return (
+                b.retCode.substring(b.retCode.length - 6) -
+                a.retCode.substring(a.retCode.length - 6)
+              );
+            });
+          }
           this.crud.forEach((item, index) => {
             item.finStatus = String(item.finStatus);
             item.index = index + 1;
@@ -277,51 +303,24 @@ export default {
         });
     },
     add() {
-      if (
-        this.crud.length > 0 &&
-        !this.crud[this.crud.length - 1].whseMaterialoid &&
-        !this.crud[this.crud.length - 1].whseCalicoselloutoid &&
-        !this.crud[this.crud.length - 1].whseRetsuppcalicooid &&
-        !this.crud[this.crud.length - 1].whseRetguestcalicooid &&
-        !this.crud[this.crud.length - 1].whseTransfercalicooid
-      ) {
-        return;
-      }
-      if (Object.keys(this.oldData).length > 0) {
-        this.oldData.$cellEdit = false;
-      }
       let data = {
         index: this.crud.length + 1,
         $cellEdit: true,
         retType: this.hide,
         retCode: "",
         woOutno: "",
-        retDate: this.getNowTime(),
-        woDate: this.getNowTime(),
+        retDate: this.$getNowTime(),
+        woDate: this.$getNowTime(),
+        finStatus: "0",
       };
-      // if (this.hide != "1" && this.hide != "2") {
-      baseCodeSupply({ code: "whse_out" }).then((res) => {
-        data.woOutno = res.data.data;
+      // data = Object.assign(data, val);
+      baseCodeSupplyEx({ code: "whse_out" }).then((res) => {
         data.retCode = res.data.data;
-        this.crud.push(data);
-        this.$refs.mainCrud.setCurrentRow(this.crud[this.crud.length - 1]);
-        this.iptChange(this.crud[this.crud.length - 1]);
-        this.oldData = this.crud[this.crud.length - 1];
-        this.$nextTick(() => {
-          // 绑定 输入 事件
-          let _this = this;
-          document
-            .getElementsByClassName("el-table__row")
-            [_this.crud.length - 1].addEventListener(
-              "input",
-              function () {
-                _this.iptChange(_this.oldData);
-              },
-              false
-            );
-        });
+        data.woOutno = res.data.data;
+        this.isAdd = true;
+        this.detail = data;
+        this.temV = true;
       });
-      // }
     },
     iptChange(val) {
       if (this.changeList.length === 0) {
@@ -426,6 +425,8 @@ export default {
         this.chooseData.whseRetguestcalicooid ||
         this.chooseData.whseTransfercalicooid
       ) {
+        this.isAdd = false;
+        this.detail = this.chooseData;
         this.temV = true;
       } else {
         this.$tip.warning("请先保存该出仓数据!");

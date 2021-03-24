@@ -160,10 +160,16 @@ import {
   getWhseMaterialoutPlan,
   WhseMaterialoutPlanF,
   WhseMaterialoutPlanC,
+  getWhseMaterialPlan,
+  WhseMaterialPlanF,
+  WhseMaterialPlanC,
   // 外厂纱线配料计划
   getWhseRetyarninoutPlan,
   WhseRetyarninoutPlanC,
   WhseRetyarninoutPlanF,
+  getWhseRetyarninPlan,
+  WhseRetyarninPlanC,
+  WhseRetyarninPlanF,
   // 五金採購單
   getPurHardwarepo,
   PurHardwarepoF,
@@ -180,6 +186,9 @@ import {
   getshipPlan,
   shipPlanF,
   shipPlanC,
+  getshipPlanDtl,
+  shipPlanDtlF,
+  shipPlanDtlC,
   // 订单胚布资料
   getOrderPb,
   OrderPbF,
@@ -238,6 +247,10 @@ import {
   instructDtlF,
   instructDtlC,
   getInstructDtl,
+  // 紗線入倉
+  YarninF,
+  YarninC,
+  getYarnin,
 } from "@/const/whse";
 export default {
   name: "",
@@ -559,6 +572,9 @@ export default {
             return;
           }
           this.crud.forEach((item, index) => {
+            if (this.choiceTle === "選擇紗線入庫明細") {
+              item.yarnsName = item.yarnsId;
+            }
             if (this.choiceTle === "選擇貨位") {
               item.warehouseName = item.warehouseId;
             }
@@ -571,6 +587,10 @@ export default {
               this.choiceTle === "選擇來顏料登記"
             ) {
               item.custName = item.custCode;
+            }
+
+            if (this.choiceTle === "選擇貨運計劃明細") {
+              item.fabId = item.fabName;
             }
             if (this.choiceTle === "來輔料登記") {
               item.custName = item.custNo;
@@ -679,6 +699,11 @@ export default {
   },
   created() {
     switch (this.choiceTle) {
+      case "選擇紗線入庫明細":
+        this.choiceC = YarninC;
+        this.choiceF = YarninF;
+        this.getData = getYarnin;
+        break;
       case "選擇指令單明細":
         this.choiceC = instructDtlC;
         this.choiceF = instructDtlF;
@@ -846,20 +871,35 @@ export default {
         this.choiceF = WhseRetmaterialsPlanF;
         this.getData = getWhseRetmaterialsPlan;
         break;
-      case "選擇外厂胚布配料計劃":
+      case "選擇外厂胚布配料计划":
         this.choiceC = WhseMaterialoutPlanC;
         this.choiceF = WhseMaterialoutPlanF;
         this.getData = getWhseMaterialoutPlan;
+        break;
+      case "選擇本厂胚布配料计划":
+        this.choiceC = WhseMaterialPlanC;
+        this.choiceF = WhseMaterialPlanF;
+        this.getData = getWhseMaterialPlan;
         break;
       case "選擇外厂纱线配料计划":
         this.choiceC = WhseRetyarninoutPlanC;
         this.choiceF = WhseRetyarninoutPlanF;
         this.getData = getWhseRetyarninoutPlan;
         break;
-      case "货运计划编号":
+      case "選擇本厂纱线配料计划":
+        this.choiceC = WhseRetyarninPlanC;
+        this.choiceF = WhseRetyarninPlanF;
+        this.getData = getWhseRetyarninPlan;
+        break;
+      case "選擇貨運計劃":
         this.choiceC = shipPlanC;
         this.choiceF = shipPlanF;
         this.getData = getshipPlan;
+        break;
+      case "選擇貨運計劃明細":
+        this.choiceC = shipPlanDtlC;
+        this.choiceF = shipPlanDtlF;
+        this.getData = getshipPlanDtl;
         break;
       case "選擇訂單胚布資料":
         this.choiceC = OrderPbC;

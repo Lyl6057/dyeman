@@ -9,7 +9,7 @@
     <div class="formBox">
       <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
     </div>
-    <el-row class="crudBox">
+    <el-row class="crudBox" style="margin-top: -8px">
       <avue-crud
         ref="crud"
         id="crud"
@@ -30,98 +30,6 @@
       :before-close="planclose"
       v-if="planV"
     >
-      <view-container
-        :title="tle + '出庫單'"
-        v-loading="outloading"
-        element-loading-text="正在保存中..."
-        element-loading-spinner="el-icon-loading"
-        element-loading-background="rgba(0, 0, 0, 0.8)"
-      >
-        <div class="btnList">
-          <el-button type="success" @click="save" :disabled="!canSave"
-            >保存</el-button
-          >
-          <el-button type="warning" @click="planclose">关闭</el-button>
-        </div>
-        <div class="formBox">
-          <avue-form
-            ref="form"
-            :option="outformOp"
-            v-model="outform"
-          ></avue-form>
-        </div>
-        <view-container :title="tle + '出庫單明細'">
-          <div class="btnList" style="margin-bottom: 2px">
-            <el-button type="primary" @click="addDetail" :disabled="!canSave"
-              >新增</el-button
-            >
-            <el-button type="danger" @click="delDetail" :disabled="!canSave"
-              >删除</el-button
-            >
-          </div>
-          <div class="crudBox">
-            <avue-crud
-              ref="outcrud1"
-              id="outcrud"
-              :option="outcrudOp"
-              :data="outcrud"
-              :page.sync="outpage"
-              @on-load="getDetali"
-              @current-row-change="cellDetailClick"
-            ></avue-crud>
-          </div>
-          <el-dialog
-            id="sxPlanDlg"
-            :visible.sync="sxV"
-            append-to-body
-            fullscreen
-            :close-on-click-modal="false"
-            :close-on-press-escape="false"
-            :before-close="sxclose"
-            v-if="sxV"
-          >
-            <view-container title="選擇紗線配料">
-              <div class="btnList">
-                <el-button type="success" @click="check">選擇</el-button>
-                <el-button type="primary" @click="getSxData">查询</el-button>
-                <el-button type="warning" @click="sxclose">关闭</el-button>
-              </div>
-              <div class="formBox">
-                <avue-form
-                  ref="sxform"
-                  :option="sxformOp"
-                  v-model="sxform"
-                ></avue-form>
-              </div>
-              <div class="crudBox">
-                <avue-crud
-                  ref="sxcrud"
-                  id="sxcrud"
-                  :option="outcrudOp"
-                  :data="sxcrud"
-                  :page.sync="sxpage"
-                  v-loading="loading"
-                  @on-load="getSxData"
-                  @selection-change="sxselectionChange"
-                ></avue-crud>
-              </div>
-            </view-container>
-          </el-dialog>
-        </view-container>
-      </view-container>
-    </el-dialog>
-    <el-dialog
-      id="wkRuleDlg"
-      :visible.sync="ruleV"
-      append-to-body
-      :close-on-click-modal="false"
-      v-if="ruleV"
-    >
-      <rule-dlg
-        ref="rule"
-        :rcType="'whse_out'"
-        @close="ruleV = false"
-      ></rule-dlg>
     </el-dialog>
   </div>
 </template>
@@ -134,22 +42,21 @@ import {
   sxForm,
   rsxkr2C,
 } from "./data";
-import rule from "@/components/rule";
-import { baseCodeSupply } from "@/api/index";
+import { baseCodeSupplyEx, baseCodeSupply } from "@/api/index";
 import {
   getSxPlan,
   getSxOutPlan,
   getSxCcDetali,
   getSx,
   addSx,
+  updateSx,
   addSxDetali,
+  updateSxDetali,
 } from "@/api/im/Wk/cc/sx";
 import { getSxDetali } from "@/api/im/Wk/rc";
 export default {
   name: "",
-  components: {
-    ruleDlg: rule,
-  },
+  components: {},
   props: {
     hide: String,
     tle: String,
@@ -312,31 +219,23 @@ export default {
     },
     outOrder() {
       if (Object.keys(this.chooseData).length > 0) {
-        this.outform = this.chooseData;
-        this.outform.retType = this.hide;
-        this.outform.batchNumber = this.chooseData.retBatch;
-        this.outform.retDate = this.getNowTime();
-        baseCodeSupply({ code: "whse_out" }).then((res) => {
-          this.outform.retCode = res.data.data;
-        });
-        this.outcrudOp.height = "calc(100vh - 329px)";
-        this.getDetali();
-        this.planV = true;
+        // this.outform = this.chooseData;
+        // this.outform.retType = this.hide;
+        // this.outform.batchNumber = this.chooseData.retBatch;
+        // this.outform.retDate = this.getNowTime();
+        // baseCodeSupplyEx({ code: "whse_out" }).then((res) => {
+        //   this.outform.retCode = res.data.data;
+        // });
+        // this.outcrudOp.height = "calc(100vh - 318px)";
+        // this.outcrud.push(Object.assign(this.chooseData, { $cellEdit: true }));
+        // this.outpage.total = this.outcrud.length;
+        // // this.getDetali();
+        // this.planV = true;
+        this.$emit("add", this.chooseData);
       } else {
         this.$tip.error("請先選擇配料計劃資料!");
         return;
       }
-    },
-    addDetail() {
-      // 新增領用單明細 = 打開紗線入庫資料彈窗
-      this.outcrudOp.column[2].hide = true;
-      this.outcrudOp.column[3].hide = true;
-      this.outcrudOp.column[4].hide = true;
-      this.outcrudOp.column[5].hide = true;
-      this.outcrudOp.selection = true;
-      this.outcrudOp.showSummary = false;
-      this.outcrudOp.height = "calc(100vh - 213px)";
-      this.sxV = true;
     },
     sxselectionChange(val) {
       // 选中纱线
@@ -397,26 +296,61 @@ export default {
     del() {},
     save() {
       this.outloading = true;
-      addSx(this.outform).then((res) => {
-        if (this.outcrud.length === 0) {
-          this.$tip.success("保存成功");
-          this.canSave = false;
-          this.$emit("save2reset");
-          this.outloading = false;
-        }
-        this.outcrud.forEach((item, index) => {
-          item.yarnsName = item.$yarnsName;
-          item.whseRetyarninFk = res.data.data;
-          addSxDetali(item).then((res) => {
+      if (this.outform.whseRetyarninoid) {
+        updateSx(this.outform).then((res) => {
+          if (this.outcrud.length === 0) {
+            this.$tip.success("保存成功");
+            this.canSave = false;
+            this.$emit("save2reset");
+            this.outloading = false;
+          }
+          this.outcrud.forEach((item, index) => {
+            item.yarnsName = item.$yarnsName;
+            if (item.whseRetyarninDtloid) {
+              updateSxDetali(item).then((res) => {});
+            } else {
+              item.whseRetyarninFk = this.outform.whseRetyarninoid;
+              addSxDetali(item).then((res) => {
+                item.whseRetyarninDtloid = res.data.data;
+              });
+            }
             if (index === this.outcrud.length - 1) {
               this.$tip.success("保存成功");
-              this.canSave = false;
+              // this.canSave = false;
               this.$emit("save2reset");
               this.outloading = false;
             }
           });
         });
-      });
+      } else {
+        addSx(this.outform).then((res) => {
+          this.outform.whseRetyarninoid = res.data.data;
+          baseCodeSupplyEx({ code: "whse_out" }).then((res) => {});
+          if (this.outcrud.length === 0) {
+            this.$tip.success("保存成功");
+            this.canSave = false;
+            this.$emit("save2reset");
+            this.outloading = false;
+          }
+          this.outcrud.forEach((item, index) => {
+            item.yarnsName = item.$yarnsName;
+            if (item.whseRetyarninDtloid) {
+              updateSxDetali(item).then((res) => {});
+            } else {
+              item.whseRetyarninFk = this.outform.whseRetyarninoid;
+              addSxDetali(item).then((res) => {
+                item.whseRetyarninDtloid = res.data.data;
+              });
+            }
+            if (index === this.outcrud.length - 1) {
+              this.$tip.success("保存成功");
+              // this.canSave = false;
+              this.$emit("save2reset");
+              this.outloading = false;
+            }
+          });
+        });
+      }
     },
     unique(arr, val) {
       const res = new Map();
@@ -436,6 +370,34 @@ export default {
       mi = mi < 10 ? `0${mi}` : mi;
       s = s < 10 ? `0${s}` : s;
       return `${y}-${m}-${d} ${h}:${mi}:${s}`;
+    },
+    choiceData(val) {
+      if (Object.keys(val).length === 0) {
+        this.choiceV = false;
+        return;
+      }
+      // // this.choiceTarget[this.choiceField] = val[this.choiceField];
+      // this.oldData.$cellEdit = true;
+      if (this.choiceTle === "選擇本厂纱线配料计划") {
+        this.outcrud = this.$unique(this.outcrud.concat(val), "retBatch");
+        this.page.total = this.outcrud.length;
+        this.outcrud.forEach((item, i) => {
+          item.index = i + 1;
+          item.$cellEdit = true;
+          if (i === this.outcrud.length - 1) {
+            this.$refs.outcrud1.setCurrentRow(
+              this.outcrud[this.outcrud.length - 1]
+            );
+          }
+        });
+      }
+      for (var key in val) {
+        delete val[key];
+      }
+      for (var key in this.choiceQ) {
+        delete this.choiceQ[key];
+      }
+      this.choiceV = false;
     },
   },
   created() {},

@@ -3,15 +3,11 @@
     <view-container
       :title="datas.type.split('_')[0] + '资料'"
       v-loading="outloading"
-      element-loading-text="正在生成领料单..."
-      element-loading-spinner="el-icon-loading"
-      element-loading-background="rgba(255, 255, 255, 0.8)"
+      element-loading-text="拼命加载中..."
     >
       <div class="btnList">
-        <el-button type="success" @click="savePlan" v-if="canSave && isPlan"
-          >保存</el-button
-        >
-        <el-button type="success" @click="save" v-if="!isPlan">保存</el-button>
+        <el-button type="success" @click="savePlan">保存</el-button>
+        <!-- <el-button type="success" @click="save" v-if="!isPlan">保存</el-button> -->
         <el-button type="warning" @click="close">关闭</el-button>
       </div>
       <div class="formBox">
@@ -20,7 +16,7 @@
       <el-row>
         <el-col :span="hide === '4' || hide === '3' || hide === '5' ? 24 : 12">
           <view-container :title="datas.type.split('_')[0] + '明细'">
-            <div class="btnList" style="margin-bottom: 2px">
+            <div class="btnList">
               <!-- <el-button type="primary" @click="getDetail">查询</el-button> -->
               <el-button type="primary" @click="add" v-if="canSave"
                 >新增</el-button
@@ -32,19 +28,20 @@
               <!-- <el-button type="warning" @click="getDetail">取消</el-button>
        -->
             </div>
-            <avue-crud
-              ref="dlgcrud"
-              :option="mxOp"
-              v-loading="loading"
-              :data="mx"
-              :page.sync="page"
-              @current-row-change="cellClick"
-              @on-load="getDetail"
-            ></avue-crud> </view-container
+            <div class="crudBox">
+              <avue-crud
+                ref="dlgcrud"
+                :option="mxOp"
+                v-loading="loading"
+                :data="mx"
+                :page.sync="page"
+                @current-row-change="cellClick"
+                @on-load="getDetail"
+              ></avue-crud></div></view-container
         ></el-col>
         <el-col :span="12" v-if="hide != '4' && hide != '3' && hide != '5'">
           <view-container :title="datas.type.split('_')[0] + '批号资料'">
-            <div class="btnList" style="margin-bottom: 2px">
+            <div class="btnList">
               <!-- <el-button type="primary" @click="getDetail">查询</el-button> -->
               <el-button type="primary" @click="addPh" v-if="canSave"
                 >新增</el-button
@@ -58,14 +55,16 @@
               <!-- <el-button type="warning" @click="getDetail">取消</el-button>
         <el-button type="warning" @click="close">关闭</el-button> -->
             </div>
-            <avue-crud
-              ref="dlgPhcrud"
-              :option="rcOp"
-              v-loading="rcloading"
-              :data="chooseData.list"
-              :page.sync="rcPage"
-              @current-row-change="cellPhClick"
-            ></avue-crud>
+            <div class="crudBox">
+              <avue-crud
+                ref="dlgPhcrud"
+                :option="rcOp"
+                v-loading="rcloading"
+                :data="chooseData.list"
+                :page.sync="rcPage"
+                @current-row-change="cellPhClick"
+              ></avue-crud>
+            </div>
           </view-container>
         </el-col>
       </el-row>
@@ -174,6 +173,7 @@ export default {
     hide: String,
     detail: Object,
     isPlan: Boolean,
+    isAdd: Boolean,
     PlanForm: Object,
   },
   name: "",
@@ -235,31 +235,20 @@ export default {
       choiceTarget: {},
       choiceField: "",
       choiceQ: {},
+      isPh: false,
     };
   },
   watch: {},
   methods: {
     getDetail() {
       this.loading = true;
-      if (
-        Object.keys(this.detail).length === 0 ||
-        (!this.detail.whseCalicoselloutoid &&
-          !this.detail.whseMaterialoid &&
-          !this.detail.whseRetsuppcalicooid &&
-          !this.detail.whseRetguestcalicooid &&
-          !this.detail.whseTransfercalicooid)
-      ) {
-        this.mx = [];
-        this.loading = false;
-        return;
-      }
 
       if (this.hide === "3") {
         this.func.getDetail = getRetguestcalicodtl;
         this.func.delDetail = delRetguestcalicodtl;
         this.func.updateDetail = updateRetguestcalicodtl;
         this.func.addDetail = addRetguestcalicodtl;
-        this.mxOp.column[3].hide = false;
+        this.mxOp.column[3].hide = true;
         // this.mxOp = rsxkr3C(this);
       } else if (this.hide === "4") {
         this.func.getDetail = getRetsuppcalicoDtl;
@@ -286,9 +275,22 @@ export default {
         this.func.getDetail = getPbDetalis;
         this.func.delDetail = delPbDetali;
         this.func.addDetail = addPbDetali;
+        this.func.updateDetail = updatePbDetali;
         this.func.getPhDetail = getPhDetali;
         this.func.delPhDetail = delPhDetali;
         this.func.addPhDetail = addPhDetali;
+      }
+      if (
+        Object.keys(this.detail).length === 0 ||
+        (!this.detail.whseCalicoselloutoid &&
+          !this.detail.whseMaterialoid &&
+          !this.detail.whseRetsuppcalicooid &&
+          !this.detail.whseRetguestcalicooid &&
+          !this.detail.whseTransfercalicooid)
+      ) {
+        this.mx = [];
+        this.loading = false;
+        return;
       }
       this.func
         .getDetail({
@@ -376,10 +378,10 @@ export default {
             }
 
             if (index === this.rcData.length - 1) {
-              this.$nextTick(() => {
-                this.chooseData.list = this.rcData;
-                // this.$set(this.chooseData, "list", this.rcData);
-              });
+              // this.$nextTick(() => {
+              this.chooseData.list = this.rcData;
+              // this.$set(this.chooseData, "list", this.rcData);
+              // });
               this.rcOp.showSummary = true;
               this.choosePh = {};
               this.rcloading = false;
@@ -388,12 +390,29 @@ export default {
         });
     },
     add() {
-      if (this.hide === "6") {
+      if (this.hide === "1") {
         this.choiceV = !this.choiceV;
-        this.choiceField = "woOrderno";
-        this.oldData = this.chooseData;
-        this.choiceTarget = this.oldData;
-        this.choiceTle = "选择订单胚布资料";
+        this.choiceQ.retBatch = this.form.retBatch;
+        // this.choiceTarget = this.chooseData;
+        this.dlgWidth = "100%";
+        this.isPh = false;
+        this.choiceTle = "選擇本厂胚布配料计划";
+      } else if (this.hide === "2") {
+        this.choiceV = !this.choiceV;
+        this.choiceQ.retBatch = this.form.retBatch;
+        // this.choiceTarget = this.chooseData;
+        this.dlgWidth = "100%";
+        this.isPh = false;
+        this.choiceTle = "選擇外厂胚布配料计划";
+      } else if (this.hide === "6") {
+        if (!this.form.spNo) {
+          this.$tip.error("請先選擇貨運計劃!");
+          return;
+        }
+        this.choiceV = !this.choiceV;
+        this.dlgWidth = "100%";
+        // this.choiceQ.poNo = this.form.poNo;
+        this.choiceTle = "選擇訂單胚布資料";
       } else if (this.hide === "4" || this.hide === "3") {
         this.choiceV = !this.choiceV;
         this.choiceField = "woOrderno";
@@ -425,31 +444,50 @@ export default {
       }
     },
     addPh() {
-      if (Object.keys(this.chooseData).length === 0) {
-        this.$tip.error("请先选择明细资料!");
+      if (this.hide === "1") {
+        this.choiceV = !this.choiceV;
+        this.choiceQ.retBatch = this.form.retBatch;
+        // this.choiceTarget = this.chooseData;
+        this.dlgWidth = "100%";
+        this.isPh = true;
+        this.choiceTle = "選擇本厂胚布配料计划";
         return;
       }
+      if (this.hide === "2") {
+        this.choiceV = !this.choiceV;
+        this.choiceQ.retBatch = this.form.retBatch;
+        // this.choiceTarget = this.chooseData;
+        this.dlgWidth = "100%";
+        this.isPh = true;
+        this.choiceTle = "選擇外厂胚布配料计划";
+        return;
+      }
+
       if (this.hide === "6") {
-        //   this.choiceV = !this.choiceV;
-        //   this.choiceField = "woOrderno";
-        //   this.choiceQ.calicoId = this.chooseData.woMatno;
-        //   this.oldData = this.chooseData;
-        //   this.choiceTarget = this.oldData;
-        //   this.choiceTle = "选择胚布疋号资料";
+        if (Object.keys(this.chooseData).length === 0) {
+          this.$tip.error("请先选择明细资料!");
+          return;
+        }
+        this.choiceV = !this.choiceV;
+        this.choiceField = "woOrderno";
+        this.choiceQ.calicoId = this.chooseData.woMatno;
+        this.oldData = this.chooseData;
+        this.choiceTarget = this.oldData;
+        this.choiceTle = "选择胚布疋号资料";
       }
       // } else {
-      this.outcrudOp = rcpb3C(this);
-      this.sxformOp.column[0].display = false;
-      this.sxformOp.column[1].display = false;
-      this.sxformOp.column[2].display = false;
-      this.sxformOp.column[6].display = this.hide === "6" ? true : false;
-      this.sxformOp.column[7].display = false;
-      this.sxformOp.column[8].display = true;
-      this.outcrudOp.selection = true;
-      this.outcrudOp.showSummary = false;
-      this.outcrudOp.height = "calc(100vh - 213px)";
-      this.isPh = true;
-      this.sxV = true;
+      // this.outcrudOp = rcpb3C(this);
+      // this.sxformOp.column[0].display = false;
+      // this.sxformOp.column[1].display = false;
+      // this.sxformOp.column[2].display = false;
+      // this.sxformOp.column[6].display = this.hide === "6" ? true : false;
+      // this.sxformOp.column[7].display = false;
+      // this.sxformOp.column[8].display = true;
+      // this.outcrudOp.selection = true;
+      // this.outcrudOp.showSummary = false;
+      // this.outcrudOp.height = "calc(100vh - 213px)";
+      // this.isPh = true;
+      // this.sxV = true;
       // }
     },
     del() {
@@ -468,7 +506,13 @@ export default {
         !this.chooseData.whseTransfercalicoDtloid
       ) {
         this.mx.splice(this.chooseData.index - 1, 1);
-        this.$refs.dlgcrud.setCurrentRow(this.mx[0]);
+        this.chooseData = {};
+        this.page.total = this.mx.length;
+        this.rcPage.total = 0;
+        if (this.mx.length > 0) {
+          this.$refs.dlgcrud.setCurrentRow(this.mx[0]);
+        }
+
         this.mx.forEach((i, index) => {
           i.index = index + 1;
         });
@@ -503,6 +547,11 @@ export default {
               if (res.data.code === 200) {
                 this.$tip.success("删除成功");
                 this.mx.splice(this.chooseData.index - 1, 1);
+                this.chooseData = {};
+                if (this.mx.length > 0) {
+                  this.$refs.dlgcrud.setCurrentRow(this.mx[0]);
+                }
+                this.rcPage.total = 0;
                 this.getDetail();
               } else {
                 this.$tip.error("删除失败");
@@ -528,6 +577,7 @@ export default {
       ) {
         this.chooseData.list.splice(this.choosePh.index - 1, 1);
         this.$refs.dlgPhcrud.setCurrentRow();
+        this.rcPage.total = this.chooseData.list.length;
         return;
       }
       let tip = "";
@@ -555,6 +605,7 @@ export default {
               if (res.data.code === 200) {
                 this.$tip.success("删除成功");
                 this.rcData.splice(this.choosePh.index - 1, 1);
+                this.rcPage.total = this.chooseData.list.length;
                 this.getPhDetail(this.chooseData);
               } else {
                 this.$tip.error("删除失败");
@@ -583,8 +634,8 @@ export default {
       this.chooseData = val;
       if (!this.chooseData.list) {
         this.chooseData.list = [];
+        this.getPhDetail(val);
       }
-      this.getPhDetail(val);
     },
     cellPhClick(val) {
       this.choosePh = val;
@@ -802,208 +853,256 @@ export default {
       this.sxcheckList = [];
       this.sxclose();
     },
-    save() {
-      // console.log(this.mx);
-      // return;
-      if (this.mx.length === 0) {
-        return;
-      }
-      this.form.sysCreatedby = this.sysCreatedby;
-      this.loading = true;
-      if (this.hide === "4" || this.hide === "3" || this.hide === "5") {
-        if (!this.form.traIn || !this.form.traOut) {
-          this.$tip.error("调出入仓不能为空!");
-          return;
-        }
-        for (let i = 0; i < this.mx.length; i++) {
-          if (
-            (this.hide === "3" || this.hide === "4") &&
-            (!this.mx[i].retTotalweight || !this.mx[i].retTotalpi)
-          ) {
-            this.$tip.error("退回总疋数/退回总重量不能为空!");
-            this.loading = false;
-            return;
-          }
-          if (!this.mx[i].batchNo) {
-            this.$tip.error("批号不能为空!");
-            this.loading = false;
-            return;
-          }
-
-          if (this.hide === "5" && !this.mx[i].traWeight) {
-            this.$tip.error("调仓重量重量不能为空!");
-            this.loading = false;
-            return;
-          }
-        }
-
-        this.mx.forEach((item, index) => {
-          item.retCompany = item.weightUnit;
-          item.traCompany = item.weightUnit;
-          // item.whseCalicoinDtlaFk = item.whseCalicoinDtlaoid;
-          item.whseCalicoinDtlbFk = item.whseCalicoinDtlboid;
-          if (
-            item.whseRetsuppcalicodtloid ||
-            item.whseRetguestcalicodtloid ||
-            item.whseTransfercalicoDtloid
-          ) {
-            // update
-            this.func.updateDetail(item).then((res) => {
-              if (index === this.mx.length - 1) {
-                this.getDetail();
-                this.$tip.success("保存成功!");
-              }
-            });
-          } else {
-            item.whseRetsuppcalicoFk = this.detail.whseRetsuppcalicooid;
-            item.whseRetguestcalicoFk = this.detail.whseRetguestcalicooid;
-            item.whseTransfercalicoFk = this.detail.whseTransfercalicooid;
-            // add
-            this.func.addDetail(item).then((res) => {
-              if (index === this.mx.length - 1) {
-                this.getDetail();
-                this.$tip.success("保存成功!");
-              }
-            });
-          }
-        });
-      } else {
-        let addDtla = (item, i) => {
-          return new Promise((resolve, reject) => {
-            let data = JSON.parse(JSON.stringify(item));
-            data.list = [];
-            this.func.addDetail(data).then((res) => {
-              item.whseCalicoselloutDtlaoid = res.data.data;
-              item.whseMaterialDlaoid = res.data.data;
-              resolve();
-            });
-          });
-        };
-
-        let promiseArr = this.mx.map((item, i) => {
-          if (!item.whseMaterialDlaoid && !item.whseCalicoselloutDtlaoid) {
-            item.whseMaterialFk = this.detail.whseMaterialoid;
-            item.whseCalicoselloutFk = this.detail.whseCalicoselloutoid;
-            return addDtla(item, i);
-          }
-        });
-
-        Promise.all(promiseArr).then((res) => {
-          for (let i = 0; i < this.mx.length; i++) {
-            if (this.mx[i].list) {
-              this.mx[i].list.forEach((item) => {
-                if (!item.whseCalicoselloutDtlboid && this.hide === "6") {
-                  item.whseCalicoselloutDtlaFk = this.mx[
-                    i
-                  ].whseCalicoselloutDtlaoid;
-                  this.func.addPhDetail(item).then((res) => {});
-                }
-                if (
-                  !item.whseMaterialDlboid &&
-                  (this.hide === "1" || this.hide === "2")
-                ) {
-                  item.whseMaterialDlaFk = this.mx[i].whseMaterialDlaoid;
-                  this.func.addPhDetail(item).then((res) => {});
-                }
-              });
-            }
-            if (i === this.mx.length - 1) {
-              this.changeList = [];
-              this.getDetail();
-              this.$tip.success("保存成功!");
-            }
-          }
-        });
-      }
-
-      // this.mx.forEach((item, index) => {
-      //   if (!item.whseMaterialDlaoid && !item.whseCalicoselloutDtlaoid) {
-      //     item.whseMaterialFk = this.detail.whseMaterialoid;
-      //     item.whseCalicoselloutFk = this.detail.whseCalicoselloutoid;
-      //   }
-      //   if (index === this.mx.length - 1) {
-      //     this.getDetail();
-      //     this.$tip.success("保存成功!");
-      //   }
-      // });
-      // this.changeList = [];
-    },
-    savePh() {
-      return;
-      if (this.rcData.length === 0) {
-        return;
-      }
-      this.rcloading = true;
-      this.rcData.forEach((item, index) => {
-        if (!item.whseMaterialDlboid) {
-          item.whseMaterialDlaFk = this.chooseData.whseMaterialDlaoid;
-          this.func.addPhDetail(item).then((res) => {});
-        }
-        if (index === this.rcData.length - 1) {
-          this.changeList = [];
-          this.getPhDetail(this.chooseData);
-          this.$tip.success("保存成功!");
-        }
-      });
-    },
     // 生成领料计划
     savePlan() {
-      if (this.form.retDate === "" || this.form.retCode === "") {
-        this.$tip.error("请输入出仓编号/日期");
-        return;
+      if (this.hide === "5") {
+        if (!this.form.traIn || this.form.traOut === "") {
+          this.$tip.error("调入仓/调出仓不能为空!");
+          return;
+        }
       }
-      this.outloading = true;
-      this.form.sysCreatedby = this.sysCreatedby;
-      try {
-        addMaterial(this.form).then((res) => {
-          let addPb = (item, i) => {
-            return new Promise((resolve, reject) => {
-              addPbDetali({
-                whseMaterialFk: res.data.data,
-                calicoId: item.calicoId,
-                clothName: item.clothName,
-              }).then((Res) => {
-                resolve({ oid: Res.data.data, index: i });
-              });
-            });
-          };
+      if (this.hide != "6") {
+        if (this.form.retDate === "" || this.form.retCode === "") {
+          this.$tip.error("请输入出仓编号/日期!");
+          return;
+        }
+      } else {
+        if (this.form.woDate === "" || this.form.woOutno === "") {
+          this.$tip.error("请输入出仓编号/日期!");
+          return;
+        }
+        if (!this.form.spNo) {
+          this.$tip.error("请选择货运计划编号!");
+          return;
+        }
+      }
+      if (this.hide === "4" || this.hide === "3") {
+        for (let i = 0; i < this.mx.length; i++) {
+          if (!this.mx[i].retTotalpi || !this.mx[i].retTotalweight) {
+            this.$tip.error("退回疋数和重量不能为空");
+            return;
+          }
+        }
+      }
 
-          let promiseArr = this.mx.map((item, i) => {
-            return addPb(item, i);
-          });
-          Promise.all(promiseArr).then((res) => {
-            if (res.length > 0) {
-              res.forEach((item, i) => {
+      this.outloading = true;
+      for (var key in this.form) {
+        if (this.form[key] === "" || this.form[key] === null) {
+          delete this.form[key];
+        }
+      }
+
+      try {
+        if (
+          this.form.whseMaterialoid ||
+          this.form.whseCalicoselloutoid ||
+          this.form.whseRetsuppcalicooid ||
+          this.form.whseRetguestcalicooid ||
+          this.form.whseTransfercalicooid
+        ) {
+          this.everyThing.updateF(this.form).then((res) => {
+            let addPb = (item, i) => {
+              return new Promise((resolve, reject) => {
                 if (
-                  this.mx[item.index].list != undefined &&
-                  this.mx[item.index].list.length > 0
+                  item.whseRetsuppcalicodtloid ||
+                  item.whseRetguestcalicodtloid ||
+                  item.whseTransfercalicoDtloid
                 ) {
-                  this.mx[item.index].list.forEach((mx, j) => {
-                    addPhDetali(
-                      Object.assign(mx, {
-                        whseMaterialDlaFk: item.oid,
-                      })
-                    ).then((phRes) => {});
+                  this.func
+                    .updateDetail({
+                      whseRetsuppcalicoFk: this.form.whseRetsuppcalicooid,
+                      // whseRetguestcalicoFk: this.form.whseRetguestcalicooid,
+                      batchNo: item.batchNo,
+                      retCompany: item.retCompany,
+                      retTotalpi: item.retTotalpi,
+                      retTotalweight: item.retTotalweight,
+                      // whseCalicoinDtlaFk: item.whseCalicoinDtlaoid,
+                    })
+                    .then((res) => {
+                      resolve();
+                    });
+                } else {
+                  this.func
+                    .addDetail({
+                      whseMaterialFk: this.form.whseMaterialoid,
+                      whseTransfercalicoFk: this.form.whseTransfercalicooid,
+                      whseCalicoselloutFk: this.form.whseCalicoselloutoid,
+                      whseRetsuppcalicoFk: this.form.whseRetsuppcalicooid,
+                      whseRetguestcalicoFk: this.form.whseRetguestcalicooid,
+                      calicoId: item.calicoId,
+                      clothName: item.clothName,
+                      woMatno: item.woMatno,
+                      woMatname: item.woMatname,
+                      woOrderno: item.woOrderno,
+                      salPoDtlaFk: item.salPoDtlaoid,
+                      batchNo: item.batchNo,
+                      retCompany: item.retCompany,
+                      retTotalpi: item.retTotalpi,
+                      retTotalweight: item.retTotalweight,
+                      whseCalicoinDtlaFk: item.whseCalicoinDtlaoid,
+                      traWeight: item.traWeight,
+                      traCompany: item.traCompany,
+                    })
+                    .then((Res) => {
+                      item.whseMaterialDlaoid = Res.data.data;
+                      item.whseCalicoselloutDtlaoid = Res.data.data;
+                      item.whseRetsuppcalicodtloid = Res.data.data;
+                      item.whseRetguestcalicodtloid = Res.data.data;
+                      item.whseTransfercalicoDtloid = Res.data.data;
+                      resolve();
+                    });
+                }
+              });
+            };
+            let promiseArr = this.mx.map((item, i) => {
+              return addPb(item, i);
+            });
+            Promise.all(promiseArr).then((res) => {
+              this.mx.forEach((item, i) => {
+                if (item.list != undefined && item.list.length > 0) {
+                  item.list.forEach((mx, j) => {
+                    if (mx.whseMaterialDlboid || mx.whseCalicoselloutDtlboid) {
+                      // this.func.updatePhDetail(mx).then((phRes) => {});
+                    } else {
+                      this.func
+                        .addPhDetail(
+                          Object.assign(mx, {
+                            whseMaterialDlaFk: item.whseMaterialDlaoid,
+                            whseCalicoselloutDtlaFk:
+                              item.whseCalicoselloutDtlaoid,
+                          })
+                        )
+                        .then((phRes) => {
+                          mx.whseMaterialDlboid = phRes.data.data;
+                          mx.whseCalicoselloutDtlboid = phRes.data.data;
+                        });
+                    }
                   });
                 }
 
-                if (i === res.length - 1) {
+                if (i === this.mx.length - 1) {
                   // this.getDetail();
-                  this.canSave = false;
+                  // this.canSave = false;
                   this.outloading = false;
                   this.$emit("updateList");
                   this.$tip.success("保存成功!");
                 }
               });
-            } else {
-              this.canSave = false;
+            });
+            if (this.mx.length === 0) {
+              // this.canSave = false;
               this.outloading = false;
               this.$emit("updateList");
               this.$tip.success("保存成功!");
             }
           });
-          baseCodeSupply({ code: "whse_out" }).then((res) => {});
-        });
+        } else {
+          this.everyThing.addF(this.form).then((res) => {
+            this.form.whseMaterialoid = res.data.data;
+            this.form.whseCalicoselloutoid = res.data.data;
+            this.form.whseRetsuppcalicooid = res.data.data;
+            this.form.whseRetguestcalicooid = res.data.data;
+            this.form.whseTransfercalicooid = res.data.data;
+            let addPb = (item, i) => {
+              return new Promise((resolve, reject) => {
+                let data = JSON.parse(JSON.stringify(item));
+                data.list = [];
+                if (
+                  item.whseRetsuppcalicodtloid ||
+                  item.whseRetguestcalicodtloid ||
+                  item.whseTransfercalicoDtloid
+                ) {
+                  this.func
+                    .updateDetail({
+                      whseRetsuppcalicoFk: this.form.whseRetsuppcalicooid,
+
+                      batchNo: item.batchNo,
+                      retCompany: item.retCompany,
+                      retTotalpi: item.retTotalpi,
+                      retTotalweight: item.retTotalweight,
+                      // whseCalicoinDtlaFk: item.whseCalicoinDtlaoid,
+                    })
+                    .then((res) => {
+                      resolve();
+                    });
+                } else {
+                  this.func
+                    .addDetail({
+                      whseMaterialFk: this.form.whseMaterialoid,
+                      whseTransfercalicoFk: this.form.whseTransfercalicooid,
+                      whseCalicoselloutFk: this.form.whseCalicoselloutoid,
+                      whseRetsuppcalicoFk: this.form.whseRetsuppcalicooid,
+                      whseRetguestcalicoFk: this.form.whseRetguestcalicooid,
+                      calicoId: item.calicoId,
+                      clothName: item.clothName,
+                      woOrderno: item.woOrderno,
+                      woOrderno: item.woOrderno,
+                      salPoDtlaFk: item.salPoDtlaoid,
+                      batchNo: item.batchNo,
+                      retCompany: item.retCompany,
+                      retTotalpi: item.retTotalpi,
+                      retTotalweight: item.retTotalweight,
+                      whseCalicoinDtlaFk: item.whseCalicoinDtlaoid,
+                      whseCalicoinDtlbFk: item.whseCalicoinDtlboid,
+                      traWeight: item.traWeight,
+                      traCompany: item.traCompany,
+                    })
+                    .then((Res) => {
+                      item.whseMaterialDlaoid = Res.data.data;
+                      item.whseCalicoselloutDtlaoid = Res.data.data;
+                      item.whseRetsuppcalicodtloid = Res.data.data;
+                      item.whseRetguestcalicodtloid = Res.data.data;
+                      item.whseTransfercalicoDtloid = Res.data.data;
+                      resolve();
+                    });
+                }
+              });
+            };
+
+            let promiseArr = this.mx.map((item, i) => {
+              return addPb(item, i);
+            });
+            Promise.all(promiseArr).then((res) => {
+              this.mx.forEach((item, i) => {
+                if (item.list != undefined && item.list.length > 0) {
+                  item.list.forEach((mx, j) => {
+                    if (mx.whseMaterialDlboid || mx.whseCalicoselloutDtlboid) {
+                      // this.func.updatePhDetail(mx).then((phRes) => {});
+                    } else {
+                      this.func
+                        .addPhDetail(
+                          Object.assign(mx, {
+                            whseMaterialDlaFk: item.whseMaterialDlaoid,
+                            whseCalicoselloutDtlaFk:
+                              item.whseCalicoselloutDtlaoid,
+                          })
+                        )
+                        .then((phRes) => {
+                          mx.whseMaterialDlboid = phRes.data.data;
+                          mx.whseCalicoselloutDtlboid = phRes.data.data;
+                        });
+                    }
+                  });
+                }
+
+                if (i === this.mx.length - 1) {
+                  // this.getDetail();
+                  // this.canSave = false;
+                  this.outloading = false;
+                  this.$emit("updateList");
+                  this.$tip.success("保存成功!");
+                }
+              });
+            });
+            if (this.mx.length === 0) {
+              // this.canSave = false;
+              this.outloading = false;
+              this.$emit("updateList");
+              this.$tip.success("保存成功!");
+            }
+            baseCodeSupply({ code: "whse_out" }).then((res) => {});
+          });
+        }
       } catch (error) {
         this.outloading = false;
       }
@@ -1014,19 +1113,30 @@ export default {
         return;
       }
       // this.oldData.$cellEdit = false;
-      if (this.choiceTle === "选择订单胚布资料") {
-        let data = {
-          woMatno: val.fabId,
+      if (this.choiceTle === "選擇訂單胚布資料") {
+        val.forEach((item, i) => {
+          item.woMatno = item.fabId;
+          item.woMatname = item.fabName;
+          item.woOrderno = item.$salPoFk;
+          item.index = item.fabId;
+        });
+        this.mx = this.$unique(this.mx.concat(val), "woOrderno");
+        this.mx.forEach((item, i) => {
+          item.index = i + 1;
+        });
+        this.page.total = this.mx.length;
+      } else if (this.choiceTle === "選擇貨運計劃") {
+        this.form.spNo = val.spNo;
+      } else if (this.choiceTle === "選擇貨運計劃明細") {
+        this.mx.push({
+          woOrderno: val.orderNo,
+          woMatno: val.$fabId,
           woMatname: val.fabName,
-          woOrderno: val.$salPoFk,
-          index: this.mx.length + 1,
-        };
-        this.mx.push(data);
-        // this.changeList.push(data);
-      } else if (
-        this.choiceTle === "选择胚布入仓明细" ||
-        this.choiceTle === "选择胚布疋号资料"
-      ) {
+        });
+        this.mx.forEach((item, i) => {
+          item.index = i + 1;
+        });
+      } else if (this.choiceTle === "选择胚布入仓明细") {
         // let data = {
         //   woMatno: val.fabId,
         //   woMatname: val.fabName,
@@ -1038,18 +1148,71 @@ export default {
             item.retCompany = item.weightUnit;
           });
         }
-
         this.mx = this.mx.concat(val);
-        // this.changeList.push(data);
-      } else {
-        this.chooseData.list = this.chooseData.list.concat(val);
-        this.chooseData.list.forEach((e, index) => {
-          e.index = index + 1;
-          e.prodNo = e.$prodNo;
-          e.woWeights = e.weight;
-          e.woUnit = e.weightUnit;
-          e.ticketNo = e.custTicket;
+        this.mx.forEach((item, i) => {
+          item.index = i + 1;
         });
+        if (this.mx.length > 0) {
+          this.$refs.dlgcrud.setCurrentRow(this.mx[this.mx.length - 1]);
+        }
+
+        // this.changeList.push(data);
+      } else if (this.choiceTle === "选择胚布疋号资料") {
+        if (this.hide === "5") {
+          val.forEach((item, i) => {
+            item.traCompany = item.weightUnit;
+            item.whseCalicoinDtlaFk = item.whseCalicoinDtlaFk;
+            item.whseCalicoinDtlbFk = item.whseCalicoinDtlbFk;
+          });
+          this.mx = this.$unique(this.mx.concat(val), "prodNo");
+        } else {
+          val.forEach((item, i) => {
+            item.woWeights = item.weight;
+            item.woUnit = item.weightUnit;
+            item.ticketNo = item.custTicket;
+            item.prodNo = item.$prodNo;
+          });
+          this.chooseData.list = this.$unique(
+            this.chooseData.list.concat(val),
+            "prodNo"
+          );
+          this.chooseData.list.forEach((item, i) => {
+            item.index = i = 1;
+          });
+          this.rcPage.total = this.chooseData.list.length;
+        }
+      } else if (
+        this.choiceTle === "選擇本厂胚布配料计划" ||
+        this.choiceTle === "選擇外厂胚布配料计划"
+      ) {
+        if (this.isPh) {
+          this.chooseData.list = this.$unique(
+            this.chooseData.list.concat(val),
+            "batchNo"
+          );
+          this.chooseData.list.forEach((item, i) => {
+            item.index = i = 1;
+          });
+          this.rcPage.total = this.chooseData.list.length;
+        } else {
+          // 本廠
+          val.forEach((item) => {
+            item.list = [];
+            item.list.push(item);
+          });
+          this.mx = this.$unique(this.mx.concat(val), "calicoId");
+          this.page.total = this.mx.length;
+          this.mx.forEach((item, i) => {
+            // item.list = [];
+            // item.list.push(JSON.parse(JSON.stringify(item)));
+            item.index = i + 1;
+            if (i === this.mx.length - 1) {
+              this.$refs.dlgcrud.setCurrentRow(this.mx[this.mx.length - 1]);
+            }
+          });
+          this.rcPage.total = 1;
+        }
+      } else {
       }
       // this.oldData.$cellEdit = true;
       for (var key in val) {
@@ -1066,7 +1229,7 @@ export default {
       // this.outcrudOp.column[5].hide = true;
       this.outcrudOp.selection = false;
       this.outcrudOp.showSummary = true;
-      this.outcrudOp.height = "calc(100vh - 288px)";
+      this.outcrudOp.height = "calc(100vh - 273px)";
       this.sxcheckList = [];
       this.sxV = false;
     },
@@ -1078,26 +1241,39 @@ export default {
   created() {},
   mounted() {
     //
-    getUcmlUser({ usrLogin: parent.userID }).then((Res) => {
-      this.sysCreatedby = Res.data.ucmlUseroid;
-    });
-    this.rcOp.height = "calc(100vh - 288px)";
+    // getUcmlUser({ usrLogin: parent.userID }).then((Res) => {
+    //   this.sysCreatedby = Res.data.ucmlUseroid;
+    // });
+    this.form.sysCreatedby = this.$store.state.userOid;
+    this.rcOp.height = "calc(100vh - 273px)";
     if (this.hide === "3" || this.hide === "4" || this.hide === "5") {
       this.mxOp = rsxkr3C(this);
     }
-    if (this.hide === "6") {
+    if (this.hide === "6" && !this.isAdd) {
       this.detail.retCode = this.detail.woOutno;
       this.detail.retDate = this.detail.woDate;
+    }
+    if (this.isAdd) {
+      if (this.hide === "3" || this.hide === "4" || this.hide === "5") {
+        this.mxOp.column[3].hide = true;
+      }
     }
     if (this.isPlan) {
       this.loading = true;
       let data = JSON.parse(JSON.stringify(this.PlanForm));
       this.form = this.PlanForm;
-      this.mx.push(data);
+      this.mx.push({
+        // whseMaterialFk: this.form.whseMaterialoid,
+        index: 1,
+        calicoId: data.calicoId,
+        clothName: data.clothName,
+      });
+      this.page.total = this.mx.length;
       setTimeout(() => {
         this.$refs.dlgcrud.setCurrentRow(this.mx[0]);
         this.chooseData.list = [];
         this.chooseData.list.push(data);
+        this.rcPage.total = 1;
         this.loading = false;
       }, 200);
 
@@ -1112,6 +1288,8 @@ export default {
 </script>
 <style lang='stylus'>
 #sxPlanDlg {
+  overflow: hidden !important;
+
   .el-dialog__header {
     padding: 0;
   }
@@ -1162,6 +1340,7 @@ export default {
     height: 100%;
     margin: 0 !important;
     background-color: rgb(2, 26, 60);
+    overflow: hidden;
   }
 
   // .avue-form__group {

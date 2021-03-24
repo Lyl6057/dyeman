@@ -168,19 +168,19 @@ export default {
           {
             label: this.$t("ProWorkflowInfo.gjc"),
             prop: "keyCode",
-            span: 8,
+            span: 6,
           },
           {
             label: this.$t("ProWorkflowInfo.sbxh"),
             prop: "equModel",
-            span: 8,
+            span: 6,
             dicData: eqType,
             type: "select",
           },
           {
             label: this.$t("ProWorkflowInfo.gs"),
             prop: "formula",
-            span: 8,
+            span: 6,
           },
           // {
           //   label: this.$t("ProWorkflowInfo.gjcmc"),

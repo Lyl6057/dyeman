@@ -327,7 +327,7 @@ export default {
         this.outform.retDate = this.getNowTime();
         baseCodeSupplyEx({ code: "whse_out" }).then((res) => {
           this.outform.retCode = res.data.data;
-          this.outcrudOp.height = "calc(100vh - 2880px)";
+          // this.outcrudOp.height = "calc(100vh - 2880px)";
           this.getDetali();
           this.planV = true;
         });
@@ -461,6 +461,8 @@ export default {
 </script>
 <style lang='stylus'>
 #sxPlanDlg {
+  overflow: hidden;
+
   .el-dialog__header {
     padding: 0;
   }

@@ -61,7 +61,7 @@ export function getVpnvi(params) {
   })
 }
 
-// 染化料入仓分配
+// 原料入仓分配
 export function getChemicalinAlloc(params) {
   return axios({
     url: '/api/whseChemicalinAlloc/page',
@@ -73,6 +73,24 @@ export function getChemicalinAlloc(params) {
 export function addChemicalinAlloc(params) {
   return axios({
     url: '/api/whseChemicalinAlloc',
+    method: 'post',
+    params: params
+  })
+}
+
+// 顏料入仓分配Whse_DyesaIn_alloc
+
+export function getDyesainAlloc(params) {
+  return axios({
+    url: '/api/whseDyesainAlloc/page',
+    method: 'get',
+    params: params
+  })
+}
+
+export function addDyesainAlloc(params) {
+  return axios({
+    url: '/api/whseDyesainAlloc',
     method: 'post',
     params: params
   })

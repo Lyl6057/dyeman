@@ -17,6 +17,140 @@ let basChemical = getXDicT("basChemicalmat/v1.0/list")
 let basPigment = getXDicT("basPigment")
 let basProductivesupplies = getXDicT("basProductivesupplies")
 
+// 纱线入库
+export function getYarnin(params) {
+  return axios({
+    url: '/api/whseYarninDtl/v1.0/listByPage',
+    method: 'get',
+    params: params
+  })
+}
+let yarnin = getXDicT("whseYarnin/v1.0/list")
+export const YarninF = {
+  submitBtn: false,
+  emptyBtn: false,
+  labelWidth: 130,
+  menuBtn: false,
+  menu: false,
+  column: [
+    {
+      label: "入仓编号",
+      prop: "whseYarninFk",
+      span: 6,
+      type: "tree",
+      dicData: yarnin,
+      props: {
+        label: "yinId",
+        value: "whseYarninoid"
+      },
+      placeholder: "請選擇入仓编号",
+    },
+    {
+      label: "紗線系統編號",
+      prop: "yarnsId",
+      span: 6,
+      placeholder: "請選擇紗線系統編號",
+    },
+    {
+      label: "批號",
+      prop: "batchNo",
+      span: 6,
+      placeholder: " ",
+    },
+  ]
+
+}
+
+export const YarninC = {
+  menu: false,
+  addBtn: false,
+  border: true,
+  highlightCurrentRow: true,
+  height: "calc(100vh - 200px)",
+  refreshBtn: false,
+  columnBtn: false,
+  selection: true,
+  page: true,
+  column: [
+    {
+      prop: "index",
+      label: "#",
+      width: 50,
+      align: "center",
+    },
+    {
+      label: "入仓编号",
+      prop: "whseYarninFk",
+      cell: false,
+      width: 150,
+      type: "select",
+      dicData: yarnin,
+      props: {
+        label: "yinId",
+        value: "whseYarninoid"
+      },
+      placeholder: "請選擇入仓编号",
+    },
+    {
+      label: "紗線系統編號",
+      prop: "yarnsId",
+      cell: false,
+      width: 120,
+      placeholder: "請選擇紗線系統編號",
+    },
+    {
+      label: "紗線名称",
+      prop: "yarnsName",
+      cell: false,
+      // width: 350,
+      type: "select",
+      dicData: getDicT("basYarnsData", "yarnsName", "yarnsId"),
+    },
+    {
+      label: "纱批/批号",
+      prop: "batchNo",
+      cell: false,
+      width: 150,
+    },
+    // {
+    //   label: "纱牌",
+    //   prop: "yarnsCard",
+    //   cell: false,
+    //   width: 180,
+    // },
+    {
+      label: "产地",
+      prop: "placeOrigin",
+      cell: false,
+      width: 100,
+      type: "select",
+      dicData: getDIC("Whse_Origin"),
+    },
+    {
+      label: "箱数",
+      prop: "cartonNum",
+      cell: false,
+      width: 100,
+      align: "right",
+    },
+    {
+      label: "入倉重量",
+      prop: "weight",
+      cell: false,
+      width: 100,
+      align: "right",
+    },
+    {
+      label: "单位",
+      prop: "weightUnit",
+      cell: false,
+      width: 100,
+      type: "select",
+      dicData: getDIC("bas_matUnit"),
+    },
+  ]
+
+}
 // 加工指令單明細
 export function getInstructDtl(params) {
   return axios({
@@ -3419,6 +3553,7 @@ export const WhseMaterialoutPlanC = {
   height: "calc(100vh - 200px)",
   refreshBtn: false,
   columnBtn: false,
+  selection: true,
   page: true,
   column: [
     {
@@ -3472,7 +3607,130 @@ export const WhseMaterialoutPlanC = {
   ]
 
 }
+// 本厂胚布配料计划
+export function getWhseMaterialPlan(params) {
+  return axios({
+    url: '/api/whseMaterialPlan/page',
+    method: 'get',
+    params: params
+  })
+}
 
+export const WhseMaterialPlanF = {
+  submitBtn: false,
+  emptyBtn: false,
+  labelWidth: 130,
+  menuBtn: false,
+  menu: false,
+  column: [
+    {
+      label: "设备编号",
+      prop: "equCode",
+      span: 6,
+      placeholder: " ",
+    },
+    {
+      label: "设备名称",
+      prop: "equName",
+      span: 6,
+      placeholder: " ",
+    },
+    {
+      label: "胚布編號",
+      prop: "calicoId",
+      span: 6,
+      placeholder: " ",
+    },
+    {
+      label: "配料计划编号",
+      prop: "retBatch",
+      span: 6,
+      placeholder: " ",
+    },
+    // {
+    //   label: "生產單號",
+    //   prop: "prOn",
+    //   span: 8,
+    //   placeholder: " ",
+    // },
+  ]
+
+}
+
+export const WhseMaterialPlanC = {
+  menu: false,
+  addBtn: false,
+  border: true,
+  highlightCurrentRow: true,
+  height: "calc(100vh - 200px)",
+  refreshBtn: false,
+  columnBtn: false,
+  selection: true,
+  page: true,
+  column: [
+    {
+      prop: "index",
+      label: "#",
+      width: 50,
+      align: "center",
+    },
+    {
+      label: "设备编号",
+      prop: "equCode",
+      width: 120
+    },
+    {
+      label: "设备名称",
+      prop: "equName",
+      width: 150
+    },
+    {
+      label: "本厂配料计划编号",
+      prop: "retBatch",
+      width: 220
+    },
+    {
+      label: "生產單號",
+      prop: "prOn",
+      width: 150
+    },
+    {
+      label: "胚布编号",
+      prop: "calicoId",
+      width: 140
+    },
+    {
+      label: "胚布名称",
+      prop: "clothName",
+      // width: 250
+    },
+    {
+      label: "批號",
+      prop: "batchNo",
+      align: "right",
+      width: 140
+    },
+    {
+      label: "疋号",
+      prop: "countingNo",
+      align: "right",
+      width: 100
+    },
+    {
+      label: "重量",
+      prop: "weight",
+      align: "right",
+      width: 100
+    },
+    {
+      label: "單位",
+      prop: "weightUnit",
+      type: "select",
+      dicData: matUnit
+    }
+  ]
+
+}
 
 // 外厂纱线配料计划
 export function getWhseRetyarninoutPlan(params) {
@@ -3532,6 +3790,7 @@ export const WhseRetyarninoutPlanC = {
   height: "calc(100vh - 200px)",
   refreshBtn: false,
   columnBtn: false,
+  selection: true,
   page: true,
   column: [
     {
@@ -3555,10 +3814,11 @@ export const WhseRetyarninoutPlanC = {
       prop: "retBatch",
       width: 220
     },
-    // {
-    //   label: "生產單號",
-    //   prop: "prOn",
-    // },
+    {
+      label: "生產單號",
+      prop: "prOn",
+      width: 140
+    },
     {
       label: "纱线编号",
       prop: "yarnsId",
@@ -3568,6 +3828,131 @@ export const WhseRetyarninoutPlanC = {
       label: "纱线名称",
       prop: "yarnsName",
       width: 250
+    },
+    {
+      label: "锭数",
+      prop: "everySpindle",
+      align: "right",
+      width: 100
+    },
+    {
+      label: "重量",
+      prop: "weight",
+      align: "right",
+      width: 100
+    },
+    // {
+    //   label: "單位",
+    //   prop: "weightUnit",
+    //   type: "select",
+    //   dicData:matUnit
+    // }
+  ]
+
+}
+
+// 本厂纱线配料计划
+export function getWhseRetyarninPlan(params) {
+  return axios({
+    url: '/api/vWhseRetyarninPlan/page',
+    method: 'get',
+    params: params
+  })
+}
+
+export const WhseRetyarninPlanF = {
+  submitBtn: false,
+  emptyBtn: false,
+  labelWidth: 130,
+  menuBtn: false,
+  menu: false,
+  column: [
+    {
+      label: "设备编号",
+      prop: "equId",
+      span: 6,
+      placeholder: " ",
+    },
+    {
+      label: "设备名称",
+      prop: "equName",
+      span: 6,
+      placeholder: " ",
+    },
+    {
+      label: "纱线編號",
+      prop: "yarnsId",
+      span: 6,
+      placeholder: " ",
+    },
+    {
+      label: "配料计划编号",
+      prop: "retBatch",
+      span: 6,
+      placeholder: " ",
+    },
+    // {
+    //   label: "生產單號",
+    //   prop: "prOn",
+    //   span: 8,
+    //   placeholder: " ",
+    // },
+  ]
+
+}
+
+export const WhseRetyarninPlanC = {
+  menu: false,
+  addBtn: false,
+  border: true,
+  highlightCurrentRow: true,
+  height: "calc(100vh - 200px)",
+  refreshBtn: false,
+  columnBtn: false,
+  selection: true,
+  page: true,
+  column: [
+    {
+      prop: "index",
+      label: "#",
+      width: 50,
+      align: "center",
+    },
+    {
+      label: "设备编号",
+      prop: "equId",
+      width: 120
+    },
+    {
+      label: "设备名称",
+      prop: "equName",
+      width: 150
+    },
+    {
+      label: "本厂配料计划编号",
+      prop: "retBatch",
+      width: 220
+    },
+    {
+      label: "生產單號",
+      prop: "prOn",
+      width: 150
+    },
+    {
+      label: "纱线编号",
+      prop: "yarnsId",
+      width: 140
+    },
+    {
+      label: "纱线名称",
+      prop: "yarnsName",
+      // width: 250
+    },
+    {
+      label: "锭数",
+      prop: "everySpindle",
+      align: "right",
+      width: 100
     },
     {
       label: "重量",
@@ -3605,13 +3990,13 @@ export const shipPlanF = {
     {
       label: "货运计划编号",
       prop: "spNo",
-      span: 8,
+      span: 6,
       placeholder: " ",
     },
     {
       label: "贸易方式",
       prop: "tradeMode",
-      span: 8,
+      span: 6,
       placeholder: " ",
       type: "select",
       dicData: getDIC("sal_tradeMode"),
@@ -3619,7 +4004,7 @@ export const shipPlanF = {
     {
       label: "运输方式",
       prop: "shipMode",
-      span: 8,
+      span: 6,
       placeholder: " ",
       type: "select",
       dicData: getDIC("Bas_TranType"),
@@ -3633,7 +4018,7 @@ export const shipPlanC = {
   addBtn: false,
   border: true,
   highlightCurrentRow: true,
-  height: "calc(100vh - 445px)",
+  height: "calc(100vh - 200px)",
   refreshBtn: false,
   columnBtn: false,
   page: true,
@@ -3647,6 +4032,7 @@ export const shipPlanC = {
     {
       label: "货运计划编号",
       prop: "spNo",
+      width: 160,
     },
     {
       label: "贸易方式",
@@ -3665,6 +4051,99 @@ export const shipPlanC = {
     {
       label: "备注",
       prop: "spRemark",
+      width: 260,
+    },
+  ]
+
+}
+
+// 货运计划
+export function getshipPlanDtl(params) {
+  return axios({
+    url: '/api/shipPlanDtl/v1.0/listByPage',
+    method: 'get',
+    params: params
+  })
+}
+
+export const shipPlanDtlF = {
+  submitBtn: false,
+  emptyBtn: false,
+  labelWidth: 130,
+  menuBtn: false,
+  menu: false,
+  column: [
+    {
+      label: "货运计划编号",
+      prop: "poNo",
+      span: 6,
+      placeholder: " ",
+    },
+    {
+      label: "訂單號",
+      prop: "orderNo",
+      span: 6,
+      placeholder: " ",
+    },
+    {
+      label: "胚布編號",
+      prop: "fabId",
+      span: 6,
+      placeholder: " ",
+    },
+
+
+  ]
+
+}
+
+export const shipPlanDtlC = {
+  menu: false,
+  addBtn: false,
+  border: true,
+  highlightCurrentRow: true,
+  height: "calc(100vh - 200px)",
+  refreshBtn: false,
+  columnBtn: false,
+  page: true,
+  column: [
+    {
+      prop: "index",
+      label: "#",
+      width: 50,
+      align: "center",
+    },
+    {
+      label: "货运计划编号",
+      prop: "poNo",
+      width: 180,
+    },
+    {
+      label: "客人订单号",
+      prop: "orderNo",
+      width: 140,
+    },
+    {
+      label: "客人名称",
+      prop: "custName",
+      width: 180,
+    },
+    {
+      label: "胚布編號",
+      prop: "fabId",
+      width: 140,
+      type: "select",
+      dicData: getDicT("basCalico", "calicoId", "calicoName")
+    },
+    {
+      label: "胚布名稱",
+      prop: "fabName",
+      // width: 600
+    },
+    {
+      label: "重量",
+      prop: "qty",
+      width: 100
     },
   ]
 
@@ -3794,7 +4273,7 @@ export const PbDltbF = {
     {
       label: "生产单号",
       prop: "prodNo",
-      span: 8,
+      span: 6,
       placeholder: " ",
       // type: "tree",
       // dicData: postDicT("salPoList", "poNo", "salPooid"),
@@ -3803,7 +4282,7 @@ export const PbDltbF = {
     {
       label: "客人布票号",
       prop: "custTicket",
-      span: 8,
+      span: 6,
       placeholder: " ",
     },
 
@@ -3816,7 +4295,7 @@ export const PbDltbC = {
   addBtn: false,
   border: true,
   highlightCurrentRow: true,
-  height: "calc(100vh - 206px)",
+  height: "calc(100vh - 200px)",
   refreshBtn: false,
   columnBtn: false,
   selection: true,
@@ -3832,7 +4311,7 @@ export const PbDltbC = {
       label: "生产单号",
       prop: "prodNo",
       cell: true,
-      width: 120,
+      width: 140,
       type: "select",
       dicData: getDicT("whseCalicoinDtla/v1.0/list", "prodNo", "whseCalicoinDtlaoid"),
     },
@@ -3922,7 +4401,7 @@ export const PbDetaliC = {
   addBtn: false,
   border: true,
   highlightCurrentRow: true,
-  height: "calc(100vh - 206px)",
+  height: "calc(100vh - 200px)",
   refreshBtn: false,
   columnBtn: false,
   selection: true,
@@ -3938,7 +4417,7 @@ export const PbDetaliC = {
       label: "入仓编号",
       prop: "$whseCalicoinFk",
       cell: true,
-      width: 140,
+      width: 150,
       type: "select",
       dicData: getDicT("whseCalicoin/v1.0/list", "yinId", "whseCalicoinoid"),
     },
@@ -3946,7 +4425,7 @@ export const PbDetaliC = {
       label: "入仓编号2",
       prop: "whseCalicoinFk",
       cell: false,
-      width: 140,
+      width: 150,
       type: "select",
       hide: false,
       props: {
@@ -3958,12 +4437,12 @@ export const PbDetaliC = {
     {
       label: "胚布編碼",
       prop: "calicoId",
-      width: 140,
+      width: 120,
     },
     {
       label: "胚布名称",
       prop: "clothName",
-      width: 450,
+      // width: 450,
     },
     {
       label: "批号",
@@ -3973,19 +4452,19 @@ export const PbDetaliC = {
     {
       label: "疋數",
       prop: "countingNo",
-      width: 100,
+      width: 80,
       align: "right",
     },
     {
       label: "重量",
       prop: "weight",
-      width: 100,
+      width: 80,
       align: "right",
     },
     {
-      label: "重量单位",
+      label: "单位",
       prop: "weightUnit",
-      width: 100,
+      width: 80,
       type: "select",
       dicData: matUnit
 

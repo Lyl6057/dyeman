@@ -209,7 +209,6 @@ export default {
                 setTimeout(() => {
                   // this.$refs.mx.setCurrentRow(this.mx[0]);
                   this.getAlloc();
-                  console.log(this.mx);
                   this.loading = false;
                 }, 200);
               }
@@ -250,8 +249,8 @@ export default {
         .then((res) => {
           let records = res.data;
           this.phPage.total = records.total;
-          let data = [];
-          data = records.records;
+          let data = res.data;
+          // data = records.records;
           if (data.length === 0) {
             this.ctLoading = false;
           }
