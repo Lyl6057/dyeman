@@ -5,11 +5,24 @@ export default [
     name: "仓位管理",
     component: resolve => require(["@/view/im/Wl/index"], resolve)
   },
+  //库存管理
+  {
+    path: "/imHo",
+    name: "手动操作",
+    component: resolve => require(["@/view/im/Ho/index"], resolve)
+  },
   //库存盘点
   {
-    path: "/imSt",
+    path: "/imIty",
     name: "库存盘点",
-    component: resolve => require(["@/view/im/St/index"], resolve)
+    component: resolve => require(["@/view/im/Ity/index"], resolve),
+    children: [
+      {
+        path: "/ityBasic",
+        name: "库存盘点",
+        component: resolve => require(["@/view/im/Ity/basic/index"], resolve),
+      }
+    ]
   },
   //仓库工作指引看板
   {

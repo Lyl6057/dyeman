@@ -1,5 +1,11 @@
+/*
+ * @Author: Lyl
+ * @Date: 2021-03-10 14:20:44
+ * @LastEditors: Lyl
+ * @LastEditTime: 2021-03-25 16:24:41
+ * @Description: 
+ */
 import Vue from 'vue'
-import da from '../router/view/da';
 
 /** 全局注册*/
 Vue.directive('drap', {

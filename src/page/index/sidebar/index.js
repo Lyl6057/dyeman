@@ -2,57 +2,57 @@
 export const menuData = _this => {
   return {
     menu: [
-      {
-        menuName: _this.$t("menuData.ProductionName"),
-        index: "0",
-        icon: "el-icon-edit-outline",
-        children: [
-          {
-            menuName: "基础设定",
-            index: "/basics"
-          },
-          {
-            menuName: _this.$t("menuData.ProductionName"),
-            index: "/proMng"
-          },
-          {
-            menuName: "报表",
-            index: "/proReport"
-          },
-          // {
-          //   menuName: _this.$t("menuData.Production[1].name"),
-          //   index: "/ProWorkflowInfo"
-          // },
-          // // {
-          // //   menuName: _this.$t('menuData.Production[0].name'),
-          // //   index: "/ProSchedule"
-          // // },
-          // // {
-          // //   menuName: "生产排期明细",
-          // //   index: "/ProScheduleDetail"
-          // // },
-          // {
-          //   menuName: _this.$t("menuData.Production[4].name"),
-          //   index: "/proSalSchedule"
-          // },
-          // {
-          //   menuName: "生產排單",
-          //   index: "/proScheduling"
-          // },
-          // {
-          //   menuName: _this.$t("menuData.Production[0].name"),
-          //   index: "/EquipmentSchedule"
-          // },
-          // {
-          //   menuName: _this.$t("menuData.Production[6].name"),
-          //   index: "/EquipmentType"
-          // },
-          // {
-          //   menuName: "打印",
-          //   index: "/print"
-          // }
-        ]
-      },
+      // {
+      //   menuName: _this.$t("menuData.ProductionName"),
+      //   index: "0",
+      //   icon: "el-icon-edit-outline",
+      //   children: [
+      //     {
+      //       menuName: "基础设定",
+      //       index: "/basics"
+      //     },
+      //     {
+      //       menuName: _this.$t("menuData.ProductionName"),
+      //       index: "/proMng"
+      //     },
+      //     {
+      //       menuName: "报表",
+      //       index: "/proReport"
+      //     },
+      //     // {
+      //     //   menuName: _this.$t("menuData.Production[1].name"),
+      //     //   index: "/ProWorkflowInfo"
+      //     // },
+      //     // // {
+      //     // //   menuName: _this.$t('menuData.Production[0].name'),
+      //     // //   index: "/ProSchedule"
+      //     // // },
+      //     // // {
+      //     // //   menuName: "生产排期明细",
+      //     // //   index: "/ProScheduleDetail"
+      //     // // },
+      //     // {
+      //     //   menuName: _this.$t("menuData.Production[4].name"),
+      //     //   index: "/proSalSchedule"
+      //     // },
+      //     // {
+      //     //   menuName: "生產排單",
+      //     //   index: "/proScheduling"
+      //     // },
+      //     // {
+      //     //   menuName: _this.$t("menuData.Production[0].name"),
+      //     //   index: "/EquipmentSchedule"
+      //     // },
+      //     // {
+      //     //   menuName: _this.$t("menuData.Production[6].name"),
+      //     //   index: "/EquipmentType"
+      //     // },
+      //     // {
+      //     //   menuName: "打印",
+      //     //   index: "/print"
+      //     // }
+      //   ]
+      // },
       // 产品管理
       // {
       //   menuName: '产品管理',
@@ -252,7 +252,7 @@ export const menuData = _this => {
       // },
       // 库存管理
       {
-        menuName: '库存管理',
+        menuName: '仓库管理',
         index: "7",
         icon: "el-icon-s-order",
         name: "im",
@@ -266,8 +266,8 @@ export const menuData = _this => {
             index: "/imWk"
           },
           {
-            menuName: '3.库存盘点',
-            index: "/imSt"
+            menuName: '3.库存管理',
+            index: "/imIty"
           },
 
           // {

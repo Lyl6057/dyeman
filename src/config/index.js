@@ -82,7 +82,7 @@ export function getDIC(codeTableId) {
 }
 
 // 获取下拉字典
-export function getDbDicT(url, url2) {
+export async function getDbDicT(url, url2) {
   // let resultMap = _this.$store.getters.getDic(codeTableId);
   let resultMap = []
   axios
