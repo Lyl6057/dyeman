@@ -3,15 +3,12 @@
     <view-container
       :title="datas.type.split('_')[0] + '资料'"
       v-loading="outloading"
-      element-loading-text="正在生成领料单..."
+      element-loading-text="正在加載..."
       element-loading-spinner="el-icon-loading"
       element-loading-background="rgba(255, 255, 255, 0.8)"
     >
       <div class="btnList">
-        <el-button type="success" @click="savePlan" v-if="canSave && isPlan"
-          >保存</el-button
-        >
-        <el-button type="success" @click="save" v-if="!isPlan">保存</el-button>
+        <el-button type="success" @click="savePlan">保存</el-button>
         <el-button type="warning" @click="close">关闭</el-button>
       </div>
       <div class="formBox">
@@ -130,6 +127,10 @@ import {
   getCpbDetali,
 } from "@/api/im/Wk/rc";
 import {
+  getFinclothsellout,
+  addFinclothsellout,
+  updateFinclothsellout,
+  delFinclothsellout,
   getFinclothselloutDtla,
   addFinclothselloutDtla,
   updateFinclothselloutDtla,
@@ -145,8 +146,8 @@ export default {
     everyThing: Object,
     hide: String,
     detail: Object,
-    isPlan: Boolean,
     PlanForm: Object,
+    isAdd: Boolean,
   },
   name: "",
   components: {
@@ -221,6 +222,7 @@ export default {
       this.func.getPhDetail = getFinclothselloutDtlb;
       this.func.delPhDetail = delFinclothselloutDtlb;
       this.func.addPhDetail = addFinclothselloutDtlb;
+      this.chooseData = {};
       // this.mxOp = rsxkr3C(this);
       this.func
         .getDetail({
@@ -293,13 +295,14 @@ export default {
         });
     },
     add() {
-      if (this.hide === "6") {
-        this.choiceV = !this.choiceV;
-        this.choiceField = "woOrderno";
-        this.oldData = this.chooseData;
-        this.choiceTarget = this.oldData;
-        this.choiceTle = "选择订单胚布资料";
+      if (!this.form.spNo) {
+        this.$tip.error("請先選擇貨運計劃!");
+        return;
       }
+      this.choiceV = !this.choiceV;
+      this.dlgWidth = "100%";
+      // this.choiceQ.poNo = this.form.poNo;
+      this.choiceTle = "選擇訂單胚布資料";
     },
     addPh() {
       if (Object.keys(this.chooseData).length === 0) {
@@ -318,7 +321,7 @@ export default {
       this.outcrudOp = rcpb3C(this);
       this.outcrudOp.selection = true;
       this.outcrudOp.showSummary = false;
-      this.outcrudOp.height = "calc(100vh - 213px)";
+      this.outcrudOp.height = "calc(100vh - 205px)";
       this.isPh = true;
       this.sxV = true;
       // }
@@ -464,11 +467,10 @@ export default {
                   items.index = index + 1;
                   items.prodNo = items.whseCalicoinDtlaFk;
                   if (index === this.sxcrud.length - 1) {
-                    // this.sxpage.total = this.sxcrud.length;
+                    this.sxpage.total = this.sxcrud.length;
                     this.sxloading = false;
                   }
                 });
-                console.log(this.sxcrud);
               }
             });
           });
@@ -554,12 +556,14 @@ export default {
           }
         }
         // if (this.isPlan) {
-        this.chooseData.list = this.unique(
-          this.chooseData.list.concat(this.sxcheckList),
-          "custTicket"
-        );
+        // this.chooseData.list = this.unique(
+        //   this.chooseData.list.concat(this.sxcheckList),
+        //   "custTicket"
+        // );
+        this.chooseData.list = this.chooseData.list.concat(this.sxcheckList);
         this.chooseData.list.forEach((item, i) => {
           item.index = i + 1;
+          item.prodNo = item.batchNo;
           item.prodNo = item.$prodNo;
           item.woWeights = item.weight;
           item.woUnit = item.weightUnit;
@@ -689,45 +693,58 @@ export default {
     },
     // 生成领料计划
     savePlan() {
-      if (this.form.retDate === "" || this.form.retCode === "") {
+      if (this.form.retDate === "" || this.form.woDate === "") {
         this.$tip.error("请输入出仓编号/日期");
         return;
       }
+      // console.log(this.mx);
+      // return;
       this.outloading = true;
       try {
-        addMaterial(this.form).then((res) => {
-          let addPb = (item, i) => {
-            return new Promise((resolve, reject) => {
-              addPbDetali({
-                whseMaterialFk: res.data.data,
-                calicoId: item.calicoId,
-                clothName: item.clothName,
-              }).then((Res) => {
-                resolve({ oid: Res.data.data, index: i });
+        if (!this.form.whseFinclothselloutoid) {
+          addFinclothsellout(this.form).then((res) => {
+            this.form.whseFinclothselloutoid = res.data.data;
+            let addPb = (item, i) => {
+              return new Promise((resolve, reject) => {
+                if (!item.whseFinclothselloutDtlaoid) {
+                  addFinclothselloutDtla({
+                    whseFinclothselloutFk: this.form.whseFinclothselloutoid,
+                    woMatno: item.woMatno,
+                    woMatname: item.woMatname,
+                    woOrderno: item.woOrderno,
+                    salPoDtlaFk: item.salPoDtlaoid,
+                  }).then((Res) => {
+                    item.whseFinclothselloutDtlaoid = Res.data.data;
+                    resolve();
+                  });
+                } else {
+                  resolve();
+                }
               });
-            });
-          };
+            };
 
-          let promiseArr = this.mx.map((item, i) => {
-            return addPb(item, i);
-          });
-          Promise.all(promiseArr).then((res) => {
-            if (res.length > 0) {
-              res.forEach((item, i) => {
-                if (
-                  this.mx[item.index].list != undefined &&
-                  this.mx[item.index].list.length > 0
-                ) {
-                  this.mx[item.index].list.forEach((mx, j) => {
-                    addPhDetali(
-                      Object.assign(mx, {
-                        whseMaterialDlaFk: item.oid,
-                      })
-                    ).then((phRes) => {});
+            let promiseArr = this.mx.map((item, i) => {
+              return addPb(item, i);
+            });
+            Promise.all(promiseArr).then((res) => {
+              this.mx.forEach((item, i) => {
+                if (item.list != undefined && item.list.length > 0) {
+                  item.list.forEach((mx, j) => {
+                    if (!mx.whseFinclothselloutDtlboid) {
+                      mx.prodNo = mx.batchNo;
+                      addFinclothselloutDtlb(
+                        Object.assign(mx, {
+                          whseFinclothselloutDtlaFk:
+                            item.whseFinclothselloutDtlaoid,
+                        })
+                      ).then((phRes) => {
+                        mx.whseFinclothselloutDtlboid = phRes.data.data;
+                      });
+                    }
                   });
                 }
 
-                if (i === res.length - 1) {
+                if (i === this.mx.length - 1) {
                   // this.getDetail();
                   this.canSave = false;
                   this.outloading = false;
@@ -735,14 +752,71 @@ export default {
                   this.$tip.success("保存成功!");
                 }
               });
-            } else {
+              if (this.mx.length === 0) {
+                this.canSave = false;
+                this.outloading = false;
+                this.$emit("updateList");
+                this.$tip.success("保存成功!");
+              }
+            });
+          });
+        } else {
+          let addPb = (item, i) => {
+            return new Promise((resolve, reject) => {
+              if (!item.whseFinclothselloutDtlaoid) {
+                addFinclothselloutDtla({
+                  whseFinclothselloutFk: this.form.whseFinclothselloutoid,
+                  woMatno: item.woMatno,
+                  woMatname: item.woMatname,
+                  woOrderno: item.woOrderno,
+                  salPoDtlaFk: item.salPoDtlaoid,
+                }).then((Res) => {
+                  item.whseFinclothselloutDtlaoid = Res.data.data;
+                  resolve();
+                });
+              } else {
+                resolve();
+              }
+            });
+          };
+
+          let promiseArr = this.mx.map((item, i) => {
+            return addPb(item, i);
+          });
+          Promise.all(promiseArr).then((res) => {
+            this.mx.forEach((item, i) => {
+              if (item.list != undefined && item.list.length > 0) {
+                item.list.forEach((mx, j) => {
+                  if (!mx.whseFinclothselloutDtlboid) {
+                    mx.prodNo = mx.batchNo;
+                    addFinclothselloutDtlb(
+                      Object.assign(mx, {
+                        whseFinclothselloutDtlaFk:
+                          item.whseFinclothselloutDtlaoid,
+                      })
+                    ).then((phRes) => {
+                      mx.whseFinclothselloutDtlboid = phRes.data.data;
+                    });
+                  }
+                });
+              }
+
+              if (i === this.mx.length - 1) {
+                // this.getDetail();
+                this.canSave = false;
+                this.outloading = false;
+                this.$emit("updateList");
+                this.$tip.success("保存成功!");
+              }
+            });
+            if (this.mx.length === 0) {
               this.canSave = false;
               this.outloading = false;
               this.$emit("updateList");
               this.$tip.success("保存成功!");
             }
           });
-        });
+        }
       } catch (error) {
         this.outloading = false;
       }
@@ -753,18 +827,33 @@ export default {
         return;
       }
       this.oldData.$cellEdit = false;
-      if (this.choiceTle === "选择订单胚布资料") {
-        let data = {
-          woMatno: val.fabId,
-          woMatname: val.fabName,
-          woOrderno: val.$salPoFk,
-          salPoDtlaoid: val.salPoDtlaoid,
-          colorName: val.colorName,
-          index: this.mx.length + 1,
-        };
+      // if (this.choiceTle === "选择订单胚布资料") {
+      //   let data = {
+      //     woMatno: val.fabId,
+      //     woMatname: val.fabName,
+      //     woOrderno: val.$salPoFk,
+      //     salPoDtlaoid: val.salPoDtlaoid,
+      //     colorName: val.colorName,
+      //     index: this.mx.length + 1,
+      //   };
 
-        this.mx.push(data);
-        // this.changeList.push(data);
+      //   this.mx.push(data);
+      //   // this.changeList.push(data);
+      // }
+      if (this.choiceTle === "選擇訂單胚布資料") {
+        val.forEach((item, i) => {
+          item.woMatno = item.fabId;
+          item.woMatname = item.fabName;
+          item.woOrderno = item.$salPoFk;
+        });
+        this.mx = this.$unique(this.mx.concat(val), "woOrderno");
+        this.mx.forEach((item, i) => {
+          item.index = i + 1;
+        });
+        this.page.total = this.mx.length;
+      }
+      if (this.choiceTle === "選擇貨運計劃") {
+        this.form.spNo = val.spNo;
       }
       this.oldData.$cellEdit = true;
       for (var key in val) {
@@ -781,7 +870,7 @@ export default {
       // this.outcrudOp.column[5].hide = true;
       this.outcrudOp.selection = false;
       this.outcrudOp.showSummary = true;
-      this.outcrudOp.height = "calc(100vh - 283px)";
+      this.outcrudOp.height = "calc(100vh - 275px)";
       this.sxcheckList = [];
       this.sxV = false;
     },
@@ -792,19 +881,17 @@ export default {
   },
   created() {},
   mounted() {
-    this.rcOp.height = "calc(100vh - 283px)";
+    this.rcOp.height = "calc(100vh - 275px)";
     if (this.hide === "3" || this.hide === "4" || this.hide === "5") {
       this.mxOp = rsxkr3C(this);
     }
-    if (this.hide === "6") {
-      this.detail.retCode = this.detail.woOutno;
-      this.detail.retDate = this.detail.woDate;
-    }
-    if (this.isPlan) {
-      this.form = this.PlanForm;
-    } else {
-      this.form = this.detail;
-    }
+    // if (this.hide === "6") {
+    //   this.detail.retCode = this.detail.woOutno;
+    //   this.detail.retDate = this.detail.woDate;
+    // }
+
+    this.form = this.detail;
+    this.form.sysCreatedby = this.$store.state.userOid;
     // this.getDetail();
   },
   beforeDestroy() {},

@@ -208,6 +208,21 @@ export function getXDicT(url) {
 }
 
 
+// export function getNowTime() {
+//   const time = new Date();
+//   let y = time.getFullYear();
+//   let m = time.getMonth() + 1;
+//   let d = time.getDate();
+//   let h = time.getHours();
+//   let mi = time.getMinutes();
+//   let s = time.getSeconds();
+//   m = m < 10 ? `0${m}` : m;
+//   d = d < 10 ? `0${d}` : d;
+//   h = h < 10 ? `0${h}` : h;
+//   mi = mi < 10 ? `0${mi}` : mi;
+//   s = s < 10 ? `0${s}` : s;
+//   return `${y}-${m}-${d} ${h}:${mi}:${s}`;
+// }
 export function getNowTime() {
   const time = new Date();
   let y = time.getFullYear();
@@ -215,13 +230,8 @@ export function getNowTime() {
   let d = time.getDate();
   let h = time.getHours();
   let mi = time.getMinutes();
-  let s = time.getSeconds();
-  m = m < 10 ? `0${m}` : m;
-  d = d < 10 ? `0${d}` : d;
-  h = h < 10 ? `0${h}` : h;
   mi = mi < 10 ? `0${mi}` : mi;
-  s = s < 10 ? `0${s}` : s;
-  return `${y}-${m}-${d} ${h}:${mi}:${s}`;
+  return `${y}-${m}-${d}`;
 }
 
 export function unique(arr, val) {

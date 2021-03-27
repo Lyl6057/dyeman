@@ -88,7 +88,8 @@
         :datas="data"
         :everyThing="everyThing"
         :hide="hide"
-        :detail="chooseData"
+        :detail="detail"
+        :isAdd="isAdd"
         @close="temV = false"
       ></temDlg>
     </el-dialog>
@@ -107,7 +108,7 @@
 import tem from "./tem";
 import rule from "@/components/rule";
 import choice from "@/components/choice";
-import { baseCodeSupply } from "@/api/index";
+import { baseCodeSupplyEx } from "@/api/index";
 import {
   getFinclothsellout,
   addFinclothsellout,
@@ -150,6 +151,7 @@ export default {
       choiceTarget: {},
       choiceField: "",
       choiceQ: {},
+      isAdd: false,
     };
   },
   watch: {},
@@ -208,62 +210,22 @@ export default {
         });
     },
     add() {
-      if (
-        this.crud.length > 0 &&
-        !this.crud[this.crud.length - 1].whseFinclothselloutoid
-      ) {
-        return;
-      }
-      if (Object.keys(this.oldData).length > 0) {
-        this.oldData.$cellEdit = false;
-      }
       let data = {
         index: this.crud.length + 1,
         $cellEdit: true,
         retType: this.hide,
         woOutno: "",
-        woDate: this.getNowTime(),
+        woDate: this.$getNowTime(),
+        finStatus: "0",
       };
       // if (this.hide != "1" && this.hide != "2") {
-      baseCodeSupply({ code: "whse_out" }).then((res) => {
+      baseCodeSupplyEx({ code: "whse_out" }).then((res) => {
         data.woOutno = res.data.data;
-        this.crud.push(data);
-        this.$refs.mainCrud.setCurrentRow(this.crud[this.crud.length - 1]);
-        this.iptChange(this.crud[this.crud.length - 1]);
-        this.oldData = this.crud[this.crud.length - 1];
-        this.$nextTick(() => {
-          // 绑定 输入 事件
-          let _this = this;
-          document
-            .getElementsByClassName("el-table__row")
-            [_this.crud.length - 1].addEventListener(
-              "input",
-              function () {
-                _this.iptChange(_this.oldData);
-              },
-              false
-            );
-        });
+        this.detail = data;
+        this.isAdd = true;
+        this.temV = true;
       });
       // }
-    },
-    iptChange(val) {
-      if (this.changeList.length === 0) {
-        this.changeList.push(val);
-      } else {
-        for (let i = 0; i < this.changeList.length; i++) {
-          if (val.index === this.changeList[i].index) {
-            this.changeList[i] = val;
-            return;
-          }
-          if (
-            this.changeList.length - 1 === i &&
-            this.changeList[i].index != val.index
-          ) {
-            this.changeList.push(val);
-          }
-        }
-      }
     },
     del() {
       if (Object.keys(this.chooseData).length === 0) {
@@ -328,6 +290,8 @@ export default {
     },
     handleRowDBLClick(row) {
       if (this.chooseData.whseFinclothselloutoid) {
+        this.isAdd = false;
+        this.detail = this.chooseData;
         this.temV = true;
       } else {
         this.$tip.warning("请先保存该出仓数据!");
@@ -336,8 +300,8 @@ export default {
       // this.$refs.temDlg.getDetail();
     },
     cellClick(val) {
-      this.oldData.$cellEdit = false;
-      this.$set(val, "$cellEdit", true);
+      // this.oldData.$cellEdit = false;
+      // this.$set(val, "$cellEdit", true);
       this.oldData = val;
       this.chooseData = val;
     },

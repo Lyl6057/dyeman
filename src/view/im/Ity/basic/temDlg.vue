@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-25 00:46:18
  * @LastEditors: Lyl
- * @LastEditTime: 2021-03-25 23:57:13
+ * @LastEditTime: 2021-03-27 23:04:55
  * @Description: 
 -->
 <template>
@@ -43,7 +43,7 @@
 <script>
 import { formTemOp, crudTemOp } from "./data";
 import materChoice from "@/components/material/choice";
-import { get, add, update, del } from "./api";
+import { get, add, update, del, updateStock } from "./api";
 export default {
   name: "",
   props: {
@@ -137,7 +137,12 @@ export default {
               item.whseMaterialopeningoid = res.data.data;
             });
           }
+
           if (i === this.crud.length - 1) {
+            updateStock({
+              materialId: this.form.materialId,
+              unitId: this.form.unitId,
+            }).then((res) => {});
             setTimeout(() => {
               this.changed = true;
               this.$tip.success("保存成功!");

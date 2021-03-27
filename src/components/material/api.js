@@ -2,20 +2,20 @@
  * @Author: Lyl
  * @Date: 2021-03-25 14:04:15
  * @LastEditors: Lyl
- * @LastEditTime: 2021-03-25 15:08:47
+ * @LastEditTime: 2021-03-27 23:13:53
  * @Description:
  */
 import axios from 'axios'
 export function getSx(params) {
   return axios({
-    url: '/api/basYarnsData/page',
+    url: '/api/basYarnsData/pageBylike',
     method: 'get',
     params: params
   })
 }
 export function getPb(params) {
   return axios({
-    url: '/api/basCalico/page',
+    url: '/api/basCalico/pageylike',
     method: 'get',
     params: params
   })
@@ -23,7 +23,7 @@ export function getPb(params) {
 
 export function getHgyl(params) {
   return axios({
-    url: '/api/BasChemicalmatNew/page',
+    url: '/api/BasChemicalmatNew/pageBylike',
     method: 'get',
     params: params
   })
@@ -31,7 +31,7 @@ export function getHgyl(params) {
 
 export function getYl(params) {
   return axios({
-    url: '/api/basPigment/page',
+    url: '/api/basPigment/pageBylike',
     method: 'get',
     params: params
   })
@@ -39,21 +39,21 @@ export function getYl(params) {
 
 export function getScfl(params) {
   return axios({
-    url: '/api/basProductivesupplies/page',
+    url: '/api/basProductivesupplies/pageBylike',
     method: 'get',
     params: params
   })
 }
 export function getWj(params) {
   return axios({
-    url: '/api/basHardwarearticles/page',
+    url: '/api/basHardwarearticles/pageBylike',
     method: 'get',
     params: params
   })
 }
 export function getXz(params) {
   return axios({
-    url: '/api/basAdsuppliesarticles/page',
+    url: '/api/basAdsuppliesarticles/pageBylike',
     method: 'get',
     params: params
   })

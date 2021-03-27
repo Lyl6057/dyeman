@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-24 14:21:09
  * @LastEditors: Lyl
- * @LastEditTime: 2021-03-25 19:09:11
+ * @LastEditTime: 2021-03-27 23:01:02
  * @Description:
  */
 import axios from 'axios'
@@ -34,5 +34,13 @@ export function del(id) {
   return axios({
     url: '/api/whseMaterialopening?whseMaterialopeningoid=' + id,
     method: 'delete',
+  })
+}
+
+export function updateStock(params) {
+  return axios({
+    url: '/api/whseStockchangedtl/stockInitialization',
+    method: 'get',
+    params: params
   })
 }
