@@ -107,18 +107,20 @@
                             ganttH / 2.2 > 20 ? '20px' : ganttH / 2.2 + 'px',
                         }"
                       >
-                        <div>订单编号: {{ dlgData.poNo }}</div>
+                        <div>名称: {{ dlgData.schName }}</div>
                         <el-divider></el-divider>
-                        <div>客户: {{ dlgData.brandId }}</div>
+                        <div>客色号: {{ dlgData.colorCode }}</div>
                         <el-divider></el-divider>
-                        <div>重量: {{ dlgData.weight }}</div>
+                        <div>重量: {{ dlgData.weight + dlgData.proUnit }}</div>
                         <el-divider></el-divider>
-                        <div>开始日期: {{ dlgData.poDate }}</div>
+                        <div>开始日期: {{ dlgData.schStart }}</div>
                         <el-divider></el-divider>
-                        <div>结束日期: {{ dlgData.end }}</div>
+                        <div>结束日期: {{ dlgData.schEnd }}</div>
                         <el-divider></el-divider>
                         <div v-for="(dt, j) of gt.detail" :key="j">
-                          {{ dt.colorName + ":  " + dt.proAmount + dt.proUnit }}
+                          {{
+                            dt.stepCode + ":  " + dt.workAmount + dt.workUnit
+                          }}
                           <el-divider
                             v-if="j != gt.detail.length - 1"
                           ></el-divider>
@@ -153,7 +155,7 @@
                   >
                     <div
                       :title="
-                        gt.item.poNo +
+                        gt.item.schName +
                         ', 共' +
                         gt.item.weight +
                         gt.item.proUnit +
@@ -166,15 +168,14 @@
                       style="min-width: 80px; text-align: center"
                       :style="{ width: (gt.lg * dayW) / 24 + 'px' }"
                     >
-                      {{
-                        gt.item.poNo +
+                      <!--  .schName +
                         ", 共" +
                         gt.item.weight +
                         gt.item.proUnit +
                         ", 完成" +
                           (gt.item.actualWeight / gt.item.weight * 100).toFixed(2) +
-                        "%",
-                      }}
+                        "%", -->
+                      {{ gt.item.schName }}
                     </div>
                   </div>
                   <span
@@ -238,19 +239,19 @@
                             <div class="lv2Label">
                               <span
                                 :title="
-                                  detail.colorName +
+                                  detail.workName +
                                   ', 共' +
-                                  detail.proAmount +
-                                  detail.proUnit +
+                                  detail.workAmount +
+                                  detail.workUnit +
                                   ', 完成' +
                                   detail.finishProportion * 100 +
                                   '% '
                                 "
                                 >{{
-                                  detail.colorName +
+                                  detail.workName +
                                   ", 共" +
-                                  detail.proAmount +
-                                  detail.proUnit +
+                                  detail.workAmount +
+                                  detail.workUnit +
                                   ", 完成" +
                                   detail.finishProportion * 100 +
                                   "% "
@@ -260,10 +261,10 @@
                           </div>
                           <div
                             :title="
-                              detail.colorName +
+                              detail.workName +
                               ' , ' +
-                              detail.proAmount +
-                              detail.proUnit +
+                              detail.workAmount +
+                              detail.workUnit +
                               '' +
                               '  完成:' +
                               detail.finishProportion * 100 +
@@ -280,10 +281,10 @@
                             }"
                           >
                             {{
-                              detail.colorName +
+                              detail.workName +
                               " , " +
-                              detail.proAmount +
-                              detail.proUnit +
+                              detail.workAmount +
+                              detail.workUnit +
                               "  完成:" +
                               detail.finishProportion * 100 +
                               "%"
@@ -291,7 +292,7 @@
                           </div>
                         </div>
                         <el-collapse-transition>
-                          <div class="lv3Box" v-show="detail.show">
+                          <div class="lv3Box">
                             <div
                               class="lv2Box"
                               :style="{
@@ -307,7 +308,7 @@
                                   height: Math.ceil(ganttH * 0.7) + 1 + 'px',
                                 }"
                               >
-                                缸號
+                                {{ detail.stepCode }}
                               </div>
                               <div
                                 class="lv2Task"
@@ -325,14 +326,14 @@
                                   :title="
                                     lv2Task.workName +
                                     ', 共' +
-                                    lv2Task.exampleUseTime.toFixed(1) +
+                                    lv2Task.exampleUseTime.toFixed(2) +
                                     'h'
                                   "
                                 >
                                   {{ lv2Task.workName }}
                                   <span style="font-size: 13px">{{
                                     "共" +
-                                    lv2Task.exampleUseTime.toFixed(1) +
+                                    lv2Task.exampleUseTime.toFixed(2) +
                                     "h"
                                   }}</span>
                                   <!-- <br />
@@ -361,9 +362,9 @@
                                     'calc(100% /' + detail.zhList.length + ')',
                                 }"
                                 :title="
-                                  (lv2Task.finishProportion * 100).toFixed(1) +
+                                  (lv2Task.finishProportion * 100).toFixed(2) +
                                   '%' +
-                                  lv2Task.exampleUseTime.toFixed(1) +
+                                  lv2Task.exampleUseTime.toFixed(2) +
                                   'h'
                                 "
                               >
@@ -371,7 +372,7 @@
                                   {{
                                     lv2Task.finishProportion * 100 +
                                     "% " +
-                                    lv2Task.exampleUseTime.toFixed(1) +
+                                    lv2Task.exampleUseTime.toFixed(2) +
                                     "h"
                                   }}
                                 </div>
@@ -447,7 +448,7 @@
                                       (
                                         (task.exampleUseTime / 60) *
                                         task.finishProportion
-                                      ).toFixed(1) +
+                                      ).toFixed(2) +
                                       'h,' +
                                       task.finishProportion * 100 +
                                       '%'
@@ -467,7 +468,7 @@
                                           (
                                             (task.exampleUseTime / 60) *
                                             task.finishProportion
-                                          ).toFixed(1) + "h"
+                                          ).toFixed(2) + "h"
                                         }}</span
                                       >
                                     </span>
@@ -551,11 +552,8 @@ export default {
       // 计算时间轴
       getschANDschetail().then((res) => {
         this.order = res.data;
-        console.log(this.order);
         let timeList = [];
-        this.order.forEach((item, i) => {
-          timeList.push(getExtreme(item.proSalSchedule, "schStart", "schEnd"));
-        });
+        timeList.push(getExtreme(this.order, "schStart", "schEnd"));
         let date = {
           minResult: timeList.sort((a, b) => {
             return b.minResult < a.minResult ? 1 : -1;
@@ -564,110 +562,112 @@ export default {
             return b.maxResult < a.maxResult ? -1 : 1;
           })[0].maxResult,
         };
+
         date.minResult = date.minResult.split(" ")[0] + " 00:00:00"; // 取整
         this.dateLength = getYearAndMonthAndDay(date.minResult, date.maxResult);
         this.dateList = this.arrGroup(this.dateLength, "ym");
-
         // 计算每个数据的gantt数据，marginLeft、length 、
         this.order.forEach((item, i) => {
           item.weight = 0;
           item.actualWeight = 0;
           item.finishProportion = 0;
-          item.proSalSchedule.forEach((pd) => {
-            pd.show = false;
-            pd.icon = "el-icon-caret-right";
-            let task = [];
-            pd.proSalScheduleDetailEx.forEach((px) => {
-              // console.log(px.workAmount);
-              // pd.weight += px.workAmount;
-              // pd.proUnit = px.proUnit;
-              task = task.concat(px.proSalScheduleDetail);
-            });
-            task = this.arrGroup(task, "workName");
-
-            // taskList = this.$unique(taskList, "workName");
-            let taskList = [];
-            let zhList = [];
-            let sunTime = 0,
-              useTime = 0;
-            task.forEach((tk) => {
-              let time = 0,
-                zhTime = 0;
-              tk.list.forEach((tkf) => {
-                time += tkf.exampleUseTime / 60;
-                zhTime += (tkf.exampleUseTime * tkf.finishProportion) / 60;
-                sunTime += tkf.exampleUseTime / 60;
-                useTime += (tkf.exampleUseTime * tkf.finishProportion) / 60;
-              });
-
-              zhList.push({
-                workName: tk.workName,
-                sn:
-                  tk.workName.indexOf("备") != -1
-                    ? 1
-                    : tk.workName.indexOf("成品") != -1
-                    ? tk.workName.indexOf("验") != -1
-                      ? 4
-                      : 3
-                    : 2,
-                exampleUseTime: zhTime,
-                finishProportion: (zhTime / time).toFixed(2),
-              });
-              taskList.push({
-                workName: tk.workName,
-                sn:
-                  tk.workName.indexOf("备") != -1
-                    ? 1
-                    : tk.workName.indexOf("成品") != -1
-                    ? tk.workName.indexOf("验") != -1
-                      ? 4
-                      : 3
-                    : 2,
-                exampleUseTime: time,
-              });
-            });
-            // taskList = taskList.sort((a, b) => {
-            //   return a.sn - b.sn;
-            // });
-            // zhList = zhList.sort((a, b) => {
-            //   return a.sn - b.sn;
-            // });
-            pd.finishProportion = useTime / sunTime;
-            pd.zhList = zhList;
-            pd.proSalScheduleDetailEx.forEach((px) => {
-              let data = [];
-              taskList.forEach((tl, j) => {
-                let kctr = true;
-                px.proSalScheduleDetail.forEach((pl, k) => {
-                  if (tl.workName === pl.workName) {
-                    data.push(pl);
-                    kctr = false;
-                  } else if (k === px.proSalScheduleDetail.length - 1 && kctr) {
-                    data.push({
-                      workName: "无",
-                      exampleUseTime: 0,
-                    });
-                  }
-                });
-                px.taskList = data;
-              });
-            });
-
-            item.weight += pd.proAmount;
-            item.actualWeight += pd.proAmount * pd.finishProportion;
-            item.finishProportion += pd.finishProportion;
-            item.proUnit = pd.proUnit;
-            pd.taskList = taskList;
+          // item.proSalSchedule.forEach((item) => {
+          //   item.show = false;
+          //   item.icon = "el-icon-caret-right";
+          let task = [];
+          item.proSalScheduleDetailEx.forEach((px) => {
+            // console.log(px.workAmount);
+            // item.weight += px.workAmount;
+            // item.proUnit = px.proUnit;
+            task = task.concat(px.proSalScheduleDetail);
           });
+          task = this.arrGroup(task, "workName");
+          // taskList = this.$unique(taskList, "workName");
+          let taskList = [];
+          let zhList = [];
+          let sunTime = 0,
+            useTime = 0;
+          task.forEach((tk) => {
+            let time = 0,
+              zhTime = 0;
+            tk.list.forEach((tkf) => {
+              time += tkf.exampleUseTime / 60;
+              zhTime += (tkf.exampleUseTime * tkf.finishProportion) / 60;
+              sunTime += tkf.exampleUseTime / 60;
+              useTime += (tkf.exampleUseTime * tkf.finishProportion) / 60;
+            });
+
+            zhList.push({
+              workName: tk.workName,
+              sn:
+                tk.workName.indexOf("备") != -1
+                  ? 1
+                  : tk.workName.indexOf("成品") != -1
+                  ? tk.workName.indexOf("验") != -1
+                    ? 4
+                    : 3
+                  : 2,
+              exampleUseTime: zhTime,
+              finishProportion: (zhTime / time).toFixed(2),
+            });
+            taskList.push({
+              workName: tk.workName,
+              sn:
+                tk.workName.indexOf("备") != -1
+                  ? 1
+                  : tk.workName.indexOf("成品") != -1
+                  ? tk.workName.indexOf("验") != -1
+                    ? 4
+                    : 3
+                  : 2,
+              exampleUseTime: time,
+            });
+          });
+          // taskList = taskList.sort((a, b) => {
+          //   return a.sn - b.sn;
+          // });
+          // zhList = zhList.sort((a, b) => {
+          //   return a.sn - b.sn;
+          // });
+          item.finishProportion = useTime / sunTime;
+
+          item.proSalScheduleDetailEx.forEach((px) => {
+            let data = [];
+            taskList.forEach((tl, j) => {
+              let kctr = true;
+              px.proSalScheduleDetail.forEach((pl, k) => {
+                if (tl.workName === pl.workName) {
+                  data.push(pl);
+                  kctr = false;
+                } else if (k === px.proSalScheduleDetail.length - 1 && kctr) {
+                  data.push({
+                    workName: "无",
+                    exampleUseTime: 0,
+                  });
+                }
+              });
+              px.taskList = data;
+            });
+            px.zhList = zhList;
+          });
+
+          item.weight += item.proAmount;
+          item.actualWeight += item.proAmount * item.finishProportion;
+          item.finishProportion += item.finishProportion;
+          item.proUnit = item.proUnit;
+          item.taskList = taskList;
+
+          // });
           // marginLeft = 开始时间 - minResult
+
           let ml =
-            (new Date(item.poDate).valueOf() -
+            (new Date(item.schStart).valueOf() -
               new Date(date.minResult).valueOf()) /
             (1000 * 3600);
           let lg =
             (new Date(date.maxResult).valueOf() -
               15 * 1000 * 3600 * 24 -
-              new Date(item.poDate).valueOf()) /
+              new Date(item.schStart).valueOf()) /
             (1000 * 3600);
 
           this.gant.push({
@@ -676,12 +676,12 @@ export default {
             lg,
             h: 2,
             choose: false,
-            detail: item.proSalSchedule,
+            detail: item.proSalScheduleDetailEx,
             show: false,
             icon: "el-icon-caret-right",
             label:
               "染整订单: " +
-              item.poNo +
+              item.schName +
               " , " +
               item.weight +
               item.proUnit +
@@ -691,6 +691,7 @@ export default {
               "%",
           });
         });
+        console.log(this.order);
       });
     },
     arrGroup(arr, val) {
@@ -732,6 +733,7 @@ export default {
     },
     showDlg(val) {
       this.loading = true;
+      console.log(val);
       this.dlgData = val.item;
       setTimeout(() => {
         this.loading = false;
@@ -769,7 +771,7 @@ export default {
 
     .box {
       border: 1px solid #000;
-      height: calc(100vh - 100px);
+      height: calc(100vh - 92px);
       margin: 5px;
       overflow-y: hidden;
       overflow-x: auto;
@@ -816,8 +818,9 @@ export default {
 
       .contentBox {
         width: 100%;
-        height: calc(100vh - 152px);
+        height: calc(100vh - 112px);
         overflow: auto;
+        overflow-x: hidden;
         position: relative;
 
         .content {
@@ -988,6 +991,7 @@ export default {
               width: 88px;
               background: #fff;
               font-size: 14px;
+              height: 101%;
             }
 
             .detailGantt {
@@ -1014,6 +1018,9 @@ export default {
                 position: absolute;
                 min-width: 80px;
                 width: 100%;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
 
                 span {
                   margin-left: 40%;

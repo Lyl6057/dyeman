@@ -7,7 +7,7 @@
             v-if="hide != '8' && hide != '2'"
             type="primary"
             @click="add"
-            >新增</el-button
+            >{{ this.$t("public.add") }}</el-button
           >
           <el-button
             type="success"
@@ -15,9 +15,13 @@
             @click="handleRowDBLClick(chooseData)"
             >修改</el-button
           >
-          <el-button type="danger" @click="del">删除</el-button>
+          <el-button type="danger" @click="del">{{
+            this.$t("public.del")
+          }}</el-button>
           <el-button type="primary" @click="getData">查询</el-button>
-          <el-button type="warning" @click="close">关闭</el-button>
+          <el-button type="warning" @click="close">{{
+            this.$t("public.close")
+          }}</el-button>
         </div>
         <div class="formBox">
           <avue-form
@@ -282,7 +286,7 @@ export default {
           delYl(this.chooseData.whseDyesalinoid)
             .then((res) => {
               if (res.data.code === 200) {
-                this.$tip.success("删除成功");
+                this.$tip.success(this.$t("public.sccg"));
                 this.crud.splice(this.chooseData.index - 1, 1);
                 if (this.crud.length > 0) {
                   this.crud.forEach((item, index) => {
@@ -294,15 +298,15 @@ export default {
                 }
                 // this.getData();
               } else {
-                this.$tip.error("删除失败");
+                this.$tip.error(this.$t("public.scsb"));
               }
             })
             .catch((err) => {
-              this.$tip.error("删除失败!");
+              this.$tip.error(this.$t("public.scsb"));
             });
         })
         .catch((err) => {
-          this.$tip.warning("取消操作");
+          this.$tip.warning(this.$t("public.qxcz"));
         });
     },
     cellClick(val) {

@@ -1,21 +1,27 @@
 <template>
   <div id="colorMng">
     <view-container
-      title="仓位管理"
-      element-loading-text="拼命加载中"
+      :title="$t('whseMng.cwgl')"
+      :element-loading-text="$t('public.loading')"
       v-loading="wLoading"
     >
       <div class="btnList">
-        <el-button type="primary" @click="add">新增</el-button>
-        <el-button type="primary" @click="update">修改</el-button>
-        <el-button type="danger" @click="del">删除</el-button>
-        <el-button type="primary" @click="query">查询</el-button>
+        <el-button type="primary" @click="add">{{
+          $t("public.add")
+        }}</el-button>
+        <el-button type="primary" @click="update">{{
+          $t("public.update")
+        }}</el-button>
+        <el-button type="danger" @click="del">{{ $t("public.del") }}</el-button>
+        <el-button type="primary" @click="query">{{
+          $t("public.query")
+        }}</el-button>
       </div>
 
       <div class="formBox">
         <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
       </div>
-      <view-container title="仓库资料">
+      <view-container :title="$t('whseMng.ckzl')">
         <div class="crudBox" style="margin-top: 5px">
           <avue-crud
             ref="crud"
@@ -124,7 +130,7 @@ export default {
     },
     update() {
       if (Object.keys(this.detail).length === 0) {
-        this.$tip.warning("请先选择要修改的数据!");
+        this.$tip.warning(this.$t("public.updateTle"));
         return;
       }
       this.isAdd = false;
@@ -132,12 +138,14 @@ export default {
     },
     del() {
       if (Object.keys(this.detail).length === 0) {
-        this.$tip.error("请选择要删除的数据!");
+        this.$tip.error(this.$t("public.delTle"));
         return;
       }
       this.$tip
         .cofirm(
-          "是否确定删除代号为 【 " + this.detail.warehouseId + " 】 的数据?",
+          this.$t("whseMng.qdsc1") +
+            this.detail.warehouseId +
+            this.$t("whseMng.qdsc2"),
           this,
           {}
         )
@@ -145,19 +153,19 @@ export default {
           delWarehouse(this.detail.whseWarehouseoid)
             .then((res) => {
               if (res.data.code === 200) {
-                this.$tip.success("删除成功");
+                this.$tip.success(this.$t("public.sccg"));
                 this.crud.splice(this.detail.index - 1, 1);
                 this.query();
               } else {
-                this.$tip.error("删除失败");
+                this.$tip.error(this.$t("public.scsb"));
               }
             })
             .catch((err) => {
-              this.$tip.error("删除失败!");
+              this.$tip.error(this.$t("public.scsb"));
             });
         })
         .catch((err) => {
-          this.$tip.warning("取消操作");
+          this.$tip.warning(this.$t("public.qxcz"));
         });
     },
     handleRowDBLClick(row) {

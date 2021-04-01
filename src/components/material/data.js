@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-24 14:21:15
  * @LastEditors: Lyl
- * @LastEditTime: 2021-03-25 17:58:46
+ * @LastEditTime: 2021-03-31 15:51:03
  * @Description:
  */
 
@@ -13,6 +13,8 @@ let kindId = getDIC("bas_censorshipVarieties")
 let yarnsType = getDIC("bas_yarnsType")
 let calicoType = getDIC("bas_calicoType")
 let matUnit = getDIC("bas_matUnit")
+import store from '@/store/index' // 多語言 store.state
+const lang = store.state.lang
 export function formOp(_this) {
   return {
     submitBtn: false,
@@ -254,9 +256,9 @@ export function hgylOp(_this) {
       },
       {
         label: "原料名稱",
-        prop: "cnnamelong",
+        prop: lang === '1' ? "cnnamelong" : lang === '2' ? "ennamelong" : "vinamelong",
         cell: false,
-        width: 250,
+        width: 350,
       },
       {
         label: "一級分類",
@@ -316,9 +318,9 @@ export function ylOp(_this) {
       },
       {
         label: "顏料名稱",
-        prop: "cnnamelong",
+        prop: lang === '1' ? "cnnamelong" : lang === '2' ? "ennamelong" : "vinamelong",
         cell: false,
-        width: 180,
+        width: 350,
       },
       {
         label: "一級分類",
@@ -384,9 +386,9 @@ export function flOp(_this) {
       },
       {
         label: "輔料名稱",
-        prop: "chinName",
+        prop: lang === '1' ? "cnnamelong" : lang === '2' ? "ennamelong" : "vinamelong",
         cell: false,
-        width: 180,
+        width: 350,
       },
       {
         label: "類別",
@@ -438,9 +440,9 @@ export function wjOp(_this) {
       },
       {
         label: "材料名稱",
-        prop: "chinName",
+        prop: lang === '1' ? "chinName" : lang === '2' ? "engName" : "engName",
         cell: false,
-        width: 180,
+        width: 350,
       },
 
       {
@@ -501,9 +503,9 @@ export function xzOp(_this) {
       },
       {
         label: "材料名稱",
-        prop: "chinName",
+        prop: lang === '1' ? "chinName" : lang === '2' ? "engName" : "engName",
         cell: false,
-        width: 180,
+        width: 350,
       },
 
       {

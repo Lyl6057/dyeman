@@ -18,7 +18,7 @@
             type="danger"
             @click="del"
             :disabled="Object.keys(chooseData).length === 0"
-            >删除</el-button
+            >{{ this.$t("public.del") }}</el-button
           >
 
           <!-- <el-button type="warning" @click="ruleV = true" v-if="hide != 8"
@@ -27,7 +27,9 @@
 
           <!-- <el-button type="warning" @click="getData">取消</el-button> -->
           <el-button type="primary" @click="getData">查询</el-button>
-          <el-button type="warning" @click="close">关闭</el-button>
+          <el-button type="warning" @click="close">{{
+            this.$t("public.close")
+          }}</el-button>
         </div>
         <div class="formBox">
           <avue-form
@@ -462,7 +464,7 @@ export default {
             )
             .then((res) => {
               if (res.data.code === 200) {
-                this.$tip.success("删除成功");
+                this.$tip.success(this.$t("public.sccg"));
                 this.crud.splice(this.chooseData.index - 1, 1);
                 this.crud.forEach((item, index) => {
                   item.index = index + 1;
@@ -476,15 +478,15 @@ export default {
                 }
                 this.getData();
               } else {
-                this.$tip.error("删除失败");
+                this.$tip.error(this.$t("public.scsb"));
               }
             })
             .catch((err) => {
-              this.$tip.error("删除失败!");
+              this.$tip.error(this.$t("public.scsb"));
             });
         })
         .catch((err) => {
-          this.$tip.warning("取消操作");
+          this.$tip.warning(this.$t("public.qxcz"));
         });
     },
     cellClick(val) {

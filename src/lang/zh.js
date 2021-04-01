@@ -12,6 +12,83 @@ export default {
     gztj: "工資統計",
     lsgz: "臨時工工資"
   },
+  public: {
+    add: "新增",
+    update: "修改",
+    del: "刪除",
+    query: "查詢",
+    save: "保存",
+    close: "關閉",
+    lsh: "流水號",
+    loading: "拼命加載中...",
+    updateTle: "請先選擇要修改的數據!",
+    delTle: "請先選擇要刪除的數據!",
+    sccg: "刪除成功!",
+    scsb: "刪除失敗!",
+    qxcz: "取消操作!",
+    bccg: "保存成功!",
+    bcsb: "保存失敗!"
+  },
+  whseMng: {
+    // 倉位管理
+    cwgl: "倉位管理",
+    ckmc: "倉庫名稱",
+    cklx: "倉庫類型",
+    ckzl: "倉庫資料",
+    ckdh: "倉庫代號",
+    ckgg: "倉庫規格",
+    ckwh: "倉庫維護",
+    ckfq: "倉庫分區",
+    hwdy: "貨位定義",
+    qchw: "清除貨位",
+    fqdh: "分區代號",
+    qwm: "區位碼",
+    hwmx: "貨位模型",
+    zdschw: "自動生成貨位",
+    hj: "貨架",
+    cs: "層數",
+    mchws: "每層貨位數",
+    hwkbs: "貨位卡板數",
+    hjcm: "貨架層碼",
+    hgm: "貨格碼",
+    kbm: "卡板碼",
+    hwm: "貨位碼",
+    qdsc1: "是否確定刪除代號爲 【 ",
+    qdsc2: "】 的數據?",
+    setTle: "請選擇要定義的數據!",
+    setTle2: "請先保存該分區數據!",
+    hwlb: "貨位列表",
+    bchwTle: "請先保存此次生成的貨位!",
+    hjTle: "請輸入貨架!",
+    csTle: "請輸入層數!",
+    hwsTle: "請輸入貨位數!",
+    kbsTle: "請輸入卡板數!",
+    schw1: "是否確定刪除貨位碼爲 【 ",
+    schw2: " 】 的數據?",
+    qkTle: "請選擇要清空的數據!",
+    qdqk1: "是否確定清空分區代號爲 【 ",
+    qdqk2: " 】 的貨位數據?",
+    qkcg: "清空成功!",
+    qksb: "清空失敗!",
+    saveTle1: "倉代號/倉庫名稱不能爲空!",
+    saveTle2: "倉庫類型/倉庫規格不能爲空!",
+    saveTle3: "分區代號不能爲空!",
+    saveTle4: "區位碼不能爲空!",
+    saveTle5: "貨位模型不能爲空!"
+  },
+  iaoMng: { // 出入庫
+    rcgl: "入倉管理",
+    ccgl: "出倉管理",
+    sx: "紗線",
+    sxrc: "紗線入倉",
+    krls: "客人來紗",
+    sxcg: "紗線採購",
+    ystc: "本廠余紗退倉",
+    wfts: "外發退紗",
+    sgsx: "申購紗線"
+
+
+  },
   ProWorkflowInfo: {
     // LD
     pfl: "配方量",
@@ -307,7 +384,13 @@ export default {
         name: "项目检测报告",
         data: ""
       }
-    ]
+    ],
+    whseMng: { // 
+      houseMng: "倉庫管理",
+      positions: "一.倉位管理",
+      inAndOut: "二.出入庫管理",
+      inventory: "三.庫存管理"
+    },
   },
 
   procedure: {

@@ -5,15 +5,21 @@
       v-loading="loading"
     >
       <div class="btnList">
-        <el-button type="success" @click="save">保存</el-button>
-        <el-button type="primary" @click="add">新增</el-button>
+        <el-button type="success" @click="save">{{
+          this.$t("public.save")
+        }}</el-button>
+        <el-button type="primary" @click="add">{{
+          this.$t("public.add")
+        }}</el-button>
         <el-button
           type="danger"
           @click="del"
           :disabled="Object.keys(chooseData).length === 0"
-          >删除</el-button
+          >{{ this.$t("public.del") }}</el-button
         >
-        <el-button type="warning" @click="close">关闭</el-button>
+        <el-button type="warning" @click="close">{{
+          this.$t("public.close")
+        }}</el-button>
       </div>
       <div class="formBox">
         <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
@@ -315,22 +321,22 @@ export default {
             )
             .then((res) => {
               if (res.data.code === 200) {
-                this.$tip.success("删除成功");
+                this.$tip.success(this.$t("public.sccg"));
                 this.mx.splice(this.chooseData.index - 1, 1);
                 this.mx.forEach((item, i) => {
                   item.index = i + 1;
                 });
                 this.getDetail();
               } else {
-                this.$tip.error("删除失败");
+                this.$tip.error(this.$t("public.scsb"));
               }
             })
             .catch((err) => {
-              this.$tip.error("删除失败!");
+              this.$tip.error(this.$t("public.scsb"));
             });
         })
         .catch((err) => {
-          this.$tip.warning("取消操作");
+          this.$tip.warning(this.$t("public.qxcz"));
         });
     },
     cellClick(val) {

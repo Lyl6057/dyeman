@@ -22,7 +22,9 @@
             <el-button type="warning" v-if="isCell" @click="Cancel">
               {{ $t("energy.qx") }}
             </el-button>
-            <el-button type="warning" @click="closeDialg">关闭</el-button>
+            <el-button type="warning" @click="closeDialg">{{
+              this.$t("public.close")
+            }}</el-button>
           </el-col>
         </el-row>
         <div v-loading="loading" :element-loading-text="$t('proReport.jzz')">
@@ -783,10 +785,12 @@
                     v-if="activeName == 'level1'"
                   >
                     <div class="btnList">
-                      <el-button type="success" @click="save">保存</el-button>
-                      <el-button type="warning" @click="addDialog = false"
-                        >关闭</el-button
-                      >
+                      <el-button type="success" @click="save">{{
+                        this.$t("public.save")
+                      }}</el-button>
+                      <el-button type="warning" @click="addDialog = false">{{
+                        this.$t("public.close")
+                      }}</el-button>
                     </div>
                     <el-row>
                       <avue-form
@@ -1097,7 +1101,7 @@ export default {
             //   .delete("/api/qcStandarDetail/v1.0/removeById?id=" + val.itemCode)
             //   .then(Res => {
             //     if (Res.data.code == 200) {
-            //       success("删除成功！");
+            //       success(this.$t("public.sccg"));
             //       this.checkVariety();
             //     }
             //   });
@@ -1191,7 +1195,7 @@ export default {
           .delete("/api/qcStandarDetail/v1.0/removeById?id=" + val.itemCode)
           .then((Res) => {
             if (Res.data.code == 200) {
-              success("删除成功！");
+              success(this.$t("public.sccg"));
               this.checkVariety();
             }
           });

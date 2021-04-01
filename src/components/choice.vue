@@ -22,7 +22,9 @@
               v-if="choiceTle != '送货单明细'"
               >查询</el-button
             >
-            <el-button type="warning" @click="close">关闭</el-button>
+            <el-button type="warning" @click="close">{{
+              this.$t("public.close")
+            }}</el-button>
           </div>
           <div class="formBox">
             <avue-form ref="form" :option="choiceF" v-model="form"></avue-form>
@@ -46,7 +48,9 @@
           <div class="btnList">
             <el-button type="primary" @click="choice">选择</el-button>
             <el-button type="primary" @click="query">查询</el-button>
-            <el-button type="warning" @click="close">关闭</el-button>
+            <el-button type="warning" @click="close">{{
+              this.$t("public.close")
+            }}</el-button>
           </div>
           <div class="formBox">
             <avue-form ref="form" :option="choiceF" v-model="form"></avue-form>

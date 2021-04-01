@@ -12,19 +12,19 @@
         <el-tabs type="border-card">
           <el-tab-pane label="检测项目基础定义">
             <div class="btnList">
-              <el-button type="success" size="mini" @click="save"
-                >保存</el-button
-              >
-              <el-button type="primary" size="mini" @click="addBtn"
-                >新增</el-button
-              >
+              <el-button type="success" size="mini" @click="save">{{
+                this.$t("public.save")
+              }}</el-button>
+              <el-button type="primary" size="mini" @click="addBtn">{{
+                this.$t("public.add")
+              }}</el-button>
               <el-button type="primary" size="mini" @click="handleList"
                 >查询</el-button
               >
 
-              <el-button type="primary" size="mini" @click="del"
-                >删除</el-button
-              >
+              <el-button type="primary" size="mini" @click="del">{{
+                this.$t("public.del")
+              }}</el-button>
             </div>
             <div>
               <avue-form :option="formOption" v-model="form"></avue-form>
@@ -285,7 +285,7 @@ export default {
                     this.checkData = {};
                   }, 100);
                 } else {
-                  warning("删除失败");
+                  warning(this.$t("public.scsb"));
                 }
               })
               .catch((err) => {
@@ -363,7 +363,7 @@ export default {
         if (i === this.gridData.length - 1) {
           setTimeout(() => {
             this.handleList();
-            success("保存成功!");
+            success(this.$t("public.bccg"));
             this.loading = false;
           }, 200);
         }

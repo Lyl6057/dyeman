@@ -7,23 +7,24 @@
   <div id="orderDefine">
     <view-container title="指令定义">
       <div class="btnList">
-        <el-button type="primary" @click="add" :disabled="loading"
-          >新增</el-button
-        >
-        <el-button type="success" @click="sava" :disabled="loading"
-          >保存</el-button
-        ><el-button type="danger" @click="del" :disabled="loading"
-          >删除</el-button
-        >
+        <el-button type="primary" @click="add" :disabled="loading">{{
+          this.$t("public.add")
+        }}</el-button>
+        <el-button type="success" @click="sava" :disabled="loading">{{
+          this.$t("public.save")
+        }}</el-button
+        ><el-button type="danger" @click="del" :disabled="loading">{{
+          this.$t("public.del")
+        }}</el-button>
         <el-button type="info" @click="getData" :disabled="loading"
           >取消</el-button
         >
         <el-button type="primary" @click="getData" :disabled="loading"
           >查询</el-button
         >
-        <el-button type="danger" @click="close" :disabled="loading"
-          >关闭</el-button
-        >
+        <el-button type="danger" @click="close" :disabled="loading">{{
+          this.$t("public.close")
+        }}</el-button>
       </div>
       <div class="formBox">
         <avue-form ref="form" v-model="form" :option="formOp"> </avue-form>
@@ -238,15 +239,15 @@ export default {
         delOrderDefine(this.chooseData.instrucId)
           .then((res) => {
             if (res.data.code === 200) {
-              this.$tip.success("删除成功");
+              this.$tip.success(this.$t("public.sccg"));
               this.data.splice(this.chooseData.index - 1, 1);
               // this.getData();
             } else {
-              this.$tip.warning("删除失败");
+              this.$tip.warning(this.$t("public.scsb"));
             }
           })
           .catch((err) => {
-            this.$tip.error("删除失败!");
+            this.$tip.error(this.$t("public.scsb"));
           });
       });
     },
@@ -268,7 +269,7 @@ export default {
         }
       });
       this.getData();
-      this.$tip.success("保存成功!");
+      this.$tip.success(this.$t("public.bccg"));
     },
     cancel() {
       this.getData();

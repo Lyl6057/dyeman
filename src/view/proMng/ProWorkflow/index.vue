@@ -6,40 +6,65 @@
         <el-tabs type="border-card" v-loading="loading">
           <el-tab-pane label="生产工序">
             <div class="btnList">
-              <el-button type="success" size="mini" @click="save"
-                >保存</el-button
-              >
-              <el-button type="primary" size="mini" @click="addBtn"
-                >新增</el-button
-              >
-              <el-button type="danger" size="mini" @click="del">删除</el-button>
-              <el-button type="primary" size="mini" @click="handleList"
+              <el-button type="success" size="mini" @click="save">{{
+                this.$t("public.save")
+              }}</el-button>
+              <el-button type="primary" size="mini" @click="addBtn">{{
+                this.$t("public.add")
+              }}</el-button>
+              <el-button type="danger" size="mini" @click="del">{{
+                this.$t("public.del")
+              }}</el-button>
+              <!-- <el-button type="warning" size="mini" @click="close">{{
+                this.$t("public.close")
+              }}</el-button> -->
+              <!-- <el-button type="primary" size="mini" @click="handleList"
                 >查询</el-button
-              >
+              > -->
             </div>
-            <div :span="24">
+            <!-- <div :span="24">
               <avue-form :option="formOption" v-model="form"></avue-form>
-            </div>
-            <el-col :span="24">
-              <avue-crud
+            </div> -->
+            <el-row class="content">
+              <el-col :span="5">
+                <view-container title="生产过程">
+                  <el-card>
+                    <el-tree
+                      ref="proTree"
+                      style="margin-top: 2px; margin-left: 10px"
+                      :data="gridData"
+                      :props="defaultProps"
+                      accordion
+                      node-key="stepId"
+                      :default-expanded-keys="defaultShowNodes"
+                      @node-click="handleNodeClick"
+                      @node-expand="handleNodeExpand"
+                      @node-collapse="handleNodeCollapse"
+                    >
+                    </el-tree>
+                  </el-card>
+                </view-container>
+              </el-col>
+              <el-col :span="19">
+                <view-container title="生产工序明细" style="margin-left: 5px">
+                  <el-card>
+                    <avue-form
+                      style="margin-top: 10px"
+                      :option="crudOp"
+                      v-model="detail"
+                    ></avue-form>
+                  </el-card>
+                </view-container>
+              </el-col>
+            </el-row>
+            <!-- <avue-crud
                 ref="crud"
                 :data="gridData"
-                :option="gridOption"
-                :page="page"
+                :option="crudOp"
                 @on-load="handleList"
                 @row-click="handleCurrentRowChange"
               >
-                <!-- <template slot="menuLeft"></template>
-            <template slot-scope="scope" slot="menuForm">
-              <el-button
-                type="primary"
-                icon="el-icon-check"
-                size="mini"
-                @click="addData2(scope.row, scope.index)"
-              >保存并新增</el-button>
-            </template>-->
-              </avue-crud>
-            </el-col>
+              </avue-crud> -->
           </el-tab-pane>
         </el-tabs>
       </el-col>
@@ -48,15 +73,11 @@
 </template>
 
 <script>
-var eqType = [],
-  codeData = [],
-  codeData2 = [];
+var eqType = [];
 
-import { fetchList } from "./data";
-import Qs from "qs";
+import { get, add, del, update } from "./api";
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
 import { cofirm, success, error, warning } from "@/seal/seal"; //引入封装的消息提示和弹框组件
-import { Data_Width, label_Width, isDate } from "@/seal/gridOption"; //时间格式转化、表头宽度控制
 export default {
   data() {
     return {
@@ -157,6 +178,147 @@ export default {
           },
         ],
       },
+      crudOp: {
+        menu: false,
+        addBtn: false,
+        border: true,
+        highlightCurrentRow: true,
+        height: "calc(100vh - 165px)",
+        refreshBtn: false,
+        columnBtn: false,
+        page: false,
+        tree: true,
+        children: "nodes",
+        rowKey: "stepCode",
+        labelWidth: 120,
+        column: [
+          // {
+          //   prop: "index",
+          //   label: "#",
+          //   width: 60,
+          //   align: "center",
+          // },
+          {
+            label: "工序编号",
+            prop: "stepCode",
+            width: 120,
+            cell: true,
+            placeholder: " ",
+            span: 8,
+          },
+          {
+            label: "工序名称",
+            prop: "stepName",
+            span: 8,
+            cell: true,
+            placeholder: " ",
+          },
+          {
+            label: "序号",
+            prop: "stepSn",
+            span: 8,
+            cell: true,
+            placeholder: " ",
+          },
+
+          // {
+          //   label: "工序层次",
+          //   prop: "stepLevel",
+          //   span: 8,
+          //   width: 180,
+          //   cell: true,
+          //   placeholder: " ",
+          // },
+          // {
+          //   label: "工序输入",
+          //   prop: "stepIn",
+          //   span: 8,
+          //   width: 180,
+          //   cell: true,
+          //   placeholder: " ",
+          // },
+          // {
+          //   label: "工序输出",
+          //   prop: "stepOut",
+          //   span: 8,
+          //   width: 180,
+          //   cell: true,
+          //   placeholder: " ",
+          // },
+
+          {
+            label: "产能计算公式",
+            prop: "stepCapacity",
+            span: 16,
+            width: 180,
+            cell: true,
+            placeholder: " ",
+          },
+          {
+            label: "工序布局",
+            prop: "stepLayout",
+            span: 8,
+            width: 180,
+            cell: true,
+            placeholder: " ",
+          },
+
+          {
+            label: "时间计算公式",
+            prop: "standardFormula",
+            span: 16,
+            width: 180,
+            cell: true,
+            placeholder: " ",
+          },
+          {
+            label: "是否瓶颈工序",
+            prop: "stepConstraint",
+            width: 120,
+            span: 8,
+            type: "switch",
+            cell: true,
+            placeholder: " ",
+            dicData: [
+              {
+                label: "否",
+                value: false,
+              },
+              {
+                label: "是",
+                value: true,
+              },
+            ],
+          },
+          {
+            label: "描述信息",
+            prop: "stepDescribe",
+            span: 16,
+            width: 250,
+            cell: true,
+            placeholder: " ",
+          },
+          {
+            label: "是否里程碑",
+            prop: "stepHsMilestone",
+            width: 120,
+            span: 8,
+            type: "switch",
+            cell: true,
+            placeholder: " ",
+            dicData: [
+              {
+                label: "否",
+                value: false,
+              },
+              {
+                label: "是",
+                value: true,
+              },
+            ],
+          },
+        ],
+      },
       form: {},
       formOption: {
         submitBtn: false,
@@ -166,32 +328,15 @@ export default {
         labelWidth: 110,
         column: [
           {
-            label: this.$t("ProWorkflowInfo.gjc"),
-            prop: "keyCode",
+            label: "工序编号",
+            prop: "stepCode",
             span: 6,
           },
           {
-            label: this.$t("ProWorkflowInfo.sbxh"),
-            prop: "equModel",
-            span: 6,
-            dicData: eqType,
-            type: "select",
-          },
-          {
-            label: this.$t("ProWorkflowInfo.gs"),
-            prop: "formula",
+            label: "序号",
+            prop: "stepSn",
             span: 6,
           },
-          // {
-          //   label: this.$t("ProWorkflowInfo.gjcmc"),
-          //   prop: "keyName",
-          //   span: 8
-          // }
-          // {
-          //   label: this.$t("ProWorkflowInfo.gjcms"),
-          //   prop: "keyDesc",
-          //   span: 8
-          // }
         ],
       },
       testData: [],
@@ -200,35 +345,50 @@ export default {
       checkData: {},
       oldData: {},
       loading: false,
+      defaultProps: {
+        children: "nodes",
+        label: "stepName",
+      },
+      detail: {},
+      studentTree: [], // 我的树结构数据
+      defaultShowNodes: [], // 这里存放要默认展开的节点 id
     };
   },
   methods: {
     //查询
-    handleList({ currentPage, pageSize } = {}) {
+    handleList() {
       this.loading = true;
-      //分页
-      this.$http
-        .get("/api/formulaAndProductionDtlcList", {
-          params: Object.assign(
-            {
-              current: currentPage || this.page.currentPage,
-              size: pageSize || this.page.pageSize,
-            },
-            this.form
-          ),
-        })
+      this.detail = {};
+      for (var key in this.form) {
+        if (this.form[key] === "") {
+          delete this.form[key];
+        }
+      }
+      get()
         .then((res) => {
-          //procedureName basProductionDtlc
-          let { records, total } = res.data;
-          this.gridData = records;
-          this.gridData.forEach((item, i) => {
-            item.index = i + 1;
-            item.keyName = item.keyCode;
-          });
-          this.checkData = {};
-          this.$refs.crud.setCurrentRow();
-          this.page.total = total;
-          this.loading = false;
+          this.gridData = [];
+          for (let i = 0; i < res.data.length; i++) {
+            if (res.data[i].stepName === "生产过程") {
+              this.nodeId = res.data[i].stepId;
+              this.gridData = res.data[i].nodes;
+              this.currentNodeKey = this.detail.stepId;
+              // this.$nextTick(() => {
+              // if (this.detail.stepId) {
+              //   this.$refs.proTree.setCurrentKey(this.detail.stepId);
+              // }
+              this.loading = false;
+              // });
+            } else if (i === res.data.length - 1) {
+              setTimeout(() => {
+                // this.$tip.warning("暂无数据!");
+                this.loading = false;
+              }, 200);
+            }
+          }
+          if (this.gridData.length === 0) {
+            // this.$tip.warning("暂无数据!");
+            this.loading = false;
+          }
         })
         .catch((err) => {
           this.loading = false;
@@ -236,82 +396,110 @@ export default {
         });
     },
     save() {
-      for (let i = 0; i < this.gridData.length; i++) {
-        if (
-          this.gridData[i].keyName === "" ||
-          !this.gridData[i].keyName ||
-          this.gridData[i].equModel === "" ||
-          !this.gridData[i].equModel ||
-          this.gridData[i].formula === "" ||
-          !this.gridData[i].formula
-        ) {
-          error(
-            this.$t("ProWorkflowInfo.gxmc") +
-              "/" +
-              this.$t("ProWorkflowInfo.sbxh") +
-              "/" +
-              this.$t("ProWorkflowInfo.gs") +
-              "不能为空!"
-          );
-          return;
-        }
-      }
-      this.loading = true;
-      this.gridData.forEach((item, i) => {
-        item.keyName = item.$keyName;
-        let data = Qs.stringify(item);
-        if (item.isAdd) {
-          // add
-          this.$http
-            .put("/api/baseStandarFormulaKey?" + data)
-            .then((res) => {});
-        } else {
-          this.$http
-            .post("/api/baseStandarFormulaKey?" + data)
-            .then((res) => {});
-        }
-        if (i === this.gridData.length - 1) {
-          success("保存成功!");
-          this.loading = false;
-          this.handleList();
-        }
-      });
-      if (this.gridData.length === 0) {
-        this.loading = false;
+      if (!this.detail.stepCode) {
+        this.$tip.error("工序编号不能为空!");
+        return;
+      } else if (!this.detail.stepName) {
+        this.$tip.error("工序名称不能为空!");
         return;
       }
+      this.loading = true;
+      let data = JSON.parse(JSON.stringify(this.detail));
+      data.nodes = null;
+      data.workEquipmentModeInfols = "";
+      if (this.detail.stepId) {
+        // update
+
+        update(data)
+          .then((res) => {
+            if (res.data.code === 200) {
+              this.detail.stepName = data.stepName;
+              this.$tip.success(this.$t("public.bccg"));
+            }
+          })
+          .catch((err) => {
+            this.$tip.error("保存失败!" + err);
+          });
+      } else {
+        // add
+        add(data)
+          .then((res) => {
+            if (res.data.code === 200) {
+              this.detail.stepId = res.data.data;
+              this.$tip.success(this.$t("public.bccg"));
+            }
+          })
+          .catch((err) => {
+            this.$tip.error("保存失败!" + err);
+          });
+      }
+      setTimeout(() => {
+        this.handleList();
+        // this.loading = false;
+      }, 200);
     },
     addBtn() {
-      // this.$refs.crud.rowAdd();
-      this.gridData.push({ index: this.gridData.length + 1, isAdd: true });
-      this.$refs.crud.setCurrentRow(this.gridData[this.gridData.length - 1]);
-      this.handleCurrentRowChange(this.gridData[this.gridData.length - 1]);
+      if (!this.detail.stepId && !this.detail.stepCode) {
+        // 最外层
+        this.gridData.push({
+          stepName: "新节点",
+          pareantId: this.nodeId,
+          stepCode: this.$preFixInt(this.gridData.length + 1, 3),
+          stepSn: this.gridData.length + 1,
+        });
+        // this.$nextTick(() => {
+        //   this.detail = this.gridData[this.gridData.length - 1];
+        //   this.$refs.proTree.setCurrentKey(
+        //     this.gridData[this.gridData.length - 1].stepId
+        //   );
+        // });
+      } else if (this.detail.stepId && this.detail.pareantId) {
+        // 新节点
+        if (!this.detail.nodes) {
+          this.detail.nodes = [];
+        }
+        let data = {
+          pareantId: this.detail.stepId,
+          stepName: "新节点",
+          stepSn: this.detail.nodes.length + 1,
+          stepCode:
+            this.detail.nodes.length > 0
+              ? this.detail.stepCode +
+                "-" +
+                this.$preFixInt(this.detail.nodes.length + 1, 3)
+              : this.detail.stepCode + "-" + "001",
+        };
+        this.detail.nodes.push(data);
+      } else {
+        this.$tip.error("请先保存当前节点!");
+        return;
+      }
     },
     //删除
     del() {
-      if (this.checkData.isAdd) {
-        this.gridData.splice([this.checkData.$index], 1);
-        this.$refs.crud.setCurrentRow();
-        this.checkData = {};
+      if (this.detail.nodes && this.detail.nodes.length > 0) {
+        this.$tip.error("请先删除子节点!");
         return;
       }
-      if (this.checkData.keyCode) {
-        cofirm("此操作将永久删除该数据, 是否继续?", "提示", {})
+      if (this.detail.stepId) {
+        cofirm(
+          "是否确定删除节点名称为【 " + this.detail.stepName + " 】的数据?",
+          "提示",
+          {}
+        )
           .then(() => {
-            this.$http
-              .delete(
-                "/api/baseStandarFormulaKey?keyCode=" + this.checkData.keyCode
-              )
+            del(this.detail.stepId)
               .then((res) => {
                 if (res.data.code == 200) {
                   success(res.data.msg);
                   // this.gridData.splice([this.checkData.$index], 1);
                   // setTimeout(() => {
                   this.handleList();
+                  this.detail = {};
                   //   this.$refs.crud.setCurrentRow();
                   // }, 100);
                 } else {
-                  warning("删除失败");
+                  error(this.$t("public.scsb"));
                 }
               })
               .catch((err) => {
@@ -325,7 +513,7 @@ export default {
             });
           });
       } else {
-        warning("请选择删除的数据");
+        this.handleList();
       }
     },
     //双击编辑
@@ -352,8 +540,8 @@ export default {
     },
     // 获取
     handleCurrentRowChange(val) {
-      this.oldData.$cellEdit = false;
-      this.$set(val, "$cellEdit", true);
+      // this.oldData.$cellEdit = false;
+      // this.$set(val, "$cellEdit", true);
       this.oldData = val;
       this.checkData = val;
       this.$nextTick(() => {
@@ -364,12 +552,66 @@ export default {
         }
       });
     },
+    handleNodeClick(val) {
+      for (var key in this.detail) {
+        delete this.detail[key];
+      }
+      this.detail = val;
+    },
+    // 树节点展开
+    handleNodeExpand(data) {
+      // 保存当前展开的节点
+      let flag = false;
+      this.defaultShowNodes.some((item) => {
+        if (item === data.stepId) {
+          // 判断当前节点是否存在， 存在不做处理
+          flag = true;
+          return true;
+        }
+      });
+      if (!flag) {
+        // 不存在则存到数组里
+        this.defaultShowNodes.push(data.stepId);
+      }
+    },
+    // 树节点关闭
+    handleNodeCollapse(data) {
+      this.defaultShowNodes.some((item, i) => {
+        if (item === data.stepId) {
+          // 删除关闭节点
+          this.defaultShowNodes.length = i;
+        }
+      });
+    },
+    close() {
+      document.getElementsByClassName("el-dialog__headerbtn")[0].click();
+    },
   },
-  created() {},
+  created() {
+    this.handleList();
+  },
 };
 </script>
 
 <style lang="stylus">
 #ProWorkflow {
+  .el-table__row--level-1 {
+    text-indent: 1em;
+  }
+
+  .el-table__row--level-2 {
+    text-indent: 1.5em;
+  }
+
+  .content {
+    .el-tree {
+      height: calc(100vh - 150px) !important;
+      overflow: auto;
+    }
+
+    .el-card {
+      height: calc(100vh - 125px) !important;
+    }
+  }
 }
 </style>

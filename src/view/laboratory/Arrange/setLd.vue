@@ -19,7 +19,7 @@
               @click="save"
               v-if="isEditor"
               :disabled="!canSave"
-              >保存</el-button
+              >{{ this.$t("public.save") }}</el-button
             >
             <el-button type="primary" @click="update" v-else>编辑</el-button>
             <el-button type="primary" @click="cancel" v-if="isEditor"
@@ -1073,7 +1073,7 @@ export default {
               .then((res) => {
                 if (res.data.code == 200) {
                   this.getData();
-                  success("删除成功！");
+                  success(this.$t("public.sccg"));
                 } else {
                   error(this.$t("energy.scsb") + res.data);
                   this.loading = false;

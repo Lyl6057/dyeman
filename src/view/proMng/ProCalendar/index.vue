@@ -236,10 +236,10 @@ export default {
             .delete("/api/proCalendar?calId=" + data, this.header)
             .then((res) => {
               if (res.data.code == 0) {
-                this.$message.success("删除成功");
+                this.$message.success(this.$t("public.sccg"));
                 this.handleList();
               } else {
-                this.$message.warning("删除失败");
+                this.$message.warning(this.$t("public.scsb"));
               }
             });
         })

@@ -11,7 +11,9 @@
       <el-row class="btnList">
         <el-button type="primary" @click="query">查询</el-button>
         <el-button type="primary" @click="print">打印</el-button>
-        <el-button type="warning" @click="close">关闭</el-button>
+        <el-button type="warning" @click="close">{{
+          this.$t("public.close")
+        }}</el-button>
       </el-row>
       <el-row class="formBox">
         <avue-form ref="form" :option="formOp" v-model="form"></avue-form>

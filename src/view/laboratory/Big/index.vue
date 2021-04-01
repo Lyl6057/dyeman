@@ -46,7 +46,9 @@
         <el-row class="queryForm">
           <div class="btnList">
             <el-button type="primary" @click="editor">修改</el-button>
-            <el-button type="primary" @click="del(checkData2)">删除</el-button>
+            <el-button type="primary" @click="del(checkData2)">{{
+              this.$t("public.del")
+            }}</el-button>
             <el-button type="primary" @click="openDialog(checkData2)">{{
               $t("ProWorkflowInfo.scpf")
             }}</el-button>
@@ -609,14 +611,14 @@ export default {
             .delete("/api/labBigcargoSchedule?schId=" + data)
             .then((res) => {
               if (res.data.code == 0) {
-                success("删除成功");
+                success(this.$t("public.sccg"));
                 this.GiveList();
               } else {
-                warning("删除失败");
+                warning(this.$t("public.scsb"));
               }
             })
             .catch((err) => {
-              error("删除失败!");
+              error(this.$t("public.scsb"));
             });
         })
         .catch(() => {

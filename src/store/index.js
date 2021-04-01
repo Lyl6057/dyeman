@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-24 08:12:20
  * @LastEditors: Lyl
- * @LastEditTime: 2021-03-04 14:54:18
+ * @LastEditTime: 2021-04-01 14:00:52
  * @Description: 
  */
 import Vue from 'vue'
@@ -22,7 +22,8 @@ const store = new VueX.Store({
     right: 21,
     phone: false,
     ldRecipeData: [],
-    userOid: ""
+    userOid: "",
+    lang: "1",
   },
   getters: {
     //实时监听state值的变化
@@ -31,11 +32,17 @@ const store = new VueX.Store({
     },
     getUser(state) {
       return state.userOid
+    },
+    getLang(state) {
+      return state.lang
     }
   },
   mutations: {
     setUser(state, value) {
       state.userOid = value
+    },
+    setLang(state, value) {
+      state.lang = value
     },
     active(state, value) {
       state.isActive = value
@@ -56,6 +63,9 @@ const store = new VueX.Store({
   actions: {
     setUsers(context, value) {
       context.commit('setUser', value)
+    },
+    setLangs(context, value) {
+      context.commit('setLang', value)
     },
     isActive(context, value) {
       context.commit('active', value)

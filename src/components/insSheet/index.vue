@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-25 09:10:26
  * @LastEditors: Lyl
- * @LastEditTime: 2021-03-05 10:44:55
+ * @LastEditTime: 2021-03-31 13:17:28
  * @Description:  送檢單組件
 -->
 
@@ -18,8 +18,12 @@
     >
       <view-container :title="'手動生成' + tle + '送檢單'">
         <div class="btnList">
-          <el-button type="success" @click="save">保存</el-button>
-          <el-button type="warning" @click="close">关闭</el-button>
+          <el-button type="success" @click="save">{{
+            this.$t("public.save")
+          }}</el-button>
+          <el-button type="warning" @click="close">{{
+            this.$t("public.close")
+          }}</el-button>
         </div>
         <div class="formBox">
           <avue-form ref="form" :option="sheetF" v-model="form"></avue-form>
@@ -334,7 +338,7 @@ export default {
           if (this.crud.length === 0) {
             setTimeout(() => {
               this.loading = false;
-              this.$tip.success("保存成功!");
+              this.$tip.success(this.$t("public.bccg"));
             }, 200);
           }
           let addDtla = (item, i) => {
@@ -389,7 +393,7 @@ export default {
                 // this.getDetail();
                 setTimeout(() => {
                   this.loading = false;
-                  this.$tip.success("保存成功!");
+                  this.$tip.success(this.$t("public.bccg"));
                 }, 200);
               }
             });
@@ -401,7 +405,7 @@ export default {
           if (this.crud.length === 0) {
             setTimeout(() => {
               this.loading = false;
-              this.$tip.success("保存成功!");
+              this.$tip.success(this.$t("public.bccg"));
             }, 200);
           }
           this.form.whseMaterialoid = res.data.data;
@@ -459,7 +463,7 @@ export default {
                 // this.getDetail();
                 setTimeout(() => {
                   this.loading = false;
-                  this.$tip.success("保存成功!");
+                  this.$tip.success(this.$t("public.bccg"));
                 }, 200);
               }
             });

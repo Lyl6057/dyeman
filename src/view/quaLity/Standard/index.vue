@@ -4,10 +4,14 @@
       <el-tabs v-model="tabsName" type="border-card" v-loading="loading">
         <el-tab-pane label="質量檢驗標準" name="reportAccry">
           <el-row class="btnList">
-            <el-button type="primary" @click.stop="addBtn">新增</el-button>
+            <el-button type="primary" @click.stop="addBtn">{{
+              this.$t("public.add")
+            }}</el-button>
             <el-button type="primary" @click="query">查询</el-button>
             <el-button type="primary" @click="editorbtn">修改</el-button>
-            <el-button type="danger" @click="del(rowCheckData)">删除</el-button>
+            <el-button type="danger" @click="del(rowCheckData)">{{
+              this.$t("public.del")
+            }}</el-button>
             <el-button type="primary" @click="openDlg">標準明細</el-button>
           </el-row>
           <el-row>
@@ -39,8 +43,12 @@
     >
       <view-container :title="dlgTle" v-loading="dlgloding">
         <div class="btnList">
-          <el-button type="success" @click="add(editForm)">保存</el-button>
-          <el-button type="warning" @click="editDlg = false">关闭</el-button>
+          <el-button type="success" @click="add(editForm)">{{
+            this.$t("public.save")
+          }}</el-button>
+          <el-button type="warning" @click="editDlg = false">{{
+            this.$t("public.close")
+          }}</el-button>
         </div>
         <div class="formBox">
           <avue-form :option="crudOp" v-model="editForm"></avue-form>

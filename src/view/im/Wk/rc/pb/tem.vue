@@ -3,17 +3,21 @@
     <view-container :title="datas.type.split('_')[0] + '入库'">
       <div class="btnList">
         <!-- <el-button type="primary" @click="getDetail">查询</el-button> -->
-        <!-- <el-button type="primary" @click="add">新增</el-button>
-        <el-button type="danger" @click="del">删除</el-button> -->
+        <!-- <el-button type="primary" @click="add">{{this.$t("public.add")}}</el-button>
+        <el-button type="danger" @click="del">{{ this.$t("public.del") }}</el-button> -->
         <!-- <el-button
           type="success"
           :disabled="changeList.length === 0"
           @click="save"
-          >保存</el-button
+          >{{this.$t("public.save")}}</el-button
         > -->
         <!-- <el-button type="warning" @click="getDetail">取消</el-button> -->
-        <el-button type="success" @click="save">保存</el-button>
-        <el-button type="warning" @click="close">关闭</el-button>
+        <el-button type="success" @click="save">{{
+          this.$t("public.save")
+        }}</el-button>
+        <el-button type="warning" @click="close">{{
+          this.$t("public.close")
+        }}</el-button>
       </div>
       <div class="formBox">
         <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
@@ -22,8 +26,12 @@
         <el-col :span="hide != '6' && hide != '7' ? 12 : 24">
           <view-container :title="datas.type.split('_')[0] + '入库明细'">
             <div class="btnList">
-              <el-button type="primary" @click="add">新增</el-button>
-              <el-button type="danger" @click="del">删除</el-button>
+              <el-button type="primary" @click="add">{{
+                this.$t("public.add")
+              }}</el-button>
+              <el-button type="danger" @click="del">{{
+                this.$t("public.del")
+              }}</el-button>
             </div>
             <div class="crudBox">
               <avue-crud
@@ -40,13 +48,13 @@
         <el-col :span="12" v-if="hide != '6' && hide != '7'">
           <view-container :title="datas.type.split('_')[0] + '入库批号资料'">
             <!-- <div style="margin-bottom: 0px" class="btnList">
-              <el-button type="primary" @click="addPh">新增</el-button>
-              <el-button type="danger" @click="delPh">删除</el-button>
+              <el-button type="primary" @click="addPh">{{this.$t("public.add")}}</el-button>
+              <el-button type="danger" @click="delPh">{{ this.$t("public.del") }}</el-button>
               <el-button
                 type="success"
                 :disabled="changePhList.length === 0"
                 @click="savePh"
-                >保存</el-button
+                >{{this.$t("public.save")}}</el-button
               >
             </div>
             <avue-crud
@@ -403,20 +411,20 @@ export default {
           delPbDetali(this.chooseData.whseCalicoinDtlaoid)
             .then((res) => {
               if (res.data.code === 200) {
-                this.$tip.success("删除成功");
+                this.$tip.success(this.$t("public.sccg"));
                 this.mx.splice(this.chooseData.index - 1, 1);
                 this.chooseData = {};
                 this.getDetail();
               } else {
-                this.$tip.error("删除失败");
+                this.$tip.error(this.$t("public.scsb"));
               }
             })
             .catch((err) => {
-              this.$tip.error("删除失败!");
+              this.$tip.error(this.$t("public.scsb"));
             });
         })
         .catch((err) => {
-          this.$tip.warning("取消操作");
+          this.$tip.warning(this.$t("public.qxcz"));
         });
     },
     delPh() {
@@ -446,19 +454,19 @@ export default {
           delPbPhDetali(this.choosePhData.whseCalicoinDtlboid)
             .then((res) => {
               if (res.data.code === 200) {
-                this.$tip.success("删除成功");
+                this.$tip.success(this.$t("public.sccg"));
                 this.count.splice(this.choosePhData.index - 1, 1);
                 this.getPh();
               } else {
-                this.$tip.error("删除失败");
+                this.$tip.error(this.$t("public.scsb"));
               }
             })
             .catch((err) => {
-              this.$tip.error("删除失败!");
+              this.$tip.error(this.$t("public.scsb"));
             });
         })
         .catch((err) => {
-          this.$tip.warning("取消操作");
+          this.$tip.warning(this.$t("public.qxcz"));
         });
     },
     cellClick(val) {
@@ -539,7 +547,7 @@ export default {
         updatePb(this.form).then((Res) => {
           if (this.mx.length === 0) {
             this.loading = false;
-            this.$tip.success("保存成功!");
+            this.$tip.success(this.$t("public.bccg"));
             return;
           }
           let addDtla = (item, i) => {
@@ -583,7 +591,7 @@ export default {
               }
               if (i === this.mx.length - 1) {
                 this.loading = false;
-                this.$tip.success("保存成功!");
+                this.$tip.success(this.$t("public.bccg"));
               }
             }
           });
@@ -594,7 +602,7 @@ export default {
           this.form.whseCalicoinoid = Res.data.data;
           if (this.mx.length === 0) {
             this.loading = false;
-            this.$tip.success("保存成功!");
+            this.$tip.success(this.$t("public.bccg"));
             return;
           }
           let addDtla = (item, i) => {
@@ -636,7 +644,7 @@ export default {
               }
               if (i === this.mx.length - 1) {
                 this.loading = false;
-                this.$tip.success("保存成功!");
+                this.$tip.success(this.$t("public.bccg"));
               }
             }
           });
@@ -660,7 +668,7 @@ export default {
       });
       this.canLeave = false;
       this.getPh();
-      this.$tip.success("保存成功!");
+      this.$tip.success(this.$t("public.bccg"));
     },
     close() {
       this.$emit("close", this.saved);

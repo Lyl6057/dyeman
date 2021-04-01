@@ -1,7 +1,11 @@
 <template>
   <div class="type" id="Type">
     <el-tabs type="border-card">
-      <el-tab-pane label="生产排期进度">
+      <el-tab-pane
+        label="生产设备"
+        v-loading="loading"
+        element-loading-text="正在拼命加载中...."
+      >
         <el-row>
           <el-col :span="4">
             <div class="height">
@@ -18,6 +22,8 @@
                 ref="crud"
                 :data="DeviceData"
                 :option="Device"
+                :page.sync="page"
+                @on-load="fn_Info"
                 @select="fn_select"
                 @row-save="fn_DeviceSave"
                 @row-update="fn_DeviceUpdate"
@@ -25,21 +31,22 @@
                 @row-click="fn_clickUP"
               >
                 <template slot="menuLeft">
-                  <el-button type="primary" size="mini" @click="fn_update"
-                    >编辑</el-button
-                  >
-                  <el-button type="primary" size="mini" @click="fn_DeviceDel"
-                    >删除</el-button
-                  >
-                </template>
-                <template slot-scope="scope" slot="menuForm">
+                  <el-button type="success" size="mini" @click="fn_update">{{
+                    this.$t("public.save")
+                  }}</el-button>
                   <el-button
                     type="primary"
-                    icon="el-icon-check"
                     size="mini"
-                    @click="addData2(scope.row, scope.index)"
-                    >保存并新增</el-button
+                    @click="add"
+                    :disabled="
+                      this.chooseData.children &&
+                      this.chooseData.children.length > 0
+                    "
+                    >{{ this.$t("public.add") }}</el-button
                   >
+                  <el-button type="danger" size="mini" @click="fn_DeviceDel">{{
+                    this.$t("public.del")
+                  }}</el-button>
                 </template>
               </avue-crud>
             </div>
@@ -50,6 +57,7 @@
   </div>
 </template>
 <script>
+import { add, update } from "./api";
 import { cofirm, success, error, warning, info } from "@/seal/seal"; //引入封装的消息提示和弹框组件
 //分类ID默认值
 var DIC = {
@@ -197,22 +205,23 @@ export default {
       },
       DeviceData: [], //设备信息数据
       Device: {
-        page: false,
-        align: "center",
+        page: true,
+        // align: "center",
         menuAlign: "center",
         menuWidth: 80, //最小值
         labelWidth: 110,
         dialogHeight: 200,
-        addBtn: true,
+        addBtn: false,
         menu: false,
         refreshBtn: false, //刷新按钮
         columnBtn: false, //显隐按钮
         addRowBtn: false,
-        height: "calc(100vh - 130px)",
+        height: "calc(100vh - 150px)",
         selection: true,
         highlightCurrentRow: true,
         dialogHeight: "80%",
         rowKey: "equId",
+        border: true,
         column: [
           {
             label: this.$t("ProWorkflowInfo.flid"),
@@ -237,6 +246,7 @@ export default {
             type: "select",
             dicData: DBC.VAILE,
             cell: true,
+            width: 100,
           },
           {
             label: this.$t("ProWorkflowInfo.szmc"),
@@ -254,11 +264,15 @@ export default {
             label: this.$t("ProWorkflowInfo.hzb"),
             prop: "localX",
             cell: true,
+            width: 100,
+            align: "right",
           },
           {
             label: this.$t("ProWorkflowInfo.zzb"),
             prop: "localY",
             cell: true,
+            width: 100,
+            align: "right",
           },
           {
             label: this.$t("ProWorkflowInfo.js"),
@@ -281,6 +295,7 @@ export default {
             type: "select",
             dicData: UNIT.VALUE,
             cell: true,
+            width: 80,
           },
           {
             label: this.$t("ProWorkflowInfo.jlfsL"),
@@ -293,7 +308,15 @@ export default {
       eqModel: "",
       eqType: [],
       rowCode: "", //勾选选中ID
-      upData: [], //选中数据编辑
+      oldData: {},
+      upData: {}, //选中数据编辑
+      chooseData: {},
+      loading: false,
+      page: {
+        pageSize: 10,
+        currentPage: 1,
+        total: 0,
+      },
     };
   },
   methods: {
@@ -322,7 +345,6 @@ export default {
           });
           this.Device.column[1].dicData = this.eqType;
         })
-
         .catch((err) => {
           error("系统错误！");
         });
@@ -330,8 +352,9 @@ export default {
     // 点击设备类型，然后根据分类ID获取设备信息
     handleNodeClick(data) {
       //点击获取设备信息将该条数据存储,方便下方删除数据时作为参数执行获取设备信息函数
+      this.chooseData = data;
       sessionStorage.setItem("data", JSON.stringify(data));
-      this.fn_DeviceInfo(data); //获取设备信息函数
+      this.fn_Info(); //获取设备信息函数
     },
     // 新增设备信息表
     fn_DeviceSave(row, done) {
@@ -386,16 +409,56 @@ export default {
       this.rowCode = selection;
     },
     //点击当前行获取当前行数据
-    fn_clickUP(row) {
-      this.upData = row;
+    fn_clickUP(val) {
+      this.upData = val;
+      this.oldData.$cellEdit = false;
+      this.$set(val, "$cellEdit", true);
+      this.oldData = val;
+    },
+    add() {
+      this.DeviceData.push({
+        eqModel: this.chooseData.categoryCode,
+        equipmentName: this.chooseData.categoryName,
+        categoryId: this.chooseData.categoryId,
+      });
+      this.$refs.crud.setCurrentRow(
+        this.DeviceData[this.DeviceData.length - 1]
+      );
     },
     //点击编辑按钮打开弹框
     fn_update() {
-      this.$refs.crud.rowEdit(this.upData);
+      for (let i = 0; i < this.DeviceData.length; i++) {
+        if (
+          !this.DeviceData[i].equipmentName ||
+          !this.DeviceData[i].equipmentCode
+        ) {
+          this.$tip.error("設備編號和名稱不能為空!");
+          return;
+        }
+      }
+      this.loading = true;
+      this.DeviceData.forEach((item, i) => {
+        if (item.equId) {
+          // update
+          update(item).then((res) => {});
+        } else {
+          //add
+          add(item).then((res) => {});
+        }
+        if (this.DeviceData.length - 1 == i) {
+          setTimeout(() => {
+            this.loading = false;
+            this.$tip.success(this.$t("public.bccg"));
+          }, 200);
+        }
+      });
     },
     //删除设备信息表
     fn_DeviceDel() {
       const Data = [];
+      if (!this.rowCode || this.rowCode.length === 0) {
+        return;
+      }
       this.rowCode.forEach((item) => {
         Data.push(item.equId);
       });
@@ -410,6 +473,8 @@ export default {
       };
       cofirm("此操作将永久删除该文件,是否继续", "warning")
         .then((res) => {
+          console.log(Data);
+          return;
           this.$http({
             ...requParams,
             method: "delete",
@@ -417,12 +482,12 @@ export default {
             data: Data,
           }).then((res) => {
             if (res.data.code == 200) {
-              success("删除成功");
+              success(this.$t("public.sccg"));
               // 获取存储在本地的数据作为参数执行获取设备信息的函数
               let data = JSON.parse(sessionStorage.getItem("data"));
               this.fn_DeviceInfo(data);
             } else {
-              warning("删除失败");
+              warning(this.$t("public.scsb"));
             }
           });
         })
@@ -430,7 +495,7 @@ export default {
           info("已取消删除");
         })
         .catch((err) => {
-          warning("删除失败");
+          warning(this.$t("public.scsb"));
         });
     },
     // 修改设备信息表
@@ -474,23 +539,23 @@ export default {
         .catch((err) => {
           error("格式错误修改失败");
         });
-      this.loading = false;
       done();
       loading();
     },
     //根据分类ID获取设备信息表
     fn_DeviceInfo(data) {
+      console.log(data);
       if (data.categoryCode) {
         this.eqModel = data.categoryCode;
       } else {
         this.eqModel = data.equModel;
         this.$set(data, "categoryCode", data.equModel);
       }
-      if (this.eqModel == "dev_13") {
-        this.Device.addBtn = false;
-      } else {
-        this.Device.addBtn = true;
-      }
+      // if (this.eqModel == "dev_13") {
+      //   this.Device.addBtn = false;
+      // } else {
+      //   this.Device.addBtn = true;
+      // }
       this.$http
         .post("/api/baseEquipmentList?equModel=" + data.categoryCode)
         .then((res) => {
@@ -499,16 +564,28 @@ export default {
     },
     //进入页面默认获取所有的设备信息
     fn_Info() {
-      const url = "/api";
-      this.$http.post(url + "/baseEquipmentList").then((res) => {
-        this.DeviceData = res.data;
+      this.loading = true;
+      this.$http({
+        url: "/api/baseEquipmentList",
+        methods: "get",
+        params: {
+          rows: this.page.pageSize,
+          start: this.page.currentPage,
+          equModel: this.chooseData.categoryCode,
+          page: this.page.currentPage,
+        },
+      }).then((res) => {
+        this.DeviceData = res.data.rows;
+        this.page.total = res.data.total;
+        setTimeout(() => {
+          this.loading = false;
+        }, 200);
       });
-      this.Device.addBtn = false;
     },
   },
   mounted() {
     this.fn_MachineType();
-    this.fn_Info(); //进入页面默认获取所有的设备信息
+    // this.fn_Info(); //进入页面默认获取所有的设备信息
   },
 };
 </script>
@@ -545,8 +622,8 @@ export default {
 }
 
 .height {
-  height: calc(100vh - 100px) !important;
-  margin-top: 10px;
+  height: calc(100vh - 88px) !important;
+  margin-top: 5px;
   background-color: #fff;
   overflow: auto;
   border: 1px solid rgb(232, 234, 236);

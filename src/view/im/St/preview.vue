@@ -63,9 +63,9 @@
               "
               >生成盈亏记录</el-button
             >
-            <el-button type="danger" @click="preClose" :disabled="loading"
-              >关闭</el-button
-            >
+            <el-button type="danger" @click="preClose" :disabled="loading">{{
+              this.$t("public.close")
+            }}</el-button>
           </div>
           <div class="crudBox">
             <avue-crud

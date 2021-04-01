@@ -1,6 +1,7 @@
 import { getDIC, getDicT, postDicT, getXDicT, getDbDicT } from '@/config/index'
 import axios from 'axios';
-
+import store from '@/store/index' // 多語言 store.state
+const lang = store.state.lang
 let cust1 = getDicT("basCustomer", "custName", "custCode")
 let cust2 = getDicT("basCustomer", "custCode", "custCode")
 let supp = getDicT("basSupplier", "suppName", "suppId",)
@@ -13,10 +14,9 @@ let yarnsCollected = getDIC("pur_yarnsCollected")
 let basHardware = getDicT("basHardware", "topcategoryName", "basHardwareoid")
 let basAdsupplies = getDicT("basAdsupplies", "topcategoryName", "basAdsuppliesoid")
 let matUnit = getDIC("bas_matUnit")
-let basChemical = getXDicT("basChemicalmat/v1.0/list")
+let basChemical = getXDicT("BasChemicalmatNew")
 let basPigment = getXDicT("basPigment")
-let basProductivesupplies = getXDicT("basProductivesupplies")
-
+let basProductivesupplies = getXDicT("basProductivesuppliesnew")
 // 纱线入库
 export function getYarnin(params) {
   return axios({
@@ -732,9 +732,9 @@ export const chemicalDtlF = {
       type: "tree",
       props: {
         label: "bcCode",
-        value: "basChemicalmatoid"
+        value: "basChemicalmatnewoid"
       },
-      dicData: basChemical
+      dicData: basChemical,
     },
   ]
 
@@ -763,17 +763,17 @@ export const chemicalDtlC = {
       type: "select",
       props: {
         label: "bcCode",
-        value: "basChemicalmatoid"
+        value: "basChemicalmatnewoid"
       },
-      dicData: basChemical
+      dicData: basChemical,
     },
     {
       label: "化工原料名称",
       prop: "bcMatname",
       type: "select",
       props: {
-        label: "bcMatname",
-        value: "basChemicalmatoid"
+        label: lang === '1' ? "cnnamelong" : lang === '2' ? "ennamelong" : "vinamelong",
+        value: "basChemicalmatnewoid"
       },
       dicData: basChemical,
       width: 350
@@ -945,7 +945,7 @@ export const pigmentDtlC = {
       prop: "cnnamelong",
       type: "select",
       props: {
-        label: "cnnamelong",
+        label: lang === '1' ? "cnnamelong" : lang === '2' ? "ennamelong" : "vinamelong",
         value: "basPigmentnewoid"
       },
       dicData: basPigment,
@@ -1111,7 +1111,7 @@ export const SalIncomaccDtlC = {
       type: "select",
       props: {
         label: "hardwareId",
-        value: "basProductivesuppliesoid"
+        value: "basProductivesuppliesnewoid"
       },
       dicData: basProductivesupplies
     },
@@ -1120,8 +1120,8 @@ export const SalIncomaccDtlC = {
       prop: "chinName",
       type: "select",
       props: {
-        label: "chinName",
-        value: "basProductivesuppliesoid"
+        label: lang === '1' ? "cnnamelong" : lang === '2' ? "ennamelong" : "vinamelong",
+        value: "basProductivesuppliesnewoid"
       },
       dicData: basProductivesupplies,
       width: 350

@@ -7,24 +7,26 @@
   <div id="eqClassify">
     <view-container title="设备分类">
       <div class="btnList">
-        <el-button type="primary" @click="add" :disabled="loading"
-          >新增</el-button
+        <el-button type="primary" @click="add" :disabled="loading">{{
+          this.$t("public.add")
+        }}</el-button
         ><el-button type="primary" @click="update" :disabled="loading"
           >修改</el-button
-        ><el-button type="danger" @click="del" :disabled="loading"
-          >删除</el-button
-        >
-        <el-button type="success" @click="sava" :disabled="loading"
-          >保存</el-button
+        ><el-button type="danger" @click="del" :disabled="loading">{{
+          this.$t("public.del")
+        }}</el-button>
+        <el-button type="success" @click="sava" :disabled="loading">{{
+          this.$t("public.save")
+        }}</el-button
         ><el-button type="info" @click="cancel" :disabled="loading"
           >取消</el-button
         >
         <el-button type="primary" @click="query" :disabled="loading"
           >查询</el-button
         >
-        <el-button type="danger" @click="close" :disabled="loading"
-          >关闭</el-button
-        >
+        <el-button type="danger" @click="close" :disabled="loading">{{
+          this.$t("public.close")
+        }}</el-button>
       </div>
       <div class="formBox">
         <avue-form ref="form" v-model="form" :option="formOp"> </avue-form>
@@ -374,10 +376,10 @@ export default {
             .delete("/api/iotEquipmentType?classifyId=" + data)
             .then((res) => {
               if (res.data.code == 0) {
-                success("删除成功");
+                success(this.$t("public.sccg"));
                 this.handleList();
               } else {
-                warning("删除失败");
+                warning(this.$t("public.scsb"));
               }
             })
             .catch((err) => {

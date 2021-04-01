@@ -48,13 +48,20 @@ export default {
               color: "#409EFF",
               // content: "",
             },
-
-            // level_2
             {
               click: () => {
                 this.toView("EquipmentType");
               },
               title: "生产设备",
+              icon: "el-icon-s-order",
+              color: "#409EFF",
+              // // content: "客人来纱看板",
+            },
+            {
+              click: () => {
+                this.toView("proWorkPackage");
+              },
+              title: "生产工作包",
               icon: "el-icon-s-order",
               color: "#409EFF",
               // // content: "客人来纱看板",

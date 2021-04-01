@@ -3,13 +3,15 @@
     <view-container :title="datas.type.split('_')[0] + '入库'">
       <div class="btnList">
         <!-- <el-button type="primary" @click="getDetail">查询</el-button> -->
-        <!-- <el-button type="primary" @click="add">新增</el-button>
-        <el-button type="danger" @click="del">删除</el-button> -->
-        <el-button type="success" @click="saveAll" :loading="loading"
-          >保存</el-button
-        >
+        <!-- <el-button type="primary" @click="add">{{this.$t("public.add")}}</el-button>
+        <el-button type="danger" @click="del">{{ this.$t("public.del") }}</el-button> -->
+        <el-button type="success" @click="saveAll" :loading="loading">{{
+          this.$t("public.save")
+        }}</el-button>
         <!-- <el-button type="warning" @click="getDetail">取消</el-button> -->
-        <el-button type="warning" @click="close">关闭</el-button>
+        <el-button type="warning" @click="close">{{
+          this.$t("public.close")
+        }}</el-button>
       </div>
       <div class="formBox">
         <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
@@ -22,7 +24,7 @@
                 type="primary"
                 @click="add"
                 v-if="hide != '8' && hide != '2'"
-                >新增</el-button
+                >{{ this.$t("public.add") }}</el-button
               >
               <el-button type="danger" @click="del">刪除</el-button>
             </div>
@@ -44,8 +46,12 @@
               name="ph"
             >
               <div class="btnList">
-                <el-button type="primary" @click="addPh">新增</el-button>
-                <el-button type="danger" @click="delPh">删除</el-button>
+                <el-button type="primary" @click="addPh">{{
+                  this.$t("public.add")
+                }}</el-button>
+                <el-button type="danger" @click="delPh">{{
+                  this.$t("public.del")
+                }}</el-button>
               </div>
               <div class="crudBox">
                 <avue-crud
@@ -391,19 +397,19 @@ export default {
           delYlDtla(this.chooseData.whseDyesainDtlaoid)
             .then((res) => {
               if (res.data.code === 200) {
-                this.$tip.success("删除成功");
+                this.$tip.success(this.$t("public.sccg"));
                 this.mx.splice(this.chooseData.index - 1, 1);
                 this.getDetail();
               } else {
-                this.$tip.error("删除失败");
+                this.$tip.error(this.$t("public.scsb"));
               }
             })
             .catch((err) => {
-              this.$tip.error("删除失败!");
+              this.$tip.error(this.$t("public.scsb"));
             });
         })
         .catch((err) => {
-          this.$tip.warning("取消操作");
+          this.$tip.warning(this.$t("public.qxcz"));
         });
     },
     delPh() {
@@ -438,7 +444,7 @@ export default {
           delYlDtlb(this.choosePhData.whseDyesainDtlboid)
             .then((res) => {
               if (res.data.code === 200) {
-                this.$tip.success("删除成功");
+                this.$tip.success(this.$t("public.sccg"));
                 this.chooseData.list.splice(this.choosePhData.index - 1, 1);
                 this.chooseData.list.forEach((item, i) => {
                   item.index = i + 1;
@@ -446,15 +452,15 @@ export default {
                 this.getPh();
                 // this.choosePhData = {};
               } else {
-                this.$tip.error("删除失败");
+                this.$tip.error(this.$t("public.scsb"));
               }
             })
             .catch((err) => {
-              this.$tip.error("删除失败!");
+              this.$tip.error(this.$t("public.scsb"));
             });
         })
         .catch((err) => {
-          this.$tip.warning("取消操作");
+          this.$tip.warning(this.$t("public.qxcz"));
         });
     },
     cellClick(val) {
@@ -515,7 +521,7 @@ export default {
       if (this.form.whseDyesalinoid) {
         updateYl(this.form).then((res) => {
           if (this.mx.length === 0) {
-            this.$tip.success("保存成功!");
+            this.$tip.success(this.$t("public.bccg"));
             this.loading = false;
           }
           // this.$emit("getData");
@@ -571,7 +577,7 @@ export default {
               if (i === this.mx.length - 1) {
                 this.loading = false;
                 // this.getDetail();
-                this.$tip.success("保存成功!");
+                this.$tip.success(this.$t("public.bccg"));
               }
             }
           });
@@ -581,7 +587,7 @@ export default {
           baseCodeSupply({ code: "whse_in" }).then((res) => {});
           if (this.mx.length === 0) {
             this.loading = false;
-            this.$tip.success("保存成功!");
+            this.$tip.success(this.$t("public.bccg"));
           }
           this.form.whseDyesalinoid = res.data.data;
           // this.$emit("getData");
@@ -637,7 +643,7 @@ export default {
               if (i === this.mx.length - 1) {
                 this.loading = false;
                 // this.getDetail();
-                this.$tip.success("保存成功!");
+                this.$tip.success(this.$t("public.bccg"));
               }
             }
           });

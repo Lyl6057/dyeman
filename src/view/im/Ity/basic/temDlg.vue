@@ -2,19 +2,25 @@
  * @Author: Lyl
  * @Date: 2021-03-25 00:46:18
  * @LastEditors: Lyl
- * @LastEditTime: 2021-03-27 23:04:55
+ * @LastEditTime: 2021-03-29 15:51:03
  * @Description: 
 -->
 <template>
   <div id="ityTme">
     <view-container title="材料维护">
       <div class="btnList">
-        <el-button type="success" @click="save" :disabled="crud.length == 0"
-          >保存</el-button
-        >
-        <el-button type="primary" @click="add">新增</el-button>
-        <el-button type="danger" @click="del">删除</el-button>
-        <el-button type="warning" @click="close">关闭</el-button>
+        <el-button type="success" @click="save" :disabled="crud.length == 0">{{
+          this.$t("public.save")
+        }}</el-button>
+        <el-button type="primary" @click="add">{{
+          this.$t("public.add")
+        }}</el-button>
+        <el-button type="danger" @click="del">{{
+          this.$t("public.del")
+        }}</el-button>
+        <el-button type="warning" @click="close">{{
+          this.$t("public.close")
+        }}</el-button>
       </div>
       <div class="formBox">
         <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
@@ -77,6 +83,7 @@ export default {
   methods: {
     getData() {},
     getMaterial() {
+      this.crud = [];
       get({
         materialId: this.form.materialId,
         rows: 10,
@@ -90,6 +97,8 @@ export default {
         }
         this.crud.forEach((item, i) => {
           item.index = i + 1;
+          item.oldpooccupyqty = item.oldpooccupyqty.toFixed(2);
+          item.openingQty = item.openingQty.toFixed(2);
           if (this.crud.length - 1 === i) {
             setTimeout(() => {
               this.form.unitId = this.crud[0].unitId;
@@ -145,7 +154,7 @@ export default {
             }).then((res) => {});
             setTimeout(() => {
               this.changed = true;
-              this.$tip.success("保存成功!");
+              this.$tip.success(this.$t("public.bccg"));
               this.loading = false;
             }, 200);
           }
@@ -200,30 +209,43 @@ export default {
             {}
           )
           .then(() => {
-            del(this.chooseData.whseMaterialopeningoid)
-              .then((res) => {
-                if (res.data.code === 200) {
-                  this.$tip.success("删除成功");
-                  this.crud.splice(this.chooseData.index - 1, 1);
-                  if (this.crud.length > 0) {
-                    this.$refs.crud.setCurrentRow(
-                      this.crud[this.crud.length - 1]
-                    );
-                  }
-                  this.crud.forEach((item, i) => {
-                    item.index = i + 1;
-                  });
-                  // this.getMaterial();
-                } else {
-                  this.$tip.error("删除失败");
-                }
-              })
-              .catch((err) => {
-                this.$tip.error("删除失败!");
-              });
+            this.chooseData.openingQty = 0;
+            this.chooseData.oldpooccupyqty = 0;
+            update(this.chooseData).then((res) => {
+              if (res.data.code === 200) {
+                updateStock({
+                  materialId: this.form.materialId,
+                  unitId: this.form.unitId,
+                }).then((Rres) => {
+                  del(this.chooseData.whseMaterialopeningoid)
+                    .then((delres) => {
+                      if (delres.data.code === 200) {
+                        this.$tip.success(this.$t("public.sccg"));
+                        this.crud.splice(this.chooseData.index - 1, 1);
+                        this.changed = true;
+                        // if (this.crud.length > 0) {
+                        //   this.$refs.crud.setCurrentRow(
+                        //     this.crud[this.crud.length - 1]
+                        //   );
+                        // }
+                        // this.crud.forEach((item, i) => {
+                        //   item.index = i + 1;
+                        // });
+                        // this.$refs.crud.setCurrentRow();
+                        this.getMaterial();
+                      } else {
+                        this.$tip.error(this.$t("public.scsb"));
+                      }
+                    })
+                    .catch((err) => {
+                      this.$tip.error(this.$t("public.scsb"));
+                    });
+                });
+              }
+            });
           })
           .catch((err) => {
-            this.$tip.warning("取消操作");
+            this.$tip.warning(this.$t("public.qxcz"));
           });
       }
     },
@@ -241,7 +263,7 @@ export default {
         val.yarnsName || val.calicoName || val.chinName || val.cnnamelong;
       this.form.materialType =
         val.$yarnsType ||
-        val.$clothType ||
+        val.$calicoType ||
         val.$bcClass ||
         val.$basProductionaccFk ||
         val.$basHardwareFk ||

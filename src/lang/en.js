@@ -17,6 +17,88 @@ export default {
     gztj: "wageStatistics",
     lsgz: "TemporaryPay"
   },
+  public: {
+    add: "add",
+    update: "update",
+    del: "delete",
+    query: "query",
+    save: "save",
+    close: "close",
+    lsh: "serial number",
+    loading: "under load...",
+    updateTle: "Please first select the data you want to modify!",
+    delTle: "Please first select the data to delete!",
+    sccg: "Delete the success!",
+    scsb: "Delete failed!",
+    qxcz: "Cancel the operation!",
+    bccg: "Save success!",
+    bcsb: "Save failed"
+  },
+  whseMng: {
+    // 倉位管理
+    cwgl: "warehouse manager",
+    ckmc: "name",
+    cklx: "type",
+    ckzl: "warehouse data",
+    ckdh: "code ",
+    ckgg: "specifications",
+    ckwh: "warehouse maintenance",
+    ckfq: "warehouse partition",
+    hwdy: "goods set",
+    qchw: "clear goods",
+    fqdh: "partition code",
+    qwm: "location code",
+    hwmx: "model",
+    zdschw: "automatically generate",
+    hj: "shelves",
+    cs: "layer number",
+    mchws: "layer goods number",
+    hwkbs: "goods board number",
+    hjcm: "shelf layer code",
+    hgm: "cargo lattice code",
+    kbm: "card board code",
+    hwm: "goods yards",
+    qdsc1: "Are you sure the delete code is 【 ",
+    qdsc2: "】 The data of?",
+    setTle: "Select the data you want to define!",
+    setTle2: "Please save the partition data first!",
+    hwlb: "List of goods",
+    bchwTle: "Please first save the goods space generated this time!",
+    hjTle: "Please enter shelves!",
+    csTle: "Please enter the number of layers!",
+    hwsTle: "Please enter the quantity of goods!",
+    kbsTle: "Please enter the number of cards!",
+    schw1: "Are you sure to delete the cargo space code 【 ",
+    schw2: " 】 The data of?",
+    qkTle: "Select the data you want to clear!",
+    qdqk1: "Are you sure to clear the partition code 【 ",
+    qdqk2: " 】 Of cargo location data?",
+    qkcg: "Empty the success!",
+    qksb: "Empty the failure!",
+    saveTle1: "Warehouse code/Warehouse name cannot be empty!",
+    saveTle2: "The warehouse type/warehouse specification cannot be empty!",
+    saveTle3: "The partition code cannot be empty!",
+    saveTle4: "Location code cannot be empty!",
+    saveTle5: "The cargo space model cannot be empty!"
+  },
+  iaoMng: { // 出入庫
+    rcgl: "入倉管理",
+    ccgl: "出倉管理",
+    sx: "紗線",
+    sxrc: "紗線入倉",
+    krls: "客人來紗",
+    sxcg: "紗線採購",
+    ystc: "本廠余紗退倉",
+    wfts: "外發退紗",
+    sgsx: "申購紗線",
+    pbrc: "胚布入倉",
+    krlp: "客人來胚",
+    pb: "胚布",
+    pbcg: "胚布採購",
+    bcsc: "本廠生產",
+
+
+  },
   ProWorkflowInfo: {
     //LD
     pfl: "Amount of formula",
@@ -442,7 +524,13 @@ export default {
           dhbh: "labCode"
         }
       }
-    ]
+    ],
+    whseMng: {
+      houseMng: "Warehouse Management",
+      positions: "一.Positions In Management",
+      inAndOut: "二.In And Out Management",
+      inventory: "三.Inventory Management"
+    }
   },
   temporary: {
     lsgh: "Temporary workers",

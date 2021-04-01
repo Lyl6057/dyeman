@@ -2,13 +2,15 @@
  * @Author: Lyl
  * @Date: 2021-02-24 08:12:20
  * @LastEditors: Lyl
- * @LastEditTime: 2021-03-13 11:16:35
+ * @LastEditTime: 2021-03-31 11:28:29
  * @Description: 
 -->
 <template>
   <div id="name">
     <div class="btnList">
-      <el-button type="primary" @click="add">新增</el-button>
+      <el-button type="primary" @click="add">{{
+        this.$t("public.add")
+      }}</el-button>
       <el-button type="danger" @click="del">刪除</el-button>
       <el-button type="primary" @click="batchAdd">批量生成</el-button>
     </div>
@@ -200,22 +202,22 @@ export default {
             .delLoc(this.chooseData.whseCalicoinDtlboid)
             .then((res) => {
               if (res.data.code === 200) {
-                this.$tip.success("删除成功");
+                this.$tip.success(this.$t("public.sccg"));
                 this.inData.loc.splice(this.chooseData.index - 1, 1);
                 this.$refs.crud.setCurrentRow(this.inData.loc[0] || {});
                 this.inData.loc.forEach((item, i) => {
                   item.index = i + 1;
                 });
               } else {
-                this.$tip.error("删除失败");
+                this.$tip.error(this.$t("public.scsb"));
               }
             })
             .catch((err) => {
-              this.$tip.error("删除失败!");
+              this.$tip.error(this.$t("public.scsb"));
             });
         })
         .catch((err) => {
-          this.$tip.warning("取消操作");
+          this.$tip.warning(this.$t("public.qxcz"));
         });
     },
     cellClick(val) {

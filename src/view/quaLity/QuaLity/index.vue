@@ -410,12 +410,12 @@
                             <el-button
                               type="success"
                               @click="projectSub(project)"
-                              >保存</el-button
+                              >{{ this.$t("public.save") }}</el-button
                             >
                             <el-button
                               type="warning"
                               @click="itemDialog = false"
-                              >关闭</el-button
+                              >{{ this.$t("public.close") }}</el-button
                             >
                           </el-row>
                           <el-row class="formBox">
@@ -436,12 +436,12 @@
                             <el-button
                               type="success"
                               @click="standardSub(standard)"
-                              >保存</el-button
+                              >{{ this.$t("public.save") }}</el-button
                             >
                             <el-button
                               type="warning"
                               @click="itemDialog = false"
-                              >关闭</el-button
+                              >{{ this.$t("public.close") }}</el-button
                             >
                           </el-row>
                           <el-row class="formBox">
@@ -459,13 +459,13 @@
                           v-if="activeName == 'standard'"
                         >
                           <el-row class="btnList">
-                            <el-button type="success" @click="sizeSub(size)"
-                              >保存</el-button
-                            >
+                            <el-button type="success" @click="sizeSub(size)">{{
+                              this.$t("public.save")
+                            }}</el-button>
                             <el-button
                               type="warning"
                               @click="itemDialog = false"
-                              >关闭</el-button
+                              >{{ this.$t("public.close") }}</el-button
                             >
                           </el-row>
                           <el-row class="formBox">

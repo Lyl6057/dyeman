@@ -12,7 +12,9 @@
               <el-button type="primary" @click.stop="download(checkData)"
                 >下载</el-button
               >
-              <el-button type="danger" @click="del(checkData)">删除</el-button>
+              <el-button type="danger" @click="del(checkData)">{{
+                this.$t("public.del")
+              }}</el-button>
               <!-- <el-button type="primary" @click="editor(checkData)"
                 >修改</el-button
               > -->
@@ -48,7 +50,9 @@
       >
         <view-container title="上传附件">
           <div class="btnList">
-            <el-button type="success" @click="submit">保存</el-button>
+            <el-button type="success" @click="submit">{{
+              this.$t("public.save")
+            }}</el-button>
             <el-button type="warning" @click="uploadDlg1 = false"
               >關閉</el-button
             >

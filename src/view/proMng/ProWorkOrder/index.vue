@@ -274,10 +274,10 @@ export default {
             .delete(url + "/proWorkOrder?workOrderId=" + data)
             .then((res) => {
               if (res.data.code == 0) {
-                success("删除成功");
+                success(this.$t("public.sccg"));
                 this.fn_PostList();
               } else {
-                warning("删除失败");
+                warning(this.$t("public.scsb"));
               }
             });
         })

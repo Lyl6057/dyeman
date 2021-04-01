@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-03-18 11:05:21
+ * @LastEditTime: 2021-04-01 15:24:47
  * @Description: 
 -->
 <template>
@@ -17,7 +17,9 @@
           >打印</el-button
         >
         <el-button type="primary" @click="setPreview">预览</el-button>
-        <el-button type="warning" @click="close">关闭</el-button>
+        <el-button type="warning" @click="close">{{
+          this.$t("public.close")
+        }}</el-button>
       </div>
 
       <div class="formBox">
@@ -170,7 +172,7 @@ export default {
               });
             })
             .catch((err) => {
-              this.$tip.warning("取消操作");
+              this.$tip.warning(this.$t("public.qxcz"));
             });
           done();
         } else {
@@ -218,6 +220,10 @@ export default {
 }
 
 #colorMng_Dlg {
+  .is-fullscreen {
+    overflow: hidden !important;
+  }
+
   .el-dialog__header {
     padding: 0 !important;
   }

@@ -4,7 +4,9 @@
       <!-- <el-button type="warning" @click="ruleV = true">編號規則配置</el-button> -->
       <el-button type="success" @click="outOrder">生成出庫單</el-button>
       <el-button type="primary" @click="getData">查询</el-button>
-      <el-button type="warning" @click="close">关闭</el-button>
+      <el-button type="warning" @click="close">{{
+        this.$t("public.close")
+      }}</el-button>
     </div>
     <div class="formBox">
       <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
@@ -32,9 +34,9 @@
     >
       <!-- <div class="btnList">
           <el-button type="success" @click="save" :disabled="!canSave"
-            >保存</el-button
+            >{{this.$t("public.save")}}</el-button
           >
-          <el-button type="warning" @click="planclose">关闭</el-button>
+          <el-button type="warning" @click="planclose">{{this.$t("public.close")}}</el-button>
         </div> -->
       <tem
         ref="tem"
@@ -59,10 +61,10 @@
         <view-container :title="tle + '出庫單明細'">
           <div class="btnList">
             <el-button type="primary" @click="addDetail" :disabled="!canSave"
-              >新增</el-button
+              >{{this.$t("public.add")}}</el-button
             >
             <el-button type="danger" @click="delDetail" :disabled="!canSave"
-              >删除</el-button
+              >{{ this.$t("public.del") }}</el-button
             >
           </div>
           <div class="crudBox">
@@ -90,7 +92,7 @@
               <div class="btnList">
                 <el-button type="primary" @click="getSxData">查询</el-button>
                 <el-button type="success" @click="check">選擇</el-button>
-                <el-button type="warning" @click="sxclose">关闭</el-button>
+                <el-button type="warning" @click="sxclose">{{this.$t("public.close")}}</el-button>
               </div>
               <div class="formBox">
                 <avue-form

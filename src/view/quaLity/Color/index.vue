@@ -39,9 +39,9 @@
             <el-button type="primary" @click="editor(checkData2)"
               >修改</el-button
             >
-            <el-button type="primary" @click="QCdel(checkData2)"
-              >删除</el-button
-            >
+            <el-button type="primary" @click="QCdel(checkData2)">{{
+              this.$t("public.del")
+            }}</el-button>
           </el-row>
         </div>
         <avue-crud

@@ -12,6 +12,81 @@ export default {
     gztj: "Thống kê tiền lương",
     lsgz: "Tiền lương tạm thời"
   },
+  public: {
+    add: "Điểm mới",
+    update: "Sửa đổi",
+    del: "Xoá bỏ",
+    query: "Truy vấn",
+    save: "Bảo tồn",
+    close: "Đóng cửa",
+    lsh: "Dòng chảy số",// 流水號,
+    loading: "Tải lên một cách khó khăn...",
+    updateTle: "請先選擇要修改的數據!",
+    delTle: "Hãy chọn dữ liệu cần sửa đổi trước!",
+    sccg: "Loại bỏ thành công!",
+    scsb: "Xóa lỗi!",
+    qxcz: "Hủy bỏ chiến dịch!",
+    bccg: "Bảo quản thành công!",
+    bcsb: "Lưu thất bại"
+  },
+  whseMng: {
+    // 倉位管理
+    cwgl: "Quản lý vị trí",
+    ckmc: "Tên nhà kho",
+    cklx: "Loại nhà kho",
+    ckzl: "Thông tin nhà kho",
+    ckdh: "Vị trí mã",
+    ckgg: "Chi tiết",
+    ckwh: "Bảo trì kho hàng",
+    ckfq: "Phân vùng kho hàng",
+    hwdy: "Định nghĩa vị trí hàng hóa",
+    qchw: "Làm sạch các kho hàng",
+    fqdh: "Mã vùng",
+    qwm: "Mã vị trí",
+    hwmx: "Mẫu vị trí hàng hóa",
+    zdschw: "Tự động tạo ra hàng hóa",
+    hj: "kệ",
+    cs: "Lớp đếm",
+    mchws: "Số vị trí hàng hóa",
+    hwkbs: "Số thẻ",
+    hjcm: "Kệ mã",
+    hgm: "Mã lưới vận chuyển hàng hóa",
+    kbm: "Mã thẻ",
+    hwm: "Mã vị trí hàng hóa",
+    qdsc1: "Có chắc chắn mã xóa là 【 ",
+    qdsc2: "】 Của dữ liệu?",
+    setTle: "Hãy chọn dữ liệu cần định nghĩa!",
+    setTle2: "Hãy lưu dữ liệu phân vùng trước!",
+    hwlb: "Danh sách vị trí",
+    bchwTle: "Xin vui lòng lưu các vị trí sản xuất!",
+    hjTle: "Xin vui lòng nhập kệ!",
+    csTle: "Hãy nhập số tầng!",
+    hwsTle: "Vui lòng nhập vị trí hàng hóa!",
+    kbsTle: "Vui lòng nhập số thẻ!",
+    schw1: "Xác định xóa vị trí hàng hóa mã 【 ",
+    schw2: " 】 Của dữ liệu?",
+    qkTle: "Hãy chọn dữ liệu cần xóa!",
+    qdqk1: "Có chắc là khu vực trống không 【 ",
+    qdqk2: " 】 Của vị trí hàng hóa?",
+    qkcg: "Trống thành công!",
+    qksb: "Trống thất bại!",
+    saveTle1: "Nhà kho/nhà kho không thể trống rỗng!",
+    saveTle2: "Nhà kho kiểu/thông số kỹ thuật nhà kho không thể trống rỗng!",
+    saveTle3: "Mã vùng không thể bị bỏ trống!",
+    saveTle4: "Mã vị trí không thể trống!",
+    saveTle5: "Mô hình vị trí hàng hóa không thể trống rỗng!"
+  },
+  iaoMng: { // 出入庫
+    rcgl: "入倉管理",
+    ccgl: "出倉管理",
+    sx: "紗線",
+    sxrc: "紗線入倉",
+    krls: "客人來紗",
+    sxcg: "紗線採購",
+    ystc: "本廠余紗退倉",
+    wfts: "外發退紗",
+    sgsx: "申購紗線"
+  },
   ProWorkflowInfo: {
     cxtj: "Tiêu chí truy vấn",
     gjc: "Từ khóa",
@@ -258,7 +333,13 @@ export default {
         name: "項目檢測報告"
         //    辦布布料明細單
       }
-    ]
+    ],
+    whseMng: {
+      houseMng: "Quản lý kho hàng",
+      positions: "一.Quản lý vị trí",
+      inAndOut: "二.Quản lý xuất nhập cảnh",
+      inventory: "三.Quản lý hàng tồn kho"
+    }
   },
 
   procedure: {

@@ -6,8 +6,12 @@
       v-loading="wLoading"
     >
       <div class="btnList">
-        <el-button type="success" @click="save">保存</el-button>
-        <el-button type="warning" @click="close">关闭</el-button>
+        <el-button type="success" @click="save">{{
+          this.$t("public.save")
+        }}</el-button>
+        <el-button type="warning" @click="close">{{
+          this.$t("public.close")
+        }}</el-button>
       </div>
 
       <div class="formBox">
@@ -42,8 +46,12 @@
             <el-tab-pane label="皂洗配方" name="zx"></el-tab-pane>
           </el-tabs>
           <div class="btnList">
-            <el-button type="primary" @click="add">新增</el-button>
-            <el-button type="danger" @click="del">删除</el-button>
+            <el-button type="primary" @click="add">{{
+              this.$t("public.add")
+            }}</el-button>
+            <el-button type="danger" @click="del">{{
+              this.$t("public.del")
+            }}</el-button>
             <el-button type="primary" @click="up">上移</el-button>
             <el-button type="primary" @click="down">下移</el-button>
             <el-button type="primary" @click="openPro">工艺参数</el-button>
@@ -75,10 +83,16 @@
     >
       <view-container :title="xTle" class="dtlTbs">
         <div class="btnList">
-          <!-- <el-button type="success" @click="savePro">保存</el-button> -->
-          <el-button type="primary" @click="addPro">新增</el-button>
-          <el-button type="danger" @click="delPro">删除</el-button>
-          <el-button type="warning" @click="proClose">关闭</el-button>
+          <!-- <el-button type="success" @click="savePro">{{this.$t("public.save")}}</el-button> -->
+          <el-button type="primary" @click="addPro">{{
+            this.$t("public.add")
+          }}</el-button>
+          <el-button type="danger" @click="delPro">{{
+            this.$t("public.del")
+          }}</el-button>
+          <el-button type="warning" @click="proClose">{{
+            this.$t("public.close")
+          }}</el-button>
         </div>
         <div class="crudBox" style="margin-top: 5px">
           <!--    :data="pro" -->
@@ -406,7 +420,7 @@ export default {
         updateLdNotice(this.form).then((res) => {
           if (this.crud.length === 0) {
             this.wLoading = false;
-            this.$tip.success("保存成功!");
+            this.$tip.success(this.$t("public.bccg"));
           }
           let addDtla = (item, i) => {
             return new Promise((resolve, reject) => {
@@ -478,7 +492,7 @@ export default {
                 // this.getDetail();
                 this.wLoading = false;
                 this.deled = false;
-                this.$tip.success("保存成功!");
+                this.$tip.success(this.$t("public.bccg"));
               }
             }
           });
@@ -489,7 +503,7 @@ export default {
           baseCodeSupply({ code: "ld_num" }).then((res) => {});
           if (this.crud.length === 0) {
             this.wLoading = false;
-            this.$tip.success("保存成功!");
+            this.$tip.success(this.$t("public.bccg"));
           }
           this.form.salLdNoticeoid = res.data.data;
           // this.$emit("getData");
@@ -562,7 +576,7 @@ export default {
                 // this.getDetail();
                 this.deled = false;
                 this.wLoading = false;
-                this.$tip.success("保存成功!");
+                this.$tip.success(this.$t("public.bccg"));
               }
             }
           });
@@ -644,7 +658,7 @@ export default {
           // this.getDetail();
           this.proLoading = false;
           this.addPro();
-          this.$tip.success("保存成功!");
+          this.$tip.success(this.$t("public.bccg"));
         }
       });
     },
@@ -829,7 +843,7 @@ export default {
             .then((res) => {
               if (res.data.code === 200) {
                 this.deled = true;
-                this.$tip.success("删除成功");
+                this.$tip.success(this.$t("public.sccg"));
                 this.crudCheck[this.tabs].splice(this.dlteCheck.index, 1);
                 this.dlteCheck = {};
                 this.$refs.dtle.setCurrentRow();
@@ -838,15 +852,15 @@ export default {
                   item.index = i;
                 });
               } else {
-                this.$tip.error("删除失败");
+                this.$tip.error(this.$t("public.scsb"));
               }
             })
             .catch((err) => {
-              this.$tip.error("删除失败!");
+              this.$tip.error(this.$t("public.scsb"));
             });
         })
         .catch((err) => {
-          this.$tip.warning("取消操作");
+          this.$tip.warning(this.$t("public.qxcz"));
         });
     },
     delPro() {
@@ -871,7 +885,7 @@ export default {
           )
             .then((res) => {
               if (res.data.code === 200) {
-                this.$tip.success("删除成功");
+                this.$tip.success(this.$t("public.sccg"));
                 this.crudCheck[this.tabs + "s"].splice(
                   this.proCheck.index - 1,
                   1
@@ -880,15 +894,15 @@ export default {
                 this.proPage.total--;
                 this.$refs.process.setCurrentRow();
               } else {
-                this.$tip.error("删除失败");
+                this.$tip.error(this.$t("public.scsb"));
               }
             })
             .catch((err) => {
-              this.$tip.error("删除失败!");
+              this.$tip.error(this.$t("public.scsb"));
             });
         })
         .catch((err) => {
-          this.$tip.warning("取消操作");
+          this.$tip.warning(this.$t("public.qxcz"));
         });
     },
     tabClick() {

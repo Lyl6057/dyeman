@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-24 08:12:20
  * @LastEditors: Lyl
- * @LastEditTime: 2021-03-22 11:25:14
+ * @LastEditTime: 2021-03-31 14:54:04
  * @Description: 
 -->
 <template>
@@ -57,9 +57,19 @@ export default {
       this.setUsers(Res.data.ucmlUseroid);
       // this.$store.getters.getUser  --- this.$store.state.userOid
     });
+    // 獲取多語言
+    let lang = "1";
+    document.cookie.split(";").forEach((item, index) => {
+      if (item.includes("ucml_Language")) {
+        lang = item.split("=")[1];
+      }
+      if (index === document.cookie.split(";").length - 1) {
+        this.setLangs(lang);
+      }
+    });
   },
   methods: {
-    ...mapActions(["setUsers"]),
+    ...mapActions(["setUsers", "setLangs"]),
   },
 };
 </script>

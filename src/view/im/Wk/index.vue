@@ -1,9 +1,10 @@
 <template>
   <div id="ekIndex">
     <el-tabs v-model="tabs" type="border-card">
-      <el-tab-pane name="rc" label="入库">
+      <el-tab-pane name="rc" :label="$t('iaoMng.rcgl')">
         <span slot="label"
-          ><i style="font-size: 20px" class="el-icon-s-home"></i> 入库</span
+          ><i style="font-size: 24px" class="el-icon-s-home"></i>
+          {{ $t("iaoMng.rcgl") }}</span
         >
         <div class="main tabs1">
           <el-row>
@@ -31,9 +32,10 @@
           </el-row>
         </div>
       </el-tab-pane>
-      <el-tab-pane name="cc" label="出库">
+      <el-tab-pane name="cc" :label="$t('iaoMng.ccgl')">
         <span slot="label"
-          ><i style="font-size: 20px" class="el-icon-truck"></i> 出库</span
+          ><i style="font-size: 24px" class="el-icon-truck"></i>
+          {{ $t("iaoMng.ccgl") }}</span
         >
         <div class="main">
           <el-row>
@@ -118,7 +120,7 @@ export default {
           data: [
             // level_1
             {
-              title: "纱线入库",
+              title: this.$t("iaoMng.sxrc"),
               icon: "yx-icf-xian1",
               color: "#606266",
               // content: "",
@@ -127,9 +129,9 @@ export default {
             // level_2
             {
               click: () => {
-                this.toView("rc_sx", "客人来纱_1");
+                this.toView("rc_sx", this.$t("iaoMng.krls") + "_1");
               },
-              title: "客人来纱",
+              title: this.$t("iaoMng.krls"),
               icon: "el-icon-user-solid",
               color: "#409EFF",
               // // content: "客人来纱看板",
@@ -138,9 +140,9 @@ export default {
             // level_3
             {
               click: () => {
-                this.toView("rc_cg", "紗線_2");
+                this.toView("rc_cg", this.$t("iaoMng.sx") + "_2");
               },
-              title: "紗線採購",
+              title: this.$t("iaoMng.sxcg"),
               icon: "el-icon-shopping-cart-2",
               color: "#409EFF",
               // // content: "纱线采购入库看板",
@@ -149,9 +151,9 @@ export default {
             // level_4
             {
               click: () => {
-                this.toView("rc_sx", "本厂余纱退仓_4");
+                this.toView("rc_sx", this.$t("iaoMng.ystc") + "_4");
               },
-              title: "本厂余纱退仓",
+              title: this.$t("iaoMng.ystc"),
               icon: "el-icon-s-home",
               color: "#409EFF",
               // content: "本厂余纱退仓入库看板",
@@ -160,9 +162,9 @@ export default {
             // level_5
             {
               click: () => {
-                this.toView("rc_sx", "外发厂退纱_5");
+                this.toView("rc_sx", this.$t("iaoMng.wfts") + "_5");
               },
-              title: "外发厂退纱",
+              title: this.$t("iaoMng.wfts"),
               icon: "el-icon-s-home",
               color: "#ccc",
               // content: "外发厂退纱入库看板",
@@ -171,9 +173,9 @@ export default {
             // level_6
             {
               click: () => {
-                this.toView("rc_sg", "紗線_6");
+                this.toView("rc_sg", this.$t("iaoMng.sx") + "_6");
               },
-              title: "申购纱线",
+              title: this.$t("iaoMng.sgsx"),
               icon: "el-icon-s-claim",
               color: "#409EFF",
               // content: "申购纱线入库看板",
@@ -1100,6 +1102,7 @@ export default {
   }
 
   .main {
+    width: 110%;
     min-width: 1000px;
     // width: 100%;
     height: calc(100vh - 80px);
@@ -1142,6 +1145,10 @@ export default {
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+
+      i {
+        font-size: 24px;
+      }
     }
 
     .item-footer {

@@ -6,23 +6,24 @@ export default [
     component: resolve => require(["@/view/im/Wl/index"], resolve)
   },
   //库存管理
-  {
-    path: "/imHo",
-    name: "手动操作",
-    component: resolve => require(["@/view/im/Ho/index"], resolve)
-  },
+  // {
+  //   path: "/imHo",
+  //   name: "手动操作",
+  //   component: resolve => require(["@/view/im/Ho/index"], resolve)
+  // },
   //库存盘点
+  // {
+  //   path: "/imIty",
+  //   name: "库存管理",
+  //   component: resolve => require(["@/view/im/Ity/index"], resolve),
+  //   children: [
+
+  //   ]
+  // },
   {
-    path: "/imIty",
-    name: "库存盘点",
-    component: resolve => require(["@/view/im/Ity/index"], resolve),
-    children: [
-      {
-        path: "/ityBasic",
-        name: "库存盘点",
-        component: resolve => require(["@/view/im/Ity/basic/index"], resolve),
-      }
-    ]
+    path: "/ityBasic",
+    name: "库存期初始化",
+    component: resolve => require(["@/view/im/Ity/basic/index"], resolve),
   },
   //仓库工作指引看板
   {

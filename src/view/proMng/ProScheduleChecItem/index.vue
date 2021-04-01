@@ -25,13 +25,15 @@
           @row-click="fn_selectUp"
         >
           <template slot="menuLeft">
-            <el-button
-              type="primary"
-              size="mini"
-              @click="handleList"
-            >{{$t('ProWorkflowInfo.query')}}</el-button>
-            <el-button type="primary" size="mini" @click="fn_update">编辑</el-button>
-            <el-button type="primary" size="mini" @click="del">删除</el-button>
+            <el-button type="primary" size="mini" @click="handleList">{{
+              $t("ProWorkflowInfo.query")
+            }}</el-button>
+            <el-button type="primary" size="mini" @click="fn_update"
+              >编辑</el-button
+            >
+            <el-button type="primary" size="mini" @click="del">{{
+              this.$t("public.del")
+            }}</el-button>
           </template>
         </avue-crud>
       </el-col>
@@ -48,7 +50,7 @@ export default {
       page: {
         pageSize: 10,
         currentPage: 1,
-        total: 0
+        total: 0,
       },
       gridData: [],
       data: [],
@@ -67,20 +69,20 @@ export default {
             label: this.$t("ProWorkflowInfo.yyid"),
             prop: "refId",
             display: false,
-            hide: true
+            hide: true,
           },
 
           {
             // 详细信息ID
             label: this.$t("ProWorkflowInfo.xxxxid"),
-            prop: "detailId"
+            prop: "detailId",
           },
           {
             // 检查项ID
             label: this.$t("ProWorkflowInfo.jcxid"),
-            prop: "checkId"
-          }
-        ]
+            prop: "checkId",
+          },
+        ],
       },
       form: {},
       formOption: {
@@ -95,24 +97,24 @@ export default {
             label: this.$t("ProWorkflowInfo.yyid"),
             prop: "refId",
             span: 8,
-            display: false
+            display: false,
           },
           {
             // 详细信息ID
             label: this.$t("ProWorkflowInfo.xxxxid"),
             prop: "detailId",
-            span: 8
+            span: 8,
           },
           {
             // 检查项ID
             label: this.$t("ProWorkflowInfo.jcxid"),
             prop: "checkId",
-            span: 8
-          }
-        ]
+            span: 8,
+          },
+        ],
       },
       rowCode: "", //勾选选中ID
-      upData: [] //选中数据编辑
+      upData: [], //选中数据编辑
     };
   },
   methods: {
@@ -124,7 +126,7 @@ export default {
         //开始列
         current: this.page.currentPage,
         //数量
-        size: this.page.pageSize
+        size: this.page.pageSize,
       };
       this.$axios
         .post(
@@ -133,22 +135,24 @@ export default {
             "&rows=" +
             data.size
         )
-        .then(res => {
+        .then((res) => {
           this.page.currentPage = res.data.current;
           this.page.pageSize = res.data.size;
           this.page.total = res.data.total;
         });
       let params = {};
-      Object.keys(this.form).forEach(key => {
+      Object.keys(this.form).forEach((key) => {
         // 左边为true,执行右边表达式
         this.form[key] && (params[key] = this.form[key]);
         // params[key] = this.form[key] ? this.form[key] : params[key];
       });
 
-      this.$axios.get("/api/proScheduleChecItemList", { params }).then(res => {
-        this.gridData = res.data;
-        this.gridOption = Data_Width(this.gridOption, this.gridData);
-      });
+      this.$axios
+        .get("/api/proScheduleChecItemList", { params })
+        .then((res) => {
+          this.gridData = res.data;
+          this.gridOption = Data_Width(this.gridOption, this.gridData);
+        });
     },
     pageChange(page) {
       this.page.currentPage = page;
@@ -161,7 +165,7 @@ export default {
     //新增
     addData(row, done) {
       let data = isDate(this.gridOption, row);
-      this.$axios.put("/api/proScheduleChecItem", data).then(res => {
+      this.$axios.put("/api/proScheduleChecItem", data).then((res) => {
         if (res.data.code == 0) {
           success("新增成功");
           this.handleList();
@@ -186,7 +190,7 @@ export default {
     //更新数据
     update(row, index, done, loading) {
       let data = isDate(this.gridOption, row);
-      this.$axios.post("/api/proScheduleChecItem", data).then(res => {
+      this.$axios.post("/api/proScheduleChecItem", data).then((res) => {
         if (res.data.code == 0) {
           this.handleList();
           success("修改成功");
@@ -199,17 +203,17 @@ export default {
     //删除
     del(row, index) {
       let Data = [];
-      this.rowCode.forEach(item => {
+      this.rowCode.forEach((item) => {
         Data.push(item.refId);
       });
       //设置请求头为json格式
       const requParams = {
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
         transformRequest(data) {
           return JSON.stringify(data);
-        }
+        },
       };
       cofirm("此操作将永久删除该文件, 是否继续?", "提示", {})
         .then(() => {
@@ -217,25 +221,25 @@ export default {
             ...requParams,
             method: "delete",
             url: "api/proScheduleChecItem/batchesDel",
-            data: Data
-          }).then(res => {
+            data: Data,
+          }).then((res) => {
             if (res.data.code == 200) {
-              success("删除成功");
+              success(this.$t("public.sccg"));
               this.handleList();
             } else {
-              warning("删除失败");
+              warning(this.$t("public.scsb"));
             }
           });
         })
         .catch(() => {
           this.$message({
             type: "info",
-            message: "已取消删除"
+            message: "已取消删除",
           });
         });
-    }
+    },
   },
-  created() {}
+  created() {},
 };
 </script>
 

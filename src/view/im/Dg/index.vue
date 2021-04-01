@@ -3,14 +3,14 @@
     <view-container title="采购物料需求">
       <div class="btnList">
         <!-- <el-button type="primary" @click="add" :disabled="loading"
-          >新增</el-button
+          >{{this.$t("public.add")}}</el-button
         ><el-button type="primary" @click="update" :disabled="loading"
           >修改</el-button
         ><el-button type="danger" @click="del" :disabled="loading"
-          >删除</el-button
+          >{{ this.$t("public.del") }}</el-button
         >
         <el-button type="success" @click="sava" :disabled="loading"
-          >保存</el-button
+          >{{this.$t("public.save")}}</el-button
         ><el-button type="info" @click="getData" :disabled="loading"
           >取消</el-button
         >
@@ -230,10 +230,10 @@ export default {
             .delete("/api/iotEquipmentType?classifyId=" + data)
             .then((res) => {
               if (res.data.code == 0) {
-                success("删除成功");
+                success(this.$t("public.sccg"));
                 this.handleList();
               } else {
-                warning("删除失败");
+                warning(this.$t("public.scsb"));
               }
             })
             .catch((err) => {

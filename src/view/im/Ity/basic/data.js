@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-24 14:21:15
  * @LastEditors: Lyl
- * @LastEditTime: 2021-03-25 23:58:44
+ * @LastEditTime: 2021-03-29 15:01:35
  * @Description:
  */
 
@@ -193,12 +193,14 @@ export function crudOp(_this) {
         prop: "openingQty",
         cell: false,
         width: 90,
+        align: "right"
       },
       {
         label: "老单占用数",
         prop: "oldpooccupyqty",
         cell: false,
         width: 110,
+        align: "right"
       },
       {
         label: "单位",
@@ -253,12 +255,14 @@ export function crudTemOp(_this) {
         prop: "openingQty",
         cell: true,
         width: 120,
+        align: "right",
       },
       {
         label: "老单占用数",
         prop: "oldpooccupyqty",
         cell: true,
         width: 120,
+        align: "right",
       },
 
     ],

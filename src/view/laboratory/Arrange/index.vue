@@ -32,9 +32,9 @@
         >
           <view-container title="生成送板单" v-if="dialogVisible">
             <div class="btnList">
-              <el-button type="success" @click="handleSubmit(form)"
-                >保存</el-button
-              >
+              <el-button type="success" @click="handleSubmit(form)">{{
+                this.$t("public.save")
+              }}</el-button>
               <el-button type="warning" @click="dialogVisible = false"
                 >關閉</el-button
               >
@@ -59,9 +59,9 @@
             <el-button type="success" size="mini" @click="editor"
               >修改</el-button
             >
-            <el-button type="danger" size="mini" @click="del(checkData2)"
-              >删除</el-button
-            >
+            <el-button type="danger" size="mini" @click="del(checkData2)">{{
+              this.$t("public.del")
+            }}</el-button>
             <!-- <el-button type="primary" @click="openDialog(checkData2)">
               <span class="btnTle">{{ $t("ProWorkflowInfo.scpf") }}</span>
             </el-button> -->
@@ -799,7 +799,7 @@ export default {
           .then((res) => {
             if (res.data.code === 200) {
               this.GiveList();
-              success("保存成功!");
+              success(this.$t("public.bccg"));
               done();
             } else {
               error("保存失败!");
@@ -828,7 +828,7 @@ export default {
               this.form.sampleId = res.data.data;
               this.GiveList();
               baseCodeSupply({ code: "LAB_ARRAN" }).then((res) => {});
-              success("保存成功!");
+              success(this.$t("public.bccg"));
               done();
             } else {
               error("保存失败!");
@@ -862,14 +862,14 @@ export default {
           delLabCustomerSample(row.sampleId)
             .then((res) => {
               if (res.data.code == 200) {
-                success("删除成功");
+                success(this.$t("public.sccg"));
                 this.GiveList();
               } else {
-                warning("删除失败");
+                warning(this.$t("public.scsb"));
               }
             })
             .catch((err) => {
-              error("删除失败!");
+              error(this.$t("public.scsb"));
             });
         })
         .catch(() => {

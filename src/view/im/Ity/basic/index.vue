@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-24 14:15:12
  * @LastEditors: Lyl
- * @LastEditTime: 2021-03-25 23:56:16
+ * @LastEditTime: 2021-03-31 14:26:55
  * @Description: 
 -->
 <template>
@@ -13,7 +13,9 @@
       v-loading="loading"
     >
       <div class="btnList">
-        <el-button type="primary" @click="add">新增</el-button>
+        <el-button type="primary" @click="add">{{
+          this.$t("public.add")
+        }}</el-button>
         <el-button
           type="success"
           :disabled="Object.keys(chooseData).length === 0"
@@ -24,10 +26,12 @@
           type="danger"
           @click="del"
           :disabled="Object.keys(chooseData).length === 0"
-          >删除</el-button
+          >{{ this.$t("public.del") }}</el-button
         >
         <el-button type="primary" @click="getData">查询</el-button>
-        <el-button type="warning" @click="close">关闭</el-button>
+        <el-button type="warning" @click="close">{{
+          this.$t("public.close")
+        }}</el-button>
       </div>
       <div class="formBox">
         <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
@@ -46,7 +50,7 @@
       </div>
     </view-container>
     <el-dialog
-      id="sxrcDlg"
+      id="ityDlg"
       :visible.sync="dialogVisible"
       width="100%"
       append-to-body
@@ -64,7 +68,7 @@
   </div>
 </template>
 <script>
-import { add, get, update, del } from "./api";
+import { add, get, update, del, updateStock } from "./api";
 import { getDIC, getDicT } from "@/config/index";
 import temDlg from "./temDlg";
 import { formOp, crudOp } from "./data";
@@ -131,6 +135,8 @@ export default {
         this.crud.forEach((item, i) => {
           item.index = i + 1;
           item.materialName = item.materialId;
+          item.oldpooccupyqty = item.oldpooccupyqty.toFixed(2);
+          item.openingQty = item.openingQty.toFixed(2);
           if (this.crud.length - 1 === i) {
             setTimeout(() => {
               this.$nextTick(() => {
@@ -186,30 +192,32 @@ export default {
             {}
           )
           .then(() => {
-            del(this.chooseData.whseMaterialopeningoid)
-              .then((res) => {
-                if (res.data.code === 200) {
-                  this.$tip.success("删除成功");
-                  this.crud.splice(this.chooseData.index - 1, 1);
-                  if (this.crud.length > 0) {
-                    this.$refs.crud.setCurrentRow(
-                      this.crud[this.crud.length - 1]
-                    );
-                  }
-                  this.crud.forEach((item, i) => {
-                    item.index = i + 1;
-                  });
-                  // this.getMaterial();
-                } else {
-                  this.$tip.error("删除失败");
-                }
-              })
-              .catch((err) => {
-                this.$tip.error("删除失败!");
-              });
+            this.chooseData.openingQty = 0;
+            this.chooseData.oldpooccupyqty = 0;
+            update(this.chooseData).then((res) => {
+              if (res.data.code === 200) {
+                updateStock({
+                  materialId: this.form.materialId,
+                  unitId: this.form.unitId,
+                }).then((Rres) => {
+                  del(this.chooseData.whseMaterialopeningoid)
+                    .then((delRes) => {
+                      if (delRes.data.code === 200) {
+                        this.$tip.success(this.$t("public.sccg"));
+                        this.getData();
+                      } else {
+                        this.$tip.error(this.$t("public.scsb"));
+                      }
+                    })
+                    .catch((err) => {
+                      this.$tip.error(this.$t("public.scsb"));
+                    });
+                });
+              }
+            });
           })
           .catch((err) => {
-            this.$tip.warning("取消操作");
+            this.$tip.warning(this.$t("public.qxcz"));
           });
       }
     },
@@ -229,6 +237,13 @@ export default {
 };
 </script>
 <style lang='stylus'>
-#name {
+#ityDlg {
+  .el-dialog {
+    margin-top: 0 !important;
+    height: 100%;
+    margin: 0 !important;
+    // background-color: rgb(2, 26, 60);
+    overflow: hidden !important;
+  }
 }
 </style>

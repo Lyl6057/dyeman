@@ -2,56 +2,42 @@
  * @Author: Lyl
  * @Date: 2021-01-29 14:14:56
  * @LastEditors: Lyl
- * @LastEditTime: 2021-03-19 10:32:35
+ * @LastEditTime: 2021-04-01 13:54:05
  * @Description: 
  */
 export default [
-  // 生产管理
+  // 生产管理 - 基础设定
   {
-    path: '/basics',
-    name: '基础设定',
-    component: resolve => require(['@/view/proMng/basics'], resolve),
-    children: [
-      {
-        path: '/ProWorkflowInfo',
-        name: '生产工序',
-        component: resolve => require(['@/view/proMng/ProWorkflow/index'], resolve)
-      },
-      {
-        path: '/EquipmentType',
-        name: 'Type',
-        component: resolve => require(['@/view/proMng/EquipmentType/index'], resolve)
-      },
-    ]
+    path: '/ProWorkflowInfo',
+    name: '生产工序',
+    component: resolve => require(['@/view/proMng/ProWorkflow/index'], resolve)
   },
   {
-    path: '/proMng',
-    name: '生产管理',
-    component: resolve => require(['@/view/proMng/proMng.vue'], resolve),
-    children: [
-      {
-        path: '/proSalSchedule',
-        name: '生产排期',
-        component: resolve => require(['@/view/pro/plan/order/index'], resolve)
-      },
-      {
-        path: '/proScheduling',
-        name: '生产排单',
-        component: resolve => require(['@/view/proMng/Calculator/socket'], resolve)
-      },
-    ]
+    path: '/EquipmentType',
+    name: 'Type',
+    component: resolve => require(['@/view/proMng/EquipmentType/index'], resolve)
   },
   {
-    path: '/proReport',
-    name: '报表',
-    component: resolve => require(['@/view/proMng/proReport.vue'], resolve),
-    children: [
-      {
-        path: "/clothFly",
-        name: "clothFly",
-        component: resolve => require(["@/view/proMng/print/clothFly/index"], resolve),
-      }
-    ]
+    path: '/ProWorkPackage',
+    name: '生产工作包',
+    component: resolve => require(['@/view/proMng/ProWorkPackage/index'], resolve)
+  },
+  //生产管理,
+  {
+    path: '/proSalSchedule',
+    name: '生产排期',
+    component: resolve => require(['@/view/pro/plan/order/index'], resolve)
+  },
+  {
+    path: '/proScheduling',
+    name: '生产排单',
+    component: resolve => require(['@/view/proMng/Calculator/socket'], resolve)
+  },
+  // 报表
+  {
+    path: "/clothFly",
+    name: "clothFly",
+    component: resolve => require(["@/view/proMng/print/clothFly/index"], resolve),
   },
   // {
   //   path: '/EquipmentSchedule',

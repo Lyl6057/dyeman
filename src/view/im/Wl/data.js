@@ -11,14 +11,14 @@ export function mainForm(_this) {
     emptyBtn: false,
     labelWidth: 150,
     column: [{
-      label: "仓库名称",
+      label: _this.$t("whseMng.ckmc"), //_this.$t("whseMng.ckmc"),
       prop: "warehouseName",
       span: 6,
       placeholder: " ",
 
     },
     {
-      label: "仓库类型",
+      label: _this.$t("whseMng.cklx"),
       prop: "warehouseType",
       span: 6,
       placeholder: " ",
@@ -34,27 +34,27 @@ export function popupForm(_this) {
     emptyBtn: false,
     labelWidth: 120,
     column: [{
-      label: "仓库代号",
+      label: _this.$t("whseMng.ckdh"),//_this.$t("whseMng.ckdh"),
       prop: "warehouseId",
       span: 6,
       maxlength: 2,
       // placeholder: " ",
     },
     {
-      label: "仓库名称",
+      label: _this.$t("whseMng.ckmc"), //_this.$t("whseMng.ckmc"),
       prop: "warehouseName",
       span: 6,
 
     },
     {
-      label: "仓库类型",
+      label: _this.$t("whseMng.cklx"),//_this.$t("whseMng.cklx"),
       prop: "warehouseType",
       span: 6,
       type: "select",
       dicData: getDIC("Whse_warehouse_type")
     },
     {
-      label: "仓库规格",
+      label: _this.$t("whseMng.ckgg"),// _this.$t("whseMng.ckgg"),
       prop: "warehouseLength",
       span: 6,
     },
@@ -68,23 +68,23 @@ export function shelvesForm(_this) {
   return {
     submitBtn: false,
     emptyBtn: false,
-    labelWidth: 100,
+    labelWidth: 165,
     column: [{
-      label: "仓库代号",
+      label: _this.$t("whseMng.ckdh"),
       prop: "warehouseId",
       span: 6,
       placeholder: " ",
       disabled: true
     },
     {
-      label: "仓库名称",
+      label: _this.$t("whseMng.ckmc"),
       prop: "warehouseName",
       span: 6,
       placeholder: " ",
       disabled: true
     },
     {
-      label: "区位码",
+      label: _this.$t("whseMng.qwm"),
       prop: "areaCode",
       span: 6,
       placeholder: " ",
@@ -92,7 +92,7 @@ export function shelvesForm(_this) {
       // row: true
     },
     {
-      label: "货架",
+      label: _this.$t("whseMng.hj"),
       prop: "shelves",
       span: 6,
       placeholder: " ",
@@ -102,7 +102,7 @@ export function shelvesForm(_this) {
       display: _this.shelvesType === "3" || _this.shelvesType === "2" ? false : true
     },
     {
-      label: "层数",
+      label: _this.$t("whseMng.cs"),
       prop: "cs",
       span: 6,
       placeholder: " ",
@@ -111,7 +111,7 @@ export function shelvesForm(_this) {
       display: _this.shelvesType === "3" ? false : true
     },
     {
-      label: "每层货位数",
+      label: _this.$t("whseMng.mchws"),
       prop: "hws",
       span: 6,
       placeholder: " ",
@@ -119,7 +119,7 @@ export function shelvesForm(_this) {
       minRows: 1,
     },
     {
-      label: "货位卡板数",
+      label: _this.$t("whseMng.hwkbs"),
       prop: "kbs",
       span: 6,
       placeholder: " ",
@@ -143,7 +143,7 @@ export function mainCrud(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 240px)",
+    height: "calc(100vh - 235px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
@@ -154,19 +154,19 @@ export function mainCrud(_this) {
       align: "center"
     },
     {
-      label: "仓代号",
+      label: _this.$t("whseMng.ckdh"),
       prop: "warehouseId",
       width: 100,
       placeholder: " ",
     },
     {
-      label: "仓库名称",
+      label: _this.$t("whseMng.ckmc"),
       prop: "warehouseName",
       width: 150,
       placeholder: " ",
     },
     {
-      label: "仓库类型",
+      label: _this.$t("whseMng.cklx"),
       prop: "warehouseType",
       width: 120,
       type: "select",
@@ -174,7 +174,7 @@ export function mainCrud(_this) {
       placeholder: " ",
     },
     {
-      label: "仓库规格",
+      label: _this.$t("whseMng.ckgg"),
       prop: "warehouseLength",
       width: 120,
       placeholder: " ",
@@ -189,7 +189,7 @@ export function partitionCrud(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 285px)",
+    height: "calc(100vh - 273px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
@@ -200,21 +200,21 @@ export function partitionCrud(_this) {
       align: "center"
     },
     {
-      label: "分区代号",
+      label: _this.$t("whseMng.fqdh"),
       prop: "partitionId",
       width: 120,
       placeholder: " ",
       cell: true
     },
     {
-      label: "区位码",
+      label: _this.$t("whseMng.qwm"),
       prop: "areaCode",
-      width: 80,
+      width: 120,
       placeholder: " ",
       cell: true
     },
     {
-      label: "货位模型",
+      label: _this.$t("whseMng.hwmx"),
       prop: "warehouseModel",
       width: 200,
       type: "select",
@@ -235,7 +235,7 @@ export function locCrud(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 260px)",
+    height: "calc(100vh - 253px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
@@ -246,40 +246,40 @@ export function locCrud(_this) {
       align: "center"
     },
     {
-      label: "货架",
+      label: _this.$t("whseMng.hj"),
       prop: "shelves",
       width: 100,
       placeholder: " ",
       cell: true
     },
     {
-      label: "流水号",
+      label: _this.$t("public.lsh"),
       prop: "shelvesCode",
-      width: 100,
+      width: 120,
       placeholder: " ",
     },
     {
-      label: "货架层码",
+      label: _this.$t("whseMng.hjcm"),
       prop: "layerCode",
-      width: 100,
+      width: 140,
       placeholder: " ",
       cell: true
     },
     {
-      label: "货格码",
+      label: _this.$t("whseMng.hgm"),
       prop: "latticeCode",
-      width: 100,
+      width: 150,
       placeholder: " ",
       cell: true
     },
     {
-      label: "卡板码",
+      label: _this.$t("whseMng.kbm"),
       prop: "cardCode",
-      width: 100,
+      width: 150,
       placeholder: " ",
       cell: true
     }, {
-      label: "货位码",
+      label: _this.$t("whseMng.hwm"),
       prop: "locationCode",
       width: 180,
       placeholder: " ",

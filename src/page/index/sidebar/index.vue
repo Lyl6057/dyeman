@@ -10,13 +10,11 @@
     >
       <!-- <el-card class="emps-title">emps</el-card> -->
       <template v-for="item in menuData">
-        <el-card class="card" :key="item.index">
+        <el-card class="card" :key="item.index" v-if="item.children">
           <el-submenu :index="item.index">
             <template slot="title" class="title">
               <i :class="item.icon"></i>
-              <span style="float: left; margin-left: 5px">{{
-                item.menuName
-              }}</span>
+              <span style="float: left">{{ item.menuName }}</span>
             </template>
             <template v-for="items in item.children">
               <el-menu-item :index="items.index" :key="items.index">{{
@@ -24,6 +22,17 @@
               }}</el-menu-item>
             </template>
           </el-submenu>
+        </el-card>
+        <el-card :key="item.index" v-else class="testtt">
+          <!-- <template v-for="items in item"> -->
+
+          <template>
+            <el-menu-item :index="item.index" :key="item.index">
+              <i :class="item.icon"></i>
+              <span> {{ item.menuName }}</span></el-menu-item
+            >
+          </template>
+          <!-- </template> -->
         </el-card>
       </template>
     </el-menu>
@@ -38,8 +47,9 @@ export default {
     };
   },
   created() {
-    // this.$router.push({ path: "basics" }); // 生产管理
-    this.$router.push({ path: "imWl" });
+    this.$router.push({ path: "ProWorkflowInfo" }); // 生产管理
+    console.log(this.menuData);
+    // this.$router.push({ path: "imWl" });
     // this.$router.push({ path: "colorMng" });
     // this.$router.push({ path: "quaLity" });
   },
@@ -53,6 +63,23 @@ export default {
 
 <style lang="stylus">
 #sidebar {
+  .testtt {
+    .el-menu-item {
+      padding-left: 10px !important;
+      text-indent: 0em !important;
+      height: 39px;
+      line-height: 39px;
+
+      span {
+        margin-left: -3px;
+      }
+    }
+
+    .el-menu-item [class^=el-icon-] {
+      font-size: 24px !important;
+    }
+  }
+
   // height:100vh;
   .eldemo:not(.el-menu--collapse) {
     height: 100vh;
@@ -100,6 +127,7 @@ export default {
     -ms-user-select: none;
     user-select: none;
     font-size: 15px;
+    padding-left: 30px !important;
   }
 
   .el-menu-item.is-active {

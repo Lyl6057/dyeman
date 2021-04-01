@@ -1,13 +1,17 @@
 <template>
   <div id="imWl_Dlg">
     <view-container
-      title="仓库维护"
-      element-loading-text="拼命加载中"
+      :title="$t('whseMng.ckwh')"
+      :element-loading-text="$t('public.loading')"
       v-loading="wLoading"
     >
       <div class="btnList">
-        <el-button type="success" @click="save">保存</el-button>
-        <el-button type="warning" @click="close">关闭</el-button>
+        <el-button type="success" @click="save">{{
+          this.$t("public.save")
+        }}</el-button>
+        <el-button type="warning" @click="close">{{
+          this.$t("public.close")
+        }}</el-button>
       </div>
 
       <div class="formBox">
@@ -15,12 +19,20 @@
       </div>
       <el-row>
         <el-col :span="24">
-          <view-container title="仓库分区">
+          <view-container :title="$t('whseMng.ckfq')">
             <div class="btnList">
-              <el-button type="primary" @click="addPar">新增</el-button>
-              <el-button type="danger" @click="delPar">删除</el-button>
-              <el-button type="primary" @click="setLoc">货位定义</el-button>
-              <el-button type="danger" @click="delAllLoc">清除货位</el-button>
+              <el-button type="primary" @click="addPar">{{
+                this.$t("public.add")
+              }}</el-button>
+              <el-button type="danger" @click="delPar">{{
+                this.$t("public.del")
+              }}</el-button>
+              <el-button type="primary" @click="setLoc">{{
+                this.$t("whseMng.hwdy")
+              }}</el-button>
+              <el-button type="danger" @click="delAllLoc">{{
+                this.$t("whseMng.qchw")
+              }}</el-button>
             </div>
             <div class="crudBox" style="margin-top: 5px">
               <avue-crud
@@ -48,21 +60,27 @@
         :before-close="handleClose"
       >
         <div>
-          <view-container title="货位列表">
+          <view-container :title="$t('whseMng.hwlb')">
             <div class="btnList">
-              <el-button type="success" @click="saveLoc">保存</el-button>
-              <el-button type="primary" @click="addLoc">新增</el-button>
-              <el-button type="danger" @click="delLoc">删除</el-button>
-              <el-button type="warning" @click="addLocX"
-                >自动生成货位</el-button
+              <el-button type="success" @click="saveLoc">
+                {{ this.$t("public.save") }}</el-button
               >
+              <el-button type="primary" @click="addLoc">{{
+                this.$t("public.add")
+              }}</el-button>
+              <el-button type="danger" @click="delLoc">{{
+                this.$t("public.del")
+              }}</el-button>
+              <el-button type="warning" @click="addLocX">{{
+                this.$t("whseMng.zdschw")
+              }}</el-button>
               <el-button
-                type="danger"
+                type="warning"
                 @click="
                   locDlg = false;
                   change = false;
                 "
-                >关闭</el-button
+                >{{ this.$t("public.close") }}</el-button
               >
             </div>
             <el-row class="shelvesBox">
@@ -227,7 +245,7 @@ export default {
                   this.locChooseData = {};
                 }, 200);
                 if (val === 1) {
-                  this.$tip.success("保存成功!");
+                  this.$tip.success(this.$t("public.bccg"));
                 }
               }
             });
@@ -246,11 +264,11 @@ export default {
         this.chooseData === undefined ||
         Object.keys(this.chooseData).length === 0
       ) {
-        this.$tip.error("请选择要定义的数据!");
+        this.$tip.error(this.$t("whseMng.setTle"));
         return;
       }
       if (!this.chooseData.whsePartitionoid) {
-        this.$tip.error("请先保存该分区数据!");
+        this.$tip.error(this.$t("whseMng.setTle2"));
         return;
       }
       this.shelves.warehouseId = this.form.warehouseId;
@@ -288,7 +306,7 @@ export default {
         this.chooseData === undefined ||
         Object.keys(this.chooseData).length === 0
       ) {
-        this.$tip.error("请选择要删除的数据!");
+        this.$tip.error(this.$t("public.delTle"));
         return;
       }
       if (!this.chooseData.whsePartitionoid) {
@@ -302,9 +320,9 @@ export default {
       }
       this.$tip
         .cofirm(
-          "是否确定删除分区代号为 【 " +
+          this.$t("public.qdsc1") +
             this.chooseData.partitionId +
-            " 】 的数据?",
+            this.$t("public.qdsc2"),
           this,
           {}
         )
@@ -312,7 +330,7 @@ export default {
           delPartition(this.chooseData.whsePartitionoid)
             .then((res) => {
               if (res.data.code === 200) {
-                this.$tip.success("删除成功");
+                this.$tip.success(this.$t("public.sccg"));
                 this.partion.splice(this.chooseData.index - 1, 1);
                 this.$refs.partion.setCurrentRow(this.partion[0] || {});
                 this.partion.forEach((item, i) => {
@@ -320,15 +338,15 @@ export default {
                 });
                 // this.chooseData = {};
               } else {
-                this.$tip.error("删除失败");
+                this.$tip.error(this.$t("public.scsb"));
               }
             })
             .catch((err) => {
-              this.$tip.error("删除失败!");
+              this.$tip.error(this.$t("public.scsb"));
             });
         })
         .catch((err) => {
-          this.$tip.warning("取消操作");
+          this.$tip.warning(this.$t("public.qxcz"));
         });
     },
     addLoc() {
@@ -336,11 +354,11 @@ export default {
         this.chooseData === undefined ||
         Object.keys(this.chooseData).length === 0
       ) {
-        this.$tip.error("请选择要定义的数据!");
+        this.$tip.error(this.$t("whseMng.setTle"));
         return;
       }
       if (!this.chooseData.whsePartitionoid) {
-        this.$tip.error("请先保存该分区数据!");
+        this.$tip.error(this.$t("whseMng.setTle2"));
         return;
       }
       // 新增货位
@@ -359,32 +377,32 @@ export default {
     },
     addLocX() {
       if (this.change && this.loc.length != 0) {
-        this.$tip.error("请先保存此次生成的货位!");
+        this.$tip.error(this.$t("whseMng.bchwTle"));
         return;
       }
       if (
         (this.shelvesType === "0" || this.shelvesType === "1") &&
         this.shelves.shelves === ""
       ) {
-        this.$tip.error("请输入货架!");
+        this.$tip.error(this.$t("whseMng.hjTle"));
         return;
       }
       if (
         this.shelvesType != "3" &&
         (this.shelves.cs === undefined || this.shelves.cs === "")
       ) {
-        this.$tip.error("请输入层数!");
+        this.$tip.error(this.$t("whseMng.csTle"));
         return;
       }
       if (this.shelves.hws === "" || this.shelves.hws === undefined) {
-        this.$tip.error("请输入货位数!");
+        this.$tip.error(this.$t("whseMng.hwsTle"));
         return;
       }
       if (
         (this.shelvesType === "0" && this.shelves.kbs === "") ||
         this.shelves.kbs === undefined
       ) {
-        this.$tip.error("请输入卡板数!");
+        this.$tip.error(this.$t("whseMng.kbsTle"));
         return;
       }
       // 获取货架流水号
@@ -399,7 +417,6 @@ export default {
         } else {
           this.shelvesNum = preFixInt(Number(res.data.length) + 1, 3);
         }
-        console.log(this.form, this.shelves);
         if (this.shelvesType === "0") {
           for (let i = 0; i < this.shelves.cs; i++) {
             // 层数
@@ -520,7 +537,7 @@ export default {
         this.locChooseData === undefined ||
         Object.keys(this.locChooseData).length === 0
       ) {
-        this.$tip.error("请选择要删除的数据!");
+        this.$tip.error(this.$t("public.delTle"));
         return;
       }
       if (!this.locChooseData.whseLocationoid) {
@@ -541,9 +558,9 @@ export default {
       }
       this.$tip
         .cofirm(
-          "是否确定删除货位码为 【 " +
+          this.$t("public.schw1") +
             this.locChooseData.locationCode +
-            " 】 的数据?",
+            this.$t("public.schw2"),
           this,
           {}
         )
@@ -551,7 +568,7 @@ export default {
           delLocation(this.locChooseData.whseLocationoid)
             .then((res) => {
               if (res.data.code === 200) {
-                this.$tip.success("删除成功");
+                this.$tip.success(this.$t("public.sccg"));
                 this.loc.splice(this.locChooseData.index - 1, 1);
                 this.getLoc();
                 // this.$refs.loc.setCurrentRow(this.loc[0] || {});
@@ -559,15 +576,15 @@ export default {
                 //   item.index = i + 1;
                 // });
               } else {
-                this.$tip.error("删除失败");
+                this.$tip.error(this.$t("public.scsb"));
               }
             })
             .catch((err) => {
-              this.$tip.error("删除失败!");
+              this.$tip.error(this.$t("public.scsb"));
             });
         })
         .catch((err) => {
-          this.$tip.warning("取消操作");
+          this.$tip.warning(this.$t("public.qxcz"));
         });
     },
     delAllLoc() {
@@ -575,14 +592,14 @@ export default {
         this.chooseData === undefined ||
         Object.keys(this.chooseData).length === 0
       ) {
-        this.$tip.error("请选择要清空的数据!");
+        this.$tip.error(this.$t("whseMng.qkTle"));
         return;
       }
       this.$tip
         .cofirm(
-          "是否确定清空分区代号为 【 " +
+          this.$t("whseMng.qdqk1") +
             this.chooseData.partitionId +
-            " 】 的货位数据?",
+            this.$t("whseMng.qdqk2"),
           this,
           {}
         )
@@ -590,28 +607,28 @@ export default {
           delAllLocation(this.chooseData.whsePartitionoid)
             .then((res) => {
               if (res.data.code === 200) {
-                this.$tip.success("清空成功");
+                this.$tip.success(this.$t("whseMng.qkcg"));
               } else {
-                this.$tip.error("清空失败");
+                this.$tip.error(this.$t("whseMng.qksb"));
               }
             })
             .catch((err) => {
-              this.$tip.error("清空失败!");
+              this.$tip.error(this.$t("whseMng.qksb"));
             });
         })
         .catch((err) => {
-          this.$tip.warning("取消操作");
+          this.$tip.warning(this.$t("public.qxcz"));
         });
     },
     save() {
       if (this.form.warehouseId === "" || this.form.warehouseName === "") {
-        this.$tip.error("仓代号/仓库名称不能为空!");
+        this.$tip.error(this.$t("whseMng.saveTle1"));
         return;
       } else if (
         this.form.warehouseType === "" ||
         this.form.warehouseLength === ""
       ) {
-        this.$tip.error("仓库类型/仓库规格不能为空!");
+        this.$tip.error(this.$t("whseMng.saveTle2"));
         return;
       }
       for (let i = 0; i < this.partion.length; i++) {
@@ -620,7 +637,7 @@ export default {
           this.partion[i].partitionId === null ||
           this.partion[i].partitionId === undefined
         ) {
-          this.$tip.error("分区代号不能为空!");
+          this.$tip.error(this.$t("whseMng.saveTle3"));
           return;
         }
         if (
@@ -628,7 +645,7 @@ export default {
           this.partion[i].areaCode === null ||
           this.partion[i].areaCode === undefined
         ) {
-          this.$tip.error("区位码不能为空!");
+          this.$tip.error(this.$t("whseMng.saveTle4"));
           return;
         }
         if (
@@ -636,7 +653,7 @@ export default {
           this.partion[i].warehouseModel === null ||
           this.partion[i].warehouseModel === undefined
         ) {
-          this.$tip.error("货位模型不能为空!");
+          this.$tip.error(this.$t("whseMng.saveTle5"));
           return;
         }
       }
@@ -648,7 +665,7 @@ export default {
             setTimeout(() => {
               this.wLoading = false;
             }, 200);
-            this.$tip.success("保存成功!");
+            this.$tip.success(this.$t("public.bccg"));
           }
           let addDtla = (item, i) => {
             return new Promise((resolve, reject) => {
@@ -678,7 +695,7 @@ export default {
             setTimeout(() => {
               this.wLoading = false;
             }, 200);
-            this.$tip.success("保存成功!");
+            this.$tip.success(this.$t("public.bccg"));
             // for (let i = 0; i < this.partion.length; i++) {
             //   if (this.partion[i].list) {
             //     this.partion[i].list.forEach((item) => {
@@ -715,7 +732,7 @@ export default {
               setTimeout(() => {
                 this.wLoading = false;
               }, 200);
-              this.$tip.success("保存成功!");
+              this.$tip.success(this.$t("public.bccg"));
             }
             this.form.whseWarehouseoid = res.data.data;
             // this.$emit("getData");
@@ -747,7 +764,7 @@ export default {
               setTimeout(() => {
                 this.wLoading = false;
               }, 200);
-              this.$tip.success("保存成功!");
+              this.$tip.success(this.$t("public.bccg"));
               // if (this.partion[i].list) {
               //   this.partion[i].list.forEach((item) => {
               //     item.areaCode = this.chooseData.areaCode;
@@ -772,7 +789,7 @@ export default {
             //   this.query(1);
             //   this.isAdd = false;
             //   setTimeout(() => {
-            //     this.$tip.success("保存成功!");
+            //     this.$tip.success(this.$t("public.bccg"));
             //     // this.wLoading = false;
             //   }, 200);
             // }

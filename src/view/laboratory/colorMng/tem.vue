@@ -6,8 +6,12 @@
       v-loading="wLoading"
     >
       <div class="btnList">
-        <el-button type="success" @click="save">保存</el-button>
-        <el-button type="warning" @click="close">关闭</el-button>
+        <el-button type="success" @click="save">{{
+          this.$t("public.save")
+        }}</el-button>
+        <el-button type="warning" @click="close">{{
+          this.$t("public.close")
+        }}</el-button>
       </div>
 
       <div class="formBox">
@@ -139,7 +143,7 @@ export default {
         updateLabTapcolor(this.form)
           .then((res) => {
             this.wLoading = false;
-            this.$tip.success("保存成功!");
+            this.$tip.success(this.$t("public.bccg"));
           })
           .catch((err) => {
             this.wLoading = false;
@@ -163,7 +167,7 @@ export default {
             baseCodeSupply({ code: "color_num" }).then((res) => {});
             this.form.labTapcoloroid = res.data.data;
             this.wLoading = false;
-            this.$tip.success("保存成功!");
+            this.$tip.success(this.$t("public.bccg"));
           })
           .catch((err) => {
             this.wLoading = false;

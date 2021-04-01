@@ -8,7 +8,9 @@
 <template>
   <div id="name">
     <div class="btnList">
-      <el-button type="primary" @click="add">新增</el-button>
+      <el-button type="primary" @click="add">{{
+        this.$t("public.add")
+      }}</el-button>
       <el-button type="danger" @click="del">刪除</el-button>
     </div>
 
@@ -160,22 +162,22 @@ export default {
             )
             .then((res) => {
               if (res.data.code === 200) {
-                this.$tip.success("删除成功");
+                this.$tip.success(this.$t("public.sccg"));
                 this.inData.loc.splice(this.chooseData.index - 1, 1);
                 this.inData.loc.forEach((item, index) => {
                   item.index = index + 1;
                 });
                 this.$refs.crud.setCurrentRow(this.inData.loc[0] || {});
               } else {
-                this.$tip.error("删除失败");
+                this.$tip.error(this.$t("public.scsb"));
               }
             })
             .catch((err) => {
-              this.$tip.error("删除失败!");
+              this.$tip.error(this.$t("public.scsb"));
             });
         })
         .catch((err) => {
-          this.$tip.warning("取消操作");
+          this.$tip.warning(this.$t("public.qxcz"));
         });
     },
     cellClick(val) {

@@ -8,14 +8,16 @@
             type="primary"
             @click="add"
             v-if="hide != '1' && hide != '2'"
-            >新增</el-button
+            >{{ this.$t("public.add") }}</el-button
           >
-          <el-button type="danger" @click="del">删除</el-button>
+          <el-button type="danger" @click="del">{{
+            this.$t("public.del")
+          }}</el-button>
           <el-button
             type="success"
             :disabled="changeList.length === 0"
             @click="save"
-            >保存</el-button
+            >{{ this.$t("public.save") }}</el-button
           >
           <!-- <el-button
             type="warning"
@@ -24,7 +26,9 @@
             >編號規則配置</el-button
           > -->
           <el-button type="primary" @click="getData">查询</el-button>
-          <el-button type="warning" @click="close">关闭</el-button>
+          <el-button type="warning" @click="close">{{
+            this.$t("public.close")
+          }}</el-button>
         </div>
         <div class="formBox">
           <avue-form
@@ -387,19 +391,19 @@ export default {
             )
             .then((res) => {
               if (res.data.code === 200) {
-                this.$tip.success("删除成功");
+                this.$tip.success(this.$t("public.sccg"));
                 this.crud.splice(this.chooseData.index - 1, 1);
                 this.getData();
               } else {
-                this.$tip.error("删除失败");
+                this.$tip.error(this.$t("public.scsb"));
               }
             })
             .catch((err) => {
-              this.$tip.error("删除失败!");
+              this.$tip.error(this.$t("public.scsb"));
             });
         })
         .catch((err) => {
-          this.$tip.warning("取消操作");
+          this.$tip.warning(this.$t("public.qxcz"));
         });
     },
     choiceData(val) {
@@ -480,7 +484,7 @@ export default {
         }
       });
       this.getData();
-      this.$tip.success("保存成功!");
+      this.$tip.success(this.$t("public.bccg"));
     },
     close() {
       document.getElementsByClassName("el-dialog__headerbtn")[0].click();
@@ -515,13 +519,12 @@ export default {
   }
 
   // .el-button--mini, .el-button--small {
-  //   font-size: 16px;
+  // font-size: 16px;
   // }
 
   // .el-button--mini, .el-button--mini.is-round {
-  //   padding: 5px 10px;
+  // padding: 5px 10px;
   // }
-
   .avue-crud__menu {
     min-height: 5px !important;
     height: 5px !important;

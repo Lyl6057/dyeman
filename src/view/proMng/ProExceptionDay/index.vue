@@ -13,9 +13,10 @@
               type="primary"
               size="small"
               @click="handleList"
-              style="margin-right:110px"
+              style="margin-right: 110px"
               s
-            >查 询</el-button>
+              >查 询</el-button
+            >
           </template>
         </avue-form>
       </el-col>
@@ -40,7 +41,7 @@ export default {
       page: {
         pageSize: 10,
         currentPage: 1,
-        total: 0
+        total: 0,
       },
       gridData: [],
       data: [],
@@ -50,17 +51,17 @@ export default {
         column: [
           {
             label: "例外ID",
-            prop: "exceptionId"
+            prop: "exceptionId",
           },
           {
             label: "日历ID",
-            prop: "calId"
+            prop: "calId",
           },
           {
             label: "例外日期",
-            prop: "exceptionDate"
-          }
-        ]
+            prop: "exceptionDate",
+          },
+        ],
       },
       form: {},
       formOption: {
@@ -73,24 +74,24 @@ export default {
         column: [
           {
             label: "例外ID",
-            prop: "exceptionId"
+            prop: "exceptionId",
           },
           {
             label: "日历ID",
-            prop: "calId"
+            prop: "calId",
           },
           {
             label: "例外日期",
-            prop: "exceptionDate"
-          }
-        ]
+            prop: "exceptionDate",
+          },
+        ],
       },
       header: {
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer eyJhbGciOiJIUzI1NiJ9"
-        }
-      }
+          Authorization: "Bearer eyJhbGciOiJIUzI1NiJ9",
+        },
+      },
     };
   },
   methods: {
@@ -98,7 +99,7 @@ export default {
     handleList() {
       this.$axios
         .post("/api/proExceptionDayList", this.form, this.header)
-        .then(res => {
+        .then((res) => {
           console.log(res);
           this.gridData = res.data;
         });
@@ -109,10 +110,10 @@ export default {
       const data = row;
       const sedheader = {
         headers: {
-          "Content-Type": "application/x-www-form-urlencoded"
-        }
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
       };
-      this.$axios.put("/api/proExceptionDay", data, sedheader).then(res => {
+      this.$axios.put("/api/proExceptionDay", data, sedheader).then((res) => {
         console.log(res);
         if (res.data.code == 0) {
           this.$message.success("新增成功");
@@ -128,11 +129,11 @@ export default {
     update(row, index, done, loading) {
       const sedheader = {
         headers: {
-          "Content-Type": "application/x-www-form-urlencoded"
-        }
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
       };
       const data = row;
-      this.$axios.post("/api/proExceptionDay", data, sedheader).then(res => {
+      this.$axios.post("/api/proExceptionDay", data, sedheader).then((res) => {
         console.log(res);
         if (res.data.code == 0) {
           this.handleList();
@@ -149,28 +150,28 @@ export default {
       this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning"
+        type: "warning",
       })
         .then(() => {
           this.$axios
             .delete("/api/proExceptionDay?exceptionId=" + data, this.header)
-            .then(res => {
+            .then((res) => {
               if (res.data.code == 0) {
-                this.$message.success("删除成功");
+                this.$message.success(this.$t("public.sccg"));
                 this.handleList();
               } else {
-                this.$message.warning("删除失败");
+                this.$message.warning(this.$t("public.scsb"));
               }
             });
         })
         .catch(() => {
           this.$message({
             type: "info",
-            message: "已取消删除"
+            message: "已取消删除",
           });
         });
-    }
-  }
+    },
+  },
 };
 </script>
 

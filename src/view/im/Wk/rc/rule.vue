@@ -2,7 +2,9 @@
   <div id="wkRule">
     <view-container title="編號規則配置">
       <div class="btnList">
-        <el-button type="success" @click="save">保存</el-button>
+        <el-button type="success" @click="save">{{
+          this.$t("public.save")
+        }}</el-button>
         <el-button type="warning" @click="close">關閉</el-button>
       </div>
       <div class="formBox">
@@ -213,7 +215,7 @@ export default {
       axios({ url: "/api/baseCodeSupply", method: "post", params: data }).then(
         (res) => {
           if (res.data.code === 0) {
-            this.$tip.success("保存成功!");
+            this.$tip.success(this.$t("public.bccg"));
           } else {
             this.$tip.error("保存失敗!");
           }

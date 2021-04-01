@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-25 14:04:15
  * @LastEditors: Lyl
- * @LastEditTime: 2021-03-27 23:13:53
+ * @LastEditTime: 2021-03-31 16:34:38
  * @Description:
  */
 import axios from 'axios'
@@ -39,7 +39,7 @@ export function getYl(params) {
 
 export function getScfl(params) {
   return axios({
-    url: '/api/basProductivesupplies/pageBylike',
+    url: '/api/basProductivesuppliesnew/pageBylike',
     method: 'get',
     params: params
   })

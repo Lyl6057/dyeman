@@ -5,11 +5,19 @@
         <el-form-item>
           <el-col :span="8">
             <el-button type="primary" @click="upDateGt">更新视图</el-button>
-            <el-button type="primary" @click="add">新增</el-button>
-            <el-button type="primary" @click="save">保存</el-button>
-            <el-button type="primary" @click="del">删除</el-button>
+            <el-button type="primary" @click="add">{{
+              this.$t("public.add")
+            }}</el-button>
+            <el-button type="primary" @click="save">{{
+              this.$t("public.save")
+            }}</el-button>
+            <el-button type="primary" @click="del">{{
+              this.$t("public.del")
+            }}</el-button>
             <el-button type="primary" @click="cancel">取消</el-button>
-            <el-button type="primary" @click="close">关闭</el-button>
+            <el-button type="primary" @click="close">{{
+              this.$t("public.close")
+            }}</el-button>
           </el-col>
           <el-col :span="8">
             <span>计划</span>

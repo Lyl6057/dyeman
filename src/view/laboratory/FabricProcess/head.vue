@@ -61,7 +61,9 @@
         >
           <view-container title="生成檢驗報告">
             <div class="btnList">
-              <el-button type="success" @click="save">保存</el-button>
+              <el-button type="success" @click="save">
+                {{ this.$t("public.save") }}</el-button
+              >
               <el-button type="warning" @click="dialog = false">關閉</el-button>
             </div>
             <el-row style="margin: 5px 5px">

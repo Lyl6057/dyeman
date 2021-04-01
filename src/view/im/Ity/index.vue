@@ -1,9 +1,9 @@
 <template>
   <div id="proIndex">
     <el-tabs v-model="tabs" type="border-card">
-      <el-tab-pane name="rc" label="仓库管理">
+      <el-tab-pane name="rc" label="库存管理">
         <span slot="label"
-          ><i style="font-size: 20px" class="el-icon-s-home"></i> 仓库管理</span
+          ><i style="font-size: 20px" class="el-icon-s-home"></i> 库存管理</span
         >
         <div class="main tabs1">
           <el-row>
@@ -14,6 +14,7 @@
         </div>
       </el-tab-pane>
       <el-dialog
+        id="viewDlg"
         :visible.sync="dialogVisible"
         fullscreen
         append-to-body

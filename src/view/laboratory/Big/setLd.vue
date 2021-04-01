@@ -1,54 +1,53 @@
 <template >
   <div id="ArrangeSetLd">
+    <el-tabs
+      v-model="tabsName"
+      style="margin: 0 5px"
+      v-loading="loading"
+      element-loading-text="拼命加载中"
+      element-loading-spinner="el-icon-loading"
+    >
+      <el-tab-pane label="大货复板" name="rhlpf">
+        <el-row>
+          <headers ref="header" />
+        </el-row>
+        <el-row class="btnList">
+          <div style="float: left; margin-right: 20px">
+            <!-- <el-button type="primary" @click="add" v-if="!isEditor" icon="el-icon-plus">新增版本</el-button> -->
+            <el-button
+              type="primary"
+              @click="save"
+              v-if="isEditor"
+              :disabled="!canSave"
+              >{{ this.$t("public.save") }}</el-button
+            >
+            <el-button type="primary" @click="update" v-else>编辑</el-button>
+            <el-button type="primary" @click="cancel" v-if="isEditor"
+              >取消</el-button
+            >
+          </div>
+          <div>
+            <label for="order">订单批号：</label>
+            <el-input
+              id="order"
+              style="width: 180px; margin-right: 20px"
+              placeholder="请输入订单批号"
+              :readonly="!isEditor"
+              v-model="pihao.clothLotCode"
+              @input="iptChange(pihao, 'pihao')"
+            ></el-input>
+            <label for="shaxian">纱线批号：</label>
+            <el-input
+              id="shaxian"
+              :readonly="!isEditor"
+              style="width: 180px"
+              placeholder="请输入纱线批号"
+              v-model="pihao.yarnLotCode"
+              @input="iptChange(pihao, 'pihao')"
+            ></el-input>
+          </div>
 
-      <el-tabs
-        v-model="tabsName"
-        style="margin: 0 5px"
-        v-loading="loading"
-        element-loading-text="拼命加载中"
-        element-loading-spinner="el-icon-loading"
-      >
-        <el-tab-pane label="大货复板" name="rhlpf">
-          <el-row>
-            <headers ref="header" />
-          </el-row>
-          <el-row class="btnList">
-            <div style="float: left; margin-right: 20px">
-              <!-- <el-button type="primary" @click="add" v-if="!isEditor" icon="el-icon-plus">新增版本</el-button> -->
-              <el-button
-                type="primary"
-                @click="save"
-                v-if="isEditor"
-                :disabled="!canSave"
-                >保存</el-button
-              >
-              <el-button type="primary" @click="update" v-else>编辑</el-button>
-              <el-button type="primary" @click="cancel" v-if="isEditor"
-                >取消</el-button
-              >
-            </div>
-            <div>
-              <label for="order">订单批号：</label>
-              <el-input
-                id="order"
-                style="width: 180px; margin-right: 20px"
-                placeholder="请输入订单批号"
-                :readonly="!isEditor"
-                v-model="pihao.clothLotCode"
-                @input="iptChange(pihao, 'pihao')"
-              ></el-input>
-              <label for="shaxian">纱线批号：</label>
-              <el-input
-                id="shaxian"
-                :readonly="!isEditor"
-                style="width: 180px"
-                placeholder="请输入纱线批号"
-                v-model="pihao.yarnLotCode"
-                @input="iptChange(pihao, 'pihao')"
-              ></el-input>
-            </div>
-
-            <!-- <el-row style="float:right" type="flex" justify="end">
+          <!-- <el-row style="float:right" type="flex" justify="end">
               <el-col :span="6">   <label> 确认版本</label></el-col>
               <el-col :span="18">
                  <el-input
@@ -60,121 +59,115 @@
               </el-row>
             </el-col>
             </el-row>-->
-          </el-row>
-          <div class="box">
-            <div
-              id="gdBox"
-              :style="{ width: versionData.length * 122 + 420 + 'px' }"
-            >
-              <el-container>
-                <el-header>
-                  <div class="indexBox">
-                    <div class="indexTle">序号</div>
-                  </div>
-                  <div class="boderTop">
-                    <div class="versionTle">
-                      <div style="width: 98px; border-right: 1px solid #ccc">
-                        代号
-                      </div>
-                      <div style="width: 128px">物料批号/名称</div>
-                      <div class="versionType">
-                        <div>内部版本</div>
-                        <div>打样版本</div>
-                      </div>
+        </el-row>
+        <div class="box">
+          <div
+            id="gdBox"
+            :style="{ width: versionData.length * 122 + 420 + 'px' }"
+          >
+            <el-container>
+              <el-header>
+                <div class="indexBox">
+                  <div class="indexTle">序号</div>
+                </div>
+                <div class="boderTop">
+                  <div class="versionTle">
+                    <div style="width: 98px; border-right: 1px solid #ccc">
+                      代号
+                    </div>
+                    <div style="width: 128px">物料批号/名称</div>
+                    <div class="versionType">
+                      <div>内部版本</div>
+                      <div>打样版本</div>
                     </div>
                   </div>
-                  <div>
-                    <el-row style="height: 50px">
-                      <div
-                        v-for="(items, index) of versionData"
-                        :class="
-                          !items.light ? 'lightHeight version' : 'version'
-                        "
-                        :key="index"
-                        @mouseenter="mouseEnter(items)"
-                        @mouseleave="mouseLeave(items)"
+                </div>
+                <div>
+                  <el-row style="height: 50px">
+                    <div
+                      v-for="(items, index) of versionData"
+                      :class="!items.light ? 'lightHeight version' : 'version'"
+                      :key="index"
+                      @mouseenter="mouseEnter(items)"
+                      @mouseleave="mouseLeave(items)"
+                    >
+                      <el-select
+                        v-model="items.verNo"
+                        style="display: none"
+                        clearable
+                        placeholder="内部版本"
+                        @input="iptChange(items, 'verChange')"
+                        @change="ckVerNo(items.verNo)"
+                        @clear="clearVerNo"
                       >
-                        <el-select
-                          v-model="items.verNo"
-                          style="display: none"
-                          clearable
-                          placeholder="内部版本"
-                          @input="iptChange(items, 'verChange')"
-                          @change="ckVerNo(items.verNo)"
-                          @clear="clearVerNo"
-                        >
-                          <el-option
-                            v-for="item in verNoList"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value"
-                          ></el-option>
-                        </el-select>
-                        <div>
-                          <span v-if="items.verNo != ''">{{
-                            items.verNo
-                          }}</span>
-                          <span v-else>/</span>
-                        </div>
-                        <!-- <div class="handleDl" v-if="!items.display" @click="del(items,'pfl')">
+                        <el-option
+                          v-for="item in verNoList"
+                          :key="item.value"
+                          :label="item.label"
+                          :value="item.value"
+                        ></el-option>
+                      </el-select>
+                      <div>
+                        <span v-if="items.verNo != ''">{{ items.verNo }}</span>
+                        <span v-else>/</span>
+                      </div>
+                      <!-- <div class="handleDl" v-if="!items.display" @click="del(items,'pfl')">
                         <i class="el-icon-close"></i>
                         </div>-->
-                      </div>
-                    </el-row>
-                    <el-row style="height: 51px">
-                      <div
-                        v-for="(item, index) of versionData"
-                        :class="
-                          !item.light ? 'lightHeight version1' : 'version1'
-                        "
-                        :key="index"
-                        @mouseenter="mouseEnter(item)"
-                        @mouseleave="mouseLeave(item)"
-                      >
-                        {{ item.verSn }}
-                      </div>
-                    </el-row>
-                  </div>
-                </el-header>
-                <el-main ref="gdBox">
-                  <div ref="bTle" class="bTle" style>
+                    </div>
+                  </el-row>
+                  <el-row style="height: 51px">
                     <div
-                      v-for="(item, index) of data"
-                      :key="item.index"
+                      v-for="(item, index) of versionData"
+                      :class="!item.light ? 'lightHeight version1' : 'version1'"
+                      :key="index"
                       @mouseenter="mouseEnter(item)"
                       @mouseleave="mouseLeave(item)"
-                      :class="item.techId ? 'techDiv' : ''"
                     >
-                      <div class="bIndex" :class="item.techId ? 'techDiv' : ''">
-                        {{ index + 1 }}
-                      </div>
+                      {{ item.verSn }}
+                    </div>
+                  </el-row>
+                </div>
+              </el-header>
+              <el-main ref="gdBox">
+                <div ref="bTle" class="bTle" style>
+                  <div
+                    v-for="(item, index) of data"
+                    :key="item.index"
+                    @mouseenter="mouseEnter(item)"
+                    @mouseleave="mouseLeave(item)"
+                    :class="item.techId ? 'techDiv' : ''"
+                  >
+                    <div class="bIndex" :class="item.techId ? 'techDiv' : ''">
+                      {{ index + 1 }}
+                    </div>
+                    <div
+                      class="wlIndex"
+                      :class="item.techId ? 'techDiv2' : ''"
+                      v-if="item.techId"
+                    >
+                      工艺{{ item.techIndex }}
                       <div
-                        class="wlIndex"
-                        :class="item.techId ? 'techDiv2' : ''"
-                        v-if="item.techId"
+                        class="handleDl1"
+                        v-if="!item.display"
+                        @click="del(item, 'tech')"
                       >
-                        工艺{{ item.techIndex }}
-                        <div
-                          class="handleDl1"
-                          v-if="!item.display"
-                          @click="del(item, 'tech')"
-                        >
-                          <i class="el-icon-close"></i>
-                        </div>
+                        <i class="el-icon-close"></i>
                       </div>
-                      <div
-                        class="wlIndex"
-                        v-else
-                        style="background: #fff; border-right: none"
-                      >
-                        {{ item.bcCode }}
-                      </div>
-                      <div
-                        class="wlIndex"
-                        v-if="!item.techId"
-                        style="background: #fff; width: 128px"
-                      >
-                        <!-- <el-input
+                    </div>
+                    <div
+                      class="wlIndex"
+                      v-else
+                      style="background: #fff; border-right: none"
+                    >
+                      {{ item.bcCode }}
+                    </div>
+                    <div
+                      class="wlIndex"
+                      v-if="!item.techId"
+                      style="background: #fff; width: 128px"
+                    >
+                      <!-- <el-input
                           style="width:90%"
                           v-model="item.materBatchNumber"
                           placeholder="物料批号"
@@ -182,68 +175,66 @@
                           @input="iptChange(item,'materBatchNumber')"
                         ></el-input>-->
 
-                        <el-select
-                          v-model="item.materBatchNumber"
-                          style="width: 95%"
-                          clearable
-                          placeholder="物料批号"
-                          v-if="isEditor && !item.techId"
-                          @input="iptChange(item, 'materBatchNumber')"
-                        >
-                          <el-option
-                            v-for="item in whseChemicalinData"
-                            :key="item.whseChemicalinDtlboid"
-                            :label="item.batchNo"
-                            :value="item.batchNo"
-                          ></el-option>
-                        </el-select>
-                        <el-popover
-                          v-if="item.materBatchNumber && !isEditor"
-                          placement="top-start"
-                          style="margin-left: 2px"
-                          width="200"
-                          trigger="click"
-                          :title="item.materBatchNumber"
-                        >
-                          <span slot="reference">{{
-                            item.materBatchNumber
-                          }}</span>
-                        </el-popover>
+                      <el-select
+                        v-model="item.materBatchNumber"
+                        style="width: 95%"
+                        clearable
+                        placeholder="物料批号"
+                        v-if="isEditor && !item.techId"
+                        @input="iptChange(item, 'materBatchNumber')"
+                      >
+                        <el-option
+                          v-for="item in whseChemicalinData"
+                          :key="item.whseChemicalinDtlboid"
+                          :label="item.batchNo"
+                          :value="item.batchNo"
+                        ></el-option>
+                      </el-select>
+                      <el-popover
+                        v-if="item.materBatchNumber && !isEditor"
+                        placement="top-start"
+                        style="margin-left: 2px"
+                        width="200"
+                        trigger="click"
+                        :title="item.materBatchNumber"
+                      >
+                        <span slot="reference">{{
+                          item.materBatchNumber
+                        }}</span>
+                      </el-popover>
 
-                        <span v-if="!item.materBatchNumber && !isEditor"
-                          >/</span
-                        >
-                      </div>
-                      <div class="bName" :class="item.techId ? 'techDiv' : ''">
-                        <el-input
-                          style="width: 90%"
-                          v-model="item.chemicalName"
-                          placeholder="染化料"
-                          v-if="isEditor && !item.techId"
-                          @input="iptChange(item, 'bcCode')"
-                          maxlength="5"
-                        ></el-input>
-                        <el-popover
-                          v-else
-                          placement="top-start"
-                          width="200"
-                          trigger="click"
-                          :title="item.chemicalName"
-                        >
-                          <span slot="reference">{{ item.chemicalName }}</span>
-                        </el-popover>
+                      <span v-if="!item.materBatchNumber && !isEditor">/</span>
+                    </div>
+                    <div class="bName" :class="item.techId ? 'techDiv' : ''">
+                      <el-input
+                        style="width: 90%"
+                        v-model="item.chemicalName"
+                        placeholder="染化料"
+                        v-if="isEditor && !item.techId"
+                        @input="iptChange(item, 'bcCode')"
+                        maxlength="5"
+                      ></el-input>
+                      <el-popover
+                        v-else
+                        placement="top-start"
+                        width="200"
+                        trigger="click"
+                        :title="item.chemicalName"
+                      >
+                        <span slot="reference">{{ item.chemicalName }}</span>
+                      </el-popover>
 
-                        <!-- <span v-else>{{item.chemicalName}}</span> -->
-                        <div
-                          class="handleDl1"
-                          v-if="!item.display && !item.techId"
-                          @click="del(item, 'rhl')"
-                        >
-                          <i class="el-icon-close"></i>
-                        </div>
+                      <!-- <span v-else>{{item.chemicalName}}</span> -->
+                      <div
+                        class="handleDl1"
+                        v-if="!item.display && !item.techId"
+                        @click="del(item, 'rhl')"
+                      >
+                        <i class="el-icon-close"></i>
                       </div>
                     </div>
-                    <!-- <div class="addColor">
+                  </div>
+                  <!-- <div class="addColor">
                       <el-button
                         type="primary"
                         @click="colorAdd"
@@ -257,180 +248,175 @@
                         icon="el-icon-plus"
                       >工艺配方</el-button>
                     </div>-->
-                  </div>
-                  <div style="margin-left: 400px">
-                    <div
-                      class="LdData"
-                      v-for="item of versionData"
-                      :key="item.index"
-                      @mouseenter="mouseEnter(item)"
-                      @mouseleave="mouseLeave(item)"
-                    >
-                      <div class="dataBox">
-                        <div
-                          v-for="(items, index) of item.children"
-                          :class="
-                            !item.light ? 'lightHeight tbValue' : 'tbValue'
-                          "
-                          :key="index"
-                        >
-                          <div v-if="!items.isTech">
-                            <el-input
-                              style="width: 90%"
-                              v-model="items.formulaAmount"
-                              placeholder="配方量"
-                              v-if="isEditor && item.verId != '' && items.light"
-                              @input="iptChange(items, 'formulaAmount')"
-                            ></el-input>
+                </div>
+                <div style="margin-left: 400px">
+                  <div
+                    class="LdData"
+                    v-for="item of versionData"
+                    :key="item.index"
+                    @mouseenter="mouseEnter(item)"
+                    @mouseleave="mouseLeave(item)"
+                  >
+                    <div class="dataBox">
+                      <div
+                        v-for="(items, index) of item.children"
+                        :class="!item.light ? 'lightHeight tbValue' : 'tbValue'"
+                        :key="index"
+                      >
+                        <div v-if="!items.isTech">
+                          <el-input
+                            style="width: 90%"
+                            v-model="items.formulaAmount"
+                            placeholder="配方量"
+                            v-if="isEditor && item.verId != '' && items.light"
+                            @input="iptChange(items, 'formulaAmount')"
+                          ></el-input>
 
-                            <div class="uninput" v-else>
-                              <span
-                                v-if="
-                                  items.formulaAmount != null &&
-                                  items.formulaAmount != ''
-                                "
-                                >{{ items.formulaAmount }}</span
-                              >
-                              <span v-else>/</span>
-                            </div>
+                          <div class="uninput" v-else>
+                            <span
+                              v-if="
+                                items.formulaAmount != null &&
+                                items.formulaAmount != ''
+                              "
+                              >{{ items.formulaAmount }}</span
+                            >
+                            <span v-else>/</span>
                           </div>
-                          <div v-else class="techDiv">
-                            <div v-if="isEditor">
-                              <span
-                                style="float: left; margin-left: 5px"
-                                v-if="items.placeholder"
-                                >{{ items.placeholder }}:</span
-                              >
+                        </div>
+                        <div v-else class="techDiv">
+                          <div v-if="isEditor">
+                            <span
+                              style="float: left; margin-left: 5px"
+                              v-if="items.placeholder"
+                              >{{ items.placeholder }}:</span
+                            >
 
-                              <el-input
-                                style="width: 60%"
-                                v-model="items.value"
-                                :placeholder="items.placeholder"
-                                :disabled="items.disabled"
-                                @input="iptChange(items, 'tech')"
-                              ></el-input>
-                            </div>
+                            <el-input
+                              style="width: 60%"
+                              v-model="items.value"
+                              :placeholder="items.placeholder"
+                              :disabled="items.disabled"
+                              @input="iptChange(items, 'tech')"
+                            ></el-input>
+                          </div>
 
-                            <div class="uninput" v-else>
-                              <span
-                                style="width: 60px; float: left"
-                                v-if="items.placeholder"
-                                >{{ items.placeholder }}：</span
-                              >
-                              <span
-                                style="float: left; font-weight: bold"
-                                v-if="items.value != null && items.value != ''"
-                                >{{ items.value }}</span
-                              >
-                              <span v-else>/</span>
-                            </div>
+                          <div class="uninput" v-else>
+                            <span
+                              style="width: 60px; float: left"
+                              v-if="items.placeholder"
+                              >{{ items.placeholder }}：</span
+                            >
+                            <span
+                              style="float: left; font-weight: bold"
+                              v-if="items.value != null && items.value != ''"
+                              >{{ items.value }}</span
+                            >
+                            <span v-else>/</span>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </el-main>
-              </el-container>
-            </div>
+                </div>
+              </el-main>
+            </el-container>
           </div>
-        </el-tab-pane>
-      </el-tabs>
-      <el-dialog
-        title
-        :visible.sync="addDlg"
-        width="80%"
-        :close-on-click-modal="false"
-        append-to-body
-        class="adddlg"
-      >
-        <el-row>
-          <el-tabs v-model="addActive">
-            <el-tab-pane
-              label="新增版本"
-              name="first"
-              v-if="addActive === 'first'"
+        </div>
+      </el-tab-pane>
+    </el-tabs>
+    <el-dialog
+      title
+      :visible.sync="addDlg"
+      width="80%"
+      :close-on-click-modal="false"
+      append-to-body
+      class="adddlg"
+    >
+      <el-row>
+        <el-tabs v-model="addActive">
+          <el-tab-pane
+            label="新增版本"
+            name="first"
+            v-if="addActive === 'first'"
+          >
+            <avue-form
+              :option="formOption"
+              v-model="form"
+              @submit="verAdd"
+            ></avue-form>
+          </el-tab-pane>
+          <el-tab-pane
+            label="新增染化料"
+            name="second"
+            v-if="addActive === 'second'"
+          >
+            <avue-form
+              :option="colorOp"
+              v-model="colorForm"
+              @submit="colorSave"
             >
-              <avue-form
-                :option="formOption"
-                v-model="form"
-                @submit="verAdd"
-              ></avue-form>
-            </el-tab-pane>
-            <el-tab-pane
-              label="新增染化料"
-              name="second"
-              v-if="addActive === 'second'"
-            >
-              <avue-form
-                :option="colorOp"
-                v-model="colorForm"
-                @submit="colorSave"
-              >
-                <template slot-scope="scope" slot="chemicalClass">
-                  <div>
-                    <el-select
-                      v-model="colorForm.chemicalClass"
-                      remote
-                      filterable
-                      placeholder="请选择"
-                      :remote-method="remoteMethod"
-                      :loading="remoteLoading"
+              <template slot-scope="scope" slot="chemicalClass">
+                <div>
+                  <el-select
+                    v-model="colorForm.chemicalClass"
+                    remote
+                    filterable
+                    placeholder="请选择"
+                    :remote-method="remoteMethod"
+                    :loading="remoteLoading"
+                  >
+                    <el-option
+                      v-for="item in chemicalClassData"
+                      :key="item.bcCode"
+                      :label="item.bcMatname"
+                      :value="item.bcMatname"
+                      style="width: 800px"
                     >
-                      <el-option
-                        v-for="item in chemicalClassData"
-                        :key="item.bcCode"
-                        :label="item.bcMatname"
-                        :value="item.bcMatname"
-                        style="width: 800px"
-                      >
-                        <el-row>
-                          <el-col style="width: 20%">
-                            <span>名称 : {{ item.bcMatname }}</span>
-                          </el-col>
-                          <el-col style="width: 20%">
-                            <span style="color: #8492a6; font-size: 13px"
-                              >编码 : {{ item.bcCode }}</span
-                            >
-                          </el-col>
-                          <el-col style="width: 20%">
-                            <span style="color: #8492a6; font-size: 13px"
-                              >一级分类 :
-                              {{ item.basChemicalsecond.sname }}</span
-                            >
-                          </el-col>
-                          <el-col style="width: 20%">
-                            <span style="color: #8492a6; font-size: 13px"
-                              >二级分类 :
-                              {{ item.basChemicalthree.tname }}</span
-                            >
-                          </el-col>
-                          <el-col style="width: 20%">
-                            <span style="color: #8492a6; font-size: 13px"
-                              >三级分类 : {{ item.basChemicalfour.fname }}</span
-                            >
-                          </el-col>
-                        </el-row>
-                      </el-option>
-                    </el-select>
-                  </div>
-                </template>
-              </avue-form>
-            </el-tab-pane>
-            <el-tab-pane
-              label="新增工艺配方"
-              name="three"
-              v-if="addActive === 'three'"
-            >
-              <avue-form
-                :option="techOption"
-                v-model="techForm"
-                @submit="techSave"
-              ></avue-form>
-            </el-tab-pane>
-          </el-tabs>
-        </el-row>
-      </el-dialog>
-  
+                      <el-row>
+                        <el-col style="width: 20%">
+                          <span>名称 : {{ item.bcMatname }}</span>
+                        </el-col>
+                        <el-col style="width: 20%">
+                          <span style="color: #8492a6; font-size: 13px"
+                            >编码 : {{ item.bcCode }}</span
+                          >
+                        </el-col>
+                        <el-col style="width: 20%">
+                          <span style="color: #8492a6; font-size: 13px"
+                            >一级分类 : {{ item.basChemicalsecond.sname }}</span
+                          >
+                        </el-col>
+                        <el-col style="width: 20%">
+                          <span style="color: #8492a6; font-size: 13px"
+                            >二级分类 : {{ item.basChemicalthree.tname }}</span
+                          >
+                        </el-col>
+                        <el-col style="width: 20%">
+                          <span style="color: #8492a6; font-size: 13px"
+                            >三级分类 : {{ item.basChemicalfour.fname }}</span
+                          >
+                        </el-col>
+                      </el-row>
+                    </el-option>
+                  </el-select>
+                </div>
+              </template>
+            </avue-form>
+          </el-tab-pane>
+          <el-tab-pane
+            label="新增工艺配方"
+            name="three"
+            v-if="addActive === 'three'"
+          >
+            <avue-form
+              :option="techOption"
+              v-model="techForm"
+              @submit="techSave"
+            ></avue-form>
+          </el-tab-pane>
+        </el-tabs>
+      </el-row>
+    </el-dialog>
   </div>
 </template>
 
@@ -1089,7 +1075,7 @@ export default {
               .then((res) => {
                 if (res.data.code == 200) {
                   this.getData();
-                  success("删除成功！");
+                  success(this.$t("public.sccg"));
                 } else {
                   error(this.$t("energy.scsb") + res.data);
                   this.loading = false;

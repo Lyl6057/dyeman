@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-25 01:27:50
  * @LastEditors: Lyl
- * @LastEditTime: 2021-03-25 15:45:16
+ * @LastEditTime: 2021-03-31 16:36:47
  * @Description: 
 -->
 
@@ -20,7 +20,9 @@
         <div class="btnList">
           <el-button type="primary" @click="choice">选择</el-button>
           <el-button type="primary" @click="query">查询</el-button>
-          <el-button type="warning" @click="close">关闭</el-button>
+          <el-button type="warning" @click="close">{{
+            this.$t("public.close")
+          }}</el-button>
         </div>
         <div class="formBox">
           <avue-form ref="form" :option="choiceF" v-model="form"></avue-form>
@@ -79,17 +81,32 @@ export default {
             this.choiceC = flOp(this);
             this.func.get = getScfl;
             this.choiceF.column[1].prop = "hardwareId";
-            this.choiceF.column[2].prop = "chinName";
+            this.choiceF.column[2].prop =
+              this.lang === "1"
+                ? "cnnamelong"
+                : this.lang === "2"
+                ? "ennamelong"
+                : "vinamelong";
             break;
           case "RHL":
             this.choiceF.column[1].prop = "bcCode";
-            this.choiceF.column[2].prop = "cnnamelong";
+            this.choiceF.column[2].prop =
+              this.lang === "1"
+                ? "cnnamelong"
+                : this.lang === "2"
+                ? "ennamelong"
+                : "vinamelong";
             this.choiceC = hgylOp(this);
             this.func.get = getHgyl;
             break;
           case "RLL":
             this.choiceF.column[1].prop = "bcCode";
-            this.choiceF.column[2].prop = "cnnamelong";
+            this.choiceF.column[2].prop =
+              this.lang === "1"
+                ? "cnnamelong"
+                : this.lang === "2"
+                ? "ennamelong"
+                : "vinamelong";
             this.choiceC = ylOp(this);
             this.func.get = getYl;
             break;
@@ -130,6 +147,7 @@ export default {
       func: {
         get: getSx,
       },
+      lang: this.$store.state.lang,
     };
   },
   methods: {
@@ -240,6 +258,10 @@ export default {
 
   .el-tag--mini {
     display: none;
+  }
+
+  .el-dialog.is-fullscreen {
+    overflow: hidden !important;
   }
 }
 </style>

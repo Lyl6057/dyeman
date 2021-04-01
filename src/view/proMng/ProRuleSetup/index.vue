@@ -20,13 +20,15 @@
           @row-click="fn_clickUP"
         >
           <template slot="menuLeft">
-            <el-button
-              type="primary"
-              size="mini"
-              @click="handleList"
-            >{{$t('ProWorkflowInfo.query')}}</el-button>
-            <el-button type="primary" size="mini" @click="fn_update">编辑</el-button>
-            <el-button type="primary" size="mini" @click="del">删除</el-button>
+            <el-button type="primary" size="mini" @click="handleList">{{
+              $t("ProWorkflowInfo.query")
+            }}</el-button>
+            <el-button type="primary" size="mini" @click="fn_update"
+              >编辑</el-button
+            >
+            <el-button type="primary" size="mini" @click="del">{{
+              this.$t("public.del")
+            }}</el-button>
           </template>
           <template slot-scope="scope" slot="menuForm">
             <el-button
@@ -34,7 +36,8 @@
               icon="el-icon-check"
               size="mini"
               @click="addData2(scope.row, scope.index)"
-            >保存并新增</el-button>
+              >保存并新增</el-button
+            >
           </template>
         </avue-crud>
       </el-col>
@@ -51,7 +54,7 @@ export default {
       page: {
         pageSize: 20,
         currentPage: 1,
-        total: 0
+        total: 0,
       },
       gridData: [],
       data: [],
@@ -74,39 +77,39 @@ export default {
             label: "设置ID",
             prop: "setupId",
             hide: true,
-            display: false
+            display: false,
           },
           {
             // 设置名称
             label: this.$t("ProWorkflowInfo.sjmc"),
             prop: "setupName",
-            cell: true
+            cell: true,
           },
           {
             // 设置编号
             label: this.$t("ProWorkflowInfo.sjbh"),
             prop: "setupCode",
-            cell: true
+            cell: true,
           },
           {
             // 设置分类
             label: this.$t("ProWorkflowInfo.sjfl"),
             prop: "setupCategory",
-            cell: true
+            cell: true,
           },
           {
             // 设置描述
             label: this.$t("ProWorkflowInfo.szms"),
             prop: "setupDecs",
-            cell: true
+            cell: true,
           },
           {
             // 设置表达式
             label: this.$t("ProWorkflowInfo.bds"),
             prop: "setupFormula",
-            cell: true
-          }
-        ]
+            cell: true,
+          },
+        ],
       },
       form: {},
       formOption: {
@@ -125,20 +128,20 @@ export default {
             // 设置名称
             label: this.$t("ProWorkflowInfo.sjmc"),
             prop: "setupName",
-            span: 8
+            span: 8,
           },
           {
             // 设置编号
             label: this.$t("ProWorkflowInfo.sjbh"),
             prop: "setupCode",
-            span: 8
+            span: 8,
           },
           {
             // 设置分类
             label: this.$t("ProWorkflowInfo.sjfl"),
             prop: "setupCategory",
-            span: 8
-          }
+            span: 8,
+          },
           // {
           //   label: "设置描述",
           //   prop: "setupDecs",
@@ -149,10 +152,10 @@ export default {
           //   prop: "setupFormula",
           //   span: 8
           // }
-        ]
+        ],
       },
       rowCode: "", //勾选选中ID
-      upData: [] //选中数据编辑
+      upData: [], //选中数据编辑
     };
   },
   methods: {
@@ -164,25 +167,25 @@ export default {
         //开始列
         current: this.page.currentPage,
         //数量
-        size: this.page.pageSize
+        size: this.page.pageSize,
       };
       this.$axios
         .post(
           "/api/proRuleSetupList?page=" + data.current + "&rows=" + data.size
         )
-        .then(res => {
+        .then((res) => {
           this.page.currentPage = res.data.current;
           this.page.pageSize = res.data.size;
           this.page.total = res.data.total;
         });
 
       let params = {};
-      Object.keys(this.form).forEach(key => {
+      Object.keys(this.form).forEach((key) => {
         // 左边为true,执行右边表达式
         this.form[key] && (params[key] = this.form[key]);
       });
       // 获取和输入筛选数据
-      this.$axios.get("/api/proRuleSetupList", { params }).then(res => {
+      this.$axios.get("/api/proRuleSetupList", { params }).then((res) => {
         console.log(res);
         this.gridData = res.data;
         this.gridOption = Data_Width(this.gridOption, this.gridData);
@@ -204,7 +207,7 @@ export default {
     //新增
     addData(row, done) {
       let data = isDate(this.gridOption, row);
-      this.$axios.put("/api/proRuleSetup", data).then(res => {
+      this.$axios.put("/api/proRuleSetup", data).then((res) => {
         if (res.data.code == 0) {
           success("新增成功");
           this.handleList();
@@ -230,7 +233,7 @@ export default {
     //更新数据
     update(row, index, done, loading) {
       let data = isDate(this.gridOption, row);
-      this.$axios.post("/api/proRuleSetup", data).then(res => {
+      this.$axios.post("/api/proRuleSetup", data).then((res) => {
         if (res.data.code == 0) {
           this.handleList();
           success("修改成功");
@@ -244,17 +247,17 @@ export default {
     //删除
     del() {
       const Data = [];
-      this.rowCode.forEach(item => {
+      this.rowCode.forEach((item) => {
         Data.push(item.setupId);
       });
       //设置请求格式为json格式
       const requParams = {
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
         transformRequest(data) {
           return JSON.stringify(data);
-        }
+        },
       };
       cofirm("此操作将永久删除该文件, 是否继续?", "提示", {})
         .then(() => {
@@ -262,32 +265,32 @@ export default {
             ...requParams,
             method: "delete",
             url: "/api/proRuleSetup/batchesDel",
-            data: Data
-          }).then(res => {
+            data: Data,
+          }).then((res) => {
             if (res.data.code == 200) {
-              success("删除成功");
+              success(this.$t("public.sccg"));
               this.handleList();
             } else {
-              warning("删除失败");
+              warning(this.$t("public.scsb"));
             }
           });
         })
         .catch(() => {
           this.$message({
             type: "info",
-            message: "已取消删除"
+            message: "已取消删除",
           });
         });
     },
     //双击编辑
     rowClick(row, column, cell, event) {
       this.$refs.crud.rowCell(row, row.$index);
-    }
+    },
   },
   created() {
     this.handleList();
     this.gridOption = label_Width(this.gridOption);
-  }
+  },
 };
 </script>
 
