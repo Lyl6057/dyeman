@@ -56,7 +56,7 @@
         </el-form-item>
       </el-form>
     </el-row>
-    <!-- v-loading="loading" element-loading-text="拼命加载中" -->
+    <!-- v-loading="loading" :element-loading-text="$t('public.loading')" -->
     <el-row>
       <div
         :style="{ width: size.width[0] * 10 + '%', float: 'left' }"

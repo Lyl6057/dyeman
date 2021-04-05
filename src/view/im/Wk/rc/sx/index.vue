@@ -9,14 +9,16 @@
           type="success"
           :disabled="Object.keys(detail).length === 0"
           @click="handleRowDBLClick(detail)"
-          >修改</el-button
+          >{{ this.$t("public.update") }}</el-button
         >
         <el-button type="danger" @click="del">{{
           this.$t("public.del")
         }}</el-button>
 
         <!-- <el-button type="warning" @click="ruleV = true">編號規則配置</el-button> -->
-        <el-button type="primary" @click="getData">查询</el-button>
+        <el-button type="primary" @click="getData">{{
+          this.$t("public.query")
+        }}</el-button>
         <el-button type="warning" @click="close">{{
           this.$t("public.close")
         }}</el-button>
@@ -30,7 +32,7 @@
       </div>
       <el-row class="crudBox">
         <el-col :span="24">
-          <view-container :title="data.type.split('_')[0] + '入库'">
+          <view-container :title="data.type.split('_')[0] + $t('iaoMng.rc')">
             <avue-crud
               ref="crud"
               :option="everyThing.mainC"
@@ -155,7 +157,7 @@ export default {
       changeList: [],
       ruleV: false,
       choiceV: false,
-      choiceTle: "來紗登記",
+      choiceTle: this.$t("iaoMng.xzlsdj"),
       choiceTarget: {},
       choiceField: "",
       choiceQ: {},
@@ -271,7 +273,7 @@ export default {
     },
     del() {
       if (Object.keys(this.chooseData).length === 0) {
-        this.$tip.error("请选择要删除的数据!");
+        this.$tip.error(this.$t("public.delTle"));
         return;
       }
       if (!this.chooseData.whseYarninoid) {
@@ -281,7 +283,9 @@ export default {
       }
       this.$tip
         .cofirm(
-          "是否确定删除入仓编号为 【 " + this.chooseData.yinId + " 】 的数据?",
+          this.$t("iaoMng.delTle1") +
+            this.chooseData.yinId +
+            this.$t("iaoMng.delTle2"),
           this,
           {}
         )
@@ -372,7 +376,7 @@ export default {
       // }
       this.oldData.$cellEdit = false;
       this.choiceTarget[this.choiceField] = val[this.choiceField];
-      if (this.choiceTle === "外厂纱线配料计划") {
+      if (this.choiceTle === this.$t("choicDlg.sxwc")) {
         this.choiceTarget.factoryId = val.refCode;
         this.choiceTarget.factoryName = val.refCode;
       }

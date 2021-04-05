@@ -19,7 +19,7 @@
                 this.$t("public.close")
               }}</el-button> -->
               <!-- <el-button type="primary" size="mini" @click="handleList"
-                >查询</el-button
+                >{{this.$t("public.query")}}</el-button
               > -->
             </div>
             <!-- <div :span="24">

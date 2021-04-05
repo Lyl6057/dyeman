@@ -1,5 +1,6 @@
 import { getDIC, getDicT, postDicT, getXDicT, getDbDicT } from '@/config/index'
 import axios from 'axios';
+import i18n from '../lang/index'
 import store from '@/store/index' // 多語言 store.state
 const lang = store.state.lang
 let cust1 = getDicT("basCustomer", "custName", "custCode")
@@ -34,7 +35,7 @@ export const YarninF = {
   menu: false,
   column: [
     {
-      label: "入仓编号",
+      label: i18n.t("whseField.rcbh"),
       prop: "whseYarninFk",
       span: 6,
       type: "tree",
@@ -79,7 +80,7 @@ export const YarninC = {
       align: "center",
     },
     {
-      label: "入仓编号",
+      label: i18n.t("whseField.rcbh"),
       prop: "whseYarninFk",
       cell: false,
       width: 150,
@@ -227,7 +228,7 @@ export const instructDtlC = {
       width: 350
     },
     {
-      label: "重量",
+      label: i18n.t("whseField.zl"),
       prop: "weight",
       width: 100,
       align: "right"
@@ -364,7 +365,7 @@ export const IncomingYarnDtlF = {
       placeholder: " ",
     },
     {
-      label: "批号",
+      label: i18n.t("whseField.ph"),
       prop: "batchNo",
       span: 6,
       placeholder: " ",
@@ -423,7 +424,7 @@ export const IncomingYarnDtlC = {
       align: "right"
     },
     {
-      label: "重量",
+      label: i18n.t("whseField.zl"),
       prop: "weight",
       width: 100,
       align: "right"
@@ -581,7 +582,7 @@ export const EmbryogenesisDtlC = {
       width: 120
     },
     {
-      label: "胚布名称",
+      label: i18n.t("whseField.pbmc"),
       prop: "clothName",
       // width: 350
     },
@@ -605,7 +606,7 @@ export const EmbryogenesisDtlC = {
       align: "right"
     },
     {
-      label: "重量",
+      label: i18n.t("whseField.zl"),
       prop: "weights",
       width: 100,
       align: "right"
@@ -779,7 +780,7 @@ export const chemicalDtlC = {
       width: 350
     },
     {
-      label: "重量",
+      label: i18n.t("whseField.zl"),
       prop: "incomQty",
       width: 100,
       align: "right"
@@ -952,7 +953,7 @@ export const pigmentDtlC = {
       width: 350
     },
     {
-      label: "重量",
+      label: i18n.t("whseField.zl"),
       prop: "incomQty",
       width: 100,
       align: "right"
@@ -1167,7 +1168,7 @@ export const BasYarnsDataF = {
     //   placeholder: " ",
     // },
     {
-      label: "批号",
+      label: i18n.t("whseField.ph"),
       prop: "batchNo",
       span: 6,
       placeholder: " ",
@@ -1228,7 +1229,7 @@ export const BasYarnsDataC = {
       width: 500
     },
     {
-      label: "批号",
+      label: i18n.t("whseField.ph"),
       prop: "batchNo",
       width: 130
     },
@@ -1354,7 +1355,7 @@ export const BasCalicoC = {
       width: 100,
     },
     {
-      label: "胚布名称",
+      label: i18n.t("whseField.pbmc"),
       prop: "calicoSname",
       width: 380,
       // type: "select",
@@ -2055,20 +2056,20 @@ export const WhseCalicoPackBarCodeC = {
     },
 
     {
-      label: "重量",
+      label: i18n.t("whseField.zl"),
       prop: "weight",
       width: 100,
       align: "right"
     },
     {
-      label: "重量单位",
+      label: i18n.t("whseField.zldw"),
       prop: "weightUnit",
       width: 100,
       type: "select",
       dicData: matUnit
     },
     {
-      label: "码卡号",
+      label: i18n.t("whseField.mkh"),
       prop: "fabticket",
       width: 250
     },
@@ -2221,7 +2222,7 @@ export const PurYarnsPoF = {
   menu: false,
   column: [
     {
-      label: "採購單號",
+      label: i18n.t("whseField.chdh"),
       prop: "poNo",
       span: 6,
       placeholder: " ",
@@ -2279,7 +2280,7 @@ export const PurYarnsPoC = {
       align: "center",
     },
     {
-      label: "採購單號",
+      label: i18n.t("whseField.chdh"),
       prop: "poNo",
       width: 180
     },
@@ -2336,7 +2337,7 @@ export const PurYarnsPoDtlaF = {
   menu: false,
   column: [
     {
-      label: "採購單號",
+      label: i18n.t("whseField.chdh"),
       prop: "poNo",
       span: 6,
       placeholder: " ",
@@ -2394,7 +2395,7 @@ export const PurYarnsPoDtlaC = {
       align: "center",
     },
     {
-      label: "採購單號",
+      label: i18n.t("whseField.chdh"),
       prop: "poNo",
       width: 180
     },
@@ -2452,7 +2453,7 @@ export const PurCalicoPoF = {
   menu: false,
   column: [
     {
-      label: "採購單號",
+      label: i18n.t("whseField.chdh"),
       prop: "poNo",
       span: 8,
       placeholder: " ",
@@ -2510,7 +2511,7 @@ export const PurCalicoPoC = {
       align: "center",
     },
     {
-      label: "採購單號",
+      label: i18n.t("whseField.chdh"),
       prop: "poNo",
     },
     {
@@ -2574,7 +2575,7 @@ export const PurChemicalpoF = {
   menu: false,
   column: [
     {
-      label: "採購單號",
+      label: i18n.t("whseField.chdh"),
       prop: "poNo",
       span: 8,
       placeholder: " ",
@@ -2632,7 +2633,7 @@ export const PurChemicalpoC = {
       align: "center",
     },
     {
-      label: "採購單號",
+      label: i18n.t("whseField.chdh"),
       prop: "poNo",
       width: 180
     },
@@ -2693,7 +2694,7 @@ export const PurMaterialspoF = {
   menu: false,
   column: [
     {
-      label: "採購單號",
+      label: i18n.t("whseField.chdh"),
       prop: "poNo",
       span: 8,
       placeholder: " ",
@@ -2751,7 +2752,7 @@ export const PurMaterialspoC = {
       align: "center",
     },
     {
-      label: "採購單號",
+      label: i18n.t("whseField.chdh"),
       prop: "poNo",
     },
     {
@@ -2802,7 +2803,7 @@ export const PurHardwarepoF = {
   menu: false,
   column: [
     {
-      label: "採購單號",
+      label: i18n.t("whseField.chdh"),
       prop: "poNo",
       span: 8,
       placeholder: " ",
@@ -2860,7 +2861,7 @@ export const PurHardwarepoC = {
       align: "center",
     },
     {
-      label: "採購單號",
+      label: i18n.t("whseField.chdh"),
       prop: "poNo",
     },
     {
@@ -2925,7 +2926,7 @@ export const WhseRetratyarnF = {
       placeholder: " ",
     },
     {
-      label: "批号",
+      label: i18n.t("whseField.ph"),
       prop: "batchNo",
       span: 6,
       placeholder: " ",
@@ -2972,12 +2973,12 @@ export const WhseRetratyarnC = {
       dicData: getDicT("basYarnsData", "yarnsName", "yarnsId"),
     },
     {
-      label: "批号",
+      label: i18n.t("whseField.ph"),
       prop: "batchNo",
       width: 150
     },
     {
-      label: "重量",
+      label: i18n.t("whseField.zl"),
       prop: "weight",
       align: "right",
       width: 120
@@ -3205,7 +3206,7 @@ export const BasCustomerF = {
   menu: false,
   column: [
     {
-      label: "客戶名稱",
+      label: i18n.t("whseField.khmc"),
       prop: "custName",
       span: 8,
       placeholder: " ",
@@ -3245,12 +3246,12 @@ export const BasCustomerC = {
       align: "center",
     },
     {
-      label: "客戶名稱",
+      label: i18n.t("whseField.khmc"),
       prop: "custName",
       width: 280
     },
     {
-      label: "客戶編號",
+      label: i18n.t("whseField.khbh"),
       prop: "custCode",
       type: "select",
     },
@@ -3321,7 +3322,7 @@ export const WhseChemicalPlanF = {
       placeholder: " ",
     },
     // {
-    //   label: "生產單號",
+    //   label:i18n.t("whseField.scdh"),
     //   prop: "prOn",
     //   span: 8,
     //   placeholder: " ",
@@ -3362,7 +3363,7 @@ export const WhseChemicalPlanC = {
       width: 220
     },
     // {
-    //   label: "生產單號",
+    //   label:i18n.t("whseField.scdh"),
     //   prop: "prOn",
     // },
     {
@@ -3374,7 +3375,7 @@ export const WhseChemicalPlanC = {
       prop: "chemicalName",
     },
     {
-      label: "重量",
+      label: i18n.t("whseField.zl"),
       prop: "weight",
       align: "right"
     },
@@ -3429,7 +3430,7 @@ export const WhseRetmaterialsPlanF = {
       placeholder: " ",
     },
     // {
-    //   label: "生產單號",
+    //   label:i18n.t("whseField.scdh"),
     //   prop: "prOn",
     //   span: 8,
     //   placeholder: " ",
@@ -3469,7 +3470,7 @@ export const WhseRetmaterialsPlanC = {
       width: 220
     },
     // {
-    //   label: "生產單號",
+    //   label:i18n.t("whseField.scdh"),
     //   prop: "prOn",
     // },
     {
@@ -3524,7 +3525,7 @@ export const WhseMaterialoutPlanF = {
       placeholder: " ",
     },
     {
-      label: "胚布名称",
+      label: i18n.t("whseField.pbmc"),
       prop: "clothName",
       span: 6,
       placeholder: " ",
@@ -3536,7 +3537,7 @@ export const WhseMaterialoutPlanF = {
       placeholder: " ",
     },
     // {
-    //   label: "生產單號",
+    //   label:i18n.t("whseField.scdh"),
     //   prop: "prOn",
     //   span: 8,
     //   placeholder: " ",
@@ -3553,7 +3554,7 @@ export const WhseMaterialoutPlanC = {
   height: "calc(100vh - 200px)",
   refreshBtn: false,
   columnBtn: false,
-  selection: true,
+  selection: false,
   page: true,
   column: [
     {
@@ -3579,7 +3580,7 @@ export const WhseMaterialoutPlanC = {
       width: 150
     },
     // {
-    //   label: "生產單號",
+    //   label:i18n.t("whseField.scdh"),
     //   prop: "prOn",
     // },
     {
@@ -3588,11 +3589,11 @@ export const WhseMaterialoutPlanC = {
       width: 140
     },
     {
-      label: "胚布名称",
+      label: i18n.t("whseField.pbmc"),
       prop: "clothName",
     },
     {
-      label: "重量",
+      label: i18n.t("whseField.zl"),
       prop: "weight",
       align: "right",
       width: 120
@@ -3648,7 +3649,7 @@ export const WhseMaterialPlanF = {
       placeholder: " ",
     },
     // {
-    //   label: "生產單號",
+    //   label:i18n.t("whseField.scdh"),
     //   prop: "prOn",
     //   span: 8,
     //   placeholder: " ",
@@ -3690,7 +3691,7 @@ export const WhseMaterialPlanC = {
       width: 220
     },
     {
-      label: "生產單號",
+      label: i18n.t("whseField.scdh"),
       prop: "prOn",
       width: 150
     },
@@ -3700,7 +3701,7 @@ export const WhseMaterialPlanC = {
       width: 140
     },
     {
-      label: "胚布名称",
+      label: i18n.t("whseField.pbmc"),
       prop: "clothName",
       // width: 250
     },
@@ -3711,13 +3712,13 @@ export const WhseMaterialPlanC = {
       width: 140
     },
     {
-      label: "疋号",
+      label: i18n.t("whseField.ph2"),
       prop: "countingNo",
       align: "right",
       width: 100
     },
     {
-      label: "重量",
+      label: i18n.t("whseField.zl"),
       prop: "weight",
       align: "right",
       width: 100
@@ -3773,7 +3774,7 @@ export const WhseRetyarninoutPlanF = {
       placeholder: " ",
     },
     // {
-    //   label: "生產單號",
+    //   label:i18n.t("whseField.scdh"),
     //   prop: "prOn",
     //   span: 8,
     //   placeholder: " ",
@@ -3790,7 +3791,7 @@ export const WhseRetyarninoutPlanC = {
   height: "calc(100vh - 200px)",
   refreshBtn: false,
   columnBtn: false,
-  selection: true,
+  selection: false,
   page: true,
   column: [
     {
@@ -3815,7 +3816,7 @@ export const WhseRetyarninoutPlanC = {
       width: 220
     },
     {
-      label: "生產單號",
+      label: i18n.t("whseField.scdh"),
       prop: "prOn",
       width: 140
     },
@@ -3836,7 +3837,7 @@ export const WhseRetyarninoutPlanC = {
       width: 100
     },
     {
-      label: "重量",
+      label: i18n.t("whseField.zl"),
       prop: "weight",
       align: "right",
       width: 100
@@ -3892,7 +3893,7 @@ export const WhseRetyarninPlanF = {
       placeholder: " ",
     },
     // {
-    //   label: "生產單號",
+    //   label:i18n.t("whseField.scdh"),
     //   prop: "prOn",
     //   span: 8,
     //   placeholder: " ",
@@ -3934,7 +3935,7 @@ export const WhseRetyarninPlanC = {
       width: 220
     },
     {
-      label: "生產單號",
+      label: i18n.t("whseField.scdh"),
       prop: "prOn",
       width: 150
     },
@@ -3955,7 +3956,7 @@ export const WhseRetyarninPlanC = {
       width: 100
     },
     {
-      label: "重量",
+      label: i18n.t("whseField.zl"),
       prop: "weight",
       align: "right",
       width: 100
@@ -4141,7 +4142,7 @@ export const shipPlanDtlC = {
       // width: 600
     },
     {
-      label: "重量",
+      label: i18n.t("whseField.zl"),
       prop: "qty",
       width: 100
     },
@@ -4280,7 +4281,7 @@ export const PbDltbF = {
       // typeslot: true,
     },
     {
-      label: "客人布票号",
+      label: i18n.t("whseField.krbph"),
       prop: "custTicket",
       span: 6,
       placeholder: " ",
@@ -4316,48 +4317,48 @@ export const PbDltbC = {
       dicData: getDicT("whseCalicoinDtla/v1.0/list", "prodNo", "whseCalicoinDtlaoid"),
     },
     {
-      label: "批号",
+      label: i18n.t("whseField.ph"),
       prop: "batchNo",
       width: 150,
     },
     {
-      label: "疋号",
+      label: i18n.t("whseField.ph2"),
       prop: "countingNo",
       cell: true,
       width: 80,
       align: "right",
       // click: (val) => {
-      //   _this.iptPhChange(_this.choosePhData);
+      //  window.vm.iptPhChange(_this.choosePhData);
       // },
     },
     {
-      label: "重量",
+      label: i18n.t("whseField.zl"),
       prop: "weight",
       cell: true,
       width: 100,
       align: "right",
       // click: (val) => {
-      //   _this.iptPhChange(_this.choosePhData);
+      //  window.vm.iptPhChange(_this.choosePhData);
       // },
     },
     {
-      label: "重量单位",
+      label: i18n.t("whseField.zldw"),
       prop: "weightUnit",
       cell: true,
       width: 100,
       type: "select",
       dicData: matUnit
       // click: (val) => {
-      //   _this.iptPhChange(_this.choosePhData);
+      //  window.vm.iptPhChange(_this.choosePhData);
       // },
     },
     {
-      label: "客人布票号",
+      label: i18n.t("whseField.krbph"),
       prop: "custTicket",
       cell: true,
       width: 150,
       // click: (val) => {
-      //   _this.iptPhChange(_this.choosePhData);
+      //  window.vm.iptPhChange(_this.choosePhData);
       // },
     }
   ]
@@ -4386,7 +4387,7 @@ export const PbDetaliF = {
       placeholder: " ",
     },
     {
-      label: "批号",
+      label: i18n.t("whseField.ph"),
       prop: "batchNo",
       span: 8,
       placeholder: " ",
@@ -4414,7 +4415,7 @@ export const PbDetaliC = {
       align: "center",
     },
     {
-      label: "入仓编号",
+      label: i18n.t("whseField.rcbh"),
       prop: "$whseCalicoinFk",
       cell: true,
       width: 150,
@@ -4440,23 +4441,23 @@ export const PbDetaliC = {
       width: 120,
     },
     {
-      label: "胚布名称",
+      label: i18n.t("whseField.pbmc"),
       prop: "clothName",
       // width: 450,
     },
     {
-      label: "批号",
+      label: i18n.t("whseField.ph"),
       prop: "batchNo",
       width: 150,
     },
     {
-      label: "疋數",
+      label: i18n.t("whseField.ps"),
       prop: "countingNo",
       width: 80,
       align: "right",
     },
     {
-      label: "重量",
+      label: i18n.t("whseField.zl"),
       prop: "weight",
       width: 80,
       align: "right",
@@ -4502,7 +4503,7 @@ export const calicoinDtlaF = {
       placeholder: " ",
     },
     {
-      label: "批号",
+      label: i18n.t("whseField.ph"),
       prop: "batchNo",
       span: 6,
       placeholder: " ",
@@ -4529,7 +4530,7 @@ export const calicoinDtlaC = {
       align: "center",
     },
     {
-      label: "入仓编号",
+      label: i18n.t("whseField.rcbh"),
       prop: "$whseAccessoriesinFk",
       cell: true,
       width: 140,
@@ -4575,7 +4576,7 @@ export const calicoinDtlaC = {
       dicData: basWjxz
     },
     {
-      label: "批号",
+      label: i18n.t("whseField.ph"),
       prop: "batchNo",
       width: 150,
     },

@@ -3,7 +3,9 @@
     <div class="btnList">
       <!-- <el-button type="warning" @click="ruleV = true">編號規則配置</el-button> -->
       <el-button type="success" @click="outOrder">生成出庫單</el-button>
-      <el-button type="primary" @click="getData">查询</el-button>
+      <el-button type="primary" @click="getData">{{
+        this.$t("public.query")
+      }}</el-button>
       <el-button type="warning" @click="close">{{
         this.$t("public.close")
       }}</el-button>

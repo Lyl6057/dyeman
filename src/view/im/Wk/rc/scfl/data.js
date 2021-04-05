@@ -6,13 +6,13 @@ export function rsxkr1F(_this) {
     labelWidth: 130,
     column: [
       {
-        label: "入仓编号",
+        label: _this.$t("whseField.rcbh"),
         prop: "yinId",
         span: 6,
         placeholder: " ",
       },
       {
-        label: "入仓日期",
+        label: _this.$t("whseField.rcrq"),
         prop: "yinDate",
         span: 6,
         placeholder: " ",
@@ -20,12 +20,12 @@ export function rsxkr1F(_this) {
         valueFormat: "yyyy-MM-dd",
       },
       // {
-      //   label: "採購單號",
+      //   label: _this.$t("whseField.chdh"),
       //   prop: "purNo",
       //   span: 6,
       //   placeholder: " ",
       //   // type: "select",
-      //   // placeholder: "請選擇採購單號",
+      //   // placeholder: _this.$t("whseField.xzchdh"),
       //   // click: () => {
       //   //   _this.choiceV = !_this.choiceV;
       //   //   _this.choiceField = "purNo";
@@ -52,7 +52,7 @@ export function rsxkr1F(_this) {
       },
 
       // {
-      //   label: "送货单号",
+      //   label: _this.$t("whseField.shdh"),
       //   prop: "deliNo",
       //   span: 6,
       //   placeholder: " ",
@@ -64,7 +64,7 @@ export function rsxkr1F(_this) {
       //   //   _this.choiceQ.deliType = 'yarns'
       //   //   _this.choiceField = "deliNo"
       //   //   _this.choiceTarget = _this.form
-      //   //   _this.choiceTle = '送貨單'
+      //   //   _this.choiceTle = _this.$t('choicDlg.xzshd')
       //   // },
       // },
       //           {
@@ -77,7 +77,7 @@ export function rsxkr1F(_this) {
       // },
 
       {
-        label: "检验状态",
+        label: _this.$t("whseField.jyzt"),
         prop: "yinStatus",
         span: 6,
         placeholder: " ",
@@ -87,7 +87,7 @@ export function rsxkr1F(_this) {
       },
 
       // {
-      //   label: "财务状态",
+      //   label: _this.$t("whseField.cwzt"),
       //   prop: "finStatus",
       //   span: 6,
       //   placeholder: " ",
@@ -107,7 +107,7 @@ export function rsxkr2F(_this) {
     labelWidth: 130,
     column: [
       {
-        label: "入仓编号",
+        label: _this.$t("whseField.rcbh"),
         prop: "yinId",
         span: 6,
         placeholder: " ",
@@ -115,7 +115,7 @@ export function rsxkr2F(_this) {
         red: true,
       },
       {
-        label: "入仓日期",
+        label: _this.$t("whseField.rcrq"),
         prop: "yinDate",
         span: 6,
         placeholder: " ",
@@ -135,7 +135,7 @@ export function rsxkr2F(_this) {
 
       },
       // {
-      //   label: "採購單號",
+      //   label: _this.$t("whseField.chdh"),
       //   prop: "purNo",
       //   span: 6,
       //   placeholder: " ",
@@ -155,7 +155,7 @@ export function rsxkr2F(_this) {
       //   },
       // },
       // {
-      //   label: "送货单号",
+      //   label: _this.$t("whseField.shdh"),
       //   prop: "deliNo",
       //   span: 6,
       //   placeholder: " ",
@@ -172,12 +172,12 @@ export function rsxkr2F(_this) {
       //       _this.dlgWidth = "60%";
       //       _this.choiceV = !_this.choiceV
       //       _this.choiceTarget = _this.form
-      //       _this.choiceTle = '選擇送貨單'
+      //       _this.choiceTle = _this.$t("choicDlg.xzshd")
       //     }
       //   },
       // },
       {
-        label: "加工厂名稱",
+        label: _this.$t("whseField.wfcmc"),
         prop: "factoryId",
         cell: false,
         type: "select",
@@ -191,12 +191,12 @@ export function rsxkr2F(_this) {
           // this.choiceQ.registerNo = this.form;
           _this.choiceTarget = _this.form;
           _this.dlgWidth = "100%";
-          _this.choiceTle = "選擇外厂輔料配料计划";
+          _this.choiceTle = _this.$t("choicDlg.xzwfflpl");
 
         }
       },
       {
-        label: "加工指令單",
+        label: _this.$t("whseField.jgzld"),
         prop: "instructId",
         cell: false,
         span: 6,
@@ -211,7 +211,7 @@ export function rsxkr2F(_this) {
         //   this.choiceQ.registerNo = this.form;
         //   _this.choiceTarget = _this.form;
         //   _this.dlgWidth = "100%";
-        //   _this.choiceTle = "選擇指令單明細";
+        //   _this.choiceTle = $t('iaoMng.xzzld');
 
         // }
         change: () => {
@@ -252,7 +252,7 @@ export function rsxkr2F(_this) {
         }
       },
       {
-        label: "客戶名称",
+        label: _this.$t("whseField.khmc"),
         prop: "custName",
         span: 6,
         cell: false,
@@ -263,7 +263,7 @@ export function rsxkr2F(_this) {
         dicData: getDicT("basCustomer", "custName", "custCode"),
       },
       {
-        label: "检验状态",
+        label: _this.$t("whseField.jyzt"),
         prop: "yinStatus",
         span: 6,
         placeholder: " ",
@@ -274,7 +274,7 @@ export function rsxkr2F(_this) {
         disabled: true
       },
       {
-        label: "财务状态",
+        label: _this.$t("whseField.cwzt"),
         prop: "finStatus",
         span: 6,
         placeholder: " ",
@@ -285,7 +285,7 @@ export function rsxkr2F(_this) {
           getDIC('whse_finStatus'),
       },
       {
-        label: "操作員",
+        label: _this.$t("whseField.czy"),
         prop: "sysCreatedby",
         disabled: true,
         span: 6,
@@ -335,7 +335,7 @@ export function rsxkr1C(_this) {
         hide: true,
       },
       {
-        label: "入仓编号",
+        label: _this.$t("whseField.rcbh"),
         prop: "yinId",
         cell: true,
         width: 180,
@@ -349,7 +349,7 @@ export function rsxkr1C(_this) {
         dicData: getDIC('Whse_AccessoriesType'),
       },
       {
-        label: "入仓日期",
+        label: _this.$t("whseField.rcrq"),
         prop: "yinDate",
         cell: true,
         type: "datetime",
@@ -359,12 +359,12 @@ export function rsxkr1C(_this) {
         align: "center",
       },
       // {
-      //   label: "採購單號",
+      //   label: _this.$t("whseField.chdh"),
       //   prop: "purNo",
       //   cell: true,
       //   hide: _this.hide === '2' || _this.hide === '6' ? false : true,
       //   width: 220,
-      //   placeholder: "請選擇採購單號",
+      //   placeholder: _this.$t("whseField.xzchdh"),
       //   click: () => {
       //     _this.choiceV = !_this.choiceV;
       //     _this.choiceField = "purNo";
@@ -383,7 +383,7 @@ export function rsxkr1C(_this) {
       //   hide: _this.hide === '2' || _this.hide === '6' ? false : true,
       //   click: (val) => {
       //     if (!_this.chooseData.purNo) {
-      //       _this.$tip.error("請先選擇採購單號！")
+      //       _this.$tip.error(_this.$t("whseField.xzchdh"))
       //       return
       //     }
       //     _this.choiceV = !_this.choiceV
@@ -392,7 +392,7 @@ export function rsxkr1C(_this) {
       //     _this.oldData = _this.chooseData
       //     // _this.choiceQ.purNo = this.oldData.purNo
       //     _this.choiceTarget = _this.oldData
-      //     _this.choiceTle = '選擇送貨單'
+      //     _this.choiceTle = _this.$t("choicDlg.xzshd")
       //   },
       //   placeholder: "請選擇送貨單號"
       // },
@@ -413,7 +413,7 @@ export function rsxkr1C(_this) {
         },
       },
       {
-        label: "客戶編號",
+        label: _this.$t("whseField.khbh"),
         prop: "custId",
         cell: false,
         hide: _this.hide === '1' ? false : true,
@@ -422,7 +422,7 @@ export function rsxkr1C(_this) {
         dicData: getDicT("salIncomacc", "custNo", "registerNo"),
       },
       {
-        label: "客戶名称",
+        label: _this.$t("whseField.khmc"),
         prop: "custName",
         cell: false,
         hide: _this.hide === "1" ? false : true,
@@ -432,7 +432,7 @@ export function rsxkr1C(_this) {
       },
 
       {
-        label: "检验状态",
+        label: _this.$t("whseField.jyzt"),
         prop: "yinStatus",
         cell: true,
         width: 120,
@@ -459,12 +459,12 @@ export function rsxkr1C(_this) {
         dicData: getDicT("vWhseRetyarninoutPlan", "refName", "refCode")
       },
       {
-        label: "指令单",
+        label: _this.$t("whseField.zld"),
         prop: "instructId",
         hide: true,
       },
       {
-        label: "财务状态",
+        label: _this.$t("whseField.cwzt"),
         prop: "finStatus",
         cell: true,
         width: 120,
@@ -474,7 +474,7 @@ export function rsxkr1C(_this) {
           getDIC('whse_finStatus'),
       },
       {
-        label: "操作員",
+        label: _this.$t("whseField.czy"),
         prop: "sysCreatedby",
         hide: false,
         width: 100,
@@ -549,7 +549,7 @@ export function rsxkr2C(_this) {
 
       },
       {
-        label: "材料编号",
+        label: _this.$t('whseField.clbh'),
         prop: "materialNum",
         cell: false,
         width: 140,
@@ -568,20 +568,20 @@ export function rsxkr2C(_this) {
         dicData: getXDicT("basProductivesupplies")
       },
       {
-        label: "批号",
+        label: _this.$t("whseField.ph"),
         prop: "batchNo",
         cell: true,
         width: 150,
       },
       {
-        label: "数量",
+        label: _this.$t('energy.sl'),
         prop: "poQty",
         cell: true,
         width: 100,
         align: "right",
       },
       {
-        label: "单位",
+        label: _this.$t('whseField.dw'),
         prop: "unitQty",
         cell: true,
         width: 100,
@@ -627,7 +627,7 @@ export function backYarn(_this) {
         hide: true,
       },
       {
-        label: "生產單號",
+        label: _this.$t("whseField.scdh"),
         prop: "poNo",
         cell: true,
         width: 150,
@@ -683,14 +683,14 @@ export function backYarn(_this) {
       //   },
       // },
       {
-        label: "重量",
+        label: _this.$t("whseField.zl"),
         prop: "weight",
         cell: true,
         width: 120,
         align: "right",
       },
       {
-        label: "单位",
+        label: _this.$t('whseField.dw'),
         prop: "weightUnit",
         cell: true,
         width: 100,
@@ -704,7 +704,7 @@ export function backYarn(_this) {
         width: 180,
       },
       {
-        label: "产地",
+        label: _this.$t("whseField.cd"),
         prop: "placeOrigin",
         cell: true,
         width: 150,
@@ -719,7 +719,7 @@ export function backYarn(_this) {
         align: "right",
       },
       {
-        label: "客戶編號",
+        label: _this.$t("whseField.khbh"),
         prop: "custId",
         cell: true,
         width: 150,
@@ -729,7 +729,7 @@ export function backYarn(_this) {
           _this.choiceField = "custId";
           _this.oldData = _this.chooseData;
           _this.choiceTarget = _this.oldData;
-          _this.choiceTle = "选择客戶";
+          _this.choiceTle = _this.$t("choicDlg.xzkh");
         },
         placeholder: "請選擇客戶編號"
       },

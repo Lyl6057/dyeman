@@ -7,34 +7,34 @@ export function rcpb1F(_this) {
     labelWidth: 130,
     column: [
       {
-        label: "入仓编号",
+        label: _this.$t("whseField.rcbh"),
         prop: "yinId",
         span: 6,
         placeholder: " ",
       },
       {
-        label: "采购单号",
+        label: _this.$t("whseField.chdh"),
         prop: "purNo",
         span: 6,
         placeholder: " ",
         display: _this.hide === '2' ? true : false,
       },
       {
-        label: "送货单号",
+        label: _this.$t("whseField.shdh"),
         prop: "deliNo",
         display: _this.hide === '2' ? true : false,
         span: 6,
         placeholder: " ",
       },
       {
-        label: "来胚编号",
+        label: _this.$t("whseField.lpbh"),
         prop: "registerNo",
         display: _this.hide === '1' ? true : false,
         span: 6,
         placeholder: " ",
       },
       {
-        label: "入仓日期",
+        label: _this.$t("whseField.rcrq"),
         prop: "yinDate",
         span: 6,
         placeholder: " ",
@@ -42,7 +42,7 @@ export function rcpb1F(_this) {
         valueFormat: "yyyy-MM-dd",
       },
       {
-        label: "检验状态",
+        label: _this.$t("whseField.jyzt"),
         prop: "yinStatus",
         span: 6,
         placeholder: " ",
@@ -61,7 +61,7 @@ export function rcpb1F(_this) {
 
 
       {
-        label: "财务状态",
+        label: _this.$t("whseField.cwzt"),
         prop: "finStatus",
         span: 6,
         display: _this.hide === '1' || _this.hide === '2' ? true : false,
@@ -80,7 +80,7 @@ export function rcpb2F(_this) {
     labelWidth: 130,
     column: [
       {
-        label: "入仓编号",
+        label: _this.$t("whseField.rcbh"),
         prop: "yinId",
         span: 6,
         placeholder: " ",
@@ -97,7 +97,7 @@ export function rcpb2F(_this) {
       //   disabled: true
       // },
       {
-        label: "入仓日期",
+        label: _this.$t("whseField.rcrq"),
         prop: "yinDate",
         span: 6,
         placeholder: " ",
@@ -107,7 +107,7 @@ export function rcpb2F(_this) {
       },
 
       {
-        label: "采购单号",
+        label: _this.$t("whseField.chdh"),
         prop: "purNo",
         span: 6,
         placeholder: " ",
@@ -115,7 +115,7 @@ export function rcpb2F(_this) {
         display: _this.hide != '2' ? false : true,
       },
       {
-        label: "送货单号",
+        label: _this.$t("whseField.shdh"),
         prop: "deliNo",
         span: 6,
         placeholder: " ",
@@ -123,7 +123,7 @@ export function rcpb2F(_this) {
         display: _this.hide === '2' ? true : false,
       },
       {
-        label: "来胚登記编号",
+        label: _this.$t("whseField.lpbh"),
         prop: "registerNo",
         span: 6,
         placeholder: " ",
@@ -135,7 +135,7 @@ export function rcpb2F(_this) {
             _this.choiceField = "registerNo";
             _this.choiceTarget = _this.form;
             _this.dlgWidth = "60%";
-            _this.choiceTle = "選擇來胚登記";
+            _this.choiceTle = _this.$t("choicDlg.lpdj");
           }
 
         },
@@ -150,7 +150,7 @@ export function rcpb2F(_this) {
         }
       },
       {
-        label: "客戶名称",
+        label: _this.$t("whseField.khmc"),
         prop: "custName",
         cell: false,
         display: _this.hide === "1" ? true : false,
@@ -160,7 +160,7 @@ export function rcpb2F(_this) {
         disabled: true
       },
       {
-        label: "入仓类型",
+        label: _this.$t("whseField.rclx"),
         prop: "yinType",
         cell: false,
         type: "select",
@@ -170,7 +170,7 @@ export function rcpb2F(_this) {
         disabled: true
       },
       {
-        label: "加工廠",
+        label: _this.$t("whseField.wfjgc"),
         prop: "factoryId",
         cell: false,
         type: "select",
@@ -184,12 +184,12 @@ export function rcpb2F(_this) {
           // this.choiceQ.registerNo = this.form;
           _this.choiceTarget = _this.form;
           _this.dlgWidth = "100%";
-          _this.choiceTle = "選擇外厂胚布配料計劃";
+          _this.choiceTle = _this.$t("choicDlg.xzwfpbpl")
 
         }
       },
       {
-        label: "加工指令單",
+        label: _this.$t("whseField.jgzld"),
         prop: "instructId",
         cell: false,
         span: 6,
@@ -204,7 +204,7 @@ export function rcpb2F(_this) {
         //   this.choiceQ.registerNo = this.form;
         //   _this.choiceTarget = _this.form;
         //   _this.dlgWidth = "100%";
-        //   _this.choiceTle = "選擇指令單明細";
+        //   _this.choiceTle = $t('iaoMng.xzzld');
 
         // }
         change: () => {
@@ -218,7 +218,7 @@ export function rcpb2F(_this) {
         }
       },
       {
-        label: "检验状态",
+        label: _this.$t("whseField.jyzt"),
         prop: "yinStatus",
         span: 6,
         placeholder: " ",
@@ -230,7 +230,7 @@ export function rcpb2F(_this) {
       },
 
       {
-        label: "财务状态",
+        label: _this.$t("whseField.cwzt"),
         prop: "finStatus",
         display: _this.hide === "2" ? true : false,
         span: 6,
@@ -241,7 +241,7 @@ export function rcpb2F(_this) {
         disabled: true
       },
       {
-        label: "操作員",
+        label: _this.$t("whseField.czy"),
         prop: "sysCreatedby",
         disabled: true,
         span: 6,
@@ -261,14 +261,14 @@ export function rcpbDetailF(_this) {
     labelWidth: 130,
     column: [
       {
-        label: "入仓编号",
+        label: _this.$t("whseField.rcbh"),
         prop: "yinId",
         span: 6,
         placeholder: " ",
         disabled: true,
       },
       {
-        label: "采购单号",
+        label: _this.$t("whseField.chdh"),
         prop: "purNo",
         span: 6,
         placeholder: " ",
@@ -283,7 +283,7 @@ export function rcpbDetailF(_this) {
         disabled: true
       },
       // {
-      //   label: "检验状态",
+      //   label: _this.$t("whseField.jyzt"),
       //   prop: "yinStatus",
       //   span: 6,
       //   placeholder: " ",
@@ -301,7 +301,7 @@ export function rcpbDetailF(_this) {
       //   type: "datetime",
       // },
       {
-        label: "入仓日期",
+        label: _this.$t("whseField.rcrq"),
         prop: "yinDate",
         span: 6,
         placeholder: " ",
@@ -310,14 +310,14 @@ export function rcpbDetailF(_this) {
         valueFormat: "yyyy-MM-dd",
       },
       {
-        label: "送货单号",
+        label: _this.$t("whseField.shdh"),
         prop: "deliNo",
         span: 6,
         placeholder: " ",
         disabled: true
       },
       // {
-      //   label: "财务状态",
+      //   label: _this.$t("whseField.cwzt"),
       //   prop: "finStatus",
       //   span: 6,
       //   placeholder: " ",
@@ -366,13 +366,13 @@ export function rcpb1C(_this) {
         hide: true,
       },
       {
-        label: "入仓编号",
+        label: _this.$t("whseField.rcbh"),
         prop: "yinId",
         cell: true,
         width: 200,
       },
       {
-        label: "入仓类型",
+        label: _this.$t("whseField.rclx"),
         prop: "yinType",
         cell: false,
         width: 140,
@@ -380,7 +380,7 @@ export function rcpb1C(_this) {
         dicData: getDIC('Whse_CalicoType'),
       },
       {
-        label: "入仓日期",
+        label: _this.$t("whseField.rcrq"),
         prop: "yinDate",
         cell: true,
         type: "datetime",
@@ -390,30 +390,30 @@ export function rcpb1C(_this) {
         align: "center",
       },
       {
-        label: "採購單號",
+        label: _this.$t("whseField.chdh"),
         prop: "purNo",
         cell: true,
         hide: _this.hide === "2" ? false : true,
         width: 220,
-        placeholder: "請選擇採購單號",
+        placeholder: _this.$t("whseField.xzchdh"),
         click: () => {
           _this.choiceV = !_this.choiceV;
           _this.choiceField = "purNo";
           // _this.choiceQ.purType = '5'
           _this.oldData = _this.chooseData
           _this.choiceTarget = _this.oldData;
-          _this.choiceTle = '胚布採購單';
+          _this.choiceTle = _this.$t("choicDlg.xzpbcgd");
         },
       },
       {
-        label: "送货单号",
+        label: _this.$t("whseField.shdh"),
         prop: "deliNo",
         cell: true,
         width: 180,
         hide: _this.hide === '2' ? false : true,
         click: (val) => {
           if (!_this.chooseData.purNo) {
-            _this.$tip.error("請先選擇採購單號！")
+            _this.$tip.error(_this.$t("whseField.xzchdh"))
             return
           }
           _this.choiceV = !_this.choiceV
@@ -422,11 +422,11 @@ export function rcpb1C(_this) {
           _this.oldData = _this.chooseData
           // _this.choiceQ.purNo = this.oldData.purNo
           _this.choiceTarget = _this.oldData
-          _this.choiceTle = '送貨單'
+          _this.choiceTle = _this.$t("choicDlg.shd")
         },
       },
       {
-        label: "来胚编号",
+        label: _this.$t("whseField.lpbh"),
         prop: "registerNo",
         cell: true,
         width: 180,
@@ -434,7 +434,7 @@ export function rcpb1C(_this) {
 
       },
       {
-        label: "客戶編號",
+        label: _this.$t("whseField.khbh"),
         prop: "custId",
         cell: false,
         hide: _this.hide === "1" ? false : true,
@@ -443,7 +443,7 @@ export function rcpb1C(_this) {
         dicData: getDicT("salEmbryogenesis", "custCode", "registerNo"),
       },
       {
-        label: "客戶名稱",
+        label: _this.$t("whseField.khmc"),
         prop: "custName",
         cell: false,
         hide: _this.hide === "1" ? false : true,
@@ -452,7 +452,7 @@ export function rcpb1C(_this) {
         width: 280,
       },
       {
-        label: "检验状态",
+        label: _this.$t("whseField.jyzt"),
         prop: "yinStatus",
         cell: true,
         width: 120,
@@ -461,23 +461,22 @@ export function rcpb1C(_this) {
       },
 
       {
-        label: "加工厂代號",
+        label: _this.$t("whseField.wfcdh"),
         prop: "factoryId",
         cell: true,
         hide: _this.hide === "5" ? false : true,
         width: 150,
-        placeholder: "请选择加工厂代號",
         click: () => {
           _this.choiceField = "factoryId"
           _this.choiceV = !_this.choiceV
           _this.oldData = _this.chooseData
           _this.choiceTarget = _this.oldData
-          _this.choiceTle = '外厂胚布配料计划',
+          _this.choiceTle = _this.$t("choicDlg.xzwfpbpl"),//'外厂胚布配料计划',
             _this.iptChange(_this.chooseData);
         },
       },
       {
-        label: "加工厂名稱",
+        label: _this.$t("whseField.wfcmc"),
         prop: "factoryName",
         cell: false,
         hide: _this.hide === "5" ? false : true,
@@ -486,12 +485,12 @@ export function rcpb1C(_this) {
         dicData: getDicT("vWhseMaterialoutPlan", "refName", "refCode")
       },
       {
-        label: "指令单",
+        label: _this.$t("whseField.zld"),
         prop: "instructId",
         hide: true,
       },
       {
-        label: "财务状态",
+        label: _this.$t("whseField.cwzt"),
         prop: "finStatus",
         cell: true,
         width: 120,
@@ -551,7 +550,7 @@ export function rcpb2C(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: 'calc(100vh - 310px)',
+    height: 'calc(100vh - 312px)',
     refreshBtn: false,
     columnBtn: false,
     page: true,
@@ -583,12 +582,12 @@ export function rcpb2C(_this) {
         hide: true,
       },
       {
-        label: "生產單號",
+        label: _this.$t("whseField.scdh"),
         prop: "prodNo",
         cell: false,
         width: 140,
         hide: _this.hide === '6' || _this.hide === '4' || _this.hide === '7' ? false : true,
-        placeholder: "請選擇生產單號",
+        placeholder: _this.$t("whseField.qxzscdh"),//"請選擇生產單號",
         click: (val) => {
           // _this.choiceV = !_this.choiceV
           // _this.choiceField = "prodNo";
@@ -598,12 +597,12 @@ export function rcpb2C(_this) {
           //   _this.choiceTle = "胚布貨物包";
           // }
           if (_this.hide === '4') {
-            _this.choiceTle = "胚布訂單";
+            _this.choiceTle = _this.$t("choicDlg.pbdd");
           }
         },
       },
       {
-        label: "胚布編碼",
+        label: _this.$t("choicDlg.pbbm"),
         prop: "calicoId",
         cell: false,
         width: 120,
@@ -613,11 +612,11 @@ export function rcpb2C(_this) {
           _this.choiceField = "calicoId";
           _this.oldData = _this.chooseData;
           _this.choiceTarget = _this.oldData;
-          _this.choiceTle = "胚布編碼";
+          _this.choiceTle = _this.$t("choicDlg.pbbm");
         },
       },
       {
-        label: "胚布名称",
+        label: _this.$t("whseField.pbmc"),
         prop: "clothName",
         cell: false,
         width: 650,
@@ -626,7 +625,7 @@ export function rcpb2C(_this) {
         },
       },
       {
-        label: "疋數",
+        label: _this.$t("whseField.ps"),
         prop: "countingNo",
         hide: _this.hide === '6' || _this.hide === '7' || _this.hide === '5' ? false : true,
         cell: true,
@@ -634,14 +633,14 @@ export function rcpb2C(_this) {
         align: "right",
       },
       {
-        label: "码卡号",
+        label: _this.$t("whseField.mkh"),
         prop: "fabticket",
         cell: true,
         width: 140,
         hide: _this.hide === '6' || _this.hide === '7' ? false : true,
       },
       {
-        label: "货位码",
+        label: _this.$t("whseField.hwm"),
         prop: "locationCode",
         cell: true,
         hide: _this.hide === '6' || _this.hide === '7' ? false : true,
@@ -651,12 +650,12 @@ export function rcpb2C(_this) {
           _this.choiceV = !_this.choiceV
           _this.choiceField = "locationCode";
           _this.choiceTarget = _this.chooseData;
-          _this.choiceTle = "選擇貨位";
+          _this.choiceTle = _this.$t("choicDlg.xzhw");
         }
       },
 
       // {
-      //   label: "客户编号",
+      //   label: _this.$t('whseField.khbh'),
       //   prop: "custId",
       //   cell: false,
       //   width: 150,
@@ -667,13 +666,13 @@ export function rcpb2C(_this) {
       //   //   _this.choiceField = "custId";
       //   //   _this.oldData = _this.chooseData;
       //   //   _this.choiceTarget = _this.oldData;
-      //   //   _this.choiceTle = "客戶編號";
+      //   //   _this.choiceTle = _this.$t("whseField.khbh");
       //   //   _this.iptChange(_this.chooseData);
       //   // },
       // },
 
       // {
-      //   label: "批号",
+      //   label: _this.$t("whseField.ph"),
       //   prop: "batchNo",
       //   hide: _this.hide === '6' || _this.hide === '4' || _this.hide === '7' ? true : false,
       //   cell: true,
@@ -697,7 +696,7 @@ export function rcpb2C(_this) {
 
 
       {
-        label: "重量",
+        label: _this.$t("whseField.zl"),
         prop: "weight",
         hide: _this.hide != '5',
         cell: true,
@@ -706,7 +705,7 @@ export function rcpb2C(_this) {
       },
 
       // {
-      //   label: "重量单位",
+      //   label: _this.$t("whseField.zldw"),
       //   prop: "weightUnit",
       //   hide: _this.hide === '4' || _this.hide === '7' ? true : false,
       //   cell: _this.hide != '6' ? true : false,
@@ -752,7 +751,7 @@ export function rcpb3C(_this) {
         hide: true,
       },
       {
-        label: "批号",
+        label: _this.$t("whseField.ph"),
         prop: "batchNo",
         cell: true, width: 170,
 
@@ -761,7 +760,7 @@ export function rcpb3C(_this) {
         // },
       },
       {
-        label: "疋号",
+        label: _this.$t("whseField.ph2"),
         prop: "countingNo",
         cell: true,
         width: 70,
@@ -771,7 +770,7 @@ export function rcpb3C(_this) {
         // },
       },
       {
-        label: "重量",
+        label: _this.$t("whseField.zl"),
         prop: "weight",
         cell: true,
         width: 100,
@@ -781,7 +780,7 @@ export function rcpb3C(_this) {
         // },
       },
       {
-        label: "重量单位",
+        label: _this.$t("whseField.zldw"),
         prop: "weightUnit",
         cell: true,
         width: 100,
@@ -792,7 +791,7 @@ export function rcpb3C(_this) {
         // },
       },
       {
-        label: "客人布票号",
+        label: _this.$t("whseField.krbph"),
         prop: "custTicket",
         cell: true,
         width: 150,

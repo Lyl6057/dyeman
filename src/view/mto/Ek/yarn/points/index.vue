@@ -78,7 +78,7 @@ export default {
         emptyBtn: false,
         column: [
           {
-            label: "纱线编号",
+            label: this.$t("whseField.sxbh"), //"纱线编号",
             placeholder: " ",
             prop: "yarnSn",
             align: "left",
@@ -86,7 +86,7 @@ export default {
             span: 8,
           },
           {
-            label: "纱线名称",
+            label: _this.$t("whseField.sxmc"), // "纱线名称",
             placeholder: " ",
             prop: "yarnName",
             align: "left",
@@ -139,7 +139,7 @@ export default {
             span: 8,
           },
           {
-            label: "重量",
+            label: _this.$t("whseField.zl"),
             placeholder: " ",
             prop: "weight",
             align: "right",
@@ -163,7 +163,7 @@ export default {
             span: 8,
           },
           {
-            label: "检验状态",
+            label: this.$t("whseField.jyzt"),
             prop: "inspectionStatus",
             placeholder: " ",
             align: "left",
@@ -196,7 +196,7 @@ export default {
             align: "left",
           },
           {
-            label: "纱线编号",
+            label: this.$t("whseField.sxbh"), //"纱线编号",
             placeholder: " ",
             prop: "yarnSn",
             align: "left",
@@ -204,7 +204,7 @@ export default {
             span: 8,
           },
           {
-            label: "纱线名称",
+            label: _this.$t("whseField.sxmc"), //"纱线名称",
             placeholder: " ",
             prop: "yarnName",
             align: "left",
@@ -257,7 +257,7 @@ export default {
             span: 8,
           },
           {
-            label: "重量",
+            label: _this.$t("whseField.zl"),
             placeholder: " ",
             prop: "weight",
             align: "right",
@@ -281,7 +281,7 @@ export default {
             span: 8,
           },
           {
-            label: "检验状态",
+            label: this.$t("whseField.jyzt"),
             prop: "inspectionStatus",
             placeholder: " ",
             align: "left",

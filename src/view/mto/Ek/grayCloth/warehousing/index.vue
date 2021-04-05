@@ -82,7 +82,7 @@ export default {
             width: 200,
           },
           {
-            label: "疋号",
+            label: this.$t("whseField.ph2"),
             prop: "countingNo",
             align: "left",
             width: 200,
@@ -93,7 +93,7 @@ export default {
             align: "left",
           },
           {
-            label: "重量",
+            label: _this.$t("whseField.zl"),
             prop: "weight",
             align: "right",
           },
@@ -129,7 +129,7 @@ export default {
             align: "left",
           },
           {
-            label: "纱线编号",
+            label: this.$t("whseField.sxbh"),
             placeholder: " ",
             prop: "yarnSn",
             align: "left",
@@ -137,7 +137,7 @@ export default {
             span: 8,
           },
           {
-            label: "纱线名称",
+            label: _this.$t("whseField.sxmc"), // "纱线名称",
             placeholder: " ",
             prop: "yarnName",
             align: "left",
@@ -191,7 +191,7 @@ export default {
             span: 8,
           },
           {
-            label: "重量",
+            label: _this.$t("whseField.zl"),
             placeholder: " ",
             prop: "weight",
             align: "right",

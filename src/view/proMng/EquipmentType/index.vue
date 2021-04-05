@@ -19,7 +19,7 @@
           <el-col :span="20">
             <div class="table">
               <avue-crud
-                ref="crud"
+                ref="crudRef"
                 :data="DeviceData"
                 :option="Device"
                 :page.sync="page"
@@ -31,22 +31,30 @@
                 @row-click="fn_clickUP"
               >
                 <template slot="menuLeft">
-                  <el-button type="success" size="mini" @click="fn_update">{{
-                    this.$t("public.save")
-                  }}</el-button>
+                  <el-button
+                    type="success"
+                    size="mini"
+                    @click="fn_update"
+                    :disabled="DeviceData.length == 0"
+                    >{{ this.$t("public.save") }}</el-button
+                  >
                   <el-button
                     type="primary"
                     size="mini"
                     @click="add"
                     :disabled="
-                      this.chooseData.children &&
-                      this.chooseData.children.length > 0
+                      (chooseData.children && chooseData.children.length > 0) ||
+                      Object.keys(chooseData).length == 0
                     "
                     >{{ this.$t("public.add") }}</el-button
                   >
-                  <el-button type="danger" size="mini" @click="fn_DeviceDel">{{
-                    this.$t("public.del")
-                  }}</el-button>
+                  <el-button
+                    type="danger"
+                    size="mini"
+                    @click="fn_DeviceDel"
+                    :disabled="rowCode.length == 0"
+                    >{{ this.$t("public.del") }}</el-button
+                  >
                 </template>
               </avue-crud>
             </div>
@@ -58,6 +66,8 @@
 </template>
 <script>
 import { add, update } from "./api";
+import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
+let UNIT = getDIC("bas_matUnit"); // 單位
 import { cofirm, success, error, warning, info } from "@/seal/seal"; //引入封装的消息提示和弹框组件
 //分类ID默认值
 var DIC = {
@@ -173,27 +183,7 @@ var DBC = {
     },
   ],
 };
-//单位选择默认值
-var UNIT = {
-  VALUE: [
-    {
-      label: "吨",
-      value: "吨",
-    },
-    {
-      label: "公斤",
-      value: "公斤",
-    },
-    {
-      label: "斤",
-      value: "斤",
-    },
-    {
-      label: "米",
-      value: "米",
-    },
-  ],
-};
+
 export default {
   data() {
     return {
@@ -293,7 +283,7 @@ export default {
             label: this.$t("ProWorkflowInfo.dw"),
             prop: "unit",
             type: "select",
-            dicData: UNIT.VALUE,
+            dicData: UNIT,
             cell: true,
             width: 80,
           },
@@ -398,11 +388,6 @@ export default {
       this.loading = false;
       done();
     },
-    //保存新增
-    addData2(row, index) {
-      this.$refs.crud.rowSave();
-      this.$refs.crud.rowAdd();
-    },
     //勾选选中回调
     fn_select(selection, row) {
       // this.rowCode = row.equId;
@@ -410,20 +395,23 @@ export default {
     },
     //点击当前行获取当前行数据
     fn_clickUP(val) {
-      this.upData = val;
       this.oldData.$cellEdit = false;
       this.$set(val, "$cellEdit", true);
       this.oldData = val;
+      this.upData = val;
     },
     add() {
       this.DeviceData.push({
-        eqModel: this.chooseData.categoryCode,
+        equModel: this.chooseData.categoryCode,
         equipmentName: this.chooseData.categoryName,
         categoryId: this.chooseData.categoryId,
       });
-      this.$refs.crud.setCurrentRow(
-        this.DeviceData[this.DeviceData.length - 1]
-      );
+      this.$nextTick(() => {
+        this.$refs.crudRef.setCurrentRow(
+          this.DeviceData[this.DeviceData.length - 1]
+        );
+        this.fn_clickUP(this.DeviceData[this.DeviceData.length - 1]);
+      });
     },
     //点击编辑按钮打开弹框
     fn_update() {
@@ -443,7 +431,9 @@ export default {
           update(item).then((res) => {});
         } else {
           //add
-          add(item).then((res) => {});
+          add(item).then((res) => {
+            item.equId = res.data.data;
+          });
         }
         if (this.DeviceData.length - 1 == i) {
           setTimeout(() => {
@@ -452,6 +442,9 @@ export default {
           }, 200);
         }
       });
+      if (this.DeviceData.length == 0) {
+        this.loading = false;
+      }
     },
     //删除设备信息表
     fn_DeviceDel() {
@@ -471,10 +464,8 @@ export default {
           return JSON.stringify(data);
         },
       };
-      cofirm("此操作将永久删除该文件,是否继续", "warning")
+      cofirm("此操作将永久删除選中數據,是否继续", "warning")
         .then((res) => {
-          console.log(Data);
-          return;
           this.$http({
             ...requParams,
             method: "delete",
@@ -544,7 +535,6 @@ export default {
     },
     //根据分类ID获取设备信息表
     fn_DeviceInfo(data) {
-      console.log(data);
       if (data.categoryCode) {
         this.eqModel = data.categoryCode;
       } else {

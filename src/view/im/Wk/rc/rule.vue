@@ -5,7 +5,9 @@
         <el-button type="success" @click="save">{{
           this.$t("public.save")
         }}</el-button>
-        <el-button type="warning" @click="close">關閉</el-button>
+        <el-button type="warning" @click="close">{{
+          $t("public.close")
+        }}</el-button>
       </div>
       <div class="formBox">
         <avue-form

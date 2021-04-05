@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-24 14:21:15
  * @LastEditors: Lyl
- * @LastEditTime: 2021-03-29 15:01:35
+ * @LastEditTime: 2021-04-02 10:00:53
  * @Description:
  */
 
@@ -52,13 +52,13 @@ export function formOp(_this) {
         dicData: [],
       },
       {
-        label: "材料编号",
+        label: _this.$t('whseField.clbh'),
         prop: "materialId",
         span: 6,
         placeholder: " "
       },
       {
-        label: "批号",
+        label: _this.$t("whseField.ph"),
         prop: "batchNo",
         span: 6,
         placeholder: " ",
@@ -73,7 +73,7 @@ export function formTemOp(_this) {
     labelWidth: 130,
     column: [
       {
-        label: "材料编号",
+        label: _this.$t('whseField.clbh'),
         prop: "materialId",
         span: 6,
         placeholder: " ",
@@ -96,7 +96,7 @@ export function formTemOp(_this) {
 
       },
       {
-        label: "材料名称",
+        label: _this.$t('whseField.clmc'),
         prop: "materialName",
         span: 18,
         placeholder: " ",
@@ -105,7 +105,7 @@ export function formTemOp(_this) {
         dicData: []
       },
       {
-        label: "单位",
+        label: _this.$t('whseField.dw'),
         prop: "unitId",
         span: 6,
         type: "select",
@@ -141,9 +141,10 @@ export function crudOp(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 197px)",
+    height: "calc(100vh - 195px)",
     refreshBtn: false,
     columnBtn: false,
+    showOverflowTooltip: true,
     page: true,
     column: [
       {
@@ -169,21 +170,22 @@ export function crudOp(_this) {
         dicData: []
       },
       {
-        label: "材料编号",
+        label: _this.$t('whseField.clbh'),
         prop: "materialId",
         cell: false,
         width: 100,
       },
       {
-        label: "材料名称",
+        label: _this.$t('whseField.clmc'),
         prop: "materialName",
         cell: false,
         type: "select",
+        overHidden: true,
         dicData: []
         // width: 180,
       },
       {
-        label: "批号",
+        label: _this.$t("whseField.ph"),
         prop: "batchNo",
         cell: false,
         width: 160,
@@ -203,7 +205,7 @@ export function crudOp(_this) {
         align: "right"
       },
       {
-        label: "单位",
+        label: _this.$t('whseField.dw'),
         prop: "unitId",
         cell: false,
         width: 80,
@@ -245,7 +247,7 @@ export function crudTemOp(_this) {
 
       },
       {
-        label: "批号",
+        label: _this.$t("whseField.ph"),
         prop: "batchNo",
         cell: true,
         width: 160,

@@ -248,7 +248,7 @@ export default {
             width: 180,
           },
           {
-            label: "疋号",
+            label: this.$t("whseField.ph2"),
             prop: "countingNo",
             cell: false,
             width: 150,
@@ -264,7 +264,7 @@ export default {
           },
 
           {
-            label: "重量",
+            label: _this.$t("whseField.zl"),
             prop: "weight",
             cell: false,
             width: 100,
@@ -364,7 +364,7 @@ export default {
             width: 150,
           },
           {
-            label: "疋号",
+            label: this.$t("whseField.ph2"),
             prop: "countingNo",
             cell: false,
             width: 100,
@@ -380,7 +380,7 @@ export default {
           },
 
           {
-            label: "重量",
+            label: _this.$t("whseField.zl"),
             prop: "weight",
             cell: false,
             width: 100,

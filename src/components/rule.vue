@@ -1,11 +1,13 @@
 <template>
   <div id="wkRule">
-    <view-container title="編號規則配置">
+    <view-container :title="$t('choicDlg.bhgzpz')">
       <div class="btnList">
         <el-button type="success" @click="save">{{
           this.$t("public.save")
         }}</el-button>
-        <el-button type="warning" @click="close">關閉</el-button>
+        <el-button type="warning" @click="close">{{
+          $t("public.close")
+        }}</el-button>
       </div>
       <div class="formBox">
         <avue-form

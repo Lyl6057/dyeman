@@ -132,7 +132,7 @@ export default {
             align: "left",
           },
           {
-            label: "胚布编号",
+            label: this.$t("whseField.pbbh"), //"胚布编号",
             prop: "warehouseSn",
             align: "left",
           },
@@ -151,7 +151,7 @@ export default {
             align: "left",
           },
           {
-            label: "疋号",
+            label: this.$t("whseField.ph2"),
             prop: "countingNo",
             align: "left",
           },
@@ -174,7 +174,7 @@ export default {
           },
 
           {
-            label: "检验状态",
+            label: this.$t("whseField.jyzt"),
             prop: "inspectionStatus",
             align: "left",
           },

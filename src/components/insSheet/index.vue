@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-25 09:10:26
  * @LastEditors: Lyl
- * @LastEditTime: 2021-03-31 13:17:28
+ * @LastEditTime: 2021-04-05 18:59:08
  * @Description:  送檢單組件
 -->
 
@@ -16,7 +16,7 @@
       :close-on-click-modal="false"
       v-if="sheetV"
     >
-      <view-container :title="'手動生成' + tle + '送檢單'">
+      <view-container :title="$t('choicDlg.sdsc') + tle + $t('choicDlg.sjd')">
         <div class="btnList">
           <el-button type="success" @click="save">{{
             this.$t("public.save")
@@ -29,8 +29,8 @@
           <avue-form ref="form" :option="sheetF" v-model="form"></avue-form>
         </div>
         <el-row class="crudBox">
-          <el-col :span="tle === '紗線' ? 24 : 12">
-            <view-container :title="tle + '送檢單明細'">
+          <el-col :span="tle === this.$t('iaoMng.sx') ? 24 : 12">
+            <view-container :title="tle + $t('choicDlg.sjdmx')">
               <avue-crud
                 style="margin-top: 3px"
                 ref="crud"
@@ -43,8 +43,8 @@
               </avue-crud>
             </view-container>
           </el-col>
-          <el-col :span="tle === '紗線' ? 0 : 12">
-            <view-container :title="tle + '送檢單批號明細'">
+          <el-col :span="tle === this.$t('iaoMng.sx') ? 0 : 12">
+            <view-container :title="tle + $t('choicDlg.sjdphmx')">
               <avue-crud
                 style="margin-top: 3px"
                 ref="dlta"
@@ -133,7 +133,7 @@ export default {
     getData() {
       this.loading = true;
       switch (this.tle) {
-        case "紗線":
+        case this.$t("iaoMng.sx"):
           this.sheetF = sxForm(this);
           this.sheetC = sxCrud(this);
           this.api.get = getSx;
@@ -143,7 +143,7 @@ export default {
           this.api.updateD = updateSxDetali;
           this.api.addD = addSxDetali;
           break;
-        case "胚布":
+        case this.$t("iaoMng.pb"):
           this.sheetF = sxForm(this);
           this.sheetC = pbCrud(this);
           this.sheetDtla = pbDtlbCrud(this);
@@ -157,7 +157,7 @@ export default {
           this.api.updateDtlb = updatePbDlb;
           this.api.addDtlb = addPbDlb;
           break;
-        case "化工原料":
+        case this.$t("iaoMng.hgyl"):
           this.sheetF = sxForm(this);
           this.sheetC = hgylCrud(this);
           this.sheetDtla = hgylDtlbCrud(this);
@@ -171,7 +171,7 @@ export default {
           this.api.updateDtlb = updateHgylDlb;
           this.api.addDtlb = addHgylDlb;
           break;
-        case "顏料":
+        case this.$t("iaoMng.yl"):
           this.sheetF = sxForm(this);
           this.sheetC = ylCrud(this);
           this.sheetDtla = hgylDtlbCrud(this);
@@ -205,14 +205,16 @@ export default {
             this.form.retType = "10";
             this.form.sysCreatedby = this.inForm.sysCreatedby;
             this.crud = JSON.parse(JSON.stringify(this.inCrud));
-            if (this.tle === "紗線") {
+            if (this.tle === this.$t("iaoMng.sx")) {
               this.crud.forEach((i, index) => {
                 // i.$cellEdit = true;
                 // i.weight = Math.ceil(i.weight / 100);
+                i.list = [];
+                i.loc = [];
                 i.weight = 1;
               });
             }
-            if (this.tle === "胚布") {
+            if (this.tle === this.$t("iaoMng.pb")) {
               this.crud.forEach((i, index) => {
                 i.loc.forEach((j, indexs) => {
                   // j.weight = Math.ceil(j.weight / 100);
@@ -220,7 +222,10 @@ export default {
                 });
               });
             }
-            if (this.tle === "化工原料" || this.tle === "顏料") {
+            if (
+              this.tle === this.$t("iaoMng.hgyl") ||
+              this.tle === this.$t("iaoMng.yl")
+            ) {
               this.crud.forEach((i, index) => {
                 i.loc = i.list;
                 i.loc.forEach((j, indexs) => {
@@ -255,7 +260,6 @@ export default {
                 let records = Res.data;
                 this.page.total = records.total;
                 this.crud = records.records;
-
                 this.crud.forEach((item, index) => {
                   item.$cellEdit = true;
                   item.loc = [];
@@ -304,30 +308,29 @@ export default {
     },
     save() {
       if (!this.form.batchNumber) {
-        this.$tip.error("配料单号不能为空!");
+        this.$tip.error(this.$t("iaoMng.saveTle8"));
         return;
       }
-      if (this.tle === "紗線") {
+      if (this.tle === this.$t("iaoMng.sx")) {
         for (let i = 0; i < this.crud.length; i++) {
           if (!this.crud[i].weight) {
-            this.$tip.error("重量不能为空!");
+            this.$tip.error(this.$t("iaoMng.saveTle9"));
             return;
           }
         }
       }
-      if (this.tle === "胚布") {
+      if (this.tle === this.$t("iaoMng.pb")) {
         for (let i = 0; i < this.crud.length; i++) {
           if (this.crud[i].loc) {
             for (let j = 0; j < this.crud[i].loc.length; j++) {
               if (this.crud[i].loc[j].weight === "") {
-                this.$tip.error("重量不能为空!");
+                this.$tip.error(this.$t("iaoMng.saveTle9"));
                 return;
               }
             }
           }
         }
       }
-
       this.loading = true;
       if (
         this.form.whseRetyarninoid ||
@@ -376,6 +379,7 @@ export default {
           Promise.all(promiseArr).then((res) => {
             this.crud.forEach((item, index) => {
               if (item.loc && item.loc.length > 0) {
+                console.log(item.loc);
                 item.loc.forEach((loc, index) => {
                   if (loc.whseMaterialDlboid || loc.whseChemicalDlboid) {
                     this.api.updateDtlb(loc).then((res) => {});
@@ -400,7 +404,7 @@ export default {
           });
         });
       } else {
-        this.form.sysCreated = this.$getNowTime();
+        this.form.sysCreated = this.$getNowTime("datetime");
         this.api.add(this.form).then((res) => {
           if (this.crud.length === 0) {
             setTimeout(() => {

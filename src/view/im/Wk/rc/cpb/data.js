@@ -6,13 +6,13 @@ export function rsxkr1F(_this) {
     labelWidth: 130,
     column: [
       {
-        label: "入仓编号",
+        label: _this.$t("whseField.rcbh"),
         prop: "yinId",
         span: 6,
         placeholder: " ",
       },
       {
-        label: "入仓日期",
+        label: _this.$t("whseField.rcrq"),
         prop: "yinDate",
         span: 6,
         placeholder: " ",
@@ -21,7 +21,7 @@ export function rsxkr1F(_this) {
         valueFormat: "yyyy-MM-dd HH:mm:ss",
       },
       {
-        label: "检验状态",
+        label: _this.$t("whseField.jyzt"),
         prop: "yinStatus",
         span: 6,
         placeholder: " ",
@@ -30,7 +30,7 @@ export function rsxkr1F(_this) {
           getDIC('whse_yinstatus')
       },
       {
-        label: "客户名称",
+        label: _this.$t("whseField.khmc"),
         prop: "custName",
         span: 6,
         placeholder: " ",
@@ -42,7 +42,7 @@ export function rsxkr1F(_this) {
 
 
       {
-        label: "财务状态",
+        label: _this.$t("whseField.cwzt"),
         prop: "finStatus",
         span: 6,
         placeholder: " ",
@@ -61,14 +61,14 @@ export function rsxkr2F(_this) {
     labelWidth: 130,
     column: [
       {
-        label: "入仓编号",
+        label: _this.$t("whseField.rcbh"),
         prop: "yinId",
         span: 6,
         placeholder: " ",
         disabled: true,
       },
       {
-        label: "入仓日期",
+        label: _this.$t("whseField.rcrq"),
         prop: "yinDate",
         span: 6,
         placeholder: " ",
@@ -78,7 +78,7 @@ export function rsxkr2F(_this) {
         disabled: true
       },
       {
-        label: "入仓类型",
+        label: _this.$t("whseField.rclx"),
         prop: "yinType",
         cell: false,
         type: "select",
@@ -88,7 +88,7 @@ export function rsxkr2F(_this) {
         disabled: true
       },
       {
-        label: "客户名称",
+        label: _this.$t("whseField.khmc"),
         prop: "custName",
         span: 6,
         placeholder: " ",
@@ -102,11 +102,11 @@ export function rsxkr2F(_this) {
           _this.choiceField = "custName";
           _this.choiceTarget = _this.form;
           _this.dlgWidth = "100%";
-          _this.choiceTle = "选择客戶";
+          _this.choiceTle = _this.$t("choicDlg.xzkh");
         }
       },
       {
-        label: "客人通知单",
+        label: _this.$t("whseField.krtzd"),
         prop: "custNotice",
         span: 6,
         placeholder: " ",
@@ -115,7 +115,7 @@ export function rsxkr2F(_this) {
       },
 
       {
-        label: "检验状态",
+        label: _this.$t("whseField.jyzt"),
         prop: "yinStatus",
         span: 6,
         placeholder: " ",
@@ -126,7 +126,7 @@ export function rsxkr2F(_this) {
           getDIC('whse_yinstatus')
       },
       {
-        label: "備註",
+        label: _this.$t("energy.bz"),
         prop: "remarks",
         span: 18,
         placeholder: " ",
@@ -176,13 +176,13 @@ export function rsxkr1C(_this) {
         hide: true,
       },
       {
-        label: "入仓编号",
+        label: _this.$t("whseField.rcbh"),
         prop: "yinId",
         cell: true,
         width: 160,
       },
       {
-        label: "入仓类型",
+        label: _this.$t("whseField.rclx"),
         prop: "yinType",
         cell: false,
         width: 120,
@@ -190,7 +190,7 @@ export function rsxkr1C(_this) {
         dicData: getDIC('Whse_FinishedclothType'),
       },
       {
-        label: "入仓日期",
+        label: _this.$t("whseField.rcrq"),
         prop: "yinDate",
         cell: true,
         type: "datetime",
@@ -201,7 +201,7 @@ export function rsxkr1C(_this) {
       },
 
       {
-        label: "客户名稱",
+        label: _this.$t("whseField.khmc"),
         prop: "custName",
         cell: true,
         hide: _this.hide === "2" ? false : true,
@@ -212,11 +212,11 @@ export function rsxkr1C(_this) {
           // _this.choiceQ.purType = '5'
           _this.oldData = _this.chooseData
           _this.choiceTarget = _this.oldData;
-          _this.choiceTle = "选择客戶";
+          _this.choiceTle = _this.$t("choicDlg.xzkh");
         },
       },
       {
-        label: "客户代码",
+        label: _this.$t("whseField.khbh"),
         prop: "custCode",
         cell: false,
         width: 150,
@@ -224,7 +224,7 @@ export function rsxkr1C(_this) {
       },
 
       {
-        label: "客人通知单",
+        label: _this.$t("whseField.krtzd"),
         prop: "custNotice",
         cell: true,
         hide: _this.hide === "2" ? false : true,
@@ -232,26 +232,26 @@ export function rsxkr1C(_this) {
       },
 
       {
-        label: "检验状态",
+        label: _this.$t("whseField.jyzt"),
         prop: "yinStatus",
         cell: true,
-        width: 110,
+        width: 120,
         hide: _this.hide != '2' ? false : true,
         type: "select",
         dicData: getDIC('whse_yinstatus'),
       },
       {
-        label: "财务状态",
+        label: _this.$t("whseField.cwzt"),
         prop: "finStatus",
         cell: true,
-        width: 120,
+        width: 135,
         type: "select",
         hide: _this.hide === '1' ? false : true,
         dicData:
           getDIC('whse_finStatus'),
       },
       {
-        label: "备注",
+        label: _this.$t("energy.bz"),
         prop: "remarks",
         cell: true,
         hide: _this.hide === '2' ? false : true,
@@ -308,7 +308,7 @@ export function rsxkr2C(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: _this.hide === '2' ? "calc(100vh - 310px)" : "calc(100vh - 265px)",
+    height: _this.hide === '2' ? "calc(100vh - 312px)" : "calc(100vh - 267px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
@@ -340,7 +340,7 @@ export function rsxkr2C(_this) {
         hide: true,
       },
       {
-        label: "缸号",
+        label: _this.$t("whseField.gh"),
         prop: "batchNo",
         cell: _this.hide === '2' ? true : false,
         width: 230,
@@ -357,27 +357,27 @@ export function rsxkr2C(_this) {
         // },
       },
       {
-        label: "布票号",
+        label: _this.$t("whseField.bph"),
         prop: "fabticket",
         cell: true,
         width: 230,
       },
       {
-        label: "疋数",
+        label: _this.$t("whseField.ps"),
         prop: "countingNo",
         cell: true,
         width: 120,
         align: "right",
       },
       {
-        label: "重量",
+        label: _this.$t("whseField.zl"),
         prop: "weight",
         cell: true,
         width: 120,
         align: "right",
       },
       {
-        label: "单位",
+        label: _this.$t('whseField.dw'),
         prop: "weightUnit",
         cell: true,
         width: 100,
@@ -386,7 +386,7 @@ export function rsxkr2C(_this) {
         dicData: getDIC("bas_matUnit")
       },
       {
-        label: "货位码",
+        label: _this.$t("whseField.hwm"),
         prop: "locationCode",
         cell: true,
         width: 180,
@@ -395,7 +395,7 @@ export function rsxkr2C(_this) {
           _this.choiceV = !_this.choiceV
           _this.choiceField = "locationCode";
           _this.choiceTarget = _this.chooseData;
-          _this.choiceTle = "選擇貨位";
+          _this.choiceTle = _this.$t("choicDlg.xzhw");
         }
       },
       {

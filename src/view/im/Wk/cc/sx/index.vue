@@ -15,7 +15,7 @@
             type="success"
             :disabled="Object.keys(chooseData).length === 0"
             @click="handleRowDBLClick(chooseData)"
-            >修改</el-button
+            >{{ this.$t("public.update") }}</el-button
           >
           <el-button
             type="primary"
@@ -26,7 +26,9 @@
           <el-button type="danger" @click="del">{{
             this.$t("public.del")
           }}</el-button>
-          <el-button type="primary" @click="getData">查询</el-button>
+          <el-button type="primary" @click="getData">{{
+            this.$t("public.query")
+          }}</el-button>
           <el-button type="warning" @click="close">{{
             this.$t("public.close")
           }}</el-button>
@@ -262,7 +264,7 @@ export default {
     },
     del() {
       if (Object.keys(this.chooseData).length === 0) {
-        this.$tip.error("请选择要删除的数据!");
+        this.$tip.error(this.$t("public.delTle"));
         return;
       }
       if (
@@ -281,7 +283,7 @@ export default {
         .cofirm(
           "是否确定删除出仓编号为 【 " +
             this.chooseData.retCode +
-            " 】 的数据?",
+            this.$t("iaoMng.delTle2"),
           this,
           {}
         )

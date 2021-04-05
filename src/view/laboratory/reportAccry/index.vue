@@ -5,7 +5,9 @@
         <el-tabs v-model="tabsName" type="border-card">
           <el-tab-pane label="检验报告附件" name="reportAccry">
             <el-row class="btnList">
-              <el-button type="primary" @click="query">查询</el-button>
+              <el-button type="primary" @click="query">{{
+                this.$t("public.query")
+              }}</el-button>
               <el-button type="primary" @click.stop="uploadDlg1 = true"
                 >上传</el-button
               >
@@ -16,7 +18,7 @@
                 this.$t("public.del")
               }}</el-button>
               <!-- <el-button type="primary" @click="editor(checkData)"
-                >修改</el-button
+                >{{this.$t("public.update")}}</el-button
               > -->
               <el-button type="primary" @click="yulan(checkData)"
                 >预览</el-button
@@ -53,9 +55,9 @@
             <el-button type="success" @click="submit">{{
               this.$t("public.save")
             }}</el-button>
-            <el-button type="warning" @click="uploadDlg1 = false"
-              >關閉</el-button
-            >
+            <el-button type="warning" @click="uploadDlg1 = false">{{
+              $t("public.close")
+            }}</el-button>
           </div>
           <avue-form :option="formOp" v-model="form"></avue-form>
         </view-container>

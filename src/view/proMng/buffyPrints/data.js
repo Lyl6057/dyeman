@@ -1,61 +1,49 @@
+/*
+ * @Author: Lyl
+ * @Date: 2021-01-30 10:55:22
+ * @LastEditors: Lyl
+ * @LastEditTime: 2021-04-05 08:55:10
+ * @Description:
+ */
+
 import {
   getDIC,
   getDicT,
   getXDicT,
   postDicT
 } from '@/config'
-
+let matUnit = getDIC("bas_matUnit")
 export function mainForm(_this) {
   return {
     submitBtn: false,
     emptyBtn: false,
-    labelWidth: 150,
+    labelWidth: 120,
     column: [
       {
-        label: _this.$t('whseField.khmc'),
-        prop: "custCode",
-        span: 6,
-        placeholder: " ",
-        type: "select",
-        dicData: getDicT("basCustomer", "custName", "custCode")
-      },
-      {
-        label: "颜色编号",
-        prop: "colorBh",
+        label: "訂單號",
+        prop: "poNo",
         span: 6,
         placeholder: " ",
       },
       {
-        label: "颜色中文",
-        prop: "colorChn",
+        label: "布票編號",
+        prop: "noteCode",
         span: 6,
         placeholder: " ",
       },
       {
-        label: "颜色英文",
-        prop: "colorEngName",
+        label: "客戶",
+        prop: "customerName",
         span: 6,
         placeholder: " ",
       },
       {
-        label: "客色号",
-        prop: "custColorBh",
+        label: "機台編號",
+        prop: "machineCode",
         span: 6,
         placeholder: " ",
-      },
-      {
-        label: "面料",
-        prop: "fabricDesc",
-        span: 12,
-        placeholder: " ",
-      },
-      {
-        label: "色号",
-        prop: "colorNo",
-        span: 6,
-        placeholder: " ",
-      },
 
+      },
     ],
   }
 }
@@ -309,97 +297,206 @@ export function popupForm(_this) {
 
 
 }
-
 export function mainCrud(_this) {
   return {
     menu: false,
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 285px)",
+    height: "calc(100vh - 195px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
+    labelWidth: 100,
     column: [
       {
         label: "#",
         prop: "index",
         width: 50,
-        align: "center"
+        align: "center",
+        display: false
       },
       {
-        label: "色号",
-        prop: "colorNo",
-        width: 130,
-      },
-      {
-        label: _this.$t('whseField.khmc'),
-        prop: "custCode",
-        width: 220,
-        type: "select",
-        dicData: getDicT("basCustomer", "custName", "custCode")
-      },
-      {
-        label: "颜色编号",
-        prop: "colorBh",
-        width: 140,
-      },
-      {
-        label: "颜色中文",
-        prop: "colorChn",
-        width: 120,
-      },
-      {
-        label: "颜色英文",
-        prop: "colorEngName",
-        width: 150,
-      },
-      {
-        label: "客色号",
-        prop: "custColorBh",
-        width: 130,
-      },
-      {
-        label: "面料编号",
-        prop: "fabCode",
+        label: "訂單號",
+        prop: "poNo",
         width: 110,
+        span: 6,
+        placeholder: " ",
+        disabled: true
       },
       {
-        label: "面料",
-        prop: "fabricDesc",
-        width: 400,
+        label: "布票編號",
+        prop: "noteCode",
+        width: 150,
+        disabled: true, placeholder: " ",
+        span: 6,
+        sortable: true,
+      },
+      {
+        label: "客戶",
+        prop: "customerName",
+        width: 180,
+        disabled: true, placeholder: " ",
+        span: 6,
+        display: false
+      },
+      {
+        label: "布类名称",
+        prop: "fabricName",
+        disabled: true, placeholder: " ",
+        span: 6,
+        width: 100,
+      },
+      {
+        label: "顏色",
+        prop: "proColor",
+        disabled: true, placeholder: " ",
+        span: 6,
+        width: 100,
+      },
+
+      {
+        label: "纱批",
+        prop: "spi",
+        width: 90,
+        hide: true,
+        span: 6,
+      },
+
+      {
+        label: "纱牌",
+        prop: "sp",
+        width: 90,
+        hide: true,
+        span: 6,
+      },
+      {
+        label: "机台編號",
+        prop: "machineCode",
+        width: 110,
+        hide: false,
+        span: 6,
+        disabled: true,
 
       },
       {
-        label: "面料来源",
-        prop: "fabSource",
-        width: 120,
-        type: "select",
-        dicData: getDIC("LAP_FABSOURCE"),
-      },
-      {
-        label: "染色类别",
-        prop: "lapDyetype",
-        width: 120,
-        type: "select",
-        dicData: getDIC("LAP_DYETYPE"),
-      },
-      {
-        label: "是否双染",
-        prop: "doubleFlag",
+        label: "机号",
+        prop: "loomNo",
         width: 100,
-        type: 'select',
+        hide: false,
+        span: 6,
+        rules: [{
+          required: true,
+          message: "请输入机号",
+          trigger: "blur"
+        }],
+        sortable: true,
+        disabled: true
+      },
+      {
+        label: "值机工号",
+        prop: "workNo",
+        width: 90,
+        hide: true,
+        span: 6,
+        disabled: true,
+        rules: [{
+          required: true,
+          message: "请输入值机工号",
+          trigger: "blur"
+        }],
+      },
+      {
+        label: "幅宽",
+        prop: "breadth",
+        width: 80,
+        align: "right",
+        span: 6,
+        rules: [{
+          required: true,
+          message: "请输入幅宽",
+          trigger: "blur"
+        }]
+      },
+      {
+        label: _this.$t("whseField.zl"),
+        prop: "clothWeight",
+        width: 80,
+        span: 6,
+
+      },
+      {
+        label: "單位",
+        prop: "weightUnit",
+        width: 80,
+        display: false,
+        placeholder: " ",
+        span: 6,
+        type: "select",
+        dicData: matUnit
+      },
+      // {
+      //   label: "長度",
+      //   prop: "clothLength",
+      //   width: 80,
+      //   display: false
+      // },
+
+      // {
+      //   label: "單位",
+      //   prop: "lenUnit",
+      //   width: 80,
+      //   display: false,
+      //   placeholder: " ",
+      //   span: 6,
+      //   type: "select",
+      //   dicData: matUnit
+      // },
+      {
+        label: "克重",
+        prop: "gramWeight",
+        width: 80,
+        align: "right",
+        span: 6,
+        rules: [{
+          required: true,
+          message: "请输入克重",
+          trigger: "blur"
+        }]
+      },
+      {
+        label: "匹號",
+        prop: "eachNumber",
+        width: 80,
+        align: "right",
+        span: 6,
+      },
+      {
+        label: "已打印",
+        prop: "isPrinted",
+        type: "select",
+        disabled: true,
         dicData: [
           {
             value: true,
-            label: '是'
+            label: "是"
           },
           {
             value: false,
-            label: '否'
+            label: "否"
           }
-        ]
+        ],
+        span: 6,
       },
+      {
+        label: "打印时间",
+        prop: "printedTime",
+        type: "date",
+        format: "yyyy-MM-dd hh:MM:ss",
+        valueFormat: "yyyy-MM-dd hh:MM:ss",
+        span: 6,
+        width: 180
+      }
     ],
   }
 

@@ -1,8 +1,8 @@
 <template>
   <div id="rcDetail">
-    <view-container :title="datas.type.split('_')[0] + '入库'">
+    <view-container :title="datas.type.split('_')[0] + this.$t('iaoMng.rc')">
       <div class="btnList">
-        <!-- <el-button type="primary" @click="getDetail">查询</el-button> -->
+        <!-- <el-button type="primary" @click="getDetail">{{this.$t("public.query")}}</el-button> -->
         <el-button type="primary" @click="add">{{
           this.$t("public.add")
         }}</el-button>
@@ -101,7 +101,7 @@ export default {
       changeList: [],
       ruleV: false,
       choiceV: false,
-      choiceTle: "來紗登記",
+      choiceTle: this.$t("iaoMng.xzlsdj"),
       choiceTarget: {},
       choiceField: "",
       choiceQ: {},
@@ -175,7 +175,7 @@ export default {
     },
     del() {
       if (Object.keys(this.chooseData).length === 0) {
-        this.$tip.error("请选择要删除的数据!");
+        this.$tip.error(this.$t("public.delTle"));
         return;
       }
       if (!this.chooseData.whseYarninDtloid) {

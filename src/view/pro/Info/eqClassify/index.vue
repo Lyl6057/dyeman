@@ -10,8 +10,9 @@
         <el-button type="primary" @click="add" :disabled="loading">{{
           this.$t("public.add")
         }}</el-button
-        ><el-button type="primary" @click="update" :disabled="loading"
-          >修改</el-button
+        ><el-button type="primary" @click="update" :disabled="loading">{{
+          this.$t("public.update")
+        }}</el-button
         ><el-button type="danger" @click="del" :disabled="loading">{{
           this.$t("public.del")
         }}</el-button>
@@ -21,9 +22,9 @@
         ><el-button type="info" @click="cancel" :disabled="loading"
           >取消</el-button
         >
-        <el-button type="primary" @click="query" :disabled="loading"
-          >查询</el-button
-        >
+        <el-button type="primary" @click="query" :disabled="loading">{{
+          this.$t("public.query")
+        }}</el-button>
         <el-button type="danger" @click="close" :disabled="loading">{{
           this.$t("public.close")
         }}</el-button>

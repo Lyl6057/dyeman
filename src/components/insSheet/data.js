@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-25 09:13:34
  * @LastEditors: Lyl
- * @LastEditTime: 2021-03-05 11:51:30
+ * @LastEditTime: 2021-04-05 10:28:30
  * @Description:
  */
 
@@ -22,24 +22,24 @@ export function sxForm(_this) {
     labelWidth: 130,
     column: [
       {
-        label: "出仓编号",
+        label: _this.$t("whseField.ccbh"),// "出仓编号",
         prop: "retCode",
         span: 6,
         placeholder: " ",
         disabled: true
       },
       {
-        label: "出倉日期",
+        label: _this.$t("whseField.ccrq"),// "出倉日期",
         prop: "retDate",
         span: 6,
         placeholder: " ",
-        type: "datetime",
-        format: "yyyy-MM-dd HH:mm:ss",
-        valueFormat: "yyyy-MM-dd HH:mm:ss",
+        type: "date",
+        format: "yyyy-MM-dd",
+        valueFormat: "yyyy-MM-dd",
         disabled: true
       },
       {
-        label: "出仓类型",
+        label: _this.$t("whseField.cclx"),//"出仓类型",
         prop: "retType",
         span: 6,
         type: "select",
@@ -47,14 +47,14 @@ export function sxForm(_this) {
         dicData: getDIC('Whse_out_type'),
       },
       {
-        label: "配料单号",
-        prop: _this.tle === '紗線' ? "batchNumber" : "retBatch",
+        label: _this.$t("whseField.pldh"),// "配料单号",
+        prop: _this.tle === _this.$t("iaoMng.sx") ? "batchNumber" : "retBatch",
         span: 6,
         placeholder: " ",
         disabled: true
       },
       {
-        label: "操作员",
+        label: _this.$t("whseField.czy"),// "操作员",
         prop: "sysCreatedby",
         span: 6,
         placeholder: " ",
@@ -95,13 +95,13 @@ export function sxCrud(_this) {
 
       },
       {
-        label: "纱线编号",
+        label: _this.$t("whseField.sxbh"),// "纱线编号",
         prop: "yarnsId",
         cell: false,
         width: 120,
       },
       {
-        label: "纱线名称",
+        label: _this.$t("whseField.sxmc"),//"纱线名称",
         prop: "yarnsName",
         cell: false,
         width: 450,
@@ -110,20 +110,20 @@ export function sxCrud(_this) {
       },
 
       {
-        label: "批次/批号",
+        label: _this.$t("whseField.ph"),// "批次/批号",
         prop: "batchNo",
         cell: false,
         width: 180,
       },
       {
-        label: "重量",
+        label: _this.$t("whseField.zl"),//"重量",
         prop: "weight",
         cell: true,
         width: 100,
         align: "right",
       },
       {
-        label: "单位",
+        label: _this.$t("whseField.dw"),//"单位",
         prop: "weightUnit",
         cell: false,
         width: 100,
@@ -162,13 +162,13 @@ export function pbCrud(_this) {
     },
 
     {
-      label: "胚布編號",
+      label: _this.$t("whseField.pbbh"),//"胚布編號",
       prop: "calicoId",
       cell: false,
       width: 100,
     },
     {
-      label: "胚布名稱",
+      label: _this.$t("whseField.pbmc"),//"胚布名稱",
       prop: "clothName",
       cell: false,
       width: 650,
@@ -208,27 +208,27 @@ export function pbDtlbCrud(_this) {
       align: "center"
     },
     {
-      label: "批號",
+      label: _this.$t("whseField.ph"),// "批號",
       prop: "batchNo",
       cell: false,
       width: 160,
     },
     {
-      label: "疋號",
+      label: _this.$t("whseField.ph2"),//"疋號",
       prop: "countingNo",
       cell: false,
       width: 80,
       align: "right",
     },
     {
-      label: "重量",
+      label: _this.$t("whseField.zl"),// "重量",
       prop: "weight",
       cell: true,
       width: 100,
       align: "right",
     },
     {
-      label: "單位",
+      label: _this.$t("whseField.dw"),// "單位",
       prop: "weightUnit",
       cell: true,
       width: 100,
@@ -236,7 +236,7 @@ export function pbDtlbCrud(_this) {
       dicData: unit
     },
     {
-      label: "客人布票号",
+      label: _this.$t("whseField.krbph"),//"客人布票号",
       prop: "custTicket",
       cell: false,
       width: 140,
@@ -268,19 +268,19 @@ export function hgylCrud(_this) {
     },
 
     {
-      label: "原料編號",
+      label: _this.$t("whseField.ylbh"),//"原料編號",
       prop: "chemicalId", // bcCode
       cell: false,
       width: 100,
     },
     {
-      label: "原料名稱",
+      label: _this.$t("whseField.ylmc"),//"原料名稱",
       prop: "chemicalName",//CNNameLong
       cell: false,
       width: 250,
     },
     {
-      label: "英文名稱",
+      label: _this.$t("whseField.ywmc"),//"英文名稱",
       prop: "ennamelong",
       cell: false,
       width: 250,
@@ -292,7 +292,7 @@ export function hgylCrud(_this) {
       dicData: basChemicalmat
     },
     {
-      label: "型号",
+      label: _this.$t("whseField.xh"),//"型号",
       prop: "modeltype",
       cell: false,
       width: 120,
@@ -304,7 +304,7 @@ export function hgylCrud(_this) {
       dicData: basChemicalmat
     },
     {
-      label: "含固力/活力",
+      label: _this.$t("whseField.hglhl"),//"含固力/活力",
       prop: "vitality",
       cell: false,
       width: 120,
@@ -344,13 +344,13 @@ export function hgylDtlbCrud(_this) {
       align: "center"
     },
     {
-      label: "批号",
+      label: _this.$t("whseField.ph"),//"批号",
       prop: "batchNo",
       cell: true,
       width: 220,
     },
     {
-      label: "产地",
+      label: _this.$t("whseField.cd"),// "产地",
       prop: "origin",
       cell: true,
       width: 120,
@@ -358,14 +358,14 @@ export function hgylDtlbCrud(_this) {
       dicData: getDIC('Whse_Origin'),
     },
     {
-      label: "重量",
+      label: _this.$t("whseField.zl"),//"重量",
       prop: "weight",
       cell: true,
       width: 120,
       align: "right",
     },
     {
-      label: "单位",
+      label: _this.$t("whseField.dw"),//"单位",
       prop: "weightUnit",
       cell: true,
       width: 100,
@@ -398,19 +398,19 @@ export function ylCrud(_this) {
     },
 
     {
-      label: "原料編號",
+      label: _this.$t("whseField.ylbh"),//"原料編號",
       prop: "chemicalId", // bcCode
       cell: false,
       width: 100,
     },
     {
-      label: "原料名稱",
+      label: _this.$t("whseField.ylmc"),// "原料名稱",
       prop: "chemicalName",//CNNameLong
       cell: false,
       width: 250,
     },
     {
-      label: "英文名稱",
+      label: _this.$t("whseField.ywmc"),// "英文名稱",
       prop: "ennamelong",
       cell: false,
       width: 250,
@@ -422,7 +422,7 @@ export function ylCrud(_this) {
       dicData: basPigment
     },
     {
-      label: "色光",
+      label: _this.$t("whseField.sg"),//"色光",
       prop: "bcColor",
       cell: false,
       width: 120,
@@ -434,7 +434,7 @@ export function ylCrud(_this) {
       dicData: basPigment
     },
     {
-      label: "力份",
+      label: _this.$t("whseField.lf"),//"力份",
       prop: "bcForce",
       cell: false,
       width: 120,
@@ -474,13 +474,13 @@ export function ylDtlbCrud(_this) {
       align: "center"
     },
     {
-      label: "批号",
+      label: _this.$t("whseField.ph"),// "批号",
       prop: "batchNo",
       cell: true,
       width: 220,
     },
     {
-      label: "产地",
+      label: _this.$t("whseField.cd"),// "产地",
       prop: "origin",
       cell: true,
       width: 120,
@@ -488,14 +488,14 @@ export function ylDtlbCrud(_this) {
       dicData: getDIC('Whse_Origin'),
     },
     {
-      label: "重量",
+      label: _this.$t("whseField.zl"),//"重量",
       prop: "weight",
       cell: true,
       width: 120,
       align: "right",
     },
     {
-      label: "单位",
+      label: _this.$t("whseField.dw"),// "单位",
       prop: "weightUnit",
       cell: true,
       width: 100,

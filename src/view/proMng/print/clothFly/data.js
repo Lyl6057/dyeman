@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-03-18 11:01:21
+ * @LastEditTime: 2021-04-05 08:55:17
  * @Description:
  */
 
@@ -41,7 +41,7 @@ export function mainForm(_this) {
 
       },
       // {
-      //   label: "客户",
+      //   label: _this.$t('whseField.khmc'),
       //   prop: "colorBh",
       //   span: 6,
       //   placeholder: " ",
@@ -104,7 +104,7 @@ export function popupForm(_this) {
         dicData: getDIC("sal_colorFresh"),
       },
       {
-        label: "客户",
+        label: _this.$t('whseField.khmc'),
         prop: "custCode",
         span: 6,
         placeholder: "请选择客户",
@@ -166,7 +166,7 @@ export function popupForm(_this) {
           _this.choiceField = "colorBh";
           // _this.choiceQ.purType = '5'
           _this.choiceTarget = _this.form;
-          _this.choiceTle = '选择色号信息';
+          _this.choiceTle = _this.$t("choicDlg.xzshxx");
         },
       },
       {
@@ -291,7 +291,7 @@ export function popupForm(_this) {
         disabled: !_this.isAdd,
       },
       {
-        label: "备注",
+        label: _this.$t("energy.bz"),
         prop: "remarks",
         span: 18,
       },
@@ -550,7 +550,7 @@ export function mainCrud(_this) {
         }]
       },
       {
-        label: "重量",
+        label: _this.$t("whseField.zl"),
         prop: "workAmount",
         width: 90,
         span: 6,
@@ -578,7 +578,7 @@ export function mainCrud(_this) {
         }
       },
       {
-        label: "单位",
+        label: _this.$t('whseField.dw'),
         prop: "workUnit",
         width: 90,
         span: 6,

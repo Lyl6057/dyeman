@@ -119,7 +119,7 @@ export default {
       dlgTle: "選擇紗線配料",
       saved: false,
       choiceV: false,
-      choiceTle: "來紗登記",
+      choiceTle: this.$t("iaoMng.xzlsdj"),
       choiceTarget: {},
       choiceField: "",
       choiceQ: {},
@@ -242,19 +242,19 @@ export default {
         this.choiceQ.retBatch = this.form.batchNumber;
         // this.choiceTarget = this.chooseData;
         this.dlgWidth = "100%";
-        this.choiceTle = "選擇本厂纱线配料计划";
+        this.choiceTle = this.$t("choicDlg.xzbcsxpl");
       } else if (this.hide === "2") {
         this.choiceV = !this.choiceV;
         this.choiceQ.retBatch = this.form.batchNumber;
         // this.choiceTarget = this.chooseData;
         this.dlgWidth = "100%";
-        this.choiceTle = "選擇外厂纱线配料计划";
+        this.choiceTle = this.$t("choicDlg.sxwc");
       } else if (this.hide === "4" || this.hide === "3" || this.hide === "5") {
         this.choiceV = !this.choiceV;
         // this.choiceQ.retBatch = this.form.batchNumber;
         // this.choiceTarget = this.chooseData;
         this.dlgWidth = "100%";
-        this.choiceTle = "選擇紗線入庫明細";
+        this.choiceTle = this.$t("choicDlg.xzsxrc");
       }
       // if (Object.keys(this.detail).length === 0) {
       //   this.$tip.error("请先选择出库明细");
@@ -285,7 +285,7 @@ export default {
         this.chooseData == null ||
         Object.keys(this.chooseData).length === 0
       ) {
-        this.$tip.error("请选择要删除的数据!");
+        this.$tip.error(this.$t("public.delTle"));
         return;
       }
       if (
@@ -306,7 +306,7 @@ export default {
             (this.hide === "3" || this.hide === "4" || this.hide === "5"
               ? this.chooseData.$batchNo
               : this.chooseData.batchNo) +
-            " 】 的数据?",
+            this.$t("iaoMng.delTle2"),
           this,
           {}
         )
@@ -637,7 +637,7 @@ export default {
       }
       // // this.choiceTarget[this.choiceField] = val[this.choiceField];
       // this.oldData.$cellEdit = true;
-      if (this.choiceTle === "選擇本厂纱线配料计划") {
+      if (this.choiceTle === this.$t("choicDlg.xzbcsxpl")) {
         this.mx = this.$unique(this.mx.concat(val), "batchNo");
         this.page.total = this.mx.length;
         this.mx.forEach((item, i) => {
@@ -648,7 +648,7 @@ export default {
           }
         });
       }
-      if (this.choiceTle === "選擇外厂纱线配料计划") {
+      if (this.choiceTle === this.$t("choicDlg.sxwc")) {
         this.mx = this.$unique(this.mx.concat(val), "batchNo");
         this.page.total = this.mx.length;
         this.mx.forEach((item, i) => {
@@ -659,7 +659,7 @@ export default {
           }
         });
       }
-      if (this.choiceTle === "選擇紗線入庫明細") {
+      if (this.choiceTle === this.$t("choicDlg.xzsxrc")) {
         val.forEach((item, i) => {
           item.yarnsName = item.yarnsId;
         });

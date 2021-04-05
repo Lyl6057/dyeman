@@ -3,7 +3,9 @@
     <div class="btnList">
       <!-- <el-button type="warning" @click="ruleV = true">編號規則配置</el-button> -->
       <el-button type="success" @click="outOrder">生成出庫單</el-button>
-      <el-button type="primary" @click="getData">查询</el-button>
+      <el-button type="primary" @click="getData">{{
+        this.$t("public.query")
+      }}</el-button>
       <el-button type="warning" @click="close">{{
         this.$t("public.close")
       }}</el-button>
@@ -90,8 +92,8 @@
           >
             <view-container title="選擇紗線配料">
               <div class="btnList">
-                <el-button type="primary" @click="getSxData">查询</el-button>
-                <el-button type="success" @click="check">選擇</el-button>
+                <el-button type="primary" @click="getSxData">{{this.$t("public.query")}}</el-button>
+                <el-button type="success" @click="check">{{this.$t("public.choose")}}</el-button>
                 <el-button type="warning" @click="sxclose">{{this.$t("public.close")}}</el-button>
               </div>
               <div class="formBox">

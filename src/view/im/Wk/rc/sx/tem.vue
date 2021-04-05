@@ -1,15 +1,15 @@
 <template>
   <div id="rcDetail">
     <view-container
-      :title="datas.type.split('_')[0] + '入库'"
+      :title="datas.type.split('_')[0] + $t('iaoMng.rc')"
       v-loading="loading"
-      element-loading-text="拼命加载中"
+      :element-loading-text="$t('public.loading')"
     >
       <div class="btnList">
         <el-button type="success" @click="save">{{
           this.$t("public.save")
         }}</el-button>
-        <!-- <el-button type="primary" @click="getDetail">查询</el-button> -->
+        <!-- <el-button type="primary" @click="getDetail">{{this.$t("public.query")}}</el-button> -->
 
         <!-- <el-button type="warning" @click="getDetail">取消</el-button> -->
         <el-button type="warning" @click="close">{{
@@ -21,7 +21,7 @@
       </div>
       <el-row class="crudBox">
         <el-col :span="17">
-          <view-container :title="datas.type.split('_')[0] + '入库明细'">
+          <view-container :title="datas.type.split('_')[0] + $t('iaoMng.rcmx')">
             <div class="btnList">
               <el-button type="primary" @click="add">{{
                 this.$t("public.add")
@@ -48,13 +48,15 @@
           </view-container></el-col
         >
         <el-col :span="7">
-          <view-container :title="datas.type.split('_')[0] + '入库明細貨位'">
+          <view-container
+            :title="datas.type.split('_')[0] + $t('iaoMng.rcmxhw')"
+          >
             <loction
               ref="loc"
               :inData="chooseData"
               :api="everyThing"
               :form="form"
-              type="紗線"
+              :type="$t('iaoMng.sx')"
             ></loction>
           </view-container>
         </el-col>
@@ -125,7 +127,7 @@ export default {
       changeList: [],
       ruleV: false,
       choiceV: false,
-      choiceTle: "來紗登記",
+      choiceTle: this.$t("iaoMng.xzlsdj"),
       choiceTarget: {},
       choiceField: "",
       choiceQ: {},
@@ -138,55 +140,62 @@ export default {
   methods: {
     getDetail() {
       if (this.isAdd) {
+        this.loading = true;
         this.form = this.detail;
-        return;
-      }
-      if (Object.keys(this.detail).length === 0 || !this.detail.whseYarninoid) {
-        this.mx = [];
-        return;
-      }
-      this.loading = true;
-      // this.oldData = {};
-      this.changeList = [];
-      this.mx = [];
-      this.mxOp.showSummary = false;
-      // this.chooseData = {};
-      getSxDetali({
-        rows: this.page.pageSize,
-        start: this.page.currentPage,
-        whseYarninFk: this.detail.whseYarninoid,
-      }).then((res) => {
-        let records = res.data;
-        this.page.total = records.total;
-        this.mx = records.records;
-
-        // if (Object.keys(this.oldData).length > 1) {
-        //   this.$refs.dlgcrud.setCurrentRow(this.mx[this.oldData.index - 1]);
-        // } else {
-
-        // }
-
-        if (this.mx.length === 0) {
+        setTimeout(() => {
           this.loading = false;
+        }, 500);
+      } else {
+        if (
+          Object.keys(this.detail).length === 0 ||
+          !this.detail.whseYarninoid
+        ) {
+          this.mx = [];
+          return;
         }
-        this.mx.forEach((item, index) => {
-          item.yarnsName = item.yarnsId;
-          item.index = index + 1;
-          item.poNo = item.yarnsId;
-          if (index === this.mx.length - 1) {
-            setTimeout(() => {
-              this.$refs.dlgcrud.setCurrentRow(this.mx[this.mx.length - 1]);
-              this.mxOp.showSummary = true;
-              this.loading = false;
-            }, 200);
+        this.loading = true;
+        // this.oldData = {};
+        this.changeList = [];
+        this.mx = [];
+        this.mxOp.showSummary = false;
+        // this.chooseData = {};
+        getSxDetali({
+          rows: this.page.pageSize,
+          start: this.page.currentPage,
+          whseYarninFk: this.detail.whseYarninoid,
+        }).then((res) => {
+          let records = res.data;
+          this.page.total = records.total;
+          this.mx = records.records;
+
+          // if (Object.keys(this.oldData).length > 1) {
+          //   this.$refs.dlgcrud.setCurrentRow(this.mx[this.oldData.index - 1]);
+          // } else {
+
+          // }
+
+          if (this.mx.length === 0) {
+            this.loading = false;
           }
+          this.mx.forEach((item, index) => {
+            item.yarnsName = item.yarnsId;
+            item.index = index + 1;
+            item.poNo = item.yarnsId;
+            if (index === this.mx.length - 1) {
+              setTimeout(() => {
+                this.$refs.dlgcrud.setCurrentRow(this.mx[this.mx.length - 1]);
+                this.mxOp.showSummary = true;
+                this.loading = false;
+              }, 200);
+            }
+          });
         });
-      });
+      }
     },
     add() {
       if (this.hide === "1") {
         if (this.form.registerNo === "" || this.form.registerNo === null) {
-          this.$tip.error("请先选择纱线登记编号!");
+          this.$tip.error(this.$t("iaoMng.qxzdjbh"));
           return;
         }
         this.choiceV = !this.choiceV;
@@ -194,14 +203,14 @@ export default {
         this.choiceQ.registerNo = this.form.registerNo;
         this.choiceTarget = {};
         this.dlgWidth = "100%";
-        this.choiceTle = "選擇來紗登記明細";
+        this.choiceTle = this.$t("choicDlg.lsdjmx");
       } else if (this.hide === "2") {
         if (!this.form.purNo) {
-          this.$tip.error("請先選擇採購單號!");
+          this.$tip.error(this.$t("iaoMng.xzcgdh"));
           return;
         }
         if (!this.form.deliNo) {
-          this.$tip.error("請先選擇送貨單号!");
+          this.$tip.error(this.$t("iaoMng.xzshdh"));
           return;
         }
         this.choiceV = !this.choiceV;
@@ -209,24 +218,24 @@ export default {
         // this.choiceQ.yarnsId = this.form.registerNo;
         this.choiceTarget = {};
         this.dlgWidth = "100%";
-        this.choiceTle = "選擇採購訂單明細";
+        this.choiceTle = this.$t("iaoMng.xzcgdd");
       } else if (this.hide === "4") {
         this.choiceV = !this.choiceV;
         this.dlgWidth = "100%";
         this.choiceTarget = {};
         this.choiceField = "poNo";
-        this.choiceTle = "選擇退紗通知單";
+        this.choiceTle = this.$t("iaoMng.xztstzd");
       } else if (this.hide === "5") {
         if (this.form.instructId === "" || this.form.instructId === null) {
-          this.$tip.error("请先选择加工指令單!");
+          this.$tip.error(this.$t("iaoMng.xzjgzdl"));
           return;
         }
         // 外發廠退倉
         this.choiceV = !this.choiceV;
         this.dlgWidth = "100%";
         this.choiceTarget = {};
-        this.choiceQ.typeExplain = "纱线";
-        this.choiceTle = "選擇指令單明細";
+        this.choiceQ.typeExplain = "纱线"; //this.$t("iaoMng.sx");
+        this.choiceTle = this.$t("iaoMng.xzzld");
       }
     },
     iptChange(val) {
@@ -249,7 +258,7 @@ export default {
     },
     del() {
       if (Object.keys(this.chooseData).length === 0) {
-        this.$tip.error("请选择要删除的数据!");
+        this.$tip.error(this.$t("public.delTle"));
         return;
       }
       if (!this.chooseData.whseYarninDtloid) {
@@ -259,7 +268,9 @@ export default {
       }
       this.$tip
         .cofirm(
-          "是否确定删除編號為 【" + this.chooseData.yarnsId + " 】的數據？",
+          this.$t("iaoMng.delTle3") +
+            this.chooseData.yarnsId +
+            this.$t("iaoMng.delTle2"),
           this,
           {}
         )
@@ -301,33 +312,33 @@ export default {
         this.hide === "1" &&
         (this.form.yinId === "" || this.form.registerNo === "")
       ) {
-        this.$tip.error("入仓编号/纱线登记编号不能为空!");
+        this.$tip.error(this.$t("iaoMng.saveTle1"));
         return;
       }
       if (this.hide === "5" && !this.form.factoryId) {
-        this.$tip.error("入库资料中的加工廠不能为空!");
+        this.$tip.error(this.$t("iaoMng.saveTle2"));
         return;
       }
       if (this.hide === "5" && !this.form.instructId) {
-        this.$tip.error("入库资料中的加工指令單號不能为空!");
+        this.$tip.error(this.$t("iaoMng.saveTle3"));
         return;
       }
 
       for (let i = 0; i < this.mx.length; i++) {
         if (!this.mx[i].batchNo) {
-          this.$tip.error("批号不能为空!");
+          this.$tip.error(this.$t("iaoMng.saveTle4"));
           return;
         }
         if (this.hide === "1" && !this.mx[i].cartonNum) {
-          this.$tip.error("箱数不能为空!");
+          this.$tip.error(this.$t("iaoMng.saveTle5"));
           return;
         }
         if (!this.mx[i].weight || !this.mx[i].weightUnit) {
-          this.$tip.error("重量/单位不能为空!");
+          this.$tip.error(this.$t("iaoMng.saveTle6"));
           return;
         }
         if (this.hide === "1" && !this.mx[i].whseNum) {
-          this.$tip.error("入仓数量不能为空!");
+          this.$tip.error(this.$t("iaoMng.saveTle7"));
           return;
         }
       }
@@ -450,18 +461,18 @@ export default {
         return;
       }
       this.oldData.$cellEdit = false;
-      if (this.choiceTle === "選擇來紗登記") {
+      if (this.choiceTle === this.$t("iaoMng.xzlsdj")) {
         this.choiceTarget.custName = val.$custCode;
         this.choiceTarget.custCode = val.custCode;
       }
-      if (this.choiceTle === "退紗通知單") {
+      if (this.choiceTle === this.$t("iaoMng.tstzd")) {
         this.choiceTarget.yarnsId = val.yarnsId;
       }
-      if (this.choiceTle === "選擇外厂纱线配料计划") {
+      if (this.choiceTle === this.$t("choicDlg.sxwc")) {
         this.form.factoryId = val.refCode;
         this.form.factoryName = val.refName;
       }
-      if (this.choiceTle === "選擇指令單明細") {
+      if (this.choiceTle === this.$t("iaoMng.xzzld")) {
         val.forEach((item, i) => {
           item.yarnsId = item.materialId;
           item.yarnsName = item.materialName;
@@ -475,7 +486,7 @@ export default {
 
         this.$refs.dlgcrud.setCurrentRow(this.mx[this.mx.length - 1]);
       }
-      if (this.choiceTle === "選擇來紗登記明細") {
+      if (this.choiceTle === this.$t("choicDlg.lsdjmx")) {
         val.forEach((item, i) => {
           item.cartonWei = item.weight;
           item.cartonNum = item.carQty;
@@ -488,7 +499,7 @@ export default {
         });
         this.$refs.dlgcrud.setCurrentRow(this.mx[this.mx.length - 1]);
       }
-      if (this.choiceTle === "選擇退紗通知單") {
+      if (this.choiceTle === this.$t("iaoMng.xztstzd")) {
         val.forEach((item, i) => {
           item.custId = this.detail.custName;
           item.whseYarninFk = this.detail.whseYarninoid;

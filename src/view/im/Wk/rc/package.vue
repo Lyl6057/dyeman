@@ -14,7 +14,9 @@
           @click="save"
           >{{ this.$t("public.save") }}</el-button
         >
-        <el-button type="primary" @click="query">查询</el-button>
+        <el-button type="primary" @click="query">{{
+          this.$t("public.query")
+        }}</el-button>
         <el-button type="warning" @click="close">{{
           this.$t("public.close")
         }}</el-button>
@@ -158,7 +160,7 @@ export default {
     },
     del() {
       if (Object.keys(this.chooseData).length === 0) {
-        this.$tip.error("请选择要删除的数据!");
+        this.$tip.error(this.$t("public.delTle"));
         return;
       }
       if (!this.chooseData[this.data.type.split("_")[1]]) {
@@ -176,10 +178,12 @@ export default {
       this.$tip
         .cofirm(
           this.chooseData.prodNo === undefined
-            ? "是否确定删除缸號為 【 " + this.chooseData.batchNo + " 】 的数据?"
+            ? "是否确定删除缸號為 【 " +
+                this.chooseData.batchNo +
+                this.$t("iaoMng.delTle2")
             : "是否确定删除生產單號為 【 " +
                 this.chooseData.prodNo +
-                " 】 的数据?",
+                this.$t("iaoMng.delTle2"),
           this,
           {}
         )
@@ -259,7 +263,7 @@ export default {
   },
   created() {
     switch (this.data.type.split("_")[0]) {
-      case "胚布貨物包":
+      case this.$t("iaoMng.pbhwb"):
         this.crudOp = JSON.parse(JSON.stringify(WhseCalicoPackBarCodeC));
         this.formOp = WhseCalicoPackBarCodeF;
         this.getData = getWhseCalicoPackBarCode;
@@ -271,7 +275,7 @@ export default {
         this.crudOp.column[3].hide = false;
         this.crudOp.column[2].hide = true;
         break;
-      case "成品布貨物包":
+      case this.$t("iaoMng.cpbhwb"):
         //  Finishedcloth
         this.crudOp = JSON.parse(JSON.stringify(WhseCalicoPackBarCodeC));
         this.formOp = WhseCalicoPackBarCodeF;

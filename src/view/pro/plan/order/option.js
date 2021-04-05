@@ -14,14 +14,14 @@ export const workerF = {
     },
     {
       labelWidth: 60,
-      label: "客户",
+      label: _this.$t('whseField.khmc'),
       prop: "cust",
       span: 4,
       placeholder: " ",
     },
     {
       labelWidth: 60,
-      label: "重量",
+      label: _this.$t("whseField.zl"),
       prop: "weight",
       span: 4,
       placeholder: " ",
@@ -78,7 +78,7 @@ export const workerF = {
 //       prop: "refCode",
 //     },
 //     {
-//       label: "加工廠名稱",
+//       label: _this.$t("whseField.wfjgc"),
 //       prop: "refName",
 //       type: "select",
 //     },
@@ -88,20 +88,20 @@ export const workerF = {
 //       width: 220
 //     },
 //     // {
-//     //   label: "生產單號",
+//     //   label: _this.$t("whseField.scdh"),
 //     //   prop: "prOn",
 //     // },
 //     {
-//       label: "纱线编号",
+//       label: _this.$t("whseField.sxbh"),
 //       prop: "yarnsId",
 //     },
 //     {
-//       label: "纱线名称",
+//       label: _this.$t("whseField.sxmc"),
 //       prop: "yarnsName",
 //       width: 250
 //     },
 //     {
-//       label: "重量",
+//       label: _this.$t("whseField.zl"),
 //       prop: "weight",
 //       align: "right"
 //     },

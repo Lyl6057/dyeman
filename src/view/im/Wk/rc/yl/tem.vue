@@ -1,8 +1,8 @@
 <template>
   <div id="rcDetail">
-    <view-container :title="datas.type.split('_')[0] + '入库'">
+    <view-container :title="datas.type.split('_')[0] + this.$t('iaoMng.rc')">
       <div class="btnList">
-        <!-- <el-button type="primary" @click="getDetail">查询</el-button> -->
+        <!-- <el-button type="primary" @click="getDetail">{{this.$t("public.query")}}</el-button> -->
         <!-- <el-button type="primary" @click="add">{{this.$t("public.add")}}</el-button>
         <el-button type="danger" @click="del">{{ this.$t("public.del") }}</el-button> -->
         <el-button type="success" @click="saveAll" :loading="loading">{{
@@ -18,7 +18,7 @@
       </div>
       <el-row class="crudBox">
         <el-col :span="12">
-          <view-container :title="datas.type.split('_')[0] + '入库明细'">
+          <view-container :title="datas.type.split('_')[0] + $t('iaoMng.rcmx')">
             <div class="btnList">
               <el-button
                 type="primary"
@@ -26,7 +26,9 @@
                 v-if="hide != '8' && hide != '2'"
                 >{{ this.$t("public.add") }}</el-button
               >
-              <el-button type="danger" @click="del">刪除</el-button>
+              <el-button type="danger" @click="del">{{
+                this.$t("public.del")
+              }}</el-button>
             </div>
             <div class="crudBox">
               <avue-crud
@@ -42,7 +44,7 @@
         <el-col :span="12">
           <el-tabs v-model="tabs" type="border-card">
             <el-tab-pane
-              :label="datas.type.split('_')[0] + '入库批号资料'"
+              :label="datas.type.split('_')[0] + $t('iaoMng.rcphzl')"
               name="ph"
             >
               <div class="btnList">
@@ -65,7 +67,7 @@
               </div>
             </el-tab-pane>
             <el-tab-pane
-              :label="datas.type.split('_')[0] + '入库明細貨位'"
+              :label="datas.type.split('_')[0] + $t('iaoMng.rcmxhw')"
               name="loc"
             >
               <loction
@@ -73,7 +75,7 @@
                 :inData="chooseData"
                 :api="everyThing"
                 :form="form"
-                type="化工原料"
+                :type="this.$t('iaoMng.hgyl')"
               ></loction>
             </el-tab-pane>
           </el-tabs>
@@ -154,7 +156,7 @@ export default {
       changePhList: [],
       canLeave: false,
       choiceV: false,
-      choiceTle: "來紗登記",
+      choiceTle: this.$t("iaoMng.xzlsdj"),
       choiceTarget: {},
       choiceField: "",
       choiceQ: {},
@@ -276,7 +278,7 @@ export default {
       //   // this.oldData = this.chooseData;
       //   this.choiceTarget = this.oldData;
       //   this.choiceQ.purNo = this.form.purNo;
-      //   this.choiceTle = "送货单明细";
+      //   this.choiceTle = this.$t("choicDlg.shdmx");
       //   // this.choiceQ.pu
       //   return;
       // }
@@ -292,17 +294,17 @@ export default {
         // this.choiceField = "chemicalId";
         this.dlgWidth = "100%";
         this.choiceTarget = {};
-        this.choiceTle = "選擇來顏料登記明細";
+        this.choiceTle = this.$t("choicDlg.xzlyldj1");
       } else if (this.hide === "5") {
         if (this.form.instructId === "" || this.form.instructId === null) {
-          this.$tip.error("请先选择加工指令單號!");
+          this.$tip.error(this.$t("whseMng.jgzldTle"));
           return;
         }
         this.choiceV = !this.choiceV;
         this.choiceQ.materialType = "3";
         this.choiceTarget = {};
         this.dlgWidth = "100%";
-        this.choiceTle = "選擇指令單明細";
+        this.choiceTle = this.$t("iaoMng.xzzld");
       }
 
       // this.mx.push({
@@ -317,7 +319,7 @@ export default {
     },
     addPh() {
       if (Object.keys(this.chooseData).length === 0) {
-        this.$tip.error("请先选择入库明细");
+        this.$tip.error(this.$t("choicDlg.qxzrcmx"));
         return;
       }
       this.ctLoading = true;
@@ -377,7 +379,7 @@ export default {
     },
     del() {
       if (Object.keys(this.chooseData).length === 0) {
-        this.$tip.error("请选择要删除的数据!");
+        this.$tip.error(this.$t("public.delTle"));
         return;
       }
       if (!this.chooseData.whseDyesainDtlaoid) {
@@ -389,7 +391,7 @@ export default {
         .cofirm(
           "是否确定删除顏料编码为 【 " +
             this.chooseData.chemicalId +
-            " 】 的数据?",
+            this.$t("iaoMng.delTle2"),
           this,
           {}
         )
@@ -417,7 +419,7 @@ export default {
         Object.keys(this.choosePhData).length === 0 ||
         this.chooseData.list.length === 0
       ) {
-        this.$tip.error("请选择要删除的数据!");
+        this.$tip.error(this.$t("public.delTle"));
         return;
       }
       if (!this.choosePhData.whseDyesainDtlboid) {
@@ -436,7 +438,9 @@ export default {
       }
       this.$tip
         .cofirm(
-          "是否确定删除批号为 【 " + this.choosePhData.batchNo + " 】 的数据?",
+          "是否确定删除批号为 【 " +
+            this.choosePhData.batchNo +
+            this.$t("iaoMng.delTle2"),
           this,
           {}
         )
@@ -490,15 +494,15 @@ export default {
       //   return;
       // }
       if (this.form.yinId === "" || this.form.yinDate === null) {
-        this.$tip.warning("入库资料中的入仓编号/日期不能为空!");
+        this.$tip.error(this.$t("whseMng.saveTle8"));
         return;
       }
       if (this.hide === "5" && !this.form.factoryId) {
-        this.$tip.error("入库资料中的加工廠不能为空!");
+        this.$tip.error(this.$t("iaoMng.saveTle2"));
         return;
       }
       if (this.hide === "5" && !this.form.instructId) {
-        this.$tip.error("入库资料中的加工指令單號不能为空!");
+        this.$tip.error(this.$t("iaoMng.saveTle3"));
         return;
       }
       for (let i = 0; i < this.mx.length; i++) {
@@ -511,7 +515,7 @@ export default {
             !this.mx[i].list[j].weight ||
             !this.mx[i].list[j].weightUnit
           ) {
-            this.$tip.warning("入仓批号明细中的批号/重量/单位不能为空!");
+            this.$tip.error(this.$t("iaoMng.saveTle17"));
             return;
           }
         }
@@ -658,7 +662,7 @@ export default {
       this.oldData.$cellEdit = false;
       this.choiceTarget[this.choiceField] = val[this.choiceField];
       this.oldData.$cellEdit = true;
-      if (this.choiceTle === "選擇指令單明細") {
+      if (this.choiceTle === this.$t("iaoMng.xzzld")) {
         val.forEach((item, i) => {
           item.chemicalId = item.materialId;
           item.chemicalName = item.materialName;
@@ -680,10 +684,10 @@ export default {
             this.$refs.dlgcrud.setCurrentRow(this.mx[this.mx.length - 1]);
           }
         });
-      } else if (this.choiceTle === "選擇來顏料登記") {
+      } else if (this.choiceTle === this.$t("choicDlg.xzlyl1")) {
         this.choiceTarget.custName = val.$custNo;
         this.choiceTarget.custCode = val.custNo;
-      } else if (this.choiceTle === "選擇來顏料登記明細") {
+      } else if (this.choiceTle === this.$t("choicDlg.xzlyldj1")) {
         val.forEach((item, i) => {
           item.weight = item.incomQty;
           item.weightUnit = item.chemicalQty;
@@ -707,7 +711,7 @@ export default {
             this.$refs.dlgcrud.setCurrentRow(this.mx[this.mx.length - 1]);
           }
         });
-      } else if (this.choiceTle === "送货单明细") {
+      } else if (this.choiceTle === this.$t("choicDlg.shdmx")) {
         val.forEach((item, i) => {
           item.chemicalId = item.$materialNum;
           item.chemicalName = item.$chinName;
@@ -724,7 +728,7 @@ export default {
           item.index = i + 1;
         });
         this.$refs.dlgcrud.setCurrentRow(this.mx[this.mx.length - 1]);
-      } else if (this.choiceTle === "化工原料") {
+      } else if (this.choiceTle === this.$t("iaoMng.hgyl")) {
         val.forEach((item, i) => {
           item.chemicalId = item.bcCode;
           item.chemicalName = item.bcMatname;
@@ -740,12 +744,12 @@ export default {
         this.$refs.dlgcrud.setCurrentRow(this.mx[this.mx.length - 1]);
       } else {
         if (
-          this.choiceTle == "染化料申购採購單" ||
-          this.choiceTle == "染化料採購單"
+          this.choiceTle == this.$t("choicDlg.rhlsgcgd") ||
+          this.choiceTle == this.$t("choicDlg.xzylcgd")
         ) {
           this.choiceTarget.purNo = val.poNo;
         }
-        if (this.choiceTle == "外厂染化料配料计划") {
+        if (this.choiceTle == this.$t("choicDlg.xzwfylpl")) {
           this.mx = this.mx.concat(val);
           this.mx.forEach((item, i) => {
             item.index = i + 1;
@@ -758,7 +762,7 @@ export default {
         this.choiceTarget.bcColor = val.bcColor;
         this.choiceTarget.bcForce = val.bcForce;
       }
-      if (this.choiceTle == "選擇外廠化工原料配料計劃") {
+      if (this.choiceTle == this.$t("choicDlg.xzwfylpl")) {
         this.form.factoryId = val.refCode;
       }
 

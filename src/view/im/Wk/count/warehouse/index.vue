@@ -3,7 +3,9 @@
     <view-container title="出入仓统计">
       <el-row class="btnList">
         <!-- <el-button type="warning" @click="cancel">取消</el-button> -->
-        <el-button type="primary" @click="query">查询</el-button>
+        <el-button type="primary" @click="query">{{
+          this.$t("public.query")
+        }}</el-button>
         <el-button type="warning" @click="close">{{
           this.$t("public.close")
         }}</el-button>

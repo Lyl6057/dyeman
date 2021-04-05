@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-24 08:12:20
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-01 09:17:54
+ * @LastEditTime: 2021-04-02 07:25:32
  * @Description: 
  */
 // The Vue build version to load with the `import` command
@@ -25,9 +25,7 @@ import './config/axios'
 import 'default-passive-events'
 import echarts from 'echarts' // echarts
 import i18n from './lang' // Internationalization
-import VueContextMenu from '@xunlei/vue-context-menu'
 
-Vue.use(VueContextMenu)
 // 指令
 import './instruct/v-drap'
 // import './styles/element-variables.scss'
@@ -38,8 +36,6 @@ import { getDIC, getDicT, getNowTime, unique, toTableLow, preFixInt } from './co
 import viewContainer from './components/view-container/index'
 // 注册全局容器
 Vue.component('viewContainer', viewContainer)
-
-Vue.use(VueContextMenu)
 //粒子特效
 Vue.use(VueParticles)
 // Vue.use(ElementUI);

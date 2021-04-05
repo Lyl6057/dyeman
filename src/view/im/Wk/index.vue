@@ -215,60 +215,60 @@ export default {
           span: 24,
           data: [
             {
-              title: "胚布入库",
+              title: this.$t("iaoMng.pbrc"),
               icon: "yx-icf-bupi",
               color: "#fff",
             },
             {
               click: () => {
-                this.toView("rc_pb", "客人来胚_1");
+                this.toView("rc_pb", this.$t("iaoMng.krlp") + "_1");
               },
-              title: "客人来胚",
+              title: this.$t("iaoMng.krlp"),
               icon: "el-icon-user-solid",
               color: "#409EFF",
               // content: "客人来胚入仓看板",
             },
             {
               click: () => {
-                this.toView("rc_cg", "胚布_2");
+                this.toView("rc_cg", this.$t("iaoMng.pb") + "_2");
               },
-              title: "胚布采购",
+              title: this.$t("iaoMng.pbcg"),
               icon: "el-icon-shopping-cart-2",
               color: "#409EFF",
               // content: "采购入库看板",
             },
             {
               click: () => {
-                this.toView("rc_pb", "本厂生产_6");
+                this.toView("rc_pb", this.$t("iaoMng.bcsc") + "_6");
               },
-              title: "本厂生产",
+              title: this.$t("iaoMng.bcsc"),
               icon: "el-icon-s-home",
               color: "#409EFF",
               // content: "本厂生产入库看板",
             },
             {
               click: () => {
-                this.toView("rc_pb", "本厂胚布退仓_4");
+                this.toView("rc_pb", this.$t("iaoMng.pbtc") + "_4");
               },
-              title: "本厂胚布退仓",
+              title: this.$t("iaoMng.pbtc"),
               icon: "el-icon-s-home",
               color: "#409EFF",
               // content: "本厂胚布退仓入库看板",
             },
             {
               click: () => {
-                this.toView("rc_pb", "外发加工回胚_7");
+                this.toView("rc_pb", this.$t("iaoMng.jghp") + "_7");
               },
-              title: "外发加工回胚",
+              title: this.$t("iaoMng.jghp"),
               icon: "el-icon-s-home",
               color: "#ccc",
               // content: "外发加工回胚看板",
             },
             {
               click: () => {
-                this.toView("rc_pb", "外发厂退胚_5");
+                this.toView("rc_pb", this.$t("iaoMng.wftp") + "_5");
               },
-              title: "外发厂退胚",
+              title: this.$t("iaoMng.wftp"),
               icon: "el-icon-s-home",
               color: "#ccc",
               // content: "外发厂退胚入库看板",
@@ -277,10 +277,10 @@ export default {
               click: () => {
                 this.toView(
                   "cc_package",
-                  "胚布貨物包_whseCalicopackBarcodeoid"
+                  this.$t("iaoMng.pbhwb") + "_whseCalicopackBarcodeoid"
                 );
               },
-              title: "胚布貨物包",
+              title: this.$t("iaoMng.pbhwb"),
               icon: "el-icon-s-claim",
               color: "#409EFF",
               // content: "胚布貨物包入库看板",
@@ -291,24 +291,24 @@ export default {
           span: 24,
           data: [
             {
-              title: "成品布入库",
+              title: this.$t("iaoMng.cpbrc"),
               icon: "yx-icf-bupi",
               color: "#606266",
             },
             {
               click: () => {
-                this.toView("rc_cpb", "本厂生产_1");
+                this.toView("rc_cpb", this.$t("iaoMng.bcsc") + "_1");
               },
-              title: "本厂生产",
+              title: this.$t("iaoMng.bcsc"),
               icon: "el-icon-s-home",
               color: "#409EFF",
               // content: "本厂生产入库看板",
             },
             {
               click: () => {
-                this.toView("rc_cpb", "外发加工回仓_3");
+                this.toView("rc_cpb", this.$t("iaoMng.wfjghc") + "_3");
               },
-              title: "外发加工回仓",
+              title: this.$t("iaoMng.wfjghc"),
               icon: "el-icon-s-home",
               color: "#ccc",
               // content: "外发加工回仓入库看板",
@@ -316,9 +316,9 @@ export default {
 
             {
               click: () => {
-                this.toView("rc_cpb", "客人退回_2");
+                this.toView("rc_cpb", this.$t("iaoMng.krth") + "_2");
               },
-              title: "客人退回",
+              title: this.$t("iaoMng.krth"),
               icon: "el-icon-user-solid",
               color: "#409EFF",
               // content: "客人退回入库看板",
@@ -327,10 +327,10 @@ export default {
               click: () => {
                 this.toView(
                   "cc_package",
-                  "成品布貨物包_whseFinishedclothpackBarcodeoid"
+                  this.$t("iaoMng.cpbhwb") + "_whseFinishedclothpackBarcodeoid"
                 );
               },
-              title: "成品布貨物包",
+              title: this.$t("iaoMng.cpbhwb"),
               icon: "yx-icf-bupi",
               color: "#409EFF",
               // content: "成品布貨物包入库看板",
@@ -341,34 +341,34 @@ export default {
           span: 24,
           data: [
             {
-              title: "化工原料入库",
+              title: this.$t("iaoMng.hgylrc"),
               icon: "yx-icf-cailiaogongcheng",
               color: "#606266",
             },
 
             {
               click: () => {
-                this.toView("rc_rhl", "客人来原料_1");
+                this.toView("rc_rhl", this.$t("iaoMng.krlyl") + "_1");
               },
-              title: "客人来原料",
+              title: this.$t("iaoMng.krlyl"),
               icon: "el-icon-user-solid",
               color: "#409EFF",
               // content: "客人来化工原料入库看板",
             },
             {
               click: () => {
-                this.toView("rc_cg", "化工原料_2");
+                this.toView("rc_cg", this.$t("iaoMng.hgyl") + "_2");
               },
-              title: "采购入库",
+              title: this.$t("iaoMng.ylcg"),
               icon: "el-icon-shopping-cart-2",
               color: "#409EFF",
               // content: "采购入库入库看板",
             },
             {
               click: () => {
-                this.toView("rc_rhl", "外发厂退回_5");
+                this.toView("rc_rhl", this.$t("iaoMng.wfcth") + "_5");
               },
-              title: "外发厂退回",
+              title: this.$t("iaoMng.wfcth"),
               icon: "el-icon-s-home",
               color: "#ccc",
               // content: "外发厂化工原料退回看板",
@@ -376,9 +376,9 @@ export default {
             {
               click: () => {
                 // this.toView("rc_rhl", "申购_8");
-                this.toView("rc_sg", "化工原料_4");
+                this.toView("rc_sg", this.$t("iaoMng.hgyl") + "_4");
               },
-              title: "申购化工原料",
+              title: this.$t("iaoMng.sghgyl"),
               icon: "el-icon-s-claim",
               color: "#409EFF",
               // content: "申购化工原料入库看板",
@@ -389,42 +389,42 @@ export default {
           span: 24,
           data: [
             {
-              title: "颜料入库",
+              title: this.$t("iaoMng.ylrc"),
               icon: "yx-icf-cailiaogongcheng",
               color: "#606266",
             },
             {
               click: () => {
-                this.toView("rc_yl", "客人来顏料_1");
+                this.toView("rc_yl", this.$t("iaoMng.krlyl") + "_1");
               },
-              title: "客人来顏料",
+              title: this.$t("iaoMng.krlyl"),
               icon: "el-icon-user-solid",
               color: "#409EFF",
               // content: "客人来化工原料入库看板",
             },
             {
               click: () => {
-                this.toView("rc_cg", "顏料_2");
+                this.toView("rc_cg", this.$t("iaoMng.yl") + "_2");
               },
-              title: "采购入库",
+              title: this.$t("iaoMng.ylcg"),
               icon: "el-icon-shopping-cart-2",
               color: "#409EFF",
               // content: "采购入库入库看板",
             },
             {
               click: () => {
-                this.toView("rc_yl", "外发厂退回_5");
+                this.toView("rc_yl", this.$t("iaoMng.wfcth") + "_5");
               },
-              title: "外发厂退回",
+              title: this.$t("iaoMng.wfcth"),
               icon: "el-icon-s-home",
               color: "#ccc",
               // content: "外发厂化工原料退回看板",
             },
             {
               click: () => {
-                this.toView("rc_sg", "颜料_4");
+                this.toView("rc_sg", this.$t("iaoMng.yl") + "_4");
               },
-              title: "申购颜料",
+              title: this.$t("iaoMng.sgyl"),
               icon: "el-icon-s-claim",
               color: "#409EFF",
               // content: "申购颜料入库看板",
@@ -435,24 +435,24 @@ export default {
           span: 24,
           data: [
             {
-              title: "生产辅料入库",
+              title: this.$t("iaoMng.scflrc"),
               icon: "yx-icf-cailiaogongcheng",
               color: "#606266",
             },
             {
               click: () => {
-                this.toView("rc_scfl", "客人来辅料_1");
+                this.toView("rc_scfl", this.$t("iaoMng.krlfl") + "_1");
               },
-              title: "客人来料",
+              title: this.$t("iaoMng.krlfl"),
               icon: "el-icon-user-solid",
               color: "#409EFF",
               // content: "客人来生料入库看板",
             },
             {
               click: () => {
-                this.toView("rc_cg", "生產輔料_2");
+                this.toView("rc_cg", this.$t("iaoMng.scfl") + "_2");
               },
-              title: "采购入库",
+              title: this.$t("iaoMng.scflcg"),
               icon: "el-icon-shopping-cart-2",
               color: "#409EFF",
               // content: "采购生产辅料入库看板",
@@ -468,18 +468,18 @@ export default {
             // },
             {
               click: () => {
-                this.toView("rc_scfl", "外发厂余料回仓_6");
+                this.toView("rc_scfl", this.$t("iaoMng.wfcylhc") + "_6");
               },
-              title: "外发余料回仓",
+              title: this.$t("iaoMng.wfcylhc"),
               icon: "el-icon-s-home",
               color: "#ccc",
               // content: "外发余料回仓看板",
             },
             {
               click: () => {
-                this.toView("rc_sg", "辅料_5");
+                this.toView("rc_sg", this.$t("iaoMng.fl") + "_5");
               },
-              title: "申购生产辅料",
+              title: this.$t("iaoMng.sgscfl"),
               icon: "el-icon-s-claim",
               color: "#409EFF",
               // content: "申购化工原料入库看板",
@@ -490,24 +490,24 @@ export default {
           span: 24,
           data: [
             {
-              title: "五金/行政入库",
+              title: this.$t("iaoMng.wjxzrc"),
               icon: "yx-icf-cailiaogongcheng",
               color: "#606266",
             },
             {
               click: () => {
-                this.toView("rc_scfl", "五金/行政采购_11");
+                this.toView("rc_scfl", this.$t("iaoMng.wjxz") + "_11");
               },
-              title: "采购入库",
+              title: this.$t("iaoMng.wjxzcg"),
               icon: "el-icon-shopping-cart-2",
               color: "#409EFF",
               // content: "采购入库看板",
             },
             {
               click: () => {
-                this.toView("rc_sg", "五金/行政_7");
+                this.toView("rc_sg", this.$t("iaoMng.wjxz") + "_7");
               },
-              title: "申购五金/行政",
+              title: this.$t("iaoMng.sgwjzx"),
               icon: "el-icon-s-claim",
               color: "#409EFF",
               // content: "申购化工原料入库看板",

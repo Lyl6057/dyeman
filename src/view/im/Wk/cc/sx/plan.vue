@@ -3,7 +3,9 @@
     <div class="btnList">
       <!-- <el-button type="warning" @click="ruleV = true">編號規則配置</el-button> -->
       <el-button type="success" @click="outOrder">生成出庫單</el-button>
-      <el-button type="primary" @click="getData">查询</el-button>
+      <el-button type="primary" @click="getData">{{
+        this.$t("public.query")
+      }}</el-button>
       <el-button type="warning" @click="close">{{
         this.$t("public.close")
       }}</el-button>
@@ -380,7 +382,7 @@ export default {
       }
       // // this.choiceTarget[this.choiceField] = val[this.choiceField];
       // this.oldData.$cellEdit = true;
-      if (this.choiceTle === "選擇本厂纱线配料计划") {
+      if (this.choiceTle === this.$t("choicDlg.xzbcsxpl")) {
         this.outcrud = this.$unique(this.outcrud.concat(val), "retBatch");
         this.page.total = this.outcrud.length;
         this.outcrud.forEach((item, i) => {

@@ -2,7 +2,7 @@
   <div
     id="points"
     v-loading.fullscreen.lock="!refresh"
-    element-loading-text="拼命加载中"
+    :element-loading-text="$t('public.loading')"
     element-loading-spinner="el-icon-loading"
     element-loading-background="rgba(0, 0, 0, 0.8)"
   >

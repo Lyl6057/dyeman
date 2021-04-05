@@ -1,564 +1,532 @@
 <template>
-  
-    <div style="padding: 0 5px; overflow: auto" id="proReport">
-      <!-- 下拉选择 -->
-      <el-row>
-        <ql-Head ref="qlHead" @checkVariety="checkVariety"></ql-Head>
-      </el-row>
+  <div style="padding: 0 5px; overflow: auto" id="proReport">
+    <!-- 下拉选择 -->
+    <el-row>
+      <ql-Head ref="qlHead" @checkVariety="checkVariety"></ql-Head>
+    </el-row>
+    <!-- 按钮 -->
+    <el-row class="tbBtn" v-if="btnCtr">
+      <el-col :span="24">
+        <el-button type="primary" v-if="!isCell" @click="Editor">{{
+          $t("energy.bj")
+        }}</el-button>
+        <el-button type="primary" v-else :disabled="!canSave" @click="Update">{{
+          $t("energy.bc")
+        }}</el-button>
+        <el-button type="primary" :disabled="!isCell" @click="Cancel">{{
+          $t("energy.qx")
+        }}</el-button>
+      </el-col>
+    </el-row>
+    <div
+      v-loading="loading"
+      :element-loading-text="$t('public.loading')"
+      element-loading-spinner="el-icon-loading"
+      element-loading-background="rgba(0, 0, 0, 0.8)"
+    >
       <!-- 按钮 -->
-      <el-row class="tbBtn" v-if="btnCtr">
-        <el-col :span="24">
-          <el-button type="primary" v-if="!isCell" @click="Editor">{{
-            $t("energy.bj")
-          }}</el-button>
-          <el-button
-            type="primary"
-            v-else
-            :disabled="!canSave"
-            @click="Update"
-            >{{ $t("energy.bc") }}</el-button
-          >
-          <el-button type="primary" :disabled="!isCell" @click="Cancel">{{
-            $t("energy.qx")
-          }}</el-button>
-        </el-col>
-      </el-row>
-      <div
-        v-loading="loading"
-        element-loading-text="拼命加载中"
-        element-loading-spinner="el-icon-loading"
-        element-loading-background="rgba(0, 0, 0, 0.8)"
-      >
-        <!-- 按钮 -->
-        <!-- 质量检查项目 -->
-        <el-row class="Quality">
-          <el-col :span="12">
-            <div class="tbBox">
-              <el-container class="rowBox">
-                <el-header class="headBox">
-                  <el-row class="rowHead">
-                    <el-col :span="4" style="border: none">
-                      <div style="width: 99%; border-right: 1px solid #c0c4cc">
-                        {{ $t("energy.jczl") }}
-                      </div>
-                    </el-col>
-                    <el-col :span="20">
-                      <el-row>
-                        <el-col :span="6" style="border: none">
-                          <div
-                            style="
-                              width: 99.3%;
-                              border-right: 1px solid #c0c4cc;
-                            "
-                          >
-                            {{ $t("energy.jcxm") }}
-                          </div>
-                        </el-col>
-                        <el-col :span="18" class="inbox">
-                          <el-row>
-                            <el-col :span="8" style="border: none">
-                              <div
-                                style="
-                                  width: 99.3%;
-                                  border-right: 1px solid #c0c4cc;
-                                "
-                              >
-                                {{ $t("energy.ckff") }}
-                              </div>
-                            </el-col>
-                            <el-col :span="8">
-                              <div>{{ $t("energy.gg") }}</div>
-                            </el-col>
-                            <el-col
-                              :span="8"
-                              style="border-right: 1px solid #c0c4cc"
-                            >
-                              <span>{{ $t("energy.jsbz") }}</span>
-                            </el-col>
-                          </el-row>
-                        </el-col>
-                      </el-row>
-                    </el-col>
-                  </el-row>
-                </el-header>
-                <el-main class="mainBox" ref="mainBox1">
-                  <el-row v-if="tbData.length > 0">
-                    <el-col :span="4">
-                      <div class="pzStyle" :style="pzStyle[0]">
-                        <el-popover
-                          placement="top-start"
-                          width="100"
-                          trigger="click"
+      <!-- 质量检查项目 -->
+      <el-row class="Quality">
+        <el-col :span="12">
+          <div class="tbBox">
+            <el-container class="rowBox">
+              <el-header class="headBox">
+                <el-row class="rowHead">
+                  <el-col :span="4" style="border: none">
+                    <div style="width: 99%; border-right: 1px solid #c0c4cc">
+                      {{ $t("energy.jczl") }}
+                    </div>
+                  </el-col>
+                  <el-col :span="20">
+                    <el-row>
+                      <el-col :span="6" style="border: none">
+                        <div
+                          style="width: 99.3%; border-right: 1px solid #c0c4cc"
                         >
-                          <span slot="reference">{{ checkPz[0] }}</span>
-                        </el-popover>
-                      </div>
-                    </el-col>
-                    <el-col
-                      :span="20"
-                      style="border-top: 1px solid #c0c4cc; margin-top: -1px"
-                    >
-                      <el-row
-                        class="content"
-                        v-for="(item, index) of tbData"
-                        :key="index"
-                      >
-                        <el-col :span="6" :style="item.tbStyle" class="xmStyle">
-                          <el-row>
-                            <div class="tbLabel">
-                              <el-popover
-                                placement="top-start"
-                                width="200"
-                                trigger="click"
-                                :content="item.itemName"
-                              >
-                                <span slot="reference">{{
-                                  item.itemName
-                                }}</span>
-                              </el-popover>
-                            </div>
-                          </el-row>
-                        </el-col>
-                        <!-- 参考方法 -->
-                        <el-col :span="18">
-                          <el-row>
+                          {{ $t("energy.jcxm") }}
+                        </div>
+                      </el-col>
+                      <el-col :span="18" class="inbox">
+                        <el-row>
+                          <el-col :span="8" style="border: none">
                             <div
-                              v-if="item.labCheckStandard.length > 0"
-                              v-for="(items, indexs) in item.labCheckStandard"
-                              class="contentDiv"
-                            >
-                              <el-row v-if="items.standName">
-                                <el-col
-                                  :span="8"
-                                  :style="items.ckStyle"
-                                  class="ffStyle"
-                                >
-                                  <div class="tbLabel">
-                                    <el-popover
-                                      placement="top-start"
-                                      width="200"
-                                      trigger="click"
-                                      :content="items.standName"
-                                    >
-                                      <span slot="reference">{{
-                                        items.standName
-                                      }}</span>
-                                    </el-popover>
-                                  </div>
-                                </el-col>
-                                <el-col
-                                  :span="16"
-                                  v-for="(
-                                    data, indexs
-                                  ) of items.labCheckScopeRange"
-                                  :key="indexs"
-                                  v-if="items.labCheckScopeRange.length > 0"
-                                >
-                                  <el-row>
-                                    <el-col :span="12" v-if="data.scopeName">
-                                      <div class="contentList">
-                                        <div class="cdiv">
-                                          <el-popover
-                                            placement="top-start"
-                                            width="200"
-                                            trigger="click"
-                                            :content="data.scopeName"
-                                          >
-                                            <span slot="reference">{{
-                                              data.scopeName
-                                            }}</span>
-                                          </el-popover>
-                                        </div>
-                                      </div>
-                                    </el-col>
-                                    <el-col
-                                      v-else
-                                      :span="12"
-                                      class="nullStyle"
-                                      style="border-right: 1px solid #c0c4cc"
-                                      >/</el-col
-                                    >
-                                    <el-col :span="12" v-if="data.rangeAccept">
-                                      <div class="contentList">
-                                        <div class="cdiv">
-                                          <el-popover
-                                            placement="top-end"
-                                            width="200"
-                                            trigger="click"
-                                            :content="data.rangeAccept"
-                                          >
-                                            <span slot="reference">{{
-                                              data.rangeAccept
-                                            }}</span>
-                                          </el-popover>
-                                        </div>
-                                      </div>
-                                    </el-col>
-                                    <el-col
-                                      v-else
-                                      :span="12"
-                                      class="nullStyle"
-                                      style="border-right: 1px solid #c0c4cc"
-                                      >/</el-col
-                                    >
-                                  </el-row>
-                                </el-col>
-                                <el-col
-                                  :span="16"
-                                  v-if="items.labCheckScopeRange.length == 0"
-                                >
-                                  <el-row>
-                                    <el-col
-                                      :span="12"
-                                      style="
-                                        height: 50px;
-                                        line-height: 50px;
-                                        border-right: 1px solid #c0c4cc;
-                                      "
-                                      >/</el-col
-                                    >
-                                    <el-col
-                                      :span="12"
-                                      style="
-                                        height: 50px;
-                                        line-height: 50px;
-                                        border-right: 1px solid #c0c4cc;
-                                      "
-                                      >/</el-col
-                                    >
-                                  </el-row>
-                                </el-col>
-                              </el-row>
-                            </div>
-                            <div
-                              v-if="item.labCheckStandard.length == 0"
                               style="
-                                height: 50px;
-                                line-height: 50px;
-                                border-right: 1px solid #409eff;
+                                width: 99.3%;
+                                border-right: 1px solid #c0c4cc;
                               "
                             >
-                              <el-row>
-                                <el-col :span="8" class="nullStyle">
-                                  <div class="cdiv">/</div>
-                                </el-col>
-                                <el-col :span="8">
-                                  <div class="nullStyle">
-                                    <div class="cdiv">/</div>
-                                  </div>
-                                </el-col>
-                                <el-col :span="8">
-                                  <div class="nullStyle" style>
-                                    <div class="cdiv">/</div>
-                                  </div>
-                                </el-col>
-                              </el-row>
+                              {{ $t("energy.ckff") }}
                             </div>
-                          </el-row>
-                        </el-col>
-                      </el-row>
-                    </el-col>
-                  </el-row>
-                  <el-row
-                    v-else
-                    style="border-bottom: 1px solid #c0c4cc; margin-top: -0.5px"
-                  >
-                    <el-col :span="4">
-                      <div
-                        style="
-                          height: 50px;
-                          line-height: 50px;
-                          border-right: 1px solid #c0c4cc;
-                          border-left: 1px solid #c0c4cc;
-                        "
+                          </el-col>
+                          <el-col :span="8">
+                            <div>{{ $t("energy.gg") }}</div>
+                          </el-col>
+                          <el-col
+                            :span="8"
+                            style="border-right: 1px solid #c0c4cc"
+                          >
+                            <span>{{ $t("energy.jsbz") }}</span>
+                          </el-col>
+                        </el-row>
+                      </el-col>
+                    </el-row>
+                  </el-col>
+                </el-row>
+              </el-header>
+              <el-main class="mainBox" ref="mainBox1">
+                <el-row v-if="tbData.length > 0">
+                  <el-col :span="4">
+                    <div class="pzStyle" :style="pzStyle[0]">
+                      <el-popover
+                        placement="top-start"
+                        width="100"
+                        trigger="click"
                       >
-                        <el-popover
-                          placement="top-start"
-                          width="100"
-                          trigger="click"
-                        >
-                          <span slot="reference">{{ checkPz[0] }}</span>
-                        </el-popover>
-                      </div>
-                    </el-col>
-                    <el-col :span="20" class="nullData">
-                      <el-row>
-                        <el-col :span="6">/</el-col>
-                        <el-col :span="18">
-                          <el-row>
-                            <el-col :span="8">/</el-col>
-                            <el-col :span="8">/</el-col>
-                            <el-col :span="8">
-                              <div style="border-right: 1px solid #409eff">
-                                /
-                              </div>
-                            </el-col>
-                          </el-row>
-                        </el-col>
-                      </el-row>
-                    </el-col>
-                  </el-row>
-                </el-main>
-              </el-container>
-            </div>
-          </el-col>
-          <el-col :span="12">
-            <div class="tbBox1">
-              <el-container class="rowBox">
-                <el-header class="headBox">
-                  <el-row
-                    class="rowHead"
-                    style="border-left: none; border-right: none"
+                        <span slot="reference">{{ checkPz[0] }}</span>
+                      </el-popover>
+                    </div>
+                  </el-col>
+                  <el-col
+                    :span="20"
+                    style="border-top: 1px solid #c0c4cc; margin-top: -1px"
                   >
-                    <el-col :span="24">
-                      <el-row>
-                        <el-col :span="24" class="inbox">
-                          <el-row>
-                            <el-col :span="24" style="border-left: none">
-                              <el-row>
-                                <el-col :span="4">
-                                  <span>说明</span>
-                                </el-col>
-                                <el-col :span="4">
-                                  <div>测试结果</div>
-                                </el-col>
-                                <el-col :span="4">
-                                  <div>评判</div>
-                                </el-col>
-                                <el-col :span="4" style="border: none">
-                                  <div
-                                    style="
-                                      width: 100.2%;
-                                      border-right: 1px solid #c0c4cc;
-                                    "
-                                  >
-                                    处理意见
-                                  </div>
-                                </el-col>
-                                <el-col :span="4" style="border: none">
-                                  <div
-                                    style="
-                                      width: 100.2%;
-                                      border-right: 1px solid #c0c4cc;
-                                    "
-                                  >
-                                    所需设备
-                                  </div>
-                                </el-col>
-                                <el-col :span="4">
-                                  <span>备注</span>
-                                </el-col>
-                              </el-row>
-                            </el-col>
-                          </el-row>
-                        </el-col>
-                      </el-row>
-                    </el-col>
-                  </el-row>
-                </el-header>
-                <el-main class="mainBox" ref="mainBox2">
-                  <el-row style="border-top: 1px #ccc solid; margin-top: -1px">
-                    <el-col
-                      :span="24"
-                      :style="pzStyle"
-                      v-if="tbData.length > 0"
+                    <el-row
+                      class="content"
+                      v-for="(item, index) of tbData"
+                      :key="index"
                     >
-                      <el-row
-                        class="content"
-                        v-for="(item, index) of tbData"
-                        :key="index"
-                      >
-                        <!-- 参考方法 -->
-                        <el-col :span="24">
+                      <el-col :span="6" :style="item.tbStyle" class="xmStyle">
+                        <el-row>
+                          <div class="tbLabel">
+                            <el-popover
+                              placement="top-start"
+                              width="200"
+                              trigger="click"
+                              :content="item.itemName"
+                            >
+                              <span slot="reference">{{ item.itemName }}</span>
+                            </el-popover>
+                          </div>
+                        </el-row>
+                      </el-col>
+                      <!-- 参考方法 -->
+                      <el-col :span="18">
+                        <el-row>
                           <div
                             v-if="item.labCheckStandard.length > 0"
                             v-for="(items, indexs) in item.labCheckStandard"
                             class="contentDiv"
                           >
-                            <div
-                              v-for="data of items.labCheckScopeRange"
-                              v-if="items.labCheckScopeRange.length > 0"
-                            >
-                              <el-row>
-                                <el-col :span="4">
-                                  <div class="contentList">
-                                    <div class="cdiv">
-                                      <el-input
-                                        v-model="data.testData"
-                                        placeholder="请输入说明"
-                                        @input="iptChange(data)"
-                                        clearable
-                                        :readonly="realOnly"
-                                      ></el-input>
-                                    </div>
-                                  </div>
-                                </el-col>
-                                <el-col :span="4">
-                                  <div class="contentList">
-                                    <div class="cdiv">
-                                      <el-input
-                                        v-model="data.testResult"
-                                        placeholder="请输入测试结果"
-                                        @input="iptChange(data)"
-                                        clearable
-                                        :readonly="realOnly"
-                                      ></el-input>
-                                    </div>
-                                  </div>
-                                </el-col>
-                                <el-col :span="4">
-                                  <div class="contentList">
-                                    <div class="cdiv">
-                                      <el-input
-                                        v-model="data.judgeVerdict"
-                                        placeholder="请输入评判"
-                                        @input="iptChange(data)"
-                                        maxlength="20"
-                                        :readonly="realOnly"
-                                        clearable
-                                      ></el-input>
-                                    </div>
-                                  </div>
-                                </el-col>
-                                <el-col :span="4">
-                                  <div
-                                    class="contentList"
-                                    style="width: 100.1%"
-                                  >
-                                    <div class="cdiv">
-                                      <el-input
-                                        v-model="data.handleSuggest"
-                                        placeholder="请输入处理意见"
-                                        @input="iptChange(data)"
-                                        clearable
-                                        :readonly="realOnly"
-                                      ></el-input>
-                                    </div>
-                                  </div>
-                                </el-col>
-                                <el-col :span="4">
-                                  <div
-                                    class="contentList"
-                                    style="width: 100.1%"
-                                  >
-                                    <div class="cdiv">
-                                      <el-input
-                                        v-model="data.supportEquipment"
-                                        placeholder="请输入所需设备"
-                                        @input="iptChange(data)"
-                                        clearable
-                                        :readonly="realOnly"
-                                      ></el-input>
-                                    </div>
-                                  </div>
-                                </el-col>
-                                <el-col :span="4">
-                                  <div class="contentList">
-                                    <div class="cdiv">
-                                      <el-input
-                                        v-model="data.itemDesc"
-                                        placeholder="请输入备注"
-                                        @input="iptChange(data)"
-                                        clearable
-                                        :readonly="realOnly"
-                                      ></el-input>
-                                    </div>
-                                  </div>
-                                </el-col>
-                              </el-row>
-                            </div>
-                            <div v-if="items.labCheckScopeRange.length == 0">
-                              <el-row>
-                                <el-col :span="4">
-                                  <div class="contentList">
-                                    <div class="cdiv">/</div>
-                                  </div>
-                                </el-col>
-                                <el-col :span="4">
-                                  <div class="contentList">
-                                    <div class="cdiv">/</div>
-                                  </div>
-                                </el-col>
-                                <el-col :span="4">
-                                  <div class="contentList">
-                                    <div class="cdiv">/</div>
-                                  </div>
-                                </el-col>
-                                <el-col :span="4">
-                                  <div
-                                    class="contentList"
-                                    style="width: 100.1%"
-                                  >
-                                    <div class="cdiv">/</div>
-                                  </div>
-                                </el-col>
-                                <el-col :span="4">
-                                  <div
-                                    class="contentList"
-                                    style="width: 100.1%"
-                                  >
-                                    <div class="cdiv">/</div>
-                                  </div>
-                                </el-col>
-                                <el-col :span="4">
-                                  <div class="contentList">
-                                    <div class="cdiv">/</div>
-                                  </div>
-                                </el-col>
-                              </el-row>
-                            </div>
-                          </div>
-                          <div v-if="item.labCheckStandard.length === 0">
-                            <el-row>
+                            <el-row v-if="items.standName">
                               <el-col
-                                :span="24"
-                                style="border-right: 1px solid #ccc"
+                                :span="8"
+                                :style="items.ckStyle"
+                                class="ffStyle"
                               >
-                                <el-row class="labDiv">
-                                  <el-col :span="4">
-                                    <div>/</div>
+                                <div class="tbLabel">
+                                  <el-popover
+                                    placement="top-start"
+                                    width="200"
+                                    trigger="click"
+                                    :content="items.standName"
+                                  >
+                                    <span slot="reference">{{
+                                      items.standName
+                                    }}</span>
+                                  </el-popover>
+                                </div>
+                              </el-col>
+                              <el-col
+                                :span="16"
+                                v-for="(
+                                  data, indexs
+                                ) of items.labCheckScopeRange"
+                                :key="indexs"
+                                v-if="items.labCheckScopeRange.length > 0"
+                              >
+                                <el-row>
+                                  <el-col :span="12" v-if="data.scopeName">
+                                    <div class="contentList">
+                                      <div class="cdiv">
+                                        <el-popover
+                                          placement="top-start"
+                                          width="200"
+                                          trigger="click"
+                                          :content="data.scopeName"
+                                        >
+                                          <span slot="reference">{{
+                                            data.scopeName
+                                          }}</span>
+                                        </el-popover>
+                                      </div>
+                                    </div>
                                   </el-col>
-                                  <el-col :span="4">
-                                    <div>/</div>
+                                  <el-col
+                                    v-else
+                                    :span="12"
+                                    class="nullStyle"
+                                    style="border-right: 1px solid #c0c4cc"
+                                    >/</el-col
+                                  >
+                                  <el-col :span="12" v-if="data.rangeAccept">
+                                    <div class="contentList">
+                                      <div class="cdiv">
+                                        <el-popover
+                                          placement="top-end"
+                                          width="200"
+                                          trigger="click"
+                                          :content="data.rangeAccept"
+                                        >
+                                          <span slot="reference">{{
+                                            data.rangeAccept
+                                          }}</span>
+                                        </el-popover>
+                                      </div>
+                                    </div>
                                   </el-col>
-                                  <el-col :span="4">
-                                    <div>/</div>
-                                  </el-col>
-                                  <el-col :span="4">
-                                    <div>/</div>
-                                  </el-col>
-                                  <el-col :span="4">
-                                    <div>/</div>
-                                  </el-col>
-                                  <el-col :span="4">
-                                    <div>/</div>
-                                  </el-col>
+                                  <el-col
+                                    v-else
+                                    :span="12"
+                                    class="nullStyle"
+                                    style="border-right: 1px solid #c0c4cc"
+                                    >/</el-col
+                                  >
+                                </el-row>
+                              </el-col>
+                              <el-col
+                                :span="16"
+                                v-if="items.labCheckScopeRange.length == 0"
+                              >
+                                <el-row>
+                                  <el-col
+                                    :span="12"
+                                    style="
+                                      height: 50px;
+                                      line-height: 50px;
+                                      border-right: 1px solid #c0c4cc;
+                                    "
+                                    >/</el-col
+                                  >
+                                  <el-col
+                                    :span="12"
+                                    style="
+                                      height: 50px;
+                                      line-height: 50px;
+                                      border-right: 1px solid #c0c4cc;
+                                    "
+                                    >/</el-col
+                                  >
                                 </el-row>
                               </el-col>
                             </el-row>
                           </div>
-                        </el-col>
-                      </el-row>
-                    </el-col>
-                    <el-col
-                      :span="24"
-                      v-else
+                          <div
+                            v-if="item.labCheckStandard.length == 0"
+                            style="
+                              height: 50px;
+                              line-height: 50px;
+                              border-right: 1px solid #409eff;
+                            "
+                          >
+                            <el-row>
+                              <el-col :span="8" class="nullStyle">
+                                <div class="cdiv">/</div>
+                              </el-col>
+                              <el-col :span="8">
+                                <div class="nullStyle">
+                                  <div class="cdiv">/</div>
+                                </div>
+                              </el-col>
+                              <el-col :span="8">
+                                <div class="nullStyle" style>
+                                  <div class="cdiv">/</div>
+                                </div>
+                              </el-col>
+                            </el-row>
+                          </div>
+                        </el-row>
+                      </el-col>
+                    </el-row>
+                  </el-col>
+                </el-row>
+                <el-row
+                  v-else
+                  style="border-bottom: 1px solid #c0c4cc; margin-top: -0.5px"
+                >
+                  <el-col :span="4">
+                    <div
                       style="
-                        border-bottom: 1px solid #c0c4cc;
-                        margin-top: -0.5px;
+                        height: 50px;
+                        line-height: 50px;
+                        border-right: 1px solid #c0c4cc;
+                        border-left: 1px solid #c0c4cc;
                       "
                     >
-                      <div style="height: 50px; line-height: 50px">/</div>
-                    </el-col>
-                  </el-row>
-                </el-main>
-              </el-container>
-            </div>
-          </el-col>
-        </el-row>
-      </div>
+                      <el-popover
+                        placement="top-start"
+                        width="100"
+                        trigger="click"
+                      >
+                        <span slot="reference">{{ checkPz[0] }}</span>
+                      </el-popover>
+                    </div>
+                  </el-col>
+                  <el-col :span="20" class="nullData">
+                    <el-row>
+                      <el-col :span="6">/</el-col>
+                      <el-col :span="18">
+                        <el-row>
+                          <el-col :span="8">/</el-col>
+                          <el-col :span="8">/</el-col>
+                          <el-col :span="8">
+                            <div style="border-right: 1px solid #409eff">/</div>
+                          </el-col>
+                        </el-row>
+                      </el-col>
+                    </el-row>
+                  </el-col>
+                </el-row>
+              </el-main>
+            </el-container>
+          </div>
+        </el-col>
+        <el-col :span="12">
+          <div class="tbBox1">
+            <el-container class="rowBox">
+              <el-header class="headBox">
+                <el-row
+                  class="rowHead"
+                  style="border-left: none; border-right: none"
+                >
+                  <el-col :span="24">
+                    <el-row>
+                      <el-col :span="24" class="inbox">
+                        <el-row>
+                          <el-col :span="24" style="border-left: none">
+                            <el-row>
+                              <el-col :span="4">
+                                <span>说明</span>
+                              </el-col>
+                              <el-col :span="4">
+                                <div>测试结果</div>
+                              </el-col>
+                              <el-col :span="4">
+                                <div>评判</div>
+                              </el-col>
+                              <el-col :span="4" style="border: none">
+                                <div
+                                  style="
+                                    width: 100.2%;
+                                    border-right: 1px solid #c0c4cc;
+                                  "
+                                >
+                                  处理意见
+                                </div>
+                              </el-col>
+                              <el-col :span="4" style="border: none">
+                                <div
+                                  style="
+                                    width: 100.2%;
+                                    border-right: 1px solid #c0c4cc;
+                                  "
+                                >
+                                  所需设备
+                                </div>
+                              </el-col>
+                              <el-col :span="4">
+                                <span>备注</span>
+                              </el-col>
+                            </el-row>
+                          </el-col>
+                        </el-row>
+                      </el-col>
+                    </el-row>
+                  </el-col>
+                </el-row>
+              </el-header>
+              <el-main class="mainBox" ref="mainBox2">
+                <el-row style="border-top: 1px #ccc solid; margin-top: -1px">
+                  <el-col :span="24" :style="pzStyle" v-if="tbData.length > 0">
+                    <el-row
+                      class="content"
+                      v-for="(item, index) of tbData"
+                      :key="index"
+                    >
+                      <!-- 参考方法 -->
+                      <el-col :span="24">
+                        <div
+                          v-if="item.labCheckStandard.length > 0"
+                          v-for="(items, indexs) in item.labCheckStandard"
+                          class="contentDiv"
+                        >
+                          <div
+                            v-for="data of items.labCheckScopeRange"
+                            v-if="items.labCheckScopeRange.length > 0"
+                          >
+                            <el-row>
+                              <el-col :span="4">
+                                <div class="contentList">
+                                  <div class="cdiv">
+                                    <el-input
+                                      v-model="data.testData"
+                                      placeholder="请输入说明"
+                                      @input="iptChange(data)"
+                                      clearable
+                                      :readonly="realOnly"
+                                    ></el-input>
+                                  </div>
+                                </div>
+                              </el-col>
+                              <el-col :span="4">
+                                <div class="contentList">
+                                  <div class="cdiv">
+                                    <el-input
+                                      v-model="data.testResult"
+                                      placeholder="请输入测试结果"
+                                      @input="iptChange(data)"
+                                      clearable
+                                      :readonly="realOnly"
+                                    ></el-input>
+                                  </div>
+                                </div>
+                              </el-col>
+                              <el-col :span="4">
+                                <div class="contentList">
+                                  <div class="cdiv">
+                                    <el-input
+                                      v-model="data.judgeVerdict"
+                                      placeholder="请输入评判"
+                                      @input="iptChange(data)"
+                                      maxlength="20"
+                                      :readonly="realOnly"
+                                      clearable
+                                    ></el-input>
+                                  </div>
+                                </div>
+                              </el-col>
+                              <el-col :span="4">
+                                <div class="contentList" style="width: 100.1%">
+                                  <div class="cdiv">
+                                    <el-input
+                                      v-model="data.handleSuggest"
+                                      placeholder="请输入处理意见"
+                                      @input="iptChange(data)"
+                                      clearable
+                                      :readonly="realOnly"
+                                    ></el-input>
+                                  </div>
+                                </div>
+                              </el-col>
+                              <el-col :span="4">
+                                <div class="contentList" style="width: 100.1%">
+                                  <div class="cdiv">
+                                    <el-input
+                                      v-model="data.supportEquipment"
+                                      placeholder="请输入所需设备"
+                                      @input="iptChange(data)"
+                                      clearable
+                                      :readonly="realOnly"
+                                    ></el-input>
+                                  </div>
+                                </div>
+                              </el-col>
+                              <el-col :span="4">
+                                <div class="contentList">
+                                  <div class="cdiv">
+                                    <el-input
+                                      v-model="data.itemDesc"
+                                      placeholder="请输入备注"
+                                      @input="iptChange(data)"
+                                      clearable
+                                      :readonly="realOnly"
+                                    ></el-input>
+                                  </div>
+                                </div>
+                              </el-col>
+                            </el-row>
+                          </div>
+                          <div v-if="items.labCheckScopeRange.length == 0">
+                            <el-row>
+                              <el-col :span="4">
+                                <div class="contentList">
+                                  <div class="cdiv">/</div>
+                                </div>
+                              </el-col>
+                              <el-col :span="4">
+                                <div class="contentList">
+                                  <div class="cdiv">/</div>
+                                </div>
+                              </el-col>
+                              <el-col :span="4">
+                                <div class="contentList">
+                                  <div class="cdiv">/</div>
+                                </div>
+                              </el-col>
+                              <el-col :span="4">
+                                <div class="contentList" style="width: 100.1%">
+                                  <div class="cdiv">/</div>
+                                </div>
+                              </el-col>
+                              <el-col :span="4">
+                                <div class="contentList" style="width: 100.1%">
+                                  <div class="cdiv">/</div>
+                                </div>
+                              </el-col>
+                              <el-col :span="4">
+                                <div class="contentList">
+                                  <div class="cdiv">/</div>
+                                </div>
+                              </el-col>
+                            </el-row>
+                          </div>
+                        </div>
+                        <div v-if="item.labCheckStandard.length === 0">
+                          <el-row>
+                            <el-col
+                              :span="24"
+                              style="border-right: 1px solid #ccc"
+                            >
+                              <el-row class="labDiv">
+                                <el-col :span="4">
+                                  <div>/</div>
+                                </el-col>
+                                <el-col :span="4">
+                                  <div>/</div>
+                                </el-col>
+                                <el-col :span="4">
+                                  <div>/</div>
+                                </el-col>
+                                <el-col :span="4">
+                                  <div>/</div>
+                                </el-col>
+                                <el-col :span="4">
+                                  <div>/</div>
+                                </el-col>
+                                <el-col :span="4">
+                                  <div>/</div>
+                                </el-col>
+                              </el-row>
+                            </el-col>
+                          </el-row>
+                        </div>
+                      </el-col>
+                    </el-row>
+                  </el-col>
+                  <el-col
+                    :span="24"
+                    v-else
+                    style="border-bottom: 1px solid #c0c4cc; margin-top: -0.5px"
+                  >
+                    <div style="height: 50px; line-height: 50px">/</div>
+                  </el-col>
+                </el-row>
+              </el-main>
+            </el-container>
+          </div>
+        </el-col>
+      </el-row>
     </div>
-
+  </div>
 </template>
 <script>
 import { cofirm, success, error, warning } from "@/seal/seal"; //引入封装的消息提示和弹框组件

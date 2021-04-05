@@ -2,8 +2,12 @@
   <div id="outPlan">
     <div class="btnList">
       <!-- <el-button type="warning" @click="ruleV = true">編號規則配置</el-button> -->
-      <el-button type="success" @click="setOorder">生成入庫單</el-button>
-      <el-button type="primary" @click="getData">查询</el-button>
+      <el-button type="success" @click="setOorder">{{
+        $t("iaoMng.scrkd")
+      }}</el-button>
+      <el-button type="primary" @click="getData">{{
+        this.$t("public.query")
+      }}</el-button>
     </div>
     <div class="formBox">
       <avue-form ref="form" :option="formOp" v-model="form"></avue-form>

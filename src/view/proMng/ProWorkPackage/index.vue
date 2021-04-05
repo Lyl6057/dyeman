@@ -19,9 +19,9 @@
               <el-button type="danger" size="mini" @click="del">{{
                 this.$t("public.del")
               }}</el-button>
-              <el-button type="primary" size="mini" @click="handleList"
-                >查询</el-button
-              >
+              <el-button type="primary" size="mini" @click="handleList">{{
+                this.$t("public.query")
+              }}</el-button>
               <!-- <el-button type="warning" size="mini" @click="close">{{
                 this.$t("public.close")
               }}</el-button> -->

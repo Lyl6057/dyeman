@@ -35,9 +35,9 @@
               <el-button type="success" @click="handleSubmit(form)">{{
                 this.$t("public.save")
               }}</el-button>
-              <el-button type="warning" @click="dialogVisible = false"
-                >關閉</el-button
-              >
+              <el-button type="warning" @click="dialogVisible = false">{{
+                $t("public.close")
+              }}</el-button>
             </div>
             <div
               class="formBox"
@@ -56,9 +56,9 @@
       <el-tab-pane :label="$t('menuData.Laboratory[3].data.sbd')" name="first">
         <el-row class="queryForm">
           <div class="btnList">
-            <el-button type="success" size="mini" @click="editor"
-              >修改</el-button
-            >
+            <el-button type="success" size="mini" @click="editor">{{
+              this.$t("public.update")
+            }}</el-button>
             <el-button type="danger" size="mini" @click="del(checkData2)">{{
               this.$t("public.del")
             }}</el-button>

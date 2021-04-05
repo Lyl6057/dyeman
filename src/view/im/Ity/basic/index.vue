@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-24 14:15:12
  * @LastEditors: Lyl
- * @LastEditTime: 2021-03-31 14:26:55
+ * @LastEditTime: 2021-04-02 09:57:07
  * @Description: 
 -->
 <template>
@@ -20,7 +20,7 @@
           type="success"
           :disabled="Object.keys(chooseData).length === 0"
           @click="handleRowDBLClick(chooseData)"
-          >修改</el-button
+          >{{ this.$t("public.update") }}</el-button
         >
         <el-button
           type="danger"
@@ -28,7 +28,9 @@
           :disabled="Object.keys(chooseData).length === 0"
           >{{ this.$t("public.del") }}</el-button
         >
-        <el-button type="primary" @click="getData">查询</el-button>
+        <el-button type="primary" @click="getData">{{
+          this.$t("public.query")
+        }}</el-button>
         <el-button type="warning" @click="close">{{
           this.$t("public.close")
         }}</el-button>
@@ -71,7 +73,7 @@
 import { add, get, update, del, updateStock } from "./api";
 import { getDIC, getDicT } from "@/config/index";
 import temDlg from "./temDlg";
-import { formOp, crudOp } from "./data";
+import { formOp, crudOp, formTemOp } from "./data";
 export default {
   name: "",
   components: {
@@ -171,7 +173,7 @@ export default {
     },
     del() {
       if (Object.keys(this.chooseData).length === 0) {
-        this.$tip.error("请选择要删除的数据!");
+        this.$tip.error(this.$t("public.delTle"));
         return;
       }
       if (!this.chooseData.whseMaterialopeningoid) {
@@ -187,7 +189,7 @@ export default {
           .cofirm(
             "是否确定删除材料編號为 【 " +
               this.chooseData.materialId +
-              " 】 的数据?",
+              this.$t("iaoMng.delTle2"),
             this,
             {}
           )

@@ -4,7 +4,7 @@
       v-model="tabsName"
       style="margin: 0 5px"
       v-loading="loading"
-      element-loading-text="拼命加载中"
+      :element-loading-text="$t('public.loading')"
       element-loading-spinner="el-icon-loading"
     >
       <el-tab-pane label="大货复板" name="rhlpf">

@@ -15,13 +15,13 @@ export function rhl1F(_this) {
     emptyBtn: false,
     labelWidth: 150,
     column: [{
-      label: "入仓编号",
+      label: _this.$t("whseField.rcbh"),
       prop: "yinId",
       span: 6,
       placeholder: " ",
     },
     {
-      label: "入仓日期",
+      label: _this.$t("whseField.rcrq"),
       prop: "yinDate",
       span: 6,
       placeholder: " ",
@@ -31,20 +31,20 @@ export function rhl1F(_this) {
     },
 
     {
-      label: "采购单号",
+      label: _this.$t("whseField.chdh"),
       prop: "purNo",
       span: 6,
       placeholder: " ",
 
     },
     {
-      label: "送货单号",
+      label: _this.$t("whseField.shdh"),
       prop: "deliNo",
       span: 6,
       placeholder: " ",
     },
     {
-      label: "检验状态",
+      label: _this.$t("whseField.jyzt"),
       prop: "yinStatus",
       span: 6,
       placeholder: " ",
@@ -53,7 +53,7 @@ export function rhl1F(_this) {
     },
 
     {
-      label: "财务状态",
+      label: _this.$t("whseField.cwzt"),
       prop: "finStatus",
       span: 6,
       placeholder: " ",
@@ -69,14 +69,14 @@ export function rhl2F(_this) {
     emptyBtn: false,
     labelWidth: 150,
     column: [{
-      label: "入仓编号",
+      label: _this.$t("whseField.rcbh"),
       prop: "yinId",
       span: 6,
       placeholder: " ",
       disabled: true,
     },
     {
-      label: "入仓日期",
+      label: _this.$t("whseField.rcrq"),
       prop: "yinDate",
       span: 6,
       placeholder: " ",
@@ -86,21 +86,21 @@ export function rhl2F(_this) {
       disabled: true,
     },
     {
-      label: "采购单号",
+      label: _this.$t("whseField.chdh"),
       prop: "purNo",
       span: 6,
       placeholder: " ",
       disabled: true,
     },
     {
-      label: "送货单号",
+      label: _this.$t("whseField.shdh"),
       prop: "deliNo",
       span: 6,
       placeholder: " ",
       disabled: true,
     },
     {
-      label: "检验状态",
+      label: _this.$t("whseField.jyzt"),
       prop: "yinStatus",
       span: 6,
       placeholder: " ",
@@ -110,7 +110,7 @@ export function rhl2F(_this) {
       dicData: getDIC('whse_yinstatus')
     },
     {
-      label: "财务状态",
+      label: _this.$t("whseField.cwzt"),
       prop: "finStatus",
       span: 6,
       placeholder: " ",
@@ -119,7 +119,7 @@ export function rhl2F(_this) {
       dicData: getDIC('whse_finStatus'),
     },
     {
-      label: "操作员",
+      label: _this.$t("whseField.czy"),// "操作员",
       prop: "sysCreatedby",
       display: true,
       disabled: true,
@@ -140,7 +140,7 @@ export function rhl1C(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 275px)",
+    height: "calc(100vh - 278px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
@@ -165,23 +165,23 @@ export function rhl1C(_this) {
       align: "center",
     },
     {
-      label: "入仓编号",
+      label: _this.$t("whseField.rcbh"),
       prop: "yinId",
       cell: false,
       width: 180,
 
     },
     {
-      label: "入仓类型",
+      label: _this.$t("whseField.rclx"),
       prop: "yinType",
       cell: false,
       width: 100,
       type: "select",
-      dicData: _this.data === '化工原料' || _this.data === '颜料' ? getDIC('Whse_CalicoType') : getDIC('Whse_AccessoriesType'),
+      dicData: _this.data === _this.$t("iaoMng.hgyl") || _this.data === _this.$t("iaoMng.yl") ? getDIC('Whse_CalicoType') : getDIC('Whse_AccessoriesType'),
 
     },
     {
-      label: "入仓日期",
+      label: _this.$t("whseField.rcrq"),
       prop: "yinDate",
       cell: false,
       type: "date",
@@ -191,22 +191,22 @@ export function rhl1C(_this) {
       align: "center",
     },
     {
-      label: "采购单号",
+      label: _this.$t("whseField.chdh"),
       prop: "purNo",
       cell: false,
       width: 160,
 
     },
     {
-      label: "供應商编号",
+      label: _this.$t("whseField.gysbh"),// "供應商编号",
       prop: "suppId",
       cell: false,
       width: 110,
       type: "select",
-      dicData: _this.data === '紗線' ? getDicT("purYarnspo", "suppId", "poNo") : _this.data === '胚布' ? getDicT("purCalicopo", "suppId", "poNo") : _this.data === '顏料' ? getDicT("purDelivery", "suppId", "deliNo", { deliType: "dyes" }) : getDicT("purChemicalpo", "suppId", "poNo"),
+      dicData: _this.data === _this.$t("iaoMng.sx") ? getDicT("purYarnspo", "suppId", "poNo") : _this.data === _this.$t("iaoMng.pb") ? getDicT("purCalicopo", "suppId", "poNo") : _this.data === _this.$t("iaoMng.yl") ? getDicT("purDelivery", "suppId", "deliNo", { deliType: "dyes" }) : getDicT("purChemicalpo", "suppId", "poNo"),
     },
     {
-      label: "供應商名稱",
+      label: _this.$t("whseField.gysmc"),//"供應商名稱",
       prop: "$suppId",
       cell: false,
       width: 280,
@@ -215,31 +215,31 @@ export function rhl1C(_this) {
 
     },
     {
-      label: "送货单号",
+      label: _this.$t("whseField.shdh"),
       prop: "deliNo",
       cell: false,
       width: 160,
     },
     {
-      label: "检验状态",
+      label: _this.$t("whseField.jyzt"),
       prop: "yinStatus",
       cell: false,
-      width: 110,
+      width: 120,
       type: "select",
       dicData: getDIC('whse_yinstatus'),
 
     },
     {
-      label: "财务状态",
+      label: _this.$t("whseField.cwzt"),
       prop: "finStatus",
       cell: false,
-      width: 110,
+      width: 135,
       type: "select",
       dicData: getDIC('whse_finStatus'),
 
     },
     {
-      label: "操作员",
+      label: _this.$t("whseField.czy"),//"操作员",
       prop: "sysCreatedby",
       span: 6,
       placeholder: " ",
@@ -294,7 +294,7 @@ export function rhl2C(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 310px)",
+    height: "calc(100vh - 314px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
@@ -318,32 +318,32 @@ export function rhl2C(_this) {
       align: "center"
     },
     {
-      label: _this.datas === '化工原料' ? "化工原料编号" : "颜料编号",
+      label: _this.datas === _this.$t("iaoMng.hgyl") ? _this.$t("whseField.ylbh") : _this.$t('whseField.ylbh1'),
       prop: "chemicalId",
       cell: false,
       width: 180,
-      hide: _this.datas === '化工原料' || _this.datas === '颜料' ? false : true
+      hide: _this.datas === _this.$t("iaoMng.hgyl") || _this.datas === _this.$t("iaoMng.yl") ? false : true
     },
     {
-      label: _this.datas === '化工原料' ? "化工原料名称" : "颜料名称",
+      label: _this.datas === _this.$t("iaoMng.hgyl") ? _this.$t('whseField.ylmc') : _this.$t('whseField.ylmc1'),
       prop: "chemicalName",
       cell: false,
       width: 180,
-      hide: _this.datas === '化工原料' || _this.datas === '颜料' ? false : true
+      hide: _this.datas === _this.$t("iaoMng.hgyl") || _this.datas === _this.$t("iaoMng.yl") ? false : true
     },
     {
-      label: "材料编号",
+      label: _this.$t('whseField.clbh'),
       prop: "materialNum",
       cell: false,
       width: 180,
-      hide: _this.datas === '生產輔料' ? false : true
+      hide: _this.datas === _this.$t("iaoMng.scfl") ? false : true
     },
     {
-      label: "材料名称",
+      label: _this.$t('whseField.clmc'),
       prop: "chinName",
       cell: false,
       width: 180,
-      hide: _this.datas === '生產輔料' ? false : true,
+      hide: _this.datas === _this.$t("iaoMng.scfl") ? false : true,
       type: "select",
       props: {
         label: "chinName",
@@ -352,7 +352,7 @@ export function rhl2C(_this) {
       // dicData: getDicT("basHardwarearticles", "chinName", "hardwareId")
     },
     {
-      label: "材料类型",
+      label: _this.$t('whseField.clzl'),
       prop: "materialType",
       cell: false,
       width: 180,
@@ -400,7 +400,7 @@ export function rhl2C(_this) {
     //   dicData: Chemicalmat
     // },
     // {
-    //   label: "生产单号",
+    //   label: _this.$t("whseField.scdh"),
     //   prop: "prodNo",
     //   cell: true,
     //   width: 150,
@@ -409,7 +409,7 @@ export function rhl2C(_this) {
     //   },
     // },
     // {
-    //   label: "码卡号",
+    //   label: _this.$t("whseField.mkh"),
     //   prop: "fabticket",
     //   cell: true,
     //   width: 150,
@@ -418,45 +418,45 @@ export function rhl2C(_this) {
     //   },
     // },
     {
-      label: "批号",
+      label: _this.$t("whseField.ph"),
       prop: "batchNo",
       cell: false,
       width: 220,
     },
     {
-      label: "重量",
+      label: _this.$t("whseField.zl"),
       prop: "weight",
       cell: false,
       width: 100,
       align: "right",
-      hide: _this.datas === '化工原料' || _this.datas === '颜料' ? false : true
+      hide: _this.datas === _this.$t("iaoMng.hgyl") || _this.datas === _this.$t("iaoMng.yl") ? false : true
     },
     {
-      label: "单位",
+      label: _this.$t('whseField.dw'),
       prop: "weightUnit",
       cell: false,
       width: 100,
       type: "select",
       dicData: unit,
-      hide: _this.datas === '化工原料' || _this.datas === '颜料' ? false : true
+      hide: _this.datas === _this.$t("iaoMng.hgyl") || _this.datas === _this.$t("iaoMng.yl") ? false : true
     },
     {
-      label: "数量",
+      label: _this.$t('energy.sl'),
       prop: "poQty",
       cell: false,
       width: 100,
       align: "right",
-      hide: _this.datas != '化工原料' && _this.datas != '颜料' ? false : true,
+      hide: _this.datas != _this.$t("iaoMng.hgyl") && _this.datas != _this.$t("iaoMng.yl") ? false : true,
 
     },
     {
-      label: "单位",
+      label: _this.$t('whseField.dw'),
       prop: "unitQty",
       cell: false,
       width: 100,
       type: "select",
       dicData: unit,
-      hide: _this.datas != '化工原料' && _this.datas != '颜料' ? false : true,
+      hide: _this.datas != _this.$t("iaoMng.hgyl") && _this.datas != _this.$t("iaoMng.yl") ? false : true,
     },
     ]
   }
@@ -468,7 +468,7 @@ export function sx2C(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 310px)",
+    height: "calc(100vh - 314px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
@@ -503,17 +503,19 @@ export function sx2C(_this) {
     },
 
     {
-      label: "紗線編號",
+      label: _this.$t("whseField.sxbh"),
       prop: "yarnsId",
       cell: false,
-      width: 100,
+      width: 130,
     },
     {
-      label: "紗線名稱",
+      label: _this.$t("whseField.sxmc"),
       prop: "yarnsName",
       cell: false,
+      overHidden: true,
       width: 350,
       type: "select",
+      overHidden: true,
       // props: {
       //   label: "yarnsName",
       //   value: "yarnsId"
@@ -521,41 +523,41 @@ export function sx2C(_this) {
       dicData: getDicT("basYarnsData", "yarnsName", "yarnsId")
     },
     {
-      label: "批号",
+      label: _this.$t("whseField.ph"),
       prop: "batchNo",
       cell: false,
       width: 120,
     },
     {
-      label: "送貨單箱數",
+      label: _this.$t("whseField.shdxs"),//"送貨單箱數",
       prop: "cartonNum", //cartNum
       cell: false,
       width: 110,
       align: "right",
     },
     {
-      label: "送貨單重量",
+      label: _this.$t("whseField.shdzl"),//"送貨單重量",
       prop: "cartonWei", // netWei
       cell: false,
       width: 110,
       align: "right",
     },
     {
-      label: "入倉箱數",
+      label: _this.$t("whseField.rcxs"),// "入倉箱數",
       prop: "whseNum",
       cell: true,
       width: 110,
       align: "right",
     },
     {
-      label: "入倉重量",
+      label: _this.$t("whseField.rczl"),//"入倉重量",
       prop: "weight",
       cell: true,
       width: 110,
       align: "right",
     },
     {
-      label: "单位",
+      label: _this.$t('whseField.dw'),
       prop: "weightUnit", // weiUnit
       cell: false,
       width: 80,
@@ -563,27 +565,27 @@ export function sx2C(_this) {
       dicData: unit,
     },
     {
-      label: "每箱釘數",
+      label: _this.$t('whseField.mxds'),//"每箱釘數",
       prop: "everySpindle",
       cell: true,
       width: 100,
       align: "right",
     },
     {
-      label: "尾箱釘數",
+      label: _this.$t('whseField.wxds'),//"尾箱釘數",
       prop: "tailSpindle",
       cell: true,
       width: 100,
       align: "right",
     },
     {
-      label: "紗牌",
+      label: _this.$t('whseField.sp'),//"紗牌",
       prop: "yarnsCard",
       cell: false,
       width: 120,
     },
     {
-      label: "產地",
+      label: _this.$t('whseField.cd'),//"產地",
       prop: "placeOrigin",
       cell: false,
       width: 100,
@@ -598,7 +600,7 @@ export function pb2C(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 310px)",
+    height: "calc(100vh - 314px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
@@ -619,16 +621,18 @@ export function pb2C(_this) {
     },
 
     {
-      label: "胚布編號",
+      label: _this.$t('whseField.pbbh'),//"胚布編號",
       prop: "calicoId",
       cell: false,
       width: 100,
     },
     {
-      label: "胚布名稱",
+      label: _this.$t('whseField.pbmc'),
       prop: "clothName",
       cell: false,
-      width: 650,
+      overHidden: true,
+      width: 450,
+      overHidden: true,
       type: "select",
       // props: {
       //   label: "yarnsName",
@@ -647,7 +651,7 @@ export function hgyl2C(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 310px)",
+    height: "calc(100vh - 314px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
@@ -660,22 +664,25 @@ export function hgyl2C(_this) {
     },
 
     {
-      label: "原料編號",
+      label: _this.$t('whseField.ylbh'),
       prop: "chemicalId", // bcCode
       cell: false,
-      width: 100,
+      width: 140,
     },
     {
-      label: "原料名稱",
+      label: _this.$t('whseField.ylmc'),
       prop: "chemicalName",//CNNameLong
       cell: false,
+      overHidden: true,
       width: 250,
+      overHidden: true,
     },
     {
-      label: "英文名稱",
+      label: _this.$t('whseField.ywmc'),
       prop: "ennamelong",
       cell: false,
       width: 250,
+      overHidden: true,
       props: {
         label: "ennamelong",
         value: "bcCode"
@@ -684,7 +691,7 @@ export function hgyl2C(_this) {
       dicData: basChemicalmat
     },
     {
-      label: "型号",
+      label: _this.$t("whseField.xh"),
       prop: "modeltype",
       cell: false,
       width: 120,
@@ -696,7 +703,7 @@ export function hgyl2C(_this) {
       dicData: basChemicalmat
     },
     {
-      label: "含固力/活力",
+      label: _this.$t("whseField.hglhl"),//"含固力/活力",
       prop: "vitality",
       cell: false,
       width: 120,
@@ -718,7 +725,7 @@ export function yl2C(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 310px)",
+    height: "calc(100vh - 314px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
@@ -731,22 +738,24 @@ export function yl2C(_this) {
     },
 
     {
-      label: "顏料編號",
+      label: _this.$t("whseField.ylbh1"),
       prop: "chemicalId", // bcCode
       cell: false,
       width: 100,
     },
     {
-      label: "顏料名稱",
+      label: _this.$t("whseField.ylmc1"),
       prop: "chemicalName",//CNNameLong
       cell: false,
       width: 250,
+      overHidden: true,
     },
     {
-      label: "英文名稱",
+      label: _this.$t('whseField.ywmc'),
       prop: "ennamelong",
       cell: false,
       width: 250,
+      overHidden: true,
       props: {
         label: "ennamelong",
         value: "bcCode"
@@ -755,7 +764,7 @@ export function yl2C(_this) {
       dicData: basPigment
     },
     {
-      label: "色光",
+      label: _this.$t("whseField.sg"),//"色光",
       prop: "bcColor",
       cell: false,
       width: 120,
@@ -767,7 +776,7 @@ export function yl2C(_this) {
       dicData: basPigment
     },
     {
-      label: "力份",
+      label: _this.$t("whseField.lf"),//"力份",
       prop: "bcForce",
       cell: false,
       width: 120,
@@ -806,13 +815,13 @@ export function rhl3C(_this) {
       align: "center"
     },
     {
-      label: "批号",
+      label: _this.$t("whseField.ph"),
       prop: "batchNo",
       cell: true,
       width: 220,
     },
     {
-      label: "产地",
+      label: _this.$t("whseField.cd"),
       prop: "origin",
       cell: true,
       width: 120,
@@ -820,14 +829,14 @@ export function rhl3C(_this) {
       dicData: getDIC('Whse_Origin'),
     },
     {
-      label: "重量",
+      label: _this.$t("whseField.zl"),
       prop: "weight",
       cell: true,
       width: 120,
       align: "right",
     },
     {
-      label: "单位",
+      label: _this.$t('whseField.dw'),
       prop: "weightUnit",
       cell: true,
       width: 100,
@@ -846,7 +855,7 @@ export function rhl4C(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: _this.datas === '颜料' || _this.datas === '化工原料' ? "calc(50vh - 198px)" : "calc(100vh - 285px)",
+    height: _this.datas === _this.$t("iaoMng.yl") || _this.datas === _this.$t("iaoMng.hgyl") ? "calc(50vh - 198px)" : "calc(100vh - 285px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
@@ -863,13 +872,13 @@ export function rhl4C(_this) {
       align: "center"
     },
     {
-      label: "申购单号",
+      label: _this.$t("whseField.sgdh"),
       prop: "appId",
       cell: true,
       width: 220,
     },
     {
-      label: "分配数量",
+      label: _this.$t("whseField.fpsl"),
       prop: "applyNum",
       cell: true,
       width: 120,
@@ -885,7 +894,7 @@ export function planForm(_this) {
     emptyBtn: false,
     labelWidth: 150,
     column: [{
-      label: "采购单号",
+      label: _this.$t("whseField.chdh"),
       prop: "poNo",
       span: 6,
       placeholder: " ",
@@ -898,32 +907,32 @@ export function planForm(_this) {
     //   placeholder: " ",
     // },
     {
-      label: "送货单号",
+      label: _this.$t("whseField.shdh"),
       prop: "deliNo",
       span: 6,
       placeholder: " ",
       disabled: _this.upDate
     },
     {
-      label: "纱线编号",
+      label: _this.$t("whseField.sxbh"),
       prop: "yarnsId",
       span: 6,
       placeholder: " ",
-      display: _this.data === '紗線'
+      display: _this.data === _this.$t("iaoMng.sx")
     },
     {
-      label: "胚布编号",
+      label: _this.$t("whseField.pbbh"),
       prop: "calicoId",
       span: 6,
       placeholder: " ",
-      display: _this.data === '胚布'
+      display: _this.data === _this.$t("iaoMng.pb")
     },
     {
-      label: "原料编号",
+      label: _this.$t("whseField.ylbh"),
       prop: "bcCode",
       span: 6,
       placeholder: " ",
-      display: _this.data === '化工原料' || _this.data === '顏料'
+      display: _this.data === _this.$t("iaoMng.hgyl") || _this.data === _this.$t("iaoMng.yl")
     },
     ],
   }
@@ -946,7 +955,7 @@ export function planCrud(_this) {
       align: "center",
     },
     {
-      label: "采购单号",
+      label: _this.$t("whseField.chdh"),
       prop: "poNo",
       cell: false,
       width: 170,
@@ -960,13 +969,13 @@ export function planCrud(_this) {
     //   dicData: getDicT("purSinglepo", "suppName", "suppId")
     // },
     {
-      label: "送货单号",
+      label: _this.$t("whseField.shdh"),
       prop: "deliNo",
       cell: false,
       width: 170,
     },
     // {
-    //   label: "送货日期",
+    //   label: _this.$t('whseField.shrq'),
     //   prop: "deliDate",
     //   type: "date",
     //   width: 120,
@@ -975,94 +984,97 @@ export function planCrud(_this) {
     //   align: "center",
     // },
     {
-      label: "紗線编号",
+      label: _this.$t("whseField.sxbh"),
       prop: "yarnsId",
       cell: false,
-      width: 110,
-      hide: _this.data != '紗線'
+      width: 130,
+      hide: _this.data != _this.$t("iaoMng.sx")
     },
     {
-      label: "紗線名稱",
+      label: _this.$t("whseField.sxmc"),//"紗線名稱",
       prop: "yarnsName",
       cell: false,
-      hide: _this.data != '紗線'
+      overHidden: true,
+      hide: _this.data != _this.$t("iaoMng.sx")
       // width: 150,
     },
     {
-      label: "胚布编号",
+      label: _this.$t("whseField.pbbh"),
       prop: "calicoId",
       cell: false,
-      width: 110,
-      hide: _this.data != '胚布'
+      width: 120,
+      hide: _this.data != _this.$t("iaoMng.pb")
     },
     {
-      label: "胚布名稱",
+      label: _this.$t('whseField.pbmc'),
       prop: "calicoName",
       cell: false,
-      hide: _this.data != '胚布'
+      hide: _this.data != _this.$t("iaoMng.pb")
       // width: 150,
     },
     {
-      label: _this.data === '化工原料' ? "原料编号" : "顏料编号",
+      label: _this.data === _this.$t("iaoMng.hgyl") ? _this.$t("whseField.ylbh") : _this.$t("whseField.ylbh1"),
       prop: "bcCode",
       cell: false,
-      width: 110,
-      hide: _this.data != '化工原料' && _this.data != '顏料',
+      width: 140,
+      hide: _this.data != _this.$t("iaoMng.hgyl") && _this.data != _this.$t("iaoMng.yl"),
     },
     {
-      label: _this.data === '化工原料' ? "原料名稱" : "顏料名稱",
+      label: _this.data === _this.$t("iaoMng.hgyl") ? _this.$t('whseField.ylmc') : _this.$t("whseField.ylmc1"),
       prop: "cnnamelong",
       cell: false,
-      hide: _this.data != '化工原料' && _this.data != '顏料',
+      overHidden: true,
+      hide: _this.data != _this.$t("iaoMng.hgyl") && _this.data != _this.$t("iaoMng.yl"),
       width: 350,
     },
 
     {
-      label: "重量",
+      label: _this.$t("whseField.zl"),
       prop: "deliQty",
       cell: false,
       width: 80,
       align: "right",
-      hide: _this.data != '化工原料' && _this.data != '顏料',
+      hide: _this.data != _this.$t("iaoMng.hgyl") && _this.data != _this.$t("iaoMng.yl"),
     },
     {
-      label: "单位",
+      label: _this.$t('whseField.dw'),
       prop: "deliUnit",
       cell: false,
       width: 60,
       type: "select",
       dicData: unit,
-      hide: _this.data != '化工原料' && _this.data != '顏料',
+      hide: _this.data != _this.$t("iaoMng.hgyl") && _this.data != _this.$t("iaoMng.yl"),
     },
     {
-      label: _this.data === '紗線' ? "箱數" : "箱數",
+      label: _this.$t("whseField.xs"),
       prop: "cartNum",
       cell: false,
       width: 80,
+      overHidden: true,
       align: "right",
-      hide: _this.data != '紗線'
+      hide: _this.data != _this.$t("iaoMng.sx")
     },
 
     {
-      label: _this.data === '紗線' ? "重量" : "重量",
+      label: _this.data === _this.$t("iaoMng.sx") ? _this.$t("whseField.zl") : _this.$t("whseField.zl"),
       prop: "netWei",
       cell: false,
       width: 80,
       align: "right",
-      hide: _this.data != '紗線' && _this.data != '胚布'
+      hide: _this.data != _this.$t("iaoMng.sx") && _this.data != _this.$t("iaoMng.pb")
     },
     {
-      label: "单位",
+      label: _this.$t('whseField.dw'),
       prop: "weiUnit",
       cell: false,
       width: 60,
       type: "select",
-      hide: _this.data != '紗線' && _this.data != '胚布',
+      hide: _this.data != _this.$t("iaoMng.sx") && _this.data != _this.$t("iaoMng.pb"),
       dicData: unit
     },
 
     {
-      label: "批号",
+      label: _this.$t("whseField.ph"),
       prop: "batchNo",
       cell: false,
       width: 180,

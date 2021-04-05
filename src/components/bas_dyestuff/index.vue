@@ -15,8 +15,12 @@
       <el-tabs type="border-card" v-model="tab">
         <el-tab-pane name="tab1" :label="dlgTle">
           <div class="btnList">
-            <el-button type="primary" @click="choice">选择</el-button>
-            <el-button type="primary" @click="query">查询</el-button>
+            <el-button type="primary" @click="choice">{{
+              this.$t("public.choose")
+            }}</el-button>
+            <el-button type="primary" @click="query">{{
+              this.$t("public.query")
+            }}</el-button>
             <el-button type="warning" @click="close">{{
               this.$t("public.close")
             }}</el-button>
@@ -87,30 +91,30 @@ export default {
             align: "center",
           },
           {
-            label: "编号",
+            label: this.$t("whseField.bh"), //"编号",
             prop: "bcCode",
           },
           {
-            label: "原料名称",
+            label: this.$t("whseField.bh"), //"原料名称",
             prop: "bcMatname",
           },
           {
-            label: "一级分类",
+            label: this.$t("whseField.yjfl"), // "一级分类",
             prop: "bcClass",
             type: "select",
             dicData: getDIC("bas_chemicalClass"),
           },
           {
-            label: "原料英文名称",
+            label: this.$t("whseField.ywmc"), //"原料英文名称",
             prop: "bcMatengname",
           },
 
           {
-            label: "色光",
+            label: this.$t("whseField.sg"),
             prop: "bcColor",
           },
           {
-            label: "力份",
+            label: this.$t("whseField.lf"), //"力份",
             prop: "bcForce",
           },
         ],
@@ -124,7 +128,7 @@ export default {
         menu: false,
         column: [
           {
-            label: "配方类别",
+            label: this.$t("whseField.pflx"), //"配方类别",
             prop: "pfType",
             span: 6,
             placeholder: " ",
@@ -132,11 +136,11 @@ export default {
             dicData: [
               {
                 value: 0,
-                label: "化工原料",
+                label: this.$t("iaoMng.hgyl"), //"化工原料",
               },
               {
                 value: 1,
-                label: "颜料",
+                label: this.$t("iaoMng.yl"), //"颜料",
               },
             ],
             change: (val) => {
@@ -147,7 +151,7 @@ export default {
             },
           },
           {
-            label: "一级分类",
+            label: this.$t("whseField.yjfl"), // "一级分类",
             prop: "bcClass",
             span: 6,
             placeholder: " ",
@@ -155,13 +159,13 @@ export default {
             dicData: getDIC("bas_chemicalClass"),
           },
           {
-            label: "编号",
+            label: this.$t("whseField.bh"), // "编号",
             prop: "bcCode",
             span: 6,
             placeholder: " ",
           },
           {
-            label: "原料名称",
+            label: this.$t("whseField.ylmc"), //"原料名称",
             prop: "bcMatname",
             span: 6,
             placeholder: " ",
@@ -185,7 +189,7 @@ export default {
         }
       }
       this.form.basAdsuppliesFk = this.form.basHardwareFk;
-      if (this.dlgTle == "选择五金/行政用品") {
+      if (this.dlgTle == this.$t("whseField.xzwjxzyp")) {
         if (this.form.pfType == 0) {
           this.getData = getBasHardwar;
           let data = getDicT(
@@ -291,7 +295,8 @@ export default {
   created() {},
   mounted() {
     this.form.pfType = 0;
-    if (this.dlgTle == "选择五金/行政用品") {
+    if (this.dlgTle == this.$t("whseField.xzwjxzyp")) {
+      // "选择五金/行政用品"
       this.crudOp = hardwareC;
       this.formOp = mainForm(this);
     }

@@ -2,7 +2,7 @@
   <div id="colorPlay_Tem">
     <view-container
       title="色号资料管理"
-      element-loading-text="拼命加载中"
+      :element-loading-text="$t('public.loading')"
       v-loading="wLoading"
     >
       <div class="btnList">
@@ -201,7 +201,7 @@ export default {
       minRows: 1,
       maxRows: 5,
       choiceV: false,
-      choiceTle: "选择客戶",
+      choiceTle: this.$t("choicDlg.xzkh"),
       choiceTarget: {},
       choiceField: "",
       choiceQ: {},
@@ -792,7 +792,7 @@ export default {
           this.dlgWidth = "100%";
           this.choiceV = !this.choiceV;
           this.choiceTarget = this.form;
-          this.choiceTle = "选择化工原料";
+          this.choiceTle = this.$t("choicDlg.xzhgyl");
         }
       }
     },
@@ -819,7 +819,7 @@ export default {
     },
     del() {
       if (Object.keys(this.dlteCheck).length === 0) {
-        this.$tip.error("请选择要删除的数据!");
+        this.$tip.error(this.$t("public.delTle"));
         return;
       }
       if (!this.dlteCheck[this.oidName]) {
@@ -830,7 +830,9 @@ export default {
       }
       this.$tip
         .cofirm(
-          "是否确定删除原料为 【 " + this.dlteCheck.$bcCode + " 】 的数据?",
+          "是否确定删除原料为 【 " +
+            this.dlteCheck.$bcCode +
+            this.$t("iaoMng.delTle2"),
           this,
           {}
         )
@@ -865,7 +867,7 @@ export default {
     },
     delPro() {
       if (Object.keys(this.proCheck).length === 0) {
-        this.$tip.error("请选择要删除的数据!");
+        this.$tip.error(this.$t("public.delTle"));
         return;
       }
       if (!this.proCheck[[this.oidName.split("oid")[0] + "xoid"]]) {
@@ -1019,7 +1021,7 @@ export default {
         return;
       }
       // this.choiceTarget[this.choiceField] = val[this.choiceField];
-      if (this.choiceTle === "选择色号资料") {
+      if (this.choiceTle === this.$t("choicDlg.xzshzl")) {
         this.form = Object.assign(this.form, val);
         this.form.labTapcolorFk = this.form.labTapcoloroid;
         getLdNoticeList({
@@ -1037,7 +1039,7 @@ export default {
           this.formOp.column[13].disabled = false;
         });
       }
-      if (this.choiceTle === "选择化工原料") {
+      if (this.choiceTle === this.$t("choicDlg.xzhgyl")) {
         val.forEach((item) => {
           item.bcCode = item.bcCode;
           item.chemicalClass = item.bcClass;

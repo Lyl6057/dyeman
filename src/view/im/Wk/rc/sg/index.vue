@@ -3,10 +3,13 @@
     <el-tabs
       type="border-card"
       v-model="tabs"
-      element-loading-text="拼命加载中"
+      :element-loading-text="$t('public.loading')"
       v-loading="screenLoading"
     >
-      <el-tab-pane :label="'申购' + data + '入库'" name="tabs1">
+      <el-tab-pane
+        :label="$t('iaoMng.sg') + data + this.$t('iaoMng.rc')"
+        name="tabs1"
+      >
         <div class="btnList">
           <el-button type="danger" @click="del">{{
             this.$t("public.del")
@@ -22,7 +25,9 @@
           > -->
 
           <!-- <el-button type="warning" @click="getData">取消</el-button> -->
-          <el-button type="primary" @click="getData">查询</el-button>
+          <el-button type="primary" @click="getData">{{
+            this.$t("public.query")
+          }}</el-button>
           <el-button type="warning" @click="close">{{
             this.$t("public.close")
           }}</el-button>
@@ -36,7 +41,7 @@
         </div>
         <el-row class="crudBox">
           <el-col :span="24">
-            <view-container title="申购入库资料">
+            <view-container :title="$t('iaoMng.sgrkzl')">
               <avue-crud
                 ref="crud"
                 :option="everyThing.mainC"
@@ -58,7 +63,7 @@
         ></el-col> -->
         </el-row>
       </el-tab-pane>
-      <el-tab-pane label="未生成入库送货单" name="tabs2">
+      <el-tab-pane :label="$t('iaoMng.wrcshdzl')" name="tabs2">
         <plan
           ref="plan"
           v-if="plan"
@@ -217,7 +222,7 @@ export default {
       changeList: [],
       ruleV: false,
       choiceV: false,
-      choiceTle: "來紗登記",
+      choiceTle: this.$t("iaoMng.xzlsdj"),
       choiceTarget: {},
       choiceField: "",
       choiceQ: {},
@@ -239,7 +244,7 @@ export default {
         code: "whse_in",
       };
       switch (this.data) {
-        case "紗線":
+        case this.$t("iaoMng.sx"):
           this.everyThing.get = getSx;
           this.everyThing.del = delSx;
           this.everyThing.update = updateSx;
@@ -252,7 +257,7 @@ export default {
           this.everyThing.getAlloc = getYarninAlloc;
           this.everyThing.addAlloc = addYarninAlloc;
           break;
-        case "辅料":
+        case this.$t("iaoMng.fl"):
           this.everyThing.get = getScfl;
           this.everyThing.del = delScfl;
           this.everyThing.update = updateScfl;
@@ -265,7 +270,7 @@ export default {
           this.everyThing.getAlloc = getAccessoriesinAlloc;
           this.everyThing.addAlloc = addAccessoriesinAlloc;
           break;
-        case "五金/行政":
+        case this.$t("iaoMng.wjxz"):
           this.everyThing.get = getScfl;
           this.everyThing.del = delScfl;
           this.everyThing.update = updateScfl;
@@ -278,7 +283,7 @@ export default {
           this.everyThing.getAlloc = getAccessoriesinAlloc;
           this.everyThing.addAlloc = addAccessoriesinAlloc;
           break;
-        case "化工原料":
+        case this.$t("iaoMng.hgyl"):
           this.everyThing.get = getRhl;
           this.everyThing.del = delRhl;
           this.everyThing.update = updateRhl;
@@ -295,7 +300,7 @@ export default {
           this.everyThing.getAlloc = getChemicalinAlloc;
           this.everyThing.addAlloc = addChemicalinAlloc;
           break;
-        case "颜料":
+        case this.$t("iaoMng.yl"):
           this.everyThing.get = getYl;
           this.everyThing.del = delYl;
           this.everyThing.update = updateYl;
@@ -381,7 +386,7 @@ export default {
     },
     del() {
       if (Object.keys(this.chooseData).length === 0) {
-        this.$tip.error("请选择要删除的数据!");
+        this.$tip.error(this.$t("public.delTle"));
         return;
       }
       if (
@@ -394,16 +399,19 @@ export default {
       }
       this.$tip
         .cofirm(
-          "是否确定删除入仓编号为 【 " + this.chooseData.yinId + " 】 的数据?",
+          this.$t("iaoMng.delTle1") +
+            this.chooseData.yinId +
+            this.$t("iaoMng.delTle2"),
           this,
           {}
         )
         .then(() => {
           this.everyThing
             .del(
-              this.data === "化工原料" || this.data === "颜料"
+              this.data === this.$t("iaoMng.hgyl") ||
+                this.data === this.$t("iaoMng.yl")
                 ? this.chooseData.whseChemicalinoid
-                : this.data === "紗線"
+                : this.data === this.$t("iaoMng.sx")
                 ? this.chooseData.whseYarninoid
                 : this.chooseData.whseAccessoriesinoid
             )
@@ -447,12 +455,12 @@ export default {
       }
       this.oldData.$cellEdit = false;
       this.choiceTarget[this.choiceField] = val[this.choiceField];
-      if (this.choiceTle === "化工原料申购採購單") {
+      if (this.choiceTle === this.$t("iaoMng.hgylsgcgd")) {
         this.choiceTarget.purNo = val.poNo;
         this.choiceTarget.suppId = val.suppId;
         this.choiceTarget.$suppId = val.suppId;
       }
-      if (this.choiceTle === "外厂化工原料配料计划") {
+      if (this.choiceTle === this.$t("choicDlg.xzwfylpl")) {
         this.choiceTarget.factoryId = val.refCode;
         this.choiceTarget.factoryName = val.refCode;
       }

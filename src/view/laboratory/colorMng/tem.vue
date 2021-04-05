@@ -2,7 +2,7 @@
   <div id="colorMng_Tem">
     <view-container
       title="色号资料管理"
-      element-loading-text="拼命加载中"
+      :element-loading-text="$t('public.loading')"
       v-loading="wLoading"
     >
       <div class="btnList">
@@ -74,7 +74,7 @@ export default {
       minRows: 1,
       maxRows: 5,
       choiceV: false,
-      choiceTle: "选择客戶",
+      choiceTle: this.$t("choicDlg.xzkh"),
       choiceTarget: {},
       choiceField: "",
       choiceQ: {},
@@ -285,15 +285,15 @@ export default {
         return;
       }
       this.choiceTarget[this.choiceField] = val[this.choiceField];
-      if (this.choiceTle === "选择客戶") {
+      if (this.choiceTle === this.$t("choicDlg.xzkh")) {
         this.form.custCode = val.custCode;
         this.form.custName = val.custName;
       }
-      if (this.choiceTle === "胚布編碼") {
+      if (this.choiceTle === this.$t("choicDlg.pbbm")) {
         this.form.fabCode = val.calicoId;
         this.form.fabricDesc = val.gustCalicoName;
       }
-      if (this.choiceTle === "选择色号信息") {
+      if (this.choiceTle === this.$t("choicDlg.xzshxx")) {
         this.form.colorBh = val.colorNo;
         this.form.colorChn = val.colorName;
       }

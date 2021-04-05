@@ -25,7 +25,7 @@
         <el-col :span="hide === '4' || hide === '3' || hide === '5' ? 24 : 12">
           <view-container :title="datas.type.split('_')[0] + '明细'">
             <div class="btnList" style="margin-bottom: 2px">
-              <!-- <el-button type="primary" @click="getDetail">查询</el-button> -->
+              <!-- <el-button type="primary" @click="getDetail">{{this.$t("public.query")}}</el-button> -->
               <el-button type="primary" @click="add" v-if="canSave">{{
                 this.$t("public.add")
               }}</el-button>
@@ -49,7 +49,7 @@
         <el-col :span="12" v-if="hide != '4' && hide != '3' && hide != '5'">
           <view-container :title="datas.type.split('_')[0] + '批号资料'">
             <div class="btnList" style="margin-bottom: 2px">
-              <!-- <el-button type="primary" @click="getDetail">查询</el-button> -->
+              <!-- <el-button type="primary" @click="getDetail">{{this.$t("public.query")}}</el-button> -->
               <el-button type="primary" @click="addPh" v-if="canSave">{{
                 this.$t("public.add")
               }}</el-button>
@@ -86,8 +86,12 @@
       >
         <view-container :title="dlgTle">
           <div class="btnList">
-            <el-button type="success" @click="check">選擇</el-button>
-            <el-button type="primary" @click="getPbData">查询</el-button>
+            <el-button type="success" @click="check">{{
+              this.$t("public.choose")
+            }}</el-button>
+            <el-button type="primary" @click="getPbData">{{
+              this.$t("public.query")
+            }}</el-button>
             <el-button type="warning" @click="sxclose">{{
               this.$t("public.close")
             }}</el-button>
@@ -398,13 +402,13 @@ export default {
         this.choiceField = "woOrderno";
         this.oldData = this.chooseData;
         this.choiceTarget = this.oldData;
-        this.choiceTle = "选择胚布入仓明细";
+        this.choiceTle = this.$t("choicDlg.xzpbrc");
       } else if (this.hide === "5") {
         this.choiceV = !this.choiceV;
         this.choiceField = "woOrderno";
         this.oldData = this.chooseData;
         this.choiceTarget = this.oldData;
-        this.choiceTle = "选择胚布疋号资料";
+        this.choiceTle = this.$t("choicDlg.xzpbph");
       } else {
         this.outcrudOp = rsxkr2C(this);
         this.outcrudOp.column[2].hide = false;
@@ -434,7 +438,7 @@ export default {
         //   this.choiceQ.calicoId = this.chooseData.woMatno;
         //   this.oldData = this.chooseData;
         //   this.choiceTarget = this.oldData;
-        //   this.choiceTle = "选择胚布疋号资料";
+        //   this.choiceTle = this.$t("choicDlg.xzpbph");
       }
       // } else {
       this.outcrudOp = rcpb3C(this);
@@ -456,7 +460,7 @@ export default {
         this.chooseData == null ||
         Object.keys(this.chooseData).length === 0
       ) {
-        this.$tip.error("请选择要删除的数据!");
+        this.$tip.error(this.$t("public.delTle"));
         return;
       }
       if (
@@ -517,7 +521,7 @@ export default {
     },
     delPh() {
       if (this.choosePh == null || Object.keys(this.choosePh).length === 0) {
-        this.$tip.error("请选择要删除的数据!");
+        this.$tip.error(this.$t("public.delTle"));
         return;
       }
       if (
@@ -799,7 +803,7 @@ export default {
             return;
           }
           if (!this.mx[i].batchNo) {
-            this.$tip.error("批号不能为空!");
+            this.$tip.error(this.$t("iaoMng.saveTle4"));
             this.loading = false;
             return;
           }
@@ -995,8 +999,8 @@ export default {
         this.mx.push(data);
         // this.changeList.push(data);
       } else if (
-        this.choiceTle === "选择胚布入仓明细" ||
-        this.choiceTle === "选择胚布疋号资料"
+        this.choiceTle === this.$t("choicDlg.xzpbrc") ||
+        this.choiceTle === this.$t("choicDlg.xzpbph")
       ) {
         // let data = {
         //   woMatno: val.fabId,

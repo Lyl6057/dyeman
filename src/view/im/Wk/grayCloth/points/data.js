@@ -35,14 +35,14 @@ export const sxForm = {
       readonly: true
     },
     {
-      label: "重量",
+      label: _this.$t("whseField.zl"),
       prop: "weight",
       span: 8,
       placeholder: ' ',
       readonly: true
     },
     {
-      label: "重量单位",
+      label: _this.$t("whseField.zldw"),
       prop: "weightUnit",
       span: 8,
       placeholder: ' ',
@@ -58,7 +58,7 @@ export const sxForm = {
       readonly: true
     },
     {
-      label: "产地",
+      label: _this.$t("whseField.cd"),
       prop: "placeOrigin",
       span: 8,
       placeholder: ' ',
@@ -148,12 +148,12 @@ export const sxCrud = {
       cell: true,
     },
     {
-      label: "重量",
+      label: _this.$t("whseField.zl"),
       prop: "weight",
       cell: true,
     },
     {
-      label: "重量单位",
+      label: _this.$t("whseField.zldw"),
       prop: "weightUnit",
       cell: true,
       type: "select",
@@ -166,7 +166,7 @@ export const sxCrud = {
       cell: true,
     },
     {
-      label: "产地",
+      label: _this.$t("whseField.cd"),
       prop: "placeOrigin",
       cell: true,
       type: 'select',
@@ -217,7 +217,7 @@ export const pbForm = {
     },
 
     {
-      label: "批号",
+      label: _this.$t("whseField.ph"),
       prop: "batchNo",
       span: 8,
       align: "left",
@@ -225,7 +225,7 @@ export const pbForm = {
       readonly: true,
     },
     {
-      label: "疋号",
+      label: _this.$t("whseField.ph2"),
       prop: "countingNo",
       span: 8,
       align: "left",
@@ -233,7 +233,7 @@ export const pbForm = {
       readonly: true,
     },
     {
-      label: "客人布票号",
+      label: _this.$t("whseField.krbph"),
       prop: "custTicket",
       span: 8,
       align: "left",
@@ -241,7 +241,7 @@ export const pbForm = {
       readonly: true,
     },
     {
-      label: "重量",
+      label: _this.$t("whseField.zl"),
       prop: "weight",
       align: "right",
       span: 8,
@@ -257,7 +257,7 @@ export const pbForm = {
       readonly: true,
     },
     {
-      label: "重量单位",
+      label: _this.$t("whseField.zldw"),
       prop: "weightUnit",
       span: 8,
       align: "left",
@@ -310,24 +310,24 @@ export const pbCrud = {
       width: 200,
     },
     {
-      label: "批号",
+      label: _this.$t("whseField.ph"),
       prop: "batchNo",
       align: "left",
       width: 200,
     },
     {
-      label: "疋号",
+      label: _this.$t("whseField.ph2"),
       prop: "countingNo",
       align: "left",
       width: 200,
     },
     {
-      label: "客人布票号",
+      label: _this.$t("whseField.krbph"),
       prop: "custTicket",
       align: "left",
     },
     {
-      label: "重量",
+      label: _this.$t("whseField.zl"),
       prop: "weight",
       align: "right",
     },
@@ -337,7 +337,7 @@ export const pbCrud = {
       align: "right",
     },
     {
-      label: "重量单位",
+      label: _this.$t("whseField.zldw"),
       prop: "weightUnit",
       align: "left",
       type: "select",
@@ -369,28 +369,28 @@ export const cpbForm = {
   labelWidth: 110,
   column: [
     {
-      label: "缸号",
+      label: _this.$t("whseField.gh"),
       prop: "batchNo",
       span: 8,
       placeholder: " ",
       readonly: true,
     },
     {
-      label: "疋数",
+      label: _this.$t("whseField.ps"),
       prop: "countingNo",
       span: 8,
       placeholder: " ",
       readonly: true,
     },
     {
-      label: "重量",
+      label: _this.$t("whseField.zl"),
       prop: "weight",
       span: 8,
       placeholder: " ",
       readonly: true,
     },
     {
-      label: "重量单位",
+      label: _this.$t("whseField.zldw"),
       prop: "weightUnit",
       span: 8,
       placeholder: " ",
@@ -399,14 +399,14 @@ export const cpbForm = {
       dicData: matUnit
     },
     {
-      label: "布票号",
+      label: _this.$t("whseField.bph"),
       prop: "fabticket",
       span: 8,
       placeholder: " ",
       readonly: true,
     },
     //     {
-    //       label: "货位码",
+    //       label: _this.$t("whseField.hwm"),
     //       prop: "locationCode",
     //       span:8,
     // placeholder: " ",
@@ -449,34 +449,34 @@ export const cpbCrud = {
       hide: true,
     },
     {
-      label: "缸号",
+      label: _this.$t("whseField.gh"),
       prop: "batchNo",
       cell: true,
     },
     {
-      label: "疋数",
+      label: _this.$t("whseField.ps"),
       prop: "countingNo",
       cell: true,
     },
     {
-      label: "重量",
+      label: _this.$t("whseField.zl"),
       prop: "weight",
       cell: true,
     },
     {
-      label: "重量单位",
+      label: _this.$t("whseField.zldw"),
       prop: "weightUnit",
       cell: true,
       type: "select",
       dicData: matUnit
     },
     {
-      label: "布票号",
+      label: _this.$t("whseField.bph"),
       prop: "fabticket",
       cell: true,
     },
     {
-      label: "货位码",
+      label: _this.$t("whseField.hwm"),
       prop: "locationCode",
       cell: true,
     },
@@ -496,14 +496,14 @@ export const scflForm = {
   column: [
 
     {
-      label: "材料编号",
+      label: _this.$t('whseField.clbh'),
       prop: "materialNum",
       span: 8,
       placeholder: " ",
       readonly: true,
     },
     {
-      label: "数量",
+      label: _this.$t('energy.sl'),
       prop: "poQty",
       span: 8,
       placeholder: " ",
@@ -519,14 +519,14 @@ export const scflForm = {
       dicData: matUnit
     },
     {
-      label: "材料类型",
+      label: _this.$t('whseField.clzl'),
       prop: "materialType",
       span: 8,
       placeholder: " ",
       readonly: true,
     },
     {
-      label: "批号",
+      label: _this.$t("whseField.ph"),
       prop: "batchNo",
       span: 8,
       placeholder: " ",
@@ -576,12 +576,12 @@ export const scflCrud = {
       hide: true,
     },
     {
-      label: "材料编号",
+      label: _this.$t('whseField.clbh'),
       prop: "materialNum",
       cell: true,
     },
     {
-      label: "数量",
+      label: _this.$t('energy.sl'),
       prop: "poQty",
       cell: true,
     },
@@ -593,12 +593,12 @@ export const scflCrud = {
       dicData: matUnit
     },
     {
-      label: "材料类型",
+      label: _this.$t('whseField.clzl'),
       prop: "materialType",
       cell: true,
     },
     {
-      label: "批号",
+      label: _this.$t("whseField.ph"),
       prop: "batchNo",
       cell: true,
     },
@@ -648,21 +648,21 @@ export const rhlForm = {
       readonly: true,
     },
     {
-      label: "批号",
+      label: _this.$t("whseField.ph"),
       prop: "batchNo",
       span: 8,
       placeholder: " ",
       readonly: true,
     },
     {
-      label: "重量",
+      label: _this.$t("whseField.zl"),
       prop: "weight",
       span: 8,
       placeholder: " ",
       readonly: true,
     },
     {
-      label: "重量单位",
+      label: _this.$t("whseField.zldw"),
       prop: "weightUnit",
       span: 8,
       placeholder: " ",
@@ -721,17 +721,17 @@ export const rhlCrud = {
     },
 
     {
-      label: "批号",
+      label: _this.$t("whseField.ph"),
       prop: "batchNo",
       cell: true,
     },
     {
-      label: "重量",
+      label: _this.$t("whseField.zl"),
       prop: "weight",
       cell: true,
     },
     {
-      label: "重量单位",
+      label: _this.$t("whseField.zldw"),
       prop: "weightUnit",
       cell: true,
       type: "select",

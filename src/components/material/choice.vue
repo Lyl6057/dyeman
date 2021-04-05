@@ -16,10 +16,14 @@
       :close-on-click-modal="false"
       v-if="choiceV"
     >
-      <view-container title="選擇材料" v-loading="loading">
+      <view-container :title="$t('choicDlg.xzcl')" v-loading="loading">
         <div class="btnList">
-          <el-button type="primary" @click="choice">选择</el-button>
-          <el-button type="primary" @click="query">查询</el-button>
+          <el-button type="primary" @click="choice">{{
+            this.$t("public.choose")
+          }}</el-button>
+          <el-button type="primary" @click="query">{{
+            this.$t("public.query")
+          }}</el-button>
           <el-button type="warning" @click="close">{{
             this.$t("public.close")
           }}</el-button>
@@ -60,10 +64,10 @@ export default {
       handler(newVal, oldVal) {
         switch (newVal) {
           case "CPB":
-            this.$tip.error("暂无数据!");
+            this.$tip.error(this.$t("choicDlg.zwsj"));
             return;
           case "RL":
-            this.$tip.error("暂无数据!");
+            this.$tip.error(this.$t("choicDlg.zwsj"));
             return;
           case "SX":
             this.choiceC = sxOp(this);

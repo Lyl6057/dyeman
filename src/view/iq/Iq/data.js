@@ -45,13 +45,13 @@ export const sx_rc = {
       width: 225,
     },
     {
-      label: "入仓编号",
+      label: _this.$t("whseField.rcbh"),
       prop: "yinId",
       cell: true,
       width: 180,
     },
     {
-      label: "入仓日期",
+      label: _this.$t("whseField.rcrq"),
       prop: "yinDate",
       cell: true,
       type: "datetime",
@@ -59,7 +59,7 @@ export const sx_rc = {
       valueFormat: "yyyy-MM-dd HH:mm:ss",
     },
     {
-      label: "采购单号",
+      label: _this.$t("whseField.chdh"),
       prop: "purNo",
       cell: true,
       width: 180,
@@ -98,14 +98,14 @@ export const sx_rc = {
       align: 'right'
     },
     {
-      label: "重量",
+      label: _this.$t("whseField.zl"),
       prop: "weight",
       cell: true,
       width: 100,
       align: 'right'
     },
     {
-      label: "重量单位",
+      label: _this.$t("whseField.zldw"),
       prop: "weightUnit",
       cell: true,
       width: 100,
@@ -118,7 +118,7 @@ export const sx_rc = {
       cell: true,
     },
     {
-      label: "产地",
+      label: _this.$t("whseField.cd"),
       prop: "placeOrigin",
       cell: true, type: "select",
       dicData: getDIC("Whse_Origin"),
@@ -180,7 +180,7 @@ export const sx_cc = {
       align: 'right'
     },
     {
-      label: "出仓编号",
+      label: _this.$t("whseField.ccbh"),
       prop: "retCode",
       cell: true,
       width: 150,
@@ -200,7 +200,7 @@ export const sx_cc = {
       width: 150,
     },
     {
-      label: "纱线名称",
+      label: _this.$t("whseField.sxmc"),
       prop: "yarnsName",
       cell: true,
       width: 250,
@@ -212,21 +212,21 @@ export const sx_cc = {
       width: 200,
     },
     {
-      label: "锭数",
+      label: _this.$t("whseField.ds"),
       prop: "everySpindle",
       cell: true,
       width: 100,
       align: 'right'
     },
     {
-      label: "重量",
+      label: _this.$t("whseField.zl"),
       prop: "weight",
       cell: true,
       width: 110,
       align: 'right'
     },
     {
-      label: "重量单位",
+      label: _this.$t("whseField.zldw"),
       prop: "weightUnit",
       cell: true,
       width: 100,
@@ -234,26 +234,26 @@ export const sx_cc = {
       dicData: matUnit,
     },
     {
-      label: "设备编号",
+      label: _this.$t("ProWorkflowInfo.sbbh"),
       prop: "equId",
       cell: true,
       width: 120,
     },
     {
-      label: "设备名称",
+      label: _this.$t("labour.sbmc"),
       prop: "equName",
       cell: true,
       width: 120,
     },
     {
-      label: "加工厂代号",
+      label: _this.$t("whseField.wfcdh"),
       prop: "refCode",
       cell: true,
       width: 150,
     },
 
     {
-      label: "加工厂名称",
+      label: _this.$t("whseField.wfcmc"),
       prop: "refName",
       cell: true,
       width: 150,
@@ -289,7 +289,7 @@ export const sx_th = {
       width: 225,
     },
     {
-      label: "出仓编号",
+      label: _this.$t("whseField.ccbh"),
       prop: "retCode",
       cell: true,
       width: 150,
@@ -306,7 +306,7 @@ export const sx_th = {
       width: 180,
     },
     {
-      label: "备注",
+      label: _this.$t("energy.bz"),
       prop: "retRemarks",
       cell: true,
       width: 250,
@@ -319,7 +319,7 @@ export const sx_th = {
       align: "right"
     },
     {
-      label: "单位",
+      label: _this.$t('whseField.dw'),
       prop: "retCompany",
       cell: true,
       width: 120,
@@ -357,13 +357,13 @@ export const pb_rc = {
       align: 'right'
     },
     {
-      label: "入仓编号",
+      label: _this.$t("whseField.rcbh"),
       prop: "yinId",
       cell: true,
       width: 180,
     },
     {
-      label: "入仓日期",
+      label: _this.$t("whseField.rcrq"),
       prop: "yinDate",
       cell: true,
       width: 200,
@@ -375,32 +375,32 @@ export const pb_rc = {
       width: 180,
     },
     {
-      label: "胚布名称",
+      label: _this.$t("whseField.pbmc"),
       prop: "clothName",
       cell: true,
       width: 450,
     },
     {
-      label: "批号",
+      label: _this.$t("whseField.ph"),
       prop: "batchNo",
       cell: true,
       width: 220,
     },
     {
-      label: "疋号",
+      label: _this.$t("whseField.ph2"),
       prop: "countingNo",
       cell: true,
       width: 100,
     },
     {
-      label: "重量",
+      label: _this.$t("whseField.zl"),
       prop: "weight",
       cell: true,
       width: 100,
       align: 'right'
     },
     {
-      label: "重量单位",
+      label: _this.$t("whseField.zldw"),
       prop: "weightUnit",
       cell: true,
       width: 100,
@@ -414,7 +414,7 @@ export const pb_rc = {
       width: 175,
     },
     {
-      label: "客人布票号",
+      label: _this.$t("whseField.krbph"),
       prop: "custTicket",
       hide: true,
       width: 175,
@@ -449,7 +449,7 @@ export const pb_tgys = {
       align: 'right'
     },
     {
-      label: "出仓编号",
+      label: _this.$t("whseField.ccbh"),
       prop: "retCode",
       width: 225,
     },
@@ -473,7 +473,7 @@ export const pb_tgys = {
       align: "right"
     },
     {
-      label: "重量单位",
+      label: _this.$t("whseField.zldw"),
       prop: "retCompany",
       cell: true,
       width: 100,
@@ -481,7 +481,7 @@ export const pb_tgys = {
       dicData: matUnit,
     },
     {
-      label: "批号",
+      label: _this.$t("whseField.ph"),
       prop: "batchNo",
       cell: true,
       width: 200,
@@ -517,7 +517,7 @@ export const pb_tkr = {
       align: 'right'
     },
     {
-      label: "出仓编号",
+      label: _this.$t("whseField.ccbh"),
       prop: "retCode",
       width: 225,
     },
@@ -541,7 +541,7 @@ export const pb_tkr = {
       align: "right"
     },
     {
-      label: "重量单位",
+      label: _this.$t("whseField.zldw"),
       prop: "retCompany",
       cell: true,
       width: 100,
@@ -549,7 +549,7 @@ export const pb_tkr = {
       dicData: matUnit,
     },
     {
-      label: "批号",
+      label: _this.$t("whseField.ph"),
       prop: "batchNo",
       cell: true,
       width: 200,
@@ -586,7 +586,7 @@ export const pb_xsck = {
       align: 'right'
     },
     {
-      label: "出仓编号",
+      label: _this.$t("whseField.ccbh"),
       prop: "woOutno",
       width: 185,
     },
@@ -601,30 +601,30 @@ export const pb_xsck = {
       width: 185,
     },
     {
-      label: "胚布编号",
+      label: _this.$t("whseField.pbbh"),
       prop: "woMatno",
       width: 185,
     },
     {
-      label: "胚布名称",
+      label: _this.$t("whseField.pbmc"),
       prop: "woMatname",
       width: 650,
     },
     {
-      label: "疋号",
+      label: _this.$t("whseField.ph2"),
       prop: "countingNo",
       cell: true,
       width: 100,
     },
     {
-      label: "重量",
+      label: _this.$t("whseField.zl"),
       prop: "woWeights",
       cell: true,
       width: 100,
       align: "right"
     },
     {
-      label: "单位",
+      label: _this.$t('whseField.dw'),
       prop: "woUnit",
       cell: true,
       width: 100,
@@ -656,7 +656,7 @@ export const pb_lld = {
       align: 'right'
     },
     {
-      label: "出仓编号",
+      label: _this.$t("whseField.ccbh"),
       prop: "retCode",
       width: 185,
     },
@@ -671,36 +671,36 @@ export const pb_lld = {
       width: 185,
     },
     {
-      label: "胚布编号",
+      label: _this.$t("whseField.pbbh"),
       prop: "calicoId",
       width: 185,
     },
     {
-      label: "胚布名称",
+      label: _this.$t("whseField.pbmc"),
       prop: "clothName",
       width: 650,
     },
     {
-      label: "批号",
+      label: _this.$t("whseField.ph"),
       prop: "batchNo",
       cell: true,
       width: 100,
     },
     {
-      label: "疋号",
+      label: _this.$t("whseField.ph2"),
       prop: "countingNo",
       cell: true,
       width: 100,
     },
     {
-      label: "重量",
+      label: _this.$t("whseField.zl"),
       prop: "weight",
       cell: true,
       width: 100,
       align: "right"
     },
     {
-      label: "单位",
+      label: _this.$t('whseField.dw'),
       prop: "weightUnit",
       cell: true,
       width: 100,
@@ -735,50 +735,50 @@ export const cpb_rc = {
       align: 'right'
     },
     {
-      label: "入仓编号",
+      label: _this.$t("whseField.rcbh"),
       prop: "yinId",
       cell: true,
       width: 180,
     },
     {
-      label: "入仓日期",
+      label: _this.$t("whseField.rcrq"),
       prop: "yinDate",
       cell: true,
       width: 200,
     },
     {
-      label: "客户名称",
+      label: _this.$t("whseField.khmc"),
       prop: "custName",
       cell: true,
       width: 180,
     },
     // {
-    //   label: "胚布名称",
+    //   label: _this.$t("whseField.pbmc"),
     //   prop: "clothName",
     //   cell: true,
     //   width: 450,
     // },
     {
-      label: "缸号",
+      label: _this.$t("whseField.gh"),
       prop: "batchNo",
       cell: true,
       width: 280,
     },
     {
-      label: "疋号",
+      label: _this.$t("whseField.ph2"),
       prop: "countingNo",
       cell: true,
       width: 100,
     },
     {
-      label: "重量",
+      label: _this.$t("whseField.zl"),
       prop: "weight",
       cell: true,
       width: 100,
       align: 'right'
     },
     {
-      label: "重量单位",
+      label: _this.$t("whseField.zldw"),
       prop: "weightUnit",
       cell: true,
       width: 100,
@@ -786,7 +786,7 @@ export const cpb_rc = {
       dicData: matUnit,
     },
     {
-      label: "客人布票号",
+      label: _this.$t("whseField.krbph"),
       prop: "custTicket",
       hide: true,
       width: 175,
@@ -818,7 +818,7 @@ export const cpb_cc = {
     },
 
     {
-      label: "出仓编号",
+      label: _this.$t("whseField.ccbh"),
       prop: "woOutno",
       width: 180,
     },
@@ -853,19 +853,19 @@ export const cpb_cc = {
     },
 
     {
-      label: "疋号",
+      label: _this.$t("whseField.ph2"),
       prop: "countingNo",
       cell: true,
       width: 110,
     },
     {
-      label: "重量",
+      label: _this.$t("whseField.zl"),
       prop: "woWeights",
       cell: true,
       width: 110,
     },
     {
-      label: "单位",
+      label: _this.$t('whseField.dw'),
       prop: "woUnit",
       cell: true,
       width: 100,
@@ -873,7 +873,7 @@ export const cpb_cc = {
       dicData: matUnit,
     },
     {
-      label: "布票号",
+      label: _this.$t("whseField.bph"),
       prop: "ticketNo",
       cell: true,
       width: 220,
@@ -906,25 +906,25 @@ export const rhl_rc = {
       align: 'right'
     },
     {
-      label: "入仓编号",
+      label: _this.$t("whseField.rcbh"),
       prop: "yinId",
       cell: true,
       width: 180,
     },
     {
-      label: "入仓日期",
+      label: _this.$t("whseField.rcrq"),
       prop: "yinDate",
       cell: true,
       width: 200,
     },
     {
-      label: "来料编号",
+      label: _this.$t('whseField.llbh'),
       prop: "registerNo",
       cell: true,
       width: 180,
     },
     {
-      label: "采购单号",
+      label: _this.$t("whseField.chdh"),
       prop: "purNo",
       cell: true,
       width: 180,
@@ -942,20 +942,20 @@ export const rhl_rc = {
       width: 150,
     },
     {
-      label: "批号",
+      label: _this.$t("whseField.ph"),
       prop: "batchNo",
       cell: true,
       width: 180,
     },
     {
-      label: "重量",
+      label: _this.$t("whseField.zl"),
       prop: "weight",
       cell: true,
       width: 100,
       align: 'right'
     },
     {
-      label: "重量单位",
+      label: _this.$t("whseField.zldw"),
       prop: "weightUnit",
       cell: true,
       type: "select",
@@ -969,7 +969,7 @@ export const rhl_rc = {
       width: 155,
     },
     {
-      label: "产地",
+      label: _this.$t("whseField.cd"),
       prop: "origin",
       hide: false,
       width: 175, type: "select",
@@ -1002,7 +1002,7 @@ export const rhl_cc = {
     },
 
     {
-      label: "出仓编号",
+      label: _this.$t("whseField.ccbh"),
       prop: "retCode",
       width: 180,
     },
@@ -1012,14 +1012,14 @@ export const rhl_cc = {
       width: 220,
     },
     {
-      label: "数量",
+      label: _this.$t('energy.sl'),
       prop: "retQty",
       cell: true,
       width: 120,
       align: "center"
     },
     {
-      label: "单位",
+      label: _this.$t('whseField.dw'),
       prop: "retCompany",
       cell: true,
       width: 100,
@@ -1052,7 +1052,7 @@ export const rhl_lld = {
       align: 'right'
     },
     {
-      label: "出仓编号",
+      label: _this.$t("whseField.ccbh"),
       prop: "retCode",
       width: 185,
     },
@@ -1077,27 +1077,27 @@ export const rhl_lld = {
       width: 250,
     },
     {
-      label: "批号",
+      label: _this.$t("whseField.ph"),
       prop: "batchNo",
       cell: true,
       width: 200,
     },
     {
-      label: "产地",
+      label: _this.$t("whseField.cd"),
       prop: "origin",
       cell: true,
       width: 100, type: "select",
       dicData: getDIC("Whse_Origin"),
     },
     {
-      label: "重量",
+      label: _this.$t("whseField.zl"),
       prop: "weight",
       cell: true,
       width: 100,
       align: "right"
     },
     {
-      label: "单位",
+      label: _this.$t('whseField.dw'),
       prop: "weightUnit",
       cell: true,
       width: 100,
@@ -1133,56 +1133,56 @@ export const qt_rc = {
       align: 'right'
     },
     {
-      label: "入仓编号",
+      label: _this.$t("whseField.rcbh"),
       prop: "yinId",
       cell: true,
       width: 180,
     },
     {
-      label: "入仓日期",
+      label: _this.$t("whseField.rcrq"),
       prop: "yinDate",
       cell: true,
       width: 200,
     },
     {
-      label: "来料编号",
+      label: _this.$t('whseField.llbh'),
       prop: "registerNo",
       cell: true,
       width: 180,
     },
     {
-      label: "采购单号",
+      label: _this.$t("whseField.chdh"),
       prop: "purNo",
       cell: true,
       width: 180,
     },
     {
-      label: "材料编号",
+      label: _this.$t('whseField.clbh'),
       prop: "materialNum",
       cell: true,
       width: 180,
     },
     {
-      label: "材料类型",
+      label: _this.$t('whseField.clzl'),
       prop: "materialType",
       cell: true,
       width: 150,
     },
     {
-      label: "批号",
+      label: _this.$t("whseField.ph"),
       prop: "batchNo",
       cell: true,
       width: 180,
     },
     {
-      label: "数量",
+      label: _this.$t('energy.sl'),
       prop: "poQty",
       cell: true,
       width: 120,
       align: 'right'
     },
     {
-      label: "单位",
+      label: _this.$t('whseField.dw'),
       prop: "unitQty",
       cell: true,
       width: 100,
@@ -1222,7 +1222,7 @@ export const qt_cc = {
     },
 
     {
-      label: "出仓编号",
+      label: _this.$t("whseField.ccbh"),
       prop: "retCode",
       width: 180,
     },
@@ -1242,30 +1242,30 @@ export const qt_cc = {
       width: 120,
     },
     {
-      label: "材料编号",
+      label: _this.$t('whseField.clbh'),
       prop: "materialId",
       width: 150,
     },
     {
-      label: "材料名称",
+      label: _this.$t('whseField.clmc'),
       prop: "materialName",
       width: 150,
     },
     {
-      label: "批号",
+      label: _this.$t("whseField.ph"),
       prop: "batchNo",
       cell: true,
       width: 180,
     },
     {
-      label: "数量",
+      label: _this.$t('energy.sl'),
       prop: "stockQty",
       cell: true,
       width: 120,
       align: "center"
     },
     {
-      label: "单位",
+      label: _this.$t('whseField.dw'),
       prop: "stockUnit",
       cell: true,
       width: 100,
@@ -1273,7 +1273,7 @@ export const qt_cc = {
       dicData: matUnit,
     },
     {
-      label: "型号",
+      label: _this.$t("whseField.xh"),
       prop: "model",
       cell: true,
       width: 120,
@@ -1328,7 +1328,7 @@ export const qt_tgys = {
       align: 'right'
     },
     {
-      label: "出仓编号",
+      label: _this.$t("whseField.ccbh"),
       prop: "retCode",
       width: 185,
     },
@@ -1353,27 +1353,27 @@ export const qt_tgys = {
       width: 250,
     },
     {
-      label: "批号",
+      label: _this.$t("whseField.ph"),
       prop: "batchNo",
       cell: true,
       width: 200,
     },
     {
-      label: "产地",
+      label: _this.$t("whseField.cd"),
       prop: "origin",
       cell: true,
       width: 100, type: "select",
       dicData: getDIC("Whse_Origin"),
     },
     {
-      label: "重量",
+      label: _this.$t("whseField.zl"),
       prop: "weight",
       cell: true,
       width: 100,
       align: "right"
     },
     {
-      label: "单位",
+      label: _this.$t('whseField.dw'),
       prop: "retCompany",
       cell: true,
       width: 100,

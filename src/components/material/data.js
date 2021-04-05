@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-24 14:21:15
  * @LastEditors: Lyl
- * @LastEditTime: 2021-03-31 15:51:03
+ * @LastEditTime: 2021-04-03 16:40:04
  * @Description:
  */
 
@@ -22,7 +22,7 @@ export function formOp(_this) {
     labelWidth: 130,
     column: [
       {
-        label: "材料种类",
+        label: _this.$t("whseField.clzl"),// "材料种类",
         prop: "kindId",
         span: 6,
         placeholder: " ",
@@ -30,13 +30,13 @@ export function formOp(_this) {
         dicData: kindId,
       },
       {
-        label: "材料编号",
+        label: _this.$t("whseField.clbh"),//"材料编号",
         prop: "materialId",
         span: 6,
         placeholder: " "
       },
       {
-        label: "材料名稱",
+        label: _this.$t("whseField.clmc"),//"材料名稱",
         prop: "materialName",
         span: 12,
         placeholder: " ",
@@ -75,19 +75,19 @@ export function crudTemOp(_this) {
 
       },
       {
-        label: "批号",
+        label: _this.$t("whseField.ph"),//"批号",
         prop: "batchNo",
         cell: true,
         width: 160,
       },
       {
-        label: "期初数量",
+        label: _this.$t("whseField.qcsl"),//"期初数量",
         prop: "openingQty",
         cell: true,
         width: 120,
       },
       {
-        label: "老单占用数",
+        label: _this.$t("whseField.ldzys"),// "老单占用数",
         prop: "oldpooccupyqty",
         cell: false,
         width: 120,
@@ -104,7 +104,7 @@ export function sxOp(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 200px)",
+    height: "calc(100vh - 197px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
@@ -116,19 +116,19 @@ export function sxOp(_this) {
         align: "center"
       },
       {
-        label: "紗線編號",
+        label: _this.$t("whseField.sxbh"),//"紗線編號",
         prop: "yarnsId",
         cell: false,
         width: 100,
       },
       {
-        label: "紗線名稱",
+        label: _this.$t("whseField.sxmc"),// "紗線名稱",
         prop: "yarnsName",
         cell: false,
         // width: 90,
       },
       {
-        label: "類別",
+        label: _this.$t("whseField.lb"),// "類別",
         prop: "yarnsType",
         cell: false,
         width: 120,
@@ -136,7 +136,7 @@ export function sxOp(_this) {
         dicData: getDIC("bas_yarnsType"),
       },
       {
-        label: "品种",
+        label: _this.$t("whseField.pz"),//"品种",
         prop: "yarnsKind",
         cell: false,
         type: "select",
@@ -145,7 +145,7 @@ export function sxOp(_this) {
         dicData: getDIC("bas_yarnsKind"),
       },
       {
-        label: "等级",
+        label: _this.$t("whseField.dj"),// "等级",
         prop: "yarnsGrade",
         cell: false,
         width: 100,
@@ -153,7 +153,7 @@ export function sxOp(_this) {
         dicData: getDIC("bas_yarnsGrade"),
       },
       {
-        label: "亮度",
+        label: _this.$t("whseField.ld"),//"亮度",
         prop: "yarnsBright",
         cell: false,
         width: 100,
@@ -171,7 +171,7 @@ export function pbOp(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 200px)",
+    height: "calc(100vh - 197px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
@@ -183,19 +183,19 @@ export function pbOp(_this) {
         align: "center"
       },
       {
-        label: "胚布編號",
+        label: _this.$t("whseField.pbbh"),// "胚布編號",
         prop: "calicoId",
         cell: false,
         width: 100,
       },
       {
-        label: "胚布名稱",
+        label: _this.$t("whseField.pbmc"),// "胚布名稱",
         prop: "calicoName",
         cell: false,
         // width: 90,
       },
       {
-        label: "類別",
+        label: _this.$t("whseField.lb"),// "類別",
         prop: "calicoType",
         cell: false,
         width: 120,
@@ -211,7 +211,7 @@ export function pbOp(_this) {
       //   dicData: getDIC("bas_yarnsType"),
       // },
       {
-        label: "布品種",
+        label: _this.$t("whseField.bpz"),//"布品種",
         prop: "fabricsDesc",
         cell: false,
         width: 100,
@@ -219,7 +219,7 @@ export function pbOp(_this) {
         dicData: getDIC("bas_clothorg"),
       },
       {
-        label: "結構",
+        label: _this.$t("whseField.jg"),// "結構",
         prop: "structureId",
         cell: false,
         width: 100,
@@ -237,7 +237,7 @@ export function hgylOp(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 200px)",
+    height: "calc(100vh - 197px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
@@ -249,19 +249,19 @@ export function hgylOp(_this) {
         align: "center"
       },
       {
-        label: "原料编號",
+        label: _this.$t("whseField.ylbh"),// "原料编號",
         prop: "bcCode",
         cell: false,
         width: 100,
       },
       {
-        label: "原料名稱",
+        label: _this.$t("whseField.ylmc"),//"原料名稱",
         prop: lang === '1' ? "cnnamelong" : lang === '2' ? "ennamelong" : "vinamelong",
         cell: false,
         width: 350,
       },
       {
-        label: "一級分類",
+        label: _this.$t("whseField.yjfl"),// "一級分類",
         prop: "bcClass",
         cell: false,
         type: "select",
@@ -269,19 +269,19 @@ export function hgylOp(_this) {
         dicData: getDIC("bas_chemicalClass"),
       },
       {
-        label: "含固力/活力",
+        label: _this.$t("whseField.hglhl"),// "含固力/活力",
         prop: "vitality",
         cell: false,
         width: 150,
       },
       {
-        label: "用途",
+        label: _this.$t("whseField.yt"),// "用途",
         prop: "bcUse",
         cell: false,
         width: 120,
       },
       {
-        label: "危险等级",
+        label: _this.$t("whseField.wxdj"),// "危险等级",
         prop: "dangerlevel",
         cell: false,
         width: 100,
@@ -299,7 +299,7 @@ export function ylOp(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 200px)",
+    height: "calc(100vh - 197px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
@@ -311,19 +311,19 @@ export function ylOp(_this) {
         align: "center"
       },
       {
-        label: "顏料编號",
+        label: _this.$t("whseField.ylbh1"),//"顏料编號",
         prop: "bcCode",
         cell: false,
         width: 100,
       },
       {
-        label: "顏料名稱",
+        label: _this.$t("whseField.ylmc1"),// "顏料名稱",
         prop: lang === '1' ? "cnnamelong" : lang === '2' ? "ennamelong" : "vinamelong",
         cell: false,
         width: 350,
       },
       {
-        label: "一級分類",
+        label: _this.$t("whseField.yjfl"),// "一級分類",
         prop: "bcClass",
         cell: false,
         type: "select",
@@ -331,25 +331,25 @@ export function ylOp(_this) {
         dicData: getDIC("bas_PigmentClass"),
       },
       {
-        label: "力份",
+        label: _this.$t("whseField.lf"),//"力份",
         prop: "bcForce",
         cell: false,
         width: 100,
       },
       {
-        label: "色光",
+        label: _this.$t("whseField.sg"),// "色光",
         prop: "bcColor",
         cell: false,
         width: 120,
       },
       {
-        label: "色牢度",
+        label: _this.$t("whseField.sld"),//"色牢度",
         prop: "bcColorprison",
         cell: false,
         width: 120,
       },
       {
-        label: "危险等级",
+        label: _this.$t("whseField.wxdj"),// "危险等级",
         prop: "bcDangerlevel",
         cell: false,
         width: 100,
@@ -367,7 +367,7 @@ export function flOp(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 200px)",
+    height: "calc(100vh - 197px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
@@ -379,19 +379,19 @@ export function flOp(_this) {
         align: "center"
       },
       {
-        label: "輔料编號",
+        label: _this.$t("whseField.flbh"),// "輔料编號",
         prop: "hardwareId",
         cell: false,
         width: 100,
       },
       {
-        label: "輔料名稱",
+        label: _this.$t("whseField.flmc"),// "輔料名稱",
         prop: lang === '1' ? "cnnamelong" : lang === '2' ? "ennamelong" : "vinamelong",
         cell: false,
         width: 350,
       },
       {
-        label: "類別",
+        label: _this.$t("whseField.lb"),//"類別",
         prop: "basProductionaccFk",
         cell: false,
         width: 120,
@@ -399,13 +399,13 @@ export function flOp(_this) {
         dicData: getDicT("basProductionacc", "topcategoryName", "basProductionaccoid")
       },
       {
-        label: "型号",
+        label: _this.$t("whseField.xh"),//"型号",
         prop: "model",
         cell: false,
         width: 250,
       },
       {
-        label: "规格",
+        label: _this.$t("whseField.gg"),// "规格",
         prop: "itemspec",
         cell: false,
         width: 250,
@@ -421,7 +421,7 @@ export function wjOp(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 200px)",
+    height: "calc(100vh - 197px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
@@ -433,20 +433,20 @@ export function wjOp(_this) {
         align: "center"
       },
       {
-        label: "材料编號",
+        label: _this.$t("whseField.clbh"),//"材料编號",
         prop: "hardwareId",
         cell: false,
         width: 100,
       },
       {
-        label: "材料名稱",
+        label: _this.$t("whseField.clmc"),//"材料名稱",
         prop: lang === '1' ? "chinName" : lang === '2' ? "engName" : "engName",
         cell: false,
         width: 350,
       },
 
       {
-        label: "類別",
+        label: _this.$t("whseField.lb"),// "類別",
         prop: "basHardwareFk",
         cell: false,
         width: 120,
@@ -455,20 +455,20 @@ export function wjOp(_this) {
 
       },
       {
-        label: "品牌",
+        label: _this.$t("whseField.pp"),//"品牌",
         prop: "brand",
         cell: false,
         width: 120,
       },
 
       {
-        label: "型号",
+        label: _this.$t("whseField.xh"),// "型号",
         prop: "model",
         cell: false,
         width: 250,
       },
       {
-        label: "规格",
+        label: _this.$t("whseField.gg"),//"规格",
         prop: "itemspec",
         cell: false,
         width: 250,
@@ -484,7 +484,7 @@ export function xzOp(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 200px)",
+    height: "calc(100vh - 197px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
@@ -496,20 +496,20 @@ export function xzOp(_this) {
         align: "center"
       },
       {
-        label: "材料编號",
+        label: _this.$t("whseField.clbh"),//"材料编號",
         prop: "hardwareId",
         cell: false,
         width: 100,
       },
       {
-        label: "材料名稱",
+        label: _this.$t("whseField.clmc"),//"材料名稱",
         prop: lang === '1' ? "chinName" : lang === '2' ? "engName" : "engName",
         cell: false,
         width: 350,
       },
 
       {
-        label: "類別",
+        label: _this.$t("whseField.lb"),// "類別",
         prop: "basAdsuppliesFk",
         cell: false,
         width: 120,
@@ -517,19 +517,19 @@ export function xzOp(_this) {
         dicData: getDicT("basAdsupplies", "topcategoryName", "basAdsuppliesoid")
       },
       {
-        label: "品牌",
+        label: _this.$t("whseField.pp"),//"品牌",
         prop: "brand",
         cell: false,
         width: 120,
       },
       {
-        label: "型号",
+        label: _this.$t("whseField.xh"),//"型号",
         prop: "model",
         cell: false,
         width: 250,
       },
       {
-        label: "规格",
+        label: _this.$t("whseField.gg"),//"规格",
         prop: "itemspec",
         cell: false,
         width: 250,

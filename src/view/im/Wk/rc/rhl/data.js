@@ -8,13 +8,13 @@ export function rhl1F(_this) {
     labelWidth: 150,
     column: [
       {
-        label: "入仓编号",
+        label: _this.$t("whseField.rcbh"),
         prop: "yinId",
         span: 6,
         placeholder: " ",
       },
       {
-        label: "入仓日期",
+        label: _this.$t("whseField.rcrq"),
         prop: "yinDate",
         span: 6,
         placeholder: " ",
@@ -23,7 +23,7 @@ export function rhl1F(_this) {
       },
 
       {
-        label: "采购单号",
+        label: _this.$t("whseField.chdh"),
         prop: "purNo",
         span: 6,
         placeholder: " ",
@@ -31,14 +31,14 @@ export function rhl1F(_this) {
 
       },
       {
-        label: "送货单号",
+        label: _this.$t("whseField.shdh"),
         prop: "deliNo",
         span: 6,
         display: _this.hide === '2' ? true : false,
         placeholder: " ",
       },
       {
-        label: "来料编号",
+        label: _this.$t("whseField.llbh"),
         prop: "registerNo",
         display: _this.hide === '1' ? true : false,
         span: 6,
@@ -46,7 +46,7 @@ export function rhl1F(_this) {
       },
 
       {
-        label: "加工廠名稱",
+        label: _this.$t("whseField.wfjgc"),
         prop: "factoryId",
         span: 6,
         placeholder: " ",
@@ -55,7 +55,7 @@ export function rhl1F(_this) {
         dicData: getDicT("vWhseChemicalPlan", "refName", "refCode")
       },
       {
-        label: "检验状态",
+        label: _this.$t("whseField.jyzt"),
         prop: "yinStatus",
         span: 6,
         display: _this.hide === '5' ? false : true,
@@ -66,7 +66,7 @@ export function rhl1F(_this) {
       },
 
       {
-        label: "财务状态",
+        label: _this.$t("whseField.cwzt"),
         prop: "finStatus",
         display: _this.hide === '5' ? false : true,
         span: 6,
@@ -85,7 +85,7 @@ export function rhl2F(_this) {
     labelWidth: 150,
     column: [
       {
-        label: "入仓编号",
+        label: _this.$t("whseField.rcbh"),
         prop: "yinId",
         span: 6,
         placeholder: " ",
@@ -93,7 +93,7 @@ export function rhl2F(_this) {
 
       },
       {
-        label: "入仓日期",
+        label: _this.$t("whseField.rcrq"),
         prop: "yinDate",
         span: 6,
         placeholder: " ",
@@ -103,7 +103,7 @@ export function rhl2F(_this) {
         valueFormat: "yyyy-MM-dd",
       },
       {
-        label: "采购单号",
+        label: _this.$t("whseField.chdh"),
         prop: "purNo",
         span: 6,
         placeholder: " ",
@@ -123,14 +123,14 @@ export function rhl2F(_this) {
           //         _this.choiceField = "purNo";
           //         // _this.oldData = _this.chooseData;
           //         _this.choiceTarget = _this.form;
-          //         _this.choiceTle = "染化料申购採購單";
+          //         _this.choiceTle = this.$t("choicDlg.rhlsgcgd");
           //         // _this.iptChange(_this.chooseData);
           //       } else {
           //         _this.choiceV = !_this.choiceV
           //         _this.choiceField = "purNo";
           //         // _this.oldData = _this.chooseData;
           //         _this.choiceTarget = _this.form;
-          //         _this.choiceTle = "染化料採購單";
+          //         _this.choiceTle = _this.$t("choicDlg.xzylcgd");
           //         // _this.iptChange(_this.chooseData);
           //       }
           //     })
@@ -140,14 +140,14 @@ export function rhl2F(_this) {
           //     _this.choiceField = "purNo";
           //     // _this.oldData = _this.chooseData;
           //     _this.choiceTarget = _this.form;
-          //     _this.choiceTle = "染化料申购採購單";
+          //     _this.choiceTle = this.$t("choicDlg.rhlsgcgd");
           //     // _this.iptChange(_this.chooseData);
           //   } else {
           // _this.choiceV = !_this.choiceV
           // _this.choiceField = "purNo";
           // // _this.oldData = _this.chooseData;
           // _this.choiceTarget = _this.form;
-          // _this.choiceTle = "染化料採購單";
+          // _this.choiceTle = _this.$t("choicDlg.xzylcgd");
           // _this.iptChange(_this.chooseData);
           //   }
           // }
@@ -160,7 +160,7 @@ export function rhl2F(_this) {
         // }
       },
       {
-        label: "送货单号",
+        label: _this.$t("whseField.shdh"),
         prop: "deliNo",
         span: 6,
         placeholder: " ",
@@ -168,7 +168,7 @@ export function rhl2F(_this) {
         disabled: true,
         // click: (val) => {
         //   if (!_this.form.purNo) {
-        //     _this.$tip.error("請先選擇採購單號！")
+        //     _this.$tip.error(_this.$t("whseField.xzchdh"))
         //     return
         //   }
         //   _this.choiceV = !_this.choiceV
@@ -177,7 +177,7 @@ export function rhl2F(_this) {
         //   // _this.oldData = _this.chooseData
         //   _this.choiceQ.purNo = _this.oldData.purNo
         //   _this.choiceTarget = _this.form
-        //   _this.choiceTle = '送貨單'
+        //   _this.choiceTle = _this.$t('choicDlg.xzshd')
         // },
         // change: () => {
         //   if (_this.isAdd) {
@@ -188,7 +188,7 @@ export function rhl2F(_this) {
         // }
       },
       {
-        label: "来料编号",
+        label: _this.$t('whseField.llbh'),
         prop: "registerNo",
         span: 6,
         placeholder: " ",
@@ -200,7 +200,7 @@ export function rhl2F(_this) {
             _this.choiceV = !_this.choiceV
             _this.dlgWidth = "60%";
             _this.choiceTarget = _this.form
-            _this.choiceTle = '選擇來原料登記'
+            _this.choiceTle = _this.$t('choicDlg.xzlyl')
           }
         },
         change: () => {
@@ -215,7 +215,7 @@ export function rhl2F(_this) {
         }
       },
       {
-        label: "客户",
+        label: _this.$t('whseField.khmc'),
         prop: "custName",
         span: 6,
         placeholder: " ",
@@ -226,7 +226,7 @@ export function rhl2F(_this) {
       },
 
       {
-        label: "加工厂名稱",
+        label: _this.$t("whseField.wfcmc"),
         prop: "factoryId",
         cell: false,
         type: "select",
@@ -240,12 +240,12 @@ export function rhl2F(_this) {
           // this.choiceQ.registerNo = this.form;
           _this.choiceTarget = _this.form;
           _this.dlgWidth = "100%";
-          _this.choiceTle = "選擇外廠化工原料配料計劃";
+          _this.choiceTle = _this.$t("choicDlg.xzwfylpl");
 
         }
       },
       {
-        label: "加工指令單",
+        label: _this.$t("whseField.jgzld"),
         prop: "instructId",
         cell: false,
         span: 6,
@@ -260,7 +260,7 @@ export function rhl2F(_this) {
         //   this.choiceQ.registerNo = this.form;
         //   _this.choiceTarget = _this.form;
         //   _this.dlgWidth = "100%";
-        //   _this.choiceTle = "選擇指令單明細";
+        //   _this.choiceTle = $t('iaoMng.xzzld');
 
         // }
         change: () => {
@@ -274,7 +274,7 @@ export function rhl2F(_this) {
         }
       },
       {
-        label: "检验状态",
+        label: _this.$t("whseField.jyzt"),
         prop: "yinStatus",
         span: 6,
         placeholder: " ",
@@ -285,7 +285,7 @@ export function rhl2F(_this) {
           getDIC('whse_yinstatus')
       },
       {
-        label: "操作员",
+        label: _this.$t('whseField.czy'),
         prop: "sysCreatedby",
         display: true,
         disabled: true,
@@ -297,7 +297,7 @@ export function rhl2F(_this) {
           postDicT('ucmlUserList', 'employeename', 'ucmlUseroid')
       },
       // {
-      //   label: "财务状态",
+      //   label: _this.$t("whseField.cwzt"),
       //   prop: "finStatus",
       //   span: 6,
       //   placeholder: " ",
@@ -315,14 +315,14 @@ export function rhlDetailF(_this) {
     labelWidth: 150,
     column: [
       {
-        label: "入仓编号",
+        label: _this.$t("whseField.rcbh"),
         prop: "yinId",
         span: 6,
         placeholder: " ",
         disabled: true,
       },
       {
-        label: "采购单号",
+        label: _this.$t("whseField.chdh"),
         prop: "purNo",
         span: 6,
         placeholder: " ",
@@ -337,7 +337,7 @@ export function rhlDetailF(_this) {
         disabled: true
       },
       // {
-      //   label: "检验状态",
+      //   label: _this.$t("whseField.jyzt"),
       //   prop: "yinStatus",
       //   span: 6,
       //   placeholder: " ",
@@ -355,7 +355,7 @@ export function rhlDetailF(_this) {
       //   type: "datetime",
       // },
       {
-        label: "入仓日期",
+        label: _this.$t("whseField.rcrq"),
         prop: "yinDate",
         span: 6,
         placeholder: " ",
@@ -364,14 +364,14 @@ export function rhlDetailF(_this) {
         valueFormat: "yyyy-MM-dd HH:mm:ss",
       },
       {
-        label: "送货单号",
+        label: _this.$t("whseField.shdh"),
         prop: "deliNo",
         span: 6,
         placeholder: " ",
         disabled: true
       },
       // {
-      //   label: "财务状态",
+      //   label: _this.$t("whseField.cwzt"),
       //   prop: "finStatus",
       //   span: 6,
       //   placeholder: " ",
@@ -428,7 +428,7 @@ export function rhl1C(_this) {
         hide: true,
       },
       {
-        label: "入仓编号",
+        label: _this.$t("whseField.rcbh"),
         prop: "yinId",
         cell: false,
         width: 180,
@@ -439,7 +439,7 @@ export function rhl1C(_this) {
         },
       },
       {
-        label: "入仓类型",
+        label: _this.$t("whseField.rclx"),
         prop: "yinType",
         cell: false,
         width: 100,
@@ -450,7 +450,7 @@ export function rhl1C(_this) {
         },
       },
       {
-        label: "入仓日期",
+        label: _this.$t("whseField.rcrq"),
         prop: "yinDate",
         cell: false,
         type: "datetime",
@@ -468,7 +468,7 @@ export function rhl1C(_this) {
         align: "center",
       },
       {
-        label: "来料编号",
+        label: _this.$t('whseField.llbh'),
         prop: "registerNo",
         cell: false,
         width: 180,
@@ -478,7 +478,6 @@ export function rhl1C(_this) {
             _this.iptChange(_this.chooseData);
           }
         },
-        placeholder: "請選擇来料编号",
         // click: () => {
         //   _this.choiceField = "registerNo"
         //   _this.choiceV = !_this.choiceV
@@ -488,7 +487,7 @@ export function rhl1C(_this) {
         // },
       },
       {
-        label: "客戶編號",
+        label: _this.$t("whseField.khbh"),
         prop: "custId",
         cell: false,
         hide: _this.hide === "1" ? false : true,
@@ -500,13 +499,13 @@ export function rhl1C(_this) {
         //   _this.choiceField = "custId";
         //   _this.oldData = _this.chooseData;
         //   _this.choiceTarget = _this.oldData;
-        //   _this.choiceTle = "客戶編號";
+        //   _this.choiceTle = _this.$t("whseField.khbh");
         //   _this.iptChange(_this.chooseData);
         // },
         // placeholder: "請選擇客戶編號"
       },
       {
-        label: "客戶名称",
+        label: _this.$t("whseField.khmc"),
         prop: "custName",
         cell: false,
         type: "select",
@@ -518,13 +517,13 @@ export function rhl1C(_this) {
         //   _this.choiceField = "custId";
         //   _this.oldData = _this.chooseData;
         //   _this.choiceTarget = _this.oldData;
-        //   _this.choiceTle = "客戶編號";
+        //   _this.choiceTle = _this.$t("whseField.khbh");
         //   _this.iptChange(_this.chooseData);
         // },
         // placeholder: "請選擇客戶編號"
       },
       {
-        label: "采购单号",
+        label: _this.$t("whseField.chdh"),
         prop: "purNo",
         cell: false,
         hide: _this.hide === "2" || _this.hide === "8" ? false : true,
@@ -540,21 +539,21 @@ export function rhl1C(_this) {
           //   _this.choiceField = "purNo";
           //   _this.oldData = _this.chooseData;
           //   _this.choiceTarget = _this.oldData;
-          //   _this.choiceTle = "染化料申购採購單";
+          //   _this.choiceTle = this.$t("choicDlg.rhlsgcgd");
           //   _this.iptChange(_this.chooseData);
           // } else {
           //   _this.choiceV = !_this.choiceV
           //   _this.choiceField = "purNo";
           //   _this.oldData = _this.chooseData;
           //   _this.choiceTarget = _this.oldData;
-          //   _this.choiceTle = "染化料採購單";
+          //   _this.choiceTle = _this.$t("choicDlg.xzylcgd");
           //   _this.iptChange(_this.chooseData);
           // }
 
         },
       },
       {
-        label: "供應商编号",
+        label: _this.$t('whseField.gysbh'),
         prop: "suppId",
         cell: false,
         hide: _this.hide === "8" ? false : true,
@@ -568,7 +567,7 @@ export function rhl1C(_this) {
         dicData: getDicT("purSinglepo", "suppId", "poNo")
       },
       {
-        label: "供應商名稱",
+        label: _this.$t('whseField.gysmc'),
         prop: "$suppId",
         cell: false,
         hide: _this.hide === "8" ? false : true,
@@ -582,7 +581,7 @@ export function rhl1C(_this) {
         dicData: getDicT("basSupplier", "suppName", "suppId",),
       },
       {
-        label: "送货单号",
+        label: _this.$t("whseField.shdh"),
         prop: "deliNo",
         hide: _this.hide === "2" || _this.hide === "8" ? false : true,
         cell: false,
@@ -594,7 +593,7 @@ export function rhl1C(_this) {
         },
         click: (val) => {
           if (!_this.chooseData.purNo) {
-            _this.$tip.error("請先選擇採購單號！")
+            _this.$tip.error(_this.$t("whseField.xzchdh"))
             return
           }
           _this.choiceV = !_this.choiceV
@@ -603,29 +602,29 @@ export function rhl1C(_this) {
           _this.oldData = _this.chooseData
           _this.choiceQ.purNo = _this.oldData.purNo
           _this.choiceTarget = _this.oldData
-          _this.choiceTle = '送貨單'
+          _this.choiceTle = _this.$t('choicDlg.xzshd')
         },
       },
 
 
       {
-        label: "加工厂代號",
+        label: _this.$t("whseField.wfcdh"),
         prop: "factoryId",
         cell: false,
         hide: _this.hide === "5" ? false : true,
         width: 150,
-        placeholder: "加工厂代號",
+        placeholder: _this.$t("whseField.wfcdh"),
         click: () => {
           _this.choiceField = "factoryId"
           _this.choiceV = !_this.choiceV
           _this.oldData = _this.chooseData
           _this.choiceTarget = _this.oldData
-          _this.choiceTle = '外厂染化料配料计划',
+          _this.choiceTle = _this.$t("choicDlg.xzwfylpl"),
             _this.iptChange(_this.chooseData);
         },
       },
       {
-        label: "加工厂名稱",
+        label: _this.$t("whseField.wfcmc"),
         prop: "factoryName",
         cell: false,
         hide: _this.hide === "5" ? false : true,
@@ -634,12 +633,12 @@ export function rhl1C(_this) {
         dicData: getDicT("vWhseChemicalPlan", "refName", "refCode")
       },
       {
-        label: "指令单",
+        label: _this.$t("whseField.zld"),
         prop: "instructId",
         hide: true,
       },
       {
-        label: "检验状态",
+        label: _this.$t("whseField.jyzt"),
         prop: "yinStatus",
         cell: false,
         width: 120,
@@ -651,10 +650,10 @@ export function rhl1C(_this) {
         },
       },
       {
-        label: "财务状态",
+        label: _this.$t("whseField.cwzt"),
         prop: "finStatus",
         cell: false,
-        width: 120,
+        width: 135,
         hide: _this.hide === '5' ? true : false,
         type: "select",
         dicData:
@@ -664,7 +663,7 @@ export function rhl1C(_this) {
         },
       },
       {
-        label: "操作员",
+        label: _this.$t('whseField.czy'),
         prop: "sysCreatedby",
         span: 6,
         placeholder: " ",
@@ -754,13 +753,13 @@ export function rhl2C(_this) {
         hide: true,
       },
       {
-        label: "化工原料編號",
+        label: _this.$t('whseField.ylbh'),//"化工原料編號",
         prop: "chemicalId",
         cell: false,
         width: 140,
       },
       {
-        label: "化工原料名称",
+        label: _this.$t('whseField.ylmc'),
         prop: "chemicalName",
         cell: false,
         // width: 350,
@@ -807,7 +806,7 @@ export function rhl2C(_this) {
       //   dicData: Chemicalmat
       // },
       // {
-      //   label: "生产单号",
+      //   label: _this.$t("whseField.scdh"),
       //   prop: "prodNo",
       //   cell: true,
       //   width: 150,
@@ -816,7 +815,7 @@ export function rhl2C(_this) {
       //   },
       // },
       // {
-      //   label: "码卡号",
+      //   label: _this.$t("whseField.mkh"),
       //   prop: "fabticket",
       //   cell: true,
       //   width: 150,
@@ -825,7 +824,7 @@ export function rhl2C(_this) {
       //   },
       // },
       // {
-      //   label: "批号",
+      //   label: _this.$t("whseField.ph"),
       //   prop: "batchNo",
       //   cell: true,
       //   width: 180,
@@ -838,7 +837,7 @@ export function rhl2C(_this) {
       //   }
       // },
       // {
-      //   label: "疋号",
+      //   label: _this.$t("whseField.ph2"),
       //   prop: "countingNo",
       //   cell: true,
       //   width: 100,
@@ -848,7 +847,7 @@ export function rhl2C(_this) {
       //   },
       // },
       // {
-      //   label: "重量",
+      //   label: _this.$t("whseField.zl"),
       //   prop: "weight",
       //   cell: true,
       //   width: 100,
@@ -856,7 +855,7 @@ export function rhl2C(_this) {
 
       // },
       // {
-      //   label: "单位",
+      //   label: _this.$t('whseField.dw'),
       //   prop: "weightUnit",
       //   cell: true,
       //   width: 100,
@@ -864,7 +863,7 @@ export function rhl2C(_this) {
       //   dicData: getDIC("bas_matUnit"),
       // },
       {
-        label: "客户编号",
+        label: _this.$t('whseField.khbh'),
         prop: "custId",
         cell: false,
         hide: true,
@@ -906,7 +905,7 @@ export function rhl3C(_this) {
         hide: true,
       },
       {
-        label: "批号",
+        label: _this.$t("whseField.ph"),
         prop: "batchNo",
         cell: true, width: 180,
         change: (val) => {
@@ -914,7 +913,7 @@ export function rhl3C(_this) {
         },
       },
       {
-        label: "产地",
+        label: _this.$t("whseField.cd"),
         prop: "origin",
         cell: true,
         width: 120,
@@ -926,7 +925,7 @@ export function rhl3C(_this) {
           getDIC('Whse_Origin'),
       },
       {
-        label: "重量",
+        label: _this.$t("whseField.zl"),
         prop: "weight",
         cell: true,
         width: 120,
@@ -936,7 +935,7 @@ export function rhl3C(_this) {
         },
       },
       {
-        label: "单位",
+        label: _this.$t('whseField.dw'),
         prop: "weightUnit",
         cell: true,
         width: 100,
@@ -969,7 +968,7 @@ export function planForm(_this) {
     labelWidth: 150,
     column: [
       {
-        label: "采购单号",
+        label: _this.$t("whseField.chdh"),
         prop: "purNo",
         span: 6,
         placeholder: " ",
@@ -981,13 +980,13 @@ export function planForm(_this) {
       //   placeholder: " ",
       // },
       {
-        label: "送货单号",
+        label: _this.$t("whseField.shdh"),
         prop: "deliNo",
         span: 6,
         placeholder: " ",
       },
       {
-        label: "材料编号",
+        label: _this.$t('whseField.clbh'),
         prop: "materialNum",
         span: 6,
         placeholder: " ",
@@ -1036,7 +1035,7 @@ export function planCrud(_this) {
         align: "center",
       },
       {
-        label: "采购单号",
+        label: _this.$t("whseField.chdh"),
         prop: "purNo",
         cell: false,
         width: 180,
@@ -1050,13 +1049,13 @@ export function planCrud(_this) {
       //   dicData: getDicT("purSinglepo", "suppName", "suppId")
       // },
       {
-        label: "送货单号",
+        label: _this.$t("whseField.shdh"),
         prop: "deliNo",
         cell: false,
         width: 180,
       },
       {
-        label: "送货日期",
+        label: _this.$t('whseField.shrq'),
         prop: "deliDate",
         type: "date",
         width: 120,
@@ -1065,38 +1064,38 @@ export function planCrud(_this) {
         align: "center",
       },
       {
-        label: "材料编号",
+        label: _this.$t('whseField.clbh'),
         prop: "materialNum",
         cell: false,
         width: 120,
       },
       {
-        label: "材料名称",
+        label: _this.$t('whseField.clmc'),
         prop: "chinName",
         cell: false,
         width: 160,
       },
       {
-        label: "型号",
+        label: _this.$t("whseField.xh"),
         prop: "model",
         cell: false,
         width: 120,
       },
       {
-        label: "规格",
+        label: _this.$t('whseField.gg'),
         prop: "itemSpec",
         cell: false,
         width: 100,
       },
       {
-        label: "重量",
+        label: _this.$t("whseField.zl"),
         prop: "deliQty",
         cell: false,
         width: 120,
         align: "right"
       },
       {
-        label: "单位",
+        label: _this.$t('whseField.dw'),
         prop: "deliUnit",
         cell: false,
         width: 100,
@@ -1104,7 +1103,7 @@ export function planCrud(_this) {
         dicData: getDIC("bas_matUnit"),
       },
       {
-        label: "批号",
+        label: _this.$t("whseField.ph"),
         prop: "batNo",
         cell: false,
         width: 220,

@@ -2,20 +2,20 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-02 09:10:42
+ * @LastEditTime: 2021-04-02 09:17:02
  * @Description: 
 -->
 <template>
   <div id="clothFly">
-    <view-container title="打印布飞">
+    <view-container title="打印布飞記錄">
       <el-row class="btnList">
         <el-button type="primary" @click="query">{{
           this.$t("public.query")
         }}</el-button>
-        <el-button type="primary" @click="print">打印</el-button>
-        <el-button type="warning" @click="close">{{
+        <el-button type="success" @click="print">打印</el-button>
+        <!-- <el-button type="warning" @click="close">{{
           this.$t("public.close")
-        }}</el-button>
+        }}</el-button> -->
       </el-row>
       <el-row class="formBox">
         <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
@@ -54,7 +54,7 @@
 </template>
 <script>
 import { mainForm, mainCrud } from "./data";
-import { getScheduleAndWork } from "./api";
+import { get, add, update, del } from "./api";
 import tem from "./temDlg";
 export default {
   name: "",
@@ -81,13 +81,18 @@ export default {
   methods: {
     query() {
       this.loading = true;
-      getScheduleAndWork(
+      for (let key in this.form) {
+        if (!this.form[key]) {
+          delete this.form[key];
+        }
+      }
+      get(
         Object.assign(this.form, {
           rows: this.page.pageSize,
           start: this.page.currentPage,
         })
       ).then((res) => {
-        this.crud = this.$unique(res.data.records, "poNo");
+        this.crud = res.data.records;
         this.crud.forEach((item, i) => {
           item.index = i + 1;
         });

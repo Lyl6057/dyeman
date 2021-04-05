@@ -167,7 +167,7 @@
               style="display: none"
               id="kinmon"
               @click="fn_kindup"
-              >修改</el-button
+              >{{ this.$t("public.update") }}</el-button
             >
           </span>
         </el-dialog>

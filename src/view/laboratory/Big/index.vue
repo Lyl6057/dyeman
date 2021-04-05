@@ -45,7 +45,9 @@
       <el-tab-pane :label="$t('menuData.Laboratory[2].data.sbd')" name="first">
         <el-row class="queryForm">
           <div class="btnList">
-            <el-button type="primary" @click="editor">修改</el-button>
+            <el-button type="primary" @click="editor">{{
+              this.$t("public.update")
+            }}</el-button>
             <el-button type="primary" @click="del(checkData2)">{{
               this.$t("public.del")
             }}</el-button>

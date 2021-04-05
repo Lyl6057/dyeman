@@ -1,6 +1,6 @@
 <template>
   <div id="rcDetail">
-    <view-container :title="datas.type.split('_')[0] + '入库'">
+    <view-container :title="datas.type.split('_')[0] + this.$t('iaoMng.rc')">
       <div class="btnList">
         <el-button type="success" @click="save">{{
           this.$t("public.save")
@@ -14,7 +14,7 @@
       </div>
       <el-row class="crudBox">
         <el-col :span="24">
-          <view-container :title="datas.type.split('_')[0] + '入库明细'">
+          <view-container :title="datas.type.split('_')[0] + $t('iaoMng.rcmx')">
             <div class="btnList">
               <el-button type="primary" @click="add">{{
                 this.$t("public.add")
@@ -93,7 +93,7 @@ export default {
       oldData: {},
       chooseData: {},
       choiceV: false,
-      choiceTle: "來紗登記",
+      choiceTle: this.$t("iaoMng.xzlsdj"),
       choiceTarget: {},
       choiceField: "",
       choiceQ: {},
@@ -153,7 +153,7 @@ export default {
         this.choiceV = !this.choiceV;
         this.choiceTarget = {};
         this.dlgWidth = "100%";
-        this.choiceTle = "選擇成品布貨物包";
+        this.choiceTle = this.$t("choicDlg.xzcpbhwb");
       }
       if (this.hide === "2") {
         this.mx.push({
@@ -163,18 +163,18 @@ export default {
       }
       if (this.hide === "5") {
         if (this.form.instructId === "" || this.form.instructId === null) {
-          this.$tip.error("请先选择加工指令單號!");
+          this.$tip.error(this.$t("whseMng.jgzldTle"));
           return;
         }
         this.choiceV = !this.choiceV;
         this.choiceQ.materialType = "2";
         this.dlgWidth = "100%";
-        this.choiceTle = "選擇指令單明細";
+        this.choiceTle = this.$t("iaoMng.xzzld");
       }
     },
     del() {
       if (Object.keys(this.chooseData).length === 0) {
-        this.$tip.error("请选择要删除的数据!");
+        this.$tip.error(this.$t("public.delTle"));
         return;
       }
       if (!this.chooseData.whseFinishedclothinDtloid) {
@@ -190,12 +190,14 @@ export default {
 
       if (this.hide != "1" && this.hide != "3") {
         tle =
-          "是否确定删除胚布编码为 【 " +
+          this.$t("iaoMng.delTle6") +
           this.chooseData.calicoId +
-          " 】 的数据?";
+          this.$t("iaoMng.delTle2");
       } else {
         tle =
-          "是否确定删除缸號为 【 " + this.chooseData.batchNo + " 】 的数据?";
+          this.$t("iaoMng.delTle9") +
+          this.chooseData.batchNo +
+          this.$t("iaoMng.delTle2");
       }
       this.$tip
         .cofirm(tle, this, {})
@@ -233,24 +235,24 @@ export default {
     },
     save() {
       if (this.hide === "1" && this.form.yinId === "") {
-        this.$tip.error("入仓编号不能为空!");
+        this.$tip.error(this.$t("whseField.rcbhTle"));
         return;
       }
       if (this.hide === "2" && this.form.custName === "") {
-        this.$tip.error("客戶名稱不能为空!");
+        this.$tip.error(this.$t("iaoMng.saveTle11"));
         return;
       }
       for (let i = 0; i < this.mx.length; i++) {
         if (!this.mx[i].batchNo) {
-          this.$tip.error("缸号不能为空!");
+          this.$tip.error(this.$t("iaoMng.saveTle12"));
           return;
         }
         if (!this.mx[i].weight || !this.mx[i].weightUnit) {
-          this.$tip.error("入倉重量/单位不能为空!");
+          this.$tip.error(this.$t("iaoMng.saveTle6"));
           return;
         }
         if (!this.mx[i].countingNo) {
-          this.$tip.error("入仓疋數不能为空!");
+          this.$tip.error(this.$t("iaoMng.saveTle10"));
           return;
         }
         // if (this.mx[i].loc) {
@@ -394,18 +396,18 @@ export default {
       this.choiceTarget.yarnsName = val.yarnsId;
       this.choiceTarget[this.choiceField] = val[this.choiceField];
       this.oldData.$cellEdit = true;
-      // if (this.choiceTle === "胚布訂單") {
+      // if (this.choiceTle === this.$t("choicDlg.pbdd")) {
       //   this.choiceTarget.prodNo = val.$poNo;
       //   this.choiceTarget.calicoId = val.fabId;
       //   this.choiceTarget.clothName = val.fabYcount;
       // }
-      // if (this.choiceTle === "胚布編碼") {
+      // if (this.choiceTle === this.$t("choicDlg.pbbm")) {
       //   this.choiceTarget.clothName = val.$clothName;
       // }
-      if (this.choiceTle === "選擇貨位") {
+      if (this.choiceTle === this.$t("choicDlg.xzhw")) {
         this.chooseData.locationCode = val[0].locationCode;
       }
-      if (this.choiceTle === "選擇成品布貨物包") {
+      if (this.choiceTle === this.$t("choicDlg.xzcpbhwb")) {
         this.mx = this.$unique(this.mx.concat(val), "batchNo");
         this.page.total = this.mx.length;
         this.mx.forEach((item, i) => {
@@ -419,7 +421,7 @@ export default {
         // this.choiceTarget.fabticket = val.fabticket;
         // this.choiceTarget.countingNo = val.countingNo;
       }
-      if (this.choiceTle === "選擇指令單明細") {
+      if (this.choiceTle === this.$t("iaoMng.xzzld")) {
         val.forEach((item, i) => {
           item.calicoId = item.materialId;
           item.clothName = item.materialName;
@@ -442,7 +444,7 @@ export default {
           }
         });
       }
-      if (this.choiceTle === "選擇訂單胚布資料") {
+      if (this.choiceTle === this.$t("choicDlg.xzddpbzl")) {
         val.forEach((item, i) => {
           item.prodNo = item.$salPoFk;
           item.calicoId = item.fabId;
@@ -465,10 +467,10 @@ export default {
           }
         });
       }
-      if (this.choiceTle === "選擇貨位") {
+      if (this.choiceTle === this.$t("choicDlg.xzhw")) {
         this.chooseData.locationCode = val[0].locationCode;
       }
-      if (this.choiceTle === "選擇外厂胚布配料計劃") {
+      if (this.choiceTle === this.$t("choicDlg.xzwfpbpl")) {
         this.form.factoryId = val.refCode;
       }
       for (var key in val) {

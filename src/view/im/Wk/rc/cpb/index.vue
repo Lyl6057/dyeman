@@ -12,7 +12,7 @@
           type="success"
           :disabled="Object.keys(chooseData).length === 0"
           @click="handleRowDBLClick(chooseData)"
-          >修改</el-button
+          >{{ this.$t("public.update") }}</el-button
         >
         <el-button
           type="danger"
@@ -20,7 +20,9 @@
           :disabled="Object.keys(chooseData).length === 0"
           >{{ this.$t("public.del") }}</el-button
         >
-        <el-button type="primary" @click="getData">查询</el-button>
+        <el-button type="primary" @click="getData">{{
+          this.$t("public.query")
+        }}</el-button>
         <el-button type="warning" @click="close">{{
           this.$t("public.close")
         }}</el-button>
@@ -34,7 +36,9 @@
       </div>
       <el-row class="crudBox">
         <el-col :span="24">
-          <view-container :title="data.type.split('_')[0] + '入库'">
+          <view-container
+            :title="data.type.split('_')[0] + this.$t('iaoMng.rc')"
+          >
             <avue-crud
               ref="crud"
               id="crud"
@@ -48,7 +52,7 @@
             ></avue-crud> </view-container
         ></el-col>
         <!-- <el-col :span="12">
-          <view-container :title="data.type.split('_')[0] + '入库明细'">
+          <view-container :title="data.type.split('_')[0] + $t('iaoMng.rcmx')">
             <tem-dlg
               ref="tem"
               :datas="data"
@@ -231,7 +235,7 @@ export default {
     },
     del() {
       if (Object.keys(this.chooseData).length === 0) {
-        this.$tip.error("请选择要删除的数据!");
+        this.$tip.error(this.$t("public.delTle"));
         return;
       }
       if (!this.chooseData.whseFinishedclothinoid) {
@@ -246,7 +250,9 @@ export default {
       }
       this.$tip
         .cofirm(
-          "是否确定删除入仓编号为 【 " + this.chooseData.yinId + " 】 的数据?",
+          this.$t("iaoMng.delTle1") +
+            this.chooseData.yinId +
+            this.$t("iaoMng.delTle2"),
           this,
           {}
         )
@@ -273,7 +279,7 @@ export default {
       this.detail = val;
       this.isAdd = false;
       if (!this.detail.whseFinishedclothinoid) {
-        this.$tip.warning("请先保存入仓资料!");
+        this.$tip.warning(this.$t("whseMng.saveTle6"));
         return;
       }
       this.dialogVisible = true;
@@ -283,8 +289,8 @@ export default {
     },
     save() {
       for (let i = 0; i < this.changeList.length; i++) {
-        if (!this.changeList[i].yinId || !this.changeList[i].yinType) {
-          this.$tip.error("入仓编号/类型不能为空!");
+        if (!this.changeList[i].yinId) {
+          this.$tip.error(this.$t("whseField.rcbhTle"));
           return;
         }
       }

@@ -194,7 +194,7 @@ export default {
             prop: "batchNo",
           },
           {
-            label: "疋号",
+            label: this.$t("whseField.ph2"),
             prop: "countingNo",
             align: "right",
           },
@@ -224,12 +224,12 @@ export default {
           //   ],
           // },
           {
-            label: "重量",
+            label: this.$t("whseField.zl"),
             prop: "weight",
             align: "right",
           },
           {
-            label: "单位",
+            label: this.$t("whseField.dw"), //"单位",
             prop: "weightUnit",
             type: "select",
             dicData: getDIC("bas_matUnit"),

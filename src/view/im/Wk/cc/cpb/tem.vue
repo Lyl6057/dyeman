@@ -22,7 +22,7 @@
         <el-col :span="hide === '4' || hide === '3' || hide === '5' ? 24 : 12">
           <view-container :title="datas.type.split('_')[0] + '明细'">
             <div class="btnList" style="margin-bottom: 2px">
-              <!-- <el-button type="primary" @click="getDetail">查询</el-button> -->
+              <!-- <el-button type="primary" @click="getDetail">{{this.$t("public.query")}}</el-button> -->
               <el-button type="primary" @click="add" v-if="canSave">{{
                 this.$t("public.add")
               }}</el-button>
@@ -46,7 +46,7 @@
         <el-col :span="12" v-if="hide != '4' && hide != '3' && hide != '5'">
           <view-container :title="datas.type.split('_')[0] + '批号资料'">
             <div class="btnList" style="margin-bottom: 2px">
-              <!-- <el-button type="primary" @click="getDetail">查询</el-button> -->
+              <!-- <el-button type="primary" @click="getDetail">{{this.$t("public.query")}}</el-button> -->
               <el-button type="primary" @click="addPh" v-if="canSave">{{
                 this.$t("public.add")
               }}</el-button>
@@ -83,8 +83,12 @@
       >
         <view-container :title="dlgTle">
           <div class="btnList">
-            <el-button type="success" @click="check">選擇</el-button>
-            <el-button type="primary" @click="getPbData">查询</el-button>
+            <el-button type="success" @click="check">{{
+              this.$t("public.choose")
+            }}</el-button>
+            <el-button type="primary" @click="getPbData">{{
+              this.$t("public.query")
+            }}</el-button>
             <el-button type="warning" @click="sxclose">{{
               this.$t("public.close")
             }}</el-button>
@@ -308,7 +312,7 @@ export default {
       this.choiceV = !this.choiceV;
       this.dlgWidth = "100%";
       // this.choiceQ.poNo = this.form.poNo;
-      this.choiceTle = "選擇訂單胚布資料";
+      this.choiceTle = this.$t("choicDlg.xzddpbzl");
     },
     addPh() {
       if (Object.keys(this.chooseData).length === 0) {
@@ -321,7 +325,7 @@ export default {
       //   //   this.choiceQ.calicoId = this.chooseData.woMatno;
       //   //   this.oldData = this.chooseData;
       //   //   this.choiceTarget = this.oldData;
-      //   //   this.choiceTle = "选择胚布疋号资料";
+      //   //   this.choiceTle = this.$t("choicDlg.xzpbph");
       // }
       // } else {
       this.outcrudOp = rcpb3C(this);
@@ -337,7 +341,7 @@ export default {
         this.chooseData == null ||
         Object.keys(this.chooseData).length === 0
       ) {
-        this.$tip.error("请选择要删除的数据!");
+        this.$tip.error(this.$t("public.delTle"));
         return;
       }
       if (!this.chooseData.whseFinclothselloutDtlaoid) {
@@ -376,7 +380,7 @@ export default {
     },
     delPh() {
       if (this.choosePh == null || Object.keys(this.choosePh).length === 0) {
-        this.$tip.error("请选择要删除的数据!");
+        this.$tip.error(this.$t("public.delTle"));
         return;
       }
       if (!this.choosePh.whseFinclothselloutDtlboid) {
@@ -846,7 +850,7 @@ export default {
       //   this.mx.push(data);
       //   // this.changeList.push(data);
       // }
-      if (this.choiceTle === "選擇訂單胚布資料") {
+      if (this.choiceTle === this.$t("choicDlg.xzddpbzl")) {
         val.forEach((item, i) => {
           item.woMatno = item.fabId;
           item.woMatname = item.fabName;
@@ -858,7 +862,7 @@ export default {
         });
         this.page.total = this.mx.length;
       }
-      if (this.choiceTle === "選擇貨運計劃") {
+      if (this.choiceTle === this.$t("choicDlg.xzhyjh")) {
         this.form.spNo = val.spNo;
       }
       this.oldData.$cellEdit = true;

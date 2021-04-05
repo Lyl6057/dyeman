@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-01 15:24:47
+ * @LastEditTime: 2021-04-02 09:08:53
  * @Description: 
 -->
 <template>
@@ -33,7 +33,7 @@
 </template>
 <script>
 import { mainCrud } from "./data";
-import { getCodeSupply, addBf, printBf } from "./api";
+import { printBf } from "./api";
 import { getDIC, getDicT, getXDicT, postDicT, preFixInt } from "@/config";
 import { baseCodeSupplyEx } from "@/api/index";
 import preview from "./preview";
@@ -71,20 +71,8 @@ export default {
   watch: {},
   methods: {
     getData() {
-      this.wLoading = true;
       this.form = this.detail;
-      baseCodeSupplyEx({ code: "cloth_fly" }).then((res) => {
-        this.form.bph = res.data.data;
-        if (this.form.realEnd === "" || this.form.realEnd === null) {
-          this.form.nowDate = this.form.planEnd.split(" ")[0];
-        } else {
-          this.form.nowDate = this.form.realEnd.split(" ")[0];
-        }
-        // this.form.nowDate = this.getNowTime();
-        setTimeout(() => {
-          this.wLoading = false;
-        }, 500);
-      });
+      this.form.printedTime = this.$getNowTime();
     },
     setPreview() {
       this.$refs.form.validate((valid, done) => {
@@ -102,76 +90,25 @@ export default {
         if (valid) {
           this.$tip
             .cofirm(
-              "是否确定打印排单号为 【 " +
-                this.detail.stepCode +
+              "是否确定打印布票號为 【 " +
+                this.detail.noteCode +
                 this.$t("iaoMng.delTle2"),
               this,
               {}
             )
             .then(() => {
               this.wLoading = true;
-              let arr = [];
-              for (let i = 0; i < this.form.ps; i++) {
-                arr.push({
-                  breadth: this.form.actualWidth,
-                  clothWeight: 100,
-                  eachNumber: this.form.qsph + i,
-                  fabricName: this.form.calicoType,
-                  gramWeight: this.form.weight,
-                  isPrinted: false,
-                  loomNo: this.form.equipmentCode,
-                  workNo: this.form.zjgh,
-                  madeDate: this.$getNowTime(),
-                  noteCode: this.form.bph + (this.form.qsph + i),
-                  poNo: this.form.poNo,
-                  printedTime: this.$getNowTime(),
-                  proBatchNumber: this.form.spi,
-                  proColor: this.form.colorName,
-                  proName: this.form.workName,
-                  schId: this.form.salSchId,
-                  // lenUnit: "1",
-                  machineCode: this.form.stepCode,
-                  // proSpec: "test",
-                  salPooid: this.form.salSchId,
-                  tempId: this.form.salSchId,
-                  weightUnit: this.form.workUnit,
-                  // clothLength: 200,
-                  // customerName: "test",
+              printBf(this.form.noteId)
+                .then((res) => {
+                  setTimeout(() => {
+                    this.$tip.success("打印成功");
+                    this.wLoading = false;
+                  });
+                })
+                .catch((err) => {
+                  this.$tip.warning("打印失败");
+                  this.wLoading = false;
                 });
-              }
-              let add = (item, i) => {
-                return new Promise((resolve, reject) => {
-                  addBf(item)
-                    .then((res) => {
-                      item.noteId = res.data.data;
-                      resolve();
-                    })
-                    .catch((err) => {
-                      this.$tip.warning("打印失败");
-                      this.wLoading = false;
-                    });
-                });
-              };
-              let promiseArr = arr.map((item, i) => {
-                return add(item, i);
-              });
-              Promise.all(promiseArr).then((res) => {
-                baseCodeSupply({ code: "cloth_fly" }).then((res) => {});
-                arr.forEach((item, i) => {
-                  printBf(item.noteId)
-                    .then((res) => {})
-                    .catch((err) => {
-                      this.$tip.warning("打印失败");
-                      this.wLoading = false;
-                    });
-                  if (i === arr.length - 1) {
-                    setTimeout(() => {
-                      this.printCtr = true;
-                      this.wLoading = false;
-                    }, 500);
-                  }
-                });
-              });
             })
             .catch((err) => {
               this.$tip.warning(this.$t("public.qxcz"));

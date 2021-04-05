@@ -20,12 +20,12 @@ export const sxForm = {
       span: 6,
     },
     {
-      label: "批号",
+      label: _this.$t("whseField.ph"),
       prop: "batchNo",
       span: 6,
     },
     {
-      label: "产地",
+      label: _this.$t("whseField.cd"),
       prop: "placeOrigin",
       span: 6,
       type: 'select',
@@ -80,7 +80,7 @@ export const sxCrud = {
       width: 150,
     },
     {
-      label: "批号",
+      label: _this.$t("whseField.ph"),
       prop: "batchNo",
       cell: true,
       width: 180,
@@ -154,7 +154,7 @@ export const sxCrud = {
       width: 50,
     },
     {
-      label: "产地",
+      label: _this.$t("whseField.cd"),
       prop: "placeOrigin",
       cell: true,
       width: 50,
@@ -347,7 +347,7 @@ export const pbCrud = {
       width: 100,
     },
     {
-      label: "数量",
+      label: _this.$t('energy.sl'),
       prop: "fabQty",
       cell: true,
       width: 100,
@@ -495,12 +495,12 @@ export const scflForm = {
       span: 6,
     },
     {
-      label: "规格",
+      label: _this.$t('whseField.gg'),
       prop: "matItemspec",
       span: 6,
     },
     {
-      label: "型号",
+      label: _this.$t("whseField.xh"),
       prop: "matModel",
       span: 6,
     },
@@ -540,7 +540,7 @@ export const scflCrud = {
       width: 50,
     },
     {
-      label: "辅料编号",
+      label: _this.$t("whseField.flbh"),
       prop: "matId",
       cell: true,
       width: 200,
@@ -558,13 +558,13 @@ export const scflCrud = {
       width: 150,
     },
     {
-      label: "规格",
+      label: _this.$t('whseField.gg'),
       prop: "matItemspec",
       cell: true,
       width: 100,
     },
     {
-      label: "型号",
+      label: _this.$t("whseField.xh"),
       prop: "matModel",
       cell: true,
       width: 120,
@@ -608,7 +608,7 @@ export const rhlForm = {
       span: 6,
     },
     {
-      label: "批号",
+      label: _this.$t("whseField.ph"),
       prop: "bcBatchnumber",
       span: 6,
     },
@@ -647,7 +647,7 @@ export const rhlCrud = {
       width: 150,
     },
     {
-      label: "批号",
+      label: _this.$t("whseField.ph"),
       prop: "bcBatchnumber",
       cell: true,
       width: 150,
@@ -672,7 +672,7 @@ export const rhlCrud = {
       width: 100,
     },
     {
-      label: "色光",
+      label: _this.$t("whseField.sg"),//,
       prop: "bcColor",
       cell: true,
       width: 80,
@@ -685,7 +685,7 @@ export const rhlCrud = {
     },
 
     {
-      label: "产地",
+      label: _this.$t("whseField.cd"),
       prop: "bcMakeplace",
       cell: true,
       width: 100,
@@ -735,7 +735,7 @@ export const rhlCrud = {
       width: 100,
     },
     {
-      label: "备注",
+      label: _this.$t("energy.bz"),
       prop: "bcDesc",
       cell: true,
       width: 150,

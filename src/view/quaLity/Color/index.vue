@@ -36,9 +36,9 @@
         <!-- 批色单表 -->
         <div class="queryForm">
           <el-row class="btnList">
-            <el-button type="primary" @click="editor(checkData2)"
-              >修改</el-button
-            >
+            <el-button type="primary" @click="editor(checkData2)">{{
+              this.$t("public.update")
+            }}</el-button>
             <el-button type="primary" @click="QCdel(checkData2)">{{
               this.$t("public.del")
             }}</el-button>

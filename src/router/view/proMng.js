@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-29 14:14:56
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-01 13:54:05
+ * @LastEditTime: 2021-04-02 08:14:47
  * @Description: 
  */
 export default [
@@ -34,6 +34,11 @@ export default [
     component: resolve => require(['@/view/proMng/Calculator/socket'], resolve)
   },
   // 报表
+  {
+    path: "/buffyPrints",
+    name: "buffyPrints",
+    component: resolve => require(["@/view/proMng/buffyPrints/index"], resolve),
+  },
   {
     path: "/clothFly",
     name: "clothFly",

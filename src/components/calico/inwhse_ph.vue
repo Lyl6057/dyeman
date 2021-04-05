@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-24 08:12:20
  * @LastEditors: Lyl
- * @LastEditTime: 2021-03-31 11:28:29
+ * @LastEditTime: 2021-04-03 13:13:15
  * @Description: 
 -->
 <template>
@@ -11,8 +11,12 @@
       <el-button type="primary" @click="add">{{
         this.$t("public.add")
       }}</el-button>
-      <el-button type="danger" @click="del">刪除</el-button>
-      <el-button type="primary" @click="batchAdd">批量生成</el-button>
+      <el-button type="danger" @click="del">{{
+        this.$t("public.del")
+      }}</el-button>
+      <el-button type="primary" @click="batchAdd">{{
+        $t("choicDlg.plsc")
+      }}</el-button>
     </div>
 
     <div class="crudBox">
@@ -35,11 +39,17 @@
       :close-on-click-modal="false"
       v-if="batchV"
     >
-      <view-container title="批量生成批號資料">
+      <view-container :title="$t('choicDlg.plscph')">
         <div class="btnList">
-          <el-button type="success" @click="batch">生成</el-button>
-          <el-button type="primary" @click="choiceV = true">選擇貨位</el-button>
-          <el-button type="warning" @click="batchV = false">關閉</el-button>
+          <el-button type="success" @click="batch">{{
+            $t("public.sc")
+          }}</el-button>
+          <el-button type="primary" @click="choiceV = true">{{
+            $t("choicDlg.xzhw")
+          }}</el-button>
+          <el-button type="warning" @click="batchV = false">{{
+            $t("public.close")
+          }}</el-button>
         </div>
         <div class="formBox">
           <avue-form
@@ -88,7 +98,7 @@ export default {
       },
       loading: false,
       choiceV: false,
-      choiceTle: "選擇貨位",
+      choiceTle: this.$t("choicDlg.xzhw"),
       choiceTarget: {},
       choiceField: "",
       choiceQ: {},
@@ -167,20 +177,20 @@ export default {
           this.$toTableLow(this, "inwhse_ph");
         });
       } else {
-        this.$tip.error("請先選擇明顯");
+        this.$tip.error(this.$t("public.qxxzmx"));
       }
     },
     batchAdd() {
       if (this.inData && Object.keys(this.inData).length != 0) {
         this.batchV = true;
       } else {
-        this.$tip.error("請先選擇明顯");
+        this.$tip.error(this.$t("public.qxxzmx"));
       }
     },
     del() {
       // return;
       if (Object.keys(this.chooseData).length === 0) {
-        this.$tip.error("请选择要删除的数据!");
+        this.$tip.error(this.$t("public.delTle"));
         return;
       }
       if (!this.chooseData.whseCalicoinDtlboid) {
@@ -193,7 +203,9 @@ export default {
       }
       this.$tip
         .cofirm(
-          "是否确定删除疋號为 【 " + this.chooseData.countingNo + " 】 的数据?",
+          this.$t("iaoMng.delTle4") +
+            this.chooseData.countingNo +
+            this.$t("iaoMng.delTle2"),
           this,
           {}
         )

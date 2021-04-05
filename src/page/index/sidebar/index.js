@@ -6,8 +6,8 @@ import { quality } from './quality'
 export const menuData = _this => {
   return {
     menu: [
-      ...proMng(_this),
-      // ...whseMng(_this),
+      // ...proMng(_this),
+      ...whseMng(_this),
       // ...laboratory(_this),
       // ...quality(_this),
       // 产品管理

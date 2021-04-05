@@ -14,7 +14,7 @@
           <el-submenu :index="item.index">
             <template slot="title" class="title">
               <i :class="item.icon"></i>
-              <span style="float: left">{{ item.menuName }}</span>
+              <span>{{ item.menuName }}</span>
             </template>
             <template v-for="items in item.children">
               <el-menu-item :index="items.index" :key="items.index">{{
@@ -23,7 +23,7 @@
             </template>
           </el-submenu>
         </el-card>
-        <el-card :key="item.index" v-else class="testtt">
+        <el-card :key="item.index" v-else class="oneMenu">
           <!-- <template v-for="items in item"> -->
 
           <template>
@@ -47,9 +47,8 @@ export default {
     };
   },
   created() {
-    this.$router.push({ path: "ProWorkflowInfo" }); // 生产管理
-    console.log(this.menuData);
-    // this.$router.push({ path: "imWl" });
+    // this.$router.push({ path: "ProWorkflowInfo" }); // 生产管理
+    this.$router.push({ path: "imWl" });
     // this.$router.push({ path: "colorMng" });
     // this.$router.push({ path: "quaLity" });
   },
@@ -63,9 +62,9 @@ export default {
 
 <style lang="stylus">
 #sidebar {
-  .testtt {
+  .oneMenu {
     .el-menu-item {
-      padding-left: 10px !important;
+      padding-left: 0 !important;
       text-indent: 0em !important;
       height: 39px;
       line-height: 39px;
@@ -118,7 +117,8 @@ export default {
     -ms-user-select: none;
     user-select: none;
     /* margin-right: 15px; */
-    padding-left: 10px !important;
+    text-align: left;
+    padding-left: 0 !important;
   }
 
   .el-menu-item {
@@ -181,7 +181,7 @@ export default {
 
   .el-menu-item {
     text-align: left;
-    text-indent: 0.5em;
+    // text-indent: 0.5em;
     margin-top: 1px;
   }
 }

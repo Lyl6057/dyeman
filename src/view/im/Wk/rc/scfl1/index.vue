@@ -8,7 +8,9 @@
         <el-button type="danger" @click="del">{{
           this.$t("public.del")
         }}</el-button>
-        <el-button type="primary" @click="getData">查询</el-button>
+        <el-button type="primary" @click="getData">{{
+          this.$t("public.query")
+        }}</el-button>
         <el-button type="warning" @click="close">{{
           this.$t("public.close")
         }}</el-button>
@@ -22,7 +24,9 @@
       </div>
       <el-row class="crudBox">
         <el-col :span="24">
-          <view-container :title="data.type.split('_')[0] + '入库'">
+          <view-container
+            :title="data.type.split('_')[0] + this.$t('iaoMng.rc')"
+          >
             <!-- <div class="btnList" style="margin-bottom: 2px">
           
 
@@ -45,7 +49,7 @@
             ></avue-crud> </view-container
         ></el-col>
         <!-- <el-col :span="10">
-          <view-container :title="data.type.split('_')[0] + '入库明细'">
+          <view-container :title="data.type.split('_')[0] + $t('iaoMng.rcmx')">
             <tem-dlg
               ref="tem"
               :datas="data"
@@ -246,7 +250,7 @@ export default {
     },
     del() {
       if (Object.keys(this.chooseData).length === 0) {
-        this.$tip.error("请选择要删除的数据!");
+        this.$tip.error(this.$t("public.delTle"));
         return;
       }
       if (!this.chooseData.whseAccessoriesinoid) {
@@ -319,8 +323,8 @@ export default {
         this.choiceTarget.factoryName = val.refCode;
       }
       if (
-        this.choiceTle === "五金採購單" ||
-        this.choiceTle === "生產輔料採購單"
+        this.choiceTle === this.$t("choicDlg.wjcgd") ||
+        this.choiceTle === this.$t("choicDlg.scflcgd")
       ) {
         this.choiceTarget.purNo = val.poNo;
       }

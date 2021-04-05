@@ -28,7 +28,7 @@
           <div
             class="Quality"
             v-loading="loading"
-            element-loading-text="拼命加载中"
+            :element-loading-text="$t('public.loading')"
           >
             <!-- 质量检查项目 -->
             <div class="tbBox">

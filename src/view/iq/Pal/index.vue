@@ -2,9 +2,9 @@
   <div id="name">
     <view-container title="盘盈/盘亏">
       <div class="btnList">
-        <el-button type="primary" @click="query" :disabled="loading"
-          >查询</el-button
-        >
+        <el-button type="primary" @click="query" :disabled="loading">{{
+          this.$t("public.query")
+        }}</el-button>
         <el-button type="primary" :disabled="loading">导出报表</el-button>
       </div>
       <div class="formBox">
@@ -100,7 +100,7 @@ export default {
           },
 
           {
-            label: "疋号",
+            label: this.$t("whseField.ph2"),
             prop: "countingNo",
             width: 120,
           },
@@ -110,7 +110,7 @@ export default {
             hide: true,
           },
           {
-            label: "重量",
+            label: _this.$t("whseField.zl"),
             prop: "weight",
             // cell: true,
             width: 100,

@@ -6,13 +6,13 @@ export function rsxkr1F(_this) {
     labelWidth: 130,
     column: [
       {
-        label: "入仓编号",
+        label: _this.$t("whseField.rcbh"),
         prop: "yinId",
         span: 6,
         placeholder: " ",
       },
       {
-        label: "采购单号",
+        label: _this.$t("whseField.chdh"),
         prop: "purNo",
         span: 6,
         placeholder: " ",
@@ -25,7 +25,7 @@ export function rsxkr1F(_this) {
         placeholder: " ",
       },
       {
-        label: "检验状态",
+        label: _this.$t("whseField.jyzt"),
         prop: "yinStatus",
         span: 6,
         placeholder: " ",
@@ -34,7 +34,7 @@ export function rsxkr1F(_this) {
           getDIC('whse_yinstatus')
       },
       {
-        label: "入仓日期",
+        label: _this.$t("whseField.rcrq"),
         prop: "yinDate",
         span: 6,
         placeholder: " ",
@@ -43,13 +43,13 @@ export function rsxkr1F(_this) {
         valueFormat: "yyyy-MM-dd HH:mm:ss",
       },
       {
-        label: "送货单号",
+        label: _this.$t("whseField.shdh"),
         prop: "deliNo",
         span: 6,
         placeholder: " ",
       },
       {
-        label: "财务状态",
+        label: _this.$t("whseField.cwzt"),
         prop: "finStatus",
         span: 6,
         placeholder: " ",
@@ -75,7 +75,7 @@ export const IncomingYarnF = {
       placeholder: " ",
     },
     {
-      label: "客户",
+      label: _this.$t('whseField.khmc'),
       prop: "custCode",
       span: 8,
       placeholder: " ",
@@ -115,7 +115,7 @@ export const IncomingYarnC = {
       prop: "registerNo",
     },
     {
-      label: "客户",
+      label: _this.$t('whseField.khmc'),
       prop: "custCode",
       type: "select",
       dicData: getDicT("basCustomer", "custCode", "custCode"),

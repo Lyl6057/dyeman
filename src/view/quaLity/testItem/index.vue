@@ -18,9 +18,9 @@
               <el-button type="primary" size="mini" @click="addBtn">{{
                 this.$t("public.add")
               }}</el-button>
-              <el-button type="primary" size="mini" @click="handleList"
-                >查询</el-button
-              >
+              <el-button type="primary" size="mini" @click="handleList">{{
+                this.$t("public.query")
+              }}</el-button>
 
               <el-button type="primary" size="mini" @click="del">{{
                 this.$t("public.del")

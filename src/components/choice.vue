@@ -15,15 +15,17 @@
       <el-tabs type="border-card" v-model="tab" @tab-click="handleClick">
         <el-tab-pane name="tab1" :label="choiceTle">
           <div class="btnList">
-            <el-button type="primary" @click="choice">选择</el-button>
+            <el-button type="primary" @click="choice">{{
+              this.$t("public.choose")
+            }}</el-button>
             <el-button
               type="primary"
               @click="query"
-              v-if="choiceTle != '送货单明细'"
-              >查询</el-button
+              v-if="choiceTle != $t('choicDlg.shdmx')"
+              >{{ $t("public.query") }}</el-button
             >
             <el-button type="warning" @click="close">{{
-              this.$t("public.close")
+              $t("public.close")
             }}</el-button>
           </div>
           <div class="formBox">
@@ -44,10 +46,18 @@
             </avue-crud>
           </div>
         </el-tab-pane>
-        <el-tab-pane name="tab2" label="行政" v-if="choiceTle === '五金'">
+        <el-tab-pane
+          name="tab2"
+          :label="this.$t('choicDlg.xz')"
+          v-if="choiceTle === $t('choicDlg.wj')"
+        >
           <div class="btnList">
-            <el-button type="primary" @click="choice">选择</el-button>
-            <el-button type="primary" @click="query">查询</el-button>
+            <el-button type="primary" @click="choice">{{
+              this.$t("public.choose")
+            }}</el-button>
+            <el-button type="primary" @click="query">{{
+              this.$t("public.query")
+            }}</el-button>
             <el-button type="warning" @click="close">{{
               this.$t("public.close")
             }}</el-button>
@@ -288,10 +298,10 @@ export default {
     // 查询
     query() {
       this.loading = true;
-      if (this.choiceTle === "选择胚布入仓明细") {
+      if (this.choiceTle === this.$t("choicDlg.xzpbrc")) {
         this.$set(this.choiceC.column[2], "hide", false);
       }
-      if (this.choiceTle === "选择五金/行政入仓明细") {
+      if (this.choiceTle === this.$t("choicDlg.xzwjxzrc")) {
         this.choiceF.column[0].dicData = this.choiceF.column[0].dicData.filter(
           (val) => {
             return (
@@ -306,7 +316,7 @@ export default {
           this.choiceF.column[0].dicData[0].value
         );
       }
-      if (this.choiceTle === "选择生产辅料入仓明细") {
+      if (this.choiceTle === this.$t("choicDlg.xzflrc")) {
         this.choiceF.column[0].dicData = this.choiceF.column[0].dicData.filter(
           (val) => {
             return val.label.indexOf("生產輔料") != -1;
@@ -320,8 +330,8 @@ export default {
         this.$set(this.choiceC.column[2], "hide", false);
       }
       //   if (
-      //   this.choiceTle === "选择五金/行政入仓明细" ||
-      //   this.choiceTle === "选择生产辅料入仓明细"
+      //   this.choiceTle === this.$t("choicDlg.xzwjxzrc") ||
+      //   this.choiceTle === this.$t("choicDlg.xzflrc")
       // ) {
       //   this.form.materialType = this.choiceF.column[0].dicData[0].value;
       // }
@@ -335,10 +345,10 @@ export default {
           delete this.choiceQ[key];
         }
       }
-      if (this.choiceTle === "染化料申购採購單") {
+      if (this.choiceTle === this.$t("choicDlg.rhlsgcgd")) {
         this.form.type = 5;
       }
-      if (this.choiceTle === "送貨單") {
+      if (this.choiceTle === this.$t("choicDlg.shd")) {
         purDelisingleDtla({ purNo: this.choiceQ.purNo }).then((res) => {
           if (res.data.length === 0) {
             this.loading = false;
@@ -370,7 +380,7 @@ export default {
             });
           });
         });
-      } else if (this.choiceTle === "選擇來紗登記明細") {
+      } else if (this.choiceTle === this.$t("choicDlg.lsdjmx")) {
         getIncoming({
           rows: 10,
           start: 1,
@@ -406,7 +416,7 @@ export default {
             });
           });
         });
-      } else if (this.choiceTle === "選擇來胚登記明細") {
+      } else if (this.choiceTle === this.$t("choicDlg.xzlpdj")) {
         getEmbryogenesis({
           rows: 10,
           start: 1,
@@ -442,7 +452,7 @@ export default {
             });
           });
         });
-      } else if (this.choiceTle === "選擇來原料登記明細") {
+      } else if (this.choiceTle === this.$t("choicDlg.xzlyldj")) {
         getChemical({
           rows: 10,
           start: 1,
@@ -479,7 +489,7 @@ export default {
             });
           });
         });
-      } else if (this.choiceTle === "選擇來顏料登記明細") {
+      } else if (this.choiceTle === this.$t("choicDlg.xzlyldj1")) {
         getPigment({
           rows: 10,
           start: 1,
@@ -516,7 +526,7 @@ export default {
             });
           });
         });
-      } else if (this.choiceTle === "選擇來辅料登記明細") {
+      } else if (this.choiceTle === this.$t("choicDlg.xzlfl")) {
         getSalIncomaccDtl({
           rows: 10,
           start: 1,
@@ -566,9 +576,9 @@ export default {
 
           if (this.crud === undefined || this.crud.length === 0) {
             if (
-              this.choiceTle === "选择胚布入仓明细" ||
-              this.choiceTle === "选择五金/行政入仓明细" ||
-              this.choiceTle === "选择生产辅料入仓明细"
+              this.choiceTle === this.$t("choicDlg.xzpbrc") ||
+              this.choiceTle === this.$t("choicDlg.xzwjxzrc") ||
+              this.choiceTle === this.$t("choicDlg.xzflrc")
             ) {
               this.$set(this.choiceC.column[2], "hide", true);
             }
@@ -576,51 +586,51 @@ export default {
             return;
           }
           this.crud.forEach((item, index) => {
-            if (this.choiceTle === "選擇紗線入庫明細") {
+            if (this.choiceTle === this.$t("choicDlg.xzsxrc")) {
               item.yarnsName = item.yarnsId;
             }
-            if (this.choiceTle === "選擇貨位") {
+            if (this.choiceTle === this.$t("choicDlg.xzhw")) {
               item.warehouseName = item.warehouseId;
             }
-            if (this.choiceTle === "胚布訂單") {
+            if (this.choiceTle === this.$t("choicDlg.pbdd")) {
               item.poNo = item.salPoFk;
             }
             if (
-              this.choiceTle === "選擇來原料登記" ||
-              this.choiceTle === "選擇來胚登記" ||
-              this.choiceTle === "選擇來顏料登記"
+              this.choiceTle === this.$t("choicDlg.xzlyl") ||
+              this.choiceTle === this.$t("choicDlg.lpdj") ||
+              this.choiceTle === this.$t("choicDlg.xzlyl1")
             ) {
               item.custName = item.custCode;
             }
 
-            if (this.choiceTle === "選擇貨運計劃明細") {
+            if (this.choiceTle === this.$t("choicDlg.xzhyjhmx")) {
               item.fabId = item.fabName;
             }
-            if (this.choiceTle === "來輔料登記") {
+            if (this.choiceTle === this.$t("choicDlg.lfldj")) {
               item.custName = item.custNo;
             }
-            if (this.choiceTle === "胚布編碼") {
+            if (this.choiceTle === this.$t("choicDlg.pbbm")) {
               // item.clothNo = item.basEmbryoidclothFk;
               item.clothName = item.basEmbryoidclothFk;
             }
-            if (this.choiceTle === "客戶編號") {
+            if (this.choiceTle === this.$t("choicDlg.xzkh")) {
               item.custId = item.custCode;
             }
-            if (this.choiceTle === "選擇紗線採購單") {
+            if (this.choiceTle === this.$t("choicDlg.sxcgd")) {
               item.purNo = item.poNo;
             }
-            if (this.choiceTle === "選擇退紗通知單") {
+            if (this.choiceTle === this.$t("iaoMng.xztstzd")) {
               item.yarnsName = item.yarnsId;
             }
             if (
-              this.choiceTle === "选择五金/行政入仓明细" ||
-              this.choiceTle === "选择生产辅料入仓明细"
+              this.choiceTle === this.$t("choicDlg.xzwjxzrc") ||
+              this.choiceTle === this.$t("choicDlg.xzflrc")
             ) {
               item.materialName = item.materialNum;
               item.model = item.materialNum;
               item.itemspec = item.materialNum;
             }
-            if (this.choiceTle === "紗線系統編號") {
+            if (this.choiceTle === this.$t("choicDlg.xzsx")) {
               if (item.functions != null && item.functions != "") {
                 let data = [];
                 item.functions.split(";").forEach((items, index) => {
@@ -629,18 +639,18 @@ export default {
                 item.functions = data;
               }
             }
-            if (this.choiceTle === "选择胚布疋号资料") {
+            if (this.choiceTle === this.$t("choicDlg.xzpbph")) {
               item.prodNo = item.whseCalicoinDtlaFk;
             }
-            if (this.choiceTle === "送货单明细") {
+            if (this.choiceTle === this.$t("choicDlg.shdmx")) {
               item.materialNum = item.purSinglepoDtlFk;
               item.chinName = item.purSinglepoDtlFk;
             }
             this.$nextTick(() => {
               if (
-                this.choiceTle === "选择胚布入仓明细" ||
-                this.choiceTle === "选择五金/行政入仓明细" ||
-                this.choiceTle === "选择生产辅料入仓明细"
+                this.choiceTle === this.$t("choicDlg.xzpbrc") ||
+                this.choiceTle === this.$t("choicDlg.xzwjxzrc") ||
+                this.choiceTle === this.$t("choicDlg.xzflrc")
               ) {
                 this.$set(this.choiceC.column[2], "hide", true);
               }
@@ -682,7 +692,7 @@ export default {
       this.pick = val;
     },
     handleClick(tab) {
-      if (this.choiceTle === "五金") {
+      if (this.choiceTle === this.$t("choicDlg.wj")) {
         if (this.tab === "tab1") {
           this.choiceC = BasHardwarearticlesC;
           this.choiceF = BasHardwarearticlesF;
@@ -703,123 +713,123 @@ export default {
   },
   created() {
     switch (this.choiceTle) {
-      case "選擇紗線入庫明細":
+      case this.$t("choicDlg.xzsxrc"):
         this.choiceC = YarninC;
         this.choiceF = YarninF;
         this.getData = getYarnin;
         break;
-      case "選擇指令單明細":
+      case this.$t("iaoMng.xzzld"):
         this.choiceC = instructDtlC;
         this.choiceF = instructDtlF;
         this.getData = getInstructDtl;
         break;
-      case "選擇來紗登記":
+      case this.$t("iaoMng.xzlsdj"):
         this.choiceC = IncomingYarnC;
         this.choiceF = IncomingYarnF;
         this.getData = getIncoming;
         break;
-      case "選擇來紗登記明細":
+      case this.$t("choicDlg.lsdjmx"):
         this.choiceC = IncomingYarnDtlC;
         this.choiceF = IncomingYarnDtlF;
         this.getData = getIncomingDtl;
         break;
-      case "選擇來胚登記":
+      case this.$t("choicDlg.lpdj"):
         this.choiceC = EmbryogenesisC;
         this.choiceF = EmbryogenesisF;
         this.getData = getEmbryogenesis;
         break;
-      case "選擇來胚登記明細":
+      case this.$t("choicDlg.xzlpdj"):
         this.choiceC = EmbryogenesisDtlC;
         this.choiceF = EmbryogenesisDtlF;
         this.getData = getEmbryogenesisDtl;
         break;
 
-      case "選擇來原料登記":
+      case this.$t("choicDlg.xzlyl"):
         this.choiceC = chemicalC;
         this.choiceF = chemicalF;
         this.getData = getChemical;
         break;
-      case "選擇來原料登記明細":
+      case this.$t("choicDlg.xzlyldj"):
         this.choiceC = chemicalDtlC;
         this.choiceF = chemicalDtlF;
         this.getData = getChemicalDtl;
         break;
-      case "選擇來顏料登記":
+      case this.$t("choicDlg.xzlyl1"):
         this.choiceC = pigmentC;
         this.choiceF = pigmentF;
         this.getData = getPigment;
         break;
-      case "選擇來顏料登記明細":
+      case this.$t("choicDlg.xzlyldj1"):
         this.choiceC = pigmentDtlC;
         this.choiceF = pigmentDtlF;
         this.getData = getPigmentDtl;
         break;
-      case "選擇來輔料登記":
+      case this.$t("choicDlg.lfldj"):
         this.choiceC = SalIncomaccC;
         this.choiceF = SalIncomaccF;
         this.getData = getSalIncomacc;
         break;
-      case "選擇來辅料登記明細":
+      case this.$t("choicDlg.xzlfl"):
         this.choiceC = SalIncomaccDtlC;
         this.choiceF = SalIncomaccDtlF;
         this.getData = getSalIncomaccDtl;
         break;
-      case "選擇紗線系統編號":
+      case this.$t("choicDlg.xzsx"): //"選擇紗線系統編號":
         this.choiceC = BasYarnsDataC;
         this.choiceF = BasYarnsDataF;
         this.getData = getBasYarnsData;
         break;
-      case "胚布編碼":
+      case this.$t("choicDlg.pbbm"):
         this.choiceC = BasCalicoC;
         this.choiceF = BasCalicoF;
         this.getData = getBasCalico;
         break;
-      case "选择化工原料":
+      case this.$t("choicDlg.xzhgyl"):
         this.choiceC = BasChemicalmatC;
         this.choiceF = BasChemicalmatF;
         this.getData = getBasChemicalmat;
         break;
-      case "五金":
+      case this.$t("choicDlg.wj"):
         this.choiceC = BasHardwarearticlesC;
         this.choiceF = BasHardwarearticlesF;
         this.getData = getBasHardwarearticles;
         break;
-      case "行政":
+      case this.$t("choicDlg.xz"): //"行政":
         this.choiceC = BasAdsuppliesarticlesC;
         this.choiceF = BasAdsuppliesarticlesF;
         this.getData = getBasAdsuppliesarticles;
         break;
-      case "生產輔料":
+      case this.$t("choicDlg.xzscfl"):
         this.choiceC = ProductivesuppliesC;
         this.choiceF = ProductivesuppliesF;
         this.getData = getProductivesupplies;
         break;
-      case "胚布採購單":
+      case this.$t("choicDlg.xzpbcgd"):
         this.choiceC = PurCalicoPoC;
         this.choiceF = PurCalicoPoF;
         this.getData = getPurCalicoPo;
         break;
-      case "染化料申购採購單":
+      case this.$t("choicDlg.rhlsgcgd"):
         this.choiceC = PurChemicalpoC;
         this.choiceF = PurChemicalpoF;
         this.getData = getPurChemicalpo;
         break;
-      case "染化料採購單":
+      case this.$t("choicDlg.xzylcgd"):
         this.choiceC = PurChemicalpoC;
         this.choiceF = PurChemicalpoF;
         this.getData = getPurChemicalpo2;
         break;
-      case "生產輔料採購單":
+      case this.$t("choicDlg.scflcgd"):
         this.choiceC = PurMaterialspoC;
         this.choiceF = PurMaterialspoF;
         this.getData = getPurMaterialspo;
         break;
-      case "五金採購單":
+      case this.$t("choicDlg.wjcgd"):
         this.choiceC = PurHardwarepoC;
         this.choiceF = PurHardwarepoF;
         this.getData = getPurHardwarepo;
         break;
-      case "選擇胚布貨物包":
+      case this.$t("choicDlg.xzpbhwb"):
         this.choiceC = WhseCalicoPackBarCodeC;
         this.choiceF = WhseCalicoPackBarCodeF;
         this.getData = getWhseCalicoPackBarCode;
@@ -827,9 +837,9 @@ export default {
         this.choiceF.column[2].display = false;
         this.choiceC.column[2].hide = true;
         this.choiceC.column[3].hide = false;
-        this.choiceC.column[7].label = "码卡号";
+        this.choiceC.column[7].label = this.$t("whseField.mkh");
         break;
-      case "選擇成品布貨物包":
+      case this.$t("choicDlg.xzcpbhwb"):
         this.choiceC = WhseCalicoPackBarCodeC;
         this.choiceF = WhseCalicoPackBarCodeF;
         this.getData = getWhseFinishedclothpackBarcode;
@@ -839,118 +849,118 @@ export default {
         this.choiceC.column[2].hide = false;
         this.choiceC.column[7].label = "布票号";
         break;
-      case "胚布訂單":
+      case this.$t("choicDlg.pbdd"):
         this.choiceC = SalPoDtlaListC;
         this.choiceF = SalPoDtlaListF;
         this.getData = getSalPoDtlaList;
         break;
-      case "選擇送貨單":
+      case this.$t("choicDlg.xzshd"):
         this.choiceC = PurDeliveryC;
         this.choiceF = PurDeliveryF;
         this.getData = getPurDelivery;
         break;
-      case "選擇紗線採購單":
+      case this.$t("choicDlg.sxcgd"):
         this.choiceC = PurYarnsPoC;
         this.choiceF = PurYarnsPoF;
         this.getData = getPurYarnsPo;
         break;
 
-      case "选择客戶":
+      case this.$t("choicDlg.xzkh"):
         this.choiceC = BasCustomerC;
         this.choiceF = BasCustomerF;
         this.getData = getBasCustomer;
         break;
-      case "選擇退紗通知單":
+      case this.$t("iaoMng.xztstzd"):
         this.choiceC = WhseRetratyarnC;
         this.choiceF = WhseRetratyarnF;
         this.getData = getWhseRetratyarn;
         break;
-      case "選擇外廠化工原料配料計劃":
+      case this.$t("choicDlg.xzwfylpl"):
         this.choiceC = WhseChemicalPlanC;
         this.choiceF = WhseChemicalPlanF;
         this.getData = getWhseChemicalPlan;
         break;
-      case "選擇外厂輔料配料计划":
+      case this.$t("choicDlg.xzwfflpl"):
         this.choiceC = WhseRetmaterialsPlanC;
         this.choiceF = WhseRetmaterialsPlanF;
         this.getData = getWhseRetmaterialsPlan;
         break;
-      case "選擇外厂胚布配料计划":
+      case this.$t("choicDlg.xzwfpbpl"):
         this.choiceC = WhseMaterialoutPlanC;
         this.choiceF = WhseMaterialoutPlanF;
         this.getData = getWhseMaterialoutPlan;
         break;
-      case "選擇本厂胚布配料计划":
+      case this.$t("choicDlg.xzbcpbpl"):
         this.choiceC = WhseMaterialPlanC;
         this.choiceF = WhseMaterialPlanF;
         this.getData = getWhseMaterialPlan;
         break;
-      case "選擇外厂纱线配料计划":
+      case this.$t("choicDlg.sxwc"):
         this.choiceC = WhseRetyarninoutPlanC;
         this.choiceF = WhseRetyarninoutPlanF;
         this.getData = getWhseRetyarninoutPlan;
         break;
-      case "選擇本厂纱线配料计划":
+      case this.$t("choicDlg.xzbcsxpl"):
         this.choiceC = WhseRetyarninPlanC;
         this.choiceF = WhseRetyarninPlanF;
         this.getData = getWhseRetyarninPlan;
         break;
-      case "選擇貨運計劃":
+      case this.$t("choicDlg.xzhyjh"):
         this.choiceC = shipPlanC;
         this.choiceF = shipPlanF;
         this.getData = getshipPlan;
         break;
-      case "選擇貨運計劃明細":
+      case this.$t("choicDlg.xzhyjhmx"):
         this.choiceC = shipPlanDtlC;
         this.choiceF = shipPlanDtlF;
         this.getData = getshipPlanDtl;
         break;
-      case "選擇訂單胚布資料":
+      case this.$t("choicDlg.xzddpbzl"):
         this.choiceC = OrderPbC;
         this.choiceF = OrderPbF;
         this.getData = getOrderPb;
         break;
-      case "选择胚布疋号资料":
+      case this.$t("choicDlg.xzpbph"):
         this.choiceC = PbDltbC;
         this.choiceF = PbDltbF;
         this.getData = getPbDltb;
         break;
-      case "选择胚布入仓明细":
+      case this.$t("choicDlg.xzpbrc"):
         this.choiceC = PbDetaliC;
         this.choiceF = PbDetaliF;
         this.getData = getPbDetali;
         break;
-      case "选择五金/行政入仓明细":
+      case this.$t("choicDlg.xzwjxzrc"):
         this.choiceC = calicoinDtlaC;
         this.choiceF = calicoinDtlaF;
         this.getData = getCalicoinDtla;
         break;
-      case "选择生产辅料入仓明细":
+      case this.$t("choicDlg.xzflrc"):
         this.choiceC = calicoinDtlaC;
         this.choiceF = calicoinDtlaF;
         this.getData = getCalicoinDtla;
         break;
-      case "领用人":
+      case this.$t("choicDlg.xzlyr"):
         this.choiceC = PersonC;
         this.choiceF = PersonF;
         this.getData = getPersonList;
         break;
-      case "送货单明细":
+      case this.$t("choicDlg.shdmx"):
         this.choiceC = PurDeliveryDC;
         this.choiceF = PurDeliveryDF;
         this.getData = getPurDeliveryDetail;
         break;
-      case "申购单":
+      case this.$t("choicDlg.xzsgd"):
         this.choiceC = SingleC;
         this.choiceF = SingleF;
         this.getData = getSingle;
         break;
-      case "申购单资料":
+      case this.$t("choicDlg.xzsgdzl"):
         this.choiceC = SingleDtlC;
         this.choiceF = SingleDtlF;
         this.getData = getSingleDtl;
         break;
-      case "选择申请领用单":
+      case this.$t("choicDlg.xzsqlyd"):
         this.choiceC = purApplicationC;
         this.choiceF = purApplicationF;
         this.getData = getPurApplication;
@@ -961,22 +971,22 @@ export default {
         );
         this.form.applyCategory = this.choiceF.column[0].dicData[0].value;
         break;
-      case "选择申请领用单明细":
+      case this.$t("choicDlg.xzsqlydmx"):
         this.choiceC = purApplicationDtlC;
         this.choiceF = purApplicationDtlF;
         this.getData = getPurApplicationDtl;
         break;
-      case "选择色号信息":
+      case this.$t("choicDlg.xzshxx"):
         this.choiceC = SalColorC;
         this.choiceF = SalColorF;
         this.getData = getSalColor;
         break;
-      case "选择色号资料":
+      case this.$t("choicDlg.xzshzl"):
         this.choiceC = TapcolorC;
         this.choiceF = TapcolorF;
         this.getData = getTapcolor;
         break;
-      case "選擇貨位":
+      case this.$t("choicDlg.xzhw"):
         this.choiceC = locC;
         this.choiceF = locF;
         this.getData = getLoc;
@@ -1039,6 +1049,10 @@ export default {
 
   .el-tag--mini {
     display: none;
+  }
+
+  .el-dialog.is-fullscreen {
+    overflow: hidden !important;
   }
 }
 </style>

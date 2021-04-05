@@ -1,8 +1,11 @@
 <template>
   <div id="rcDetail">
-    <view-container :title="'採購' + datas + '入库'" v-loading="wloading">
+    <view-container
+      :title="this.$t('iaoMng.cg') + datas + this.$t('iaoMng.rc')"
+      v-loading="wloading"
+    >
       <div class="btnList">
-        <!-- <el-button type="primary" @click="getDetail">查询</el-button> -->
+        <!-- <el-button type="primary" @click="getDetail">{{this.$t("public.query")}}</el-button> -->
         <!-- <el-button type="primary" @click="add">{{this.$t("public.add")}}</el-button>
         <el-button type="danger" @click="del">{{ this.$t("public.del") }}</el-button> -->
         <el-button type="success" @click="saveAll">{{
@@ -17,7 +20,7 @@
             form.whseChemicalinoid ||
             form.whseDyesalinoid
           "
-          >生成送檢單</el-button
+          >{{ $t("iaoMng.scsjd") }}</el-button
         >
         <el-button type="warning" @click="close">{{
           this.$t("public.close")
@@ -29,14 +32,17 @@
       <el-row class="crudBox">
         <el-col
           :span="
-            datas === '胚布'
+            datas === this.$t('iaoMng.pb')
               ? 11
-              : datas === '化工原料' || datas === '顏料'
+              : datas === this.$t('iaoMng.hgyl') ||
+                datas === this.$t('iaoMng.yl')
               ? 14
               : 17
           "
         >
-          <view-container :title="'採購' + datas + '入库明细'">
+          <view-container
+            :title="this.$t('iaoMng.cg') + datas + this.$t('iaoMng.rcmx')"
+          >
             <div class="btnList">
               <!-- <el-button type="primary" @click="planV = true">{{this.$t("public.add")}}</el-button> -->
               <el-button
@@ -58,9 +64,17 @@
               ></avue-crud>
             </div> </view-container
         ></el-col>
-        <el-col :span="10" v-if="datas === '化工原料' || datas === '顏料'">
+        <el-col
+          :span="10"
+          v-if="
+            datas === this.$t('iaoMng.hgyl') || datas === this.$t('iaoMng.yl')
+          "
+        >
           <el-tabs v-model="tabs" type="border-card">
-            <el-tab-pane :label="'採購' + datas + '入庫批號資料'" name="ph">
+            <el-tab-pane
+              :label="this.$t('iaoMng.cg') + datas + this.$t('iaoMng.rcphzl')"
+              name="ph"
+            >
               <div class="btnList">
                 <el-button type="primary" @click="addPh">{{
                   this.$t("public.add")
@@ -80,7 +94,10 @@
                 ></avue-crud>
               </div>
             </el-tab-pane>
-            <el-tab-pane :label="'採購' + datas + '入库明細貨位'" name="loc">
+            <el-tab-pane
+              :label="this.$t('iaoMng.cg') + datas + this.$t('iaoMng.rcmxhw')"
+              name="loc"
+            >
               <loction
                 ref="loc"
                 :inData="chooseData"
@@ -102,8 +119,10 @@
             ></avue-crud> </view-container
         > -->
         </el-col>
-        <el-col :span="7" v-if="datas === '紗線'">
-          <view-container :title="'採購' + datas + '入库明細貨位'">
+        <el-col :span="7" v-if="datas === this.$t('iaoMng.sx')">
+          <view-container
+            :title="this.$t('iaoMng.cg') + datas + this.$t('iaoMng.rcmxhw')"
+          >
             <loction
               ref="loc"
               :inData="chooseData"
@@ -113,8 +132,10 @@
             ></loction>
           </view-container>
         </el-col>
-        <el-col :span="13" v-if="datas === '胚布'">
-          <view-container :title="'採購' + datas + '入库批號資料'">
+        <el-col :span="13" v-if="datas === this.$t('iaoMng.pb')">
+          <view-container
+            :title="this.$t('iaoMng.cg') + datas + this.$t('iaoMng.rcphzl')"
+          >
             <inwhse-ph
               ref="loc"
               :inData="chooseData"
@@ -134,7 +155,7 @@
       fullscreen
       v-if="planV"
     >
-      <view-container title="未入仓送货单资料">
+      <view-container :title="this.$t('iaoMng.wrcshdzl')">
         <plan
           ref="plan"
           v-if="planV"
@@ -242,14 +263,17 @@ export default {
         this.form.sysCreatedby = this.$store.state.userOid;
         addList.forEach((item, index) => {
           if (index === 0) {
-            if (this.datas === "胚布") {
+            if (this.datas === this.$t("iaoMng.pb")) {
               item.loc = [];
               item.weight = item.netWei;
               item.weightUnit = item.weiUnit;
               item.countingNo = 1;
               item.loc.push(JSON.parse(JSON.stringify(item)));
             }
-            if (this.datas === "化工原料" || this.datas === "顏料") {
+            if (
+              this.datas === this.$t("iaoMng.hgyl") ||
+              this.datas === this.$t("iaoMng.yl")
+            ) {
               item.list = [];
               item.weight = item.deliQty;
               item.weightUnit = item.deliUnit;
@@ -283,13 +307,13 @@ export default {
           item.cartonWei = item.netWei;
           item.weightUnit = item.weiUnit;
           item.clothName = item.calicoName;
-          if (this.datas === "化工原料") {
+          if (this.datas === this.$t("iaoMng.hgyl")) {
             // 處理英文名稱 、色光、力份信息
             item.ennamelong = item.chemicalId;
             item.modeltype = item.chemicalId;
             item.vitality = item.chemicalId;
           }
-          if (this.datas === "顏料") {
+          if (this.datas === this.$t("iaoMng.yl")) {
             // 處理英文名稱 、色光、力份信息
             item.ennamelong = item.chemicalId;
             item.bcColor = item.chemicalId;
@@ -326,7 +350,7 @@ export default {
         })
         .then((res) => {
           // let dicData = [];
-          // if (this.datas === "化工原料" || this.datas === "顏料") {
+          // if (this.datas === this.$t("iaoMng.hgyl") || this.datas === this.$t("iaoMng.yl")) {
           //   getHardwarearticles().then((Res1) => {
           //     dicData = Res1.data;
           //     getAdsuppliesarticles().then((Res) => {
@@ -371,14 +395,14 @@ export default {
             item.index = index + 1;
             item.chinName = item.materialNum;
             item.yarnsName = item.yarnsId;
-            if (this.datas === "化工原料") {
+            if (this.datas === this.$t("iaoMng.hgyl")) {
               // 處理英文名稱 、色光、力份信息
               let data = JSON.parse(JSON.stringify(item.chemicalId));
               item.ennamelong = item.chemicalId;
               item.modeltype = item.chemicalId;
               item.vitality = item.chemicalId;
             }
-            if (this.datas === "顏料") {
+            if (this.datas === this.$t("iaoMng.yl")) {
               // 處理英文名稱 、色光、力份信息
               item.ennamelong = item.chemicalId;
               item.bcColor = item.chemicalId;
@@ -553,7 +577,7 @@ export default {
     },
     addPh() {
       if (Object.keys(this.chooseData).length === 0) {
-        this.$tip.error("请先选择入库明细");
+        this.$tip.error(this.$t("choicDlg.qxzrcmx"));
         return;
       }
       this.ctLoading = true;
@@ -606,7 +630,7 @@ export default {
     },
     del() {
       if (Object.keys(this.chooseData).length === 0) {
-        this.$tip.error("请选择要删除的数据!");
+        this.$tip.error(this.$t("public.delTle"));
         return;
       }
       if (
@@ -622,33 +646,36 @@ export default {
       this.$tip
         .cofirm(
           "是否确定删除" +
-            (this.datas === "化工原料" || this.datas === "顏料"
-              ? "化工原料"
-              : this.datas === "紗線"
-              ? "紗線"
-              : this.datas === "胚布"
-              ? "胚布"
+            (this.datas === this.$t("iaoMng.hgyl") ||
+            this.datas === this.$t("iaoMng.yl")
+              ? this.$t("iaoMng.hgyl")
+              : this.datas === this.$t("iaoMng.sx")
+              ? this.$t("iaoMng.sx")
+              : this.datas === this.$t("iaoMng.pb")
+              ? this.$t("iaoMng.pb")
               : "材料") +
             "编号为 【 " +
-            (this.datas === "化工原料" || this.datas === "顏料"
+            (this.datas === this.$t("iaoMng.hgyl") ||
+            this.datas === this.$t("iaoMng.yl")
               ? this.chooseData.chemicalId
-              : this.datas === "紗線"
+              : this.datas === this.$t("iaoMng.sx")
               ? this.chooseData.yarnsId
-              : this.datas === "胚布"
+              : this.datas === this.$t("iaoMng.pb")
               ? this.chooseData.calicoId
               : this.chooseData.materialNum) +
-            " 】 的数据?",
+            this.$t("iaoMng.delTle2"),
           this,
           {}
         )
         .then(() => {
           this.everyThing
             .delDetail(
-              this.datas === "化工原料" || this.datas === "顏料"
+              this.datas === this.$t("iaoMng.hgyl") ||
+                this.datas === this.$t("iaoMng.yl")
                 ? this.chooseData.whseChemicalinDtlaoid
-                : this.datas === "紗線"
+                : this.datas === this.$t("iaoMng.sx")
                 ? this.chooseData.whseYarninDtloid
-                : this.datas === "胚布"
+                : this.datas === this.$t("iaoMng.pb")
                 ? this.chooseData.whseCalicoinDtlaoid
                 : this.chooseData.whseAccessoriesDtloid
             )
@@ -676,7 +703,7 @@ export default {
           .length === 0 ||
         this.chooseData.list.length === 0
       ) {
-        this.$tip.error("请选择要删除的数据!");
+        this.$tip.error(this.$t("public.delTle"));
         return;
       }
       if (!this.choosePhData.whseChemicalinDtlboid) {
@@ -690,7 +717,9 @@ export default {
       }
       this.$tip
         .cofirm(
-          "是否确定删除批号为 【 " + this.choosePhData.batchNo + " 】 的数据?",
+          this.$t("iaoMng.delTle8") +
+            this.choosePhData.batchNo +
+            this.$t("iaoMng.delTle2"),
           this,
           {}
         )
@@ -726,7 +755,10 @@ export default {
       if (!this.chooseData.list) {
         this.chooseData.list = [];
       }
-      if (this.datas === "化工原料" || this.datas === "顏料") {
+      if (
+        this.datas === this.$t("iaoMng.hgyl") ||
+        this.datas === this.$t("iaoMng.yl")
+      ) {
         this.getPh();
         // this.getLoc();
       }
@@ -744,27 +776,27 @@ export default {
     },
     saveAll() {
       if (this.form.purNo === "" || this.form.deliNo === "") {
-        this.$tip.error("入库资料中的采购/送货单号不能为空!");
+        this.$tip.error(this.$t("whseMng.saveTle7"));
         return;
       }
       if (this.form.yinId === "" || this.form.yinDate === null) {
-        this.$tip.error("入库资料中的入仓编号/日期不能为空!");
+        this.$tip.error(this.$t("whseMng.saveTle8"));
         return;
       }
-      if (this.datas === "紗線") {
+      if (this.datas === this.$t("iaoMng.sx")) {
         for (let i = 0; i < this.mx.length; i++) {
           if (
             !this.mx[i].batchNo ||
             !this.mx[i].weight ||
             !this.mx[i].whseNum
           ) {
-            this.$tip.error("入库明细的批号/入倉箱數/入倉重量不能为空!");
+            this.$tip.error(this.$t("whseMng.saveTle9"));
             return;
           }
           if (this.mx[i].loc) {
             for (let j = 0; j < this.mx[i].loc.length; j++) {
               if (!this.mx[i].loc[j].cartonNum || !this.mx[i].loc[j].weight) {
-                this.$tip.error("入库貨位的箱數/重量不能为空!");
+                this.$tip.error(this.$t("whseMng.saveTle10"));
                 return;
               }
             }
@@ -772,24 +804,27 @@ export default {
         }
       }
 
-      if (this.datas === "胚布") {
+      if (this.datas === this.$t("iaoMng.pb")) {
         for (let i = 0; i < this.mx.length; i++) {
           this.mx[i].weightUnit = "";
           if (this.mx[i].loc) {
             for (let j = 0; j < this.mx[i].loc.length; j++) {
               if (!this.mx[i].loc[j].weight || !this.mx[i].loc[j].weightUnit) {
-                this.$tip.error("入库貨位的重量/單位不能为空!");
+                this.$tip.error(this.$t("iaoMng.saveTle6"));
                 return;
               }
               if (!this.mx[i].loc[j].batchNo || !this.mx[i].loc[j].countingNo) {
-                this.$tip.error("入库貨位的批號/疋號不能为空!");
+                this.$tip.error(this.$t("whseMng.saveTle11"));
                 return;
               }
             }
           }
         }
       }
-      if (this.datas === "化工原料" || this.datas === "顏料") {
+      if (
+        this.datas === this.$t("iaoMng.hgyl") ||
+        this.datas === this.$t("iaoMng.yl")
+      ) {
         for (let i = 0; i < this.mx.length; i++) {
           if (!this.mx[i].list) {
             break;
@@ -800,7 +835,7 @@ export default {
               !this.mx[i].list[j].weight ||
               !this.mx[i].list[j].weightUnit
             ) {
-              this.$tip.error("入库批号明细中的批号/重量/单位不能为空!");
+              this.$tip.error(this.$t("whseMng.saveTle9"));
               return;
             }
           }
@@ -868,7 +903,10 @@ export default {
                 this.mx[i].list.forEach((item) => {
                   item.whseChemicalinDtlaFk = this.mx[i].whseChemicalinDtlaoid;
                   item.whseDyesainDtlaFk = this.mx[i].whseDyesainDtlaoid;
-                  if (this.datas === "化工原料" || this.datas === "顏料") {
+                  if (
+                    this.datas === this.$t("iaoMng.hgyl") ||
+                    this.datas === this.$t("iaoMng.yl")
+                  ) {
                     if (
                       !item.whseChemicalinDtlboid &&
                       !item.whseDyesainDtlboid
@@ -990,7 +1028,10 @@ export default {
                 this.mx[i].list.forEach((item) => {
                   item.whseChemicalinDtlaFk = this.mx[i].whseChemicalinDtlaoid;
                   item.whseDyesainDtlaFk = this.mx[i].whseDyesainDtlaoid;
-                  if (this.datas === "化工原料" || this.datas === "顏料") {
+                  if (
+                    this.datas === this.$t("iaoMng.hgyl") ||
+                    this.datas === this.$t("iaoMng.yl")
+                  ) {
                     if (
                       !item.whseChemicalinDtlboid &&
                       !item.whseDyesainDtlboid

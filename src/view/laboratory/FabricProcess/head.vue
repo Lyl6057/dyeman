@@ -64,7 +64,9 @@
               <el-button type="success" @click="save">
                 {{ this.$t("public.save") }}</el-button
               >
-              <el-button type="warning" @click="dialog = false">關閉</el-button>
+              <el-button type="warning" @click="dialog = false">{{
+                $t("public.close")
+              }}</el-button>
             </div>
             <el-row style="margin: 5px 5px">
               <avue-form

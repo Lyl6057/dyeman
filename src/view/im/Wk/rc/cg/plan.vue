@@ -2,11 +2,15 @@
   <div id="deliOutPlan">
     <div class="btnList">
       <!-- <el-button type="warning" @click="ruleV = true">編號規則配置</el-button> -->
-      <el-button type="success" @click="setOorder" v-if="!upDate"
-        >生成入庫單</el-button
-      >
-      <el-button type="success" @click="check" v-if="upDate">選擇</el-button>
-      <el-button type="primary" @click="getData">查询</el-button>
+      <el-button type="success" @click="setOorder" v-if="!upDate">{{
+        $t("iaoMng.scrkd")
+      }}</el-button>
+      <el-button type="success" @click="check" v-if="upDate">{{
+        this.$t("public.choose")
+      }}</el-button>
+      <el-button type="primary" @click="getData">{{
+        this.$t("public.query")
+      }}</el-button>
       <el-button type="warning" @click="close">{{
         this.$t("public.close")
       }}</el-button>
@@ -124,7 +128,7 @@ export default {
     },
     setOorder() {
       if (this.selected.length === 0) {
-        this.$tip.warning("请先选择送货单！");
+        this.$tip.warning(this.$t("iaoMng.qxzshd"));
         return;
       }
       this.$emit("add", this.selected);

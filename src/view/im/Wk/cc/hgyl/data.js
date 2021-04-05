@@ -57,7 +57,7 @@ export function rsxkr1F(_this) {
 
       },
       {
-        label: "财务状态",
+        label: _this.$t("whseField.cwzt"),
         prop: "finStatus",
         span: 6,
         placeholder: " ",
@@ -67,7 +67,7 @@ export function rsxkr1F(_this) {
         display: _this.hide === '6',
       },
       {
-        label: "操作员",
+        label: _this.$t('whseField.czy'),
         prop: "sysCreatedby",
         display: false,
         span: 6,
@@ -87,7 +87,7 @@ export function rsxkr2F(_this) {
     labelWidth: 130,
     column: [
       {
-        label: "出仓编号",
+        label: _this.$t("whseField.ccbh"),
         prop: "retCode",
         span: 6,
         placeholder: " ",
@@ -121,7 +121,7 @@ export function rsxkr2F(_this) {
         disabled: true
       },
       {
-        label: "操作员",
+        label: _this.$t('whseField.czy'),
         prop: "sysCreatedby",
         display: false,
         span: 6,
@@ -140,7 +140,7 @@ export function rsxkr2F(_this) {
         disabled: true
       },
       {
-        label: "财务状态",
+        label: _this.$t("whseField.cwzt"),
         prop: "finStatus",
         span: 6,
         placeholder: " ",
@@ -201,7 +201,7 @@ export function rsxkr1C(_this) {
         hide: true,
       },
       {
-        label: "出仓编号",
+        label: _this.$t("whseField.ccbh"),
         prop: "retCode",
         cell: true,
         width: 180,
@@ -211,7 +211,7 @@ export function rsxkr1C(_this) {
         hide: _this.hide === '6' ? true : false
       },
       {
-        label: "出仓编号",
+        label: _this.$t("whseField.ccbh"),
         prop: "woOutno",
         cell: true,
         width: 180,
@@ -348,7 +348,7 @@ export function rsxkr1C(_this) {
         //   getDicT('basCustomer', 'custCode', 'custCode')
       },
       {
-        label: "操作员",
+        label: _this.$t('whseField.czy'),
         prop: "sysCreatedby",
         cell: true,
         width: 140,
@@ -358,7 +358,7 @@ export function rsxkr1C(_this) {
         hide: _this.hide === '6' ? false : true
       },
       {
-        label: "财务状态",
+        label: _this.$t("whseField.cwzt"),
         prop: "finStatus",
         span: 6,
         cell: true,
@@ -370,7 +370,7 @@ export function rsxkr1C(_this) {
         width: 120,
       },
       {
-        label: "备注",
+        label: _this.$t("energy.bz"),
         prop: "retRemarks",
         span: 6,
         cell: true,
@@ -436,14 +436,14 @@ export function rsxkr2C(_this) {
 
       // },
       // {
-      //   label: "设备名称",
+      //   label: _this.$t("labour.sbmc"),
       //   prop: "equName",
       //   cell: true,
       //   width: 120,
       //   hide: true
       // },
       // {
-      //   label: "加工厂代号",
+      //   label: _this.$t("whseField.wfcdh"),
       //   prop: "refCode",
       //   cell: true,
       //   width: 120,
@@ -454,14 +454,14 @@ export function rsxkr2C(_this) {
 
       // },
       // {
-      //   label: "加工厂名称",
+      //   label: _this.$t("whseField.wfcmc"),
       //   prop: "refName",
       //   cell: true,
       //   width: 120,
       //   hide: true
       // },
       // {
-      //   label: "入仓编号",
+      //   label: _this.$t("whseField.rcbh"),
       //   prop: "yinId",
       //   hide: true,
       //   // hide: _this.hide != '4',
@@ -470,7 +470,7 @@ export function rsxkr2C(_this) {
       //   dicData: getDicT("whseCalicoin/v1.0/list", "yinId", "whseCalicoinoid"),
       // },
       // {
-      //   label: "生產單號",
+      //   label: _this.$t("whseField.scdh"),
       //   prop: "prodNo",
       //   cell: true,
       //   hide: true,
@@ -481,14 +481,14 @@ export function rsxkr2C(_this) {
       // },
 
       {
-        label: "胚布编号",
+        label: _this.$t("whseField.pbbh"),
         prop: "calicoId",
         cell: _this.hide === '6' ? false : true,
         width: 140,
         hide: _this.hide === '6' ? true : false
       },
       {
-        label: "胚布名称",
+        label: _this.$t("whseField.pbmc"),
         prop: "clothName",
         cell: _this.hide === '6' ? false : true,
         width: 400,
@@ -502,14 +502,14 @@ export function rsxkr2C(_this) {
         hide: _this.hide === '6' ? false : true
       },
       {
-        label: "胚布编号",
+        label: _this.$t("whseField.pbbh"),
         prop: "woMatno",
         cell: false,
         width: 140,
         hide: _this.hide === '6' ? false : true
       },
       {
-        label: "胚布名称",
+        label: _this.$t("whseField.pbmc"),
         prop: "woMatname",
         cell: false,
         width: 400,
@@ -522,14 +522,14 @@ export function rsxkr2C(_this) {
       //   width: 180,
       // },
       // {
-      //   label: "重量",
+      //   label: _this.$t("whseField.zl"),
       //   prop: "weight",
       //   cell: true,
       //   width: 100,
       //   align: "right",
       // },
       // {
-      //   label: "单位",
+      //   label: _this.$t('whseField.dw'),
       //   prop: "weightUnit",
       //   cell: true,
       //   width: 100,
@@ -581,13 +581,13 @@ export function rcpb3C(_this) {
         hide: true,
       },
       {
-        label: "批号",
+        label: _this.$t("whseField.ph"),
         prop: "batchNo",
         cell: true, width: 180,
         hide: _this.hide === '6' ? true : false
       },
       {
-        label: "生产单号",
+        label: _this.$t("whseField.scdh"),
         prop: "prodNo",
         cell: true, width: 180,
         hide: _this.hide != '6' ? true : false,
@@ -596,7 +596,7 @@ export function rcpb3C(_this) {
 
       },
       {
-        label: "疋号",
+        label: _this.$t("whseField.ph2"),
         prop: "countingNo",
         cell: true,
         width: 80,
@@ -606,7 +606,7 @@ export function rcpb3C(_this) {
         // },
       },
       {
-        label: "重量",
+        label: _this.$t("whseField.zl"),
         prop: "weight",
         cell: true,
         width: 100,
@@ -616,7 +616,7 @@ export function rcpb3C(_this) {
         // },
       },
       {
-        label: "重量单位",
+        label: _this.$t("whseField.zldw"),
         prop: "weightUnit",
         cell: true,
         width: 100,
@@ -627,7 +627,7 @@ export function rcpb3C(_this) {
         // },
       },
       {
-        label: "客人布票号",
+        label: _this.$t("whseField.krbph"),
         prop: "custTicket",
         cell: true,
         width: 150,
@@ -686,7 +686,7 @@ export function rsxkr3C(_this) {
         hide: true,
       },
       {
-        label: "入仓编号",
+        label: _this.$t("whseField.rcbh"),
         prop: "$whseCalicoinFk",
         cell: false,
         width: 140,
@@ -722,7 +722,7 @@ export function rsxkr3C(_this) {
         hide: _this.hide === '5' ? true : false
       },
       // {
-      //   label: "胚布名称",
+      //   label: _this.$t("whseField.pbmc"),
       //   prop: "clothName",
       //   cell: true,
       //   width: 140,
@@ -730,7 +730,7 @@ export function rsxkr3C(_this) {
       //   dicData: getDicT("whseYarninDtl/v1.0/list", "yarnsId", "whseYarninDtloid"),
       // },
       {
-        label: "生产单号",
+        label: _this.$t("whseField.scdh"),
         prop: "prodNo",
         cell: false,
         width: 140,
@@ -739,7 +739,7 @@ export function rsxkr3C(_this) {
         hide: _this.hide != '5' ? true : false
       },
       {
-        label: "批号",
+        label: _this.$t("whseField.ph"),
         prop: "batchNo",
         cell: false,
         width: 180,
@@ -751,7 +751,7 @@ export function rsxkr3C(_this) {
         dicData: rsxkr3CDic,
       },
       {
-        label: _this.hide === '5' ? '疋号' : "疋数",
+        label: _this.hide === '5' ? '疋号' : _this.$t("whseField.ps"),
         prop: "countingNo",
         cell: false,
         width: 100,
@@ -766,7 +766,7 @@ export function rsxkr3C(_this) {
       },
 
       {
-        label: "重量",
+        label: _this.$t("whseField.zl"),
         prop: "weight",
         cell: false,
         width: 140,
@@ -803,7 +803,7 @@ export function rsxkr3C(_this) {
         hide: _this.hide != '5' ? true : false
       },
       {
-        label: "单位",
+        label: _this.$t('whseField.dw'),
         prop: "retCompany",
         cell: false,
         width: 100,
@@ -840,7 +840,7 @@ export function planCrud(_this) {
         hide: true,
       },
       {
-        label: "计划编号",
+        label: _this.$t("whseField.jhbh"),
         prop: "retBatch",
         width: 120,
         cell: true,
@@ -861,14 +861,14 @@ export function planCrud(_this) {
 
       },
       {
-        label: "设备名称",
+        label: _this.$t("labour.sbmc"),
         prop: "equName",
         cell: true,
         width: 120,
         hide: _this.hide != '1' ? true : false
       },
       {
-        label: "加工厂代号",
+        label: _this.$t("whseField.wfcdh"),
         prop: "refCode",
         cell: true,
         width: 120,
@@ -879,14 +879,14 @@ export function planCrud(_this) {
 
       },
       {
-        label: "加工厂名称",
+        label: _this.$t("whseField.wfcmc"),
         prop: "refName",
         cell: true,
         width: 120,
         hide: _this.hide != '2' ? true : false
       },
       {
-        label: "生產單號",
+        label: _this.$t("whseField.scdh"),
         prop: "prOn",
         cell: true,
         width: 180,
@@ -895,7 +895,7 @@ export function planCrud(_this) {
         },
       },
       {
-        label: "胚布编号",
+        label: _this.$t("whseField.pbbh"),
         prop: "calicoId",
         cell: true,
         width: 120,
@@ -904,7 +904,7 @@ export function planCrud(_this) {
         },
       },
       {
-        label: "胚布名称",
+        label: _this.$t("whseField.pbmc"),
         prop: "clothName",
         cell: true,
         width: 450,
@@ -914,7 +914,7 @@ export function planCrud(_this) {
       },
 
       // {
-      //   label: "批号",
+      //   label: _this.$t("whseField.ph"),
       //   prop: "batchNo",
       //   cell: true,
       //   width: 180,
@@ -923,7 +923,7 @@ export function planCrud(_this) {
       //   },
       // },
       // {
-      //   label: "布票号",
+      //   label: _this.$t("whseField.bph"),
       //   prop: "custTicket",
       //   cell: true,
       //   width: 180,
@@ -932,7 +932,7 @@ export function planCrud(_this) {
       //   },
       // },
       {
-        label: "重量",
+        label: _this.$t("whseField.zl"),
         prop: "weight",
         cell: true,
         width: 120,
@@ -942,7 +942,7 @@ export function planCrud(_this) {
         },
       },
       {
-        label: "单位",
+        label: _this.$t('whseField.dw'),
         prop: "weightUnit",
         cell: true,
         width: 120,
@@ -1001,14 +1001,14 @@ export function PlanOutCrud(_this) {
 
       // },
       // {
-      //   label: "设备名称",
+      //   label: _this.$t("labour.sbmc"),
       //   prop: "equName",
       //   cell: true,
       //   width: 120,
       //   hide: _this.hide != '1'
       // },
       // {
-      //   label: "加工厂代号",
+      //   label: _this.$t("whseField.wfcdh"),
       //   prop: "refCode",
       //   cell: true,
       //   width: 120,
@@ -1019,14 +1019,14 @@ export function PlanOutCrud(_this) {
 
       // },
       // {
-      //   label: "加工厂名称",
+      //   label: _this.$t("whseField.wfcmc"),
       //   prop: "refName",
       //   cell: true,
       //   width: 120,
       //   hide: _this.hide != '2'
       // },
       {
-        label: "生產單號",
+        label: _this.$t("whseField.scdh"),
         prop: "prOn",
         cell: true,
         width: 140,
@@ -1035,7 +1035,7 @@ export function PlanOutCrud(_this) {
         },
       },
       {
-        label: "纱线编号",
+        label: _this.$t("whseField.sxbh"),
         prop: "yarnsId",
         cell: true,
         width: 120,
@@ -1045,7 +1045,7 @@ export function PlanOutCrud(_this) {
 
       },
       {
-        label: "纱线名称",
+        label: _this.$t("whseField.sxmc"),
         prop: "yarnsName",
         cell: true,
         width: 250,
@@ -1055,7 +1055,7 @@ export function PlanOutCrud(_this) {
       },
 
       {
-        label: "批号",
+        label: _this.$t("whseField.ph"),
         prop: "batchNo",
         cell: true,
         width: 180,
@@ -1065,7 +1065,7 @@ export function PlanOutCrud(_this) {
         },
       },
       {
-        label: "重量",
+        label: _this.$t("whseField.zl"),
         prop: "weight",
         cell: true,
         width: 100,
@@ -1075,7 +1075,7 @@ export function PlanOutCrud(_this) {
         },
       },
       {
-        label: "锭数",
+        label: _this.$t("whseField.ds"),
         prop: "everySpindle",
         cell: true,
         align: "right",
@@ -1096,39 +1096,39 @@ export function planForm(_this) {
     labelWidth: 130,
     column: [
       {
-        label: "计划编号",
+        label: _this.$t("whseField.jhbh"),
         prop: "retBatch",
         span: 6,
         placeholder: " ",
       },
       {
-        label: "设备编号",
+        label: _this.$t("ProWorkflowInfo.sbbh"),
         prop: "equCode",
         span: 6,
         display: _this.hide === '1' ? true : false,
         placeholder: " ",
       },
       {
-        label: "工厂代号",
+        label: _this.$t("whseField.gcdh"),
         prop: "refCode",
         span: 6,
         placeholder: " ",
         display: _this.hide === '2' ? true : false
       },
       // {
-      //   label: "生产单号",
+      //   label: _this.$t("whseField.scdh"),
       //   prop: "prOn",
       //   span: 6,
       //   placeholder: " ",
       // },
       {
-        label: "批号",
+        label: _this.$t("whseField.ph"),
         prop: "batchNo",
         span: 6,
         placeholder: " ",
       },
       {
-        label: "胚布编号",
+        label: _this.$t("whseField.pbbh"),
         prop: "calicoId",
         span: 6,
         placeholder: " ",
@@ -1144,14 +1144,14 @@ export function sxForm(_this) {
     labelWidth: 130,
     column: [
       {
-        label: "计划编号",
+        label: _this.$t("whseField.jhbh"),
         prop: "retBatch",
         span: 6,
         placeholder: " ",
         disabled: true
       },
       {
-        label: "设备编号",
+        label: _this.$t("ProWorkflowInfo.sbbh"),
         prop: "equCode",
         span: 6,
         placeholder: " ",
@@ -1159,7 +1159,7 @@ export function sxForm(_this) {
         display: _this.hide === '1' ? true : false
       },
       {
-        label: "设备名称",
+        label: _this.$t("labour.sbmc"),
         prop: "equName",
         span: 6,
         placeholder: " ",
@@ -1167,7 +1167,7 @@ export function sxForm(_this) {
         display: _this.hide === '1' ? true : false
       },
       {
-        label: "工厂代号",
+        label: _this.$t("whseField.gcdh"),
         prop: "refCode",
         span: 6,
         placeholder: " ",
@@ -1175,7 +1175,7 @@ export function sxForm(_this) {
         display: _this.hide === '2' ? true : false
       },
       {
-        label: "工厂名称",
+        label: _this.$t("whseField.gcmc"),
         prop: "refName",
         span: 6,
         placeholder: " ",
@@ -1183,14 +1183,14 @@ export function sxForm(_this) {
         display: _this.hide === '2' ? true : false
       },
       {
-        label: "胚布编号",
+        label: _this.$t("whseField.pbbh"),
         prop: "calicoId",
         span: 6,
         placeholder: " ",
         disabled: true
       },
       {
-        label: "生產單號",
+        label: _this.$t("whseField.scdh"),
         prop: "prodNo",
         span: 6,
         placeholder: " ",
@@ -1201,13 +1201,13 @@ export function sxForm(_this) {
       },
 
       {
-        label: "批号",
+        label: _this.$t("whseField.ph"),
         prop: "batchNo",
         span: 6,
         placeholder: " ",
       },
       {
-        label: "布票号",
+        label: _this.$t("whseField.bph"),
         prop: "custTicket",
         span: 6,
         placeholder: " ",
@@ -1242,7 +1242,7 @@ export function whseRetreatCrud(_this) {
         hide: true,
       },
       {
-        label: "计划编号",
+        label: _this.$t("whseField.jhbh"),
         prop: "retBatch",
         cell: true,
         width: 120,
@@ -1264,14 +1264,14 @@ export function whseRetreatCrud(_this) {
 
       },
       {
-        label: "设备名称",
+        label: _this.$t("labour.sbmc"),
         prop: "equName",
         cell: true,
         width: 120,
         hide: _this.hide != '1'
       },
       {
-        label: "加工厂代号",
+        label: _this.$t("whseField.wfcdh"),
         prop: "refCode",
         cell: true,
         width: 120,
@@ -1282,14 +1282,14 @@ export function whseRetreatCrud(_this) {
 
       },
       {
-        label: "加工厂名称",
+        label: _this.$t("whseField.wfcmc"),
         prop: "refName",
         cell: true,
         width: 120,
         hide: _this.hide != '2'
       },
       {
-        label: "生產單號",
+        label: _this.$t("whseField.scdh"),
         prop: "prOn",
         cell: true,
         width: 180,
@@ -1298,7 +1298,7 @@ export function whseRetreatCrud(_this) {
         },
       },
       {
-        label: "纱线编号",
+        label: _this.$t("whseField.sxbh"),
         prop: "yarnsId",
         cell: true,
         width: 120,
@@ -1308,7 +1308,7 @@ export function whseRetreatCrud(_this) {
 
       },
       {
-        label: "纱线名称",
+        label: _this.$t("whseField.sxmc"),
         prop: "yarnsName",
         cell: true,
         width: 250,
@@ -1318,7 +1318,7 @@ export function whseRetreatCrud(_this) {
       },
 
       {
-        label: "批号",
+        label: _this.$t("whseField.ph"),
         prop: "batchNo",
         cell: true,
         width: 180,
@@ -1327,7 +1327,7 @@ export function whseRetreatCrud(_this) {
         },
       },
       {
-        label: "重量",
+        label: _this.$t("whseField.zl"),
         prop: "weight",
         cell: true,
         width: 100,
@@ -1337,7 +1337,7 @@ export function whseRetreatCrud(_this) {
         },
       },
       {
-        label: "锭数",
+        label: _this.$t("whseField.ds"),
         prop: "everySpindle",
         cell: true,
         align: "right",

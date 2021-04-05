@@ -13,7 +13,7 @@ export function mainForm(_this) {
     emptyBtn: false,
     labelWidth: 150,
     column: [{
-      label: "客户",
+      label: _this.$t('whseField.khmc'),
       prop: "custCode",
       span: 6,
       placeholder: " ",
@@ -85,7 +85,7 @@ export function popupForm(_this) {
           _this.choiceField = "colorNo";
           // _this.choiceQ.purType = '5'
           _this.choiceTarget = _this.form;
-          _this.choiceTle = '选择色号资料';
+          _this.choiceTle = _this.$t("choicDlg.xzshzl");
           _this.$nextTick(() => {
             if (_this.form.labTapcolorFk === '') {
 
@@ -154,7 +154,7 @@ export function popupForm(_this) {
         valueFormat: "yyyy-MM-dd",
       },
       {
-        label: "客户",
+        label: _this.$t('whseField.khmc'),
         prop: "$custCode",
         span: 6,
         placeholder: " ",
@@ -330,7 +330,7 @@ export function mainCrud(_this) {
       //   // dicData: colorMng
       // },
       {
-        label: "客户",
+        label: _this.$t('whseField.khmc'),
         prop: "custCode",
         width: 220,
         type: "select",
@@ -527,7 +527,7 @@ export function popupCrud(_this) {
         ]
       },
       {
-        label: "备注",
+        label: _this.$t("energy.bz"),
         prop: "remarks",
         cell: true,
         width: 160,
@@ -585,12 +585,12 @@ export function dtleCrud(_this) {
         dicData: [],
       },
       {
-        label: "批号",
+        label: _this.$t("whseField.ph"),
         prop: "batchNo",
         width: 140,
       },
       {
-        label: "产地",
+        label: _this.$t("whseField.cd"),
         prop: "prodPlace",
         type: "select",
         dicData: getDIC("Whse_Origin"),
@@ -692,7 +692,7 @@ export function dtlexCrud(_this) {
         placeholder: " "
       },
       {
-        label: "备注",
+        label: _this.$t("energy.bz"),
         prop: "remarks",
         width: 220,
         cell: true,
@@ -796,7 +796,7 @@ export function dtlfCrud(_this) {
         placeholder: " "
       },
       {
-        label: "备注",
+        label: _this.$t("energy.bz"),
         prop: "remarks",
         width: 220,
         cell: true,
@@ -853,7 +853,7 @@ export function dtlixCrud(_this) {
         placeholder: " ",
       },
       {
-        label: "备注",
+        label: _this.$t("energy.bz"),
         prop: "remarks",
         width: 220,
         cell: true,

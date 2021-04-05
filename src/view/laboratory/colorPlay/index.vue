@@ -2,18 +2,22 @@
   <div id="colorMng">
     <view-container
       title="色号打办"
-      element-loading-text="拼命加载中"
+      :element-loading-text="$t('public.loading')"
       v-loading="wLoading"
     >
       <div class="btnList">
         <el-button type="primary" @click="add">{{
           this.$t("public.add")
         }}</el-button>
-        <el-button type="primary" @click="update">修改</el-button>
+        <el-button type="primary" @click="update">{{
+          this.$t("public.update")
+        }}</el-button>
         <el-button type="danger" @click="del">{{
           this.$t("public.del")
         }}</el-button>
-        <el-button type="primary" @click="query">查询</el-button>
+        <el-button type="primary" @click="query">{{
+          this.$t("public.query")
+        }}</el-button>
       </div>
 
       <div class="formBox">
@@ -139,12 +143,14 @@ export default {
     },
     del() {
       if (Object.keys(this.detail).length === 0) {
-        this.$tip.error("请选择要删除的数据!");
+        this.$tip.error(this.$t("public.delTle"));
         return;
       }
       this.$tip
         .cofirm(
-          "是否确定删除编号为 【 " + this.detail.runNo + " 】 的数据?",
+          "是否确定删除编号为 【 " +
+            this.detail.runNo +
+            this.$t("iaoMng.delTle2"),
           this,
           {}
         )

@@ -1,8 +1,8 @@
 <template>
   <div id="rcDetail">
-    <view-container :title="datas.type.split('_')[0] + '入库'">
+    <view-container :title="datas.type.split('_')[0] + this.$t('iaoMng.rc')">
       <div class="btnList">
-        <!-- <el-button type="primary" @click="getDetail">查询</el-button> -->
+        <!-- <el-button type="primary" @click="getDetail">{{this.$t("public.query")}}</el-button> -->
         <!-- <el-button type="primary" @click="add">{{this.$t("public.add")}}</el-button>
         <el-button type="danger" @click="del">{{ this.$t("public.del") }}</el-button> -->
         <!-- <el-button
@@ -24,7 +24,7 @@
       </div>
       <el-row class="crudBox">
         <el-col :span="hide != '6' && hide != '7' ? 12 : 24">
-          <view-container :title="datas.type.split('_')[0] + '入库明细'">
+          <view-container :title="datas.type.split('_')[0] + $t('iaoMng.rcmx')">
             <div class="btnList">
               <el-button type="primary" @click="add">{{
                 this.$t("public.add")
@@ -46,7 +46,9 @@
             </div> </view-container
         ></el-col>
         <el-col :span="12" v-if="hide != '6' && hide != '7'">
-          <view-container :title="datas.type.split('_')[0] + '入库批号资料'">
+          <view-container
+            :title="datas.type.split('_')[0] + $t('iaoMng.rcphzl')"
+          >
             <!-- <div style="margin-bottom: 0px" class="btnList">
               <el-button type="primary" @click="addPh">{{this.$t("public.add")}}</el-button>
               <el-button type="danger" @click="delPh">{{ this.$t("public.del") }}</el-button>
@@ -144,7 +146,7 @@ export default {
       changePhList: [],
       canLeave: false,
       choiceV: false,
-      choiceTle: "來紗登記",
+      choiceTle: this.$t("iaoMng.xzlsdj"),
       choiceTarget: {},
       choiceField: "",
       choiceQ: {},
@@ -259,7 +261,7 @@ export default {
     add() {
       if (this.hide === "1") {
         if (this.form.registerNo === "" || this.form.registerNo === null) {
-          this.$tip.error("请先选择胚布登记编号!");
+          this.$tip.error(this.$t("whseMng.pbbhTle"));
           return;
         }
         this.choiceV = !this.choiceV;
@@ -267,7 +269,7 @@ export default {
         this.choiceQ.registerNo = this.form.registerNo;
         this.choiceTarget = {};
         this.dlgWidth = "100%";
-        this.choiceTle = "選擇來胚登記明細";
+        this.choiceTle = this.$t("choicDlg.xzlpdj");
         // return;
       }
       if (this.hide === "6" || this.hide === "7") {
@@ -276,7 +278,7 @@ export default {
         // this.choiceQ.registerNo = this.form.registerNo;
         this.choiceTarget = {};
         this.dlgWidth = "100%";
-        this.choiceTle = "選擇胚布貨物包";
+        this.choiceTle = this.$t("choicDlg.xzpbhwb");
         // return;
       }
       if (this.hide === "4") {
@@ -285,26 +287,26 @@ export default {
 
         this.choiceTarget = {};
         this.dlgWidth = "100%";
-        this.choiceTle = "選擇訂單胚布資料";
+        this.choiceTle = this.$t("choicDlg.xzddpbzl");
         // return;
       }
       if (this.hide === "5") {
         if (this.form.instructId === "" || this.form.instructId === null) {
-          this.$tip.error("请先选择加工指令單號!");
+          this.$tip.error(this.$t("whseMng.jgzldTle"));
           return;
         }
         this.choiceV = !this.choiceV;
         this.choiceQ.materialType = "2";
         this.dlgWidth = "100%";
-        this.choiceTle = "選擇指令單明細";
+        this.choiceTle = this.$t("iaoMng.xzzld");
       }
     },
     addPh() {
       if (Object.keys(this.chooseData).length === 0) {
-        this.$tip.error("请先选择入库明细");
+        this.$tip.error(this.$t("choicDlg.qxzrcmx"));
         return;
       } else if (!this.chooseData.whseCalicoinDtlaoid) {
-        this.$tip.error("请先保存入库明细资料");
+        this.$tip.error(this.$t("choicDlg.qxbcrcmx"));
         return;
       }
       // if (Object.keys(this.oldPhData).length > 0) {
@@ -382,7 +384,7 @@ export default {
     },
     del() {
       if (Object.keys(this.chooseData).length === 0) {
-        this.$tip.error("请选择要删除的数据!");
+        this.$tip.error(this.$t("public.delTle"));
         return;
       }
       if (!this.chooseData.whseCalicoinDtlaoid) {
@@ -398,12 +400,14 @@ export default {
 
       if (this.hide != "6") {
         tle =
-          "是否确定删除胚布编码为 【 " +
+          this.$t("iaoMng.delTle6") +
           this.chooseData.calicoId +
-          " 】 的数据?";
+          this.$t("iaoMng.delTle2");
       } else {
         tle =
-          "是否确定删除生產單號为 【 " + this.chooseData.prodNo + " 】 的数据?";
+          this.$t("iaoMng.delTle7") +
+          this.chooseData.prodNo +
+          this.$t("iaoMng.delTle2");
       }
       this.$tip
         .cofirm(tle, this, {})
@@ -429,7 +433,7 @@ export default {
     },
     delPh() {
       if (Object.keys(this.choosePhData).length === 0) {
-        this.$tip.error("请选择要删除的数据!");
+        this.$tip.error(this.$t("public.delTle"));
         return;
       }
       if (!this.choosePhData.whseCalicoinDtlboid) {
@@ -446,7 +450,9 @@ export default {
       }
       this.$tip
         .cofirm(
-          "是否确定删除批号为 【 " + this.choosePhData.batchNo + " 】 的数据?",
+          this.$t("iaoMng.delTle8") +
+            this.choosePhData.batchNo +
+            this.$t("iaoMng.delTle2"),
           this,
           {}
         )
@@ -477,7 +483,7 @@ export default {
       if (!this.chooseData.list) {
         this.chooseData.list = [];
       }
-      // if (this.datas === "化工原料" || this.datas === "顏料") {
+      // if (this.datas === this.$t("iaoMng.hgyl") || this.datas === this.$t("iaoMng.yl")) {
       //   this.getPh();
       //   // this.getLoc();
       // }
@@ -496,21 +502,21 @@ export default {
         this.hide === "1" &&
         (this.form.yinId === "" || this.form.registerNo === "")
       ) {
-        this.$tip.error("入仓编号/登记编号不能为空!");
+        this.$tip.error(this.$t("iaoMng.saveTle1"));
         return;
       }
       if (this.hide === "5" && !this.form.factoryId) {
-        this.$tip.error("入库资料中的加工廠不能为空!");
+        this.$tip.error(this.$t("iaoMng.saveTle2"));
         return;
       }
       if (this.hide === "5" && !this.form.instructId) {
-        this.$tip.error("入库资料中的加工指令單號不能为空!");
+        this.$tip.error(this.$t("iaoMng.saveTle3"));
         return;
       }
 
       for (let i = 0; i < this.mx.length; i++) {
         // if (!this.mx[i].batchNo) {
-        //   this.$tip.error("批号不能为空!");
+        //   this.$tip.error($t('iaoMng.saveTle4'));
         //   return;
         // }
         // if (!this.mx[i].weight || !this.mx[i].weightUnit) {
@@ -524,17 +530,17 @@ export default {
         if (this.mx[i].loc) {
           for (let j = 0; j < this.mx[i].loc.length; j++) {
             if (!this.mx[i].loc[j].weight || !this.mx[i].loc[j].weightUnit) {
-              this.$tip.error("入仓批號重量不能为空!");
+              this.$tip.error(this.$t("iaoMng.saveTle6"));
               return;
             }
             if (!this.mx[i].loc[j].batchNo) {
-              this.$tip.error("入仓批號不能为空!");
+              this.$tip.error(this.$t("iaoMng.saveTle4"));
               return;
             }
           }
         }
         if (this.hide === "6" && !this.mx[i].countingNo) {
-          this.$tip.error("入仓疋数不能为空!");
+          this.$tip.error(this.$t("iaoMng.saveTle10"));
           return;
         }
       }
@@ -682,11 +688,11 @@ export default {
       this.choiceTarget.yarnsName = val.yarnsId;
       // this.choiceTarget[this.choiceField] = val[this.choiceField];
       this.oldData.$cellEdit = true;
-      if (this.choiceTle === "選擇來胚登記") {
+      if (this.choiceTle === this.$t("choicDlg.lpdj")) {
         this.choiceTarget.custName = val.$custCode;
         // this.choiceTarget.custCode = val.custCode;
       }
-      if (this.choiceTle === "選擇來胚登記明細") {
+      if (this.choiceTle === this.$t("choicDlg.xzlpdj")) {
         val.forEach((item, i) => {
           item.weight = item.weights;
           item.weightUnit = item.weightUnit;
@@ -714,15 +720,15 @@ export default {
           }
         });
       }
-      if (this.choiceTle === "胚布訂單") {
+      if (this.choiceTle === this.$t("choicDlg.pbdd")) {
         this.choiceTarget.prodNo = val.$poNo;
         this.choiceTarget.calicoId = val.fabId;
         this.choiceTarget.clothName = val.fabYcount;
       }
-      if (this.choiceTle === "胚布編碼") {
+      if (this.choiceTle === this.$t("choicDlg.pbbm")) {
         this.choiceTarget.clothName = val.$clothName;
       }
-      if (this.choiceTle === "選擇胚布貨物包") {
+      if (this.choiceTle === this.$t("choicDlg.xzpbhwb")) {
         // if (this.hide === "6") {
         // this.mx = this.mx.concat(val);
         this.mx = this.$unique(this.mx.concat(val), "prodNo");
@@ -738,7 +744,7 @@ export default {
         // this.choiceTarget.fabticket = val.fabticket;
         // this.choiceTarget.countingNo = val.countingNo;
       }
-      if (this.choiceTle === "選擇指令單明細") {
+      if (this.choiceTle === this.$t("iaoMng.xzzld")) {
         val.forEach((item, i) => {
           item.calicoId = item.materialId;
           item.clothName = item.materialName;
@@ -761,7 +767,7 @@ export default {
           }
         });
       }
-      if (this.choiceTle === "選擇訂單胚布資料") {
+      if (this.choiceTle === this.$t("choicDlg.xzddpbzl")) {
         val.forEach((item, i) => {
           item.prodNo = item.$salPoFk;
           item.calicoId = item.fabId;
@@ -784,10 +790,10 @@ export default {
           }
         });
       }
-      if (this.choiceTle === "選擇貨位") {
+      if (this.choiceTle === this.$t("choicDlg.xzhw")) {
         this.chooseData.locationCode = val[0].locationCode;
       }
-      if (this.choiceTle === "選擇外厂胚布配料計劃") {
+      if (this.choiceTle === this.$t("choicDlg.xzwfpbpl")) {
         this.form.factoryId = val.refCode;
       }
       for (var key in val) {

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-23 08:03:49
  * @LastEditors: Lyl
- * @LastEditTime: 2021-02-04 16:00:31
+ * @LastEditTime: 2021-04-05 14:27:11
  * @Description:
  */
 import { getDIC, getDicT, postDicT, getXDicT } from '@/config/index'
@@ -14,7 +14,7 @@ export function mainForm(_this) {
     labelWidth: 150,
     column: [
       {
-        label: "材料类别",
+        label: _this.$t("whseField.cllb"),//"材料类别",
         prop: "pfType",
         span: 6,
         placeholder: " ",
@@ -22,11 +22,11 @@ export function mainForm(_this) {
         dicData: [
           {
             value: 0,
-            label: "五金用品",
+            label: _this.$t("whseField.wjyp"),// "五金用品",
           },
           {
             value: 1,
-            label: "行政用品",
+            label: _this.$t("whseField.xzyp"),// "行政用品",
           },
         ],
         change: (val) => {
@@ -38,7 +38,7 @@ export function mainForm(_this) {
         },
       },
       {
-        label: "一级分类",
+        label: _this.$t("whseField.yjfl"),// "一级分类",
         prop: "basHardwareFk",
         span: 6,
         placeholder: " ",
@@ -46,13 +46,13 @@ export function mainForm(_this) {
         dicData: [],
       },
       {
-        label: "编号",
+        label: _this.$t("whseField.bh"),//"编号",
         prop: "hardwareId",
         span: 6,
         placeholder: " ",
       },
       {
-        label: "中文名称",
+        label: _this.$t("whseField.zwmc"),// "中文名称",
         prop: "chinName",
         span: 6,
         placeholder: " ",
@@ -79,17 +79,17 @@ export const hardwareC = {
       align: "center",
     },
     {
-      label: "编号",
+      label: _this.$t("whseField.bh"),//"编号",
       prop: "hardwareId",
       width: 120
     },
     {
-      label: "中文名称",
+      label: _this.$t("whseField.zwmc"),// "中文名称",
       prop: "chinName",
       width: 140
     },
     {
-      label: "英文名称",
+      label: _this.$t("whseField.ywmc"),//"英文名称",
       prop: "engName",
       width: 140
     },
@@ -101,14 +101,14 @@ export const hardwareC = {
     //   type: "select",
     // },
     {
-      label: "一级分类",
+      label: _this.$t("whseField.yjfl"),//"一级分类",
       prop: "basHardwareFk",
       type: "select",
       dicData: getDicT("basHardware", "topcategoryName", "topcategoryId"),
       width: 140
     },
     {
-      label: "二级分类",
+      label: _this.$t("whseField.ejfl"),//"二级分类",
       prop: "basHardwareDtlaFk",
       type: "select",
       dicData: getDicT("basHardwareDtla", "topcategoryName", "topcategoryId"),
@@ -116,22 +116,22 @@ export const hardwareC = {
     },
 
     {
-      label: "品牌",
+      label: _this.$t("whseField.pp"),// "品牌",
       prop: "brand",
       width: 160
     },
     {
-      label: "规格",
+      label: _this.$t("whseField.gg"),//"规格",
       prop: "itemspec",
       width: 250
     },
     {
-      label: "型号",
+      label: _this.$t("whseField.xh"),//"型号",
       prop: "model",
       width: 250
     },
     {
-      label: "计量单位",
+      label: _this.$t("whseField.jldw"),//"计量单位",
       prop: "msUnit",
       type: "select",
       dicData: getDIC("bas_matUnit"),

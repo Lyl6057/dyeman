@@ -7,8 +7,12 @@
             <el-button type="primary" @click.stop="addBtn">{{
               this.$t("public.add")
             }}</el-button>
-            <el-button type="primary" @click="query">查询</el-button>
-            <el-button type="primary" @click="editorbtn">修改</el-button>
+            <el-button type="primary" @click="query">{{
+              this.$t("public.query")
+            }}</el-button>
+            <el-button type="primary" @click="editorbtn">{{
+              this.$t("public.update")
+            }}</el-button>
             <el-button type="danger" @click="del(rowCheckData)">{{
               this.$t("public.del")
             }}</el-button>

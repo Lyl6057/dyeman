@@ -5,7 +5,7 @@
         <!-- <el-button type="primary" @click="add" :disabled="loading"
           >{{this.$t("public.add")}}</el-button
         ><el-button type="primary" @click="update" :disabled="loading"
-          >修改</el-button
+          >{{this.$t("public.update")}}</el-button
         ><el-button type="danger" @click="del" :disabled="loading"
           >{{ this.$t("public.del") }}</el-button
         >
@@ -15,9 +15,9 @@
           >取消</el-button
         >
            </div> -->
-        <el-button type="primary" @click="getData" :disabled="loading"
-          >查询</el-button
-        >
+        <el-button type="primary" @click="getData" :disabled="loading">{{
+          this.$t("public.query")
+        }}</el-button>
       </div>
       <div class="formBox" style="margin-top: 10px">
         <avue-form ref="form" v-model="form" :option="formOp"> </avue-form>

@@ -25,7 +25,9 @@
             v-if="hide != '1' && hide != '2'"
             >編號規則配置</el-button
           > -->
-          <el-button type="primary" @click="getData">查询</el-button>
+          <el-button type="primary" @click="getData">{{
+            this.$t("public.query")
+          }}</el-button>
           <el-button type="warning" @click="close">{{
             this.$t("public.close")
           }}</el-button>
@@ -151,7 +153,7 @@ export default {
       ruleV: false,
       temV: false,
       choiceV: false,
-      choiceTle: "选择货运计划",
+      choiceTle: this.$t("choicDlg.xzhyjh"),
       choiceTarget: {},
       choiceField: "",
       choiceQ: {},
@@ -233,7 +235,7 @@ export default {
     },
     del() {
       if (Object.keys(this.chooseData).length === 0) {
-        this.$tip.error("请选择要删除的数据!");
+        this.$tip.error(this.$t("public.delTle"));
         return;
       }
       if (!this.chooseData.whseFinclothselloutoid) {

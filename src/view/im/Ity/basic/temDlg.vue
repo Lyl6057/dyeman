@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-25 00:46:18
  * @LastEditors: Lyl
- * @LastEditTime: 2021-03-29 15:51:03
+ * @LastEditTime: 2021-04-02 09:57:29
  * @Description: 
 -->
 <template>
@@ -190,7 +190,7 @@ export default {
     },
     del() {
       if (Object.keys(this.chooseData).length === 0) {
-        this.$tip.error("请选择要删除的数据!");
+        this.$tip.error(this.$t("public.delTle"));
         return;
       }
       if (!this.chooseData.whseMaterialopeningoid) {
@@ -204,7 +204,9 @@ export default {
       } else {
         this.$tip
           .cofirm(
-            "是否确定删除批號为 【 " + this.chooseData.batchNo + " 】 的数据?",
+            "是否确定删除批號为 【 " +
+              this.chooseData.batchNo +
+              this.$t("iaoMng.delTle2"),
             this,
             {}
           )
@@ -280,6 +282,7 @@ export default {
     if (this.isAdd) {
       this.loading = true;
       this.form = this.detail;
+      this.form.materialName = this.form.$materialName;
       this.getMaterial();
     }
   },

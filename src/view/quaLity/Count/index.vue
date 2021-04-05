@@ -11,7 +11,9 @@
       <el-tabs type="border-card">
         <el-tab-pane label="检测统计">
           <el-row class="btnList">
-            <el-button type="primary" @click="queryBtn">查询</el-button>
+            <el-button type="primary" @click="queryBtn">{{
+              this.$t("public.query")
+            }}</el-button>
           </el-row>
           <avue-form
             ref="form"

@@ -21,7 +21,7 @@
         <el-col :span="24">
           <view-container :title="datas.type.split('_')[0] + '明细'">
             <div class="btnList" style="margin-bottom: 2px">
-              <!-- <el-button type="primary" @click="getDetail">查询</el-button> -->
+              <!-- <el-button type="primary" @click="getDetail">{{this.$t("public.query")}}</el-button> -->
               <el-button type="primary" @click="add" v-if="canSave">{{
                 this.$t("public.add")
               }}</el-button>
@@ -263,12 +263,12 @@ export default {
               .then((res) => {
                 this.choiceV = !this.choiceV;
                 this.choiceQ.purSingleFk = res.data[0].purSingleoid;
-                this.choiceTle = "申购单资料";
+                this.choiceTle = this.$t("choicDlg.xzsgdzl");
               });
           } else {
             this.choiceV = !this.choiceV;
             this.choiceQ.purSingleFk = this.form.purSingleoid;
-            this.choiceTle = "申购单资料";
+            this.choiceTle = this.$t("choicDlg.xzsgdzl");
           }
         } else if (this.form.stockType === "2") {
           this.otherV = true;
@@ -283,12 +283,12 @@ export default {
               .then((res) => {
                 this.choiceV = !this.choiceV;
                 this.choiceQ.purApplicationFk = res.data[0].purApplicationoid;
-                this.choiceTle = "选择申请领用单明细";
+                this.choiceTle = this.$t("choicDlg.xzsqlydmx");
               });
           } else {
             this.choiceV = !this.choiceV;
             this.choiceQ.purApplicationFk = this.form.purApplicationoid;
-            this.choiceTle = "选择申请领用单明细";
+            this.choiceTle = this.$t("choicDlg.xzsqlydmx");
           }
         }
       } else if (this.hide === "4" || this.hide === "5") {
@@ -296,7 +296,7 @@ export default {
         this.choiceField = "woOrderno";
         this.oldData = this.chooseData;
         this.choiceTarget = this.oldData;
-        this.choiceTle = "选择五金/行政入仓明细";
+        this.choiceTle = this.$t("choicDlg.xzwjxzrc");
       }
     },
     del() {
@@ -304,7 +304,7 @@ export default {
         this.chooseData == null ||
         Object.keys(this.chooseData).length === 0
       ) {
-        this.$tip.error("请选择要删除的数据!");
+        this.$tip.error(this.$t("public.delTle"));
         return;
       }
       if (
@@ -537,12 +537,12 @@ export default {
         this.choiceV = false;
         return;
       }
-      if (this.choiceTle === "申购单") {
+      if (this.choiceTle === this.$t("choicDlg.xzsgd")) {
         this.form.appId = val.appId;
         this.form.purSingleoid = val.purSingleoid;
-      } else if (this.choiceTle === "领用人") {
+      } else if (this.choiceTle === this.$t("choicDlg.xzlyr")) {
         this.form.leader = val.perPersonoid;
-      } else if (this.choiceTle === "申购单资料") {
+      } else if (this.choiceTle === this.$t("choicDlg.xzsgdzl")) {
         val.forEach((item, i) => {
           item.$cellEdit = true;
           item.materialId = item.materialNum;
@@ -556,7 +556,7 @@ export default {
         this.mx.forEach((e, index) => {
           e.index = index + 1;
         });
-      } else if (this.choiceTle === "选择申请领用单明细") {
+      } else if (this.choiceTle === this.$t("choicDlg.xzsqlydmx")) {
         val.forEach((item, i) => {
           item.$cellEdit = true;
           item.materialId = item.materielCode;
@@ -570,7 +570,7 @@ export default {
         this.mx.forEach((e, index) => {
           e.index = index + 1;
         });
-      } else if (this.choiceTle === "选择五金/行政入仓明细") {
+      } else if (this.choiceTle === this.$t("choicDlg.xzwjxzrc")) {
         // let data = {
         //   woMatno: val.fabId,
         //   woMatname: val.fabName,

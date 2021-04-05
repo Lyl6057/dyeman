@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-24 08:12:20
  * @LastEditors: Lyl
- * @LastEditTime: 2021-03-16 16:20:59
+ * @LastEditTime: 2021-04-03 16:00:23
  * @Description: 
 -->
 <template>
@@ -11,7 +11,9 @@
       <el-button type="primary" @click="add">{{
         this.$t("public.add")
       }}</el-button>
-      <el-button type="danger" @click="del">刪除</el-button>
+      <el-button type="danger" @click="del">{{
+        this.$t("public.del")
+      }}</el-button>
     </div>
 
     <div class="crudBox">
@@ -62,7 +64,7 @@ export default {
       },
       loading: false,
       choiceV: false,
-      choiceTle: "選擇貨位",
+      choiceTle: this.$t("choicDlg.xzhw"),
       choiceTarget: {},
       choiceField: "",
       choiceQ: {},
@@ -122,13 +124,13 @@ export default {
       if (this.inData && Object.keys(this.inData).length != 0) {
         this.choiceV = true;
       } else {
-        this.$tip.error("請先選擇入倉明細!");
+        this.$tip.error(this.$t("choicDlg.qxzrcmx"));
       }
     },
     del() {
       // return;
       if (Object.keys(this.chooseData).length === 0) {
-        this.$tip.error("请选择要删除的数据!");
+        this.$tip.error(this.$t("public.delTle"));
         return;
       }
       if (
@@ -143,20 +145,20 @@ export default {
       }
       this.$tip
         .cofirm(
-          "是否确定删除貨位碼为 【 " +
+          this.$t("iaoMng.delTle5") +
             this.chooseData.locationCode +
-            " 】 的数据?",
+            this.$t("iaoMng.delTle2"),
           this,
           {}
         )
         .then(() => {
           this.api
             .delLoc(
-              this.type === "紗線"
+              this.type === this.$t("iaoMng.sx")
                 ? this.chooseData.whseYarninDtlaoid
-                : this.type === "化工原料"
+                : this.type === this.$t("iaoMng.hgyl")
                 ? this.chooseData.whseChemicalinDtlcoid
-                : this.type === "生產輔料"
+                : this.type === this.$t("iaoMng.scfl")
                 ? this.chooseData.whseAccessoriesDtlaoid
                 : this.chooseData.whseDyesainDtlcoid
             )

@@ -129,13 +129,13 @@ export function crud(_this) {
         align: "center"
       },
       {
-        label: "重量",
+        label: _this.$t("whseField.zl"),
         prop: "weight",
         width: 120,
         align: "right"
       },
       {
-        label: "单位",
+        label: _this.$t('whseField.dw'),
         prop: "unit",
         width: 120,
       },

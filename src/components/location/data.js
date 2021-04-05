@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-24 08:12:20
  * @LastEditors: Lyl
- * @LastEditTime: 2021-03-18 11:25:07
+ * @LastEditTime: 2021-04-05 16:52:58
  * @Description: 
  */
 import {
@@ -41,7 +41,7 @@ export function loc1C(_this) {
       align: "center"
     },
     {
-      label: "貨位碼",
+      label: _this.$t("whseField.hwm"),//"貨位碼",
       prop: "locationCode",
       cell: false,
       width: 160,
@@ -52,13 +52,13 @@ export function loc1C(_this) {
       cell: true,
       width: 100,
       align: "right",
-      hide: _this.type != '紗線',
+      hide: _this.type != _this.$t("iaoMng.sx"),
       // change: () => {
       //   _this.$refs["crud"].doLayout();
       // }
     },
     {
-      label: "重量",
+      label: _this.$t("whseField.zl"),
       prop: "weight",
       cell: true,
       width: 100,
