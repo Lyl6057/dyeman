@@ -392,7 +392,8 @@ export default {
       if (
         !this.chooseData.whseChemicalinoid &&
         !this.chooseData.whseAccessoriesinoid &&
-        !this.chooseData.whseYarninoid
+        !this.chooseData.whseYarninoid &&
+        !this.chooseData.whseDyesalinoid
       ) {
         this.crud.splice(this.chooseData.index - 1, 1);
         this.chooseData = {};
@@ -408,9 +409,10 @@ export default {
         .then(() => {
           this.everyThing
             .del(
-              this.data === this.$t("iaoMng.hgyl") ||
-                this.data === this.$t("iaoMng.yl")
+              this.data === this.$t("iaoMng.hgyl")
                 ? this.chooseData.whseChemicalinoid
+                : this.data === this.$t("iaoMng.yl")
+                ? this.chooseData.whseDyesalinoid
                 : this.data === this.$t("iaoMng.sx")
                 ? this.chooseData.whseYarninoid
                 : this.chooseData.whseAccessoriesinoid

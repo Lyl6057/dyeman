@@ -75,7 +75,7 @@
                 :inData="chooseData"
                 :api="everyThing"
                 :form="form"
-                :type="this.$t('iaoMng.hgyl')"
+                :type="this.$t('iaoMng.yl')"
               ></loction>
             </el-tab-pane>
           </el-tabs>
@@ -287,7 +287,7 @@ export default {
       // }
       if (this.hide === "1") {
         if (this.form.registerNo === "" || this.form.registerNo === null) {
-          this.$tip.error("請先選擇來顏料登記編號!");
+          this.$tip.error(this.$t("iaoMng.addTle"));
           return;
         }
         this.choiceV = !this.choiceV;
@@ -389,7 +389,7 @@ export default {
       }
       this.$tip
         .cofirm(
-          "是否确定删除顏料编码为 【 " +
+          this.$t("iaoMng.delTle13") +
             this.chooseData.chemicalId +
             this.$t("iaoMng.delTle2"),
           this,
@@ -438,7 +438,7 @@ export default {
       }
       this.$tip
         .cofirm(
-          "是否确定删除批号为 【 " +
+          this.$t("iaoMng.delTle8") +
             this.choosePhData.batchNo +
             this.$t("iaoMng.delTle2"),
           this,
@@ -749,12 +749,12 @@ export default {
         ) {
           this.choiceTarget.purNo = val.poNo;
         }
-        if (this.choiceTle == this.$t("choicDlg.xzwfylpl")) {
-          this.mx = this.mx.concat(val);
-          this.mx.forEach((item, i) => {
-            item.index = i + 1;
-          });
-        }
+        // if (this.choiceTle == this.$t("choicDlg.xzwfylpl")) {
+        //   this.mx = this.mx.concat(val);
+        //   this.mx.forEach((item, i) => {
+        //     item.index = i + 1;
+        //   });
+        // }
 
         this.choiceTarget.chemicalId = val.bcCode;
         this.choiceTarget.chemicalName = val.bcMatname;

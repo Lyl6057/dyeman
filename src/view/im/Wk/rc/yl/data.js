@@ -256,7 +256,7 @@ export function rhlDetailF(_this) {
         display: _this.hide === '2' ? false : true,
       },
       {
-        label: "纱线登记编号",
+        label: _this.$t("whseField.djbh"),
         prop: "registerNo",
         span: 6,
         placeholder: " ",
@@ -370,7 +370,6 @@ export function rhl1C(_this) {
         cell: false,
         width: 180,
         hide: _this.hide === "1" ? false : true,
-        placeholder: "請選擇来料编号",
       },
       {
         label: _this.$t("whseField.khbh"),
@@ -462,7 +461,7 @@ export function rhl1C(_this) {
         label: _this.$t("whseField.cwzt"),
         prop: "finStatus",
         cell: false,
-        width: 120,
+        width: 135,
         hide: _this.hide === '5' ? true : false,
         type: "select",
         dicData:
@@ -557,7 +556,7 @@ export function rhl2C(_this) {
         width: 140,
       },
       {
-        label: "顏料名称",
+        label: _this.$t("whseField.ylmc1"),
         prop: "chemicalName",
         cell: false,
         width: 350,

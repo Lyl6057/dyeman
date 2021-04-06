@@ -629,6 +629,7 @@ export default {
       });
     },
     del() {
+      console.log(this.chooseData);
       if (Object.keys(this.chooseData).length === 0) {
         this.$tip.error(this.$t("public.delTle"));
         return;
@@ -637,7 +638,8 @@ export default {
         !this.chooseData.whseYarninDtloid &&
         !this.chooseData.whseCalicoinDtlaoid &&
         !this.chooseData.whseChemicalinDtlaoid &&
-        !this.chooseData.whseAccessoriesDtloid
+        !this.chooseData.whseAccessoriesDtloid &&
+        !this.chooseData.whseDyesainDtlaoid
       ) {
         this.mx.splice(this.chooseData.index - 1, 1);
         this.$refs.mx.setCurrentRow(this.mx[this.mx.length - 1] || {});
@@ -645,16 +647,17 @@ export default {
       }
       this.$tip
         .cofirm(
-          "是否确定删除" +
-            (this.datas === this.$t("iaoMng.hgyl") ||
-            this.datas === this.$t("iaoMng.yl")
+          this.$t("iaoMng.delTle11") +
+            (this.datas === this.$t("iaoMng.hgyl")
               ? this.$t("iaoMng.hgyl")
+              : this.datas === this.$t("iaoMng.yl")
+              ? this.$t("iaoMng.yl")
               : this.datas === this.$t("iaoMng.sx")
               ? this.$t("iaoMng.sx")
               : this.datas === this.$t("iaoMng.pb")
               ? this.$t("iaoMng.pb")
-              : "材料") +
-            "编号为 【 " +
+              : this.$t("iaoMng.cl")) +
+            this.$t("iaoMng.delTle12") +
             (this.datas === this.$t("iaoMng.hgyl") ||
             this.datas === this.$t("iaoMng.yl")
               ? this.chooseData.chemicalId
@@ -670,9 +673,10 @@ export default {
         .then(() => {
           this.everyThing
             .delDetail(
-              this.datas === this.$t("iaoMng.hgyl") ||
-                this.datas === this.$t("iaoMng.yl")
+              this.datas === this.$t("iaoMng.hgyl")
                 ? this.chooseData.whseChemicalinDtlaoid
+                : this.datas === this.$t("iaoMng.yl")
+                ? this.chooseData.whseDyesainDtlaoid
                 : this.datas === this.$t("iaoMng.sx")
                 ? this.chooseData.whseYarninDtloid
                 : this.datas === this.$t("iaoMng.pb")
@@ -706,7 +710,10 @@ export default {
         this.$tip.error(this.$t("public.delTle"));
         return;
       }
-      if (!this.choosePhData.whseChemicalinDtlboid) {
+      if (
+        !this.choosePhData.whseChemicalinDtlboid &&
+        !this.choosePhData.whseDyesainDtlboid
+      ) {
         this.chooseData.list.splice(this.choosePhData.index - 1, 1);
         this.phPage.total--;
         this.chooseData.list.forEach((item, i) => {
@@ -725,7 +732,11 @@ export default {
         )
         .then(() => {
           this.everyThing
-            .delPh(this.choosePhData.whseChemicalinDtlboid)
+            .delPh(
+              this.datas === this.$t("iaoMng.yl")
+                ? this.choosePhData.whseDyesainDtlboid
+                : this.choosePhData.whseChemicalinDtlboid
+            )
             .then((res) => {
               if (res.data.code === 200) {
                 this.$tip.success(this.$t("public.sccg"));

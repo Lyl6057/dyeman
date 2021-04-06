@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-04-01 13:39:35
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-01 15:42:19
+ * @LastEditTime: 2021-04-06 13:32:10
  * @Description:
  */
 
@@ -64,7 +64,7 @@ export function proMng(_this) {
     ]
   },
   {
-    menuName: "三.染单生产",
+    menuName: "四.染单生产",
     index: "dyePro",
     icon: "el-icon-edit-outline",
     children: [
@@ -89,7 +89,7 @@ export function proMng(_this) {
     children: [
       {
         menuName: "1.织造工单",
-        index: "织造工单"
+        index: "/proWeaveJob"
       },
       {
         menuName: "2.染整工单",

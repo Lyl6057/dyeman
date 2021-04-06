@@ -29,24 +29,10 @@
       >
       </avue-crud>
     </el-row>
-    <el-dialog
-      id="wkRuleDlg"
-      :visible.sync="ruleV"
-      append-to-body
-      :close-on-click-modal="false"
-      v-if="ruleV"
-    >
-      <rule-dlg
-        ref="rule"
-        :rcType="'whse_in'"
-        @close="ruleV = false"
-      ></rule-dlg>
-    </el-dialog>
   </div>
 </template>
 <script>
 import { planCrud, planForm } from "./data";
-import rule from "@/components/rule";
 import tem from "./tem";
 import { baseCodeSupply } from "@/api/index";
 import {
@@ -60,7 +46,6 @@ import { getviPurchNostock } from "@/api/im/Wk/rhl";
 export default {
   name: "",
   components: {
-    ruleDlg: rule,
     tem,
   },
   props: {},
@@ -77,7 +62,6 @@ export default {
       crudOp: planCrud(this),
       crud: [],
       planV: false,
-      ruleV: false,
       sxV: false,
       selected: [],
       chooseData: {},

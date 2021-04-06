@@ -2,17 +2,24 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-06 13:36:49
+ * @LastEditTime: 2021-04-06 15:12:43
  * @Description: 
 -->
 <template>
   <div id="clothFly">
-    <view-container title="布飞打印">
+    <view-container title="織造通知單打印">
       <el-row class="btnList">
+        <el-button type="success" @click="handleRowDBLClick(chooseData)">{{
+          this.$t("public.update")
+        }}</el-button>
+        <el-button type="primary" @click="add">{{
+          this.$t("public.add")
+        }}</el-button>
+        <el-button type="primary" @click="print">打印</el-button>
         <el-button type="primary" @click="query">{{
           this.$t("public.query")
         }}</el-button>
-        <el-button type="primary" @click="print">打印</el-button>
+
         <el-button type="warning" @click="close">{{
           this.$t("public.close")
         }}</el-button>
@@ -45,6 +52,7 @@
         <tem-dlg
           ref="tem"
           :detail="detail"
+          :isAdd="isAdd"
           @close="dialogVisible = false"
           v-if="dialogVisible"
         ></tem-dlg>
@@ -54,7 +62,7 @@
 </template>
 <script>
 import { mainForm, mainCrud } from "./data";
-import { getScheduleAndWork } from "./api";
+import { get, add, update, del } from "./api";
 import tem from "./temDlg";
 export default {
   name: "",
@@ -75,19 +83,21 @@ export default {
       loading: false,
       dialogVisible: false,
       detail: {},
+      isAdd: false,
+      chooseData: {},
     };
   },
   watch: {},
   methods: {
     query() {
       this.loading = true;
-      getScheduleAndWork(
-        Object.assign(this.form, {
+      get(
+        Object.assign({
           rows: this.page.pageSize,
           start: this.page.currentPage,
         })
       ).then((res) => {
-        this.crud = this.$unique(res.data.records, "poNo");
+        this.crud = res.data.records;
         this.crud.forEach((item, i) => {
           item.index = i + 1;
         });
@@ -103,9 +113,14 @@ export default {
       this.detail.qsph = 1;
       this.dialogVisible = true;
     },
+    add() {
+      this.isAdd = true;
+      this.dialogVisible = true;
+    },
     handleRowDBLClick(val) {
+      this.isAdd = false;
       this.detail = val;
-      this.print();
+      // this.print();
     },
     cellClick(val) {
       this.detail = val;

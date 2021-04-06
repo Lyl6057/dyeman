@@ -276,7 +276,7 @@ export function rcpbDetailF(_this) {
         display: _this.hide === '2' ? false : true,
       },
       {
-        label: "纱线登记编号",
+        label: _this.$t("whseField.djbh"),
         prop: "registerNo",
         span: 6,
         placeholder: " ",
@@ -493,7 +493,7 @@ export function rcpb1C(_this) {
         label: _this.$t("whseField.cwzt"),
         prop: "finStatus",
         cell: true,
-        width: 120,
+        width: 135,
         hide: _this.hide === '1' || _this.hide === '2' ? false : true,
         type: "select",
         dicData:

@@ -35,7 +35,7 @@ export function rsxkr1F(_this) {
       //   display: _this.hide === '2' || _this.hide === '6' ? true : false,
       // },
       {
-        label: "輔料登记编号",
+        label: _this.$t("iaoMng.fldjbh"),
         prop: "registerNo",
         span: 6,
         placeholder: " ",
@@ -104,7 +104,7 @@ export function rsxkr2F(_this) {
   return {
     submitBtn: false,
     emptyBtn: false,
-    labelWidth: 130,
+    labelWidth: 140,
     column: [
       {
         label: _this.$t("whseField.rcbh"),
@@ -124,7 +124,7 @@ export function rsxkr2F(_this) {
         disabled: false
       },
       {
-        label: "入倉類型",
+        label: _this.$t("whseField.rclx"),
         prop: "yinType",
         span: 6,
         placeholder: " ",
@@ -225,7 +225,7 @@ export function rsxkr2F(_this) {
         }
       },
       {
-        label: "輔料登记编号",
+        label: _this.$t("iaoMng.fldjbh"),
         prop: "registerNo",
         span: 6,
         placeholder: " ",
@@ -237,7 +237,7 @@ export function rsxkr2F(_this) {
             _this.dlgWidth = "60%";
             _this.choiceV = !_this.choiceV
             _this.choiceTarget = _this.form
-            _this.choiceTle = '選擇來輔料登記'
+            _this.choiceTle = _this.$t("choicDlg.lfldj")//'選擇來輔料登記'
           }
         },
         change: () => {
@@ -341,7 +341,7 @@ export function rsxkr1C(_this) {
         width: 180,
       },
       {
-        label: "入倉類型",
+        label: _this.$t("whseField.rclx"),
         prop: "yinType",
         cell: false,
         width: 120,
@@ -397,19 +397,18 @@ export function rsxkr1C(_this) {
       //   placeholder: "請選擇送貨單號"
       // },
       {
-        label: "輔料登记编号",
+        label: _this.$t("iaoMng.fldjbh"),//"輔料登记编号",
         prop: "registerNo",
         cell: true,
         width: 160,
         type: "select",
-        placeholder: "請選擇輔料登记编号",
         hide: _this.hide === '1' ? false : true,
         click: () => {
           _this.choiceField = "registerNo"
           _this.choiceV = !_this.choiceV
           _this.oldData = _this.chooseData
           _this.choiceTarget = _this.oldData
-          _this.choiceTle = '選擇來紗登記'
+          _this.choiceTle = _this.$t("choicDlg.lfldj")
         },
       },
       {
@@ -441,16 +440,15 @@ export function rsxkr1C(_this) {
       },
 
       {
-        label: "外工厂代號",
+        label: _this.$t("whseField.wfcdh"),// "外工厂代號",
         prop: "factoryId",
         cell: true,
         hide: _this.hide === "5" ? false : true,
         width: 150,
-        placeholder: "请选择加工厂代號",
 
       },
       {
-        label: "外工厂名稱",
+        label: _this.$t("whseField.wfcmc"),//"外工厂名稱",
         prop: "factoryName",
         cell: false,
         hide: _this.hide === "5" ? false : true,
@@ -467,7 +465,7 @@ export function rsxkr1C(_this) {
         label: _this.$t("whseField.cwzt"),
         prop: "finStatus",
         cell: true,
-        width: 120,
+        width: 135,
         hide: _this.hide != '5' && _this.hide != '4' ? false : true,
         type: "select",
         dicData:
@@ -528,7 +526,7 @@ export function rsxkr2C(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: _this.hide === '4' ? "calc(100vh - 312px)" : "calc(100vh - 310px)",
+    height: _this.hide === '4' ? "calc(100vh - 312px)" : "calc(100vh - 312px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
@@ -553,10 +551,9 @@ export function rsxkr2C(_this) {
         prop: "materialNum",
         cell: false,
         width: 140,
-        placeholder: "請選擇材料编号",
       },
       {
-        label: "材料名稱",
+        label: _this.$t('whseField.clmc'),//"材料名稱",
         prop: "materialName",
         cell: false,
         width: 290,
@@ -631,7 +628,6 @@ export function backYarn(_this) {
         prop: "poNo",
         cell: true,
         width: 150,
-        placeholder: "請選擇輔料系統編號",
         click: (val) => {
           _this.choiceV = !_this.choiceV
           _this.choiceField = "yarnsId";

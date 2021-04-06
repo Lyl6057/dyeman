@@ -56,7 +56,7 @@
               :inData="chooseData"
               :api="everyThing"
               :form="form"
-              type="生產輔料"
+              :type="$t('iaoMng.scfl')"
             ></loction>
           </view-container>
         </el-col>
@@ -183,7 +183,7 @@ export default {
     add() {
       if (this.hide === "1") {
         if (this.form.registerNo === "" || this.form.registerNo === null) {
-          this.$tip.error("请先選擇來辅料登記编号!");
+          this.$tip.error(this.$t("iaoMng.addTle"));
           return;
         }
         this.choiceV = !this.choiceV;
@@ -194,11 +194,11 @@ export default {
         this.choiceTle = this.$t("choicDlg.xzlfl");
       } else if (this.hide === "2") {
         if (!this.form.purNo) {
-          this.$tip.error($t("iaoMng.xzcgdh"));
+          this.$tip.error(this.$t("iaoMng.xzcgdh"));
           return;
         }
         if (!this.form.deliNo) {
-          this.$tip.error($t("iaoMng.xzshdh"));
+          this.$tip.error(this.$t("iaoMng.xzshdh"));
           return;
         }
         this.choiceV = !this.choiceV;
@@ -206,16 +206,16 @@ export default {
         // this.choiceQ.yarnsId = this.form.registerNo;
         this.choiceTarget = {};
         this.dlgWidth = "100%";
-        this.choiceTle = $t("iaoMng.xzcgdd");
+        this.choiceTle = this.$t("iaoMng.xzcgdd");
       } else if (this.hide === "4") {
         this.choiceV = !this.choiceV;
         this.dlgWidth = "100%";
         this.choiceTarget = {};
         this.choiceField = "poNo";
-        this.choiceTle = $t("iaoMng.xztstzd");
+        this.choiceTle = this.$t("iaoMng.xztstzd");
       } else if (this.hide === "6") {
         if (this.form.instructId === "" || this.form.instructId === null) {
-          this.$tip.error($t("iaoMng.xzjgzdl"));
+          this.$tip.error(this.$t("iaoMng.xzjgzdl"));
           return;
         }
         // 外發廠退倉
@@ -300,7 +300,7 @@ export default {
         this.hide === "1" &&
         (this.form.yinId === "" || this.form.registerNo === "")
       ) {
-        this.$tip.error("入仓编号/纱线登记编号不能为空!");
+        this.$tip.error(this.$t("iaoMng.saveTle1"));
         return;
       }
       if (this.hide === "6" && !this.form.factoryId) {
@@ -317,7 +317,7 @@ export default {
           return;
         }
         if (!this.mx[i].poQty || !this.mx[i].unitQty) {
-          this.$tip.error("數量/单位不能为空!");
+          this.$tip.error(this.$t("iaoMng.saveTle18"));
           return;
         }
       }
@@ -459,11 +459,11 @@ export default {
           }
         });
       }
-      if (this.choiceTle === "選擇來輔料登記") {
+      if (this.choiceTle === this.$t("choicDlg.lfldj")) {
         this.choiceTarget.custName = val.$custNo;
         this.choiceTarget.custCode = val.custNo;
       }
-      if (this.choiceTle === $t("iaoMng.tstzd")) {
+      if (this.choiceTle === this.$t("iaoMng.tstzd")) {
         this.choiceTarget.yarnsId = val.yarnsId;
       }
       if (this.choiceTle === this.$t("choicDlg.xzwfflpl")) {
@@ -497,7 +497,7 @@ export default {
         });
         this.$refs.dlgcrud.setCurrentRow(this.mx[this.mx.length - 1]);
       }
-      if (this.choiceTle === $t("iaoMng.xztstzd")) {
+      if (this.choiceTle === this.$t("iaoMng.xztstzd")) {
         val.forEach((item, i) => {
           item.custId = this.detail.custName;
           item.whseYarninFk = this.detail.whseYarninoid;

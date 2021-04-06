@@ -741,7 +741,7 @@ export function yl2C(_this) {
       label: _this.$t("whseField.ylbh1"),
       prop: "chemicalId", // bcCode
       cell: false,
-      width: 100,
+      width: 120,
     },
     {
       label: _this.$t("whseField.ylmc1"),
@@ -797,7 +797,7 @@ export function rhl3C(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 272px)",
+    height: "calc(100vh - 274px)",
     refreshBtn: false,
     columnBtn: false,
     page: false,

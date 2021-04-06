@@ -168,6 +168,7 @@ export default {
           whseChemicalinFk: this.detail.whseChemicalinoid, // 化工原料Oid
           whseAccessoriesinFk: this.detail.whseAccessoriesinoid, // 辅料/五金/行政Oid
           whseYarninFk: this.detail.whseYarninoid, // 纱线Oid
+          whseDyesalinFk: this.detail.whseDyesalinoid, // 顏料Oid
         })
         .then((res) => {
           let dicData = [];
@@ -362,7 +363,8 @@ export default {
       if (
         !this.chooseData.whseChemicalinDtlaoid &&
         !this.chooseData.whseAccessoriesDtloid &&
-        !this.chooseData.whseYarninDtloid
+        !this.chooseData.whseYarninDtloid &&
+        !this.chooseData.whseDyesainDtlaoid
       ) {
         this.mx.splice(this.chooseData.index - 1, 1);
         this.$refs.mx.setCurrentRow(this.mx[this.mx.length - 1] || {});
@@ -371,9 +373,10 @@ export default {
       this.$tip
         .cofirm(
           this.$t("iaoMng.delTle11") +
-            (this.datas === this.$t("iaoMng.hgyl") ||
-            this.datas === this.$t("iaoMng.yl")
+            (this.datas === this.$t("iaoMng.hgyl")
               ? this.$t("iaoMng.hgyl")
+              : this.datas === this.$t("iaoMng.yl")
+              ? this.$t("iaoMng.yl")
               : this.datas === this.$t("iaoMng.sx")
               ? this.$t("iaoMng.sx")
               : this.$t("whseField.clbh")) +
@@ -391,9 +394,10 @@ export default {
         .then(() => {
           this.everyThing
             .delDetail(
-              this.datas === this.$t("iaoMng.hgyl") ||
-                this.datas === this.$t("iaoMng.yl")
+              this.datas === this.$t("iaoMng.hgyl")
                 ? this.chooseData.whseChemicalinDtlaoid
+                : this.datas === this.$t("iaoMng.yl")
+                ? this.chooseData.whseDyesainDtlaoid
                 : this.datas === this.$t("iaoMng.sx")
                 ? this.chooseData.whseYarninDtloid
                 : this.chooseData.whseAccessoriesDtloid
@@ -426,7 +430,10 @@ export default {
         this.$tip.error(this.$t("public.delTle"));
         return;
       }
-      if (!this.choosePhData.whseChemicalinDtlboid) {
+      if (
+        !this.choosePhData.whseChemicalinDtlboid &&
+        !this.choosePhData.whseDyesainDtlboid
+      ) {
         this.chooseData.list.splice(this.choosePhData.index - 1, 1);
         this.phPage.total--;
         this.chooseData.list.forEach((item, i) => {
@@ -445,7 +452,11 @@ export default {
         )
         .then(() => {
           this.everyThing
-            .delPh(this.choosePhData.whseChemicalinDtlboid)
+            .delPh(
+              this.datas === this.$t("iaoMng.yl")
+                ? this.choosePhData.whseDyesainDtlboid
+                : this.choosePhData.whseChemicalinDtlboid
+            )
             .then((res) => {
               if (res.data.code === 200) {
                 this.$tip.success(this.$t("public.sccg"));

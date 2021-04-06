@@ -359,7 +359,7 @@ export function rhl2C(_this) {
       hide: _this.datas != _this.$t("iaoMng.sx")
     },
     {
-      label: "紗線名称",
+      label: _this.$t("whseField.sxmc"),
       prop: "yarnsName",
       cell: false,
       width: 450,

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-29 14:14:56
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-02 08:14:47
+ * @LastEditTime: 2021-04-06 13:35:17
  * @Description: 
  */
 export default [
@@ -35,14 +35,19 @@ export default [
   },
   // 报表
   {
-    path: "/buffyPrints",
+    path: "/buffyPrints", // 布票打印記錄
     name: "buffyPrints",
     component: resolve => require(["@/view/proMng/buffyPrints/index"], resolve),
   },
   {
-    path: "/clothFly",
+    path: "/clothFly", // 布票打印
     name: "clothFly",
     component: resolve => require(["@/view/proMng/print/clothFly/index"], resolve),
+  },
+  {
+    path: "/proWeaveJob", // 織造通知單打印
+    name: "proWeaveJob",
+    component: resolve => require(["@/view/proMng/print/proWeaveJob/index"], resolve),
   },
   // {
   //   path: '/EquipmentSchedule',

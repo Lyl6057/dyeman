@@ -18,6 +18,7 @@ let matUnit = getDIC("bas_matUnit")
 let basChemical = getXDicT("BasChemicalmatNew")
 let basPigment = getXDicT("basPigment")
 let basProductivesupplies = getXDicT("basProductivesuppliesnew")
+
 // 纱线入库
 export function getYarnin(params) {
   return axios({
@@ -44,16 +45,14 @@ export const YarninF = {
         label: "yinId",
         value: "whseYarninoid"
       },
-      placeholder: "請選擇入仓编号",
     },
     {
-      label: "紗線系統編號",
+      label: i18n.t("whseField.sxbh"),
       prop: "yarnsId",
       span: 6,
-      placeholder: "請選擇紗線系統編號",
     },
     {
-      label: "批號",
+      label: i18n.t("whseField.ph"),
       prop: "batchNo",
       span: 6,
       placeholder: " ",
@@ -93,14 +92,13 @@ export const YarninC = {
       placeholder: "請選擇入仓编号",
     },
     {
-      label: "紗線系統編號",
+      label: i18n.t("whseField.sxbh"),
       prop: "yarnsId",
       cell: false,
       width: 120,
-      placeholder: "請選擇紗線系統編號",
     },
     {
-      label: "紗線名称",
+      label: i18n.t("whseField.sxmc"),
       prop: "yarnsName",
       cell: false,
       // width: 350,
@@ -108,19 +106,19 @@ export const YarninC = {
       dicData: getDicT("basYarnsData", "yarnsName", "yarnsId"),
     },
     {
-      label: "纱批/批号",
+      label: i18n.t("whseField.ph"),
       prop: "batchNo",
       cell: false,
       width: 150,
     },
     // {
-    //   label: "纱牌",
+    //   label: i18n.t("whseField.sp"),
     //   prop: "yarnsCard",
     //   cell: false,
     //   width: 180,
     // },
     {
-      label: "产地",
+      label: i18n.t("whseField.cd"),
       prop: "placeOrigin",
       cell: false,
       width: 100,
@@ -128,21 +126,21 @@ export const YarninC = {
       dicData: getDIC("Whse_Origin"),
     },
     {
-      label: "箱数",
+      label: i18n.t("whseField.xs"),
       prop: "cartonNum",
       cell: false,
       width: 100,
       align: "right",
     },
     {
-      label: "入倉重量",
+      label: i18n.t("whseField.rczl"),
       prop: "weight",
       cell: false,
       width: 100,
       align: "right",
     },
     {
-      label: "单位",
+      label: i18n.t("whseField.dw"),
       prop: "weightUnit",
       cell: false,
       width: 100,
@@ -168,20 +166,20 @@ export const instructDtlF = {
   menu: false,
   column: [
     {
-      label: "指令單編號",
+      label: i18n.t("whseField.zldbh"),
       prop: "instructId",
       span: 6,
       placeholder: " ",
     },
     {
-      label: "批號",
+      label: i18n.t("whseField.ph"),
       prop: "batchNo",
       span: 6,
       placeholder: " ",
     },
 
     {
-      label: "材料編號",
+      label: i18n.t("whseField.clbh"),
       prop: "materialId",
       span: 6,
       placeholder: " ",
@@ -208,22 +206,22 @@ export const instructDtlC = {
       align: "center",
     },
     {
-      label: "指令單編號",
+      label: i18n.t("whseField.zldbh"),
       prop: "instructId",
       width: 120,
     },
     {
-      label: "批號",
+      label: i18n.t("whseField.ph"),
       prop: "batchNo",
       width: 140
     },
     {
-      label: "材料編號",
+      label: i18n.t("whseField.clbh"),
       prop: "materialId",
       width: 140
     },
     {
-      label: "材料名稱",
+      label: i18n.t("whseField.clmc"),
       prop: "materialName",
       width: 350
     },
@@ -234,7 +232,7 @@ export const instructDtlC = {
       align: "right"
     },
     {
-      label: "單位",
+      label: i18n.t("whseField.dw"),
       prop: "weightUnit",
       width: 100,
       type: "select",
@@ -280,13 +278,13 @@ export const IncomingYarnF = {
   menu: false,
   column: [
     {
-      label: "登记编号",
+      label: i18n.t("whseField.djbh2"),
       prop: "registerNo",
       span: 8,
       placeholder: " ",
     },
     {
-      label: "客户",
+      label: i18n.t("whseField.khmc"),
       prop: "custCode",
       span: 8,
       placeholder: " ",
@@ -294,7 +292,7 @@ export const IncomingYarnF = {
       dicData: cust1,
     },
     {
-      label: "来纱日期",
+      label: i18n.t("whseField.lsrq"),
       prop: "yarnDate",
       span: 8,
       placeholder: " ",
@@ -322,17 +320,17 @@ export const IncomingYarnC = {
       align: "center",
     },
     {
-      label: "登记编号",
+      label: i18n.t("whseField.djbh2"),
       prop: "registerNo",
     },
     {
-      label: "客户",
+      label: i18n.t("whseField.khmc"),
       prop: "custCode",
       type: "select",
       dicData: cust1,
     },
     {
-      label: "来纱日期",
+      label: i18n.t("whseField.lsrq"),
       prop: "yarnDate",
       type: "datetime",
       align: "center",
@@ -359,7 +357,7 @@ export const IncomingYarnDtlF = {
   menu: false,
   column: [
     {
-      label: "纱线系统编号",
+      label: i18n.t("whseField.sxbh"),
       prop: "yarnsId",
       span: 6,
       placeholder: " ",
@@ -391,34 +389,34 @@ export const IncomingYarnDtlC = {
       align: "center",
     },
     {
-      label: "纱线系统编号",
+      label: i18n.t("whseField.sxbh"),
       prop: "yarnsId",
       width: 120
     },
     {
-      label: "纱线名称",
+      label: i18n.t("whseField.sxmc"),
       prop: "yarnsName",
       width: 350
     },
     {
-      label: "批號",
+      label: i18n.t("whseField.ph"),
       prop: "batchNo",
       width: 140
     },
     {
-      label: "纱牌",
+      label: i18n.t("whseField.sp"),
       prop: "yarnsCard",
       width: 140
     },
     {
-      label: "产地",
+      label: i18n.t("whseField.cd"),
       prop: "placeOrigin",
       width: 120,
       type: 'select',
       dicData: getDIC("Whse_Origin")
     },
     {
-      label: "箱数",
+      label: i18n.t("whseField.xs"),
       prop: "carQty",
       width: 100,
       align: "right"
@@ -430,7 +428,7 @@ export const IncomingYarnDtlC = {
       align: "right"
     },
     {
-      label: "單位",
+      label: i18n.t("whseField.dw"),
       prop: "weightUnit",
       width: 100,
       align: "right",
@@ -458,13 +456,13 @@ export const EmbryogenesisF = {
   menu: false,
   column: [
     {
-      label: "登记编号",
+      label: i18n.t("whseField.djbh2"),
       prop: "registerNo",
       span: 8,
       placeholder: " ",
     },
     {
-      label: "客户",
+      label: i18n.t("whseField.khmc"),
       prop: "custCode",
       span: 8,
       placeholder: " ",
@@ -472,7 +470,7 @@ export const EmbryogenesisF = {
       dicData: cust1,
     },
     {
-      label: "来料日期",
+      label: i18n.t("whseField.llrq"),
       prop: "embryoDate",
       span: 8,
       placeholder: " ",
@@ -500,7 +498,7 @@ export const EmbryogenesisC = {
       align: "center",
     },
     {
-      label: "登记编号",
+      label: i18n.t("whseField.djbh2"),
       prop: "registerNo",
     },
     // {
@@ -510,13 +508,13 @@ export const EmbryogenesisC = {
     //   dicData: cust2,
     // },
     {
-      label: "客户名称",
+      label: i18n.t("whseField.khmc"),
       prop: "custCode",
       type: "select",
       dicData: cust1,
     },
     {
-      label: "来料日期",
+      label: i18n.t("whseField.llrq"),
       prop: "embryoDate",
       type: "datetime",
       align: "center",
@@ -543,13 +541,13 @@ export const EmbryogenesisDtlF = {
   menu: false,
   column: [
     {
-      label: "胚布系统编号",
+      label: i18n.t("whseField.pbbh"),
       prop: "calicoId",
       span: 6,
       placeholder: " ",
     },
     {
-      label: "類別",
+      label: i18n.t("whseField.lb"),
       prop: "calicoType",
       span: 6,
       placeholder: " ",
@@ -577,7 +575,7 @@ export const EmbryogenesisDtlC = {
       align: "center",
     },
     {
-      label: "胚布系统编号",
+      label: i18n.t("whseField.pbbh"),
       prop: "calicoId",
       width: 120
     },
@@ -587,20 +585,20 @@ export const EmbryogenesisDtlC = {
       // width: 350
     },
     {
-      label: "類別",
+      label: i18n.t("whseField.lb"),
       prop: "calicoType",
       width: 120,
       type: "select",
       dicData: calicoType,
     },
     {
-      label: "疋数",
+      label: i18n.t("whseField.ps"),
       prop: "countingNum",
       width: 100,
       align: "right"
     },
     {
-      label: "克重",
+      label: i18n.t("whseField.kz"),
       prop: "weight",
       width: 100,
       align: "right"
@@ -612,7 +610,7 @@ export const EmbryogenesisDtlC = {
       align: "right"
     },
     {
-      label: "單位",
+      label: i18n.t("whseField.dw"),
       prop: "weightUnit",
       width: 100,
       align: "right",
@@ -641,13 +639,13 @@ export const chemicalF = {
   menu: false,
   column: [
     {
-      label: "登记编号",
+      label: i18n.t("whseField.djbh2"),
       prop: "registerNo",
       span: 8,
       placeholder: " ",
     },
     {
-      label: "客户",
+      label: i18n.t("whseField.khmc"),
       prop: "custNo",
       span: 8,
       placeholder: " ",
@@ -655,7 +653,7 @@ export const chemicalF = {
       dicData: cust1,
     },
     {
-      label: "来料日期",
+      label: i18n.t("whseField.llrq"),
       prop: "inDate",
       span: 8,
       placeholder: " ",
@@ -683,7 +681,7 @@ export const chemicalC = {
       align: "center",
     },
     {
-      label: "登记编号",
+      label: i18n.t("whseField.djbh2"),
       prop: "registerNo",
     },
     // {
@@ -693,13 +691,13 @@ export const chemicalC = {
     //   dicData: cust2,
     // },
     {
-      label: "客户名称",
+      label: i18n.t("whseField.khmc"),
       prop: "custNo",
       type: "select",
       dicData: cust1,
     },
     {
-      label: "来料日期",
+      label: i18n.t("whseField.llrq"),
       prop: "inDate",
       type: "datetime",
       align: "center",
@@ -726,7 +724,7 @@ export const chemicalDtlF = {
   menu: false,
   column: [
     {
-      label: "化工原料編號",
+      label: i18n.t("whseField.ylbh"),
       prop: "basChemicalmatFk",
       span: 6,
       placeholder: " ",
@@ -758,7 +756,7 @@ export const chemicalDtlC = {
       align: "center",
     },
     {
-      label: "化工原料登记編號",
+      label: i18n.t("whseField.ylbh"),
       prop: "basChemicalmatFk",
       width: 150,
       type: "select",
@@ -769,7 +767,7 @@ export const chemicalDtlC = {
       dicData: basChemical,
     },
     {
-      label: "化工原料名称",
+      label: i18n.t("whseField.ylmc"),
       prop: "bcMatname",
       type: "select",
       props: {
@@ -786,7 +784,7 @@ export const chemicalDtlC = {
       align: "right"
     },
     {
-      label: "單位",
+      label: i18n.t("whseField.dw"),
       prop: "chemicalQty",
       width: 100,
       align: "right",
@@ -814,13 +812,13 @@ export const pigmentF = {
   menu: false,
   column: [
     {
-      label: "登记编号",
+      label: i18n.t("whseField.djbh2"),
       prop: "registerNo",
       span: 8,
       placeholder: " ",
     },
     {
-      label: "客户",
+      label: i18n.t("whseField.khmc"),
       prop: "custNo",
       span: 8,
       placeholder: " ",
@@ -828,7 +826,7 @@ export const pigmentF = {
       dicData: cust1,
     },
     {
-      label: "来料日期",
+      label: i18n.t("whseField.llrq"),
       prop: "inDate",
       span: 8,
       placeholder: " ",
@@ -856,7 +854,7 @@ export const pigmentC = {
       align: "center",
     },
     {
-      label: "登记编号",
+      label: i18n.t("whseField.djbh2"),
       prop: "registerNo",
     },
     // {
@@ -866,13 +864,13 @@ export const pigmentC = {
     //   dicData: cust2,
     // },
     {
-      label: "客户名称",
+      label: i18n.t("whseField.khmc"),
       prop: "custNo",
       type: "select",
       dicData: cust1,
     },
     {
-      label: "来料日期",
+      label: i18n.t("whseField.llrq"),
       prop: "inDate",
       type: "datetime",
       align: "center",
@@ -899,7 +897,7 @@ export const pigmentDtlF = {
   menu: false,
   column: [
     {
-      label: "顏料編號",
+      label: i18n.t("whseField.ylbh1"),
       prop: "chemicalIncomaccFk",
       span: 6,
       placeholder: " ",
@@ -931,7 +929,7 @@ export const pigmentDtlC = {
       align: "center",
     },
     {
-      label: "顏料登记編號",
+      label: i18n.t("whseField.ylbh1"),
       prop: "basPigmentnewFk",
       width: 150,
       type: "select",
@@ -942,7 +940,7 @@ export const pigmentDtlC = {
       dicData: basPigment
     },
     {
-      label: "顏料名称",
+      label: i18n.t("whseField.ylmc1"),
       prop: "cnnamelong",
       type: "select",
       props: {
@@ -959,7 +957,7 @@ export const pigmentDtlC = {
       align: "right"
     },
     {
-      label: "單位",
+      label: i18n.t("whseField.dw"),
       prop: "chemicalQty",
       width: 100,
       align: "right",
@@ -988,13 +986,13 @@ export const SalIncomaccF = {
   menu: false,
   column: [
     {
-      label: "登记编号",
+      label: i18n.t("whseField.djbh2"),
       prop: "registerNo",
       span: 8,
       placeholder: " ",
     },
     {
-      label: "客户",
+      label: i18n.t("whseField.khmc"),
       prop: "custNo",
       span: 8,
       placeholder: " ",
@@ -1002,7 +1000,7 @@ export const SalIncomaccF = {
       dicData: cust1,
     },
     {
-      label: "来料日期",
+      label: i18n.t("whseField.llrq"),
       prop: "embryoDate",
       span: 8,
       placeholder: " ",
@@ -1030,7 +1028,7 @@ export const SalIncomaccC = {
       align: "center",
     },
     {
-      label: "登记编号",
+      label: i18n.t("whseField.djbh2"),
       prop: "registerNo",
     },
     // {
@@ -1040,13 +1038,13 @@ export const SalIncomaccC = {
     //   dicData: cust2,
     // },
     {
-      label: "客户名称",
+      label: i18n.t("whseField.khmc"),
       prop: "custNo",
       type: "select",
       dicData: cust1,
     },
     {
-      label: "来料日期",
+      label: i18n.t("whseField.llrq"),
       prop: "inDate",
       type: "datetime",
       align: "center",
@@ -1073,7 +1071,7 @@ export const SalIncomaccDtlF = {
   menu: false,
   column: [
     {
-      label: "輔料編號",
+      label: i18n.t("whseField.flbh"),
       prop: "basProductivesuppliesFk",
       span: 6,
       placeholder: " ",
@@ -1106,7 +1104,7 @@ export const SalIncomaccDtlC = {
       align: "center",
     },
     {
-      label: "輔料登记編號",
+      label: i18n.t("whseField.flbh"),
       prop: "basProductivesuppliesFk",
       width: 150,
       type: "select",
@@ -1117,7 +1115,7 @@ export const SalIncomaccDtlC = {
       dicData: basProductivesupplies
     },
     {
-      label: "輔料名称",
+      label: i18n.t("whseField.flmc"),
       prop: "chinName",
       type: "select",
       props: {
@@ -1128,13 +1126,13 @@ export const SalIncomaccDtlC = {
       width: 350
     },
     {
-      label: "數量",
+      label: i18n.t("energy.sl"),
       prop: "incomQty",
       width: 100,
       align: "right"
     },
     {
-      label: "單位",
+      label: i18n.t("whseField.dw"),
       prop: "qtyUnit",
       width: 100,
       align: "right",
@@ -1174,7 +1172,7 @@ export const BasYarnsDataF = {
       placeholder: " ",
     },
     {
-      label: "纺纱方式",
+      label: i18n.t("whseField.fsfs"),
       prop: "spinningWay",
       span: 6,
       placeholder: " ",
@@ -1182,7 +1180,7 @@ export const BasYarnsDataF = {
       dicData: getDIC("bas_spinningWay")
     },
     {
-      label: "品种",
+      label: i18n.t("whseField.pz"),
       prop: "yarnsKind",
       span: 6,
       placeholder: " ",
@@ -1190,7 +1188,7 @@ export const BasYarnsDataF = {
       dicData: getDIC("bas_yarnsKind"),
     },
     // {
-    //   label: "類別",
+    //   label: i18n.t("whseField.lb"),
     //   prop: "yarnsType",
     //   span: 6,
     //   placeholder: " ",
@@ -1219,12 +1217,12 @@ export const BasYarnsDataC = {
       align: "center",
     },
     {
-      label: "紗線系統編號",
+      label: i18n.t("whseField.sxbh"),
       prop: "yarnsId",
       width: 130
     },
     {
-      label: "纱线描述",
+      label: i18n.t("whseField.sxmc"),
       prop: "yarnsName",
       width: 500
     },
@@ -1234,11 +1232,11 @@ export const BasYarnsDataC = {
       width: 130
     },
     {
-      label: "色号",
+      label: i18n.t("whseField.sh"),
       prop: "colorNo",
     },
     {
-      label: "功能",
+      label: i18n.t("whseField.gn"),
       prop: "functions",
       type: 'select',
       width: 200,
@@ -1246,26 +1244,26 @@ export const BasYarnsDataC = {
       dicData: getDIC("bas_yarnsFuntion")
     },
     {
-      label: "产地",
+      label: i18n.t("whseField.cd"),
       prop: "placeOrigin",
       type: 'select',
       dicData: getDIC("Whse_Origin")
     },
     {
-      label: "纺纱方式",
+      label: i18n.t("whseField.fsfs"),
       prop: "spinningWay",
       width: 100,
       type: 'select',
       dicData: getDIC("bas_spinningWay")
     },
     {
-      label: "品种",
+      label: i18n.t("whseField.pz"),
       prop: "yarnsKind",
       type: 'select',
       dicData: getDIC("bas_yarnsKind")
     },
     {
-      label: "纱牌",
+      label: i18n.t("whseField.sp"),
       prop: "yarnsCard",
     },
   ]
@@ -1289,7 +1287,7 @@ export const BasCalicoF = {
   menu: false,
   column: [
     // {
-    //   label: "编号",
+    //   label: i18n.t("whseField.bh"),
     //   prop: "clothNo",
     //   span: 8,
     //   placeholder: " ",
@@ -1305,7 +1303,7 @@ export const BasCalicoF = {
 
     // },
     {
-      label: "胚布代号",
+      label: i18n.t("whseField.pbbh"),
       prop: "calicoId",
       span: 8,
       placeholder: " ",
@@ -1313,7 +1311,7 @@ export const BasCalicoF = {
       // dicData: getDIC("bas_yarnsKind"),
     },
     {
-      label: "类别",
+      label: i18n.t("whseField.lb"),
       prop: "calicoType",
       span: 8,
       placeholder: " ",
@@ -1350,96 +1348,96 @@ export const BasCalicoC = {
       align: "center",
     },
     {
-      label: "胚布编号",
+      label: i18n.t("whseField.pbbh"),
       prop: "calicoId",
       width: 100,
     },
+    // {
+    //   label: i18n.t("whseField.pbmc"),
+    //   prop: "calicoSname",
+    //   width: 380,
+    //   // type: "select",
+    //   // dicData: getDicT("basEmbryoidcloth", 'clothName', 'basEmbryoidclothoid')
+    // },
     {
       label: i18n.t("whseField.pbmc"),
-      prop: "calicoSname",
-      width: 380,
-      // type: "select",
-      // dicData: getDicT("basEmbryoidcloth", 'clothName', 'basEmbryoidclothoid')
-    },
-    {
-      label: "胚布全称",
       prop: "calicoName",
       width: 700,
       // type: "select",
       // dicData: getDicT("basEmbryoidcloth", 'clothName', 'basEmbryoidclothoid')
     },
     {
-      label: "客人面料描述",
+      label: i18n.t("whseField.krmlms"),
       prop: "gustCalicoName",
       width: 350,
     },
     {
-      label: "客人成分要求",
+      label: i18n.t("whseField.krcfyq"),
       prop: "gustComponents",
       width: 200,
     },
     {
-      label: "类别",
+      label: i18n.t("whseField.lb"),
       prop: "calicoType",
       type: "select",
       dicData: calicoType,
       width: 80,
     },
     {
-      label: "机种",
+      label: i18n.t("whseField.jz"),
       prop: "machinetypeId",
       type: "select",
       dicData: getDIC("bas_calicoMachineType"),
       width: 120,
     },
     {
-      label: "结构",
+      label: i18n.t("whseField.jg"),
       prop: "structureId",
       type: "select",
       dicData: getDIC("bas_calicoStructure"),
       width: 100,
     },
     {
-      label: "布类型",
+      label: i18n.t("whseField.blx"),
       prop: "fabricsDesc",
       type: "select",
       dicData: getDIC("bas_clothorg"),
       width: 100,
     },
     {
-      label: "纱长",
+      label: i18n.t("whseField.sc"),
       prop: "yarnLong",
       width: 80,
       align: "right"
     },
     {
-      label: "筒径",
+      label: i18n.t("whseField.tj"),
       prop: "workDrum",
       width: 80,
       align: "right"
     },
     {
-      label: "针距",
+      label: i18n.t("whseField.zj"),
       prop: "fibreDesc",
       width: 80,
       align: "right"
       // dicData: getDIC("bas_yarnsFuntion")
     },
     {
-      label: "幅宽",
+      label: i18n.t("whseField.fk"),
       prop: "width",
       width: 80,
       align: "right"
 
     },
     {
-      label: "克重",
+      label: i18n.t("whseField.kz"),
       prop: "weight",
       width: 80,
       align: "right"
     },
     {
-      label: "洗水方法",
+      label: i18n.t("whseField.xsff"),
       prop: "washMethod",
       width: 160,
     },
@@ -1482,7 +1480,7 @@ export const BasChemicalmatF = {
     //   ]
     // },
     {
-      label: "一级分类",
+      label: i18n.t("whseField.yjfl"),
       prop: "bcClass",
       span: 6,
       placeholder: " ",
@@ -1490,7 +1488,7 @@ export const BasChemicalmatF = {
       dicData: chemicalClass
     },
     {
-      label: "编号",
+      label: i18n.t("whseField.bh"),
       prop: "bcCode",
       span: 6,
       placeholder: " ",
@@ -1498,7 +1496,7 @@ export const BasChemicalmatF = {
       // dicData: getDIC("bas_yarnsKind"),
     },
     {
-      label: "原料名称",
+      label: i18n.t("whseField.ylmc"),
       prop: "bcMatname",
       span: 6,
       placeholder: " ",
@@ -1536,33 +1534,33 @@ export const BasChemicalmatC = {
       align: "center",
     },
     {
-      label: "编号",
+      label: i18n.t("whseField.bh"),
       prop: "bcCode",
     },
     {
-      label: "原料名称",
+      label: i18n.t("whseField.ylmc"),
       prop: "bcMatname",
 
     },
     {
-      label: "一级分类",
+      label: i18n.t("whseField.yjfl"),
       prop: "bcClass",
       type: "select",
       dicData: chemicalClass
     },
     {
-      label: "原料英文名称",
+      label: i18n.t("whseField.ywmc"),
       prop: "bcMatengname",
 
     },
 
     {
-      label: "色光",
+      label: i18n.t("whseField.sg"),
       prop: "bcColor",
 
     },
     {
-      label: "力份",
+      label: i18n.t("whseField.lf"),
       prop: "bcForce",
 
     },
@@ -1595,7 +1593,7 @@ export const ProductivesuppliesF = {
   menu: false,
   column: [
     {
-      label: "编号",
+      label: i18n.t("whseField.bh"),
       prop: "hardwareId",
       span: 8,
       placeholder: " ",
@@ -1603,7 +1601,7 @@ export const ProductivesuppliesF = {
       // dicData: getDIC("bas_yarnsKind"),
     },
     {
-      label: "生产大类",
+      label: i18n.t("whseField.scdl"),
       prop: "basProductionaccFk",
       span: 8,
       placeholder: " ",
@@ -1612,7 +1610,7 @@ export const ProductivesuppliesF = {
 
     },
     {
-      label: "中文名称",
+      label: i18n.t("whseField.zwmc"),
       prop: "chinName",
       span: 8,
       placeholder: " ",
@@ -1620,7 +1618,7 @@ export const ProductivesuppliesF = {
     },
 
     {
-      label: "型號",
+      label: i18n.t("whseField.xh"),
       prop: "model",
       span: 8,
       placeholder: " ",
@@ -1647,49 +1645,49 @@ export const ProductivesuppliesC = {
       align: "center",
     },
     {
-      label: "编号",
+      label: i18n.t("whseField.bh"),
       prop: "hardwareId",
       width: 180
     },
     {
-      label: "生产大类",
+      label: i18n.t("whseField.scdl"),
       prop: "basProductionaccFk",
       type: "select",
       dicData: getDicT("basProductionacc", "topcategoryName", "basProductionaccoid")
     },
     {
-      label: "中文名称",
+      label: i18n.t("whseField.zwmc"),
       prop: "chinName",
       width: 120
 
     },
     {
-      label: "英文名称",
+      label: i18n.t("whseField.ywmc"),
       prop: "engName",
       width: 120
 
     },
 
     {
-      label: "规格",
+      label: i18n.t("whseField.gg"),
       prop: "itemspec",
 
     },
 
     {
-      label: "型号",
+      label: i18n.t("whseField.xh"),
       prop: "model",
 
     },
     {
-      label: "计量单位",
+      label: i18n.t("whseField.jldw"),
       prop: "msUnit",
       type: "select",
       dicData: matUnit
 
     },
     {
-      label: "库存单位",
+      label: i18n.t("whseField.kcdw"),
       prop: "skUnit",
       type: "select",
       dicData: matUnit
@@ -1719,7 +1717,7 @@ export const BasHardwarearticlesF = {
   menu: false,
   column: [
     {
-      label: "编号",
+      label: i18n.t("whseField.bh"),
       prop: "hardwareId",
       span: 8,
       placeholder: " ",
@@ -1727,7 +1725,7 @@ export const BasHardwarearticlesF = {
       // dicData: getDIC("bas_yarnsKind"),
     },
     {
-      label: "五金大类",
+      label: i18n.t("whseField.wjdl"),
       prop: "basHardwareFk",
       span: 8,
       placeholder: " ",
@@ -1736,7 +1734,7 @@ export const BasHardwarearticlesF = {
 
     },
     {
-      label: "中文名称",
+      label: i18n.t("whseField.zwmc"),
       prop: "chinName",
       span: 8,
       placeholder: " ",
@@ -1744,7 +1742,7 @@ export const BasHardwarearticlesF = {
     },
 
     {
-      label: "型號",
+      label: i18n.t("whseField.xh"),
       prop: "model",
       span: 8,
       placeholder: " ",
@@ -1771,49 +1769,49 @@ export const BasHardwarearticlesC = {
       align: "center",
     },
     {
-      label: "编号",
+      label: i18n.t("whseField.bh"),
       prop: "hardwareId",
       width: 180
     },
     {
-      label: "五金大类",
+      label: i18n.t("whseField.wjdl"),
       prop: "basHardwareFk",
       type: "select",
       dicData: basHardware
     },
     {
-      label: "中文名称",
+      label: i18n.t("whseField.zwmc"),
       prop: "chinName",
       width: 120
 
     },
     {
-      label: "英文名称",
+      label: i18n.t("whseField.ywmc"),
       prop: "engName",
       width: 120
 
     },
 
     {
-      label: "规格",
+      label: i18n.t("whseField.gg"),
       prop: "itemspec",
 
     },
 
     {
-      label: "型号",
+      label: i18n.t("whseField.xh"),
       prop: "model",
 
     },
     {
-      label: "计量单位",
+      label: i18n.t("whseField.jldw"),
       prop: "msUnit",
       type: "select",
       dicData: matUnit
 
     },
     {
-      label: "库存单位",
+      label: i18n.t("whseField.kcdw"),
       prop: "skUnit",
       type: "select",
       dicData: matUnit
@@ -1842,7 +1840,7 @@ export const BasAdsuppliesarticlesF = {
   menu: false,
   column: [
     {
-      label: "编号",
+      label: i18n.t("whseField.bh"),
       prop: "hardwareId",
       span: 8,
       placeholder: " ",
@@ -1850,7 +1848,7 @@ export const BasAdsuppliesarticlesF = {
       // dicData: getDIC("bas_yarnsKind"),
     },
     {
-      label: "行政大类",
+      label: i18n.t("whseField.xzdl"),
       prop: "basAdsuppliesFk",
       span: 8,
       placeholder: " ",
@@ -1859,7 +1857,7 @@ export const BasAdsuppliesarticlesF = {
 
     },
     {
-      label: "中文名称",
+      label: i18n.t("whseField.zwmc"),
       prop: "chinName",
       span: 8,
       placeholder: " ",
@@ -1867,7 +1865,7 @@ export const BasAdsuppliesarticlesF = {
     },
 
     {
-      label: "型號",
+      label: i18n.t("whseField.xh"),
       prop: "model",
       span: 8,
       placeholder: " ",
@@ -1894,51 +1892,51 @@ export const BasAdsuppliesarticlesC = {
       align: "center",
     },
     {
-      label: "编号",
+      label: i18n.t("whseField.bh"),
       prop: "hardwareId",
       width: 180
     },
     {
-      label: "行政大类",
+      label: i18n.t("whseField.xzdl"),
       prop: "basAdsuppliesFk",
       type: "select",
       dicData: basAdsupplies
 
     },
     {
-      label: "中文名称",
+      label: i18n.t("whseField.zwmc"),
       prop: "chinName",
       width: 120
 
     },
     {
-      label: "英文名称",
+      label: i18n.t("whseField.ywmc"),
       prop: "engName",
       width: 120
 
     },
 
     {
-      label: "规格",
+      label: i18n.t("whseField.gg"),
       prop: "itemspec",
 
     },
 
     {
-      label: "型号",
+      label: i18n.t("whseField.xh"),
       prop: "model",
       width: 180
 
     },
     {
-      label: "计量单位",
+      label: i18n.t("whseField.jldw"),
       prop: "msUnit",
       type: "select",
       dicData: matUnit
 
     },
     {
-      label: "库存单位",
+      label: i18n.t("whseField.kcdw"),
       prop: "skUnit",
       type: "select",
       dicData: matUnit
@@ -1988,20 +1986,20 @@ export const WhseCalicoPackBarCodeF = {
   menu: false,
   column: [
     {
-      label: "货物包码",
+      label: i18n.t("whseField.hwbm"),
       prop: "barcode",
       placeholder: " ",
       span: 6,
     },
     {
-      label: "生产单号",
+      label: i18n.t("whseField.scdh"),
       prop: "prodNo",
       span: 6,
       display: true,
       placeholder: " ",
     },
     {
-      label: "缸号",
+      label: i18n.t("whseField.gh"),
       prop: "batchNo",
       span: 6,
       display: true,
@@ -2030,26 +2028,26 @@ export const WhseCalicoPackBarCodeC = {
       align: "center",
     },
     {
-      label: "货物包码",
+      label: i18n.t("whseField.hwbm"),
       prop: "barcode",
       width: 200,
       hide: false
     },
     {
-      label: "缸号",
+      label: i18n.t("whseField.gh"),
       prop: "batchNo",
       span: 8,
       width: 200,
       hide: false
     },
     {
-      label: "生产单号",
+      label: i18n.t("whseField.scdh"),
       prop: "prodNo",
       hide: false,
       width: 200
     },
     {
-      label: "疋数",
+      label: i18n.t("whseField.ps"),
       prop: "countingNo",
       width: 100,
       align: "right"
@@ -2123,19 +2121,19 @@ export const SalPoDtlaListF = {
   menu: false,
   column: [
     {
-      label: "訂單號",
+      label: i18n.t("energy.ddh"),
       prop: "poNo",
       span: 8,
       placeholder: " ",
     },
     {
-      label: "胚布代號",
+      label: i18n.t("whseField.pbbh"),
       prop: "fabId",
       span: 8,
       placeholder: " ",
     },
     {
-      label: "布种",
+      label: i18n.t("labour.zl"),
       prop: "fabFabrics",
       span: 8,
       placeholder: " ",
@@ -2161,7 +2159,7 @@ export const SalPoDtlaListC = {
       align: "center",
     },
     {
-      label: "訂單號",
+      label: i18n.t("energy.ddh"),
       prop: "poNo",
       type: "select",
       width: 140,
@@ -2169,35 +2167,35 @@ export const SalPoDtlaListC = {
 
     },
     {
-      label: "布料编号",
+      label: i18n.t("whseField.pbbh"),
       prop: "fabId",
       width: 120,
     },
 
     {
-      label: "布料名稱",
+      label: i18n.t("labour.pbmc"),
       prop: "fabYcount",
       width: 350,
     },
     {
-      label: "总成份",
+      label: i18n.t("whseField.zcf"),
       prop: "fabComponents",
       width: 280,
     },
     {
-      label: "布種",
+      label: i18n.t("whseField.zl"),
       prop: "fabFabrics",
       type: "select",
       dicData: getDIC("bas_clothorg")
     },
     {
-      label: "數量",
+      label: i18n.t("energy.sl"),
       prop: "fabQty",
       align: "right",
       width: 100
     },
     {
-      label: "數量单位",
+      label: i18n.t("whseField.dw"),
       prop: "qtyUnit",
       width: 90
     },
@@ -2228,7 +2226,7 @@ export const PurYarnsPoF = {
       placeholder: " ",
     },
     {
-      label: "供應商",
+      label: i18n.t("whseField.gysmc"),
       prop: "suppId",
       span: 6,
       placeholder: " ",
@@ -2237,7 +2235,7 @@ export const PurYarnsPoF = {
       // dicData: cust2,
     },
     {
-      label: "採購類型",
+      label: i18n.t("whseField.cglx"),
       prop: "purType",
       span: 6,
       placeholder: " ",
@@ -2245,7 +2243,7 @@ export const PurYarnsPoF = {
       dicData: purAttr,
     },
     {
-      label: "訂單狀態",
+      label: i18n.t("whseField.ddzt"),
       prop: "poFlag",
       span: 6,
       placeholder: " ",
@@ -2253,7 +2251,7 @@ export const PurYarnsPoF = {
       dicData: yarnsFlag,
     },
     // {
-    //   label: "付款方式",
+    //   label: i18n.t("whseField.fkfs"),
     //   prop: "payType",
     //   span: 6,
     //   placeholder: " ",
@@ -2285,34 +2283,34 @@ export const PurYarnsPoC = {
       width: 180
     },
     {
-      label: "採購類型",
+      label: i18n.t("whseField.cglx"),
       prop: "purType",
       type: "select",
       dicData: purAttr,
       width: 120
     },
     {
-      label: "供应商",
+      label: i18n.t("whseField.gysmc"),
       prop: "suppId",
       type: "select",
       dicData: getDicT("basSupplier", "suppName", "suppId"),
       width: 240
     },
     {
-      label: "訂單狀態",
+      label: i18n.t("whseField.ddzt"),
       prop: "poFlag",
       type: "select",
       dicData: yarnsFlag,
       width: 120
     }, {
-      label: "付款方式",
+      label: i18n.t("whseField.fkfs"),
       prop: "payType",
       type: "select",
       dicData: getDIC("Bas_PayType"),
       width: 120
     },
     // {
-    //   label: "收齊標記",
+    //   label: i18n.t("whseField.sqbj"),
     //   prop: "collectedFlag",
     //   type: "select",
     //   dicData:yarnsCollected,
@@ -2343,7 +2341,7 @@ export const PurYarnsPoDtlaF = {
       placeholder: " ",
     },
     {
-      label: "供應商",
+      label: i18n.t("whseField.gysmc"),
       prop: "suppId",
       span: 6,
       placeholder: " ",
@@ -2352,7 +2350,7 @@ export const PurYarnsPoDtlaF = {
       // dicData: cust2,
     },
     {
-      label: "採購類型",
+      label: i18n.t("whseField.cglx"),
       prop: "purType",
       span: 6,
       placeholder: " ",
@@ -2360,7 +2358,7 @@ export const PurYarnsPoDtlaF = {
       dicData: purAttr,
     },
     {
-      label: "訂單狀態",
+      label: i18n.t("whseField.ddzt"),
       prop: "poFlag",
       span: 6,
       placeholder: " ",
@@ -2368,7 +2366,7 @@ export const PurYarnsPoDtlaF = {
       dicData: yarnsFlag,
     },
     // {
-    //   label: "付款方式",
+    //   label: i18n.t("whseField.fkfs"),
     //   prop: "payType",
     //   span: 6,
     //   placeholder: " ",
@@ -2400,34 +2398,34 @@ export const PurYarnsPoDtlaC = {
       width: 180
     },
     {
-      label: "採購類型",
+      label: i18n.t("whseField.cglx"),
       prop: "purType",
       type: "select",
       dicData: purAttr,
       width: 120
     },
     {
-      label: "供应商",
+      label: i18n.t("whseField.gysmc"),
       prop: "suppId",
       type: "select",
       dicData: getDicT("basSupplier", "suppName", "suppId"),
       width: 240
     },
     {
-      label: "訂單狀態",
+      label: i18n.t("whseField.ddzt"),
       prop: "poFlag",
       type: "select",
       dicData: yarnsFlag,
       width: 120
     }, {
-      label: "付款方式",
+      label: i18n.t("whseField.fkfs"),
       prop: "payType",
       type: "select",
       dicData: getDIC("Bas_PayType"),
       width: 120
     },
     // {
-    //   label: "收齊標記",
+    //   label: i18n.t("whseField.sqbj"),
     //   prop: "collectedFlag",
     //   type: "select",
     //   dicData:yarnsCollected,
@@ -2459,7 +2457,7 @@ export const PurCalicoPoF = {
       placeholder: " ",
     },
     {
-      label: "供應商",
+      label: i18n.t("whseField.gysmc"),
       prop: "suppId",
       span: 8,
       placeholder: " ",
@@ -2468,7 +2466,7 @@ export const PurCalicoPoF = {
       // dicData: cust2,
     },
     {
-      label: "採購類型",
+      label: i18n.t("whseField.cglx"),
       prop: "purType",
       span: 8,
       placeholder: " ",
@@ -2476,7 +2474,7 @@ export const PurCalicoPoF = {
       dicData: purAttr,
     },
     {
-      label: "訂單狀態",
+      label: i18n.t("whseField.ddzt"),
       prop: "poFlag",
       span: 8,
       placeholder: " ",
@@ -2484,7 +2482,7 @@ export const PurCalicoPoF = {
       dicData: yarnsFlag,
     },
     {
-      label: "付款方式",
+      label: i18n.t("whseField.fkfs"),
       prop: "payType",
       span: 8,
       placeholder: " ",
@@ -2515,29 +2513,29 @@ export const PurCalicoPoC = {
       prop: "poNo",
     },
     {
-      label: "採購類型",
+      label: i18n.t("whseField.cglx"),
       prop: "purType",
       type: "select",
       dicData: purAttr,
     },
     {
-      label: "供应商",
+      label: i18n.t("whseField.gysmc"),
       prop: "suppId",
       type: "select",
       dicData: supp,
     },
     {
-      label: "訂單狀態",
+      label: i18n.t("whseField.ddzt"),
       prop: "poFlag",
       type: "select",
       dicData: yarnsFlag,
     }, {
-      label: "付款方式",
+      label: i18n.t("whseField.fkfs"),
       prop: "payType",
       type: "select",
       dicData: yarnsPaytype,
     }, {
-      label: "收齊標記",
+      label: i18n.t("whseField.sqbj"),
       prop: "collectedFlag",
       type: "select",
       dicData: yarnsCollected,
@@ -2581,7 +2579,7 @@ export const PurChemicalpoF = {
       placeholder: " ",
     },
     {
-      label: "供應商",
+      label: i18n.t("whseField.gysmc"),
       prop: "suppId",
       span: 8,
       placeholder: " ",
@@ -2590,7 +2588,7 @@ export const PurChemicalpoF = {
       // dicData: cust2,
     },
     // {
-    //   label: "採購類型",
+    //   label: i18n.t("whseField.cglx"),
     //   prop: "purType",
     //   span: 8,
     //   placeholder: " ",
@@ -2598,7 +2596,7 @@ export const PurChemicalpoF = {
     //   dicData: purAttr,
     // },
     {
-      label: "訂單狀態",
+      label: i18n.t("whseField.ddzt"),
       prop: "poFlag",
       span: 8,
       placeholder: " ",
@@ -2606,7 +2604,7 @@ export const PurChemicalpoF = {
       dicData: yarnsFlag,
     },
     // {
-    //   label: "付款方式",
+    //   label: i18n.t("whseField.fkfs"),
     //   prop: "payType",
     //   span: 8,
     //   placeholder: " ",
@@ -2638,14 +2636,14 @@ export const PurChemicalpoC = {
       width: 180
     },
     {
-      label: "供应商",
+      label: i18n.t("whseField.gysmc"),
       prop: "suppId",
       type: "select",
       dicData: supp,
       width: 300
     },
     {
-      label: "订单日期",
+      label: i18n.t("whseField.ddrq"),
       prop: "poDate",
       width: 180,
       type: "datetime",
@@ -2654,20 +2652,20 @@ export const PurChemicalpoC = {
       align: 'center'
     },
     {
-      label: "訂單狀態",
+      label: i18n.t("whseField.ddzt"),
       prop: "poFlag",
       type: "select",
       dicData: yarnsFlag,
       width: 120,
     }, {
-      label: "付款方式",
+      label: i18n.t("whseField.fkfs"),
       prop: "payType",
       type: "select",
       width: 120,
       dicData: yarnsPaytype,
     },
     // {
-    //   label: "收齊標記",
+    //   label: i18n.t("whseField.sqbj"),
     //   prop: "collectedFlag",
     //   type: "select",
     //   width: 120,
@@ -2700,7 +2698,7 @@ export const PurMaterialspoF = {
       placeholder: " ",
     },
     {
-      label: "供應商",
+      label: i18n.t("whseField.gysmc"),
       prop: "suppId",
       span: 8,
       placeholder: " ",
@@ -2709,7 +2707,7 @@ export const PurMaterialspoF = {
       // dicData: cust2,
     },
     {
-      label: "採購類型",
+      label: i18n.t("whseField.cglx"),
       prop: "purType",
       span: 8,
       placeholder: " ",
@@ -2717,7 +2715,7 @@ export const PurMaterialspoF = {
       dicData: purAttr,
     },
     {
-      label: "訂單狀態",
+      label: i18n.t("whseField.ddzt"),
       prop: "poFlag",
       span: 8,
       placeholder: " ",
@@ -2725,7 +2723,7 @@ export const PurMaterialspoF = {
       dicData: yarnsFlag,
     },
     {
-      label: "付款方式",
+      label: i18n.t("whseField.fkfs"),
       prop: "payType",
       span: 8,
       placeholder: " ",
@@ -2756,29 +2754,29 @@ export const PurMaterialspoC = {
       prop: "poNo",
     },
     {
-      label: "採購類型",
+      label: i18n.t("whseField.cglx"),
       prop: "purType",
       type: "select",
       dicData: purAttr,
     },
     {
-      label: "供应商",
+      label: i18n.t("whseField.gysmc"),
       prop: "suppId",
       type: "select",
       dicData: supp,
     },
     {
-      label: "訂單狀態",
+      label: i18n.t("whseField.ddzt"),
       prop: "poFlag",
       type: "select",
       dicData: yarnsFlag,
     }, {
-      label: "付款方式",
+      label: i18n.t("whseField.fkfs"),
       prop: "payType",
       type: "select",
       dicData: yarnsPaytype,
     }, {
-      label: "收齊標記",
+      label: i18n.t("whseField.sqbj"),
       prop: "collectedFlag",
       type: "select",
       dicData: yarnsCollected,
@@ -2809,7 +2807,7 @@ export const PurHardwarepoF = {
       placeholder: " ",
     },
     {
-      label: "供應商",
+      label: i18n.t("whseField.gysmc"),
       prop: "suppId",
       span: 8,
       placeholder: " ",
@@ -2818,7 +2816,7 @@ export const PurHardwarepoF = {
       // dicData: cust2,
     },
     {
-      label: "採購類型",
+      label: i18n.t("whseField.cglx"),
       prop: "purType",
       span: 8,
       placeholder: " ",
@@ -2826,7 +2824,7 @@ export const PurHardwarepoF = {
       dicData: purAttr,
     },
     {
-      label: "訂單狀態",
+      label: i18n.t("whseField.ddzt"),
       prop: "poFlag",
       span: 8,
       placeholder: " ",
@@ -2834,7 +2832,7 @@ export const PurHardwarepoF = {
       dicData: yarnsFlag,
     },
     {
-      label: "付款方式",
+      label: i18n.t("whseField.fkfs"),
       prop: "payType",
       span: 8,
       placeholder: " ",
@@ -2865,29 +2863,29 @@ export const PurHardwarepoC = {
       prop: "poNo",
     },
     {
-      label: "採購類型",
+      label: i18n.t("whseField.cglx"),
       prop: "purType",
       type: "select",
       dicData: purAttr,
     },
     {
-      label: "供应商",
+      label: i18n.t("whseField.gysmc"),
       prop: "suppId",
       type: "select",
       dicData: supp,
     },
     {
-      label: "訂單狀態",
+      label: i18n.t("whseField.ddzt"),
       prop: "poFlag",
       type: "select",
       dicData: yarnsFlag,
     }, {
-      label: "付款方式",
+      label: i18n.t("whseField.fkfs"),
       prop: "payType",
       type: "select",
       dicData: yarnsPaytype,
     }, {
-      label: "收齊標記",
+      label: i18n.t("whseField.sqbj"),
       prop: "collectedFlag",
       type: "select",
       dicData: yarnsCollected,
@@ -2914,13 +2912,13 @@ export const WhseRetratyarnF = {
   menu: false,
   column: [
     {
-      label: "生产单号",
+      label: i18n.t("whseField.scdh"),
       prop: "poNo",
       span: 6,
       placeholder: " ",
     },
     {
-      label: "纱线编号",
+      label: i18n.t("whseField.sxbh"),
       prop: "yarnsId",
       span: 6,
       placeholder: " ",
@@ -2954,19 +2952,19 @@ export const WhseRetratyarnC = {
       align: "center",
     },
     {
-      label: "生产单号",
+      label: i18n.t("whseField.scdh"),
       prop: "poNo",
       width: 140,
       // type: "select",
       // dicData: getDicT("whseRetratyarnnotice", "poNo", "yarnsId"),
     },
     {
-      label: "紗線系統編號",
+      label: i18n.t("whseField.sxbh"),
       prop: "yarnsId",
       width: 140
     },
     {
-      label: "纱线描述",
+      label: i18n.t("whseField.sxmc"),
       prop: "yarnsName",
       width: 500,
       type: "select",
@@ -2984,7 +2982,7 @@ export const WhseRetratyarnC = {
       width: 120
     },
     {
-      label: "单位",
+      label: i18n.t("whseField.dw"),
       prop: "weightUnit",
       width: 100,
       type: "select",
@@ -3012,13 +3010,13 @@ export const PurDeliveryF = {
   menu: false,
   column: [
     {
-      label: "送貨單號",
+      label: i18n.t("whseField.shdh"),
       prop: "deliNo",
       span: 8,
       placeholder: " ",
     },
     {
-      label: "供應商",
+      label: i18n.t("whseField.gysmc"),
       prop: "suppId",
       span: 8,
       placeholder: " ",
@@ -3027,7 +3025,7 @@ export const PurDeliveryF = {
       // dicData: cust2,
     },
     {
-      label: "送貨日期",
+      label: i18n.t("whseField.shrq"),
       prop: "deliDate",
       span: 8,
       placeholder: " ",
@@ -3055,7 +3053,7 @@ export const PurDeliveryC = {
       align: "center",
     },
     {
-      label: "送貨單號",
+      label: i18n.t("whseField.shdh"),
       prop: "deliNo",
     },
     // {
@@ -3065,13 +3063,13 @@ export const PurDeliveryC = {
     //   dicData: getDIC("pur_deliType"),
     // },
     {
-      label: "供应商",
+      label: i18n.t("whseField.gysmc"),
       prop: "suppId",
       type: "select",
       dicData: supp,
     },
     {
-      label: "送貨日期",
+      label: i18n.t("whseField.shrq"),
       prop: "deliDate",
       type: "datetime",
       align: "center",
@@ -3098,13 +3096,13 @@ export const PurDeliveryDF = {
   menu: false,
   column: [
     // {
-    //   label: "送貨單號",
+    //   label: i18n.t("whseField.shdh"),
     //   prop: "deliNo",
     //   span: 8,
     //   placeholder: " ",
     // },
     // {
-    //   label: "供應商",
+    //   label: i18n.t("whseField.gysmc"),
     //   prop: "suppId",
     //   span: 8,
     //   placeholder: " ",
@@ -3113,7 +3111,7 @@ export const PurDeliveryDF = {
     //   // dicData: cust2,
     // },
     // {
-    //   label: "送貨日期",
+    //   label: i18n.t("whseField.shrq"),
     //   prop: "deliDate",
     //   span: 8,
     //   placeholder: " ",
@@ -3141,42 +3139,42 @@ export const PurDeliveryDC = {
       align: "center",
     },
     {
-      label: "采购订单",
+      label: i18n.t("whseField.chdh"),
       prop: "purNo",
       width: 200
     },
     {
-      label: "批次號",
+      label: i18n.t("whseField.ph"),
       prop: "batId",
       width: 80
     },
     {
-      label: "材料編號",
+      label: i18n.t("whseField.clbh"),
       prop: "materialNum",
       width: 120,
       type: "select",
       dicData: getDicT("purSinglepoDtl", "materialNum", "purSinglepoDtloid")
     },
     {
-      label: "材料名称",
+      label: i18n.t("whseField.clmc"),
       prop: "chinName",
       width: 200,
       type: "select",
       dicData: getDicT("purSinglepoDtl", "chinName", "purSinglepoDtloid")
     },
     {
-      label: "數量",
+      label: i18n.t("energy.sl"),
       prop: "deliQty",
       align: "right",
       width: 120
     },
     {
-      label: "单位",
+      label: i18n.t("whseField.dw"),
       prop: "deliUnit",
       width: 120
     },
     {
-      label: "送貨日期",
+      label: i18n.t("whseField.shrq"),
       prop: "cmatDate",
       type: "datetime",
       align: "center",
@@ -3212,13 +3210,13 @@ export const BasCustomerF = {
       placeholder: " ",
     },
     {
-      label: "客戶代碼",
+      label: i18n.t("whseField.khbh"),
       prop: "custCode",
       span: 8,
       placeholder: " ",
     },
     {
-      label: "客戶類型",
+      label: i18n.t("whseField.khlx"),
       prop: "custType",
       span: 8,
       placeholder: " ",
@@ -3256,23 +3254,23 @@ export const BasCustomerC = {
       type: "select",
     },
     {
-      label: "客戶類型",
+      label: i18n.t("whseField.khlx"),
       prop: "custType",
       type: "select",
       dicData: getDIC("bas_customer_type")
     },
     {
-      label: "客戶狀態",
+      label: i18n.t("whseField.khzt"),
       prop: "state",
       type: "select",
       dicData: getDIC("bas_customer_state")
     },
     {
-      label: "营业执照",
+      label: i18n.t("whseField.yyzz"),
       prop: "busLicense",
     },
     {
-      label: "備註",
+      label: i18n.t("ProWorkflowInfo.bz"),
       prop: "remake",
       type: "select",
     }
@@ -3298,25 +3296,25 @@ export const WhseChemicalPlanF = {
   menu: false,
   column: [
     {
-      label: "加工廠代號",
+      label: i18n.t("whseField.wfcdh"),
       prop: "refCode",
       span: 6,
       placeholder: " ",
     },
     {
-      label: "加工廠名稱",
+      label: i18n.t("whseField.wfcmc"),
       prop: "refName",
       span: 6,
       placeholder: " ",
     },
     {
-      label: "染化料名称",
+      label: i18n.t("whseField.ylmc"),
       prop: "chemicalName",
       span: 6,
       placeholder: " ",
     },
     {
-      label: "配料计划编号",
+      label: i18n.t("whseField.jhbh"),
       prop: "retBatch",
       span: 6,
       placeholder: " ",
@@ -3349,16 +3347,16 @@ export const WhseChemicalPlanC = {
       align: "center",
     },
     {
-      label: "加工廠代號",
+      label: i18n.t("whseField.wfcdh"),
       prop: "refCode",
     },
     {
-      label: "加工廠名稱",
+      label: i18n.t("whseField.wfcmc"),
       prop: "refName",
       type: "select",
     },
     {
-      label: "外厂配料计划编号",
+      label: i18n.t("whseField.jhbh"),
       prop: "retBatch",
       width: 220
     },
@@ -3367,11 +3365,11 @@ export const WhseChemicalPlanC = {
     //   prop: "prOn",
     // },
     {
-      label: "染化料编号",
+      label: i18n.t("whseField.ylbh"),
       prop: "chemicalId",
     },
     {
-      label: "染化料名称",
+      label: i18n.t("whseField.ylmc"),
       prop: "chemicalName",
     },
     {
@@ -3380,7 +3378,7 @@ export const WhseChemicalPlanC = {
       align: "right"
     },
     {
-      label: "重量單位",
+      label: i18n.t("whseField.zldw"),
       prop: "weightUnit",
       type: "select",
       dicData: matUnit,
@@ -3406,25 +3404,25 @@ export const WhseRetmaterialsPlanF = {
   menu: false,
   column: [
     {
-      label: "加工廠代號",
+      label: i18n.t("whseField.wfcdh"),
       prop: "refCode",
       span: 6,
       placeholder: " ",
     },
     {
-      label: "加工廠名稱",
+      label: i18n.t("whseField.wfcmc"),
       prop: "refName",
       span: 6,
       placeholder: " ",
     },
     {
-      label: "辅料名称",
+      label: i18n.t("whseField.flmc"),
       prop: "matName",
       span: 6,
       placeholder: " ",
     },
     {
-      label: "配料计划编号",
+      label: i18n.t("whseField.jhbh"),
       prop: "retBatch",
       span: 6,
       placeholder: " ",
@@ -3456,16 +3454,16 @@ export const WhseRetmaterialsPlanC = {
       align: "center",
     },
     {
-      label: "加工廠代號",
+      label: i18n.t("whseField.wfcdh"),
       prop: "refCode",
     },
     {
-      label: "加工廠名稱",
+      label: i18n.t("whseField.wfcmc"),
       prop: "refName",
       type: "select",
     },
     {
-      label: "外厂配料计划编号",
+      label: i18n.t("whseField.jhbh"),
       prop: "retBatch",
       width: 220
     },
@@ -3474,20 +3472,20 @@ export const WhseRetmaterialsPlanC = {
     //   prop: "prOn",
     // },
     {
-      label: "辅料编号",
+      label: i18n.t("whseField.flbh"),
       prop: "matId",
     },
     {
-      label: "辅料名称",
+      label: i18n.t("whseField.flmc"),
       prop: "matName",
     },
     {
-      label: "數量",
+      label: i18n.t("energy.sl"),
       prop: "qty",
       align: "right"
     },
     {
-      label: "数量單位",
+      label: i18n.t("whseField.dw"),
       prop: "qtyUnit",
       type: "select",
       dicData: matUnit,
@@ -3513,13 +3511,13 @@ export const WhseMaterialoutPlanF = {
   menu: false,
   column: [
     {
-      label: "加工廠代號",
+      label: i18n.t("whseField.wfcdh"),
       prop: "refCode",
       span: 6,
       placeholder: " ",
     },
     {
-      label: "加工廠名稱",
+      label: i18n.t("whseField.wfcmc"),
       prop: "refName",
       span: 6,
       placeholder: " ",
@@ -3531,7 +3529,7 @@ export const WhseMaterialoutPlanF = {
       placeholder: " ",
     },
     {
-      label: "配料计划编号",
+      label: i18n.t("whseField.jhbh"),
       prop: "retBatch",
       span: 6,
       placeholder: " ",
@@ -3564,18 +3562,18 @@ export const WhseMaterialoutPlanC = {
       align: "center",
     },
     {
-      label: "加工廠代號",
+      label: i18n.t("whseField.wfcdh"),
       prop: "refCode",
       width: 120
     },
     {
-      label: "加工廠名稱",
+      label: i18n.t("whseField.wfcmc"),
       prop: "refName",
       type: "select",
       width: 220
     },
     {
-      label: "外厂配料计划编号",
+      label: i18n.t("whseField.jhbh"),
       prop: "retBatch",
       width: 150
     },
@@ -3584,7 +3582,7 @@ export const WhseMaterialoutPlanC = {
     //   prop: "prOn",
     // },
     {
-      label: "胚布编号",
+      label: i18n.t("whseField.pbbh"),
       prop: "calicoId",
       width: 140
     },
@@ -3599,7 +3597,7 @@ export const WhseMaterialoutPlanC = {
       width: 120
     },
     {
-      label: "單位",
+      label: i18n.t("whseField.dw"),
       prop: "weightUnit",
       type: "select",
       dicData: matUnit,
@@ -3625,25 +3623,25 @@ export const WhseMaterialPlanF = {
   menu: false,
   column: [
     {
-      label: "设备编号",
+      label: i18n.t("ProWorkflowInfo.sbbh"),
       prop: "equCode",
       span: 6,
       placeholder: " ",
     },
     {
-      label: "设备名称",
+      label: i18n.t("ProWorkflowInfo.szmc"),
       prop: "equName",
       span: 6,
       placeholder: " ",
     },
     {
-      label: "胚布編號",
+      label: i18n.t("whseField.pbbh"),
       prop: "calicoId",
       span: 6,
       placeholder: " ",
     },
     {
-      label: "配料计划编号",
+      label: i18n.t("whseField.jhbh"),
       prop: "retBatch",
       span: 6,
       placeholder: " ",
@@ -3676,17 +3674,17 @@ export const WhseMaterialPlanC = {
       align: "center",
     },
     {
-      label: "设备编号",
+      label: i18n.t("ProWorkflowInfo.sbbh"),
       prop: "equCode",
       width: 120
     },
     {
-      label: "设备名称",
+      label: i18n.t("ProWorkflowInfo.szmc"),
       prop: "equName",
       width: 150
     },
     {
-      label: "本厂配料计划编号",
+      label: i18n.t("whseField.jhbh"),
       prop: "retBatch",
       width: 220
     },
@@ -3696,7 +3694,7 @@ export const WhseMaterialPlanC = {
       width: 150
     },
     {
-      label: "胚布编号",
+      label: i18n.t("whseField.pbbh"),
       prop: "calicoId",
       width: 140
     },
@@ -3706,7 +3704,7 @@ export const WhseMaterialPlanC = {
       // width: 250
     },
     {
-      label: "批號",
+      label: i18n.t("whseField.ph"),
       prop: "batchNo",
       align: "right",
       width: 140
@@ -3724,7 +3722,7 @@ export const WhseMaterialPlanC = {
       width: 100
     },
     {
-      label: "單位",
+      label: i18n.t("whseField.dw"),
       prop: "weightUnit",
       type: "select",
       dicData: matUnit
@@ -3750,25 +3748,25 @@ export const WhseRetyarninoutPlanF = {
   menu: false,
   column: [
     {
-      label: "加工廠代號",
+      label: i18n.t("whseField.wfcdh"),
       prop: "refCode",
       span: 6,
       placeholder: " ",
     },
     {
-      label: "加工廠名稱",
+      label: i18n.t("whseField.wfcmc"),
       prop: "refName",
       span: 6,
       placeholder: " ",
     },
     {
-      label: "纱线編號",
+      label: i18n.t("whseField.sxbh"),
       prop: "yarnsId",
       span: 6,
       placeholder: " ",
     },
     {
-      label: "配料计划编号",
+      label: i18n.t("whseField.jhbh"),
       prop: "retBatch",
       span: 6,
       placeholder: " ",
@@ -3801,17 +3799,17 @@ export const WhseRetyarninoutPlanC = {
       align: "center",
     },
     {
-      label: "加工廠代號",
+      label: i18n.t("whseField.wfcdh"),
       prop: "refCode",
       width: 120
     },
     {
-      label: "加工廠名稱",
+      label: i18n.t("whseField.wfcmc"),
       prop: "refName",
       width: 150
     },
     {
-      label: "外厂配料计划编号",
+      label: i18n.t("whseField.jhbh"),
       prop: "retBatch",
       width: 220
     },
@@ -3821,17 +3819,17 @@ export const WhseRetyarninoutPlanC = {
       width: 140
     },
     {
-      label: "纱线编号",
+      label: i18n.t("whseField.sxbh"),
       prop: "yarnsId",
       width: 140
     },
     {
-      label: "纱线名称",
+      label: i18n.t("whseField.sxmc"),
       prop: "yarnsName",
       width: 250
     },
     {
-      label: "锭数",
+      label: i18n.t("whseField.ds"),
       prop: "everySpindle",
       align: "right",
       width: 100
@@ -3843,7 +3841,7 @@ export const WhseRetyarninoutPlanC = {
       width: 100
     },
     // {
-    //   label: "單位",
+    //   label: i18n.t("whseField.dw"),
     //   prop: "weightUnit",
     //   type: "select",
     //   dicData:matUnit
@@ -3869,25 +3867,25 @@ export const WhseRetyarninPlanF = {
   menu: false,
   column: [
     {
-      label: "设备编号",
+      label: i18n.t("ProWorkflowInfo.sbbh"),
       prop: "equId",
       span: 6,
       placeholder: " ",
     },
     {
-      label: "设备名称",
+      label: i18n.t("ProWorkflowInfo.szmc"),
       prop: "equName",
       span: 6,
       placeholder: " ",
     },
     {
-      label: "纱线編號",
+      label: i18n.t("whseField.sxbh"),
       prop: "yarnsId",
       span: 6,
       placeholder: " ",
     },
     {
-      label: "配料计划编号",
+      label: i18n.t("whseField.jhbh"),
       prop: "retBatch",
       span: 6,
       placeholder: " ",
@@ -3920,17 +3918,17 @@ export const WhseRetyarninPlanC = {
       align: "center",
     },
     {
-      label: "设备编号",
+      label: i18n.t("ProWorkflowInfo.sbbh"),
       prop: "equId",
       width: 120
     },
     {
-      label: "设备名称",
+      label: i18n.t("ProWorkflowInfo.szmc"),
       prop: "equName",
       width: 150
     },
     {
-      label: "本厂配料计划编号",
+      label: i18n.t("whseField.jhbh"),
       prop: "retBatch",
       width: 220
     },
@@ -3940,17 +3938,17 @@ export const WhseRetyarninPlanC = {
       width: 150
     },
     {
-      label: "纱线编号",
+      label: i18n.t("whseField.sxbh"),
       prop: "yarnsId",
       width: 140
     },
     {
-      label: "纱线名称",
+      label: i18n.t("whseField.sxmc"),
       prop: "yarnsName",
       // width: 250
     },
     {
-      label: "锭数",
+      label: i18n.t("whseField.ds"),
       prop: "everySpindle",
       align: "right",
       width: 100
@@ -3962,7 +3960,7 @@ export const WhseRetyarninPlanC = {
       width: 100
     },
     // {
-    //   label: "單位",
+    //   label: i18n.t("whseField.dw"),
     //   prop: "weightUnit",
     //   type: "select",
     //   dicData:matUnit
@@ -3989,13 +3987,13 @@ export const shipPlanF = {
   menu: false,
   column: [
     {
-      label: "货运计划编号",
+      label: i18n.t("Shipping.hyjhbh"),
       prop: "spNo",
       span: 6,
       placeholder: " ",
     },
     {
-      label: "贸易方式",
+      label: i18n.t("Shipping.myfs"),
       prop: "tradeMode",
       span: 6,
       placeholder: " ",
@@ -4003,7 +4001,7 @@ export const shipPlanF = {
       dicData: getDIC("sal_tradeMode"),
     },
     {
-      label: "运输方式",
+      label: i18n.t("Shipping.ysfs"),
       prop: "shipMode",
       span: 6,
       placeholder: " ",
@@ -4031,26 +4029,26 @@ export const shipPlanC = {
       align: "center",
     },
     {
-      label: "货运计划编号",
+      label: i18n.t("Shipping.hyjhbh"),
       prop: "spNo",
       width: 160,
     },
     {
-      label: "贸易方式",
+      label: i18n.t("Shipping.myfs"),
       prop: "tradeMode",
       type: "select",
       dicData: getDIC("sal_tradeMode"),
       width: 120
     },
     {
-      label: "运输方式",
+      label: i18n.t("Shipping.ysfs"),
       prop: "shipMode",
       width: 120,
       type: "select",
       dicData: getDIC("Bas_TranType"),
     },
     {
-      label: "备注",
+      label: i18n.t("Shipping.bz"),
       prop: "spRemark",
       width: 260,
     },
@@ -4075,19 +4073,19 @@ export const shipPlanDtlF = {
   menu: false,
   column: [
     {
-      label: "货运计划编号",
+      label: i18n.t("Shipping.hyjhbh"),
       prop: "poNo",
       span: 6,
       placeholder: " ",
     },
     {
-      label: "訂單號",
+      label: i18n.t("energy.ddh"),
       prop: "orderNo",
       span: 6,
       placeholder: " ",
     },
     {
-      label: "胚布編號",
+      label: i18n.t("whseField.pbbh"),
       prop: "fabId",
       span: 6,
       placeholder: " ",
@@ -4115,29 +4113,29 @@ export const shipPlanDtlC = {
       align: "center",
     },
     {
-      label: "货运计划编号",
+      label: i18n.t("Shipping.hyjhbh"),
       prop: "poNo",
       width: 180,
     },
     {
-      label: "客人订单号",
+      label: i18n.t("energy.ddh"),
       prop: "orderNo",
       width: 140,
     },
     {
-      label: "客人名称",
+      label: i18n.t("whseField.khmc"),
       prop: "custName",
       width: 180,
     },
     {
-      label: "胚布編號",
+      label: i18n.t("whseField.pbbh"),
       prop: "fabId",
       width: 140,
       type: "select",
       dicData: getDicT("basCalico", "calicoId", "calicoName")
     },
     {
-      label: "胚布名稱",
+      label: i18n.t("whseField.pbmc"),
       prop: "fabName",
       // width: 600
     },
@@ -4167,7 +4165,7 @@ export const OrderPbF = {
   menu: false,
   column: [
     {
-      label: "订单号",
+      label: i18n.t("energy.ddh"),
       prop: "salPoFk",
       span: 6,
       placeholder: " ",
@@ -4176,7 +4174,7 @@ export const OrderPbF = {
       // typeslot: true,
     },
     {
-      label: "布料编号",
+      label: i18n.t("whseField.pbbh"),
       prop: "fabId",
       span: 6,
       placeholder: " ",
@@ -4204,35 +4202,35 @@ export const OrderPbC = {
       align: "center",
     },
     {
-      label: "订单号",
+      label: i18n.t("energy.ddh"),
       prop: "salPoFk",
       type: "select",
       dicData: postDicT("salPoList", "poNo", "salPooid"),
       width: 140
     },
     {
-      label: "布料编号",
+      label: i18n.t("whseField.pbbh"),
       prop: "fabId",
       width: 140
     },
     {
-      label: "布料名称",
+      label: i18n.t("whseField.blmc"),
       prop: "fabName",
       // width: 500
     },
     {
-      label: "颜色",
+      label: i18n.t("Shipping.ys"),
       prop: "colorName",
       width: 120
     },
     {
-      label: "数量",
+      label: i18n.t("Shipping.sl"),
       prop: "fabQty",
       width: 120,
       align: "right"
     },
     {
-      label: "数量单位",
+      label: i18n.t("whseField.dw"),
       prop: "qtyUnit",
       type: "select",
       width: 120,
@@ -4272,7 +4270,7 @@ export const PbDltbF = {
   menu: false,
   column: [
     {
-      label: "生产单号",
+      label: i18n.t("whseField.scdh"),
       prop: "prodNo",
       span: 6,
       placeholder: " ",
@@ -4309,7 +4307,7 @@ export const PbDltbC = {
       align: "center",
     },
     {
-      label: "生产单号",
+      label: i18n.t("whseField.scdh"),
       prop: "prodNo",
       cell: true,
       width: 140,
@@ -4381,7 +4379,7 @@ export const PbDetaliF = {
   menu: false,
   column: [
     {
-      label: "胚布編碼",
+      label: i18n.t("whseField.pbbh"),
       prop: "calicoId",
       span: 8,
       placeholder: " ",
@@ -4436,7 +4434,7 @@ export const PbDetaliC = {
       dicData: getXDicT("whseCalicoinDtla/v1.0/list"),
     },
     {
-      label: "胚布編碼",
+      label: i18n.t("whseField.pbbh"),
       prop: "calicoId",
       width: 120,
     },
@@ -4463,7 +4461,7 @@ export const PbDetaliC = {
       align: "right",
     },
     {
-      label: "单位",
+      label: i18n.t("whseField.dw"),
       prop: "weightUnit",
       width: 80,
       type: "select",
@@ -4490,14 +4488,14 @@ export const calicoinDtlaF = {
   menu: false,
   column: [
     {
-      label: "材料类型",
+      label: i18n.t("whseField.clzl"),
       prop: "materialType",
       span: 6,
       type: "select",
       dicData: getDIC("pur_category")
     },
     {
-      label: "材料编号",
+      label: i18n.t("whseField.clbh"),
       prop: "materialNum",
       span: 6,
       placeholder: " ",
@@ -4551,20 +4549,20 @@ export const calicoinDtlaC = {
       dicData: getXDicT("whseAccessoriesDtl/v1.0/list"),
     },
     {
-      label: "材料类型",
+      label: i18n.t("whseField.clzl"),
       prop: "materialType",
       width: 100,
       type: "select",
       dicData: getDIC("pur_category")
     },
     {
-      label: "材料编号",
+      label: i18n.t("whseField.clbh"),
       prop: "materialNum",
       width: 140,
     },
 
     {
-      label: "材料名称",
+      label: i18n.t("whseField.clmc"),
       prop: "materialName",
       width: 150,
       type: "select",
@@ -4581,7 +4579,7 @@ export const calicoinDtlaC = {
       width: 150,
     },
     {
-      label: "型号",
+      label: i18n.t("whseField.xh"),
       prop: "model",
       width: 180,
       type: "select",
@@ -4592,7 +4590,7 @@ export const calicoinDtlaC = {
       dicData: basWjxz
     },
     {
-      label: "规格",
+      label: i18n.t("whseField.gg"),
       prop: "itemspec",
       width: 160,
       type: "select",
@@ -4603,13 +4601,13 @@ export const calicoinDtlaC = {
       dicData: basWjxz
     },
     {
-      label: "数量",
+      label: i18n.t("Shipping.sl"),
       prop: "poQty",
       width: 100,
       align: "right",
     },
     {
-      label: "单位",
+      label: i18n.t("whseField.dw"),
       prop: "unitQty",
       width: 100,
       type: "select",
@@ -4636,13 +4634,13 @@ export const PersonF = {
   menu: false,
   column: [
     {
-      label: "員工編號",
+      label: i18n.t("basesalary.ygbh"),
       prop: "perId",
       span: 8,
       placeholder: " ",
     },
     {
-      label: "姓名",
+      label: i18n.t("basesalary.ygxm"),
       prop: "perName",
       span: 8,
       placeholder: " ",
@@ -4670,24 +4668,24 @@ export const PersonC = {
       align: "center",
     },
     {
-      label: "員工編號",
+      label: i18n.t("basesalary.ygbh"),
       prop: "perId",
       cell: true,
       width: 120,
     },
     {
-      label: "姓名",
+      label: i18n.t("basesalary.ygxm"),
       prop: "perName",
       cell: false,
       width: 120,
     },
     {
-      label: "英文名 ",
+      label: i18n.t("whseField.ywmc"),
       prop: "perEname",
       width: 120,
     },
     {
-      label: "入職日期 ",
+      label: i18n.t("whseField.rzrq"),
       prop: "entryDate",
       width: 190,
       type: "datetime",
@@ -4696,12 +4694,12 @@ export const PersonC = {
     },
 
     {
-      label: "聯繫人",
+      label: i18n.t("whseField.lxr"),
       prop: "contactPerson",
       width: 150,
     },
     {
-      label: "聯繫電話",
+      label: i18n.t("whseField.lxdh"),
       prop: "call",
       width: 120,
     },
@@ -4726,19 +4724,19 @@ export const SingleF = {
   menu: false,
   column: [
     {
-      label: "申請編號",
+      label: i18n.t("whseField.sqbh"),
       prop: "appId",
       span: 6,
       placeholder: " ",
     },
     {
-      label: "申請部門",
+      label: i18n.t("whseField.sqbm"),
       prop: "appDep",
       span: 6,
       placeholder: " ",
     },
     // {
-    //   label: "申購單狀態",
+    //   label: i18n.t("whseField.sqdzt"),
     //   prop: "purState",
     //   span: 6,
     //   placeholder: " ",
@@ -4767,17 +4765,17 @@ export const SingleC = {
       align: "center",
     },
     {
-      label: "申請編號",
+      label: i18n.t("whseField.sqbh"),
       prop: "appId",
       width: 180,
     },
     {
-      label: "申請部門",
+      label: i18n.t("whseField.sqbm"),
       prop: "appDep",
       width: 120,
     },
     {
-      label: "申請日期",
+      label: i18n.t("whseField.sqrq"),
       prop: "appDate",
       width: 160,
       type: "datetime",
@@ -4786,14 +4784,14 @@ export const SingleC = {
       valueFormat: "yyyy-MM-dd",
     },
     {
-      label: "申購類別",
+      label: i18n.t("whseField.sqlb"),
       prop: "purCategory",
       width: 120,
       type: "select",
       dicData: getDIC("pur_category")
     },
     {
-      label: "申購單狀態",
+      label: i18n.t("whseField.sqdzt"),
       prop: "purState",
       width: 120,
       type: "select",
@@ -4840,30 +4838,30 @@ export const SingleDtlC = {
       align: "center",
     },
     {
-      label: "材料編號",
+      label: i18n.t("whseField.clbh"),
       prop: "materialNum",
       width: 120,
     },
     {
-      label: "材料名稱",
+      label: i18n.t("whseField.clmc"),
       prop: "chinName",
       width: 140,
     },
     {
-      label: "數量",
+      label: i18n.t("energy.sl"),
       prop: "applyNum",
       width: 80,
       align: "right"
     },
     {
-      label: "單位",
+      label: i18n.t("whseField.dw"),
       prop: "company",
       width: 60,
       type: "select",
       dicData: matUnit
     },
     {
-      label: "需求日期",
+      label: i18n.t("whseField.xqrq"),
       prop: "demandDate",
       width: 100,
       type: "datetime",
@@ -4872,42 +4870,42 @@ export const SingleDtlC = {
       valueFormat: "yyyy-MM-dd",
     },
     {
-      label: "型號",
+      label: i18n.t("whseField.xh"),
       prop: "model",
       // width: 300,
       type: "select",
 
     },
     {
-      label: "規格",
+      label: i18n.t("whseField.gg"),
       prop: "itemspec",
       width: 200,
       type: "select",
 
     },
     {
-      label: "大類名稱",
+      label: i18n.t("whseField.yjfl"),
       prop: "topcategoryName",
       width: 100,
       type: "select",
 
     },
     {
-      label: "二級分類",
+      label: i18n.t("whseField.ejfl"),
       prop: "seccategoryName",
       width: 100,
       type: "select",
 
     },
     {
-      label: "三級分類",
+      label: i18n.t("whseField.sjfl"),
       prop: "thirdcategoryName",
       width: 100,
       type: "select",
 
     },
     {
-      label: "用途/備註",
+      label: i18n.t("whseField.ytbz"),
       prop: "purposeRemarks",
       width: 200,
     },
@@ -4932,13 +4930,13 @@ export const SalColorF = {
   column: [
 
     {
-      label: "颜色编号",
+      label: i18n.t("whseField.sh"),
       prop: "colorNo",
       span: 6,
       placeholder: " ",
     },
     {
-      label: "颜色名称",
+      label: i18n.t("whseField.ysmc"),
       prop: "colorName",
       span: 6,
       placeholder: " ",
@@ -4964,12 +4962,12 @@ export const SalColorC = {
       align: "center",
     },
     {
-      label: "颜色编号",
+      label: i18n.t("whseField.sh"),
       prop: "colorNo",
       width: 150,
     },
     {
-      label: "颜色名称",
+      label: i18n.t("whseField.ysmc"),
       prop: "colorName",
       width: 200,
     },
@@ -5001,7 +4999,7 @@ export const TapcolorF = {
   column: [
 
     {
-      label: "客户",
+      label: i18n.t("whseField.khmc"),
       prop: "custCode",
       span: 6,
       placeholder: " ",
@@ -5009,19 +5007,19 @@ export const TapcolorF = {
       dicData: cust1
     },
     {
-      label: "颜色编号",
+      label: i18n.t("whseField.sh"),
       prop: "colorBh",
       span: 6,
       placeholder: " ",
     },
     {
-      label: "颜色中文",
+      label: i18n.t("whseField.ysmc"),
       prop: "colorChn",
       span: 6,
       placeholder: " ",
     },
     {
-      label: "色号",
+      label: i18n.t("whseField.sh"),
       prop: "colorNo",
       span: 6,
       placeholder: " ",
@@ -5047,66 +5045,66 @@ export const TapcolorC = {
       align: "center",
     },
     {
-      label: "色号",
+      label: i18n.t("whseField.sh"),
       prop: "colorNo",
       width: 130,
     },
     {
-      label: "客户",
+      label: i18n.t("whseField.khmc"),
       prop: "custCode",
       width: 220,
       type: "select",
       dicData: cust1
     },
     {
-      label: "颜色编号",
+      label: i18n.t("whseField.sh"),
       prop: "colorBh",
       width: 140,
     },
     {
-      label: "颜色中文",
+      label: i18n.t("whseField.ysmc"),
       prop: "colorChn",
       width: 120,
     },
     {
-      label: "颜色来源",
+      label: i18n.t("whseField.ysly"),
       prop: "colorSource",
       width: 100,
       type: "select",
       dicData: getDIC("sal_colorSource"),
     },
     {
-      label: "客色号",
+      label: i18n.t("whseField.ksh"),
       prop: "custColorBh",
       width: 130,
     },
     {
-      label: "面料编号",
+      label: i18n.t("whseField.mlbh"),
       prop: "fabCode",
       width: 110,
     },
     {
-      label: "面料",
+      label: i18n.t("whseField.ml"),
       prop: "fabricDesc",
       width: 400,
 
     },
     {
-      label: "面料来源",
+      label: i18n.t("whseField.mlly"),
       prop: "fabSource",
       width: 120,
       type: "select",
       dicData: getDIC("LAP_FABSOURCE"),
     },
     {
-      label: "染色类别",
+      label: i18n.t("whseField.rslb"),
       prop: "lapDyetype",
       width: 120,
       type: "select",
       dicData: getDIC("LAP_DYETYPE"),
     },
     {
-      label: "是否双染",
+      label: i18n.t("whseField.sfsr"),
       prop: "doubleFlag",
       width: 100,
       type: 'select',
@@ -5142,7 +5140,7 @@ export const purApplicationF = {
   menu: false,
   column: [
     {
-      label: "申请类别",
+      label: i18n.t("whseField.sqlb"),
       prop: "applyCategory",
       span: 6,
       placeholder: " ",
@@ -5150,13 +5148,13 @@ export const purApplicationF = {
       dicData: getDIC("pur_category")
     },
     {
-      label: "申请单编号",
+      label: i18n.t("whseField.sqbh"),
       prop: "applyCode",
       span: 6,
       placeholder: " ",
     },
     {
-      label: "申请部门",
+      label: i18n.t("whseField.sqbm"),
       prop: "applyDepartment",
       span: 6,
       placeholder: " ",
@@ -5183,35 +5181,35 @@ export const purApplicationC = {
       align: "center",
     },
     {
-      label: "申請單編號",
+      label: i18n.t("whseField.sqbh"),
       prop: "applyCode",
       width: 140,
     },
     {
-      label: "申請部門",
+      label: i18n.t("whseField.sqbm"),
       prop: "applyDepartment",
       width: 120,
     },
     {
-      label: "申請人",
+      label: i18n.t("whseField.sqr"),
       prop: "applyPeople",
       width: 140,
     },
     {
-      label: "申請日期",
+      label: i18n.t("whseField.sqrq"),
       prop: "applyDate",
       width: 140,
     },
     {
-      label: "申請類別",
+      label: i18n.t("whseField.sqlb"),
       prop: "applyCategory",
       width: 100,
       type: "select",
       dicData: getDIC("pur_category"),
     },
     {
-      label: "申請狀態",
-      prop: "apply_state",
+      label: i18n.t("whseField.sqdzt"),
+      prop: "applyState",
       width: 100,
       type: "select",
       dicData: getDIC("pur_state"),
@@ -5237,13 +5235,13 @@ export const purApplicationDtlF = {
   column: [
 
     {
-      label: "物料编号",
+      label: i18n.t("whseField.clbh"),
       prop: "materielCode",
       span: 6,
       placeholder: " ",
     },
     {
-      label: "物料名称",
+      label: i18n.t("whseField.clmc"),
       prop: "materielName",
       span: 6,
       placeholder: " ",
@@ -5269,38 +5267,38 @@ export const purApplicationDtlC = {
       align: "center",
     },
     {
-      label: "物料编号",
+      label: i18n.t("whseField.clbh"),
       prop: "materielCode",
       width: 140,
     },
     {
-      label: "物料名称",
+      label: i18n.t("whseField.clmc"),
       prop: "materielName",
       width: 140,
     },
     {
-      label: "申领数量",
+      label: i18n.t("whseField.slsl"),
       prop: "applyNum",
       width: 100,
     },
     {
-      label: "单位",
+      label: i18n.t("whseField.dw"),
       prop: "company",
       width: 100,
     },
     {
-      label: "用途",
+      label: i18n.t("whseField.ytbz"),
       prop: "purposeRemarks",
       width: 140,
     },
 
     {
-      label: "型号",
+      label: i18n.t("whseField.xh"),
       prop: "model",
       width: 180,
     },
     {
-      label: "规格",
+      label: i18n.t("whseField.gg"),
       prop: "ItemSpec",
       width: 180,
     },
@@ -5325,19 +5323,19 @@ export const locF = {
   column: [
 
     {
-      label: "倉庫代號",
+      label: i18n.t("whseField.ckdh"),
       prop: "warehouseId",
       span: 6,
       placeholder: " ",
     },
     {
-      label: "倉庫名稱",
+      label: i18n.t("whseField.ckmc"),
       prop: "warehouseName",
       span: 6,
       placeholder: " ",
     },
     {
-      label: "分區碼",
+      label: i18n.t("whseField.qwm"),
       prop: "areaCode",
       span: 6,
       placeholder: " ",
@@ -5363,13 +5361,13 @@ export const locC = {
       align: "center",
     },
     {
-      label: "倉庫代號",
+      label: i18n.t("whseField.ckdh"),
       prop: "warehouseId",
       width: 140,
 
     },
     {
-      label: "倉庫名稱",
+      label: i18n.t("whseField.ckmc"),
       prop: "warehouseName",
       width: 140,
       type: "select",
@@ -5380,14 +5378,14 @@ export const locC = {
       dicData: getDicT("whseWarehouse", "warehouseName", "warehouseId")
     },
     {
-      label: "分區碼",
+      label: i18n.t("whseField.qwm"),
       prop: "areaCode",
       width: 100,
       type: "select",
       dicData: getDicT("whseShelves",)
     },
     {
-      label: "貨位碼",
+      label: i18n.t("whseField.hwm"),
       prop: "locationCode",
       width: 160,
     },
