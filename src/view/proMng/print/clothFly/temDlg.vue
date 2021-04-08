@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-01 15:24:47
+ * @LastEditTime: 2021-04-08 19:25:07
  * @Description: 
 -->
 <template>
@@ -33,7 +33,7 @@
 </template>
 <script>
 import { mainCrud } from "./data";
-import { getCodeSupply, addBf, printBf } from "./api";
+import { getCodeSupply, addBf, printBf, getYarn } from "./api";
 import { getDIC, getDicT, getXDicT, postDicT, preFixInt } from "@/config";
 import { baseCodeSupplyEx } from "@/api/index";
 import preview from "./preview";
@@ -66,6 +66,16 @@ export default {
       codeSupplyNum: 0,
       previewData: {},
       printCtr: false,
+      pageNum: 1,
+      pageTotalNum: 1,
+      pageRotate: 0,
+      // 加载进度
+      loadedRatio: 0,
+      curPageNum: 0,
+      id:
+        process.env.API_HOST +
+        "/api/proClothNote/preview?id=" +
+        "021308a1-fe63-4336-b234-e8f661ee669e",
     };
   },
   watch: {},
@@ -75,12 +85,17 @@ export default {
       this.form = this.detail;
       baseCodeSupplyEx({ code: "cloth_fly" }).then((res) => {
         this.form.bph = res.data.data;
-        if (this.form.realEnd === "" || this.form.realEnd === null) {
-          this.form.nowDate = this.form.planEnd.split(" ")[0];
-        } else {
-          this.form.nowDate = this.form.realEnd.split(" ")[0];
-        }
-        // this.form.nowDate = this.getNowTime();
+        this.form.ps = (
+          Number(this.form.amount) / Number(this.form.pz)
+        ).toFixed(0);
+        this.form.nowDate = this.$getNowTime("date");
+        console.log(this.form);
+        getYarn({
+          proWeaveJobFk: this.form.weaveJobId,
+        }).then((yarn) => {
+          console.log(yarn);
+          this.formOp.column[10].dicData = yarn.data;
+        });
         setTimeout(() => {
           this.wLoading = false;
         }, 500);
@@ -102,8 +117,8 @@ export default {
         if (valid) {
           this.$tip
             .cofirm(
-              "是否确定打印排单号为 【 " +
-                this.detail.stepCode +
+              "是否确定打印生產单号为 【 " +
+                this.detail.weaveJobCode +
                 this.$t("iaoMng.delTle2"),
               this,
               {}
@@ -111,32 +126,39 @@ export default {
             .then(() => {
               this.wLoading = true;
               let arr = [];
+              let data = "";
+              this.form.yarnThickness.forEach((item) => {
+                data = data + item;
+              });
               for (let i = 0; i < this.form.ps; i++) {
                 arr.push({
-                  breadth: this.form.actualWidth,
+                  breadth: this.form.breadth,
                   clothWeight: 100,
                   eachNumber: this.form.qsph + i,
-                  fabricName: this.form.calicoType,
-                  gramWeight: this.form.weight,
+                  fabricName: this.form.fabricDesc,
+                  gramWeight: this.form.gramWeight,
                   isPrinted: false,
-                  loomNo: this.form.equipmentCode,
+                  loomNo: this.form.mathineCode,
                   workNo: this.form.zjgh,
-                  madeDate: this.$getNowTime(),
+                  madeDate: this.$getNowTime("datetime"),
                   noteCode: this.form.bph + (this.form.qsph + i),
-                  poNo: this.form.poNo,
-                  printedTime: this.$getNowTime(),
-                  proBatchNumber: this.form.spi,
+                  poNo: this.form.salPoNo,
+                  printedTime: this.$getNowTime("datetime"),
+                  proBatchNumber: this.form.weaveJobCode, // 生产单号
                   proColor: this.form.colorName,
-                  proName: this.form.workName,
-                  schId: this.form.salSchId,
-                  // lenUnit: "1",
-                  machineCode: this.form.stepCode,
-                  // proSpec: "test",
-                  salPooid: this.form.salSchId,
-                  tempId: this.form.salSchId,
-                  weightUnit: this.form.workUnit,
-                  // clothLength: 200,
-                  // customerName: "test",
+                  proName: this.form.weaveJobCode,
+                  schId: "231c92fe-4ba9-4bf1-ab9a-58076d7a4720",
+                  machineCode: "123",
+                  salPooid: "000E0106-0000-0000-0000-00001C19D962",
+                  tempId: "1",
+                  weightUnit: "KG",
+                  lenUnit: "KG",
+                  proSpec: "test",
+                  clothLength: 200,
+                  customerName: this.form.custCode,
+                  yarnThickness: data,
+                  yarnBrand: this.form.yarnBrand,
+                  yarnBatch: this.form.yarnBatch,
                 });
               }
               let add = (item, i) => {
@@ -153,27 +175,29 @@ export default {
                 });
               };
               let promiseArr = arr.map((item, i) => {
+                console.log(arr);
                 return add(item, i);
               });
               Promise.all(promiseArr).then((res) => {
-                baseCodeSupply({ code: "cloth_fly" }).then((res) => {});
-                arr.forEach((item, i) => {
-                  printBf(item.noteId)
-                    .then((res) => {})
-                    .catch((err) => {
-                      this.$tip.warning("打印失败");
-                      this.wLoading = false;
-                    });
-                  if (i === arr.length - 1) {
-                    setTimeout(() => {
-                      this.printCtr = true;
-                      this.wLoading = false;
-                    }, 500);
-                  }
-                });
+                // baseCodeSupply({ code: "cloth_fly" }).then((res) => {});
+                // arr.forEach((item, i) => {
+                //   printBf(item.noteId)
+                //     .then((res) => {})
+                //     .catch((err) => {
+                //       this.$tip.warning("打印失败");
+                //       this.wLoading = false;
+                //     });
+                //   if (i === arr.length - 1) {
+                //     setTimeout(() => {
+                //       this.printCtr = true;
+                //       this.wLoading = false;
+                //     }, 500);
+                //   }
+                // });
               });
             })
             .catch((err) => {
+              console.log(err);
               this.$tip.warning(this.$t("public.qxcz"));
             });
           done();
@@ -182,6 +206,129 @@ export default {
           return;
         }
       });
+    },
+    print1() {
+      const win = window.open("test", "打印");
+      let newstr = document.getElementById("test").innerHTML;
+      // console.log(newstr);
+      win.document.write("<html><head><title></title>");
+      win.document.write("</head><body >");
+      win.document.write(newstr);
+
+      win.document.write("</body></html>");
+      win.document.write("<scr" + 'ipt type="text/javascript" >');
+
+      // setTimeout(() => {
+      //   win.print(true);
+      //   // win.close();
+      // }, 500);
+
+      // let test = window.open(
+      //   "http://192.168.0.91:91/api/proClothNote/preview?id=03b9e5ff-1c96-42b8-91be-ffb3fe2c9991",
+      //   "_blank"
+      // );
+      // setTimeout(() => {
+      //   test.print();
+      // }, 1500);
+
+      return;
+      printBf(item.noteId)
+        .then((res) => {})
+        .catch((err) => {
+          this.$tip.warning("打印失败");
+          this.wLoading = false;
+        });
+      if (i === arr.length - 1) {
+        setTimeout(() => {
+          this.printCtr = true;
+          this.wLoading = false;
+        }, 500);
+      }
+      // return;
+      // this.$refs.form.validate((valid, done) => {
+      //   if (valid) {
+      //     this.$tip
+      //       .cofirm(
+      //         "是否确定打印排单号为 【 " +
+      //           this.detail.stepCode +
+      //           this.$t("iaoMng.delTle2"),
+      //         this,
+      //         {}
+      //       )
+      //       .then(() => {
+      //         this.wLoading = true;
+      //         let arr = [];
+      //         for (let i = 0; i < this.form.ps; i++) {
+      //           arr.push({
+      //             breadth: this.form.actualWidth,
+      //             clothWeight: 100,
+      //             eachNumber: this.form.qsph + i,
+      //             fabricName: this.form.calicoType,
+      //             gramWeight: this.form.weight,
+      //             isPrinted: false,
+      //             loomNo: this.form.equipmentCode,
+      //             workNo: this.form.zjgh,
+      //             madeDate: this.$getNowTime(),
+      //             noteCode: this.form.bph + (this.form.qsph + i),
+      //             poNo: this.form.poNo,
+      //             printedTime: this.$getNowTime(),
+      //             proBatchNumber: this.form.spi,
+      //             proColor: this.form.colorName,
+      //             proName: this.form.workName,
+      //             schId: this.form.salSchId,
+      //             // lenUnit: "1",
+      //             machineCode: this.form.stepCode,
+      //             // proSpec: "test",
+      //             salPooid: this.form.salSchId,
+      //             tempId: this.form.salSchId,
+      //             weightUnit: this.form.workUnit,
+      //             // clothLength: 200,
+      //             // customerName: "test",
+      //           });
+      //         }
+      //         let add = (item, i) => {
+      //           return new Promise((resolve, reject) => {
+      //             addBf(item)
+      //               .then((res) => {
+      //                 item.noteId = res.data.data;
+      //                 resolve();
+      //               })
+      //               .catch((err) => {
+      //                 this.$tip.warning("打印失败");
+      //                 this.wLoading = false;
+      //               });
+      //           });
+      //         };
+      //         let promiseArr = arr.map((item, i) => {
+      //           return add(item, i);
+      //         });
+      //         Promise.all(promiseArr).then((res) => {
+      //           baseCodeSupply({ code: "cloth_fly" }).then((res) => {});
+      //           arr.forEach((item, i) => {
+      //             printBf(item.noteId)
+      //               .then((res) => {})
+      //               .catch((err) => {
+      //                 this.$tip.warning("打印失败");
+      //                 this.wLoading = false;
+      //               });
+      //             if (i === arr.length - 1) {
+      //               setTimeout(() => {
+      //                 this.printCtr = true;
+      //                 this.wLoading = false;
+      //               }, 500);
+      //             }
+      //           });
+      //         });
+      //       })
+      //       .catch((err) => {
+      //         this.$tip.warning(this.$t("public.qxcz"));
+      //       });
+      //     done();
+      //   } else {
+      //     this.$tip.error("请补充打印信息!");
+      //     return;
+      //   }
+      // });
     },
     close() {
       if (this.refresh) {

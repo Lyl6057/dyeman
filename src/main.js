@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-24 08:12:20
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-02 07:25:32
+ * @LastEditTime: 2021-04-07 14:56:17
  * @Description: 
  */
 // The Vue build version to load with the `import` command
@@ -25,7 +25,9 @@ import './config/axios'
 import 'default-passive-events'
 import echarts from 'echarts' // echarts
 import i18n from './lang' // Internationalization
-
+import Print from 'vue-print-nb'
+// Global instruction 
+Vue.use(Print);
 // 指令
 import './instruct/v-drap'
 // import './styles/element-variables.scss'

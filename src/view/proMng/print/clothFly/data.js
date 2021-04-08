@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-05 08:55:17
+ * @LastEditTime: 2021-04-08 19:19:28
  * @Description:
  */
 
@@ -12,6 +12,7 @@ import {
   getXDicT,
   postDicT
 } from '@/config'
+let cust = getDicT("basCustomer", "custName", "custCode")
 
 export function mainForm(_this) {
   return {
@@ -51,256 +52,6 @@ export function mainForm(_this) {
     ],
   }
 }
-export function popupForm(_this) {
-  return {
-    submitBtn: false,
-    emptyBtn: false,
-    labelWidth: 120,
-    column: [
-      {
-        label: "色号",
-        prop: "colorNo",
-        span: 6,
-        placeholder: " ",
-        disabled: true,
-      },
-      {
-        label: "颜色深度",
-        prop: "colorDepth",
-        span: 6,
-        placeholder: "请选择颜色深度",
-        type: "select",
-        disabled: !_this.isAdd,
-        dicData: getDIC("bas_colorclTepth"),
-        change: () => {
-          if (_this.isAdd) {
-            _this.depth()
-          }
-
-        }
-      },
-      {
-        label: "染料份量(％)",
-        prop: "dyeWeight",
-        span: 6,
-        placeholder: " ",
-        align: "right",
-        type: "number",
-        minRows: _this.minRows,
-        maxRows: _this.maxRows,
-        disabled: true,
-        // change: () => {
-        //   // if (_this.form.colorDepth == '') {
-        //   //   _this.form.dyeWeight = 0
-        //   //   _this.$tip.warning("请先选择颜色深度!")
-        //   // }
-        // }
-      },
-      {
-        label: "颜色鲜度",
-        prop: "salColorfresh",
-        span: 6,
-        type: "select",
-        dicData: getDIC("sal_colorFresh"),
-      },
-      {
-        label: _this.$t('whseField.khmc'),
-        prop: "custCode",
-        span: 6,
-        placeholder: "请选择客户",
-        disabled: !_this.isAdd,
-        click: () => {
-
-          _this.dlgWidth = '60%'
-          _this.choiceV = !_this.choiceV;
-          _this.choiceField = "custCode";
-          // _this.choiceQ.purType = '5'
-          _this.choiceTarget = _this.form;
-          _this.choiceTle = '选择客戶';
-        },
-        type: "select",
-        dicData: getDicT("basCustomer", "custName", "custCode")
-      },
-      {
-        label: "日期",
-        prop: "colorDate",
-        span: 6,
-        placeholder: " ",
-        type: "date",
-        format: "yyyy-MM-dd",
-        valueFormat: "yyyy-MM-dd",
-        align: "center",
-      },
-      {
-        label: "颜色英文",
-        prop: "colorEngName",
-        span: 6,
-      },
-      {
-        label: "状态",
-        prop: "colorState",
-        span: 6,
-        placeholder: "请选择状态",
-        type: "select",
-        dicData: [
-          {
-            value: false,
-            label: "未确定"
-          },
-          {
-            value: true,
-            label: "确定"
-          }
-
-        ]
-      },
-      {
-        label: "颜色编号",
-        prop: "colorBh",
-        span: 6,
-        placeholder: "请选择颜色编号",
-        disabled: !_this.isAdd,
-        click: () => {
-          _this.dlgWidth = '60%'
-          _this.choiceV = !_this.choiceV;
-          _this.choiceField = "colorBh";
-          // _this.choiceQ.purType = '5'
-          _this.choiceTarget = _this.form;
-          _this.choiceTle = _this.$t("choicDlg.xzshxx");
-        },
-      },
-      {
-        label: "颜色中文",
-        prop: "colorChn",
-        span: 6,
-
-      },
-      {
-        label: "颜色来源",
-        prop: "colorSource",
-        span: 6,
-        placeholder: "请选择颜色来源",
-        type: "select",
-        dicData: getDIC("sal_colorSource"),
-      },
-      {
-        label: "客色号",
-        prop: "custColorBh",
-        span: 6,
-        disabled: !_this.isAdd,
-      },
-      {
-        label: "面料",
-        prop: "fabCode",
-        span: 6,
-        placeholder: "请选择面料",
-        disabled: !_this.isAdd,
-        click: () => {
-          _this.dlgWidth = '100%'
-          _this.choiceV = !_this.choiceV;
-          _this.choiceField = "fabCode";
-          // _this.choiceQ.purType = '5'
-          _this.choiceTarget = _this.form;
-          _this.choiceTle = '胚布編碼';
-        },
-
-      },
-      {
-        label: "面料中文描述",
-        prop: "fabricDesc",
-        span: 12,
-      },
-      {
-        label: "面料来源",
-        prop: "fabSource",
-        span: 6,
-        placeholder: "请选择面料来源",
-        type: "select",
-        dicData: getDIC("LAP_FABSOURCE"),
-      },
-      {
-        label: "第一光源",
-        prop: "colorLights",
-        span: 6,
-        placeholder: "请选择第一光源",
-        type: "select",
-        dicData: getDIC("sal_colorLights"),
-        disabled: !_this.isAdd,
-        change: () => {
-          _this.lights()
-        }
-      },
-      {
-        label: "面料英文描述",
-        prop: "fabricDescEng",
-        span: 12,
-      },
-      {
-        label: "染色类别",
-        prop: "lapDyetype",
-        span: 6,
-        placeholder: "请选择染色类别",
-        type: "select",
-        dicData: getDIC("LAP_DYETYPE"),
-      },
-
-      {
-        label: "第二光源",
-        prop: "deputyLights",
-        span: 12,
-        placeholder: " ",
-        multiple: true,
-        tags: false,
-        type: "select",
-        disabled: true,
-        dicData: getDIC("sal_colorLights"),
-        // change: () => {
-        //   _this.lights("2")
-        // }
-      },
-      {
-        label: "对色标准",
-        prop: "colorStandard",
-        span: 6,
-        placeholder: "请选择对色标准",
-        type: "select",
-        dicData: getDIC("sal_colorStandard"),
-      },
-      {
-        label: "是否双染",
-        prop: "doubleFlag",
-        span: 6,
-        placeholder: " ",
-        type: "switch",
-        dicData: [
-          {
-            label: "否",
-            value: false
-          },
-          {
-            label: "是",
-            value: true
-          },
-        ]
-
-      },
-      {
-        label: "档案编号",
-        prop: "recN0",
-        span: 6,
-        disabled: !_this.isAdd,
-      },
-      {
-        label: _this.$t("energy.bz"),
-        prop: "remarks",
-        span: 18,
-      },
-
-    ],
-  }
-
-
-}
 export function mainCrud(_this) {
   return {
     menu: false,
@@ -321,150 +72,133 @@ export function mainCrud(_this) {
         display: false
       },
       {
-        label: "工序名称",
-        prop: "workName",
+        label: "生產單號",
+        prop: "weaveJobCode",
         width: 110,
-        disabled: true,
         span: 6,
-        placeholder: " ",
-      },
-      {
-        label: "订单号",
-        prop: "poNo",
-        width: 160,
-        disabled: true, placeholder: " ",
-        span: 6,
+        disabled: false,
         sortable: true,
+        rules: [{
+          required: true,
+          message: "请输入生產單號",
+          trigger: "blur"
+        }],
       },
       {
-        label: "排单号",
-        prop: "stepCode",
-        width: 120,
-        disabled: true, placeholder: " ",
+        label: "訂單編號",
+        prop: "salPoNo",
+        width: 140,
         span: 6,
+        placeholder: "请選擇訂單編號",
         sortable: true,
+        rules: [{
+          required: true,
+          message: "请選擇訂單編號",
+          trigger: "blur"
+        }],
+        // click: () => {
+        //   _this.visible = true
+        // }
       },
       {
-        label: "颜色",
-        prop: "colorName",
-        width: 90,
-        disabled: true, placeholder: " ",
-        span: 6
+        label: "客戶名稱",
+        prop: "custCode",
+        overHidden: true,
+        width: 200,
+        span: 6,
+        placeholder: "请選擇客戶名稱",
+        type: "select",
+        dicData: cust,
       },
-      // {
-      //   label: "计划开始",
-      //   prop: "planStart",
-      //   width: 160,
-      // },
-      // {
-      //   label: "实际开始",
-      //   prop: "realStart",
-      //   width: 160,
-      //   disabled: true, placeholder: " ",
-      //   span: 6
-      // },
       {
-        label: "计划完成",
-        prop: "planEnd",
-        width: 160,
-        display: false
-      },
-
-      {
-        label: "实际完成",
-        prop: "realEnd",
-        width: 160,
-        display: false,
-        placeholder: " ",
-        span: 6
-      },
-      // {
-      //   label: "完成比例",
-      //   prop: "finishProportion",
-      //   width: 90,
-      //   disabled: true, placeholder: " ",
-      //   span: 6,
-      //   display: false
-      // },
-      // {
-      //   label: "完成状态",
-      //   prop: "finishState",
-      //   width: 90,
-      //   disabled: true, placeholder: " ",
-      //   span: 6,
-      //   type: "select",
-      //   dicData: [
-      //     {
-      //       value: 1,
-      //       label: "已完成"
-      //     },
-      //     {
-      //       value: 0,
-      //       label: "未完成"
-      //     }
-      //   ]
-      // },
-      // {
-      //   label: "估算耗时",
-      //   prop: "exampleUseTime",
-      //   width: 90,
-      //   align: "right"
-      // },
-      // {
-      //   label: "实际耗时",
-      //   prop: "realUseTime",
-      //   width: 90,
-      //   align: "right",
-      //   disabled: true, placeholder: " ",
-      //   span: 6
-      // },
-      // {
-      //   label: "宽放时间",
-      //   prop: "realBroad",
-      //   width: 90,
-      //   align: "right",
-      //   disabled: true, placeholder: " ",
-      //   span: 6
-      // },
-      // {
-      //   label: "转场时间",
-      //   prop: "transferTime",
-      //   width: 90,
-      //   align: "right",
-      //   disabled: true, placeholder: " ",
-      //   span: 6
-      // },
-      {
-        label: "机号",
-        prop: "equipmentCode",
-        width: 150,
-        hide: false,
+        label: "織單數量",
+        prop: "amount",
+        width: 100,
+        placeholder: "请输入織單數量",
         span: 6,
         rules: [{
           required: true,
-          message: "请输入机号",
+          message: "请输入織單數量",
           trigger: "blur"
         }],
-        sortable: true,
-        disabled: true
+        align: "right",
       },
       {
-        label: "布类",
-        prop: "calicoType",
-        width: 100,
+        label: "開機日期",
+        prop: "startDate",
+        width: 120,
+        type: "date",
+        align: "center",
+        format: "yyyy-MM-dd",
+        valueFormat: "yyyy-MM-dd",
+        placeholder: "请選擇開機日期",
+        sortable: true,
         span: 6,
-        type: "select",
-        disabled: true,
-        dicData: getDIC("bas_colorclType")
+        rules: [{
+          required: true,
+          message: "请選擇開機日期",
+          trigger: "blur"
+        }],
       },
+      {
+        label: "機號",
+        prop: "mathineCode",
+        span: 6,
+        width: 120,
+        placeholder: " ",
+        rules: [{
+          required: true,
+          message: "请輸入機號",
+          trigger: "blur"
+        }],
 
-
+      },
+      {
+        label: "布類描述",
+        prop: "fabricDesc",
+        placeholder: " ",
+        overHidden: true,
+        width: 250,
+        span: 12,
+        placeholder: "请選擇布類描述",
+        rules: [{
+          required: true,
+          message: "请選擇布類描述",
+          trigger: "blur"
+        }],
+      },
+      {
+        label: "顏色名稱",
+        prop: "colorName",
+        placeholder: " ",
+        width: 120,
+        span: 6,
+        placeholder: "请選擇顏色名稱",
+        rules: [{
+          required: true,
+          message: "请選擇顏色名稱",
+          trigger: "blur"
+        }],
+      },
+      {
+        label: "色號",
+        prop: "colorCode",
+        width: 120,
+        span: 6,
+      },
       {
         label: "纱支",
-        prop: "ycountDesc",
-        width: 310,
-        disabled: true, placeholder: " ",
-        span: 12
+        prop: "yarnThickness",
+        width: 90,
+        hide: true,
+        span: 12,
+        type: "select",
+        props: {
+          value: "yarnName",
+          label: "yarnName"
+        },
+        multiple: true,
+        dicData: []
       },
       {
         label: "值机工号",
@@ -480,7 +214,7 @@ export function mainCrud(_this) {
       },
       {
         label: "纱批",
-        prop: "spi",
+        prop: "yarnBatch",
         width: 90,
         hide: true,
         align: "right",
@@ -494,16 +228,11 @@ export function mainCrud(_this) {
 
       {
         label: "纱牌",
-        prop: "sp",
+        prop: "yarnBrand",
         width: 90,
         hide: true,
         align: "right",
         span: 6,
-        rules: [{
-          required: true,
-          message: "请输入纱牌",
-          trigger: "blur"
-        }],
       },
       // {
       //   label: "纱长",
@@ -527,7 +256,7 @@ export function mainCrud(_this) {
       // },
       {
         label: "幅宽",
-        prop: "actualWidth",
+        prop: "breadth",
         width: 90,
         align: "right",
         span: 6,
@@ -539,7 +268,7 @@ export function mainCrud(_this) {
       },
       {
         label: "克重",
-        prop: "weight",
+        prop: "gramWeight",
         width: 90,
         align: "right",
         span: 6,
@@ -548,14 +277,6 @@ export function mainCrud(_this) {
           message: "请输入克重",
           trigger: "blur"
         }]
-      },
-      {
-        label: _this.$t("whseField.zl"),
-        prop: "workAmount",
-        width: 90,
-        span: 6,
-        disabled: true,
-        align: "right",
       },
       {
         label: "平均匹重",
@@ -577,13 +298,13 @@ export function mainCrud(_this) {
 
         }
       },
-      {
-        label: _this.$t('whseField.dw'),
-        prop: "workUnit",
-        width: 90,
-        span: 6,
-        disabled: true
-      },
+      // {
+      //   label: _this.$t('whseField.dw'),
+      //   prop: "workUnit",
+      //   width: 90,
+      //   span: 6,
+      //   disabled: true
+      // },
       {
         label: "布票號",
         prop: "bph",

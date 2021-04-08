@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-06 13:36:49
+ * @LastEditTime: 2021-04-08 19:01:20
  * @Description: 
 -->
 <template>
@@ -32,6 +32,7 @@
           @current-row-change="cellClick"
         ></avue-crud>
       </el-row>
+
       <el-dialog
         id="colorMng_Dlg"
         :visible.sync="dialogVisible"
@@ -54,7 +55,7 @@
 </template>
 <script>
 import { mainForm, mainCrud } from "./data";
-import { getScheduleAndWork } from "./api";
+import { get } from "./api";
 import tem from "./temDlg";
 export default {
   name: "",
@@ -75,19 +76,25 @@ export default {
       loading: false,
       dialogVisible: false,
       detail: {},
+      pageNum: 1,
+      pageTotalNum: 1,
+      pageRotate: 0,
+      // 加载进度
+      loadedRatio: 0,
+      curPageNum: 0,
     };
   },
   watch: {},
   methods: {
     query() {
       this.loading = true;
-      getScheduleAndWork(
+      get(
         Object.assign(this.form, {
           rows: this.page.pageSize,
           start: this.page.currentPage,
         })
       ).then((res) => {
-        this.crud = this.$unique(res.data.records, "poNo");
+        this.crud = res.data.records;
         this.crud.forEach((item, i) => {
           item.index = i + 1;
         });

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-23 08:03:49
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-01 15:06:58
+ * @LastEditTime: 2021-04-08 19:31:16
  * @Description: 
  */
 import Vue from 'vue'
@@ -19,6 +19,7 @@ import im from '@/router/view/im'
 import quaLity from '@/router/view/quaLity'
 import laboratory from './view/laboratory'
 import proMng from './view/proMng'
+import energy from './view/energy'
 Vue.use(Router)
 const originalPush = Router.prototype.push
 
@@ -58,7 +59,8 @@ export default new Router({
         ...im,
         ...quaLity,
         ...laboratory,
-        ...proMng
+        ...proMng,
+        ...energy
       ]
     },
 

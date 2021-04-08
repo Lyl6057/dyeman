@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:48:57
  * @LastEditors: Lyl
- * @LastEditTime: 2021-03-18 10:55:37
+ * @LastEditTime: 2021-04-08 13:49:22
  * @Description: 
 -->
 <template>
@@ -18,7 +18,7 @@
             </el-col>
             <el-col :span="15"
               ><div style="height: 30px; line-height: 30px">
-                {{ detail.poNo }}
+                {{ detail.salPoNo }}
               </div>
             </el-col>
           </el-row>
@@ -28,7 +28,7 @@
             </el-col>
             <el-col :span="18"
               ><div style="height: 30px; line-height: 30px; text-align: left">
-                {{ detail.$calicoType }}
+                {{ detail.fabricDesc }}
               </div>
             </el-col>
           </el-row>
@@ -46,7 +46,7 @@
 
           <el-row class="yl_label">
             <el-col :span="8">
-              <div>{{ detail.ycountDesc }}</div>
+              <div>{{ detail.fabricDesc }}</div>
             </el-col>
             <el-col :span="8">
               <div>{{ detail.sp }}</div>
@@ -57,10 +57,10 @@
           </el-row>
           <el-row class="yl_label">
             <el-col :span="12">
-              <div>机号: Số máy: {{ detail.equipmentCode }}</div>
+              <div>机号: Số máy: {{ detail.mathineCode }}</div>
             </el-col>
             <el-col :span="12">
-              <div>门幅: Khổ vải: {{ detail.actualWidth }}</div>
+              <div>门幅: Khổ vải: {{ detail.breadth }}</div>
             </el-col>
           </el-row>
           <el-row class="yl_label">
@@ -76,7 +76,7 @@
               <div>重量:Trọng lượng:</div>
             </el-col>
             <el-col :span="12">
-              <div>克重: TL gram: {{ detail.weight }}</div>
+              <div>克重: TL gram: {{ detail.gramWeight }}</div>
             </el-col>
           </el-row>
           <el-row class="yl_label">

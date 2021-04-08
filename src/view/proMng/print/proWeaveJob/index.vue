@@ -2,27 +2,39 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-06 15:12:43
+ * @LastEditTime: 2021-04-07 18:12:14
  * @Description: 
 -->
 <template>
   <div id="clothFly">
-    <view-container title="織造通知單打印">
+    <view-container
+      title="織造通知單打印"
+      v-loading="wloading"
+      element-loading-text="拼命加载中..."
+    >
       <el-row class="btnList">
-        <el-button type="success" @click="handleRowDBLClick(chooseData)">{{
-          this.$t("public.update")
-        }}</el-button>
+        <el-button
+          type="success"
+          :disabled="!detail.weaveJobId"
+          @click="handleRowDBLClick(detail)"
+          >{{ this.$t("public.update") }}</el-button
+        >
         <el-button type="primary" @click="add">{{
           this.$t("public.add")
         }}</el-button>
-        <el-button type="primary" @click="print">打印</el-button>
+        <el-button type="danger" :disabled="!detail.weaveJobId" @click="del">{{
+          this.$t("public.del")
+        }}</el-button>
+        <el-button type="primary" @click="print" :loading="wloading"
+          >打印</el-button
+        >
         <el-button type="primary" @click="query">{{
           this.$t("public.query")
         }}</el-button>
 
-        <el-button type="warning" @click="close">{{
+        <!-- <el-button type="warning" @click="close">{{
           this.$t("public.close")
-        }}</el-button>
+        }}</el-button> -->
       </el-row>
       <el-row class="formBox">
         <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
@@ -30,6 +42,7 @@
       <el-row class="crudBox">
         <avue-crud
           ref="crud"
+          id="crud"
           :option="crudOp"
           :data="crud"
           :page.sync="page"
@@ -54,6 +67,7 @@
           :detail="detail"
           :isAdd="isAdd"
           @close="dialogVisible = false"
+          @refresh="query"
           v-if="dialogVisible"
         ></tem-dlg>
       </el-dialog>
@@ -62,7 +76,9 @@
 </template>
 <script>
 import { mainForm, mainCrud } from "./data";
-import { get, add, update, del } from "./api";
+import { get, add, update, del, print } from "./api";
+import XlsxTemplate from "xlsx-template";
+import JSZipUtils from "jszip-utils";
 import tem from "./temDlg";
 export default {
   name: "",
@@ -84,40 +100,177 @@ export default {
       dialogVisible: false,
       detail: {},
       isAdd: false,
-      chooseData: {},
+      input: "",
+      wloading: false,
     };
   },
   watch: {},
   methods: {
     query() {
       this.loading = true;
+      this.detail = {};
+      for (let key in this.form) {
+        if (this.form[key] == "") {
+          delete this.form[key];
+        }
+      }
       get(
-        Object.assign({
+        Object.assign(this.form, {
           rows: this.page.pageSize,
           start: this.page.currentPage,
         })
       ).then((res) => {
         this.crud = res.data.records;
         this.crud.forEach((item, i) => {
+          item.custName = item.custCode;
+          item.amount = item.amount.toFixed(2);
           item.index = i + 1;
         });
+        if (this.crud.length > 0) {
+          this.$refs.crud.setCurrentRow(this.crud[0]);
+        }
         this.page.total = res.data.total;
         this.loading = false;
       });
     },
+    getBase64(file) {
+      return new Promise((resolve, reject) => {
+        let reader = new FileReader();
+        let fileResult = "";
+        reader.readAsDataURL(file);
+        //开始转
+        reader.onload = function () {
+          fileResult = reader.result;
+        };
+        //转 失败
+        reader.onerror = function (error) {
+          reject(error);
+        };
+        //转 结束  咱就 resolve 出去
+        reader.onloadend = function () {
+          resolve(fileResult);
+        };
+      });
+    },
+    handleFile(e) {
+      const input = e.target;
+      const files = e.target.files;
+      // let data = this.getBase64(files[0]);
+      let data = window.open("../../../../../static/zztzd.htm");
+      setTimeout(() => {
+        data.print(); //这一步就是在新窗口调出打印机
+      }, 1500);
+      // console.log(files);
+    },
     print() {
-      if (Object.keys(this.detail).length === 0) {
-        return;
+      print({ weaveJobCode: this.detail.weaveJobCode }).then((res) => {
+        if (res.data.msg === "打印成功") {
+          this.wloading = true;
+          setTimeout(() => {
+            this.wloading = false;
+            this.$tip.success(res.data.msg);
+          }, 2000);
+        } else {
+          this.wloading = true;
+          setTimeout(() => {
+            this.wloading = false;
+            this.$tip.error(res.data.msg);
+          }, 500);
+        }
+      });
+    },
+    async print2() {
+      console.log(this.input);
+      return;
+      try {
+        //获得Excel模板的buffer对象
+
+        const exlBuf = await JSZipUtils.getBinaryContent(
+          "../../../../../static/zztzd.xlsx"
+        );
+        var template = new XlsxTemplate(exlBuf);
+        var sheetNumber = "織造通知單";
+
+        // Set up some placeholder values matching the placeholders in the template
+        template.substitute(sheetNumber, this.detail);
+        var out = template.generate({ type: "blob" });
+        // let page = window.open("../../../../../static/test.pdf"); //这个url其实是这个接口的地址，参数什么的使用get方式将其带上。如果设置了代理，就在前面加上你的代理就行，如：我设置代理是用了'/api'；所以url=`/api/地址`
+        setTimeout(() => {
+          window.print("../../../../../static/test.pdf"); //这一步就是在新窗口调出打印机
+        }, 500);
+        // var fun1 = function () {
+        //   return new Promise((resolve, reject) => {
+        //     saveAs(out, "織造通知單.xlsx");
+        //     resolve();
+        //   });
+        // };
+        // fun1().then((res) => {
+        //   console.log(res);
+        // });
+      } catch (error) {
+        console.log(error);
       }
-      this.detail.pz = 25;
-      this.detail.qsph = 1;
-      this.dialogVisible = true;
+      // const html = window.document.getElementById("crud").innerHTML;
+      // const win = window.open("", "打印", "height=1100,width=1100");
+      // win.document.write("<html><head><title></title>");
+      // win.document.write("</head><body >");
+      // win.document.write(html);
+      // win.document.write("</body></html>");
+      // win.print();
+    },
+    tableToExcel() {
+      (template =
+        '<html><head><meta charset="UTF-8"></head><body><table  border="1">{table}</table></body></html>'),
+        (base64 = function (s) {
+          return window.btoa(unescape(encodeURIComponent(s)));
+        }),
+        (format = function (s, c) {
+          return s.replace(/{(\w+)}/g, function (m, p) {
+            return c[p];
+          });
+        });
+      return function (table, name) {
+        if (!table.nodeType) table = document.getElementById(table);
+        var ctx = {
+          worksheet: name || "Worksheet",
+          table: table.innerHTML,
+        };
+        window.location.href = uri + base64(format(template, ctx));
+      };
     },
     add() {
       this.isAdd = true;
       this.dialogVisible = true;
     },
+    del() {
+      this.$tip
+        .cofirm(
+          this.$t("iaoMng.delTle7") +
+            this.detail.weaveJobCode +
+            this.$t("iaoMng.delTle2"),
+          this,
+          {}
+        )
+        .then(() => {
+          del(this.detail.weaveJobId)
+            .then((res) => {
+              if (res.data.code === 200) {
+                this.$tip.success(this.$t("public.sccg"));
+                this.query();
+              } else {
+                this.$tip.error(this.$t("public.scsb"));
+              }
+            })
+            .catch((err) => {
+              this.$tip.error(this.$t("public.scsb"));
+            });
+        })
+        .catch((err) => {
+          this.$tip.warning(this.$t("public.qxcz"));
+        });
+    },
     handleRowDBLClick(val) {
+      this.dialogVisible = true;
       this.isAdd = false;
       this.detail = val;
       // this.print();
