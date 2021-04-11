@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:48:57
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-08 13:49:22
+ * @LastEditTime: 2021-04-09 13:12:02
  * @Description: 
 -->
 <template>
@@ -43,16 +43,15 @@
               <div>纱批: <br />Lô sợi</div>
             </el-col>
           </el-row>
-
           <el-row class="yl_label">
             <el-col :span="8">
-              <div>{{ detail.fabricDesc }}</div>
+              <div>{{ detail.yarnThickness }}</div>
             </el-col>
             <el-col :span="8">
-              <div>{{ detail.sp }}</div>
+              <div>{{ detail.yarnBrand + "   " }}<br /></div>
             </el-col>
             <el-col :span="8">
-              <div>{{ detail.spi }}</div>
+              <div>{{ detail.yarnBatch }}</div>
             </el-col>
           </el-row>
           <el-row class="yl_label">
@@ -65,7 +64,9 @@
           </el-row>
           <el-row class="yl_label">
             <el-col :span="12">
-              <div>匹号: Số cây: {{ Number(detail.qsph) + i }}</div>
+              <div>
+                匹号: Số cây: {{ $preFixInt(Number(detail.qsph) + i, 3) }}
+              </div>
             </el-col>
             <el-col :span="12">
               <div>颜色: Màu: {{ detail.colorName }}</div>
@@ -108,7 +109,7 @@
             |||||||||||||||||||||||||||||||
           </el-row>
           <el-row class="yl_bh">
-            {{ detail.bph + (Number(detail.qsph) + i) }}
+            {{ detail.bph + $preFixInt(Number(detail.qsph) + i, 3) }}
           </el-row>
         </div>
       </el-card>
@@ -134,7 +135,7 @@ export default {
 </script>
 <style lang='stylus'>
 #clothFlyYl {
-  height: calc(100vh - 380px);
+  height: calc(100vh - 430px);
   width: 100%;
   overflow: auto;
   display: flex;
@@ -148,7 +149,7 @@ export default {
 
   .box {
     width: 280px;
-    height: 408px;
+    height: 395px;
     margin: 3px;
     border: 1px solid #000;
     // border-right: none;

@@ -1,79 +1,87 @@
 <template>
   <div id="Consume">
-    <basicContainer>
-      <div class="head">
-        <div class="Title">{{ $t("energy.nyxh") }}</div>
-      </div>
-      <div class="conter">
-        <el-container>
-          <el-aside width="38%">
-            <div class="left">
-              <!-- 选择仪表类型 -->
-              <div class="select">
-                <span>{{ $t("energy.yblx") }}：</span>
-                <el-select
-                  v-model="Meter"
-                  :placeholder="$t('energy.qxz')"
-                  @change="fn_seleType(Meter)"
-                >
-                  <el-option
-                    v-for="item in MeterData"
-                    :key="item.codevalueoid"
-                    :label="item.codename"
-                    :value="item.codeid"
-                  ></el-option>
-                </el-select>
-              </div>
-              <!-- 表类型 -->
-              <div class="tbType">
-                <div style="padding-bottom:5px">{{ $t("energy.blx") }}{{ TbType }}</div>
-                <el-tree
-                  :data="table"
-                  :props="tbProps"
-                  :default-expand-all="true"
-                  :expand-on-click-node="false"
-                  @node-click="fn_NodeClick"
-                ></el-tree>
-              </div>
-            </div>
-          </el-aside>
-          <el-main>
-            <div class="right">
-              <div class="btnList">
-                <el-button type="primary" size="mini" @click="query">
-                  {{
-                  $t("energy.cx")
-                  }}
-                </el-button>
-                <el-button type="primary" size="mini" @click="fn_AddRead">
-                  {{
-                  $t("energy.xz")
-                  }}
-                </el-button>
-                <el-button type="primary" size="mini" @click="fn_handleDel(checkData)">
-                  {{
-                  $t("energy.sc")
-                  }}
-                </el-button>
-                <el-button type="primary" size="mini" @click="uploadXlsx">
-                  {{
-                  $t("energy.dr")
-                  }}
-                </el-button>
-              </div>
-              <!-- 输入查询 -->
-              <avue-form ref="queryForm" :option="CheckOp" v-model="Check" @submit="fn_checkRead"></avue-form>
-              <!-- 抄表数据  @row-del="fn_ReadDel" -->
-              <avue-crud
-                :data="ReadData"
-                :option="ReadOp"
-                @row-del="fn_handleDel"
-                @current-row-change="rowCheck"
-                style
+    <el-row>
+      <el-col :span="6" style="height: 100%">
+        <view-container title="儀表信息">
+          <div class="left">
+            <!-- 选择仪表类型 -->
+            <div class="select">
+              <span>{{ $t("energy.yblx") }}：</span>
+              <el-select
+                v-model="Meter"
+                :placeholder="$t('energy.qxz')"
+                @change="fn_seleType(Meter)"
               >
-                <template slot="menuLeft">
-                  <input type="file" id="oFile" style="display:none" @change="getExcelFileData" />
-                  <!--  <el-button
+                <el-option
+                  v-for="item in MeterData"
+                  :key="item.codevalueoid"
+                  :label="item.codename"
+                  :value="item.codeid"
+                ></el-option>
+              </el-select>
+            </div>
+            <!-- 表类型 -->
+            <div class="tbType">
+              <!-- <div style="padding-bottom: 5px">
+                {{ $t("energy.blx") }}{{ TbType }}
+              </div> -->
+              <el-tree
+                :data="table"
+                :props="tbProps"
+                :default-expand-all="true"
+                :expand-on-click-node="false"
+                @node-click="fn_NodeClick"
+              ></el-tree>
+            </div>
+          </div> </view-container
+      ></el-col>
+      <el-col
+        :span="18"
+        v-loading="loading"
+        :element-loading-text="$t('public.loading')"
+      >
+        <view-container :title="$t('energy.nyxh')">
+          <div class="right">
+            <div class="btnList">
+              <el-button type="success" @click="save">
+                {{ $t("public.save") }}
+              </el-button>
+              <el-button type="primary" @click="fn_AddRead">
+                {{ $t("energy.xz") }}
+              </el-button>
+              <el-button type="danger" @click="fn_handleDel(checkData)">
+                {{ $t("public.del") }}
+              </el-button>
+              <el-button type="primary" @click="uploadXlsx">
+                {{ $t("energy.dr") }}
+              </el-button>
+              <el-button type="primary" @click="query">
+                {{ $t("energy.cx") }}
+              </el-button>
+            </div>
+            <!-- 输入查询 -->
+            <avue-form
+              ref="queryForm"
+              :option="CheckOp"
+              v-model="Check"
+              @submit="fn_checkRead"
+            ></avue-form>
+            <!-- 抄表数据  @row-del="fn_ReadDel" -->
+            <avue-crud
+              ref="crud"
+              :data="ReadData"
+              :option="ReadOp"
+              @row-del="fn_handleDel"
+              @current-row-change="rowCheck"
+            >
+              <template slot="menuLeft">
+                <input
+                  type="file"
+                  id="oFile"
+                  style="display: none"
+                  @change="getExcelFileData"
+                />
+                <!--  <el-button
                     type="primary"
                     icon="el-icon-plus"
                     size="small"
@@ -85,18 +93,25 @@
                     size="small"
                     @click="fn_AddRead"
                   >{{ $t("energy.xz") }}</el-button>-->
-                </template>
-              </avue-crud>
-              <el-dialog :title="$t('energy.xz')" :visible.sync="OpenAdd" width="70%">
-                <div>
-                  <avue-form :option="AddReadOp" v-model="Read" @submit="fn_handleAdd"></avue-form>
-                </div>
-              </el-dialog>
-            </div>
-          </el-main>
-        </el-container>
-      </div>
-    </basicContainer>
+              </template>
+            </avue-crud>
+            <el-dialog
+              :title="$t('energy.xz')"
+              :visible.sync="OpenAdd"
+              width="70%"
+            >
+              <div>
+                <avue-form
+                  :option="AddReadOp"
+                  v-model="Read"
+                  @submit="fn_handleAdd"
+                ></avue-form>
+              </div>
+            </el-dialog>
+          </div>
+        </view-container>
+      </el-col>
+    </el-row>
   </div>
 </template>
 <script>
@@ -127,13 +142,13 @@ export default {
         submitBtn: false,
         submitText: this.$t("energy.cx"),
         emptyText: this.$t("energy.qk"),
-        labelWidth: 150,
+        labelWidth: 110,
         column: [
-          {
-            label: this.$t("energy.wz"),
-            prop: "enSite",
-            span: 12,
-          },
+          // {
+          //   label: this.$t("energy.wz"),
+          //   prop: "enSite",
+          //   span: 12,
+          // },
           {
             label: this.$t("energy.name"),
             prop: "enName",
@@ -141,21 +156,27 @@ export default {
             disabled: true,
           },
           {
-            label: this.$t("energy.cbrq"),
-            prop: "stastDate",
-            type: "date",
+            label: this.$t("energy.cbr"),
+            prop: "erMan",
             span: 12,
-            format: "yyyy-MM-dd",
-            valueFormat: "yyyy-MM-dd",
+            disabled: false,
           },
           {
-            label: this.$t("energy.z"),
-            prop: "endDate",
+            label: this.$t("energy.cbrq"),
+            prop: "erDate",
             type: "date",
             span: 12,
             format: "yyyy-MM-dd",
             valueFormat: "yyyy-MM-dd",
           },
+          // {
+          //   label: this.$t("energy.z"),
+          //   prop: "endDate",
+          //   type: "date",
+          //   span: 12,
+          //   format: "yyyy-MM-dd",
+          //   valueFormat: "yyyy-MM-dd",
+          // },
         ],
       },
       ReadData: [],
@@ -163,16 +184,16 @@ export default {
       ReadOp: {
         page: false,
         excelBtn: false,
-        align: "center",
         editBtn: false,
         addBtn: false,
         refreshBtn: false,
         columnBtn: false,
         menuAlign: "center",
-        menuWidth: 100,
-        height: 500,
+        // menuWidth: 100,
+        height: "calc(100vh - 210px)",
         menu: false,
         highlightCurrentRow: true,
+        border: true,
         column: [
           {
             label: "OID",
@@ -183,54 +204,80 @@ export default {
           {
             label: this.$t("energy.bh"),
             prop: "emId",
+            width: 70,
+            cell: false,
+          },
+          // {
+          //   label: this.$t("energy.name"),
+          //   prop: "emName",
+          //   width: 100,
+          //   cell: false,
+          // },
+          // {
+          //   label: this.$t("energy.wz"),
+          //   prop: "emSite",
+          //   // width: 180,
+          //   overHidden: true,
+          //   cell: true,
+          // },
+
+          {
+            label: this.$t("energy.cbr"),
+            prop: "erMan",
+            width: 80,
+            cell: true,
+          },
+
+          {
+            label: this.$t("energy.cbfs"),
+            prop: "erType",
+            type: "select",
+            width: 90,
+            dicData: getDIC2(this, "eWDFS_403"),
+            cell: true,
           },
           {
-            label: this.$t("energy.name"),
-            prop: "emName",
+            label: this.$t("energy.cbrq"),
+            prop: "erDate",
+            width: 100,
+            type: "date",
+            format: "yyyy-MM-dd",
+            valueFormat: "yyyy-MM-dd",
+            align: "center",
+            cell: true,
+          },
+          {
+            label: this.$t("energy.cbsj"),
+            prop: "erTime",
+            type: "time",
+            width: 90,
+            align: "center",
+            format: "HH:mm:ss",
+            valueFormat: "HH:mm:ss",
+            cell: true,
+          },
+
+          {
+            label: this.$t("energy.dj"),
+            prop: "erPrice",
+            width: 80,
+            align: "right",
+            cell: true,
+          },
+          {
+            label: this.$t("energy.sl"),
+            prop: "erQty",
+            width: 80,
+            align: "right",
+            cell: true,
           },
           {
             label: this.$t("energy.dw"),
             prop: "erUnit",
             type: "select",
             dicData: getDIC2(this, "eWDFS_402"),
-          },
-
-          {
-            label: this.$t("energy.cbr"),
-            prop: "erMan",
-          },
-          {
-            label: this.$t("energy.wz"),
-            prop: "emSite",
-          },
-          {
-            label: this.$t("energy.dj"),
-            prop: "erPrice",
-          },
-          {
-            label: this.$t("energy.cbfs"),
-            prop: "erType",
-            type: "select",
-            dicData: getDIC2(this, "eWDFS_403"),
-          },
-          {
-            label: this.$t("energy.cbrq"),
-            prop: "erDate",
-            width: 130,
-            type: "date",
-            format: "yyyy-MM-dd",
-            valueFormat: "yyyy-MM-dd",
-          },
-          {
-            label: this.$t("energy.cbsj"),
-            prop: "erTime",
-            type: "time",
-            // format: "hh:mm:ss",
-            // valueFormat: "HH:mm:ss"
-          },
-          {
-            label: this.$t("energy.sl"),
-            prop: "erQty",
+            width: 70,
+            cell: true,
           },
         ],
       },
@@ -248,21 +295,25 @@ export default {
             label: this.$t("energy.bh"),
             prop: "emId",
             disabled: true,
+            cell: true,
           },
           {
             label: this.$t("energy.name"),
             prop: "emName",
             disabled: true,
+            cell: true,
           },
           {
             label: this.$t("energy.cbr"),
             prop: "erMan",
             disabled: false,
+            cell: true,
           },
           {
             label: this.$t("energy.wz"),
             prop: "emSite",
             disabled: true,
+            cell: true,
           },
           {
             label: this.$t("energy.cbfs"),
@@ -270,12 +321,14 @@ export default {
             type: "select",
             disabled: true,
             dicData: getDIC2(this, "eWDFS_403"),
+            cell: true,
           },
           {
             label: this.$t("energy.dw"),
             prop: "erUnit",
             type: "select",
             dicData: getDIC2(this, "eWDFS_402"),
+            cell: true,
           },
           {
             label: this.$t("energy.cbrq"),
@@ -283,6 +336,7 @@ export default {
             type: "date",
             format: "yyyy-MM-dd",
             valueFormat: "yyyy-MM-dd hh:mm:ss",
+            cell: true,
           },
           {
             label: this.$t("energy.cbsj"),
@@ -290,24 +344,29 @@ export default {
             type: "time",
             format: "hh:mm:ss",
             valueFormat: "hh:mm:ss",
+            cell: true,
           },
           {
             label: this.$t("energy.dj"),
             prop: "erPrice",
+            cell: true,
           },
           {
             label: this.$t("energy.sl"),
             prop: "erQty",
+            cell: true,
           },
         ],
       },
       checkData: {},
+      loading: false,
+      oldData: {},
     };
   },
   methods: {
     //获取仪表类型
     fn_Meter() {
-      this.$axios
+      this.$http
         .post("/api/codeValue?codeTableId=eWDFS_401")
         .then((res) => {
           this.MeterData = res.data;
@@ -318,7 +377,7 @@ export default {
     },
     //选择仪表类型
     fn_seleType(Meter) {
-      // this.$axios
+      // this.$http
       //   .post("/api/codeValue?codeId=" + Meter + "&codeTableId=eWDFS_401")
       //   .then(res => {
       //     this.TbType = res.data[0].codename;
@@ -330,7 +389,7 @@ export default {
       this.TbType = mItem.codename;
       this.emType = Meter;
       //获取仪表类型下的总表树状图
-      this.$axios.post("/api/eneMeterList?emType=" + Meter).then((res) => {
+      this.$http.get("/api/eneMeter?emType=" + Meter).then((res) => {
         let Data = res.data;
         // 将数组作为参数执行转树状图函数
         this.table = this.toTree(Data);
@@ -338,41 +397,57 @@ export default {
     },
     //点击一个仪表类型,并查出抄表数据
     fn_NodeClick(data) {
-      console.log(data);
+      this.loading = true;
       this.Data = data;
       this.Check.enName = data.emName;
-      this.$axios
-        .get(
-          "/api/getEneRecordList?enId=" +
-            data.emId +
-            "&enName=" +
-            data.emName +
-            "&enType=" +
-            this.Meter
-        )
+      this.$http
+        .get("/api/eneRecord?emId=" + data.emId + "&emType=" + this.Meter)
         .then((res) => {
           this.ReadData = res.data;
-          this.ReadData.forEach((item) => {
-            item.erQty = item.erQty.substr(0, item.erQty.length - 5);
-            item.erDate = item.erDate.substr(0, item.erDate.length - 9);
-          });
+          // this.ReadData.forEach((item) => {
+          //   item.erQty = item.erQty.substr(0, item.erQty.length - 5);
+          //   item.erDate = item.erDate.substr(0, item.erDate.length - 9);
+          // });
+          if (this.ReadData.length > 0) {
+            this.$refs.crud.setCurrentRow(this.ReadData[0]);
+          }
+
+          this.loading = false;
         });
     },
     query() {
       this.$refs.queryForm.submit();
     },
+    save() {},
     rowCheck(row) {
+      this.oldData.$cellEdit = false;
+      this.$set(row, "$cellEdit", true);
+      this.oldData = row;
       this.checkData = row;
     },
     //输入位置和抄表日期进行筛选查询
     fn_checkRead(form, done, loading) {
-      let data = isDate(this.CheckOp, form);
-      this.$axios
-        .get("/api/getEneRecordList", {
-          params: data,
+      // let data = isDate(this.CheckOp, form);
+      for (let key in form) {
+        if (form[key] == "") {
+          delete form[key];
+        }
+      }
+      form.emId = this.Data.emId;
+      if (form.erDate) {
+        form.erDate = form.erDate + " 00:00:00";
+      }
+
+      this.$http
+        .get("/api/eneRecord", {
+          params: form,
         })
         .then((res) => {
           this.ReadData = res.data;
+          0;
+          if (this.ReadData.length > 0) {
+            this.$refs.crud.setCurrentRow(this.ReadData[0]);
+          }
         });
       done();
     },
@@ -381,23 +456,31 @@ export default {
       if (!this.Data.emId) {
         warning(this.$t("energy.qxzlc"));
       } else {
-        console.log(this.Data);
-        this.OpenAdd = true;
-        this.Read.emId = this.Data.emId;
-        this.Read.emName = this.Data.emName;
-        this.Read.emSite = this.Data.emSite;
-        this.Read.erMan = this.Data.emMan;
-        this.Read.emType = this.Data.emType;
-        this.Read.erPrice = this.Data.emPrice;
-        this.Read.erUnit = this.Data.emUnit;
-        this.Read.erType = this.Data.emType;
+        let data = {};
+        let nowDate = this.$getNowTime("datetime");
+        data.emId = this.Data.emId;
+        data.emName = this.Data.emName;
+        data.emSite = this.Data.emSite;
+        data.erMan = this.Data.emMan;
+        data.emType = this.Data.emType;
+        data.erPrice = this.Data.emPrice;
+        data.erUnit = this.Data.emUnit;
+        data.erType = this.Data.emType;
+        data.erDate = nowDate;
+        data.erTime = nowDate.split(" ")[1];
+        this.ReadData.push(data);
+        this.$nextTick(() => {
+          this.$refs.crud.setCurrentRow(
+            this.ReadData[this.ReadData.length - 1]
+          );
+        });
       }
     },
     //删除抄表数据
     fn_ReadDel(row, index) {
       cofirm(this.$t("energy.sfjx"), this.$t("energy.ts"), {})
         .then(() => {
-          this.$axios
+          this.$http
             .delete("/api/eneRecord?eneRecordoid=" + row.emParentoid)
             .then((res) => {
               if (res.data.code == 0) {
@@ -441,7 +524,7 @@ export default {
       row.erMinute = Number(time[1]);
       row.emType = row.emType;
       let hash = obj2hash(row);
-      this.$axios
+      this.$http
         .put("/api/eneRecord" + hash)
         .then((res) => {
           success(res.data.msg);
@@ -461,7 +544,7 @@ export default {
         return;
       }
       this.$confirm(this.$t("energy.qrsc")).then((_) => {
-        this.$axios
+        this.$http
           .delete("/api/eneRecord?eneRecordoid=" + row.eneRecordoid)
           .then((res) => {
             success(res.data.msg);
@@ -517,7 +600,7 @@ export default {
         return error("文件内容格式出错（时间或日期）");
       }
 
-      this.$axios({
+      this.$http({
         url: "/api/add/eneRecordList",
         method: "post",
         data: resMap,
@@ -546,8 +629,6 @@ export default {
 </script>
 <style lang="stylus">
 #Consume {
-  margin: 0 0 0 -10px;
-
   .avue-group + .el-col-24 {
     height: 5px !important;
   }
@@ -572,17 +653,14 @@ export default {
 
   .left {
     text-align: left;
-    margin: 0 30px;
-    font-size: 15px;
+    margin: 0 10px;
+    font-size: 16px;
+    height: calc(100vh - 78px);
+    overflow: auto;
   }
 
   .select {
-    margin: 5px 0 5px 0;
-  }
-
-  .select > span {
-    margin: 5px 5px 0 0;
-    font-size: 15px;
+    margin-top: 10px;
   }
 
   .tbType {

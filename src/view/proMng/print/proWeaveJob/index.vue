@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-07 18:12:14
+ * @LastEditTime: 2021-04-09 09:15:39
  * @Description: 
 -->
 <template>
@@ -163,21 +163,34 @@ export default {
       // console.log(files);
     },
     print() {
-      print({ weaveJobCode: this.detail.weaveJobCode }).then((res) => {
-        if (res.data.msg === "打印成功") {
-          this.wloading = true;
-          setTimeout(() => {
-            this.wloading = false;
-            this.$tip.success(res.data.msg);
-          }, 2000);
-        } else {
-          this.wloading = true;
-          setTimeout(() => {
-            this.wloading = false;
-            this.$tip.error(res.data.msg);
-          }, 500);
-        }
-      });
+      this.$tip
+        .cofirm(
+          "是否確定打印生產單號為【 " +
+            this.detail.weaveJobCode +
+            this.$t("iaoMng.delTle2"),
+          this,
+          {}
+        )
+        .then(() => {
+          print({ weaveJobCode: this.detail.weaveJobCode }).then((res) => {
+            if (res.data.msg === "打印成功") {
+              this.wloading = true;
+              setTimeout(() => {
+                this.wloading = false;
+                this.$tip.success(res.data.msg);
+              }, 2000);
+            } else {
+              this.wloading = true;
+              setTimeout(() => {
+                this.wloading = false;
+                this.$tip.error(res.data.msg);
+              }, 500);
+            }
+          });
+        })
+        .catch((err) => {
+          this.$tip.warning(this.$t("public.qxcz"));
+        });
     },
     async print2() {
       console.log(this.input);

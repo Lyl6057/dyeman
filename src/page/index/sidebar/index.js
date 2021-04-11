@@ -1,9 +1,9 @@
 // export default {
 import { proMng } from './proMng'
-import { whseMng } from './whseMng'
+// import { whseMng } from './whseMng'
 import { energy } from './energy'
-import { laboratory } from './laboratory'
-import { quality } from './quality'
+// import { laboratory } from './laboratory'
+// import { quality } from './quality'
 export const menuData = _this => {
   return {
     menu: [

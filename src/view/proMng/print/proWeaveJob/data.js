@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-08 09:31:01
+ * @LastEditTime: 2021-04-09 08:53:36
  * @Description:
  */
 
@@ -224,6 +224,12 @@ export function mainCrud(_this) {
           message: "请選擇客戶名稱",
           trigger: "blur"
         }],
+        change: () => {
+          if (_this.isAdd) {
+            _this.form.weaveJobCode = _this.form.custCode + '-' + _this.code
+          }
+
+        }
       },
 
 

@@ -1,3 +1,4 @@
+import i18n from '@/lang/index'
 export const workerF = {
   submitBtn: false,
   emptyBtn: false,
@@ -14,14 +15,14 @@ export const workerF = {
     },
     {
       labelWidth: 60,
-      label: _this.$t('whseField.khmc'),
+      label: i18n.t('whseField.khmc'),
       prop: "cust",
       span: 4,
       placeholder: " ",
     },
     {
       labelWidth: 60,
-      label: _this.$t("whseField.zl"),
+      label: i18n.t("whseField.zl"),
       prop: "weight",
       span: 4,
       placeholder: " ",
@@ -78,7 +79,7 @@ export const workerF = {
 //       prop: "refCode",
 //     },
 //     {
-//       label: _this.$t("whseField.wfjgc"),
+//       label: i18n.t("whseField.wfjgc"),
 //       prop: "refName",
 //       type: "select",
 //     },
@@ -88,20 +89,20 @@ export const workerF = {
 //       width: 220
 //     },
 //     // {
-//     //   label: _this.$t("whseField.scdh"),
+//     //   label: i18n.t("whseField.scdh"),
 //     //   prop: "prOn",
 //     // },
 //     {
-//       label: _this.$t("whseField.sxbh"),
+//       label: i18n.t("whseField.sxbh"),
 //       prop: "yarnsId",
 //     },
 //     {
-//       label: _this.$t("whseField.sxmc"),
+//       label: i18n.t("whseField.sxmc"),
 //       prop: "yarnsName",
 //       width: 250
 //     },
 //     {
-//       label: _this.$t("whseField.zl"),
+//       label: i18n.t("whseField.zl"),
 //       prop: "weight",
 //       align: "right"
 //     },

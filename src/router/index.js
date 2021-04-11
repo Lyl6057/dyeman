@@ -2,22 +2,22 @@
  * @Author: Lyl
  * @Date: 2021-01-23 08:03:49
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-08 19:31:16
+ * @LastEditTime: 2021-04-09 20:45:28
  * @Description: 
  */
 import Vue from 'vue'
 import Router from 'vue-router'
-// import cs from '@/router/view/cs'
-// import da from '@/router/view/da'
-// import em from '@/router/view/em'
-// import lv from '@/router/view/lv'
-// import mto from '@/router/view/mto'
-import pro from '@/router/view/pro'
-// import re from '@/router/view/re'
-// import iq from '@/router/view/iq'
-import im from '@/router/view/im'
-import quaLity from '@/router/view/quaLity'
-import laboratory from './view/laboratory'
+// // import cs from '@/router/view/cs'
+// // import da from '@/router/view/da'
+// // import em from '@/router/view/em'
+// // import lv from '@/router/view/lv'
+// // import mto from '@/router/view/mto'
+// import pro from '@/router/view/pro'
+// // import re from '@/router/view/re'
+// // import iq from '@/router/view/iq'
+// import im from '@/router/view/im'
+// import quaLity from '@/router/view/quaLity'
+// import laboratory from './view/laboratory'
 import proMng from './view/proMng'
 import energy from './view/energy'
 Vue.use(Router)
@@ -53,12 +53,12 @@ export default new Router({
         // ...em,
         // ...lv,
         // ...mto,
-        ...pro,
+        // ...pro,
         // ...re,
         // ...iq,
-        ...im,
-        ...quaLity,
-        ...laboratory,
+        // ...im,
+        // ...quaLity,
+        // ...laboratory,
         ...proMng,
         ...energy
       ]

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-08 19:19:28
+ * @LastEditTime: 2021-04-09 13:13:39
  * @Description:
  */
 
@@ -187,7 +187,7 @@ export function mainCrud(_this) {
         span: 6,
       },
       {
-        label: "纱支",
+        label: "紗支",
         prop: "yarnThickness",
         width: 90,
         hide: true,
@@ -197,8 +197,13 @@ export function mainCrud(_this) {
           value: "yarnName",
           label: "yarnName"
         },
-        multiple: true,
-        dicData: []
+        // multiple: true,
+        dicData: [],
+        rules: [{
+          required: true,
+          message: "请選擇紗支",
+          trigger: "blur"
+        }],
       },
       {
         label: "值机工号",
@@ -293,7 +298,7 @@ export function mainCrud(_this) {
         }],
         change: () => {
           _this.$nextTick(() => {
-            _this.form.ps = Math.ceil(_this.form.workAmount / _this.form.pz)
+            _this.form.ps = Math.ceil(_this.form.amount / _this.form.pz)
           })
 
         }

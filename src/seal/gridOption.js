@@ -139,7 +139,7 @@ export function getDIC(_this, codeTableId) {
   let resultMap = _this.dicMap[codeTableId]
   if (!resultMap || resultMap.length <= 0) {
     resultMap = [];
-    _this.$axios
+    _this.$http
       .post("/api/codeValue?codeTableId=" + codeTableId)
       .then(res => {
         res.data.forEach(item => {
@@ -167,7 +167,7 @@ export function getDIC2(_this, codeTableId) {
   let resultMap = _this.dicMap[codeTableId]
   if (!resultMap || resultMap.length <= 0) {
     resultMap = [];
-    _this.$axios
+    _this.$http
       .get("/api/getcodeValue?codeTableId=" + codeTableId)
       .then(res => {
         res.data.forEach(item => {

@@ -2,11 +2,11 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-08 09:28:08
+ * @LastEditTime: 2021-04-09 10:03:24
  * @Description: 
 -->
 <template>
-  <div id="colorMng_Tem">
+  <div id="proWeaveJob">
     <view-container
       :title="(isAdd ? '新增' : '修改') + '織造通知單'"
       :element-loading-text="$t('public.loading')"
@@ -17,9 +17,24 @@
           $t("public.save")
         }}</el-button>
         <el-button type="primary" @click="checkOrder">选择订单号</el-button>
-        <el-button type="primary" @click="checkYarn">用紗明細</el-button>
-        <el-button type="primary" @click="checkCalico">洗後規格</el-button>
-        <el-button type="primary" @click="checkstrain">輸送張力</el-button>
+        <el-button
+          type="primary"
+          @click="checkYarn"
+          :disabled="!this.form.weaveJobId"
+          >用紗明細</el-button
+        >
+        <el-button
+          type="primary"
+          @click="checkCalico"
+          :disabled="!this.form.weaveJobId"
+          >洗後規格</el-button
+        >
+        <el-button
+          type="primary"
+          @click="checkstrain"
+          :disabled="!this.form.weaveJobId"
+          >輸送張力</el-button
+        >
         <!-- <el-button type="primary" @click="setPreview">预览</el-button> -->
         <el-button type="warning" @click="close">{{
           this.$t("public.close")
@@ -44,9 +59,12 @@
     >
       <view-container :title="tabs">
         <div class="btnList">
-          <el-button @click="check" type="success" v-if="tabs == '更改紗長'">{{
-            $t("public.choose")
-          }}</el-button>
+          <el-button
+            @click="check"
+            type="success"
+            v-if="tabs == '選擇訂單' || tabs == '更改紗長'"
+            >{{ $t("public.choose") }}</el-button
+          >
           <el-button
             @click="saveOther"
             type="success"
@@ -63,7 +81,7 @@
             :disabled="Object.keys(chooseData).length == 0"
             >{{ $t("public.del") }}</el-button
           >
-          <el-button @click="query" type="primary">{{
+          <el-button @click="query" type="primary" v-if="tabs == '選擇訂單'">{{
             $t("public.query")
           }}</el-button>
           <el-button @click="visible = false" type="warning">{{
@@ -182,30 +200,30 @@ export default {
       choiceTarget: {},
       choiceField: "",
       choiceQ: {},
+      code: "",
     };
   },
   watch: {},
   methods: {
     getData() {
       if (this.isAdd) {
-        // this.$nextTick(() => {
-        //   this.form.created = this.$store.state.userOid;
-        // });
+        baseCodeSupplyEx({ code: "proWeaveJob" }).then((res) => {
+          this.form.weaveJobCode = res.data.data;
+          this.code = res.data.data;
+        });
       } else {
         this.wLoading = true;
         this.form = this.detail;
-        baseCodeSupplyEx({ code: "cloth_fly" }).then((res) => {
-          this.form.bph = res.data.data;
-          // if (this.form.realEnd === "" || this.form.realEnd === null) {
-          //   this.form.nowDate = this.form.planEnd.split(" ")[0];
-          // } else {
-          //   this.form.nowDate = this.form.realEnd.split(" ")[0];
-          // }
-          // this.form.nowDate = this.getNowTime();
-          setTimeout(() => {
-            this.wLoading = false;
-          }, 500);
-        });
+
+        // if (this.form.realEnd === "" || this.form.realEnd === null) {
+        //   this.form.nowDate = this.form.planEnd.split(" ")[0];
+        // } else {
+        //   this.form.nowDate = this.form.realEnd.split(" ")[0];
+        // }
+        // this.form.nowDate = this.getNowTime();
+        setTimeout(() => {
+          this.wLoading = false;
+        }, 500);
       }
     },
     save() {
@@ -262,30 +280,33 @@ export default {
     query() {
       if (this.tabs == "選擇訂單") {
         this.func.get = getPo;
+      } else if (!this.form.weaveJobId) {
+        this.crud = [];
+        return;
       } else if (this.tabs == "更改紗長") {
         this.func.get = getLong;
         this.func.del = delLong;
         this.func.add = addLong;
         this.func.update = updateLong;
-        this.dlgForm.proWeaveJobFk = this.detail.weaveJobId;
+        this.dlgForm.proWeaveJobFk = this.form.weaveJobId;
       } else if (this.tabs == "用紗明細") {
         this.func.get = getYarn;
         this.func.del = delYarn;
         this.func.add = addYarn;
         this.func.update = updateYarn;
-        this.dlgForm.proWeaveJobFk = this.detail.weaveJobId;
+        this.dlgForm.proWeaveJobFk = this.form.weaveJobId;
       } else if (this.tabs == "洗後規格") {
         this.func.get = getCalico;
         this.func.del = delCalico;
         this.func.add = addCalico;
         this.func.update = updateCalico;
-        this.dlgForm.proWeaveJobFk = this.detail.weaveJobId;
+        this.dlgForm.proWeaveJobFk = this.form.weaveJobId;
       } else if (this.tabs == "輸送張力") {
         this.func.get = getStrain;
         this.func.del = delStrain;
         this.func.add = addStrain;
         this.func.update = updateStrain;
-        this.dlgForm.proWeaveJobFk = this.detail.weaveJobId;
+        this.dlgForm.proWeaveJobFk = this.form.weaveJobId;
       }
       this.loading = true;
       this.chooseData = {};
@@ -354,7 +375,7 @@ export default {
           this.func.update(item).then((res) => {});
         } else {
           //add
-          item.proWeaveJobFk = this.detail.weaveJobId;
+          item.proWeaveJobFk = this.form.weaveJobId;
           this.func.add(item).then((res) => {
             item.changedId = res.data.data;
             item.useYarnId = res.data.data;
@@ -458,6 +479,7 @@ export default {
       if (this.tabs === "選擇訂單") {
         this.wLoading = true;
         this.visible = false;
+        this.form.weaveJobCode = this.code;
         this.form.salPoNo = this.chooseData.poNo;
         this.form.custCode = this.chooseData.custId;
         this.form.custName = this.chooseData.custId;
@@ -526,7 +548,7 @@ export default {
 };
 </script>
 <style lang='stylus'>
-#colorMng_Tem {
+#proWeaveJob {
   .formBox {
     height: 100vh !important;
   }

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-01 14:06:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-02 08:13:57
+ * @LastEditTime: 2021-04-09 15:09:35
  * @Description:
  */
 
@@ -11,7 +11,7 @@ import axios from 'axios';
 // 獲取打印記錄
 export function get(params) {
   return axios({
-    url: '/api/proClothNote/listByPage',
+    url: '/api/proClothNote/page',
     method: 'get',
     params: params
   })
@@ -21,7 +21,7 @@ export function get(params) {
 // 新增佈飛记录
 export function add(data) {
   return axios({
-    url: '/api/proClothNote/save',
+    url: '/api/proClothNote',
     method: 'post',
     params: data
   })
@@ -30,7 +30,7 @@ export function add(data) {
 // 修改佈飛记录
 export function update(data) {
   return axios({
-    url: '/api/proClothNote/updateById',
+    url: '/api/proClothNote',
     method: 'put',
     params: data
   })
@@ -39,7 +39,7 @@ export function update(data) {
 // 修改佈飛记录
 export function del(id) {
   return axios({
-    url: '/api/proClothNote/removeById?id=' + id,
+    url: '/api/proClothNote?noteId=' + id,
     method: 'delete',
   })
 }

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-08 19:25:07
+ * @LastEditTime: 2021-04-09 10:00:02
  * @Description: 
 -->
 <template>
@@ -35,7 +35,7 @@
 import { mainCrud } from "./data";
 import { getCodeSupply, addBf, printBf, getYarn } from "./api";
 import { getDIC, getDicT, getXDicT, postDicT, preFixInt } from "@/config";
-import { baseCodeSupplyEx } from "@/api/index";
+import { baseCodeSupplyEx, baseCodeSupply } from "@/api/index";
 import preview from "./preview";
 export default {
   name: "",
@@ -84,17 +84,25 @@ export default {
       this.wLoading = true;
       this.form = this.detail;
       baseCodeSupplyEx({ code: "cloth_fly" }).then((res) => {
-        this.form.bph = res.data.data;
         this.form.ps = (
           Number(this.form.amount) / Number(this.form.pz)
         ).toFixed(0);
         this.form.nowDate = this.$getNowTime("date");
-        console.log(this.form);
         getYarn({
           proWeaveJobFk: this.form.weaveJobId,
         }).then((yarn) => {
-          console.log(yarn);
           this.formOp.column[10].dicData = yarn.data;
+          if (yarn.data.length > 1) {
+            this.form.bph =
+              this.form.custCode +
+              res.data.data +
+              "-" +
+              this.$preFixInt(yarn.data.length, 2) +
+              this.form.mathineCode;
+          } else {
+            this.form.bph =
+              this.form.custCode + res.data.data + this.form.mathineCode;
+          }
         });
         setTimeout(() => {
           this.wLoading = false;
@@ -141,20 +149,22 @@ export default {
                   loomNo: this.form.mathineCode,
                   workNo: this.form.zjgh,
                   madeDate: this.$getNowTime("datetime"),
-                  noteCode: this.form.bph + (this.form.qsph + i),
+                  noteCode:
+                    this.form.bph +
+                    this.$preFixInt(Number(this.form.qsph) + i, 3),
                   poNo: this.form.salPoNo,
                   printedTime: this.$getNowTime("datetime"),
                   proBatchNumber: this.form.weaveJobCode, // 生产单号
                   proColor: this.form.colorName,
                   proName: this.form.weaveJobCode,
-                  schId: "231c92fe-4ba9-4bf1-ab9a-58076d7a4720",
-                  machineCode: "123",
-                  salPooid: "000E0106-0000-0000-0000-00001C19D962",
-                  tempId: "1",
-                  weightUnit: "KG",
-                  lenUnit: "KG",
-                  proSpec: "test",
-                  clothLength: 200,
+                  // schId: "231c92fe-4ba9-4bf1-ab9a-58076d7a4720",
+                  // machineCode: "123",
+                  // salPooid: "000E0106-0000-0000-0000-00001C19D962",
+                  // tempId: "1",
+                  // weightUnit: "KG",
+                  // lenUnit: "KG",
+                  // proSpec: "test",
+                  // clothLength: 200,
                   customerName: this.form.custCode,
                   yarnThickness: data,
                   yarnBrand: this.form.yarnBrand,
@@ -175,11 +185,13 @@ export default {
                 });
               };
               let promiseArr = arr.map((item, i) => {
-                console.log(arr);
                 return add(item, i);
               });
               Promise.all(promiseArr).then((res) => {
-                // baseCodeSupply({ code: "cloth_fly" }).then((res) => {});
+                baseCodeSupply({ code: "cloth_fly" }).then((res) => {});
+                console.log(arr);
+                this.wLoading = false;
+                // 打印操作
                 // arr.forEach((item, i) => {
                 //   printBf(item.noteId)
                 //     .then((res) => {})
