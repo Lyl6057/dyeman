@@ -32,7 +32,9 @@
               <el-button type="primary" @click="setStaff">
                 抄表人维护
               </el-button>
-              <el-button type="primary" @click="print"> 列印 </el-button>
+              <el-button type="primary" @click="print" :disabled="!detail.emId">
+                列印
+              </el-button>
               <!-- <el-button type="warning" size="mini" @click="close">{{
                 this.$t("public.close")
               }}</el-button> -->
@@ -62,7 +64,7 @@
               </el-col>
               <el-col :span="19">
                 <view-container title="儀表詳細信息" style="margin-left: -1px">
-                  <el-card>
+                  <el-card style="height: calc(100vh - 190px)">
                     <avue-form
                       ref="ybForm"
                       style="margin-top: 10px"
@@ -70,7 +72,7 @@
                       v-model="detail"
                     ></avue-form>
 
-                    <div class="btnList" style="margin-top: 0px">
+                    <!-- <div class="btnList" style="margin-top: 0px">
                       <el-button
                         :disabled="!detail.eneMeteroid"
                         type="primary"
@@ -85,13 +87,15 @@
                         @click="delEq"
                         >{{ this.$t("public.del") }}</el-button
                       >
-                    </div>
-                    <avue-crud
+                    </div> -->
+                    <!-- <avue-crud
                       ref="crud"
+                      v-loading="eqLoading"
+                      :element-loading-text="$t('public.loading')"
                       :option="eqOp"
                       :data="eqData"
                       @current-row-change="cellClick"
-                    ></avue-crud>
+                    ></avue-crud> -->
                   </el-card>
                 </view-container>
               </el-col>
@@ -100,6 +104,7 @@
         </el-tabs>
       </el-col>
     </el-row>
+    <div class="qrcode" ref="qrCodeUrl" id="qrCodeUrl"></div>
     <el-dialog
       :visible.sync="dialogVisible"
       width="70%"
@@ -128,11 +133,12 @@
     </el-dialog>
     <el-dialog
       :visible.sync="otherV"
-      width="70%"
+      fullscreen
       append-to-body
       :close-on-click-modal="false"
       :close-on-press-escape="false"
       v-if="otherV"
+      id="viewDlg"
     >
       <view-container
         :title="otherTle"
@@ -140,28 +146,89 @@
         :element-loading-text="$t('public.loading')"
       >
         <div class="btnList">
-          <el-button type="success" @click="saveOther">{{
-            $t("public.save")
-          }}</el-button>
-          <el-button type="primary" @click="addOther">{{
-            $t("public.add")
-          }}</el-button>
-          <el-button
-            type="danger"
-            :disabled="!chooseOther.eneMeterTypeoid && !chooseOther.eneStaffoid"
-            @click="delOther"
-            >{{ $t("public.del") }}</el-button
+          <el-button type="success" @click="saveOther">
+            {{ $t("public.save") }}</el-button
           >
+          <el-button type="primary" @click="getOther">
+            {{ $t("public.query") }}</el-button
+          >
+          <el-button type="warning" @click="otherV = false">{{
+            $t("public.close")
+          }}</el-button>
         </div>
-        <div class="formBox"></div>
-        <div class="crudBox">
-          <avue-crud
-            ref="other"
-            :data="otherC"
-            :option="otherCop"
-            @current-row-change="cellOtherClick"
-          ></avue-crud>
+        <div class="formBox">
+          <avue-form
+            ref="queryForm"
+            :option="queryFormOp"
+            v-model="queryForm"
+          ></avue-form>
         </div>
+        <el-row>
+          <el-col :span="10" v-if="otherV">
+            <view-container :title="childrenTle">
+              <div class="btnList">
+                <!-- <el-button type="success" @click="saveOther">{{
+                  $t("public.save")
+                }}</el-button> -->
+                <el-button type="primary" @click="addOther">{{
+                  $t("public.add")
+                }}</el-button>
+                <el-button type="danger" @click="delOther">{{
+                  $t("public.del")
+                }}</el-button>
+              </div>
+              <div class="formBox"></div>
+              <div class="crudBox">
+                <avue-crud
+                  id="other"
+                  ref="other"
+                  @on-load="getOther"
+                  :data="otherC"
+                  :page.sync="page"
+                  :option="otherCop"
+                  @current-row-change="cellOtherClick"
+                ></avue-crud>
+              </div>
+            </view-container>
+          </el-col>
+          <el-col :span="14">
+            <view-container
+              :title="
+                otherTle == '儀表類型維護'
+                  ? '儀表區域維護'
+                  : '抄錶人可抄儀表設定'
+              "
+              v-loading="otherL"
+              :element-loading-text="$t('public.loading')"
+            >
+              <div class="btnList">
+                <!-- <el-button type="success" @click="saveArea">{{
+                  $t("public.save")
+                }}</el-button> -->
+                <el-button
+                  type="primary"
+                  :disabled="
+                    !chooseOther.eneMeterTypeoid && !chooseOther.eneStaffoid
+                  "
+                  @click="addArea"
+                  >{{ $t("public.add") }}</el-button
+                >
+                <el-button type="danger" @click="delArea">{{
+                  $t("public.del")
+                }}</el-button>
+              </div>
+              <div class="formBox"></div>
+              <div class="crudBox">
+                <avue-crud
+                  id="Area"
+                  ref="Area"
+                  :data="areaData"
+                  :option="areaOp"
+                  @current-row-change="cellAreaClick"
+                ></avue-crud>
+              </div> </view-container
+          ></el-col>
+        </el-row>
       </view-container>
     </el-dialog>
   </div>
@@ -192,8 +259,18 @@ import {
   addMStaff,
   updateMStaff,
   delMStaff,
+  getTypePage,
+  getStaffPage,
 } from "./api";
-import { formOp, ybOp, timeOp, typeOp, staffOp } from "./data";
+import {
+  formOp,
+  ybOp,
+  timeOp,
+  typeOp,
+  staffOp,
+  AreaOp,
+  staff2Op,
+} from "./data";
 import QRCode from "qrcodejs2";
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
 import { cofirm, success, error, warning } from "@/seal/seal"; //引入封装的消息提示和弹框组件
@@ -238,41 +315,16 @@ export default {
       otherL: false,
       areaList: getDicT("eneMeterTypeArea", "areaName", "eneMeterTypeFk"),
       chooseOther: {},
+      areaOp: AreaOp(this),
+      areaData: [],
+      chooseArea: {},
+      eqLoading: false,
+      queryFormOp: {},
+      queryForm: {},
+      emTypeList: [],
     };
   },
   methods: {
-    //查询
-    handleList() {
-      this.loading = true;
-      this.detail = {};
-      this.chooseData = {};
-      for (var key in this.form) {
-        if (this.form[key] === "") {
-          delete this.form[key];
-        }
-      }
-      for (var key in this.detail) {
-        delete this.detail[key];
-      }
-      get(this.form)
-        .then((res) => {
-          this.gridData = res.data;
-          this.gridData.forEach((item, index) => {
-            item.label = `[${item.packageCode}]  ${item.packageName}`;
-            item.baseWorkPackageStepInfoList.forEach((items, indexs) => {
-              items.packageCode = item.packageCode;
-              items.packageName = item.packageName;
-              items.packageIds = item.packageId;
-              items.label = items.baseWorkStep.stepName;
-            });
-          });
-          this.loading = false;
-        })
-        .catch((err) => {
-          this.loading = false;
-          error("服务器错误" + err);
-        });
-    },
     resetTree() {
       this.loading = true;
       for (var key in this.detail) {
@@ -302,6 +354,10 @@ export default {
               } else {
                 this.dlgFormOp.column[9].dicData = [];
                 this.crudOp.column[9].dicData = [];
+                // this.$nextTick(() => {
+                //   this.dlgFormOp.column[9].dicData = [];
+                //   this.crudOp.column[9].dicData = [];
+                // });
               }
             });
           });
@@ -315,12 +371,21 @@ export default {
       }
     },
     print() {
-      this.qrcode(e, n);
+      this.loading = true;
+      document.getElementById("qrCodeUrl").innerHTML = "";
+      this.qrcode();
     },
     getEq() {
       this.eqData = [];
+      this.eqLoading = true;
       getMStaff({ eneMeterFk: this.detail.eneMeteroid }).then((res) => {
         this.eqData = res.data;
+        this.eqData.forEach((item) => {
+          item.$cellEdit = true;
+        });
+        setTimeout(() => {
+          this.eqLoading = false;
+        }, 200);
         if (this.eqData.length > 0) {
           this.$refs.crud.setCurrentRow(this.eqData[0]);
         }
@@ -346,27 +411,41 @@ export default {
       this.$refs.dlgForm.validate((valid, done) => {
         if (valid) {
           let data = JSON.parse(JSON.stringify(this.dlgForm));
-          data.emPrice = Number(data.emPrice);
+          data.emPrice = 1;
           if (data.eneMeteroid) {
-            update(data).then((res) => {
-              this.$tip.success(this.$t("public.bccg"));
-            });
-            setTimeout(() => {
-              this.resetTree();
-              this.dialogVisible = false;
-            }, 200);
+            update(data)
+              .then((res) => {
+                this.$tip.success(this.$t("public.bccg"));
+                setTimeout(() => {
+                  this.resetTree();
+                  this.dlgForm = {};
+                  this.dialogVisible = false;
+                }, 200);
+              })
+              .catch((err) => {
+                this.$tip.error("编号已存在");
+              });
           } else {
             data.emType = this.form.yblx;
-            data.emMan = "admin"; // parent.useId
+            // data.emMan = "admin"; // parent.useId
             data.emParentoid = this.detail.eneMeteroid;
-            add(data).then((res) => {
-              this.detail.eneMeteroid = res.data.data;
-              this.$tip.success(this.$t("public.bccg"));
-            });
-            setTimeout(() => {
-              this.resetTree();
-              this.dialogVisible = false;
-            }, 200);
+            for (let key in data) {
+              if (data[key] === "") {
+                delete data[key];
+              }
+            }
+            add(data)
+              .then((res) => {
+                this.detail.eneMeteroid = res.data.data;
+                this.$tip.success(this.$t("public.bccg"));
+                setTimeout(() => {
+                  this.resetTree();
+                  this.dialogVisible = false;
+                }, 200);
+              })
+              .catch((err) => {
+                this.$tip.error("编号已存在");
+              });
           }
         } else {
           return false;
@@ -412,6 +491,8 @@ export default {
     addBtn() {
       // if (this.chooseData.emParentoid && this.chooseData.eneMeteroid) {
       if (this.form.yblx) {
+        this.dlgForm.emMulti = 1;
+        this.dlgForm.emIsvalid = false;
         this.dialogVisible = true;
       } else {
         this.$tip.error("請選擇儀表類型!");
@@ -420,48 +501,85 @@ export default {
     },
     setType() {
       this.otherTle = "儀表類型維護";
+      this.childrenTle = "儀表類型";
       this.func = {
-        get: getType,
+        get: getTypePage,
         add: addType,
         update: updateType,
         del: delType,
+        getDtl: getArea,
+        addDtl: addArea,
+        updateDtl: updateArea,
+        delDtl: delArea,
       };
       this.otherCop = typeOp(this);
+      this.queryFormOp = typeOp(this);
+      this.areaOp = AreaOp(this); // 字表
       this.getOther();
       this.otherV = true;
     },
     setStaff() {
       this.otherTle = "抄錶人維護";
+      this.childrenTle = "抄錶人";
       this.func = {
-        get: getStaff,
+        get: getStaffPage,
         add: addStaff,
         update: updateStaff,
         del: delStaff,
+        getDtl: getMStaff,
+        addDtl: addMStaff,
+        updateDtl: updateMStaff,
+        delDtl: delMStaff,
       };
       this.otherCop = staffOp(this);
-      this.getOther();
-      this.otherV = true;
+      this.queryFormOp = staff2Op(this);
+      this.areaOp = timeOp(this); // 字表
+      get().then((res) => {
+        this.areaOp.column[1].dicData = res.data;
+        this.areaOp.column[0].dicData = res.data;
+        console.log(res.data);
+        this.getOther();
+        this.otherV = true;
+      });
     },
     getOther() {
-      this.otherL = true;
-      this.func.get().then((res) => {
-        this.otherC = res.data;
-        this.otherC.forEach((item) => {
-          item.$cellEdit = true;
-          this.areaList.forEach((area, i) => {
-            if (area.value == item.eneMeterTypeoid) {
-              item.areaName = area.label;
-            }
-          });
-          // item.areaName = data.
-        });
-        if (this.otherC.length > 0) {
-          this.$refs.other.setCurrentRow(this.otherC[0]);
+      // this.otherL = true;
+      this.areaData = [];
+      for (let key in this.queryForm) {
+        if (this.queryForm[key] == "") {
+          delete this.queryForm[key];
         }
-        setTimeout(() => {
-          this.otherL = false;
-        }, 200);
-      });
+      }
+      this.func
+        .get(
+          Object.assign(this.queryForm, {
+            rows: this.page.pageSize,
+            start: this.page.currentPage,
+          })
+        )
+        .then((res) => {
+          this.otherC = res.data.records;
+          this.page.total = res.data.total;
+          this.otherC.forEach((item) => {
+            item.$cellEdit = true;
+          });
+          if (this.otherTle === "儀表類型維護") {
+            this.otherC.sort((a, b) => {
+              return a.typeCode - b.typeCode;
+            });
+          }
+          if (this.otherTle === "抄錶人維護") {
+            this.otherC.sort((a, b) => {
+              return a.staffId - b.staffId;
+            });
+          }
+          if (this.otherC.length > 0) {
+            this.$refs.other.setCurrentRow(this.otherC[0]);
+          }
+          // setTimeout(() => {
+          // this.otherL = false;
+          // }, 200);
+        });
     },
     getArea() {
       getType().then((i) => {
@@ -474,15 +592,7 @@ export default {
         });
         this.formOption.column[0].dicData = data;
       });
-      this.areaList = [];
-      getArea().then((i) => {
-        i.data.forEach((items) => {
-          this.areaList.push({
-            value: items.eneMeterTypeFk,
-            label: items.areaName,
-          });
-        });
-      });
+      this.resetTree();
     },
     saveOther() {
       for (let i = 0; i < this.otherC.length; i++) {
@@ -503,47 +613,52 @@ export default {
           this.$tip.error("请补充抄表人信息!");
           return;
         }
+        if (this.otherTle === "抄錶人維護") {
+          for (let j = 0; j < this.otherC.length; j++) {
+            if (
+              this.otherC[i].equAccount == this.otherC[j].equAccount &&
+              this.otherC[i].$index != this.otherC[j].$index
+            ) {
+              this.$tip.error("已存在此账号,请重新设置!");
+              return;
+            }
+          }
+        }
+      }
+      for (let i = 0; i < this.areaData.length; i++) {
+        if (this.otherTle === "儀表類型維護" && !this.areaData[i].areaName) {
+          this.$tip.error("归属区域不能為空!");
+          return;
+        }
+        if (
+          this.otherTle === "抄錶人維護" &&
+          (!this.areaData[i].eneMeterFk ||
+            !this.areaData[i].startDate ||
+            !this.areaData[i].startTime ||
+            !this.areaData[i].endTime)
+        ) {
+          this.$tip.error("请补充抄表人可抄錶設定信息!");
+          return;
+        }
       }
       this.otherL = true;
       this.otherC.forEach((item, index) => {
         if (item.eneMeterTypeoid || item.eneStaffoid) {
-          // update
-          this.func.update(item).then((res) => {
-            if (this.otherTle === "儀表類型維護" && item.areaName) {
-              // 判斷是否存在 區域數據
-              getArea({ eneMeterTypeFk: item.eneMeterTypeoid }).then((res) => {
-                if (res.data.length > 0) {
-                  // 存在區域數據,更新數據
-                  res.data[0].areaName = item.areaName;
-                  updateArea(res.data[0]).then((area) => {});
-                } else {
-                  // 不存在,新增數據
-                  addArea({
-                    areaName: item.areaName,
-                    eneMeterTypeFk: item.eneMeterTypeoid,
-                  }).then((area) => {});
-                }
-              });
-            }
-          });
+          this.func.update(item).then((res) => {});
         } else {
           //add
           this.func.add(item).then((res) => {
             item.eneMeterTypeoid = res.data.data;
-            if (this.otherTle === "儀表類型維護" && item.areaName) {
-              addArea({
-                areaName: item.areaName,
-                eneMeterTypeFk: item.eneMeterTypeoid,
-              }).then((area) => {});
-            }
+            item.eneStaffoid = res.data.data;
           });
         }
         if (index == this.otherC.length - 1) {
           setTimeout(() => {
             // this.getOther();
-            this.$tip.success(this.$t("public.bccg"));
-            this.getArea();
-            this.otherL = false;
+            this.saveArea();
+            // this.$tip.success(this.$t("public.bccg"));
+
+            // this.otherL = false;
           }, 200);
         }
       });
@@ -556,6 +671,11 @@ export default {
         typeCode: "",
         typeName: "",
         $cellEdit: true,
+      });
+      this.areaData = [];
+      this.$refs.other.setCurrentRow(this.otherC[this.otherC.length - 1]);
+      this.$nextTick(() => {
+        this.$toTableLow(this, "other");
       });
     },
     delOther() {
@@ -586,19 +706,138 @@ export default {
               message: "已取消删除",
             });
           });
-      } else {
-        error("請選擇要刪除的數據!");
+      } else if (Object.keys(this.chooseOther).length > 0) {
+        this.otherC.splice(this.chooseOther.$index, 1);
+        if (this.otherC.length > 0) {
+          this.$refs.other.setCurrentRow(this.otherC[0]);
+        }
+      }
+    },
+    saveArea() {
+      this.areaData.forEach((item, index) => {
+        if (item.eneMeterTypeAreaoid || item.eneMeterStaffoid) {
+          // update
+          this.func.updateDtl(item).then((res) => {});
+        } else {
+          //add
+          item.eneMeterTypeFk = this.chooseOther.eneMeterTypeoid;
+          item.eneMeterStaffFk = this.chooseOther.eneStaffoid;
+          this.func.addDtl(item).then((res) => {
+            item.eneMeterTypeAreaoid = res.data.data;
+            item.eneMeterStaffoid = res.data.data;
+          });
+        }
+        if (index == this.areaData.length - 1) {
+          setTimeout(() => {
+            this.getOther();
+            this.$tip.success(this.$t("public.bccg"));
+            this.getArea();
+            this.getMan();
+            this.otherL = false;
+          }, 200);
+        }
+      });
+      if (this.areaData.length == 0) {
+        this.otherL = false;
+      }
+    },
+    addArea() {
+      this.areaData.push({
+        $cellEdit: true,
+        startDate: this.$getNowTime("datetime"),
+        startTime: "",
+        endTime: "",
+      });
+      this.$refs.Area.setCurrentRow(this.areaData[this.areaData.length - 1]);
+      this.$nextTick(() => {
+        this.$toTableLow(this, "Area");
+      });
+    },
+    delArea() {
+      if (
+        this.chooseArea.eneMeterTypeAreaoid ||
+        this.chooseArea.eneMeterStaffoid
+      ) {
+        cofirm("是否确定删除選中的数据?", "提示", {})
+          .then(() => {
+            this.func
+              .delDtl(
+                this.otherTle == "儀表類型維護"
+                  ? this.chooseArea.eneMeterTypeAreaoid
+                  : this.chooseArea.eneMeterStaffoid
+              )
+              .then((res) => {
+                if (res.data.code == 200) {
+                  success(res.data.msg);
+                  this.cellOtherClick(this.chooseOther);
+                } else {
+                  error(this.$t("public.scsb"));
+                }
+              })
+              .catch((err) => {
+                error("服务器错误");
+              });
+          })
+          .catch(() => {
+            this.$message({
+              type: "info",
+              message: "已取消删除",
+            });
+          });
+      } else if (Object.keys(this.chooseArea).length > 0) {
+        this.areaData.splice(this.chooseArea.$index, 1);
+        if (this.areaData.length > 0) {
+          this.$refs.Area.setCurrentRow(this.areaData[0]);
+        }
       }
     },
     cellOtherClick(val) {
       this.chooseOther = val;
+      if (val.eneMeterTypeoid || val.eneStaffoid) {
+        this.func
+          .getDtl({
+            eneMeterTypeFk: val.eneMeterTypeoid,
+            eneMeterStaffFk: val.eneStaffoid,
+          })
+          .then((res) => {
+            this.areaData = res.data;
+            this.areaData.forEach((item) => {
+              item.$cellEdit = true;
+              item.emId = item.eneMeterFk;
+            });
+            if (this.areaData.length > 0) {
+              this.$refs.Area.setCurrentRow(this.areaData[0]);
+            }
+          });
+      }
+    },
+    cellAreaClick(val) {
+      this.chooseArea = val;
     },
     qrcode(e, n) {
-      let qrcode = new QRCode("qrcode", {
-        width: 200, // 二维码宽度，单位像素
-        height: 200, // 二维码高度，单位像素
-        text: "https://pre.zhiyedang.cn/a?=" + e + "&" + n, // 生成二维码的链接
+      var qrcode = new QRCode(this.$refs.qrCodeUrl, {
+        text: this.detail.emId, // 需要转换为二维码的内容
+        width: 100,
+        height: 100,
+        colorDark: "#000000",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H,
       });
+      setTimeout(() => {
+        let win = window.open("", "列印");
+        let newstr = document.getElementById("qrCodeUrl").innerHTML;
+        // console.log(newstr);
+        win.document.write("<html><head><title></title>");
+        win.document.write("</head><body >");
+        win.document.write(`<style> img{
+          position: absolute; left: 50%; top: 50%; margin: -50px 0 0 -50px
+        } </style>`);
+        win.document.write(newstr);
+        win.document.write("</body></html>");
+        win.print();
+        document.getElementById("qrCodeUrl").innerHTML = "";
+        this.loading = false;
+      }, 500);
     },
     //删除
     del() {
@@ -638,22 +877,19 @@ export default {
       }
     },
     delEq() {
-      if (!this.chooseDataEq.eneMeterEquoid) {
-        this.eqData = [];
+      if (!this.chooseDataEq.eneMeterStaffoid) {
+        this.eqData.splice(this.chooseDataEq.$index, 1);
+        // this.getEq();
         return;
       }
-      cofirm(
-        "是否确定删除儀表設備为【 " + this.chooseDataEq.$equId + " 】的数据?",
-        "提示",
-        {}
-      )
+      cofirm("是否确定删除选中的数据?", "提示", {})
         .then(() => {
           this.loading = true;
-          delEq(this.chooseDataEq.eneMeterEquoid)
+          delMStaff(this.chooseDataEq.eneMeterStaffoid)
             .then((res) => {
               if (res.data.code == 200) {
                 success(res.data.msg);
-                this.getEq();
+                // this.getEq();
               } else {
                 error(this.$t("public.scsb"));
               }
@@ -682,7 +918,7 @@ export default {
       }
       this.chooseData = val;
       this.detail = val;
-      this.getEq();
+      // this.getEq();
     },
     // 树节点展开
     handleNodeExpand(data) {
@@ -733,25 +969,39 @@ export default {
   mounted() {},
   created() {
     // this.handleList();
-    this.$http.post("/api/baseEquipmentList").then((res) => {
-      let data = [];
-      res.data.forEach((item, index) => {
-        data.push({
-          label: item.equipmentName,
-          value: item.equipmentCode,
-        });
-      });
-      this.crudOp.column[11].dicData = this.$unique(data, "value");
-    });
+    // this.$http.post("/api/baseEquipmentList").then((res) => {
+    //   let data = [];
+    //   res.data.forEach((item, index) => {
+    //     data.push({
+    //       label: item.equipmentName,
+    //       value: item.equipmentCode,
+    //     });
+    //   });
+    //   this.crudOp.column[11].dicData = this.$unique(data, "value");
+    //   this.dlgFormOp.column[11].dicData = this.$unique(data, "value");
+    // });
     this.getMan();
   },
 };
 </script>
 
 <style lang="stylus">
+#viewDlg {
+  .el-date-editor input {
+    text-align: center !important;
+  }
+}
+
 #ProWorkflowPackage {
   .el-table__row--level-1 {
     text-indent: 1em;
+  }
+
+  .qrcode {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin: -50px 0 0 -50px;
   }
 
   .el-date-editor input {

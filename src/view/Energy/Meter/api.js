@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-30 08:20:46
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-12 00:29:14
+ * @LastEditTime: 2021-04-13 20:06:40
  * @Description: 
  */
 import axios from 'axios'
@@ -26,7 +26,7 @@ export function addPackageStep(params) {
 
 export function get(params) {
   return axios({
-    url: '/api/baseWorkPackage/list',
+    url: '/api/eneMeter',
     method: 'get',
     params: params
   })
@@ -75,6 +75,13 @@ export function delEq(id) {
 export function getType(params) {
   return axios({
     url: '/api/eneMeterType',
+    method: 'get',
+    params: params
+  })
+}
+export function getTypePage(params) {
+  return axios({
+    url: '/api/eneMeterType/page',
     method: 'get',
     params: params
   })
@@ -137,6 +144,15 @@ export function getStaff(params) {
     params: params
   })
 }
+
+export function getStaffPage(params) {
+  return axios({
+    url: '/api/eneStaff/page',
+    method: 'get',
+    params: params
+  })
+}
+
 export function addStaff(params) {
   return axios({
     url: '/api/eneStaff',

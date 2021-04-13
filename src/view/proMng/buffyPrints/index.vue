@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-02 09:17:02
+ * @LastEditTime: 2021-04-13 09:26:02
  * @Description: 
 -->
 <template>
@@ -54,6 +54,7 @@
 </template>
 <script>
 import { mainForm, mainCrud } from "./data";
+import { webSocket } from "@/config/index.js";
 import { get, add, update, del } from "./api";
 import tem from "./temDlg";
 export default {
@@ -75,6 +76,7 @@ export default {
       loading: false,
       dialogVisible: false,
       detail: {},
+      czsocket: "",
     };
   },
   watch: {},
@@ -93,6 +95,10 @@ export default {
         })
       ).then((res) => {
         this.crud = res.data.records;
+
+        this.crud.sort((a, b) => {
+          return a.printedTime < b.printedTime ? 1 : -1;
+        });
         this.crud.forEach((item, i) => {
           item.index = i + 1;
         });
@@ -104,13 +110,36 @@ export default {
       if (Object.keys(this.detail).length === 0) {
         return;
       }
-      this.detail.pz = 25;
-      this.detail.qsph = 1;
-      this.dialogVisible = true;
+      this.$tip
+        .cofirm(
+          "是否确定打印布票编号为 【 " +
+            this.detail.noteCode +
+            this.$t("iaoMng.delTle2"),
+          this,
+          {}
+        )
+        .then(() => {
+          this.czsocket.send(this.detail.noteId);
+          setTimeout(() => {
+            // this.printCtr = true;
+            this.$tip.success("已发送打印请求!");
+            this.wLoading = false;
+          }, 500);
+        });
+      // this.detail.pz = 25;
+      // this.detail.qsph = 1;
+      // this.dialogVisible = true;
     },
     handleRowDBLClick(val) {
       this.detail = val;
-      this.print();
+      // this.print();
+    },
+    setCz() {
+      webSocket.setPrint(this);
+      let _this = this;
+      _this.czsocket.onmessage = function (e) {
+        console.log(e);
+      };
     },
     cellClick(val) {
       this.detail = val;
@@ -122,6 +151,7 @@ export default {
   created() {},
   mounted() {
     this.query();
+    this.setCz();
   },
   beforeDestroy() {},
 };

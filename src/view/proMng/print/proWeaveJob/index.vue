@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-09 09:15:39
+ * @LastEditTime: 2021-04-12 14:23:31
  * @Description: 
 -->
 <template>
@@ -102,6 +102,7 @@ export default {
       isAdd: false,
       input: "",
       wloading: false,
+      czsocket: {},
     };
   },
   watch: {},
@@ -132,35 +133,6 @@ export default {
         this.page.total = res.data.total;
         this.loading = false;
       });
-    },
-    getBase64(file) {
-      return new Promise((resolve, reject) => {
-        let reader = new FileReader();
-        let fileResult = "";
-        reader.readAsDataURL(file);
-        //开始转
-        reader.onload = function () {
-          fileResult = reader.result;
-        };
-        //转 失败
-        reader.onerror = function (error) {
-          reject(error);
-        };
-        //转 结束  咱就 resolve 出去
-        reader.onloadend = function () {
-          resolve(fileResult);
-        };
-      });
-    },
-    handleFile(e) {
-      const input = e.target;
-      const files = e.target.files;
-      // let data = this.getBase64(files[0]);
-      let data = window.open("../../../../../static/zztzd.htm");
-      setTimeout(() => {
-        data.print(); //这一步就是在新窗口调出打印机
-      }, 1500);
-      // console.log(files);
     },
     print() {
       this.$tip

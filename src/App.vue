@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-24 08:12:20
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-06 14:55:12
+ * @LastEditTime: 2021-04-12 09:02:46
  * @Description: 
 -->
 <template>
@@ -50,7 +50,7 @@ export default {
     axios({
       url: "/api/ucmlUser",
       method: "get",
-      params: { usrLogin: "admin" },
+      params: { usrLogin: parent.userID },
     }).then((Res) => {
       // 登錄用戶oid
       // this.$store.dispatch("setUsers", Res.data.ucmlUseroid);

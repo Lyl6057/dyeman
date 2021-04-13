@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-05 08:55:10
+ * @LastEditTime: 2021-04-13 09:27:09
  * @Description:
  */
 
@@ -37,13 +37,13 @@ export function mainForm(_this) {
         span: 6,
         placeholder: " ",
       },
-      {
-        label: "機台編號",
-        prop: "machineCode",
-        span: 6,
-        placeholder: " ",
+      // {
+      //   label: "機台編號",
+      //   prop: "machineCode",
+      //   span: 6,
+      //   placeholder: " ",
 
-      },
+      // },
     ],
   }
 }
@@ -319,7 +319,7 @@ export function mainCrud(_this) {
       {
         label: "訂單號",
         prop: "poNo",
-        width: 110,
+        width: 150,
         span: 6,
         placeholder: " ",
         disabled: true
@@ -327,7 +327,7 @@ export function mainCrud(_this) {
       {
         label: "布票編號",
         prop: "noteCode",
-        width: 150,
+        width: 180,
         disabled: true, placeholder: " ",
         span: 6,
         sortable: true,
@@ -346,6 +346,8 @@ export function mainCrud(_this) {
         disabled: true, placeholder: " ",
         span: 6,
         width: 100,
+        width: 300,
+        overHidden: true
       },
       {
         label: "顏色",
@@ -370,15 +372,15 @@ export function mainCrud(_this) {
         hide: true,
         span: 6,
       },
-      {
-        label: "机台編號",
-        prop: "machineCode",
-        width: 110,
-        hide: false,
-        span: 6,
-        disabled: true,
+      // {
+      //   label: "机台編號",
+      //   prop: "machineCode",
+      //   width: 110,
+      //   hide: false,
+      //   span: 6,
+      //   disabled: true,
 
-      },
+      // },
       {
         label: "机号",
         prop: "loomNo",
@@ -390,14 +392,13 @@ export function mainCrud(_this) {
           message: "请输入机号",
           trigger: "blur"
         }],
-        sortable: true,
         disabled: true
       },
       {
         label: "值机工号",
         prop: "workNo",
         width: 90,
-        hide: true,
+        hide: false,
         span: 6,
         disabled: true,
         rules: [{
@@ -422,19 +423,20 @@ export function mainCrud(_this) {
         label: _this.$t("whseField.zl"),
         prop: "clothWeight",
         width: 80,
+        align: "center",
         span: 6,
 
       },
-      {
-        label: "單位",
-        prop: "weightUnit",
-        width: 80,
-        display: false,
-        placeholder: " ",
-        span: 6,
-        type: "select",
-        dicData: matUnit
-      },
+      // {
+      //   label: "單位",
+      //   prop: "weightUnit",
+      //   width: 80,
+      //   display: false,
+      //   placeholder: " ",
+      //   span: 6,
+      //   type: "select",
+      //   dicData: matUnit
+      // },
       // {
       //   label: "長度",
       //   prop: "clothLength",
@@ -495,6 +497,7 @@ export function mainCrud(_this) {
         format: "yyyy-MM-dd hh:MM:ss",
         valueFormat: "yyyy-MM-dd hh:MM:ss",
         span: 6,
+        align: "center",
         width: 180
       }
     ],

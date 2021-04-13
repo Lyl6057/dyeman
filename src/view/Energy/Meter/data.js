@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-04-08 20:27:03
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-12 00:48:51
+ * @LastEditTime: 2021-04-13 20:55:20
  * @Description:
  */
 import {
@@ -47,8 +47,20 @@ export function ybOp(_this) {
     labelWidth: 110,
     column: [
       {
-        label: _this.$t("energy.bh"),
+        label: "管编号",
         prop: "emId",
+        span: 8,
+        rules: [
+          {
+            required: true,
+            message: "請輸入編號",
+            trigger: "blur",
+          },
+        ],
+      },
+      {
+        label: "表编号",
+        prop: "chartId",
         span: 8,
         rules: [
           {
@@ -73,18 +85,13 @@ export function ybOp(_this) {
             label: "是"
           },
         ],
-        rules: [
-          {
-            required: true,
-            message: _this.$t("energy.qxzsfyx"),
-            trigger: "blur",
-          },
-        ],
-      },
-      {
-        label: "仪表厂家",
-        prop: "factory",
-        span: 8,
+        // rules: [
+        //   {
+        //     required: true,
+        //     message: _this.$t("energy.qxzsfyx"),
+        //     trigger: "blur",
+        //   },
+        // ],
       },
       {
         label: _this.$t("energy.name"),
@@ -97,6 +104,24 @@ export function ybOp(_this) {
             trigger: "blur",
           },
         ],
+      },
+      {
+        label: "仪表厂家",
+        prop: "factory",
+        span: 8,
+      },
+
+      {
+        label: "计量区域",
+        prop: "measure",
+        span: 8,
+      },
+
+      {
+        label: _this.$t("energy.cbr"),
+        prop: "emMan",
+        span: 8,
+        display: false,
       },
 
       {
@@ -113,12 +138,7 @@ export function ybOp(_this) {
           },
         ],
       },
-      {
-        label: _this.$t("energy.cbr"),
-        prop: "emMan",
-        span: 8,
-        display: false,
-      },
+
       // {
       //   label: _this.$t("energy.dj"),
       //   prop: "emPrice",
@@ -144,6 +164,21 @@ export function ybOp(_this) {
         ],
       },
 
+
+      {
+        label: "归属区域",
+        prop: "eneMeterTypeAreaFk",
+        span: 8,
+        type: "select",
+        dicData: [],
+        rules: [
+          {
+            required: true,
+            message: "請選擇归属区域",
+            trigger: "blur",
+          },
+        ],
+      },
       {
         label: "仪表型号",
         prop: "models",
@@ -155,35 +190,23 @@ export function ybOp(_this) {
         span: 16,
       },
       {
-        label: "归属区域",
-        prop: "eneMeterTypeAreaFk",
+        label: "设备编号",
+        prop: "equCode",
         span: 8,
-        type: "select",
-        dicData: getDicT("eneMeterTypeArea", "areaName", "eneMeterTypeAreaoid"),
-        rules: [
-          {
-            required: true,
-            message: "請選擇归属区域",
-            trigger: "blur",
-          },
-        ],
+        // type: "tree",
+        // dicData: []
       },
+
       {
         label: _this.$t("energy.wz"),
         prop: "emSite",
         span: 16,
       },
-      {
-        label: "设备编号",
-        prop: "equCode",
-        span: 8,
-        type: "tree",
-        dicData: []
-      },
+
       {
         label: _this.$t("energy.bz"),
         prop: "emRemark",
-        span: 16,
+        span: 24,
       },
     ],
 
@@ -195,27 +218,59 @@ export function timeOp(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 462px)",
+    height: "calc(100vh - 231px)",
     refreshBtn: false,
     columnBtn: false,
     page: false,
     column: [
+      // {
+      //   label: "抄錶人",
+      //   prop: "eneMeterStaffFk",
+      //   cell: true,
+      //   width: 100,
+      //   props: {
+      //     label: "staffName",
+      //     value: "eneStaffoid"
+      //   },
+      //   type: "tree",
+      //   dicData: []
+      // },
       {
-        label: "抄錶人",
-        prop: "eneMeterStaffFk",
-        cell: true,
-        width: 120,
+        label: "儀表编号",
+        prop: "emId",
+        width: 100,
         props: {
-          label: "staffName",
-          value: "eneStaffoid"
+          label: "emId",
+          value: "eneMeteroid"
+        },
+        type: "select",
+        dicData: [],
+        cell: false
+      },
+      {
+        label: _this.$t("energy.name"),
+        prop: "eneMeterFk",
+        width: 150,
+        props: {
+          label: "emName",
+          value: "eneMeteroid"
         },
         type: "tree",
-        dicData: []
+        dicData: [],
+        cell: true,
+        change: (val) => {
+          // console.log(val);
+          // _this.$set(_this.chooseArea, 'emId', val.value)
+          // _this.$nextTick(() => {
+          //   _this.chooseArea.emId = val.value
+
+          // })
+        }
       },
       {
         label: "開始有效日期",
         prop: "startDate",
-        width: 150,
+        width: 130,
         type: "date",
         cell: true,
         align: "center",
@@ -226,21 +281,21 @@ export function timeOp(_this) {
         label: "抄錶有效開始時間",
         prop: "startTime",
         width: 150,
-        // type: "datetime",
+        type: "time",
         cell: true,
         align: "center",
-        // format: "HH:mm:ss",
-        // valueFormat: "HH:mm:ss",
+        format: "HH:mm:ss",
+        valueFormat: "HH:mm:ss",
       },
       {
         label: "抄錶有效結束時間",
         prop: "endTime",
         width: 150,
-        // type: "datetime",
+        type: "time",
         cell: true,
         align: "center",
-        // format: "HH:mm:ss",
-        // valueFormat: "HH:mm:ss",
+        format: "HH:mm:ss",
+        valueFormat: "HH:mm:ss",
       },
 
     ],
@@ -254,24 +309,50 @@ export function typeOp(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 336px)",
+    height: "calc(100vh - 265px)",
     refreshBtn: false,
     columnBtn: false,
-    page: false,
+    page: true,
     column: [
       {
         label: "编号",
         prop: "typeCode",
         width: 120,
         align: "center",
-        cell: true
+        cell: true,
+        span: 6
       },
       {
         label: "名称",
         prop: "typeName",
         width: 200,
-        cell: true
+        cell: true,
+        span: 6
       },
+      // {
+      //   label: "归属区域",
+      //   prop: "areaName",
+      //   width: 160,
+      //   cell: true,
+      //   // type: "select",
+      //   // dicData: getDicT("eneMeterTypeArea", "areaName", "eneMeterTypeFk")
+      // },
+
+    ],
+  }
+
+}
+export function AreaOp(_this) {
+  return {
+    menu: false,
+    addBtn: false,
+    border: true,
+    highlightCurrentRow: true,
+    height: "calc(100vh - 231px)",
+    refreshBtn: false,
+    columnBtn: false,
+    page: false,
+    column: [
       {
         label: "归属区域",
         prop: "areaName",
@@ -292,35 +373,63 @@ export function staffOp(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 336px)",
+    height: "calc(100vh - 265px)",
     refreshBtn: false,
     columnBtn: false,
-    page: false,
+    page: true,
     column: [
       {
         label: "抄表人代号",
         prop: "staffId",
-        width: 120,
+        width: 110,
         cell: true
       },
       {
         label: "抄表人名称",
         prop: "staffName",
-        width: 200,
+        width: 150,
         cell: true
       },
       {
         label: "系统账号",
         prop: "equAccount",
-        width: 160,
+        width: 130,
         cell: true,
       },
       {
         label: "系统密码",
         prop: "equPassword",
-        width: 160,
+        width: 130,
         cell: true,
       },
+    ],
+  }
+}
+
+export function staff2Op(_this) {
+  return {
+    menu: false,
+    addBtn: false,
+    border: true,
+    highlightCurrentRow: true,
+    height: "calc(100vh - 336px)",
+    refreshBtn: false,
+    columnBtn: false,
+    labelWidth: 130,
+    page: false,
+    column: [
+      {
+        label: "抄表人代号",
+        prop: "staffId",
+        cell: true,
+        span: 6
+      },
+      {
+        label: "抄表人名称",
+        prop: "staffName",
+        cell: true,
+        span: 6
+      }
     ],
   }
 }

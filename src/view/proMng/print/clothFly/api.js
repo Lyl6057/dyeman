@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-01 14:06:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-09 08:22:16
+ * @LastEditTime: 2021-04-13 10:37:31
  * @Description:
  */
 
@@ -34,6 +34,15 @@ export function addBf(data) {
     params: data
   })
 }
+
+// 新增佈飛记录
+export function getBf(data) {
+  return axios({
+    url: '/api/proClothNote',
+    method: 'get',
+    params: data
+  })
+}
 // 打印佈飛
 export function printBf(id) {
   return axios({
@@ -50,3 +59,39 @@ export function getYarn(params) {
   })
 }
 
+
+// 獲取打印記錄
+export function getNote(params) {
+  return axios({
+    url: '/api/proClothNote/page',
+    method: 'get',
+    params: params
+  })
+}
+
+
+// 新增佈飛记录
+export function addNote(data) {
+  return axios({
+    url: '/api/proClothNote',
+    method: 'post',
+    params: data
+  })
+}
+
+// 修改佈飛记录
+export function updateNote(data) {
+  return axios({
+    url: '/api/proClothNote',
+    method: 'put',
+    params: data
+  })
+}
+
+// 修改佈飛记录
+export function delNote(id) {
+  return axios({
+    url: '/api/proClothNote?noteId=' + id,
+    method: 'delete',
+  })
+}

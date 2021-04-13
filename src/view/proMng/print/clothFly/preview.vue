@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:48:57
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-09 13:12:02
+ * @LastEditTime: 2021-04-13 10:21:55
  * @Description: 
 -->
 <template>
@@ -149,7 +149,7 @@ export default {
 
   .box {
     width: 280px;
-    height: 395px;
+    height: 374px;
     margin: 3px;
     border: 1px solid #000;
     // border-right: none;
