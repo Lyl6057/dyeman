@@ -2,11 +2,11 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-17 10:14:07
+ * @LastEditTime: 2021-04-19 18:36:55
  * @Description: 
 -->
 <template>
-  <div id="clothFly">
+  <div id="clothFlyPrint">
     <view-container title="布飞打印">
       <el-row class="btnList">
         <el-button type="primary" @click="query">{{

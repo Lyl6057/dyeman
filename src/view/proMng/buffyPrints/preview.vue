@@ -2,11 +2,11 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:48:57
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-02 09:05:45
+ * @LastEditTime: 2021-04-19 18:33:16
  * @Description: 
 -->
 <template>
-  <div id="clothFlyYl">
+  <div id="clothFly">
     <div class="box" v-if="detail.poNo">
       <el-card>
         <div class="tle">SUMTEX布票</div>
@@ -133,7 +133,7 @@ export default {
 };
 </script>
 <style lang='stylus'>
-#clothFlyYl {
+#clothFly {
   height: calc(100vh - 340px);
   width: 100%;
   overflow: auto;

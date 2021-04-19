@@ -2,11 +2,11 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-17 08:47:49
+ * @LastEditTime: 2021-04-19 18:37:22
  * @Description: 
 -->
 <template>
-  <div id="clothFly">
+  <div id="clothFlyPrint">
     <view-container
       title="織造通知單打印"
       v-loading="wloading"

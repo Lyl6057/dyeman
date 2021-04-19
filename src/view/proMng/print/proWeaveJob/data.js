@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-16 08:51:31
+ * @LastEditTime: 2021-04-19 17:24:00
  * @Description:
  */
 
@@ -134,7 +134,7 @@ export function mainCrud(_this) {
       {
         label: "生產單號",
         prop: "weaveJobCode",
-        width: 110,
+        width: 150,
         span: 6,
         disabled: false,
         sortable: true,
@@ -320,8 +320,9 @@ export function mainCrud(_this) {
       {
         label: "色號",
         prop: "colorCode",
-        width: 120,
+        width: 150,
         span: 6,
+        overHidden: true
       },
 
       {
@@ -725,7 +726,8 @@ export function longCrud(_this) {
         width: 200,
         format: "yyyy-MM-dd HH:mm:ss",
         valueFormat: "yyyy-MM-dd HH:mm:ss",
-        align: "center"
+        align: "center",
+        cell: true
       },
     ],
   }
@@ -737,7 +739,7 @@ export function yarnCrud(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 120px)",
+    height: "calc(100vh - 112px)",
     refreshBtn: false,
     columnBtn: false,
     page: false,

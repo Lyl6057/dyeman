@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:48:57
  * @LastEditors: Lyl
- * @LastEditTime: 2021-03-18 10:55:37
+ * @LastEditTime: 2021-04-19 18:32:20
  * @Description: 
 -->
 <template>
@@ -134,7 +134,7 @@ export default {
 </script>
 <style lang='stylus'>
 #clothFlyYl {
-  height: calc(100vh - 380px);
+  height: calc(100vh - 425px);
   width: 100%;
   overflow: auto;
   display: flex;
@@ -147,10 +147,10 @@ export default {
   padding: 3px 0;
 
   .box {
-    width: 280px;
-    height: 408px;
-    margin: 3px;
-    border: 1px solid #000;
+    // width: 280px;
+    // height: 408px;
+    // margin: 3px;
+    // border: 1px solid #000;
     // border-right: none;
   }
 

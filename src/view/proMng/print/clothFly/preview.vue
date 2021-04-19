@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:48:57
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-17 09:26:43
+ * @LastEditTime: 2021-04-19 18:46:22
  * @Description: 
 -->
 <template>
@@ -11,9 +11,9 @@
     :element-loading-text="$t('public.loading')"
     v-loading="loading"
   >
-    <div class="box" v-for="(item, i) of detail" :key="i">
+    <div class="previewBox" v-for="(item, i) of detail" :key="i">
       <el-card v-if="show">
-        <!-- <div class="tle">SUMTEX布票</div>
+        <div class="tle">SUMTEX布票</div>
         <div class="tle">THÔNG TIN TEM VẢI</div>
         <div class="content">
           <el-row class="yl_label">
@@ -22,7 +22,7 @@
             </el-col>
             <el-col :span="15"
               ><div style="height: 30px; line-height: 30px">
-                {{ detail.salPoNo }}
+                {{ item.poNo }}
               </div>
             </el-col>
           </el-row>
@@ -32,7 +32,7 @@
             </el-col>
             <el-col :span="18"
               ><div style="height: 30px; line-height: 30px; text-align: left">
-                {{ detail.fabricDesc }}
+                {{ item.noteCode }}
               </div>
             </el-col>
           </el-row>
@@ -49,31 +49,40 @@
           </el-row>
           <el-row class="yl_label">
             <el-col :span="8">
-              <div>{{ detail.yarnThickness }}</div>
+              <div v-html="form.yarnThicknessH"></div>
             </el-col>
             <el-col :span="8">
-              <div>{{ detail.yarnBrand + "   " }}<br /></div>
+              <div v-html="form.yarnBrandH"><br /></div>
             </el-col>
             <el-col :span="8">
-              <div>{{ detail.yarnBatch }}</div>
+              <div v-html="form.yarnBatchH"></div>
             </el-col>
           </el-row>
           <el-row class="yl_label">
             <el-col :span="12">
-              <div>机号: Số máy: {{ detail.mathineCode }}</div>
+              <div>机号: Số máy: {{ item.loomNo }}</div>
             </el-col>
             <el-col :span="12">
-              <div>门幅: Khổ vải: {{ detail.breadth }}</div>
+              <div>门幅: Khổ vải: {{ item.breadth }}</div>
             </el-col>
           </el-row>
           <el-row class="yl_label">
             <el-col :span="12">
-              <div>
-                匹号: Số cây: {{ $preFixInt(Number(detail.qsph) + i, 3) }}
-              </div>
+              <div>匹号: Số cây: {{ item.eachNumber }}</div>
             </el-col>
             <el-col :span="12">
-              <div>颜色: Màu: {{ detail.colorName }}</div>
+              <div>颜色: Màu: {{ item.proColor }}</div>
+            </el-col>
+          </el-row>
+          <el-row class="yl_label">
+            <el-col :span="8">
+              <div>針寸數: <br />Số Kim mối :</div>
+            </el-col>
+            <el-col
+              :span="16"
+              style="height: 30px; line-height: 30px; text-align: left"
+            >
+              <div>{{ form.needleInch }}</div>
             </el-col>
           </el-row>
           <el-row class="yl_label">
@@ -81,7 +90,7 @@
               <div>重量:Trọng lượng:</div>
             </el-col>
             <el-col :span="12">
-              <div>克重: TL gram: {{ detail.gramWeight }}</div>
+              <div>克重: TL gram: {{ item.gramWeight }}</div>
             </el-col>
           </el-row>
           <el-row class="yl_label">
@@ -93,30 +102,30 @@
             </el-col>
             <el-col :span="6">
               <div style="height: 45px; line-height: 45px; text-align: center">
-                {{ detail.zjgh }}
+                {{ item.workNo }}
               </div>
             </el-col>
             <el-col
+              :span="12"
+              style="height: 45px; line-height: 45px; text-align: left"
+            >
+              <div>日期:Ngày :{{ form.nowDate }}</div>
+            </el-col>
+            <!-- <el-col
               :span="6"
               style="height: 45px; line-height: 45px; text-align: center"
             >
-              <div>日期:Ngày :</div>
-            </el-col>
-            <el-col
-              :span="6"
-              style="height: 45px; line-height: 45px; text-align: center"
-            >
-              <div>{{ detail.nowDate }}</div>
-            </el-col>
+              <div></div>
+            </el-col> -->
           </el-row>
           <el-row class="yl_bh" style="font-size: 20px">
             |||||||||||||||||||||||||||||||
           </el-row>
           <el-row class="yl_bh">
-            {{ detail.bph + $preFixInt(Number(detail.qsph) + i, 3) }}
+            {{ item.noteCode }}
           </el-row>
-        </div> -->
-        <embed :src="url + item.noteId" width="400" height="580" hidden="no" />
+        </div>
+        <!-- <embed :src="url + item.noteId" width="400" height="580" hidden="no" /> -->
       </el-card>
     </div>
   </div>
@@ -126,6 +135,7 @@ export default {
   name: "",
   props: {
     detail: Array,
+    form: Object,
   },
   components: {},
   data() {
@@ -149,13 +159,22 @@ export default {
   },
   methods: {},
   created() {},
-  mounted() {},
+  mounted() {
+    this.show = false;
+    this.loading = true;
+    this.$nextTick(() => {
+      setTimeout(() => {
+        this.show = true;
+        this.loading = false;
+      }, 500);
+    });
+  },
   beforeDestroy() {},
 };
 </script>
 <style lang='stylus'>
 #clothFlyYl {
-  height: calc(100vh - 430px);
+  height: calc(100vh - 425px);
   width: 100%;
   overflow: auto;
   display: flex;
@@ -167,11 +186,11 @@ export default {
   user-select: none;
   padding: 3px 0;
 
-  .box {
-    // width: 400px;
+  .previewBox {
+    width: 300px;
     // height: 374px;
-    margin: 3px;
-    // border: 1px solid #000;
+    margin: 5px;
+    border: 1px solid #ccc;
     // border-right: none;
   }
 

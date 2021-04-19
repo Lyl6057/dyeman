@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-17 10:13:30
+ * @LastEditTime: 2021-04-19 17:30:14
  * @Description:
  */
 
@@ -74,7 +74,7 @@ export function mainCrud(_this) {
       {
         label: "生產單號",
         prop: "weaveJobCode",
-        width: 110,
+        width: 150,
         span: 6,
         disabled: true,
         sortable: true,
@@ -147,7 +147,7 @@ export function mainCrud(_this) {
       {
         label: "機號",
         prop: "mathineCode",
-        disabled: true,
+        disabled: false,
         span: 6,
         width: 120,
         placeholder: " ",
@@ -156,6 +156,29 @@ export function mainCrud(_this) {
           message: "请輸入機號",
           trigger: "blur"
         }],
+        change: () => {
+          let data = _this.yarnList
+            .filter((item) => {
+              return item.groupId == _this.form.weaveJobGroupFk;
+            })
+            .map((item) => {
+              return item;
+            });
+          if (data.length == 0) {
+            return;
+          }
+          _this.$nextTick(() => {
+            if (Number(data[0].sn) === 1) {
+              _this.form.bph = _this.form.mathineCode;
+            } else {
+              _this.form.bph =
+                "-" +
+                _this.$preFixInt(Number(data[0].sn), 2) +
+                _this.form.mathineCode;
+            }
+          })
+
+        }
 
       },
       {
@@ -191,7 +214,7 @@ export function mainCrud(_this) {
         label: "色號",
         disabled: true,
         prop: "colorCode",
-        width: 120,
+        width: 150,
         span: 6,
       },
       {
@@ -239,13 +262,13 @@ export function mainCrud(_this) {
         prop: "weaveJobGroupFk",
         width: 120,
         type: "select",
-
         dicData: [],
         props: {
           value: "groupId",
           label: "groupName"
         },
         span: 6,
+        hide: true,
         change: (val) => {
           _this.getYarn(val.value)
         }
@@ -308,11 +331,11 @@ export function mainCrud(_this) {
         width: 90,
         hide: true,
         span: 6,
-        rules: [{
-          required: true,
-          message: "请输入值机工号",
-          trigger: "blur"
-        }],
+        // rules: [{
+        //   required: true,
+        //   message: "请输入值机工号",
+        //   trigger: "blur"
+        // }],
       },
       // {
       //   label: "机台編號",
@@ -417,6 +440,8 @@ export function mainCrud(_this) {
   }
 
 }
+// let data = getDicT("proWeaveJobGroup", "groupName", "groupId")
+// console.log(data);
 
 export function bfCrud(_this) {
   return {

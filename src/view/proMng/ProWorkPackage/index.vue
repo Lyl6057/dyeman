@@ -29,34 +29,47 @@
             <div :span="24">
               <avue-form :option="formOption" v-model="form"></avue-form>
             </div>
+
             <el-row class="content">
-              <el-col :span="5">
-                <view-container title="工作包">
-                  <el-card>
-                    <el-tree
-                      ref="proTree"
-                      style="margin-top: 2px; margin-left: 10px"
-                      :data="gridData"
-                      :props="defaultProps"
-                      accordion
-                      node-key="packageId"
-                      :default-expanded-keys="defaultShowNodes"
-                      @node-click="handleNodeClick"
-                      @node-expand="handleNodeExpand"
-                      @node-collapse="handleNodeCollapse"
-                    >
-                    </el-tree>
-                  </el-card>
-                </view-container>
+              <el-col :span="6" class="empty-tab">
+                <el-tabs v-model="tab" type="border-card">
+                  <el-tab-pane label="染整流程" name="dye"></el-tab-pane>
+                  <el-tab-pane label="织造流程" name="weave"></el-tab-pane>
+                  <el-tab-pane label="印花流程" name="printing"></el-tab-pane>
+                </el-tabs>
+                <el-card>
+                  <el-tree
+                    ref="proTree"
+                    style="margin-top: 2px; margin-left: 10px"
+                    :data="gridData"
+                    :props="defaultProps"
+                    accordion
+                    node-key="packageId"
+                    :default-expanded-keys="defaultShowNodes"
+                    @node-click="handleNodeClick"
+                    @node-expand="handleNodeExpand"
+                    @node-collapse="handleNodeCollapse"
+                  >
+                  </el-tree>
+                </el-card>
               </el-col>
-              <el-col :span="19">
+              <el-col :span="18">
                 <view-container title="生产工序明细" style="margin-left: 5px">
                   <el-card>
-                    <avue-form
+                    <el-checkbox-group v-model="check">
+                      <el-checkbox
+                        v-for="item of stepList"
+                        :key="item.stepId"
+                        :label="item.stepName"
+                        :name="item.stepName"
+                      ></el-checkbox>
+                    </el-checkbox-group>
+
+                    <!--  <avue-form
                       style="margin-top: 10px"
                       :option="crudOp"
                       v-model="detail"
-                    ></avue-form>
+                    ></avue-form>-->
                   </el-card>
                 </view-container>
               </el-col>
@@ -467,6 +480,21 @@ export default {
             label: "工作包類型",
             prop: "packageType",
             span: 8,
+            type: "select",
+            dicData: [
+              {
+                label: "染整",
+                value: "dye",
+              },
+              {
+                label: "织造",
+                value: "weave",
+              },
+              {
+                label: "印花",
+                value: "printing",
+              },
+            ],
           },
           {
             label: "工作包描述",
@@ -482,7 +510,7 @@ export default {
       oldData: {},
       loading: false,
       defaultProps: {
-        children: "baseWorkPackageStepInfoList",
+        children: "children",
         label: "label",
       },
       detail: {},
@@ -491,7 +519,18 @@ export default {
       dlgForm: {},
       chooseData: {},
       addTle: "新增工作包",
+      tab: "dye",
+      stepList: [],
+      check: [],
     };
+  },
+  watch: {
+    tab() {
+      this.handleList();
+    },
+    check(n, o) {
+      console.log(n, o);
+    },
   },
   methods: {
     //查询
@@ -499,6 +538,8 @@ export default {
       this.loading = true;
       this.detail = {};
       this.chooseData = {};
+      this.gridData = [];
+      this.check = [];
       for (var key in this.form) {
         if (this.form[key] === "") {
           delete this.form[key];
@@ -507,18 +548,26 @@ export default {
       for (var key in this.detail) {
         delete this.detail[key];
       }
-      get(this.form)
+
+      get(Object.assign(this.form), {
+        packageType: this.tab,
+      })
         .then((res) => {
-          this.gridData = res.data;
-          this.gridData.forEach((item, index) => {
-            item.label = `[${item.packageCode}]  ${item.packageName}`;
-            item.baseWorkPackageStepInfoList.forEach((items, indexs) => {
-              items.packageCode = item.packageCode;
-              items.packageName = item.packageName;
-              items.packageIds = item.packageId;
-              items.label = items.baseWorkStep.stepName;
-            });
+          res.data.forEach((item) => {
+            if (item.packageType == this.tab) {
+              item.label = `[${item.packageCode}]  ${item.packageName}`;
+              item.baseWorkPackageStepInfoList.forEach((items, indexs) => {
+                // console.log(items.baseWorkStep.stepName);
+                // this.check.push(items.baseWorkStep.stepName);
+                items.packageCode = item.packageCode;
+                items.packageName = item.packageName;
+                items.packageIds = item.packageId;
+                items.label = items.baseWorkStep.stepName;
+              });
+              this.gridData.push(item);
+            }
           });
+          this.getStepList();
           this.loading = false;
         })
         .catch((err) => {
@@ -578,19 +627,20 @@ export default {
       });
     },
     addBtn() {
-      if (this.chooseData.packageId || this.chooseData.packageFk) {
-        this.dlgForm = this.chooseData;
-        this.dlgFormOp = this.dlgOption;
-        this.addTle = "新增工序";
-        this.dialogVisible = true;
-      } else {
-        for (var key in this.dlgForm) {
-          delete this.dlgForm[key];
-        }
-        this.dlgFormOp = this.dlgOp;
-        this.addTle = "新增工作包";
-        this.dialogVisible = true;
+      // if (this.chooseData.packageId || this.chooseData.packageFk) {
+      //   this.dlgForm = this.chooseData;
+      //   this.dlgFormOp = this.dlgOption;
+      //   this.addTle = "新增工序";
+      //   this.dialogVisible = true;
+      // } else {
+      for (var key in this.dlgForm) {
+        delete this.dlgForm[key];
       }
+      this.dlgFormOp = this.dlgOp;
+      this.addTle = "新增工作包";
+      this.dlgForm.packageType = this.tab;
+      this.dialogVisible = true;
+      // }
     },
     edit() {
       this.dlgFormOp = this.dlgOp;
@@ -671,11 +721,15 @@ export default {
       this.$refs.crud.rowCell(row, row.$index);
     },
     handleNodeClick(val) {
+      this.check = [];
       for (var key in this.detail) {
         delete this.detail[key];
       }
       this.chooseData = val;
       this.detail = val.baseWorkStep;
+      val.baseWorkPackageStepInfoList.forEach((item, i) => {
+        this.check.push(item.baseWorkStep.stepName);
+      });
     },
     // 树节点展开
     handleNodeExpand(data) {
@@ -706,26 +760,45 @@ export default {
       document.getElementsByClassName("el-dialog__headerbtn")[0].click();
     },
     getStepList() {
+      // console.log(this.gridData);
       getStep().then((res) => {
-        let stepList = [];
+        this.stepList = [];
         for (let i = 0; i < res.data.length; i++) {
           if (res.data[i].stepName === "生产过程") {
             res.data[i].nodes.forEach((item, i) => {
-              item.nodes.forEach((node, j) => {
-                stepList.push(node);
-              });
+              let type = "";
+              switch (this.tab) {
+                case "dye":
+                  type = "染整中心";
+                  break;
+                case "weave":
+                  type = "织造中心";
+                  break;
+                default:
+                  type = "印花中心";
+                  break;
+              }
+              if (item.stepName == type) {
+                item.nodes.forEach((node, j) => {
+                  node.checked = false;
+                  this.stepList.push(node);
+                });
+              }
             });
             this.loading = false;
           }
         }
-        this.dlgOption.column[2].dicData = stepList;
+        this.dlgOption.column[2].dicData = this.stepList;
       });
+    },
+    test() {
+      console.log(this.check);
     },
   },
   mounted() {},
   created() {
     this.handleList();
-    this.getStepList();
+    // this.getStepList();
   },
 };
 </script>
@@ -734,6 +807,23 @@ export default {
 #ProWorkflowPackage {
   .el-table__row--level-1 {
     text-indent: 1em;
+  }
+
+  .el-checkbox-group {
+    padding: 10px 0 10px 25px !important;
+    text-align: left;
+  }
+
+  .el-checkbox {
+    margin-top: 10px;
+    width: 200px;
+    margin-right: 0;
+  }
+
+  .empty-tab {
+    .el-tabs--border-card {
+      border-bottom: 0 !important;
+    }
   }
 
   .el-table__row--level-2 {
