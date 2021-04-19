@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-01 14:06:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-13 10:37:31
+ * @LastEditTime: 2021-04-16 10:21:54
  * @Description:
  */
 
@@ -93,5 +93,13 @@ export function delNote(id) {
   return axios({
     url: '/api/proClothNote?noteId=' + id,
     method: 'delete',
+  })
+}
+
+export function getGroup(params) {
+  return axios({
+    url: '/api/proWeaveJobGroup',
+    method: 'get',
+    params: params
   })
 }

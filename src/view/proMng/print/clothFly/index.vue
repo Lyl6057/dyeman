@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-08 19:01:20
+ * @LastEditTime: 2021-04-17 10:14:07
  * @Description: 
 -->
 <template>
@@ -13,9 +13,9 @@
           this.$t("public.query")
         }}</el-button>
         <el-button type="primary" @click="print">打印</el-button>
-        <el-button type="warning" @click="close">{{
+        <!-- <el-button type="warning" @click="close">{{
           this.$t("public.close")
-        }}</el-button>
+        }}</el-button> -->
       </el-row>
       <el-row class="formBox">
         <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
@@ -88,6 +88,11 @@ export default {
   methods: {
     query() {
       this.loading = true;
+      for (let key in this.form) {
+        if (this.form[key] == "") {
+          delete this.form[key];
+        }
+      }
       get(
         Object.assign(this.form, {
           rows: this.page.pageSize,

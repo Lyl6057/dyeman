@@ -96,6 +96,7 @@
         :hide="hide"
         :detail="detail"
         :isAdd="isAdd"
+        @updateList="getData"
         @close="temV = false"
       ></temDlg>
     </el-dialog>

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-13 07:57:18
+ * @LastEditTime: 2021-04-16 08:51:31
  * @Description:
  */
 
@@ -231,8 +231,6 @@ export function mainCrud(_this) {
 
         }
       },
-
-
       {
         label: "織單數量",
         prop: "amount",
@@ -348,7 +346,18 @@ export function mainCrud(_this) {
         width: 90,
         span: 6,
         hide: true,
-        placeholder: " "
+        placeholder: " ",
+        type: "switch",
+        dicData: [
+          {
+            value: "1",
+            label: "抽針"
+          },
+          {
+            value: "2",
+            label: "圆筒"
+          }
+        ]
       },
 
       {
@@ -728,19 +737,19 @@ export function yarnCrud(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 148px)",
+    height: "calc(100vh - 120px)",
     refreshBtn: false,
     columnBtn: false,
-    page: true,
+    page: false,
     labelWidth: 130,
     column: [
-      {
-        label: "#",
-        prop: "index",
-        width: 50,
-        align: "center",
-        display: false,
-      },
+      // {
+      //   label: "#",
+      //   prop: "index",
+      //   width: 50,
+      //   align: "center",
+      //   display: false,
+      // },
       {
         label: "紗線編號",
         prop: "yarnCode",
@@ -751,7 +760,7 @@ export function yarnCrud(_this) {
       {
         label: "紗線名稱",
         prop: "yarnName",
-        width: 500,
+        width: 400,
         overHidden: true,
         span: 6,
         cell: true
@@ -759,7 +768,23 @@ export function yarnCrud(_this) {
       {
         label: "批號",
         prop: "yarnBatch",
-        width: 140,
+        width: 150,
+        span: 6,
+        cell: true,
+        placeholder: " "
+      },
+      {
+        label: "本厂批號",
+        prop: "factoryYarnBatch",
+        width: 150,
+        span: 6,
+        cell: true,
+        placeholder: " "
+      },
+      {
+        label: "紗牌",
+        prop: "yarnBrand",
+        width: 150,
         span: 6,
         cell: true,
         placeholder: " "
@@ -782,6 +807,45 @@ export function yarnCrud(_this) {
         type: "select",
         dicData: getDIC("bas_matUnit")
       }
+    ],
+  }
+}
+
+export function groupCrudOp(_this) {
+  return {
+    menu: false,
+    addBtn: false,
+    border: true,
+    highlightCurrentRow: true,
+    height: "calc(100vh - 148px)",
+    refreshBtn: false,
+    columnBtn: false,
+    page: true,
+    labelWidth: 130,
+    column: [
+      {
+        label: "#",
+        prop: "sn",
+        width: 50,
+        align: "center",
+      },
+      {
+        label: "批次分組名稱",
+        prop: "groupName",
+        width: 120,
+        span: 6,
+        cell: true
+      },
+      {
+        label: "更換批次時間",
+        prop: "changeBatchTime",
+        width: 180,
+        span: 6,
+        cell: true,
+        type: "date",
+        format: "yyyy-MM-dd HH:mm:ss",
+        valueFormat: "yyyy-MM-dd HH:mm:ss",
+      },
     ],
   }
 }

@@ -6,19 +6,19 @@
     >
       <div class="btnList">
         <el-button type="success" @click="save">{{
-          this.$t("public.save")
+          $t("public.save")
         }}</el-button>
         <el-button type="primary" @click="add">{{
-          this.$t("public.add")
+          $t("public.add")
         }}</el-button>
         <el-button
           type="danger"
           @click="del"
           :disabled="Object.keys(chooseData).length === 0"
-          >{{ this.$t("public.del") }}</el-button
+          >{{ $t("public.del") }}</el-button
         >
         <el-button type="warning" @click="close">{{
-          this.$t("public.close")
+          $t("public.close")
         }}</el-button>
       </div>
       <div class="formBox">
@@ -104,7 +104,7 @@ export default {
       canLeave: false,
       ruleV: false,
       sxV: false,
-      sxformOp: sxForm(),
+      sxformOp: sxForm(this),
       sxform: {},
       form: {},
       formOp: rsxkr2F(this),

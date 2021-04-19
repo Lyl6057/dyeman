@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-01 14:06:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-08 09:24:59
+ * @LastEditTime: 2021-04-16 08:39:39
  * @Description:
  */
 
@@ -144,6 +144,40 @@ export function updateYarn(data) {
 export function delYarn(id) {
   return axios({
     url: '/api/proWeaveJobYarn?useYarnId=' + id,
+    method: 'delete',
+  })
+}
+
+export function getGroup(params) {
+  return axios({
+    url: '/api/proWeaveJobGroup/page',
+    method: 'get',
+    params: params
+  })
+}
+
+// 新增
+export function addGroup(data) {
+  return axios({
+    url: '/api/proWeaveJobGroup',
+    method: 'post',
+    params: data
+  })
+}
+
+// 修改
+export function updateGroup(data) {
+  return axios({
+    url: '/api/proWeaveJobGroup',
+    method: 'put',
+    params: data
+  })
+}
+
+// 刪除
+export function delGroup(id) {
+  return axios({
+    url: '/api/proWeaveJobGroup?groupId=' + id,
     method: 'delete',
   })
 }

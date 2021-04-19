@@ -238,6 +238,22 @@ export default {
           if (this.crud.length === 0) {
             this.loading = false;
           }
+          if (this.hide == "1") {
+            this.crud.sort((a, b) => {
+              return (
+                b.stockId.substring(b.stockId.length - 6) -
+                a.stockId.substring(a.stockId.length - 6)
+              );
+            });
+          } else {
+            this.crud.sort((a, b) => {
+              return (
+                b.retCode.substring(b.retCode.length - 6) -
+                a.retCode.substring(a.retCode.length - 6)
+              );
+            });
+          }
+
           this.crud.forEach((item, index) => {
             item.finStatus = String(item.finStatus);
             item.index = index + 1;

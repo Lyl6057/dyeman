@@ -56,7 +56,7 @@
     ></choice>
     <bas-dyestuff
       :showDlg="otherV"
-      dlgTle="选择五金/行政用品"
+      :dlgTle="this.$t('whseField.xzwjxzyp')"
       @choiceData="choiceDyestuff"
       @close="otherV = false"
     >
@@ -482,6 +482,9 @@ export default {
               item.whseAccessoriesoutFk = this.form.whseAccessoriesoutoid;
               item.whseRetsuppaccessoriesFk = this.form.whseRetsuppaccessoriesoid;
               item.whseTraaccessoriesFk = this.form.whseTraaccessoriesoid;
+              if (this.form.stockType === "3") {
+                item.appId = item.applyCode;
+              }
               this.func.addDetail(item).then((res) => {
                 item.whseAccessoriesoutDtloid = res.data.data;
                 item.whseRetsuppaccessoriesDtloid = res.data.data;
@@ -495,6 +498,9 @@ export default {
           });
         });
       } else {
+        if (this.form.stockType === "3") {
+          this.form.appId = this.form.applyCode;
+        }
         this.everyThing.addF(this.form).then((Res) => {
           baseCodeSupply({ code: "whse_out" }).then((res) => {});
           this.form.whseAccessoriesoutoid = Res.data.data;
@@ -518,6 +524,7 @@ export default {
               item.whseAccessoriesoutFk = this.form.whseAccessoriesoutoid;
               item.whseRetsuppaccessoriesFk = this.form.whseRetsuppaccessoriesoid;
               item.whseTraaccessoriesFk = this.form.whseTraaccessoriesoid;
+
               this.func.addDetail(item).then((res) => {
                 item.whseAccessoriesoutDtloid = res.data.data;
                 item.whseRetsuppaccessoriesDtloid = res.data.data;
@@ -593,15 +600,17 @@ export default {
         this.mx = this.mx.concat(val);
         this.mx = this.unique(this.mx, "whseAccessoriesDtlFk");
         // this.changeList.push(data);
-      } else {
-        this.chooseData.list = this.chooseData.list.concat(val);
-        this.chooseData.list.forEach((e, index) => {
-          e.index = index + 1;
-          e.prodNo = e.$prodNo;
-          e.woWeights = e.weight;
-          e.woUnit = e.weightUnit;
-          e.ticketNo = e.custTicket;
-        });
+      } else if (this.choiceTle === this.$t("choicDlg.xzsqlyd")) {
+        this.form.appId = val.applyCode;
+        this.form.purApplicationoid = val.purApplicationoid;
+        // this.chooseData.list = this.chooseData.list.concat(val);
+        // this.chooseData.list.forEach((e, index) => {
+        //   e.index = index + 1;
+        //   e.prodNo = e.$prodNo;
+        //   e.woWeights = e.weight;
+        //   e.woUnit = e.weightUnit;
+        //   e.ticketNo = e.custTicket;
+        // });
       }
       for (var key in val) {
         delete val[key];
@@ -612,10 +621,6 @@ export default {
       this.choiceV = false;
     },
     changeRet(val) {
-      // if (!this.isAdd) {
-      //   return;
-      // }
-
       this.mx = [];
       if (val === "1") {
         this.mxOp.column[8].hide = false;
@@ -633,12 +638,14 @@ export default {
         this.mxOp.column[8].hide = true;
         this.mxOp.column[9].hide = true;
         this.formOp.column[3].disabled = true;
-        this.form.appId = "";
       } else {
         this.mxOp.column[8].hide = false;
         this.mxOp.column[8].label = "領用数量";
         this.mxOp.column[9].hide = false;
         this.mxOp.column[9].label = "領用单位";
+        if (!this.isAdd) {
+          return;
+        }
         this.formOp.column[3].disabled = false;
         this.formOp.column[3].label = "申购领用单";
         this.form.appId = "";

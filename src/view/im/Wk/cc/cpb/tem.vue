@@ -23,10 +23,10 @@
           <view-container :title="datas.type.split('_')[0] + '明细'">
             <div class="btnList" style="margin-bottom: 2px">
               <!-- <el-button type="primary" @click="getDetail">{{this.$t("public.query")}}</el-button> -->
-              <el-button type="primary" @click="add" v-if="canSave">{{
+              <el-button type="primary" @click="add">{{
                 this.$t("public.add")
               }}</el-button>
-              <el-button type="danger" @click="del" v-if="canSave">{{
+              <el-button type="danger" @click="del">{{
                 this.$t("public.del")
               }}</el-button>
 
@@ -47,10 +47,10 @@
           <view-container :title="datas.type.split('_')[0] + '批号资料'">
             <div class="btnList" style="margin-bottom: 2px">
               <!-- <el-button type="primary" @click="getDetail">{{this.$t("public.query")}}</el-button> -->
-              <el-button type="primary" @click="addPh" v-if="canSave">{{
+              <el-button type="primary" @click="addPh">{{
                 this.$t("public.add")
               }}</el-button>
-              <el-button type="danger" @click="delPh" v-if="canSave">{{
+              <el-button type="danger" @click="delPh">{{
                 this.$t("public.del")
               }}</el-button>
               <!-- <el-button type="success" @click="savePh" v-if="!isPlan"
@@ -136,6 +136,7 @@ import {
   getCpbDetaliList,
   getCpbDetali,
 } from "@/api/im/Wk/rc";
+import { baseCodeSupply } from "@/api/index";
 import {
   getFinclothsellout,
   addFinclothsellout,
@@ -218,6 +219,12 @@ export default {
   methods: {
     getDetail() {
       this.loading = true;
+      this.func.getDetail = getFinclothselloutDtla;
+      this.func.delDetail = delFinclothselloutDtla;
+      this.func.addDetail = addFinclothselloutDtla;
+      this.func.getPhDetail = getFinclothselloutDtlb;
+      this.func.delPhDetail = delFinclothselloutDtlb;
+      this.func.addPhDetail = addFinclothselloutDtlb;
       if (
         Object.keys(this.detail).length === 0 ||
         !this.detail.whseFinclothselloutoid
@@ -226,12 +233,7 @@ export default {
         this.loading = false;
         return;
       }
-      this.func.getDetail = getFinclothselloutDtla;
-      this.func.delDetail = delFinclothselloutDtla;
-      this.func.addDetail = addFinclothselloutDtla;
-      this.func.getPhDetail = getFinclothselloutDtlb;
-      this.func.delPhDetail = delFinclothselloutDtlb;
-      this.func.addPhDetail = addFinclothselloutDtlb;
+
       this.chooseData = {};
       // this.mxOp = rsxkr3C(this);
       this.func
@@ -359,6 +361,7 @@ export default {
           {}
         )
         .then(() => {
+          console.log(this.chooseData);
           this.func
             .delDetail(this.chooseData.whseFinclothselloutDtlaoid)
             .then((res) => {
@@ -375,6 +378,7 @@ export default {
             });
         })
         .catch((err) => {
+          console.log(err);
           this.$tip.warning(this.$t("public.qxcz"));
         });
     },
@@ -398,7 +402,7 @@ export default {
             .then((res) => {
               if (res.data.code === 200) {
                 this.$tip.success(this.$t("public.sccg"));
-                this.rcData.splice(this.choosePh.index - 1, 1);
+                this.chooseData.list.splice(this.choosePh.index - 1, 1);
                 this.getPhDetail(this.chooseData);
               } else {
                 this.$tip.error(this.$t("public.scsb"));
@@ -666,6 +670,7 @@ export default {
             this.changeList = [];
             // this.getDetail();
             this.loading = false;
+
             this.$tip.success(this.$t("public.bccg"));
           }
         }
@@ -713,6 +718,7 @@ export default {
       try {
         if (!this.form.whseFinclothselloutoid) {
           addFinclothsellout(this.form).then((res) => {
+            baseCodeSupply({ code: "whse_out" }).then((res) => {});
             this.form.whseFinclothselloutoid = res.data.data;
             let addPb = (item, i) => {
               return new Promise((resolve, reject) => {

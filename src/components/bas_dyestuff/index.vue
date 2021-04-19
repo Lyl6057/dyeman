@@ -78,7 +78,7 @@ export default {
         addBtn: false,
         border: true,
         highlightCurrentRow: true,
-        height: "calc(100vh - 207px)",
+        height: "calc(100vh - 200px)",
         refreshBtn: false,
         columnBtn: false,
         selection: true,
@@ -93,10 +93,17 @@ export default {
           {
             label: this.$t("whseField.bh"), //"编号",
             prop: "bcCode",
+            width: 130,
           },
           {
-            label: this.$t("whseField.bh"), //"原料名称",
-            prop: "bcMatname",
+            label: this.$t("whseField.zwmc"), //"原料名称",
+            prop:
+              this.$store.state.lang === "1"
+                ? "cnnamelong"
+                : this.$store.state.lang === "2"
+                ? "ennamelong"
+                : "vinamelong",
+            width: 350,
           },
           {
             label: this.$t("whseField.yjfl"), // "一级分类",
@@ -104,18 +111,42 @@ export default {
             type: "select",
             dicData: getDIC("bas_chemicalClass"),
           },
-          {
-            label: this.$t("whseField.ywmc"), //"原料英文名称",
-            prop: "bcMatengname",
-          },
+          // {
+          //   label: this.$t("whseField.ywmc"), //"原料英文名称",
+          //   prop: "ennamelong",
+          // },
 
           {
             label: this.$t("whseField.sg"),
             prop: "bcColor",
+            hide: this.type === "yl" ? true : false,
           },
           {
             label: this.$t("whseField.lf"), //"力份",
             prop: "bcForce",
+            hide: this.type === "yl" ? true : false,
+          },
+          {
+            label: this.$t("whseField.hglhl"), //"力份",
+            prop: "vitality",
+            hide: this.type === "hgyl" ? true : false,
+          },
+          {
+            label: this.$t("whseField.xh"), //"型號",
+            prop: "modeltype",
+            hide: this.type === "hgyl" ? true : false,
+          },
+          {
+            label: this.$t("whseField.yt"), //"用途",
+            prop: "bcUse",
+            hide: this.type === "hgyl" ? true : false,
+          },
+          {
+            label: this.$t("whseField.jldw"), //"计量单位",
+            prop: "bcUnit",
+            type: "select",
+            dicData: getDIC("bas_matUnit"),
+            width: 90,
           },
         ],
       },
@@ -151,14 +182,6 @@ export default {
             },
           },
           {
-            label: this.$t("whseField.yjfl"), // "一级分类",
-            prop: "bcClass",
-            span: 6,
-            placeholder: " ",
-            type: "select",
-            dicData: getDIC("bas_chemicalClass"),
-          },
-          {
             label: this.$t("whseField.bh"), // "编号",
             prop: "bcCode",
             span: 6,
@@ -166,9 +189,22 @@ export default {
           },
           {
             label: this.$t("whseField.ylmc"), //"原料名称",
-            prop: "bcMatname",
+            prop:
+              this.$store.state.lang === "1"
+                ? "cnnamelong"
+                : this.$store.state.lang === "2"
+                ? "ennamelong"
+                : "vinamelong",
             span: 6,
             placeholder: " ",
+          },
+          {
+            label: this.$t("whseField.yjfl"), // "一级分类",
+            prop: "bcClass",
+            span: 6,
+            placeholder: " ",
+            type: "select",
+            dicData: getDIC("bas_chemicalClass"),
           },
         ],
       },
@@ -176,6 +212,7 @@ export default {
       tab: "tab1",
       chooseData: [],
       getData: Function,
+      type: "",
     };
   },
   watch: {},
@@ -227,18 +264,28 @@ export default {
         }
       } else {
         if (this.form.pfType == 0) {
+          this.type = "hgyl";
           this.getData = getBasChemicalmat;
           let data = getDIC("bas_chemicalClass");
           this.crudOp.column[3].dicData = data;
+          this.crudOp.column[4].hide = true;
+          this.crudOp.column[5].hide = true;
+          this.crudOp.column[6].hide = false;
+          this.crudOp.column[7].hide = false;
+          this.crudOp.column[8].hide = false;
           this.formOp.column[1].dicData = data;
         } else {
           this.getData = getBasPigment;
           let data = getDIC("bas_PigmentClass");
           this.crudOp.column[3].dicData = data;
+          this.crudOp.column[4].hide = false;
+          this.crudOp.column[5].hide = false;
+          this.crudOp.column[6].hide = true;
+          this.crudOp.column[7].hide = true;
+          this.crudOp.column[8].hide = true;
           this.formOp.column[1].dicData = data;
         }
       }
-
       this.getData(
         Object.assign(this.form, {
           rows: this.page.pageSize,
@@ -297,7 +344,7 @@ export default {
     this.form.pfType = 0;
     if (this.dlgTle == this.$t("whseField.xzwjxzyp")) {
       // "选择五金/行政用品"
-      this.crudOp = hardwareC;
+      this.crudOp = hardwareC(this);
       this.formOp = mainForm(this);
     }
   },
@@ -354,6 +401,10 @@ export default {
 
   .el-tag--mini {
     display: none;
+  }
+
+  .el-dialog.is-fullscreen {
+    overflow: hidden;
   }
 }
 </style>

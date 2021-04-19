@@ -676,7 +676,8 @@ export default {
             },
             {
               click: () => {
-                this.toView("cc_scfl", "生产领用_1");
+                // this.toView("cc_scfl", "生产领用_1");
+                this.toView("cc_wjxz", "生产领用_1");
               },
               title: "领用出库",
               icon: "el-icon-s-claim",
@@ -721,53 +722,53 @@ export default {
             },
           ],
         },
-        option5: {
-          span: 24,
-          data: [
-            {
-              title: "化工原料出库",
-              icon: "yx-icf-cailiaogongcheng",
-              color: "#606266",
-            },
+        // option5: {
+        //   span: 24,
+        //   data: [
+        //     {
+        //       title: "化工原料出库",
+        //       icon: "yx-icf-cailiaogongcheng",
+        //       color: "#606266",
+        //     },
 
-            {
-              click: () => {
-                this.toView("cc_hgyl", "退供应商_4");
-              },
-              title: "退供应商出库",
-              icon: "el-icon-s-claim",
-              color: "#409EFF",
-              // content: "退供应商出库看板",
-            },
-            {
-              click: () => {
-                this.toView("cc_hgyl", "外发加工_2");
-              },
-              title: "外发加工出库",
-              icon: "el-icon-s-home",
-              color: "#ccc",
-              // content: "外发加工出库看板",
-            },
-            {
-              click: () => {
-                this.toView("cc_hgyl", "退客人_3");
-              },
-              title: "退客人出库",
-              icon: "el-icon-user-solid",
-              color: "#409EFF",
-              // content: "退客人出库看板",
-            },
-            {
-              click: () => {
-                this.toView("cc_hgyl", "调仓_5");
-              },
-              title: "调仓出库",
-              icon: "el-icon-s-claim",
-              color: "#409EFF",
-              // content: "调仓出库看板",
-            },
-          ],
-        },
+        //     {
+        //       click: () => {
+        //         this.toView("cc_hgyl", "退供应商_4");
+        //       },
+        //       title: "退供应商出库",
+        //       icon: "el-icon-s-claim",
+        //       color: "#409EFF",
+        //       // content: "退供应商出库看板",
+        //     },
+        //     {
+        //       click: () => {
+        //         this.toView("cc_hgyl", "外发加工_2");
+        //       },
+        //       title: "外发加工出库",
+        //       icon: "el-icon-s-home",
+        //       color: "#ccc",
+        //       // content: "外发加工出库看板",
+        //     },
+        //     {
+        //       click: () => {
+        //         this.toView("cc_hgyl", "退客人_3");
+        //       },
+        //       title: "退客人出库",
+        //       icon: "el-icon-user-solid",
+        //       color: "#409EFF",
+        //       // content: "退客人出库看板",
+        //     },
+        //     {
+        //       click: () => {
+        //         this.toView("cc_hgyl", "调仓_5");
+        //       },
+        //       title: "调仓出库",
+        //       icon: "el-icon-s-claim",
+        //       color: "#409EFF",
+        //       // content: "调仓出库看板",
+        //     },
+        //   ],
+        // },
         option7: {
           span: 24,
           data: [

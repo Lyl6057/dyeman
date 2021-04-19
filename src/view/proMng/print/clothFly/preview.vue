@@ -2,14 +2,18 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:48:57
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-13 10:21:55
+ * @LastEditTime: 2021-04-17 09:26:43
  * @Description: 
 -->
 <template>
-  <div id="clothFlyYl">
-    <div class="box" v-for="(item, i) of Number(detail.ps) || 0" :key="item">
-      <el-card>
-        <div class="tle">SUMTEX布票</div>
+  <div
+    id="clothFlyYl"
+    :element-loading-text="$t('public.loading')"
+    v-loading="loading"
+  >
+    <div class="box" v-for="(item, i) of detail" :key="i">
+      <el-card v-if="show">
+        <!-- <div class="tle">SUMTEX布票</div>
         <div class="tle">THÔNG TIN TEM VẢI</div>
         <div class="content">
           <el-row class="yl_label">
@@ -111,7 +115,8 @@
           <el-row class="yl_bh">
             {{ detail.bph + $preFixInt(Number(detail.qsph) + i, 3) }}
           </el-row>
-        </div>
+        </div> -->
+        <embed :src="url + item.noteId" width="400" height="580" hidden="no" />
       </el-card>
     </div>
   </div>
@@ -120,13 +125,28 @@
 export default {
   name: "",
   props: {
-    detail: Object,
+    detail: Array,
   },
   components: {},
   data() {
-    return {};
+    return {
+      url: process.env.API_HOST + "/api/proClothNote/preview?id=",
+      loading: false,
+      show: false,
+    };
   },
-  watch: {},
+  watch: {
+    detail(n, o) {
+      this.show = false;
+      this.loading = true;
+      this.$nextTick(() => {
+        setTimeout(() => {
+          this.show = true;
+          this.loading = false;
+        }, 500);
+      });
+    },
+  },
   methods: {},
   created() {},
   mounted() {},
@@ -148,10 +168,10 @@ export default {
   padding: 3px 0;
 
   .box {
-    width: 280px;
-    height: 374px;
+    // width: 400px;
+    // height: 374px;
     margin: 3px;
-    border: 1px solid #000;
+    // border: 1px solid #000;
     // border-right: none;
   }
 

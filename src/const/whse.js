@@ -1204,7 +1204,7 @@ export const BasYarnsDataC = {
   addBtn: false,
   border: true,
   highlightCurrentRow: true,
-  height: "calc(100vh - 208px)",
+  height: "calc(100vh - 200px)",
   refreshBtn: false,
   columnBtn: false,
   selection: true,
@@ -1229,7 +1229,12 @@ export const BasYarnsDataC = {
     {
       label: i18n.t("whseField.ph"),
       prop: "batchNo",
-      width: 130
+      width: 150
+    },
+    {
+      label: i18n.t("whseField.sp"),
+      prop: "yarnsCard",
+      width: 150
     },
     {
       label: i18n.t("whseField.sh"),
@@ -1262,10 +1267,7 @@ export const BasYarnsDataC = {
       type: 'select',
       dicData: getDIC("bas_yarnsKind")
     },
-    {
-      label: i18n.t("whseField.sp"),
-      prop: "yarnsCard",
-    },
+
   ]
 
 }
@@ -1521,7 +1523,7 @@ export const BasChemicalmatC = {
   addBtn: false,
   border: true,
   highlightCurrentRow: true,
-  height: "calc(100vh - 207px)",
+  height: "calc(100vh - 200px)",
   refreshBtn: false,
   columnBtn: false,
   selection: true,
@@ -4515,7 +4517,7 @@ export const calicoinDtlaC = {
   addBtn: false,
   border: true,
   highlightCurrentRow: true,
-  height: "calc(100vh - 206px)",
+  height: "calc(100vh - 200px)",
   refreshBtn: false,
   columnBtn: false,
   selection: true,
@@ -4636,13 +4638,13 @@ export const PersonF = {
     {
       label: i18n.t("basesalary.ygbh"),
       prop: "perId",
-      span: 8,
+      span: 6,
       placeholder: " ",
     },
     {
       label: i18n.t("basesalary.ygxm"),
       prop: "perName",
-      span: 8,
+      span: 6,
       placeholder: " ",
     },
 
@@ -4655,7 +4657,7 @@ export const PersonC = {
   addBtn: false,
   border: true,
   highlightCurrentRow: true,
-  height: "calc(100vh - 206px)",
+  height: "calc(100vh - 200px)",
   refreshBtn: false,
   columnBtn: false,
   selection: true,
@@ -4752,7 +4754,7 @@ export const SingleC = {
   addBtn: false,
   border: true,
   highlightCurrentRow: true,
-  height: "calc(100vh - 206px)",
+  height: "calc(100vh - 200px)",
   refreshBtn: false,
   columnBtn: false,
   // selection: true,
@@ -4825,7 +4827,7 @@ export const SingleDtlC = {
   addBtn: false,
   border: true,
   highlightCurrentRow: true,
-  height: "calc(100vh - 206px)",
+  height: "calc(100vh - 150px)",
   refreshBtn: false,
   columnBtn: false,
   selection: true,
@@ -5032,7 +5034,7 @@ export const TapcolorC = {
   addBtn: false,
   border: true,
   highlightCurrentRow: true,
-  height: "calc(100vh - 206px)",
+  height: "calc(100vh - 200px)",
   refreshBtn: false,
   columnBtn: false,
   selection: false,
@@ -5168,7 +5170,7 @@ export const purApplicationC = {
   addBtn: false,
   border: true,
   highlightCurrentRow: true,
-  height: "calc(100vh - 206px)",
+  height: "calc(100vh - 200px)",
   refreshBtn: false,
   columnBtn: false,
   selection: false,
@@ -5198,6 +5200,9 @@ export const purApplicationC = {
     {
       label: i18n.t("whseField.sqrq"),
       prop: "applyDate",
+      type: "date",
+      format: "yyyy-MM-dd",
+      valueFormat: "yyyy-MM-dd",
       width: 140,
     },
     {
@@ -5210,7 +5215,7 @@ export const purApplicationC = {
     {
       label: i18n.t("whseField.sqdzt"),
       prop: "applyState",
-      width: 100,
+      width: 120,
       type: "select",
       dicData: getDIC("pur_state"),
     },
@@ -5254,10 +5259,10 @@ export const purApplicationDtlC = {
   addBtn: false,
   border: true,
   highlightCurrentRow: true,
-  height: "calc(100vh - 206px)",
+  height: "calc(100vh - 195px)",
   refreshBtn: false,
   columnBtn: false,
-  selection: false,
+  selection: true,
   page: true,
   column: [
     {

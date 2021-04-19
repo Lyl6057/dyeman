@@ -104,6 +104,7 @@
         :hide="hide"
         :detail="detail"
         :isAdd="isAdd"
+        @updateList="getData"
         @close="temClose"
       ></temDlg>
     </el-dialog>
@@ -190,7 +191,7 @@ export default {
       this.everyThing = {
         mainF: rsxkr1F(this),
         mainC: rsxkr1C(this),
-        dlgF1: rsxkr2F,
+        dlgF1: rsxkr2F(this),
         dlgC1: rsxkr2C(this),
         dlgC2: {},
         dlgPp: "24:0",
@@ -248,6 +249,21 @@ export default {
           this.crud = records.records;
           if (this.crud.length === 0) {
             this.loading = false;
+          }
+          if (this.hide == "1") {
+            this.crud.sort((a, b) => {
+              return (
+                b.stockId.substring(b.stockId.length - 6) -
+                a.stockId.substring(a.stockId.length - 6)
+              );
+            });
+          } else {
+            this.crud.sort((a, b) => {
+              return (
+                b.retCode.substring(b.retCode.length - 6) -
+                a.retCode.substring(a.retCode.length - 6)
+              );
+            });
           }
           this.crud.forEach((item, index) => {
             item.finStatus = String(item.finStatus);
@@ -523,6 +539,12 @@ export default {
 };
 </script>
 <style lang='stylus'>
+#sxrcDlg {
+  .el-dialog.is-fullscreen {
+    overflow: hidden;
+  }
+}
+
 #rc, #rcDetail {
   .formBox {
     margin-bottom: 0px;

@@ -2,14 +2,14 @@
  * @Author: Lyl
  * @Date: 2021-01-23 08:03:49
  * @LastEditors: Lyl
- * @LastEditTime: 2021-01-28 17:31:09
+ * @LastEditTime: 2021-04-15 10:29:48
  * @Description: 
  */
 import axios from 'axios'
 // 化工原料
 export function getBasChemicalmat(params) {
   return axios({
-    url: '/api/basChemicalmat/v1.0/listByPage',
+    url: '/api/BasChemicalmatNew/pageBylike',
     method: 'get',
     params: params
   })

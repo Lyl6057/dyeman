@@ -252,7 +252,6 @@ export default {
   methods: {
     getDetail() {
       this.loading = true;
-
       if (this.hide === "3") {
         this.func.getDetail = getRetguestcalicodtl;
         this.func.delDetail = delRetguestcalicodtl;
@@ -901,7 +900,6 @@ export default {
           delete this.form[key];
         }
       }
-
       try {
         if (
           this.form.whseMaterialoid ||
@@ -916,17 +914,29 @@ export default {
                 if (
                   item.whseRetsuppcalicodtloid ||
                   item.whseRetguestcalicodtloid ||
-                  item.whseTransfercalicoDtloid
+                  item.whseTransfercalicoDtloid ||
+                  item.whseCalicoselloutDtlaoid ||
+                  item.whseMaterialDlaoid
                 ) {
                   this.func
                     .updateDetail({
-                      whseRetsuppcalicoFk: this.form.whseRetsuppcalicooid,
+                      // whseMaterialFk: this.form.whseMaterialoid,
+                      // whseTransfercalicoFk: this.form.whseTransfercalicooid,
+                      // whseCalicoselloutFk: this.form.whseCalicoselloutoid,
+                      // whseRetsuppcalicoFk: this.form.whseRetsuppcalicooid,
                       // whseRetguestcalicoFk: this.form.whseRetguestcalicooid,
+                      calicoId: item.calicoId,
+                      clothName: item.clothName,
+                      woOrderno: item.woOrderno,
+                      salPoDtlaFk: item.salPoDtlaoid,
                       batchNo: item.batchNo,
                       retCompany: item.retCompany,
                       retTotalpi: item.retTotalpi,
                       retTotalweight: item.retTotalweight,
-                      // whseCalicoinDtlaFk: item.whseCalicoinDtlaoid,
+                      whseCalicoinDtlaFk: item.whseCalicoinDtlaoid,
+                      whseCalicoinDtlbFk: item.whseCalicoinDtlboid,
+                      traWeight: item.traWeight,
+                      traCompany: item.traCompany,
                     })
                     .then((res) => {
                       resolve();
@@ -1020,16 +1030,29 @@ export default {
                 if (
                   item.whseRetsuppcalicodtloid ||
                   item.whseRetguestcalicodtloid ||
-                  item.whseTransfercalicoDtloid
+                  item.whseTransfercalicoDtloid ||
+                  item.whseCalicoselloutDtlaoid ||
+                  item.whseMaterialDlaoid
                 ) {
                   this.func
                     .updateDetail({
-                      whseRetsuppcalicoFk: this.form.whseRetsuppcalicooid,
-
+                      // whseMaterialFk: this.form.whseMaterialoid,
+                      // whseTransfercalicoFk: this.form.whseTransfercalicooid,
+                      // whseCalicoselloutFk: this.form.whseCalicoselloutoid,
+                      // whseRetsuppcalicoFk: this.form.whseRetsuppcalicooid,
+                      // whseRetguestcalicoFk: this.form.whseRetguestcalicooid,
+                      calicoId: item.calicoId,
+                      clothName: item.clothName,
+                      woOrderno: item.woOrderno,
+                      salPoDtlaFk: item.salPoDtlaoid,
                       batchNo: item.batchNo,
                       retCompany: item.retCompany,
                       retTotalpi: item.retTotalpi,
                       retTotalweight: item.retTotalweight,
+                      whseCalicoinDtlaFk: item.whseCalicoinDtlaoid,
+                      whseCalicoinDtlbFk: item.whseCalicoinDtlboid,
+                      traWeight: item.traWeight,
+                      traCompany: item.traCompany,
                       // whseCalicoinDtlaFk: item.whseCalicoinDtlaoid,
                     })
                     .then((res) => {
@@ -1045,7 +1068,6 @@ export default {
                       whseRetguestcalicoFk: this.form.whseRetguestcalicooid,
                       calicoId: item.calicoId,
                       clothName: item.clothName,
-                      woOrderno: item.woOrderno,
                       woOrderno: item.woOrderno,
                       salPoDtlaFk: item.salPoDtlaoid,
                       batchNo: item.batchNo,
@@ -1165,7 +1187,6 @@ export default {
         if (this.mx.length > 0) {
           this.$refs.dlgcrud.setCurrentRow(this.mx[this.mx.length - 1]);
         }
-
         // this.changeList.push(data);
       } else if (this.choiceTle === this.$t("choicDlg.xzpbph")) {
         if (this.hide === "5") {
@@ -1196,21 +1217,20 @@ export default {
         this.choiceTle === this.$t("choicDlg.xzwfpbpl")
       ) {
         if (this.isPh) {
-          this.chooseData.list = this.$unique(
-            this.chooseData.list.concat(val),
-            "batchNo"
-          );
+          let data = JSON.parse(JSON.stringify(val));
+          this.chooseData.list.push(data);
+          this.chooseData.list = this.$unique(this.chooseData.list, "batchNo");
           this.chooseData.list.forEach((item, i) => {
-            item.index = i = 1;
+            item.index = i + 1;
           });
           this.rcPage.total = this.chooseData.list.length;
         } else {
           // 本廠
-          val.forEach((item) => {
-            item.list = [];
-            item.list.push(item);
-          });
-          this.mx = this.$unique(this.mx.concat(val), "calicoId");
+          let data = JSON.parse(JSON.stringify(val));
+          // data.list = [];
+          // data.list.push(data);
+          this.mx.push(data);
+          this.mx = this.$unique(this.mx, "calicoId");
           this.page.total = this.mx.length;
           this.mx.forEach((item, i) => {
             // item.list = [];
@@ -1224,7 +1244,7 @@ export default {
         }
       } else {
       }
-      // this.oldData.$cellEdit = true;
+      this.oldData.$cellEdit = true;
       for (var key in val) {
         delete val[key];
       }

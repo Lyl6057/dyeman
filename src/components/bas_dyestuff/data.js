@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-23 08:03:49
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-05 14:27:11
+ * @LastEditTime: 2021-04-15 10:24:37
  * @Description:
  */
 import { getDIC, getDicT, postDicT, getXDicT } from '@/config/index'
@@ -61,82 +61,85 @@ export function mainForm(_this) {
   }
 }
 
-export const hardwareC = {
-  menu: false,
-  addBtn: false,
-  border: true,
-  highlightCurrentRow: true,
-  height: "calc(100vh - 207px)",
-  refreshBtn: false,
-  columnBtn: false,
-  page: true,
-  selection: true,
-  column: [
-    {
-      prop: "index",
-      label: "#",
-      width: 50,
-      align: "center",
-    },
-    {
-      label: _this.$t("whseField.bh"),//"编号",
-      prop: "hardwareId",
-      width: 120
-    },
-    {
-      label: _this.$t("whseField.zwmc"),// "中文名称",
-      prop: "chinName",
-      width: 140
-    },
-    {
-      label: _this.$t("whseField.ywmc"),//"英文名称",
-      prop: "engName",
-      width: 140
-    },
-    // {
-    //   label: "材料类别",
-    //   prop: "materialType",
-    //   width: 100,
-    //   placeholder: " ",
-    //   type: "select",
-    // },
-    {
-      label: _this.$t("whseField.yjfl"),//"一级分类",
-      prop: "basHardwareFk",
-      type: "select",
-      dicData: getDicT("basHardware", "topcategoryName", "topcategoryId"),
-      width: 140
-    },
-    {
-      label: _this.$t("whseField.ejfl"),//"二级分类",
-      prop: "basHardwareDtlaFk",
-      type: "select",
-      dicData: getDicT("basHardwareDtla", "topcategoryName", "topcategoryId"),
-      width: 140
-    },
+export function hardwareC(_this) {
+  return {
+    menu: false,
+    addBtn: false,
+    border: true,
+    highlightCurrentRow: true,
+    height: "calc(100vh - 200px)",
+    refreshBtn: false,
+    columnBtn: false,
+    page: true,
+    selection: true,
+    column: [
+      {
+        prop: "index",
+        label: "#",
+        width: 50,
+        align: "center",
+      },
+      {
+        label: _this.$t("whseField.bh"),//"编号",
+        prop: "hardwareId",
+        width: 120
+      },
+      {
+        label: _this.$t("whseField.zwmc"),// "中文名称",
+        prop: "chinName",
+        width: 140
+      },
+      {
+        label: _this.$t("whseField.ywmc"),//"英文名称",
+        prop: "engName",
+        width: 140
+      },
+      // {
+      //   label: "材料类别",
+      //   prop: "materialType",
+      //   width: 100,
+      //   placeholder: " ",
+      //   type: "select",
+      // },
+      {
+        label: _this.$t("whseField.yjfl"),//"一级分类",
+        prop: "basHardwareFk",
+        type: "select",
+        dicData: getDicT("basHardware", "topcategoryName", "topcategoryId"),
+        width: 140
+      },
+      {
+        label: _this.$t("whseField.ejfl"),//"二级分类",
+        prop: "basHardwareDtlaFk",
+        type: "select",
+        dicData: getDicT("basHardwareDtla", "topcategoryName", "topcategoryId"),
+        width: 140
+      },
 
-    {
-      label: _this.$t("whseField.pp"),// "品牌",
-      prop: "brand",
-      width: 160
-    },
-    {
-      label: _this.$t("whseField.gg"),//"规格",
-      prop: "itemspec",
-      width: 250
-    },
-    {
-      label: _this.$t("whseField.xh"),//"型号",
-      prop: "model",
-      width: 250
-    },
-    {
-      label: _this.$t("whseField.jldw"),//"计量单位",
-      prop: "msUnit",
-      type: "select",
-      dicData: getDIC("bas_matUnit"),
-      width: 90
-    },
-  ]
+      {
+        label: _this.$t("whseField.pp"),// "品牌",
+        prop: "brand",
+        width: 160
+      },
+      {
+        label: _this.$t("whseField.gg"),//"规格",
+        prop: "itemspec",
+        width: 250
+      },
+      {
+        label: _this.$t("whseField.xh"),//"型号",
+        prop: "model",
+        width: 250
+      },
+      {
+        label: _this.$t("whseField.jldw"),//"计量单位",
+        prop: "msUnit",
+        type: "select",
+        dicData: getDIC("bas_matUnit"),
+        width: 90
+      },
+
+    ]
+  }
 
 }

@@ -3,7 +3,7 @@
     <view-container
       :title="datas.type.split('_')[0] + '出库资料'"
       v-loading="loading"
-      element-loading-text="正在拼命保存中..."
+      element-loading-text="正在拼命加載中..."
       element-loading-spinner="el-icon-loading"
     >
       <div class="btnList">
@@ -60,7 +60,7 @@
     ></choice>
     <bas-dyestuff
       :showDlg="otherV"
-      dlgTle="选择五金/行政用品"
+      :dlgTle="this.$t('whseField.xzwjxzyp')"
       @choiceData="choiceDyestuff"
       @close="otherV = false"
     >
@@ -406,12 +406,12 @@ export default {
         return;
       }
       val.forEach((item, i) => {
-        item.materialId = item.hardwareId;
-        item.materialName = item.chinName;
-        item.topcategoryName = item.$basAdsuppliesFk || item.$basHardwareFk;
-        item.seccategoryName =
-          item.$basAdsuppliesDtlaFk || item.$basHardwareDtlaFk;
-        item.stockUnit = item.msUnit;
+        item.matId = item.bcCode;
+        item.matName = item.cnnamelong;
+        // item.topcategoryName = item.$basAdsuppliesFk || item.$basHardwareFk;
+        // item.seccategoryName =
+        //   item.$basAdsuppliesDtlaFk || item.$basHardwareDtlaFk;
+        item.qtyUnit = item.bcUnit;
       });
       this.mx = this.$unique(this.mx.concat(val), "hardwareId");
       // this.choiceTarget[this.choiceField] = val[this.choiceField];
@@ -496,11 +496,13 @@ export default {
       }
       this.loading = true;
       this.saved = true;
+
       this.form.sysCreatedby = this.sysCreatedby;
       if (
         this.form.whseAccessoriesoutoid ||
         this.form.whseRetsuppaccessoriesoid ||
-        this.form.whseTraaccessoriesoid
+        this.form.whseTraaccessoriesoid ||
+        this.form.whseRetmaterialsoid
       ) {
         this.everyThing.updateF(this.form).then((Res) => {
           if (this.mx.length === 0) {
@@ -512,7 +514,8 @@ export default {
             if (
               item.whseAccessoriesoutDtloid ||
               item.whseRetsuppaccessoriesDtloid ||
-              item.whseTraaccessoriesDtloid
+              item.whseTraaccessoriesDtloid ||
+              item.whseRetmaterialsDtloid
             ) {
               // 更新
               this.func.updateDetail(item).then((res) => {});
@@ -521,10 +524,12 @@ export default {
               item.whseAccessoriesoutFk = this.form.whseAccessoriesoutoid;
               item.whseRetsuppaccessoriesFk = this.form.whseRetsuppaccessoriesoid;
               item.whseTraaccessoriesFk = this.form.whseTraaccessoriesoid;
+              item.whseRetmaterialsFk = this.form.whseRetmaterialsoid;
               this.func.addDetail(item).then((res) => {
                 item.whseAccessoriesoutDtloid = res.data.data;
                 item.whseRetsuppaccessoriesDtloid = res.data.data;
                 item.whseTraaccessoriesDtloid = res.data.data;
+                item.whseRetmaterialsDtloid = res.data.data;
               });
             }
             if (i === this.mx.length - 1) {
@@ -532,6 +537,7 @@ export default {
               this.$tip.success(this.$t("public.bccg"));
             }
           });
+          this.$emit("updateList");
         });
       } else {
         this.everyThing.addF(this.form).then((Res) => {
@@ -539,6 +545,7 @@ export default {
           this.form.whseAccessoriesoutoid = Res.data.data;
           this.form.whseRetsuppaccessoriesoid = Res.data.data;
           this.form.whseTraaccessoriesoid = Res.data.data;
+          this.form.whseRetmaterialsoid = Res.data.data;
           if (this.mx.length === 0) {
             this.loading = false;
             this.$tip.success(this.$t("public.bccg"));
@@ -548,7 +555,8 @@ export default {
             if (
               item.whseAccessoriesoutDtloid ||
               item.whseRetsuppaccessoriesDtloid ||
-              item.whseTraaccessoriesDtloid
+              item.whseTraaccessoriesDtloid ||
+              item.whseRetmaterialsDtloid
             ) {
               // 更新
               this.func.updateDetail(item).then((res) => {});
@@ -557,10 +565,12 @@ export default {
               item.whseAccessoriesoutFk = this.form.whseAccessoriesoutoid;
               item.whseRetsuppaccessoriesFk = this.form.whseRetsuppaccessoriesoid;
               item.whseTraaccessoriesFk = this.form.whseTraaccessoriesoid;
+              item.whseRetmaterialsFk = this.form.whseRetmaterialsoid;
               this.func.addDetail(item).then((res) => {
                 item.whseAccessoriesoutDtloid = res.data.data;
                 item.whseRetsuppaccessoriesDtloid = res.data.data;
                 item.whseTraaccessoriesDtloid = res.data.data;
+                item.whseRetmaterialsDtloid = res.data.data;
               });
             }
             if (i === this.mx.length - 1) {
@@ -568,6 +578,7 @@ export default {
               this.$tip.success(this.$t("public.bccg"));
             }
           });
+          this.$emit("updateList");
         });
       }
     },
@@ -654,13 +665,12 @@ export default {
       // if (!this.isAdd) {
       //   return;
       // }
-
       this.mx = [];
       if (val === "1") {
-        this.mxOp.column[8].hide = false;
-        this.mxOp.column[8].label = "申购数量";
-        this.mxOp.column[9].hide = false;
-        this.mxOp.column[9].label = "申购单位";
+        this.mxOp.column[6].hide = false;
+        this.mxOp.column[6].label = "申购数量";
+        this.mxOp.column[7].hide = false;
+        this.mxOp.column[7].label = "申购单位";
         this.formOp.column[3].label = "申购单";
         if (!this.isAdd) {
           return;
@@ -669,15 +679,15 @@ export default {
         this.form.appId = "";
       } else if (val === "2") {
         // 其他
-        this.mxOp.column[8].hide = true;
-        this.mxOp.column[9].hide = true;
+        this.mxOp.column[6].hide = true;
+        this.mxOp.column[7].hide = true;
         this.formOp.column[3].disabled = true;
         this.form.appId = "";
       } else {
-        this.mxOp.column[8].hide = false;
-        this.mxOp.column[8].label = "領用数量";
-        this.mxOp.column[9].hide = false;
-        this.mxOp.column[9].label = "領用单位";
+        this.mxOp.column[6].hide = false;
+        this.mxOp.column[6].label = "領用数量";
+        this.mxOp.column[7].hide = false;
+        this.mxOp.column[7].label = "領用单位";
         this.formOp.column[3].disabled = false;
         this.formOp.column[3].label = "申购领用单";
         this.form.appId = "";
@@ -723,6 +733,10 @@ export default {
   .el-dialog__header {
     padding: 0px;
     background-color: rgb(2, 26, 60);
+  }
+
+  .el-dialog.is-fullscreen {
+    overflow: hidden;
   }
 
   .formBox {

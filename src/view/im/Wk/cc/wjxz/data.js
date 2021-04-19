@@ -85,7 +85,7 @@ export function rsxkr2F(_this) {
       },
 
       {
-        label: "申购单",
+        label: "申購單",
         prop: "appId",
         span: 6,
         click: () => {
@@ -99,11 +99,10 @@ export function rsxkr2F(_this) {
           _this.mx = []
           if (_this.form.stockType === '1') {
             _this.choiceQ.purCategory = "1,2"
-            _this.choiceTle = '申购单';
+            _this.choiceTle = _this.$t("choicDlg.xzsgd");
           } else {
             _this.choiceTle = _this.$t("choicDlg.xzsqlyd");
           }
-
         },
         placeholder: " ",
         display: _this.hide === "2" || _this.hide === "1" ? true : false,
@@ -119,7 +118,7 @@ export function rsxkr2F(_this) {
           _this.choiceQ = {};
           _this.oldData = _this.chooseData
           _this.choiceTarget = _this.form;
-          _this.choiceTle = '领用人';
+          _this.choiceTle = _this.$t("choicDlg.xzlyr");
         },
         display: _this.hide === '6' || _this.hide === '1' || _this.hide === '2' ? true : false,
       },
@@ -162,7 +161,7 @@ export function rsxkr1C(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 210px)",
+    height: "calc(100vh - 202px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
@@ -212,14 +211,14 @@ export function rsxkr1C(_this) {
         prop: "retType",
         span: 6,
         type: "select",
-        width: 90,
+        width: 100,
         dicData: getDIC('Whse_out_type'),
       },
       {
         label: "出倉方式",
         prop: "stockType",
         cell: false,
-        width: 90,
+        width: 120,
         type: "select",
         dicData: getDIC('whse_stock_type'),
         hide: _this.hide != '1'
@@ -318,7 +317,7 @@ export function rsxkr2C(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 330px)",
+    height: "calc(100vh - 320px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
@@ -426,7 +425,7 @@ export function rcpb3C(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: _this.hide === '1' || _this.hide === '2' ? 'calc(100vh - 330px)' : 'calc(100vh - 285px)',
+    height: _this.hide === '1' || _this.hide === '2' ? 'calc(100vh - 320px)' : 'calc(100vh - 285px)',
     refreshBtn: false,
     columnBtn: false,
     page: true,
@@ -521,7 +520,7 @@ export function rsxkr3C(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 287px)",
+    height: "calc(100vh - 275px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
@@ -687,7 +686,7 @@ export function planCrud(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 210px)",
+    height: "calc(100vh - 202px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
@@ -790,7 +789,7 @@ export function PlanOutCrud(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 210px)",
+    height: "calc(100vh - 202px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
@@ -1027,7 +1026,7 @@ export function whseRetreatCrud(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 210px)",
+    height: "calc(100vh - 202px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,

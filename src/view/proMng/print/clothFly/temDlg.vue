@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-13 13:47:23
+ * @LastEditTime: 2021-04-17 10:26:00
  * @Description: 
 -->
 <template>
@@ -13,11 +13,18 @@
       v-loading="wLoading"
     >
       <div class="btnList">
-        <el-button type="success" @click="print" :disabled="printCtr"
+        <el-button type="success" :disabled="crud.length == 0" @click="save"
+          >保存布飞</el-button
+        >
+        <el-button type="primary" @click="add">生成布飞信息</el-button>
+        <el-button
+          type="success"
+          @click="print"
+          :disabled="selectData.length == 0"
           >打印</el-button
         >
-        <el-button type="primary" @click="setPreview">预览</el-button>
-        <el-button type="primary" @click="add">生成布飞信息</el-button>
+        <!-- <el-button type="primary" @click="setPreview">预览</el-button> -->
+
         <el-button type="warning" @click="close">{{
           this.$t("public.close")
         }}</el-button>
@@ -28,10 +35,20 @@
       </div>
       <el-tabs v-model="tabs" type="border-card">
         <el-tab-pane name="bf" label="布飞信息">
-          <avue-crud ref="crud" :option="crudOp" :data="crud"></avue-crud>
+          <avue-crud
+            ref="crud"
+            :option="crudOp"
+            :data="crud"
+            @selection-change="selectionChange"
+          >
+          </avue-crud>
         </el-tab-pane>
         <el-tab-pane name="dy" label="打印预览(仅供参考)">
-          <pre-view ref="preview" :detail="previewData"></pre-view>
+          <pre-view
+            ref="preview"
+            :detail="crud"
+            v-if="crud.length > 0"
+          ></pre-view>
         </el-tab-pane>
       </el-tabs>
     </view-container>
@@ -50,6 +67,7 @@ import {
   addNote,
   delNote,
   updateNote,
+  getGroup,
 } from "./api";
 import { getDIC, getDicT, getXDicT, postDicT, preFixInt } from "@/config";
 import { baseCodeSupplyEx, baseCodeSupply } from "@/api/index";
@@ -93,10 +111,12 @@ export default {
       tabs: "bf",
       crudOp: bfCrud(this),
       crud: [],
+      selectData: [],
       id:
         process.env.API_HOST +
         "/api/proClothNote/preview?id=" +
         "021308a1-fe63-4336-b234-e8f661ee669e",
+      yarnList: [],
     };
   },
   watch: {},
@@ -110,30 +130,21 @@ export default {
           Number(this.form.amount) / Number(this.form.pz)
         ).toFixed(0);
         this.form.nowDate = this.$getNowTime("date");
-        getYarn({
-          proWeaveJobFk: this.form.weaveJobId,
-        }).then((yarn) => {
-          this.formOp.column[10].dicData = yarn.data;
-          // if (yarn.data.length > 1) {
-          //   this.form.bph =
-          //     this.form.custCode +
-          //     res.data.data +
-          //     "-" +
-          //     this.$preFixInt(yarn.data.length, 2) +
-          //     this.form.mathineCode;
-          // } else {yarn.data
-          yarn.data.forEach((item) => {
-            this.form.yarnThickness.push(item.yarnName);
+        getGroup({ proWeaveJobFk: this.form.weaveJobId }).then((group) => {
+          this.yarnList = group.data;
+          group.data.sort((a, b) => {
+            return a.sn - b.sn;
           });
-          this.form.bph =
-            this.form.custCode + res.data.data + this.form.mathineCode;
-          // }
+          this.formOp.column[13].dicData = group.data;
+          this.crudOp.column[3].dicData = group.data;
+          if (group.data.length > 0) {
+            this.form.weaveJobGroupFk = group.data[0].groupId;
+          }
+
+          this.getBf();
+          // this.wLoading = false;
         });
-        setTimeout(() => {
-          this.wLoading = false;
-        }, 500);
       });
-      this.getBf();
     },
     setPreview() {
       this.$refs.form.validate((valid, done) => {
@@ -144,6 +155,45 @@ export default {
           this.$tip.error("请补充打印信息!");
           return;
         }
+      });
+    },
+    getYarn(val) {
+      // this.wLoading = true;
+      this.form.yarnThickness = "";
+      getYarn({
+        proWeaveJobGroupFk: val,
+      }).then((yarn) => {
+        // this.formOp.column[14].dicData = yarn.data;
+        yarn.data.forEach((item) => {
+          this.form.yarnThickness += item.yarnName + ";";
+        });
+        let data = this.yarnList
+          .filter((item) => {
+            return item.groupId == this.form.weaveJobGroupFk;
+          })
+          .map((item) => {
+            return item;
+          });
+        if (data.length == 0) {
+          return;
+        }
+        if (Number(data[0].sn) === 1) {
+          this.form.bph = this.form.mathineCode;
+        } else {
+          this.form.bph =
+            "-" +
+            this.$preFixInt(Number(data[0].sn), 2) +
+            this.form.mathineCode;
+        }
+        this.getBf();
+        // if (yarn.data.length > 1) {
+        // } else {
+        //   // yarn.data.forEach((item) => {
+        //   //   this.form.yarnThickness.push(item.yarnName);
+        //   // });
+        //   // this.form.bph =
+        //   //   this.form.custCode + res.data.data + this.form.mathineCode;
+        // }
       });
     },
     add() {
@@ -163,7 +213,7 @@ export default {
                 for (let i = 0; i < this.form.ps; i++) {
                   arr.push({
                     breadth: this.form.breadth,
-                    clothWeight: 100,
+                    clothWeight: "",
                     eachNumber: this.form.qsph + i,
                     fabricName: this.form.fabricDesc,
                     gramWeight: this.form.gramWeight,
@@ -179,8 +229,9 @@ export default {
                     proBatchNumber: this.form.weaveJobCode, // 生产单号
                     proColor: this.form.colorName,
                     proName: this.form.weaveJobCode,
+                    clothChecker: this.form.clothChecker,
                     // schId: "231c92fe-4ba9-4bf1-ab9a-58076d7a4720",
-                    // machineCode: "123",
+                    machineCode: this.form.mathineCode,
                     // salPooid: "000E0106-0000-0000-0000-00001C19D962",
                     // tempId: "1",
                     // weightUnit: "KG",
@@ -191,6 +242,7 @@ export default {
                     yarnThickness: data,
                     yarnBrand: this.form.yarnBrand,
                     yarnBatch: this.form.yarnBatch,
+                    weaveJobGroupFk: this.form.weaveJobGroupFk,
                   });
                 }
                 setTimeout(() => {
@@ -208,6 +260,7 @@ export default {
                       setTimeout(() => {
                         this.$tip.success("新增成功!");
                         this.getBf();
+                        done();
                       }, 200);
                     }
                   });
@@ -215,6 +268,8 @@ export default {
               })
               .catch((err) => {
                 // console.log(err);
+                this.wLoading = false;
+                done();
                 this.$tip.warning(this.$t("public.qxcz"));
               });
           } else {
@@ -229,16 +284,21 @@ export default {
               .cofirm("是否确定重新生成布飞信息?")
               .then(() => {
                 this.wLoading = true;
+                let areList = [];
                 let del = (item, i) => {
                   return new Promise((resolve, reject) => {
-                    delNote(item.noteId)
-                      .then((res) => {
-                        resolve();
-                      })
-                      .catch((err) => {
-                        this.$tip.warning("打印失败");
-                        this.wLoading = false;
-                      });
+                    if (item.clothWeight && item.clothWeight > 0) {
+                      resolve();
+                      areList.push(Number(item.eachNumber));
+                    } else {
+                      delNote(item.noteId)
+                        .then((res) => {
+                          resolve();
+                        })
+                        .catch((err) => {
+                          console.log(err);
+                        });
+                    }
                   });
                 };
                 let promiseArr = this.crud.map((item, i) => {
@@ -250,37 +310,41 @@ export default {
                   let arr = [];
                   let data = "";
                   for (let i = 0; i < this.form.ps; i++) {
-                    arr.push({
-                      breadth: this.form.breadth,
-                      clothWeight: 100,
-                      eachNumber: this.form.qsph + i,
-                      fabricName: this.form.fabricDesc,
-                      gramWeight: this.form.gramWeight,
-                      loomNo: this.form.mathineCode,
-                      workNo: this.form.zjgh,
-                      madeDate: this.$getNowTime("datetime"),
-                      noteCode:
-                        this.form.bph +
-                        this.$preFixInt(Number(this.form.qsph) + i, 3),
-                      poNo: this.form.salPoNo,
-                      // printedTime: this.$getNowTime("datetime"),
-                      proBatchNumber: this.form.weaveJobCode, // 生产单号
-                      proColor: this.form.colorName,
-                      proName: this.form.weaveJobCode,
-                      // schId: "231c92fe-4ba9-4bf1-ab9a-58076d7a4720",
-                      // machineCode: "123",
-                      // salPooid: "000E0106-0000-0000-0000-00001C19D962",
-                      // tempId: "1",
-                      // weightUnit: "KG",
-                      // lenUnit: "KG",
-                      // proSpec: "test",
-                      // clothLength: 200,
-                      isPrinted: false,
-                      customerName: this.form.custCode,
-                      yarnThickness: data,
-                      yarnBrand: this.form.yarnBrand,
-                      yarnBatch: this.form.yarnBatch,
-                    });
+                    if (areList.indexOf(i + 1) < 0) {
+                      arr.push({
+                        breadth: this.form.breadth,
+                        clothWeight: "",
+                        eachNumber: this.form.qsph + i,
+                        fabricName: this.form.fabricDesc,
+                        gramWeight: this.form.gramWeight,
+                        loomNo: this.form.mathineCode,
+                        workNo: this.form.zjgh,
+                        madeDate: this.$getNowTime("datetime"),
+                        weaveJobGroupFk: this.form.weaveJobGroupFk,
+                        noteCode:
+                          this.form.bph +
+                          this.$preFixInt(Number(this.form.qsph) + i, 3),
+                        poNo: this.form.salPoNo,
+                        // printedTime: this.$getNowTime("datetime"),
+                        proBatchNumber: this.form.weaveJobCode, // 生产单号
+                        proColor: this.form.colorName,
+                        proName: this.form.weaveJobCode,
+                        clothChecker: this.form.clothChecker,
+                        // schId: "231c92fe-4ba9-4bf1-ab9a-58076d7a4720",
+                        machineCode: this.form.mathineCode,
+                        // salPooid: "000E0106-0000-0000-0000-00001C19D962",
+                        // tempId: "1",
+                        // weightUnit: "KG",
+                        // lenUnit: "KG",
+                        // proSpec: "test",
+                        // clothLength: 200,
+                        isPrinted: false,
+                        customerName: this.form.custCode,
+                        yarnThickness: data,
+                        yarnBrand: this.form.yarnBrand,
+                        yarnBatch: this.form.yarnBatch,
+                      });
+                    }
                   }
                   setTimeout(() => {
                     arr.forEach((item, i) => {
@@ -298,6 +362,7 @@ export default {
                           this.$tip.success("生成成功!");
                           this.getBf();
                           done();
+                          this.wLoading = false;
                         }, 200);
                       }
                     });
@@ -305,12 +370,14 @@ export default {
                       this.$tip.success("生成成功!");
                       this.getBf();
                       done();
+                      this.wLoading = false;
                     }
                   }, 200);
                 });
               })
               .catch((err) => {
                 // console.log(err);
+                this.wLoading = false;
                 done();
                 this.$tip.warning(this.$t("public.qxcz"));
               });
@@ -325,17 +392,24 @@ export default {
       this.wLoading = true;
       getNote({
         weaveJobFk: this.detail.weaveJobId,
+        weaveJobGroupFk: this.form.weaveJobGroupFk,
         rows: 999,
         start: 1,
       }).then((res) => {
         this.crud = res.data.records;
+        this.crud.forEach((item) => {
+          item.$cellEdit = true;
+        });
         if (this.crud.length > 0) {
           this.form.zjgh = this.crud[0].workNo;
+          this.form.ps = this.crud.length;
         }
         this.crud.sort((a, b) => {
           return a.eachNumber - b.eachNumber;
         });
-        this.wLoading = false;
+        setTimeout(() => {
+          this.wLoading = false;
+        }, 200);
       });
     },
     print() {
@@ -349,7 +423,7 @@ export default {
           .then(() => {
             this.wLoading = true;
             // 打印操作
-            this.crud.forEach((item, i) => {
+            this.selectData.forEach((item, i) => {
               this.czsocket.send(item.noteId);
               // this.$tip.success(
               //   "已发送布飞【 " + item.noteCode + " 】的打印请求!"
@@ -357,7 +431,7 @@ export default {
               item.isPrinted = true;
               item.printedTime = this.$getNowTime("datetime");
               updateNote(item).then((res) => {});
-              if (i === this.crud.length - 1) {
+              if (i === this.selectData.length - 1) {
                 setTimeout(() => {
                   // this.printCtr = true;
                   this.$tip.success("已发送全部打印请求!");
@@ -375,6 +449,19 @@ export default {
         this.$tip.error("请先生成布飞信息!");
         return;
       }
+    },
+    save() {
+      this.wLoading = true;
+      this.crud.forEach((item, i) => {
+        updateNote(item).then((res) => {
+          if (i == this.crud.length - 1) {
+            setTimeout(() => {
+              this.wLoading = false;
+              this.$tip.success(this.$t("public.save"));
+            }, 200);
+          }
+        });
+      });
     },
     close() {
       if (this.refresh) {
@@ -406,6 +493,9 @@ export default {
         console.log(e);
       };
     },
+    selectionChange(val) {
+      this.selectData = val;
+    },
   },
   created() {},
   mounted() {
@@ -417,9 +507,9 @@ export default {
 </script>
 <style lang='stylus'>
 #colorMng_Tem {
-  // .formBox {
-  // height: calc(100vh - 125px) !important;
-  // }
+  .el-table__fixed-body-wrapper {
+    top: 35px !important;
+  }
 }
 
 #colorMng_Dlg {

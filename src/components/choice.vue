@@ -310,11 +310,11 @@ export default {
           }
         );
         this.$set(this.choiceC.column[2], "hide", false);
-        this.$set(
-          this.form,
-          "materialType",
-          this.choiceF.column[0].dicData[0].value
-        );
+        // this.$set(
+        //   this.form,
+        //   "materialType",
+        //   this.choiceF.column[0].dicData[0].value
+        // );
       }
       if (this.choiceTle === this.$t("choicDlg.xzflrc")) {
         this.choiceF.column[0].dicData = this.choiceF.column[0].dicData.filter(
