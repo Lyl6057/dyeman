@@ -2,11 +2,11 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-19 17:27:00
+ * @LastEditTime: 2021-04-23 19:53:29
  * @Description: 
 -->
 <template>
-  <div id="colorMng_Tem">
+  <div id="colorMng_Te1">
     <view-container
       title="織造通知單"
       :element-loading-text="$t('public.loading')"
@@ -36,6 +36,13 @@
       </div>
       <el-tabs v-model="tabs" type="border-card">
         <el-tab-pane name="bf" label="布飞信息">
+          <div class="list-type">
+            <el-radio-group v-model="listType" @change="typeChange">
+              <el-radio label="1">未打印</el-radio>
+              <el-radio label="2">已打印</el-radio>
+              <el-radio label="3">全部</el-radio>
+            </el-radio-group>
+          </div>
           <avue-crud
             ref="crud"
             :option="crudOp"
@@ -119,6 +126,7 @@ export default {
         "/api/proClothNote/preview?id=" +
         "021308a1-fe63-4336-b234-e8f661ee669e",
       yarnList: [],
+      listType: "1",
     };
   },
   watch: {},
@@ -139,12 +147,15 @@ export default {
         this.formOp.column[13].dicData = group.data;
         this.crudOp.column[3].dicData = group.data;
         if (group.data.length > 0) {
-          this.form.weaveJobGroupFk = group.data[0].groupId;
+          this.form.proWeaveJobGroupFk = group.data[0].groupId;
         }
 
         this.getBf();
         // this.wLoading = false;
       });
+    },
+    typeChange() {
+      this.getBf();
     },
     setPreview() {
       this.$refs.form.validate((valid, done) => {
@@ -183,7 +194,7 @@ export default {
         });
         let data = this.yarnList
           .filter((item) => {
-            return item.groupId == this.form.weaveJobGroupFk;
+            return item.groupId == this.form.proWeaveJobGroupFk;
           })
           .map((item) => {
             return item;
@@ -257,7 +268,7 @@ export default {
                       loomNo: this.form.mathineCode,
                       workNo: this.form.zjgh,
                       madeDate: this.$getNowTime("datetime"),
-                      weaveJobGroupFk: this.form.weaveJobGroupFk,
+                      proWeaveJobGroupFk: this.form.proWeaveJobGroupFk,
                       noteCode:
                         this.form.bph +
                         this.$preFixInt(Number(this.form.qsph) + i, 3),
@@ -369,7 +380,7 @@ export default {
                   yarnThickness: data,
                   yarnBrand: this.form.yarnBrand,
                   yarnBatch: this.form.yarnBatch,
-                  weaveJobGroupFk: this.form.weaveJobGroupFk,
+                  proWeaveJobGroupFk: this.form.proWeaveJobGroupFk,
                 });
               }
               setTimeout(() => {
@@ -407,12 +418,22 @@ export default {
     },
     getBf() {
       this.wLoading = true;
-      getNote({
-        weaveJobFk: this.detail.weaveJobId,
-        weaveJobGroupFk: this.form.weaveJobGroupFk,
-        rows: 999,
-        start: 1,
-      }).then((res) => {
+      let query = {};
+      if (this.listType == "1") {
+        query.isPrinted = false;
+      } else if (this.listType == "2") {
+        query.isPrinted = true;
+      } else {
+        delete query["isPrinted"];
+      }
+      getNote(
+        Object.assign(query, {
+          weaveJobFk: this.detail.weaveJobId,
+          proWeaveJobGroupFk: this.form.proWeaveJobGroupFk,
+          rows: 999,
+          start: 1,
+        })
+      ).then((res) => {
         this.crud = res.data.records;
         this.crud.forEach((item) => {
           item.$cellEdit = true;
@@ -523,9 +544,19 @@ export default {
 };
 </script>
 <style lang='stylus'>
-#colorMng_Tem {
-  .el-table__fixed-body-wrapper {
-    top: 35px !important;
+#colorMng_Te1 {
+  // .el-table__fixed-body-wrapper {
+  // top: 35px !important;
+  // }
+}
+
+.list-type {
+  margin: 8px 0 0 15px;
+  font-size: 24px;
+
+  .el-radio__inner {
+    width: 18px;
+    height: 18px;
   }
 }
 

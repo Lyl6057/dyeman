@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-19 17:24:00
+ * @LastEditTime: 2021-04-23 22:02:41
  * @Description:
  */
 
@@ -134,7 +134,8 @@ export function mainCrud(_this) {
       {
         label: "生產單號",
         prop: "weaveJobCode",
-        width: 150,
+        overHidden: true,
+        width: 180,
         span: 6,
         disabled: false,
         sortable: true,
@@ -147,10 +148,11 @@ export function mainCrud(_this) {
       {
         label: "訂單編號",
         prop: "salPoNo",
-        width: 140,
+        width: 180,
         span: 6,
         placeholder: "请選擇訂單編號",
         sortable: true,
+        overHidden: true,
         rules: [{
           required: true,
           message: "请選擇訂單編號",
@@ -226,9 +228,10 @@ export function mainCrud(_this) {
         }],
         change: () => {
           if (_this.isAdd) {
-            _this.form.weaveJobCode = _this.form.custCode + '-' + _this.code
+            _this.$nextTick(() => {
+              _this.form.weaveJobCode = _this.form.custCode + '-' + _this.code
+            })
           }
-
         }
       },
       {
@@ -242,7 +245,8 @@ export function mainCrud(_this) {
           message: "请输入織單數量",
           trigger: "blur"
         }],
-        align: "right",
+        type: "number",
+        align: "left",
       },
       {
         label: "開機日期",
@@ -308,7 +312,8 @@ export function mainCrud(_this) {
         label: "顏色名稱",
         prop: "colorName",
         placeholder: " ",
-        width: 120,
+        width: 180,
+        overHidden: true,
         span: 6,
         placeholder: "请選擇顏色名稱",
         rules: [{

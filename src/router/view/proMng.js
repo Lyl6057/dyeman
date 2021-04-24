@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-29 14:14:56
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-06 13:35:17
+ * @LastEditTime: 2021-04-23 08:51:44
  * @Description: 
  */
 export default [
@@ -45,54 +45,35 @@ export default [
     component: resolve => require(["@/view/proMng/print/clothFly/index"], resolve),
   },
   {
+    path: "/output", // 生产日产量
+    name: "生产日产量",
+    component: resolve => require(["@/view/proMng/output/index"], resolve),
+  },
+  // // 染整工单
+  {
+    path: "/dyeing", // 染整工单
+    name: "dyeing",
+    component: resolve => require(["@/view/proMng/print/dyeing/index"], resolve),
+  },
+  {
     path: "/proWeaveJob", // 織造通知單打印
     name: "proWeaveJob",
     component: resolve => require(["@/view/proMng/print/proWeaveJob/index"], resolve),
   },
+  {
+    path: "/cropping", // 織造通知單打印
+    name: "cropping",
+    component: resolve => require(["@/view/proMng/cropping/index"], resolve),
+  },
+  {
+    path: "/weaveRecord", // 織造通知單打印
+    name: "weaveRecord",
+    component: resolve => require(["@/view/proMng/WeaveJobRecord/index"], resolve),
+  },
+
   // {
   //   path: '/EquipmentSchedule',
   //   name: '设备排期',
   //   component: resolve => require(['@/view/proMng/EquipmentSchedule/index'], resolve)
   // },
-  // // {
-  // //   path: '/ProWorkflowInfo',
-  // //   name: '生产工序',
-  // //   component: resolve => require(['@/view/proMng/ProWorkflow/index'], resolve)
-  // // },
-
-  // {
-  //   path: '/ProExceptionDay',
-  //   name: '例外时间表',
-  //   component: resolve => require(['@/view/proMng/ProExceptionDay/index'], resolve)
-  // },
-  // {
-  //   path: '/ProCalendar',
-  //   name: '工作日历',
-  //   component: resolve => require(['@/view/proMng/ProCalendar/index'], resolve)
-  // },
-  // {
-  //   path: '/ProScheduleChecItem',
-  //   name: '检验方法清单',
-  //   component: resolve => require(['@/view/proMng/ProScheduleChecItem/index'], resolve)
-  // }, {
-  //   path: '/ProWorkOrder',
-  //   name: '生产工作指令单',
-  //   component: resolve => require(['@/view/proMng/ProWorkOrder/index'], resolve)
-  // },
-
-
-  // {
-  //   path: '/ProRuleSetup',
-  //   name: '生产排单逻辑',
-  //   component: resolve => require(['@/view/proMng/ProRuleSetup/index'], resolve)
-  // },
-  // {
-  //   path: '/print',
-  //   name: '打印',
-  //   component: resolve => require(['@/view/proMng/print/index'], resolve),
-  //   children: [
-  //     // 申购入库
-
-  //   ]
-  // }
 ]

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-04-01 13:39:35
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-06 13:32:10
+ * @LastEditTime: 2021-04-23 08:50:10
  * @Description:
  */
 
@@ -50,17 +50,21 @@ export function proMng(_this) {
     icon: "el-icon-edit-outline",
     children: [
       {
-        menuName: "1.织造通知单",
-        index: "wovenNotice"
+        menuName: "1.生产日产量",
+        index: "/output"
       },
-      {
-        menuName: "2.落布记录",
-        index: "offRecord"
-      },
-      {
-        menuName: "3.布飞打印记录",
-        index: "/buffyPrints"
-      },
+      // {
+      //   menuName: "1.织造通知单",
+      //   index: "/weaveRecord"
+      // },
+      // {
+      //   menuName: "2.落布记录",
+      //   index: "/cropping"
+      // },
+      // {
+      //   menuName: "3.布飞打印记录",
+      //   index: "/buffyPrints"
+      // },
     ]
   },
   {
@@ -93,7 +97,7 @@ export function proMng(_this) {
       },
       {
         menuName: "2.染整工单",
-        index: "染整工单"
+        index: "/dyeing"
       },
       {
         menuName: "3.布飞打印",

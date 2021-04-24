@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-19 17:30:14
+ * @LastEditTime: 2021-04-24 08:07:20
  * @Description:
  */
 
@@ -74,10 +74,11 @@ export function mainCrud(_this) {
       {
         label: "生產單號",
         prop: "weaveJobCode",
-        width: 150,
+        width: 180,
         span: 6,
         disabled: true,
         sortable: true,
+        overHidden: true,
         rules: [{
           required: true,
           message: "请输入生產單號",
@@ -88,7 +89,8 @@ export function mainCrud(_this) {
         label: "訂單編號",
         prop: "salPoNo",
         disabled: true,
-        width: 140,
+        overHidden: true,
+        width: 180,
         span: 6,
         placeholder: "请選擇訂單編號",
         sortable: true,
@@ -106,7 +108,8 @@ export function mainCrud(_this) {
         prop: "custCode",
         overHidden: true,
         disabled: true,
-        width: 200,
+        width: 150,
+        overHidden: true,
         span: 6,
         placeholder: "请選擇客戶編號",
         // type: "select",
@@ -159,7 +162,7 @@ export function mainCrud(_this) {
         change: () => {
           let data = _this.yarnList
             .filter((item) => {
-              return item.groupId == _this.form.weaveJobGroupFk;
+              return item.groupId == _this.form.proWeaveJobGroupFk;
             })
             .map((item) => {
               return item;
@@ -201,7 +204,7 @@ export function mainCrud(_this) {
         prop: "colorName",
         placeholder: " ",
         disabled: true,
-        width: 120,
+        width: 180,
         span: 6,
         placeholder: "请選擇顏色名稱",
         rules: [{
@@ -259,7 +262,7 @@ export function mainCrud(_this) {
       {
         label: "用紗分組",
         disabled: false,
-        prop: "weaveJobGroupFk",
+        prop: "proWeaveJobGroupFk",
         width: 120,
         type: "select",
         dicData: [],
@@ -449,7 +452,7 @@ export function bfCrud(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 460px)",
+    height: "calc(100vh - 493px)",
     refreshBtn: false,
     columnBtn: false,
     page: false,
@@ -466,9 +469,10 @@ export function bfCrud(_this) {
       {
         label: "訂單號",
         prop: "poNo",
-        width: 150,
+        width: 180,
         span: 6,
         placeholder: " ",
+        overHidden: true,
         disabled: true
       },
       {
@@ -482,7 +486,7 @@ export function bfCrud(_this) {
       {
         label: "用紗分組",
         disabled: false,
-        prop: "weaveJobGroupFk",
+        prop: "proWeaveJobGroupFk",
         width: 120,
         type: "select",
         dicData: [],
@@ -514,7 +518,8 @@ export function bfCrud(_this) {
         prop: "proColor",
         disabled: true, placeholder: " ",
         span: 6,
-        width: 100,
+        width: 150,
+        overHidden: true
       },
 
       {

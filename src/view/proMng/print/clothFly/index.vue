@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-19 18:36:55
+ * @LastEditTime: 2021-04-23 16:30:34
  * @Description: 
 -->
 <template>
@@ -69,7 +69,7 @@ export default {
       crudOp: mainCrud(this),
       crud: [],
       page: {
-        pageSize: 10,
+        pageSize: 20,
         currentPage: 1,
         total: 0,
       },

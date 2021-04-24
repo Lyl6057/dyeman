@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-16 13:18:44
+ * @LastEditTime: 2021-04-24 07:42:31
  * @Description: 
 -->
 <template>
@@ -764,6 +764,18 @@ export default {
 #proWeaveJob {
   .formBox {
     height: 100vh !important;
+  }
+
+  .el-input-number__decrease, .el-input-number__increase {
+    display: none;
+  }
+
+  .el-input-number .el-input__inner {
+    text-align: left !important;
+  }
+
+  .el-input-number.is-controls-right .el-input__inner {
+    padding-left: 5px !important;
   }
 }
 
