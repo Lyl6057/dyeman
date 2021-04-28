@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-29 14:14:56
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-23 08:51:44
+ * @LastEditTime: 2021-04-26 09:40:47
  * @Description: 
  */
 export default [
@@ -48,6 +48,11 @@ export default [
     path: "/output", // 生产日产量
     name: "生产日产量",
     component: resolve => require(["@/view/proMng/output/index"], resolve),
+  },
+  {
+    path: "/outputSchedule", // 生产日产量
+    name: "生产日产量",
+    component: resolve => require(["@/view/proMng/outputSchedule/index"], resolve),
   },
   // // 染整工单
   {

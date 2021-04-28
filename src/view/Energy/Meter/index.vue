@@ -261,6 +261,7 @@ import {
   delMStaff,
   getTypePage,
   getStaffPage,
+  getAreaName,
 } from "./api";
 import {
   formOp,
@@ -338,8 +339,8 @@ export default {
         this.$http.get("/api/eneMeter?emType=" + this.form.yblx).then((res) => {
           this.gridData = this.toTree(res.data);
           getType({ typeCode: this.form.yblx }).then((res) => {
-            getArea({
-              eneMeterTypeFk: res.data[0].eneMeterTypeoid,
+            getAreaName({
+              eneMeterTypeFf: res.data[0].eneMeterTypeoid,
             }).then((ares) => {
               if (ares.data.length > 0) {
                 let data = [];
@@ -507,7 +508,7 @@ export default {
         add: addType,
         update: updateType,
         del: delType,
-        getDtl: getArea,
+        getDtl: getAreaName,
         addDtl: addArea,
         updateDtl: updateArea,
         delDtl: delArea,
@@ -537,7 +538,6 @@ export default {
       get().then((res) => {
         this.areaOp.column[1].dicData = res.data;
         this.areaOp.column[0].dicData = res.data;
-        console.log(res.data);
         this.getOther();
         this.otherV = true;
       });
@@ -626,7 +626,7 @@ export default {
         }
       }
       for (let i = 0; i < this.areaData.length; i++) {
-        if (this.otherTle === "儀表類型維護" && !this.areaData[i].areaName) {
+        if (this.otherTle === "儀表類型維護" && !this.areaData[i].eneAreaFk) {
           this.$tip.error("归属区域不能為空!");
           return;
         }
@@ -796,12 +796,13 @@ export default {
       if (val.eneMeterTypeoid || val.eneStaffoid) {
         this.func
           .getDtl({
-            eneMeterTypeFk: val.eneMeterTypeoid,
+            eneMeterTypeFf: val.eneMeterTypeoid,
             eneMeterStaffFk: val.eneStaffoid,
           })
           .then((res) => {
             this.areaData = res.data;
-            this.areaData.forEach((item) => {
+            this.areaData.forEach((item, i) => {
+              item.index = i + 1;
               item.$cellEdit = true;
               item.emId = item.eneMeterFk;
             });

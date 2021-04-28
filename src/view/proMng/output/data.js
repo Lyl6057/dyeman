@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-04-23 09:03:31
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-24 16:54:56
+ * @LastEditTime: 2021-04-26 07:57:04
  * @Description:
  */
 
@@ -27,20 +27,23 @@ export function mainForm(_this) {
         span: 6,
         placeholder: " ",
       },
-      {
-        label: "客人",
-        prop: "salPoFk",
-        span: 6,
-        placeholder: " ",
-        // type: "select",
-        // dicData: getDicT("basCustomer", "custName", "custCode")
-      },
+      // {
+      //   label: "客人",
+      //   prop: "custId",
+      //   span: 6,
+      //   placeholder: " ",
+      //   type: "select",
+      //   dicData: getDicT("basCustomer", "custName", "custCode")
+      // },
       {
         label: "产量日期",
         prop: "gatherDate",
         span: 6,
         placeholder: " ",
-
+        type: "date",
+        align: "center",
+        format: "yyyy-MM-dd",
+        valueFormat: "yyyy-MM-dd",
       },
     ],
   }

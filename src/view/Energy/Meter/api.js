@@ -3,7 +3,7 @@
  * @Date: 2021-03-30 08:20:46
  * @LastEditors: Lyl
  * @LastEditTime: 2021-04-13 20:06:40
- * @Description: 
+ * @Description:
  */
 import axios from 'axios'
 
@@ -199,5 +199,13 @@ export function delMStaff(id) {
   return axios({
     url: '/api/eneMeterStaff?eneMeterStaffoid=' + id,
     method: 'delete',
+  })
+}
+//cenziqiang
+export function getAreaName(params) {
+  return axios({
+    url: '/api/eneMeterTypeArea/andAreaName',
+    method: 'get',
+    params: params
   })
 }

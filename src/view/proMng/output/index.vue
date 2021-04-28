@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-04-23 08:32:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-24 16:54:46
+ * @LastEditTime: 2021-04-26 09:21:58
  * @Description: 
 -->
 <template>
@@ -57,7 +57,9 @@
       <el-tab-pane label="柱状图" name="zzt">
         <div id="zzt"></div>
       </el-tab-pane>
-      <el-tab-pane label="趋势图" name="qst"> 123 </el-tab-pane>
+      <el-tab-pane label="趋势图" name="qst">
+        <div id="qst" style="height: 325px; width: 87.5vw"></div>
+      </el-tab-pane>
     </el-tabs>
     <el-dialog
       id="colorMng_Dlg"
@@ -92,7 +94,7 @@ export default {
       crud1: [],
       loading: false,
       page: {
-        pageSize: 10,
+        pageSize: 20,
         currentPage: 1,
         total: 0,
       },
@@ -106,12 +108,15 @@ export default {
   methods: {
     query() {
       this.loading = true;
-      this.crudOp.column[5].hide = false;
+      this.crudOp.column[4].hide = false;
       for (let key in this.form) {
         if (!this.form[key]) {
           delete this.form[key];
         }
       }
+      this.form.gatherDate
+        ? (this.form.gatherDate = this.form.gatherDate + " 00:00:00")
+        : "";
       get(
         Object.assign(this.form, {
           rows: this.page.pageSize,
@@ -164,7 +169,8 @@ export default {
       });
       let list = this.$unique(this.crud, "colorName");
       let relist = [],
-        series = [];
+        series = [],
+        lineData = [];
 
       list.forEach((item, i) => {
         // this.crud.forEach((items,j) =>{
@@ -183,6 +189,11 @@ export default {
             focus: "series",
           },
         });
+        lineData.push({
+          name: item.$colorName,
+          type: "line",
+          stack: item.$colorName + "实际产量",
+        });
       });
       series.forEach((item, i) => {
         item.data = [];
@@ -192,10 +203,21 @@ export default {
           }
         });
       });
+      lineData.forEach((item, i) => {
+        item.data = [];
+        this.crud.forEach((items, j) => {
+          if (item.name === items.$colorName) {
+            item.data[test.indexOf(items.gatherDate)] = items.realOutPut;
+          }
+        });
+      });
+      console.log(lineData);
       var chartDom = document.getElementById("zzt");
       var myChart = this.$echarts.init(chartDom, "dark");
       var option;
-
+      var chartDom1 = document.getElementById("qst");
+      var myChart1 = this.$echarts.init(chartDom1, "dark");
+      var option1;
       option = {
         tooltip: {
           trigger: "axis",
@@ -204,7 +226,7 @@ export default {
           },
         },
         grid: {
-          top: "10%", //距上边距
+          top: "13%", //距上边距
           left: "5%", //距离左边距
           right: "5%", //距离右边距
           bottom: "10%", //距离下边距
@@ -225,7 +247,10 @@ export default {
           feature: {
             mark: { show: true },
             dataView: { show: true, readOnly: false },
-            magicType: { show: true, type: ["line", "bar", "stack", "tiled"] },
+            magicType: {
+              show: true,
+              type: ["line", "bar", "stack", "tiled"],
+            },
             restore: { show: true },
             saveAsImage: { show: true },
           },
@@ -256,7 +281,57 @@ export default {
         series: series,
       };
 
+      option1 = {
+        // title: {
+        //   text: "折线图堆叠",
+        // },
+        tooltip: {
+          trigger: "axis",
+        },
+        legend: {
+          data: relist,
+          textStyle: {
+            fontSize: 18,
+            margin: 0,
+            padding: 0,
+          },
+        },
+        grid: {
+          top: "13%", //距上边距
+          left: "2%", //距离左边距
+          right: "5%", //距离右边距
+          bottom: "2%", //距离下边距
+          containLabel: true,
+        },
+        toolbox: {
+          feature: {
+            saveAsImage: {},
+          },
+        },
+        xAxis: {
+          type: "category",
+          boundaryGap: false,
+          data: dataList,
+          axisLabel: {
+            show: true,
+            textStyle: {
+              fontSize: 16,
+            },
+          },
+        },
+        yAxis: {
+          type: "value",
+          axisLabel: {
+            show: true,
+            textStyle: {
+              fontSize: 16,
+            },
+          },
+        },
+        series: lineData,
+      };
       option && myChart.setOption(option);
+      option1 && myChart1.setOption(option1);
     },
     cellClick(val) {
       // this.oldData.$cellEdit = false;
@@ -292,7 +367,8 @@ export default {
 
           if (i == this.crud.length - 1) {
             this.$tip.success("保存成功!");
-            this.loading = false;
+            this.query();
+            // this.loading = false;
           }
         });
       } catch (error) {
@@ -320,7 +396,7 @@ export default {
   }
 
   #zzt {
-    width: 100%;
+    width: 100% !important;
     height: 325px;
   }
 }

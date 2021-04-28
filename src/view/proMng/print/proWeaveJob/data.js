@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-23 22:02:41
+ * @LastEditTime: 2021-04-24 20:54:35
  * @Description:
  */
 
@@ -336,6 +336,7 @@ export function mainCrud(_this) {
         width: 120,
         hide: true,
         span: 6,
+        type: "number",
         placeholder: " "
       },
       {
@@ -344,6 +345,7 @@ export function mainCrud(_this) {
         width: 90,
         hide: true,
         span: 6,
+        type: "number",
         placeholder: " "
       },
       {
@@ -373,12 +375,14 @@ export function mainCrud(_this) {
         span: 6,
         hide: true,
         placeholder: " ",
+        // type: "number",
       },
       {
         label: "縂針數",
         prop: "needleNumber",
         width: 80,
         placeholder: " ",
+        type: "number",
         span: 6,
         hide: true
       },

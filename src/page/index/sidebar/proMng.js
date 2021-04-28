@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-04-01 13:39:35
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-23 08:50:10
+ * @LastEditTime: 2021-04-26 09:33:46
  * @Description:
  */
 
@@ -52,6 +52,10 @@ export function proMng(_this) {
       {
         menuName: "1.生产日产量",
         index: "/output"
+      },
+      {
+        menuName: "1.生产进度",
+        index: "/outputSchedule"
       },
       // {
       //   menuName: "1.织造通知单",

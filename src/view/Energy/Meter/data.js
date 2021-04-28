@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-04-08 20:27:03
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-13 20:55:20
+ * @LastEditTime: 2021-04-26 15:25:49
  * @Description:
  */
 import {
@@ -170,7 +170,7 @@ export function ybOp(_this) {
         prop: "eneMeterTypeAreaFk",
         span: 8,
         type: "select",
-        dicData: [],
+        dicData: getDicT("eneArea", "areaName", "eneAreaoid"), // 获取区域信息,
         rules: [
           {
             required: true,
@@ -179,6 +179,7 @@ export function ybOp(_this) {
           },
         ],
       },
+
       {
         label: "仪表型号",
         prop: "models",
@@ -208,6 +209,31 @@ export function ybOp(_this) {
         prop: "emRemark",
         span: 24,
       },
+
+      {
+        label: "溫度範圍-低",
+        prop: "tempRangeLow",
+        span: 6,
+      },
+
+      {
+        label: "溫度範圍-高",
+        prop: "tempRangeHigh",
+        span: 6,
+      },
+
+      {
+        label: "壓力範圍-低",
+        prop: "pressureRangeLow",
+        span: 6,
+      },
+
+      {
+        label: "壓力範圍-高",
+        prop: "pressureRangeHigh",
+        span: 6,
+      },
+
     ],
 
   }
@@ -354,12 +380,18 @@ export function AreaOp(_this) {
     page: false,
     column: [
       {
+        label: "#",
+        prop: "index",
+        width: 50
+      },
+      {
         label: "归属区域",
-        prop: "areaName",
+        prop: "eneAreaFk",
         width: 160,
         cell: true,
+        type: "select",
         // type: "select",
-        // dicData: getDicT("eneMeterTypeArea", "areaName", "eneMeterTypeFk")
+        dicData: getDicT("eneArea", "areaName", "eneAreaoid") // 获取区域信息
       },
 
     ],
