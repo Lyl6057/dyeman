@@ -1,19 +1,41 @@
 /*
  * @Author: Lyl
- * @Date: 2021-01-30 10:55:22
+ * @Date: 2021-05-03 13:03:03
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-04 17:07:12
+ * @LastEditTime: 2021-05-03 13:10:27
  * @Description:
  */
 
+import axios from 'axios';
 import {
   getDIC,
   getDicT,
   getXDicT,
   postDicT
 } from '@/config'
-
-export function mainForm(_this) {
+let cust = getDicT("basCustomer", "custName", "custCode")
+let supp = getDicT("basSupplier", "suppName", "suppId",)
+let purAttr = getDIC("sal_purAttr")
+let calicoType = getDIC("bas_calicoType")
+let chemicalClass = getDIC("bas_chemicalClass")
+let yarnsFlag = getDIC("pur_yarnsFlag")
+let yarnsPaytype = getDIC("pur_yarnsPaytype")
+let yarnsCollected = getDIC("pur_yarnsCollected")
+let basHardware = getDicT("basHardware", "topcategoryName", "basHardwareoid")
+let basAdsupplies = getDicT("basAdsupplies", "topcategoryName", "basAdsuppliesoid")
+let matUnit = getDIC("bas_matUnit")
+let basChemical = getXDicT("BasChemicalmatNew")
+let basPigment = getXDicT("basPigment")
+let basProductivesupplies = getXDicT("basProductivesuppliesnew")
+// 来顏料登记
+export function getWeaveJob(params) {
+  return axios({
+    url: '/api/proWeaveJob/page',
+    method: 'get',
+    params: params
+  })
+}
+export function weaveJobF(_this) {
   return {
     submitBtn: false,
     emptyBtn: false,
@@ -80,39 +102,7 @@ export function mainForm(_this) {
   }
 }
 
-export function dlgForm(_this) {
-  return {
-    submitBtn: false,
-    emptyBtn: false,
-    labelWidth: 150,
-    column: [
-      {
-        label: "訂單編號",
-        prop: "poNo",
-        span: 6,
-        placeholder: " ",
-      },
-      {
-        label: "客戶名稱",
-        prop: "custId",
-        span: 6,
-        placeholder: " ",
-        type: "tree",
-        dicData: cust,
-      },
-      {
-        label: "订单狀態",
-        prop: "poStatus",
-        span: 6,
-        placeholder: " ",
-      },
-    ],
-  }
-}
-
-let cust = getDicT("basCustomer", "custName", "custCode")
-
-export function mainCrud(_this) {
+export function weaveJobC(_this) {
   return {
     menu: false,
     addBtn: false,
@@ -321,7 +311,6 @@ export function mainCrud(_this) {
           message: "请選擇顏色名稱",
           trigger: "blur"
         }],
-        overHidden: true
       },
       {
         label: "色號",
@@ -633,323 +622,4 @@ export function mainCrud(_this) {
       }
     ],
   }
-
 }
-
-export function dlgCrud(_this) {
-  return {
-    menu: false,
-    addBtn: false,
-    border: true,
-    highlightCurrentRow: true,
-    height: "calc(100vh - 195px)",
-    refreshBtn: false,
-    columnBtn: false,
-    page: true,
-    labelWidth: 130,
-    rowKey: "salPooid",
-    column: [
-      {
-        label: "#",
-        prop: "index",
-        width: 50,
-        align: "center",
-        display: false,
-      },
-      {
-        label: "訂單號",
-        prop: "poNo",
-        width: 150,
-        span: 6,
-        sortable: true,
-      },
-      {
-        label: "客人名稱",
-        prop: "custId",
-        overHidden: true,
-        width: 250,
-        span: 6,
-        type: "select",
-        dicData: cust,
-      },
-      {
-        label: "订单日期",
-        prop: "poDate",
-        width: 130,
-        type: "date",
-        align: 'center',
-        sortable: true,
-        format: "yyyy-MM-dd",
-        valueFormat: "yyyy-MM-dd",
-      },
-      {
-        label: "订单类别",
-        prop: "poType",
-        width: 110,
-        type: "select",
-        dicData: getDIC("sal_poType")
-      },
-
-      {
-        label: "订单狀態",
-        prop: "poStatus",
-        width: 110,
-        type: "select",
-        dicData: getDIC("Status")
-      },
-    ],
-  }
-}
-
-
-export function longCrud(_this) {
-  return {
-    menu: false,
-    addBtn: false,
-    border: true,
-    highlightCurrentRow: true,
-    height: "calc(100vh - 148px)",
-    refreshBtn: false,
-    columnBtn: false,
-    page: true,
-    labelWidth: 130,
-    column: [
-      {
-        label: "#",
-        prop: "index",
-        width: 50,
-        align: "center",
-        display: false,
-      },
-      {
-        label: "纱长",
-        prop: "yarnLength",
-        width: 120,
-        span: 6,
-        align: "right",
-        cell: true
-      },
-      {
-        label: "時間",
-        prop: "signDate",
-        type: "datetime",
-        width: 200,
-        format: "yyyy-MM-dd HH:mm:ss",
-        valueFormat: "yyyy-MM-dd HH:mm:ss",
-        align: "center",
-        cell: true
-      },
-    ],
-  }
-}
-
-export function yarnCrud(_this) {
-  return {
-    menu: false,
-    addBtn: false,
-    border: true,
-    highlightCurrentRow: true,
-    height: "calc(100vh - 112px)",
-    refreshBtn: false,
-    columnBtn: false,
-    page: false,
-    labelWidth: 130,
-    column: [
-      // {
-      //   label: "#",
-      //   prop: "index",
-      //   width: 50,
-      //   align: "center",
-      //   display: false,
-      // },
-      {
-        label: "紗線編號",
-        prop: "yarnCode",
-        width: 120,
-        span: 6,
-        cell: true
-      },
-      {
-        label: "紗線名稱",
-        prop: "yarnName",
-        width: 400,
-        overHidden: true,
-        span: 6,
-        cell: true
-      },
-      {
-        label: "批號",
-        prop: "yarnBatch",
-        width: 150,
-        span: 6,
-        cell: true,
-        placeholder: " "
-      },
-      {
-        label: "本厂批號",
-        prop: "factoryYarnBatch",
-        width: 150,
-        span: 6,
-        cell: true,
-        placeholder: " "
-      },
-      {
-        label: "紗牌",
-        prop: "yarnBrand",
-        width: 150,
-        span: 6,
-        cell: true,
-        placeholder: " "
-      },
-      {
-        label: "數量",
-        prop: "amount",
-        width: 120,
-        align: "right",
-        span: 6,
-        cell: true
-      },
-      {
-        label: "單位",
-        prop: "unit",
-        width: 100,
-        span: 6,
-        cell: true,
-        placeholder: " ",
-        type: "select",
-        dicData: getDIC("bas_matUnit")
-      }
-    ],
-  }
-}
-
-export function groupCrudOp(_this) {
-  return {
-    menu: false,
-    addBtn: false,
-    border: true,
-    highlightCurrentRow: true,
-    height: "calc(100vh - 148px)",
-    refreshBtn: false,
-    columnBtn: false,
-    page: true,
-    labelWidth: 130,
-    column: [
-      {
-        label: "#",
-        prop: "sn",
-        width: 50,
-        align: "center",
-      },
-      {
-        label: "批次分組名稱",
-        prop: "groupName",
-        width: 120,
-        span: 6,
-        cell: true
-      },
-      {
-        label: "更換批次時間",
-        prop: "changeBatchTime",
-        width: 180,
-        span: 6,
-        cell: true,
-        type: "date",
-        format: "yyyy-MM-dd HH:mm:ss",
-        valueFormat: "yyyy-MM-dd HH:mm:ss",
-      },
-    ],
-  }
-}
-
-export function calicoCrud(_this) {
-  return {
-    menu: false,
-    addBtn: false,
-    border: true,
-    highlightCurrentRow: true,
-    height: "calc(100vh - 148px)",
-    refreshBtn: false,
-    columnBtn: false,
-    page: true,
-    labelWidth: 130,
-    column: [
-      {
-        label: "#",
-        prop: "index",
-        width: 50,
-        align: "center",
-        display: false,
-      },
-      {
-        label: "重量",
-        prop: "weight",
-        width: 120,
-        align: "right",
-        span: 6,
-        cell: true
-      },
-
-      {
-        label: "门幅",
-        prop: "breadth",
-        width: 120,
-        align: "right",
-        span: 6,
-        cell: true,
-        placeholder: " "
-      },
-      {
-        label: "间距（WPI)",
-        prop: "wpiSpace",
-        width: 120,
-        align: "right",
-        span: 6,
-        cell: true,
-        placeholder: " "
-      },
-      {
-        label: "间距（CPI）",
-        prop: "cpiSpace",
-        width: 120,
-        align: "right",
-        span: 6,
-        cell: true,
-        placeholder: " "
-      },
-    ],
-  }
-}
-
-export function strainCrud(_this) {
-  return {
-    menu: false,
-    addBtn: false,
-    border: true,
-    highlightCurrentRow: true,
-    height: "calc(100vh - 148px)",
-    refreshBtn: false,
-    columnBtn: false,
-    page: true,
-    labelWidth: 130,
-    column: [
-      {
-        label: "#",
-        prop: "index",
-        width: 50,
-        align: "center",
-        display: false,
-      },
-      {
-        label: "輸送張力",
-        prop: "lineTension",
-        width: 120,
-        cell: true,
-        align: "right",
-        span: 6,
-      },
-
-    ],
-  }
-}
-

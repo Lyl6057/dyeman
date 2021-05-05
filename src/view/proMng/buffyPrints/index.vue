@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-19 18:37:06
+ * @LastEditTime: 2021-05-03 11:12:15
  * @Description: 
 -->
 <template>
@@ -12,7 +12,7 @@
         <el-button type="primary" @click="query">{{
           this.$t("public.query")
         }}</el-button>
-        <el-button type="success" @click="print">打印</el-button>
+        <!-- <el-button type="success" @click="print">打印</el-button> -->
         <!-- <el-button type="warning" @click="close">{{
           this.$t("public.close")
         }}</el-button> -->
@@ -69,7 +69,7 @@ export default {
       crudOp: mainCrud(this),
       crud: [],
       page: {
-        pageSize: 10,
+        pageSize: 20,
         currentPage: 1,
         total: 0,
       },
@@ -151,7 +151,7 @@ export default {
   created() {},
   mounted() {
     this.query();
-    this.setCz();
+    // this.setCz();
   },
   beforeDestroy() {},
 };

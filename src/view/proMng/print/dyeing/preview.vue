@@ -2,14 +2,14 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:48:57
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-04 16:36:32
+ * @LastEditTime: 2021-04-19 18:32:20
  * @Description: 
 -->
 <template>
   <div id="clothFlyYl">
     <div class="box" v-for="(item, i) of Number(detail.ps) || 0" :key="item">
       <el-card>
-        <div class="tle">S.POWER</div>
+        <div class="tle">SUMTEX布票</div>
         <div class="tle">THÔNG TIN TEM VẢI</div>
         <div class="content">
           <el-row class="yl_label">

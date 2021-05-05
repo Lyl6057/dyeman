@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-13 09:27:09
+ * @LastEditTime: 2021-05-03 11:06:59
  * @Description:
  */
 
@@ -31,11 +31,18 @@ export function mainForm(_this) {
         span: 6,
         placeholder: " ",
       },
+      // {
+      //   label: "客戶",
+      //   prop: "customerName",
+      //   span: 6,
+      //   placeholder: " ",
+      // },
       {
-        label: "客戶",
-        prop: "customerName",
+        label: "匹號",
+        prop: "eachNumber",
+        width: 80,
+        align: "right",
         span: 6,
-        placeholder: " ",
       },
       // {
       //   label: "機台編號",
@@ -322,7 +329,8 @@ export function mainCrud(_this) {
         width: 150,
         span: 6,
         placeholder: " ",
-        disabled: true
+        disabled: true,
+        overHidden: true
       },
       {
         label: "布票編號",
@@ -331,6 +339,7 @@ export function mainCrud(_this) {
         disabled: true, placeholder: " ",
         span: 6,
         sortable: true,
+        overHidden: true
       },
       {
         label: "客戶",
@@ -338,7 +347,8 @@ export function mainCrud(_this) {
         width: 180,
         disabled: true, placeholder: " ",
         span: 6,
-        display: false
+        display: false,
+        overHidden: true
       },
       {
         label: "布类名称",
@@ -355,6 +365,7 @@ export function mainCrud(_this) {
         disabled: true, placeholder: " ",
         span: 6,
         width: 100,
+        overHidden: true
       },
 
       {

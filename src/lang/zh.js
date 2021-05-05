@@ -94,9 +94,9 @@ export default {
   },
   iaoMng: { // 出入庫
     rc: "入倉",
-    rcmx: " 入倉明細",
-    rcphzl: " 入倉批號資料",
-    rcmxhw: " 入倉明細貨位",
+    rcmx: "入倉明細",
+    rcphzl: "入倉批號資料",
+    rcmxhw: "入倉明細貨位",
     rcgl: "入倉管理",
     ccgl: "出倉管理",
     sx: "紗線",

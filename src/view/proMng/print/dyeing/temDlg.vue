@@ -2,11 +2,11 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-04 16:32:35
+ * @LastEditTime: 2021-05-04 15:08:08
  * @Description: 
 -->
 <template>
-  <div id="proWeaveJob">
+  <div id="dyeing">
     <view-container
       :title="(isAdd ? '新增' : '修改') + '織造通知單'"
       :element-loading-text="$t('public.loading')"
@@ -177,7 +177,7 @@
   </div>
 </template>
 <script>
-import choice from "@/components/choice";
+import choice from "@/components/proMng/index";
 import {
   mainCrud,
   dlgForm,
@@ -193,26 +193,9 @@ import {
   getPo,
   getPoDtla,
   getBom,
-  getLong,
-  addLong,
-  updateLong,
-  delLong,
   getYarn,
-  addYarn,
-  updateYarn,
-  delYarn,
   getGroup,
-  addGroup,
-  updateGroup,
-  delGroup,
-  addCalico,
-  getCalico,
-  updateCalico,
-  delCalico,
-  addStrain,
-  getStrain,
-  updateStrain,
-  delStrain,
+  getPoDtlb,
 } from "./api";
 import { getDIC, getDicT, getXDicT, postDicT, preFixInt } from "@/config";
 import { baseCodeSupplyEx } from "@/api/index";
@@ -256,7 +239,7 @@ export default {
       dlgLoading: false,
       dlgChoose: {},
       choiceV: false,
-      choiceTle: this.$t("choicDlg.xzsx"),
+      choiceTle: "选择织造通知单",
       choiceTarget: {},
       choiceField: "",
       choiceQ: {},
@@ -270,10 +253,14 @@ export default {
   methods: {
     getData() {
       if (this.isAdd) {
-        baseCodeSupplyEx({ code: "proWeaveJob" }).then((res) => {
-          this.form.weaveJobCode = res.data.data;
-          this.code = res.data.data;
-        });
+        // baseCodeSupplyEx({ code: "proWeaveJob" }).then((res) => {
+        //   this.form.weaveJobCode = res.data.data;
+        //   this.code = res.data.data;
+        // });
+        setTimeout(() => {
+          this.form.workDate = this.$getNowTime();
+          console.log(this.form.workDate);
+        }, 200);
       } else {
         this.wLoading = true;
         this.form = this.detail;
@@ -289,21 +276,56 @@ export default {
         }, 500);
       }
     },
+    getOther(val) {
+      // { poNo: val.salPoNo }
+      this.wLoading = true;
+      getPo().then((po) => {
+        if (po.data.rows.length > 0) {
+          getPoDtla({ salPoFk: po.data.rows[0].salPooid }).then((poDtla) => {
+            if (poDtla.data.rows.length > 0) {
+              if (poDtla.data.rows[0].qtyUnit == "KG") {
+                this.form.poAmountKg = poDtla.data.rows[0].fabQty;
+                this.form.poAmountLb = (
+                  Number(this.form.poAmountKg) * 2.2046226
+                ).toFixed(2);
+              } else {
+                this.form.poAmountLb = poDtla.data.rows[0].fabQty;
+                this.form.poAmountKg = (
+                  Number(this.form.poAmountLb) * 0.4535924
+                ).toFixed(2);
+              }
+              getPoDtlb({ salPoDtlaFk: poDtla.data.rows[0].salPoDtlaoid }).then(
+                (color) => {
+                  this.form.poColorCount = color.data.length;
+                }
+              );
+            }
+          });
+        }
+        setTimeout(() => {
+          this.wLoading = false;
+        }, 500);
+      });
+    },
     save() {
       this.$refs.form.validate((valid, done) => {
         if (valid) {
           try {
             this.wLoading = true;
-            this.form.amount = Number(this.form.amount).toFixed(2);
 
-            for (let key in this.form) {
-              if (this.form[key] == "undefined") {
-                this.form[key] = "";
+            Object.keys(this.form).forEach((item) => {
+              if (this.isEmpty(this.form[item])) {
+                delete this.form[item];
               }
-            }
-            console.log(this.form);
-            // return;
-            if (this.form.weaveJobId) {
+            });
+
+            setTimeout(() => {
+              console.log(this.form);
+            }, 1500);
+
+            // this.form.amount = Number(this.form.amount).toFixed(2);
+            return;
+            if (this.form.bleadyeJobId) {
               // update
               this.form.upateTime = this.$getNowTime("datetime");
               update(this.form).then((res) => {
@@ -729,23 +751,24 @@ export default {
       }
     },
     choiceData(val) {
-      if (val.length === 0) {
+      if (Object.keys(val).length == 0) {
         this.choiceV = false;
         return;
       }
-      val.forEach((item, i) => {
-        this.chooseData.list.push({
-          yarnCode: item.yarnsId,
-          yarnName: item.yarnsName,
-          yarnBatch: item.batchNo,
-          yarnBrand: item.yarnsCard,
-          unit: "KG",
-          $cellEdit: true,
-        });
-      });
-      // this.crud.forEach((item, i) => {
-      //   item.index = i + 1;
-      // });
+      this.form.clothWeight = val.clothWeight;
+      this.form.fabName = val.fabricDesc;
+      this.form.gramWeightAfter = val.gramWeight;
+      this.form.clothWeight = val.amount;
+      this.form.custCode = val.custCode;
+      this.form.salPoNo = val.salPoNo;
+      this.form.weaveJobCode = val.weaveJobCode;
+      this.form.colorName = val.colorName;
+      this.form.colorCode = val.colorCode;
+      this.form.breadth = val.breadth;
+      let breadth = JSON.parse(JSON.stringify(val.breadth));
+      this.form.breadth = breadth.replace(/[^0-9]/gi, "");
+      this.form.breadthUnit = breadth.replace(/[^a-z]+/gi, "").toUpperCase();
+      this.getOther(this.form);
       this.choiceV = false;
     },
     close() {
@@ -754,6 +777,13 @@ export default {
         this.$emit("close");
       } else {
         this.$emit("close");
+      }
+    },
+    isEmpty(obj) {
+      if (typeof obj === "undefined" || obj === null || obj === "") {
+        return true;
+      } else {
+        return false;
       }
     },
   },
@@ -769,7 +799,15 @@ export default {
   top: 37px !important;
 }
 
-#proWeaveJob {
+#dyeing {
+  .el-input-number__decrease, .el-input-number__increase {
+    display: none;
+  }
+
+  .avue-form__row {
+    padding: 0 !important;
+  }
+
   .formBox {
     height: 100vh !important;
   }

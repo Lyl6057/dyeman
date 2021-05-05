@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:48:57
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-19 18:46:22
+ * @LastEditTime: 2021-05-04 16:36:52
  * @Description: 
 -->
 <template>
@@ -13,7 +13,7 @@
   >
     <div class="previewBox" v-for="(item, i) of detail" :key="i">
       <el-card v-if="show">
-        <div class="tle">SUMTEX布票</div>
+        <div class="tle">S.POWER</div>
         <div class="tle">THÔNG TIN TEM VẢI</div>
         <div class="content">
           <el-row class="yl_label">

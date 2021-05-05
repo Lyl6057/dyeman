@@ -164,7 +164,7 @@
           ></avue-form>
         </div>
         <el-row>
-          <el-col :span="10" v-if="otherV">
+          <el-col :span="otherTle == '抄錶人維護' ? 24 : 10" v-if="otherV">
             <view-container :title="childrenTle">
               <div class="btnList">
                 <!-- <el-button type="success" @click="saveOther">{{
@@ -191,7 +191,7 @@
               </div>
             </view-container>
           </el-col>
-          <el-col :span="14">
+          <el-col :span="14" v-if="otherTle != '抄錶人維護'">
             <view-container
               :title="
                 otherTle == '儀表類型維護'
@@ -276,6 +276,7 @@ import QRCode from "qrcodejs2";
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
 import { cofirm, success, error, warning } from "@/seal/seal"; //引入封装的消息提示和弹框组件
 export default {
+  components: {},
   data() {
     return {
       page: {
@@ -337,6 +338,9 @@ export default {
       if (this.form.yblx) {
         // 获取仪表类型下的总表树状图
         this.$http.get("/api/eneMeter?emType=" + this.form.yblx).then((res) => {
+          res.data = res.data.sort((a, b) => {
+            return b.emId > a.emId ? -1 : 1;
+          });
           this.gridData = this.toTree(res.data);
           getType({ typeCode: this.form.yblx }).then((res) => {
             getAreaName({

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-04-01 13:39:35
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-26 09:33:46
+ * @LastEditTime: 2021-05-03 11:03:10
  * @Description:
  */
 
@@ -54,21 +54,23 @@ export function proMng(_this) {
         index: "/output"
       },
       {
-        menuName: "1.生产进度",
+        menuName: "2.生产进度",
         index: "/outputSchedule"
       },
+      {
+        menuName: "3.布飞打印记录",
+        index: "/buffyPrints"
+      },
+      // {
+      //   menuName: "3.落布记录",
+      //   index: "/cropping"
+      // },
       // {
       //   menuName: "1.织造通知单",
       //   index: "/weaveRecord"
       // },
-      // {
-      //   menuName: "2.落布记录",
-      //   index: "/cropping"
-      // },
-      // {
-      //   menuName: "3.布飞打印记录",
-      //   index: "/buffyPrints"
-      // },
+
+
     ]
   },
   {

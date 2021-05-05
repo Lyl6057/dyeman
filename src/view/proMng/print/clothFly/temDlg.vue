@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-23 19:53:29
+ * @LastEditTime: 2021-05-04 17:07:27
  * @Description: 
 -->
 <template>
@@ -149,7 +149,6 @@ export default {
         if (group.data.length > 0) {
           this.form.proWeaveJobGroupFk = group.data[0].groupId;
         }
-
         this.getBf();
         // this.wLoading = false;
       });

@@ -54,9 +54,9 @@
             <!-- <el-col :span="3">
               <avue-data-cardtext :option="cc.option7"></avue-data-cardtext
             ></el-col> -->
-            <el-col :span="3">
+            <!-- <el-col :span="3">
               <avue-data-cardtext :option="cc.option5"></avue-data-cardtext
-            ></el-col>
+            ></el-col> -->
             <el-col :span="3">
               <avue-data-cardtext :option="cc.option6"></avue-data-cardtext
             ></el-col>

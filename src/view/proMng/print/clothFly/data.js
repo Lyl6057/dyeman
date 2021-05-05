@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-24 08:07:20
+ * @LastEditTime: 2021-05-04 17:07:05
  * @Description:
  */
 
@@ -212,6 +212,7 @@ export function mainCrud(_this) {
           message: "请選擇顏色名稱",
           trigger: "blur"
         }],
+        overHidden: true
       },
       {
         label: "色號",
@@ -580,7 +581,8 @@ export function bfCrud(_this) {
           required: true,
           message: "请输入幅宽",
           trigger: "blur"
-        }]
+        }],
+        type: "number"
       },
       {
         label: _this.$t("whseField.zl"),
@@ -588,6 +590,7 @@ export function bfCrud(_this) {
         width: 80,
         align: "center",
         span: 6,
+        type: "number"
 
       },
       // {
