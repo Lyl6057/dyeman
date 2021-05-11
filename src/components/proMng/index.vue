@@ -52,7 +52,17 @@
   </div>
 </template>
 <script>
-import { weaveJobC, weaveJobF, getWeaveJob } from "./data";
+import {
+  weaveJobC,
+  weaveJobF,
+  getWeaveJob,
+  techCodeC,
+  techCodeF,
+  getTechCode,
+  getTechItem,
+  TechItemF,
+  TechItemC,
+} from "./data";
 export default {
   name: "",
   components: {},
@@ -107,6 +117,11 @@ export default {
         if (this.crud.length === 0) {
           this.loading = false;
         }
+        if (this.choiceTle == "选择漂染工藝") {
+          this.crud = this.crud.sort((a, b) => {
+            return a.bleadyeCode > b.bleadyeCode ? 1 : -1;
+          });
+        }
         this.crud.forEach((item, index) => {
           item.index = index + 1;
           if (index === this.crud.length - 1) {
@@ -153,6 +168,16 @@ export default {
         this.choiceC = weaveJobC(this);
         this.choiceF = weaveJobF(this);
         this.getData = getWeaveJob;
+        break;
+      case "选择漂染工藝":
+        this.choiceC = techCodeC(this);
+        this.choiceF = techCodeF(this);
+        this.getData = getTechCode;
+        break;
+      case "選擇工藝材料":
+        this.choiceC = TechItemC(this);
+        this.choiceF = TechItemF(this);
+        this.getData = getTechItem;
         break;
       default:
         break;

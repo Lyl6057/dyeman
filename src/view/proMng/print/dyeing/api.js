@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-01 14:06:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-04 13:45:36
+ * @LastEditTime: 2021-05-10 17:04:17
  * @Description:
  */
 
@@ -97,39 +97,176 @@ export function getYarn(params) {
 }
 
 
-export function getGroup(params) {
+export function getProject(params) {
   return axios({
-    url: '/api/proWeaveJobGroup/page',
+    url: '/api/proBleadyeJobItem/page',
     method: 'get',
     params: params
   })
 }
 
 // 新增
-export function addGroup(data) {
+export function addProject(data) {
   return axios({
-    url: '/api/proWeaveJobGroup',
+    url: '/api/proBleadyeJobItem',
     method: 'post',
     params: data
   })
 }
 
 // 修改
-export function updateGroup(data) {
+export function updateProject(data) {
   return axios({
-    url: '/api/proWeaveJobGroup',
+    url: '/api/proBleadyeJobItem',
     method: 'put',
     params: data
   })
 }
 
 // 刪除
-export function delGroup(id) {
+export function delProject(id) {
   return axios({
-    url: '/api/proWeaveJobGroup?groupId=' + id,
+    url: '/api/proBleadyeJobItem?itemId=' + id,
     method: 'delete',
   })
 }
 
 
+export function getTest(params) {
+  return axios({
+    url: '/api/proBleadyeJobTest/page',
+    method: 'get',
+    params: params
+  })
+}
+
+// 新增
+export function addTest(data) {
+  return axios({
+    url: '/api/proBleadyeJobTest',
+    method: 'post',
+    params: data
+  })
+}
+
+// 修改
+export function updateTest(data) {
+  return axios({
+    url: '/api/proBleadyeJobTest',
+    method: 'put',
+    params: data
+  })
+}
+
+// 刪除
+export function delTest(id) {
+  return axios({
+    url: '/api/proBleadyeJobTest?jobTestId=' + id,
+    method: 'delete',
+  })
+}
+
+
+export function getDye(params) {
+  return axios({
+    url: '/api/proBleadyeJobVatParam/page',
+    method: 'get',
+    params: params
+  })
+}
+
+// 新增
+export function addDye(data) {
+  return axios({
+    url: '/api/proBleadyeJobVatParam',
+    method: 'post',
+    params: data
+  })
+}
+
+// 修改
+export function updateDye(data) {
+  return axios({
+    url: '/api/proBleadyeJobVatParam',
+    method: 'put',
+    params: data
+  })
+}
+
+// 刪除
+export function delDye(id) {
+  return axios({
+    url: '/api/proBleadyeJobVatParam?vatParamId=' + id,
+    method: 'delete',
+  })
+}
+
+
+export function getTechargue(params) {
+  return axios({
+    url: '/api/proBleadyeJobTechargue/page',
+    method: 'get',
+    params: params
+  })
+}
+
+// 新增
+export function addTechargue(data) {
+  return axios({
+    url: '/api/proBleadyeJobTechargue',
+    method: 'post',
+    params: data
+  })
+}
+
+// 修改
+export function updateTechargue(data) {
+  return axios({
+    url: '/api/proBleadyeJobTechargue',
+    method: 'put',
+    params: data
+  })
+}
+
+// 刪除
+export function delTechargue(id) {
+  return axios({
+    url: '/api/proBleadyeJobTechargue?jobTechId=' + id,
+    method: 'delete',
+  })
+}
+
+export function getCodeItem(params) {
+  return axios({
+    url: '/api/proBleadyeJobTechItem/page',
+    method: 'get',
+    params: params
+  })
+}
+
+// 新增
+export function addCodeItem(data) {
+  return axios({
+    url: '/api/proBleadyeJobTechItem',
+    method: 'post',
+    params: data
+  })
+}
+
+// 修改
+export function updateCodeItem(data) {
+  return axios({
+    url: '/api/proBleadyeJobTechItem',
+    method: 'put',
+    params: data
+  })
+}
+
+// 刪除
+export function delCodeItem(id) {
+  return axios({
+    url: '/api/proBleadyeJobTechItem?techItemId=' + id,
+    method: 'delete',
+  })
+}
 

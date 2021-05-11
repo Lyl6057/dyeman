@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-24 08:12:20
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-24 16:48:20
+ * @LastEditTime: 2021-05-07 08:44:00
  * @Description: 
 -->
 <template>
@@ -76,7 +76,7 @@ export default {
 
 <style lang="stylus">
 * {
-  touch-action: pan-y;
+  touch-action: pan-x;
 }
 
 .big {

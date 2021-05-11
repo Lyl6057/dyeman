@@ -1,5 +1,17 @@
+/*
+ * @Author: Lyl
+ * @Date: 2021-03-10 13:20:44
+ * @LastEditors: Lyl
+ * @LastEditTime: 2021-05-07 08:07:50
+ * @Description: 
+ */
 export default [
   //品质管理
+  {
+    path: "/weight",
+    name: "称重",
+    component: resolve => require(["@/view/quaLity/weight/index"], resolve)
+  },
   {
     path: "/quaLity",
     name: "检查项定义",

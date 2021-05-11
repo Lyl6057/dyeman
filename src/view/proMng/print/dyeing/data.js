@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-04 14:32:58
+ * @LastEditTime: 2021-05-10 16:57:39
  * @Description:
  */
 
@@ -136,7 +136,7 @@ export function mainCrud(_this) {
         label: "染缸機台號",
         prop: "dyeMathine",
         overHidden: true,
-        width: 180,
+        width: 130,
         span: 6,
         disabled: false,
         sortable: true,
@@ -150,7 +150,7 @@ export function mainCrud(_this) {
         label: "缸號",
         prop: "vatNo",
         overHidden: true,
-        width: 180,
+        width: 140,
         span: 6,
         disabled: false,
         sortable: true,
@@ -290,7 +290,7 @@ export function mainCrud(_this) {
       {
         label: "訂單數量(公斤)",
         prop: "poAmountKg",
-        width: 120,
+        width: 130,
         span: 6,
         type: "number",
         align: "left",
@@ -612,14 +612,6 @@ export function mainCrud(_this) {
         placeholder: " "
       },
       {
-        label: "值機員",
-        prop: "operator",
-        width: 80,
-        span: 6,
-        hide: true,
-        placeholder: " "
-      },
-      {
         label: "規格參考",
         prop: "specParam",
         width: 120,
@@ -627,6 +619,15 @@ export function mainCrud(_this) {
         placeholder: " ",
         span: 12
       },
+      {
+        label: "值機員",
+        prop: "operator",
+        width: 80,
+        span: 6,
+        hide: true,
+        placeholder: " "
+      },
+
       {
         label: "工廠負責人",
         prop: "chargeWeave",
@@ -854,32 +855,31 @@ export function groupCrudOp(_this) {
     column: [
       {
         label: "#",
-        prop: "sn",
+        prop: "index",
         width: 50,
         align: "center",
       },
       {
-        label: "批次分組名稱",
-        prop: "groupName",
-        width: 120,
-        span: 6,
-        cell: true
-      },
-      {
-        label: "更換批次時間",
-        prop: "changeBatchTime",
+        label: "项目名称",
+        prop: "jobItemName",
         width: 180,
         span: 6,
         cell: true,
-        type: "date",
-        format: "yyyy-MM-dd HH:mm:ss",
-        valueFormat: "yyyy-MM-dd HH:mm:ss",
+        // overHidden: true
+      },
+      {
+        label: "备注说明",
+        prop: "remark",
+        width: 350,
+        span: 6,
+        cell: true,
+        // overHidden: true
       },
     ],
   }
 }
 
-export function calicoCrud(_this) {
+export function testCrud(_this) {
   return {
     menu: false,
     addBtn: false,
@@ -899,46 +899,31 @@ export function calicoCrud(_this) {
         display: false,
       },
       {
-        label: "重量",
-        prop: "weight",
-        width: 120,
-        align: "right",
+        label: "测试项目编号",
+        prop: "testItemCode",
+        width: 140,
         span: 6,
         cell: true
       },
-
       {
-        label: "门幅",
-        prop: "breadth",
-        width: 120,
-        align: "right",
+        label: "测试标准",
+        prop: "testItemName",
+        width: 200,
         span: 6,
         cell: true,
-        placeholder: " "
       },
       {
-        label: "间距（WPI)",
-        prop: "wpiSpace",
-        width: 120,
-        align: "right",
+        label: "测试要求",
+        prop: "testItemContent",
+        width: 300,
         span: 6,
         cell: true,
-        placeholder: " "
-      },
-      {
-        label: "间距（CPI）",
-        prop: "cpiSpace",
-        width: 120,
-        align: "right",
-        span: 6,
-        cell: true,
-        placeholder: " "
       },
     ],
   }
 }
 
-export function strainCrud(_this) {
+export function dyeCrud(_this) {
   return {
     menu: false,
     addBtn: false,
@@ -958,14 +943,283 @@ export function strainCrud(_this) {
         display: false,
       },
       {
-        label: "輸送張力",
-        prop: "lineTension",
+        label: "染缸参数编号",
+        prop: "vatParamCode",
         width: 120,
         cell: true,
-        align: "right",
         span: 6,
       },
+      {
+        label: "项目名称",
+        prop: "vatParamName",
+        width: 120,
+        cell: true,
+        span: 6,
+      },
+      {
+        label: "练漂设定值",
+        prop: "bleachSet",
+        width: 120,
+        cell: true,
+        span: 6,
+        placeholder: " ",
+        type: "number"
+      },
+      {
+        label: "练漂实际值",
+        prop: "bleachFact",
+        width: 120,
+        cell: true,
+        span: 6,
+        placeholder: " ",
+        type: "number"
+      },
+      {
+        label: "染色设定值",
+        prop: "dyeSet",
+        width: 120,
+        cell: true,
+        span: 6,
+        placeholder: " ",
+        type: "number",
+      },
+      {
+        label: "染色实际值",
+        prop: "dyeFact",
+        width: 120,
+        cell: true,
+        span: 6,
+        type: "number",
+        placeholder: " "
+      },
+      {
+        label: "皂洗设定值",
+        prop: "soapSet",
+        width: 120,
+        cell: true,
+        type: "number",
+        placeholder: " ",
+        span: 6,
+      },
+      {
+        label: "皂洗实际值",
+        prop: "soapFact",
+        width: 120,
+        type: "number",
+        cell: true,
+        placeholder: " ",
+        span: 6,
+      },
+    ],
+  }
+}
+let bleadyeCode = getXDicT("proBleadyeTechCode")
+// bleadyeCode = bleadyeCode.sort((a, b) => {
+//   return a.bleadyeCode > b.bleadyeCode ? 1 : -1
+// })
+export function techargueCrud(_this) {
+  return {
+    menu: false,
+    addBtn: false,
+    border: true,
+    highlightCurrentRow: true,
+    height: "calc(100vh - 148px)",
+    refreshBtn: false,
+    columnBtn: false,
+    page: true,
+    labelWidth: 130,
+    column: [
+      {
+        label: "#",
+        prop: "index",
+        width: 50,
+        align: "center",
+        display: false,
+      },
+      {
+        label: "工艺代碼",
+        prop: "proBleadyeTechCodeFk",
+        width: 120,
+        cell: false,
+        span: 6,
+        props: {
+          label: "bleadyeCode",
+          value: "bleadyeCodeId"
+        },
+        type: "select",
+        dicData: bleadyeCode,
 
+      },
+      {
+        label: "工艺名稱",
+        prop: "bleadyeName",
+        width: 180,
+        cell: true,
+        span: 6,
+        props: {
+          label: "bleadyeName",
+          value: "bleadyeCodeId"
+        },
+        type: "select",
+        dicData: bleadyeCode,
+        change: () => {
+          _this.$nextTick(() => {
+            _this.chooseData.proBleadyeTechCodeFk = _this.chooseData.bleadyeName
+            // _this.chooseData.proBleadyeTechCodeFk = _this.chooseData.bleadyeName
+            // console.log(_this.chooseData);
+          })
+
+        }
+      },
+
+      {
+        label: "浴比",
+        prop: "liquorRatio",
+        width: 120,
+        cell: true,
+        type: "number",
+        span: 6,
+      },
+      {
+        label: "布含水量",
+        prop: "wetClothWater",
+        width: 120,
+        cell: true,
+        span: 6,
+        type: "number",
+        placeholder: " "
+      },
+      {
+        label: "总水量",
+        prop: "totalWater",
+        width: 120,
+        cell: true,
+        span: 6,
+        type: "number",
+        placeholder: " "
+      },
+      {
+        label: "副缸外加水量",
+        prop: "shotgunWater",
+        width: 120,
+        cell: true,
+        type: "number",
+        span: 6,
+        placeholder: " "
+      },
+      {
+        label: "停机水量",
+        prop: "haltWater",
+        width: 120,
+        cell: true,
+        type: "number",
+        span: 6,
+        placeholder: " "
+      },
+
+    ],
+  }
+}
+
+export function codeItemCrud(_this) {
+  return {
+    menu: false,
+    addBtn: false,
+    border: true,
+    highlightCurrentRow: true,
+    height: "calc(100vh - 148px)",
+    refreshBtn: false,
+    columnBtn: false,
+    page: true,
+    labelWidth: 130,
+    column: [
+      {
+        label: "#",
+        prop: "index",
+        width: 50,
+        align: "center",
+        display: false,
+      },
+      {
+        label: "物料代碼",
+        prop: "mateCode",
+        width: 120,
+        cell: true,
+        span: 6,
+      },
+      {
+        label: "物料名稱",
+        prop: "mateName",
+        width: 200,
+        overHidden: true,
+        cell: true,
+        span: 6,
+      },
+      {
+        label: "物料批次",
+        prop: "mateBatchNo",
+        width: 120,
+        cell: true,
+        span: 6,
+      },
+      {
+        label: "數量",
+        prop: "useAmount",
+        width: 90,
+        cell: true,
+        type: "number",
+        span: 6,
+      },
+      {
+        label: "單位",
+        prop: "measureType",
+        width: 90,
+        cell: true,
+        span: 6,
+      },
+      {
+        label: "工藝類型",
+        prop: "bleadyeType",
+        width: 90,
+        cell: true,
+        span: 6,
+        placeholder: " "
+      },
+      {
+        label: "溫度",
+        prop: "runTemp",
+        width: 90,
+        cell: true,
+        type: "number",
+        span: 6,
+        placeholder: " "
+      },
+      {
+        label: "時間(分鐘)",
+        prop: "runTime",
+        width: 120,
+        cell: true,
+        type: "number",
+        span: 6,
+        placeholder: " "
+      },
+      {
+        label: "開稀比例",
+        prop: "dilutionRate",
+        width: 120,
+        cell: true,
+        type: "number",
+        span: 6,
+        placeholder: " "
+      },
+      {
+        label: "輸送數量",
+        prop: "deliveryQuantity",
+        width: 120,
+        cell: true,
+        type: "number",
+        span: 6,
+      },
     ],
   }
 }

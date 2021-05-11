@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-05-03 13:03:03
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-03 13:10:27
+ * @LastEditTime: 2021-05-10 16:23:48
  * @Description:
  */
 
@@ -27,7 +27,7 @@ let matUnit = getDIC("bas_matUnit")
 let basChemical = getXDicT("BasChemicalmatNew")
 let basPigment = getXDicT("basPigment")
 let basProductivesupplies = getXDicT("basProductivesuppliesnew")
-// 来顏料登记
+
 export function getWeaveJob(params) {
   return axios({
     url: '/api/proWeaveJob/page',
@@ -620,6 +620,203 @@ export function weaveJobC(_this) {
         hide: true,
         display: false
       }
+    ],
+  }
+}
+
+export function getTechCode(params) {
+  return axios({
+    url: '/api/proBleadyeTechCode/page',
+    method: 'get',
+    params: params
+  })
+}
+export function techCodeF(_this) {
+  return {
+    submitBtn: false,
+    emptyBtn: false,
+    labelWidth: 150,
+    column: [
+      {
+        label: "工艺代码编号",
+        prop: "bleadyeCode",
+        span: 6,
+        placeholder: " ",
+      },
+      {
+        label: "工艺分类",
+        prop: "techPart",
+        span: 6,
+        placeholder: " ",
+        // dicData: getDicT("basCustomer", "custName", "custCode")
+      },
+    ],
+  }
+}
+
+export function techCodeC(_this) {
+  return {
+    menu: false,
+    addBtn: false,
+    border: true,
+    highlightCurrentRow: true,
+    height: "calc(100vh - 200px)",
+    refreshBtn: false,
+    columnBtn: false,
+    page: true,
+    labelWidth: 130,
+    column: [
+      {
+        label: "#",
+        prop: "index",
+        width: 50,
+        align: "center",
+        display: false
+      },
+      {
+        label: "工艺编号",
+        prop: "bleadyeCode",
+        overHidden: true,
+        width: 120,
+        span: 6,
+        disabled: false,
+        sortable: true,
+      },
+      {
+        label: "工艺名称",
+        prop: "bleadyeName",
+        width: 300,
+        span: 6,
+        overHidden: true,
+      },
+      {
+        label: "工艺分类",
+        prop: "techPart",
+        overHidden: true,
+        width: 140,
+        span: 6,
+      },
+      {
+        label: "建议水比",
+        prop: "liquorRatio",
+        width: 120,
+        span: 6,
+      },
+      {
+        label: "工艺流程图片",
+        prop: "bleadyeImageId",
+        span: 6,
+        width: 250,
+      },
+      {
+        label: "備註",
+        prop: "remark",
+        span: 6,
+        // width: 250,
+
+      },
+
+
+    ],
+  }
+}
+
+export function getTechItem(params) {
+  return axios({
+    url: '/api/proBleadyeCodeItem/page',
+    method: 'get',
+    params: params
+  })
+}
+export function TechItemF(_this) {
+  return {
+    submitBtn: false,
+    emptyBtn: false,
+    labelWidth: 150,
+    column: [
+      {
+        label: "物料編號",
+        prop: "basMateId",
+        span: 6,
+        placeholder: " ",
+      },
+      {
+        label: "工艺类型",
+        prop: "bleadyeType",
+        span: 6,
+        placeholder: " ",
+      },
+    ],
+  }
+}
+
+export function TechItemC(_this) {
+  return {
+    menu: false,
+    addBtn: false,
+    border: true,
+    highlightCurrentRow: true,
+    height: "calc(100vh - 200px)",
+    refreshBtn: false,
+    columnBtn: false,
+    page: true,
+    labelWidth: 130,
+    column: [
+      {
+        label: "#",
+        prop: "index",
+        width: 50,
+        align: "center",
+        display: false
+      },
+      {
+        label: "工艺类型",
+        prop: "bleadyeType",
+        overHidden: true,
+        width: 120,
+        span: 6,
+      },
+      {
+        label: "物料代碼",
+        prop: "basMateId",
+        overHidden: true,
+        width: 120,
+        span: 6,
+      },
+      {
+        label: "物料名称",
+        prop: "mateName",
+        width: 300,
+        span: 6,
+        overHidden: true,
+      },
+      {
+        label: "用量",
+        prop: "useAmount",
+        width: 140,
+        span: 6,
+      },
+      {
+        label: "單位",
+        prop: "measureType",
+        width: 120,
+        span: 6,
+      },
+      {
+        label: "运行温度",
+        prop: "runTemp",
+        span: 6,
+        width: 120,
+      },
+      {
+        label: "运行时间(分钟)",
+        prop: "runTime",
+        span: 6,
+        width: 140,
+
+      },
+
+
     ],
   }
 }

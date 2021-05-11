@@ -41,7 +41,7 @@ export const webSocket = {
     }
     //连接发生错误的回调方法
     _this.czsocket.onerror = function () {
-      alert("服务器连接失败，请检查网络!");
+      console.log("称重服务器连接失败，请检查网络!");
     };
     //连接成功建立的回调方法
     _this.czsocket.onopen = function (event) {

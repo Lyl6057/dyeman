@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-04 16:32:35
+ * @LastEditTime: 2021-05-10 14:22:28
  * @Description: 
 -->
 <template>
@@ -301,7 +301,6 @@ export default {
                 this.form[key] = "";
               }
             }
-            console.log(this.form);
             // return;
             if (this.form.weaveJobId) {
               // update

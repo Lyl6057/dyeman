@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-23 08:03:49
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-04 17:03:20
+ * @LastEditTime: 2021-05-10 10:54:25
  * @Description: 
  */
 import axios from 'axios';
@@ -18,7 +18,7 @@ axios.defaults.validateStatus = function (status) {
 }
 
 // axios.defaults.withCredentials = true; // 跨域请求，允许保存cookie
-let db = parent.dbID ? parent.dbID.toUpperCase() : 'YNYX'
+let db = parent.dbID ? parent.dbID.toUpperCase() : 'YGTEST'
 let userId = ""
 // parent.userID
 // axios({
