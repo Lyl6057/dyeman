@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-01 14:06:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-10 17:04:17
+ * @LastEditTime: 2021-05-12 16:51:51
  * @Description:
  */
 
@@ -238,6 +238,13 @@ export function delTechargue(id) {
 
 export function getCodeItem(params) {
   return axios({
+    url: '/api/proBleadyeCodeItem/page',
+    method: 'get',
+    params: params
+  })
+}
+export function getTechItem(params) {
+  return axios({
     url: '/api/proBleadyeJobTechItem/page',
     method: 'get',
     params: params
@@ -245,7 +252,7 @@ export function getCodeItem(params) {
 }
 
 // 新增
-export function addCodeItem(data) {
+export function addTechItem(data) {
   return axios({
     url: '/api/proBleadyeJobTechItem',
     method: 'post',
@@ -254,7 +261,7 @@ export function addCodeItem(data) {
 }
 
 // 修改
-export function updateCodeItem(data) {
+export function updateTechItem(data) {
   return axios({
     url: '/api/proBleadyeJobTechItem',
     method: 'put',
@@ -263,9 +270,44 @@ export function updateCodeItem(data) {
 }
 
 // 刪除
-export function delCodeItem(id) {
+export function delTechItem(id) {
   return axios({
     url: '/api/proBleadyeJobTechItem?techItemId=' + id,
+    method: 'delete',
+  })
+}
+
+
+export function getWash(params) {
+  return axios({
+    url: '/api/proBleadyeJobWash/page',
+    method: 'get',
+    params: params
+  })
+}
+
+// 新增
+export function addWash(data) {
+  return axios({
+    url: '/api/proBleadyeJobWash',
+    method: 'post',
+    params: data
+  })
+}
+
+// 修改
+export function updateWash(data) {
+  return axios({
+    url: '/api/proBleadyeJobWash',
+    method: 'put',
+    params: data
+  })
+}
+
+// 刪除
+export function delWash(id) {
+  return axios({
+    url: '/api/proBleadyeJobWash?itemId=' + id,
     method: 'delete',
   })
 }

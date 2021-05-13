@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-05-03 13:03:03
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-10 16:23:48
+ * @LastEditTime: 2021-05-13 17:43:18
  * @Description:
  */
 
@@ -745,6 +745,21 @@ export function TechItemF(_this) {
         prop: "bleadyeType",
         span: 6,
         placeholder: " ",
+        type: "select",
+        dicData: [
+          {
+            label: "增加助剂",
+            value: "add_chemicalmat "
+          },
+          {
+            label: "增加颜料",
+            value: "add_pigment "
+          },
+          {
+            label: "运行",
+            value: "run"
+          }
+        ]
       },
     ],
   }
@@ -775,6 +790,21 @@ export function TechItemC(_this) {
         overHidden: true,
         width: 120,
         span: 6,
+        type: "select",
+        dicData: [
+          {
+            label: "增加助剂",
+            value: "add_chemicalmat "
+          },
+          {
+            label: "增加颜料",
+            value: "add_pigment "
+          },
+          {
+            label: "运行",
+            value: "run"
+          }
+        ]
       },
       {
         label: "物料代碼",
@@ -814,6 +844,119 @@ export function TechItemC(_this) {
         span: 6,
         width: 140,
 
+      },
+
+
+    ],
+  }
+}
+
+export function getWorkStep(params) {
+  return axios({
+    url: '/api/baseWorkStepTree',
+    method: 'get',
+    params: params
+  })
+}
+export function WorkStepF(_this) {
+  return {
+    submitBtn: false,
+    emptyBtn: false,
+    labelWidth: 150,
+    column: [
+      {
+        label: "编号",
+        prop: "stepCode",
+        span: 6,
+        placeholder: " ",
+        change: () => {
+          _this.$nextTick(() => {
+            console.log("ss");
+            if (_this.form.stepCode != '') {
+              _this.crud = _this.backups.filter(i => { return i.stepCode.indexOf(_this.form.stepCode) != -1 && i.stepName.indexOf(_this.form.stepName) != -1 })
+            } else if (_this.form.stepName != '') {
+              _this.crud = _this.backups.filter(i => { return i.stepName.indexOf(_this.form.stepName) != -1 })
+            } else {
+              _this.crud = _this.backups
+            }
+          })
+        }
+      },
+      {
+        label: "名称",
+        prop: "stepName",
+        span: 6,
+        placeholder: " ",
+        change: () => {
+          _this.$nextTick(() => {
+            console.log("ss");
+            if (_this.form.stepName != '') {
+              _this.crud = _this.backups.filter(i => { return i.stepCode.indexOf(_this.form.stepCode) != -1 && i.stepName.indexOf(_this.form.stepName) != -1 })
+            } else if (_this.form.stepCode != '') {
+              _this.crud = _this.backups.filter(i => { return i.stepCode.indexOf(_this.form.stepCode) != -1 })
+            } else {
+              _this.crud = _this.backups
+            }
+          })
+        }
+      },
+    ],
+  }
+}
+
+export function WorkStepC(_this) {
+  return {
+    menu: false,
+    addBtn: false,
+    border: true,
+    highlightCurrentRow: true,
+    height: "calc(100vh - 162px)",
+    refreshBtn: false,
+    columnBtn: false,
+    page: false,
+    labelWidth: 130,
+    // tree: true,
+    selection: true,
+    // rowKey: "stepId",
+    column: [
+      // {
+      //   label: "#",
+      //   prop: "sn",
+      //   width: 50,
+      //   align: "center",
+      //   display: false
+      // },
+      {
+        label: "编号",
+        prop: "stepCode",
+        span: 6,
+        width: 120,
+        placeholder: " ",
+
+      },
+      {
+        label: "名称",
+        prop: "stepName",
+        span: 6,
+        width: 180,
+        placeholder: " ",
+        overHidden: true
+      },
+      {
+        label: "描述信息",
+        prop: "stepDescribe",
+        span: 6,
+        width: 250,
+        placeholder: " ",
+        overHidden: true
+      },
+      {
+        label: "标准产能计算公式",
+        prop: "stepCapacity",
+        span: 6,
+        width: 350,
+        placeholder: " ",
+        overHidden: true
       },
 
 

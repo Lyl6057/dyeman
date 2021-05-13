@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-29 14:14:56
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-26 09:40:47
+ * @LastEditTime: 2021-05-13 13:31:41
  * @Description: 
  */
 export default [
@@ -74,6 +74,11 @@ export default [
     path: "/weaveRecord", // 織造通知單打印
     name: "weaveRecord",
     component: resolve => require(["@/view/proMng/WeaveJobRecord/index"], resolve),
+  },
+  {
+    path: "/techCode", // 漂染工艺
+    name: "techCode",
+    component: resolve => require(["@/view/proMng/techCode/index"], resolve),
   },
 
   // {

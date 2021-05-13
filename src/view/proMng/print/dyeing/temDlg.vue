@@ -2,13 +2,13 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-10 17:06:03
+ * @LastEditTime: 2021-05-13 19:38:09
  * @Description: 
 -->
 <template>
   <div id="dyeing">
     <view-container
-      :title="(isAdd ? '新增' : '修改') + '織造通知單'"
+      :title="(isAdd ? '新增' : '修改') + '染整工单'"
       :element-loading-text="$t('public.loading')"
       v-loading="wLoading"
       class="not-number-icon"
@@ -29,6 +29,12 @@
           @click="checkTest"
           :disabled="!this.form.bleadyeJobId"
           >測試要求</el-button
+        >
+        <el-button
+          type="primary"
+          @click="checkCar"
+          :disabled="!this.form.bleadyeJobId"
+          >长车加工项目</el-button
         >
         <el-button
           type="primary"
@@ -147,6 +153,7 @@ import {
   groupCrudOp,
   techargueCrud,
   codeItemCrud,
+  carCrud,
 } from "./data";
 import {
   add,
@@ -175,6 +182,14 @@ import {
   addCodeItem,
   updateCodeItem,
   delCodeItem,
+  getTechItem,
+  addTechItem,
+  updateTechItem,
+  delTechItem,
+  getWash,
+  addWash,
+  updateWash,
+  delWash,
   getPoDtlb,
 } from "./api";
 import { getDIC, getDicT, getXDicT, postDicT, preFixInt } from "@/config";
@@ -375,6 +390,11 @@ export default {
         this.func.del = delTechargue;
         this.func.add = addTechargue;
         this.func.update = updateTechargue;
+      } else {
+        this.func.get = getWash;
+        this.func.del = delWash;
+        this.func.add = addWash;
+        this.func.update = updateWash;
       }
       this.dlgForm.proBleadyeJobFk = this.form.bleadyeJobId;
       this.loading = true;
@@ -405,6 +425,11 @@ export default {
           if (this.tabs == "染缸參數") {
             this.crud.sort((a, b) => {
               return a.vatParamCode < b.vatParamCode ? -1 : 1;
+            });
+          }
+          if (this.tabs == "长车加工项目") {
+            this.crud.sort((a, b) => {
+              return a.sn < b.sn ? -1 : 1;
             });
           }
           if (this.crud.length > 0) {
@@ -442,6 +467,12 @@ export default {
             return;
           }
         }
+        if (this.tabs == "长车加工项目") {
+          if (!this.crud[i].itemName) {
+            this.$tip.error("长车加工项目不能為空!");
+            return;
+          }
+        }
 
         if (this.tabs == "測試要求" && !this.crud[i].testItemCode) {
           this.$tip.error("測試項目編號不能為空!");
@@ -467,7 +498,8 @@ export default {
             item.jobTestId ||
             item.itemId ||
             item.vatParamId ||
-            item.jobTechId
+            item.jobTechId ||
+            item.itemId
           ) {
             this.func.update(data).then((res) => {
               resolve();
@@ -479,8 +511,10 @@ export default {
             this.func.add(data).then((res) => {
               item.jobTestId = res.data.data;
               item.itemId = res.data.data;
+              item.itemId = res.data.data;
               item.vatParamId = res.data.data;
               item.jobTechId = res.data.data;
+
               resolve();
             });
           }
@@ -493,13 +527,13 @@ export default {
         for (let i = 0; i < this.crud.length; i++) {
           if (this.crud[i].list && this.crud[i].list.length > 0) {
             this.crud[i].list.forEach((item) => {
-              item.proWeaveJobGroupFk = this.crud[i].groupId;
-              if (!item.useYarnId) {
-                addYarn(item).then((res) => {
-                  item.useYarnId = res.data.data;
+              item.proBleadyeJobTechargueFk = this.crud[i].jobTechId;
+              if (!item.techItemId) {
+                addTechItem(item).then((res) => {
+                  item.techItemId = res.data.data;
                 });
               } else {
-                updateYarn(item).then((res) => {});
+                updateTechItem(item).then((res) => {});
               }
             });
           }
@@ -554,6 +588,11 @@ export default {
       this.crudOp = testCrud(this);
       this.visible = true;
     },
+    checkCar() {
+      this.tabs = "长车加工项目";
+      this.crudOp = carCrud(this);
+      this.visible = true;
+    },
     checkstrain() {
       this.tabs = "染缸參數";
       this.crudOp = dyeCrud(this);
@@ -567,6 +606,10 @@ export default {
     add() {
       if (this.tabs === "生產工藝") {
         this.choiceTle = "选择漂染工藝";
+        this.choiceV = true;
+        return;
+      } else if (this.tabs === "生產項目") {
+        this.choiceTle = "選擇生产项目";
         this.choiceV = true;
         return;
       }
@@ -585,13 +628,20 @@ export default {
     },
     addDtl() {
       this.choiceTle = "選擇工藝材料";
+      if (this.chooseData.jobTechId) {
+        this.choiceQ.proBleadyeJobTechargueFk = this.chooseData.jobTechId;
+      } else {
+        this.choiceQ = {};
+      }
+
       this.choiceV = true;
     },
     del() {
       if (
         !this.chooseData.jobTestId &&
         !this.chooseData.itemId &&
-        !this.chooseData.vatParamId
+        !this.chooseData.vatParamId &&
+        !this.chooseData.jobTechId
       ) {
         this.crud.splice(this.chooseData.index - 1, 1);
         this.chooseData = {};
@@ -608,16 +658,28 @@ export default {
         .then(() => {
           this.func
             .del(
-              this.tabs === "生產項目"
+              this.tabs === "生產項目" || this.tabs === "长车加工项目"
                 ? this.chooseData.itemId
                 : this.tabs === "測試要求"
                 ? this.chooseData.jobTestId
+                : this.tabs === "生產工藝"
+                ? this.chooseData.jobTechId
                 : this.chooseData.vatParamId
             )
             .then((res) => {
               if (res.data.code === 200) {
-                this.query();
-                this.$tip.success(this.$t("public.sccg"));
+                if (this.chooseData.list.length > 0) {
+                  this.chooseData.list.forEach((item, i) => {
+                    delTechItem(item.techItemId).then((res) => {});
+                    if (i == this.chooseData.list.length - 1) {
+                      this.query();
+                      this.$tip.success(this.$t("public.sccg"));
+                    }
+                  });
+                } else {
+                  this.query();
+                  this.$tip.success(this.$t("public.sccg"));
+                }
               } else {
                 this.$tip.error(this.$t("public.scsb"));
               }
@@ -631,7 +693,7 @@ export default {
         });
     },
     delDtl() {
-      if (!this.chooseDtlData.useYarnId) {
+      if (!this.chooseDtlData.techItemId) {
         this.chooseData.list.splice(this.chooseDtlData.index - 1, 1);
         // this.chooseDtlData = {};
         this.chooseData.list.forEach((item, i) => {
@@ -645,7 +707,7 @@ export default {
       this.$tip
         .cofirm("是否确定删除選中的數據?", this, {})
         .then(() => {
-          delYarn(this.chooseDtlData.useYarnId)
+          delTechItem(this.chooseDtlData.techItemId)
             .then((res) => {
               if (res.data.code === 200) {
                 // this.query();
@@ -692,7 +754,9 @@ export default {
       this.chooseDtlData = val;
     },
     getTechItem() {
-      getCodeItem({
+      this.dlgLoading = true;
+      getTechItem({
+        proBleadyeJobTechargueFk: this.chooseData.jobTechId,
         star: 1,
         rows: 999,
       }).then((res) => {
@@ -706,6 +770,9 @@ export default {
         if (this.chooseData.list.length > 0) {
           this.$refs.yarnCrud.setCurrentRow(this.chooseData.list[0]);
         }
+        setTimeout(() => {
+          this.dlgLoading = false;
+        }, 200);
       });
     },
     check() {
@@ -749,33 +816,82 @@ export default {
         this.choiceV = false;
         return;
       }
-      this.crud.push({
-        index: this.crud.length + 1,
-        $cellEdit: true,
-        proBleadyeTechCodeFk: val.bleadyeCodeId,
-        bleadyeName: val.bleadyeCodeId,
-        liquorRatio: val.liquorRatio,
-        signDate: this.$getNowTime("datetime"),
-        changeBatchTime: this.$getNowTime("datetime"),
-        sn: this.crud.length > 0 ? this.crud[this.crud.length - 1].sn + 1 : 1,
-      });
-
-      getCodeItem({
-        proBleadyeTechCodeFk: val.bleadyeCodeId,
-        rows: this.page.pageSize,
-        start: this.page.currentPage,
-      }).then((res) => {
-        this.crud[this.crud.length - 1].list = [];
-        res.data.records.forEach((item, i) => {
-          item.index = i + 1;
-          item.$cellEdit = true;
-          item.mateCode = item.basMateId;
-          this.crud[this.crud.length - 1].list.push(item);
+      if (this.choiceTle == "选择漂染工藝") {
+        this.dlgLoading = true;
+        this.crud.push({
+          index: this.crud.length + 1,
+          $cellEdit: true,
+          proBleadyeTechCodeFk: val.bleadyeCodeId,
+          bleadyeName: val.bleadyeCodeId,
+          liquorRatio: val.liquorRatio,
+          signDate: this.$getNowTime("datetime"),
+          changeBatchTime: this.$getNowTime("datetime"),
+          sn: this.crud.length > 0 ? this.crud[this.crud.length - 1].sn + 1 : 1,
         });
-        this.$refs.crud.setCurrentRow(this.crud[this.crud.length - 1]);
-        console.log(this.crud);
-      });
 
+        getCodeItem({
+          proBleadyeTechCodeFk: val.bleadyeCode,
+          rows: this.page.pageSize,
+          start: this.page.currentPage,
+        }).then((res) => {
+          this.crud[this.crud.length - 1].list = [];
+          res.data.records.forEach((item, i) => {
+            item.index = i + 1;
+            item.$cellEdit = true;
+            item.mateCode = item.basMateId;
+            item.proBleadyeCodeItemFk = item.codeItemIt;
+            item.formulaAmount = item.useAmount;
+            item.formulaUnit = item.formulaUnit;
+            item.useAmount =
+              Number(this.form.clothWeight) * Number(item.formulaAmount);
+            isNaN(item.useAmount) ? (item.useAmount = 0) : "";
+            if (
+              item.measureType != null &&
+              item.measureType.indexOf("g") != -1
+            ) {
+              item.useAmount = 0;
+            }
+
+            this.crud[this.crud.length - 1].list.push(item);
+          });
+          this.$refs.crud.setCurrentRow(this.crud[this.crud.length - 1]);
+          setTimeout(() => {
+            this.dlgLoading = false;
+          }, 200);
+        });
+      }
+      if (this.choiceTle == "選擇工藝材料") {
+        val.index = this.chooseData.list.length + 1;
+        val.$cellEdit = true;
+        val.mateCode = val.basMateId;
+        val.proBleadyeCodeItemFk = val.codeItemIt;
+        val.formulaAmount = val.useAmount;
+        val.formulaUnit = val.measureType;
+        val.useAmount =
+          Number(this.form.clothWeight) * Number(val.formulaAmount);
+        this.chooseData.list.push(val);
+      }
+      if (this.choiceTle == "选择织造通知单") {
+        val.fabName = val.fabricDesc;
+        val.gramWeightAfter = isNaN(val.gramWeight) ? 0 : val.gramWeight;
+        val.shrinkLenth = isNaN(val.verticalShrink) ? 0 : val.verticalShrink;
+        val.shrinkWidth = isNaN(val.horizonShrink) ? 0 : val.horizonShrink;
+        val.clothWeight = isNaN(val.amount) ? 0 : val.amount;
+        this.form = val;
+        this.getOther();
+      }
+      if (this.choiceTle == "選擇生产项目") {
+        val.forEach((item, i) => {
+          this.crud.push({
+            jobItemName: item.stepName,
+            $cellEdit: true,
+            index:
+              this.crud.length > 0
+                ? this.crud[this.crud.length - 1].index + 1
+                : 1,
+          });
+        });
+      }
       this.choiceV = false;
     },
     close() {

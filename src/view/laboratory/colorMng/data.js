@@ -124,7 +124,7 @@ export function popupForm(_this) {
           _this.choiceField = "custCode";
           // _this.choiceQ.purType = '5'
           _this.choiceTarget = _this.form;
-          _this.choiceTle = '选择客戶';
+          _this.choiceTle = _this.$t("choicDlg.xzkh");
         },
         type: "select",
         dicData: getDicT("basCustomer", "custName", "custCode")

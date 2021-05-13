@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-04-01 13:39:35
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-03 11:03:10
+ * @LastEditTime: 2021-05-13 13:30:57
  * @Description:
  */
 
@@ -78,10 +78,10 @@ export function proMng(_this) {
     index: "dyePro",
     icon: "el-icon-edit-outline",
     children: [
-      // {
-      //   menuName: "1.织造通知单",
-      //   index: "织单生产"
-      // },
+      {
+        menuName: "1.漂染工艺",
+        index: "/techCode"
+      },
       // {
       //   menuName: "2.落布记录",
       //   index: "染单生产"

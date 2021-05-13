@@ -62,6 +62,9 @@ import {
   getTechItem,
   TechItemF,
   TechItemC,
+  getWorkStep,
+  WorkStepF,
+  WorkStepC,
 } from "./data";
 export default {
   name: "",
@@ -88,6 +91,7 @@ export default {
       getData: Function,
       tab: "tab1",
       chooseData: [],
+      backups: [],
     };
   },
   watch: {},
@@ -95,6 +99,7 @@ export default {
     // 查询
     query() {
       this.loading = true;
+      this.crud = [];
       for (var key in this.form) {
         if (this.form[key] === "") {
           delete this.form[key];
@@ -105,32 +110,49 @@ export default {
           delete this.choiceQ[key];
         }
       }
-      this.getData(
-        Object.assign(this.form, {
-          rows: this.page.pageSize,
-          start: this.page.currentPage,
-        })
-      ).then((Res) => {
-        let records = Res.data;
-        this.page.total = records.total;
-        this.crud = records.records;
-        if (this.crud.length === 0) {
-          this.loading = false;
-        }
-        if (this.choiceTle == "选择漂染工藝") {
-          this.crud = this.crud.sort((a, b) => {
-            return a.bleadyeCode > b.bleadyeCode ? 1 : -1;
+      if (this.choiceTle == "選擇生产项目") {
+        this.getData().then((res) => {
+          res.data.forEach((item) => {
+            if (item.stepName === "生产过程") {
+              item.nodes.forEach((t) => {
+                if (t.stepName === "染整中心") {
+                  this.crud = t.nodes;
+                  this.backups = t.nodes;
+                }
+              });
+            }
           });
-        }
-        this.crud.forEach((item, index) => {
-          item.index = index + 1;
-          if (index === this.crud.length - 1) {
-            setTimeout(() => {
-              this.loading = false;
-            }, 200);
-          }
+
+          this.loading = false;
         });
-      });
+      } else {
+        this.getData(
+          Object.assign(this.form, this.choiceQ, {
+            rows: this.page.pageSize,
+            start: this.page.currentPage,
+          })
+        ).then((Res) => {
+          let records = Res.data;
+          this.page.total = records.total;
+          this.crud = records.records;
+          if (this.crud.length === 0) {
+            this.loading = false;
+          }
+          if (this.choiceTle == "选择漂染工藝") {
+            this.crud = this.crud.sort((a, b) => {
+              return a.bleadyeCode > b.bleadyeCode ? 1 : -1;
+            });
+          }
+          this.crud.forEach((item, index) => {
+            item.index = index + 1;
+            if (index === this.crud.length - 1) {
+              setTimeout(() => {
+                this.loading = false;
+              }, 200);
+            }
+          });
+        });
+      }
     },
     // 选择
     choice() {
@@ -179,9 +201,15 @@ export default {
         this.choiceF = TechItemF(this);
         this.getData = getTechItem;
         break;
+      case "選擇生产项目":
+        this.choiceC = WorkStepC(this);
+        this.choiceF = WorkStepF(this);
+        this.getData = getWorkStep;
+        break;
       default:
         break;
     }
+    this.query();
   },
   mounted() {},
   beforeDestroy() {},

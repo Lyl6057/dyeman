@@ -3234,7 +3234,7 @@ export const BasCustomerC = {
   addBtn: false,
   border: true,
   highlightCurrentRow: true,
-  height: "calc(100vh - 200px)",
+  height: "calc(100vh - 350px)",
   refreshBtn: false,
   columnBtn: false,
   page: true,

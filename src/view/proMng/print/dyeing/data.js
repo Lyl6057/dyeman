@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-10 16:57:39
+ * @LastEditTime: 2021-05-13 19:35:37
  * @Description:
  */
 
@@ -14,6 +14,8 @@ import {
 } from '@/config'
 
 const unit = getDIC("sal_breadthUnit")
+let matUnit = getDIC("bas_matUnit")
+
 export function mainForm(_this) {
   return {
     submitBtn: false,
@@ -21,7 +23,14 @@ export function mainForm(_this) {
     labelWidth: 150,
     column: [
       {
-        label: "生產單號",
+        label: "染缸機台號",
+        prop: "dyeMathine",
+        span: 6,
+        placeholder: " ",
+
+      },
+      {
+        label: "织造生產單號",
         prop: "weaveJobCode",
         span: 6,
         placeholder: " ",
@@ -43,8 +52,8 @@ export function mainForm(_this) {
 
       },
       {
-        label: "開機日期",
-        prop: "startDate",
+        label: "发单日期",
+        prop: "workDate",
         span: 6,
         placeholder: " ",
 
@@ -57,15 +66,15 @@ export function mainForm(_this) {
         placeholder: " ",
       },
       {
-        label: "機號",
-        prop: "mathineCode",
+        label: "缸號",
+        prop: "vatNo",
         span: 6,
         placeholder: " ",
 
       },
       {
-        label: "制單人",
-        prop: "creator",
+        label: "值機員",
+        prop: "operator",
         span: 6,
         placeholder: " ",
       },
@@ -193,16 +202,16 @@ export function mainCrud(_this) {
         label: "管數量",
         prop: "dyeJarCount",
         overHidden: true,
-        width: 180,
+        width: 100,
         span: 6,
         disabled: false,
-        sortable: true,
         rules: [{
           required: true,
           message: "請輸入管數量",
           trigger: "blur"
         }],
-        type: "number"
+        type: "number",
+        align: "right"
       },
 
       {
@@ -211,7 +220,7 @@ export function mainCrud(_this) {
         width: 180,
         span: 6,
         placeholder: " ",
-        sortable: true,
+        // sortable: true,
         overHidden: true,
       },
       {
@@ -236,6 +245,7 @@ export function mainCrud(_this) {
           trigger: "blur"
         }],
         click: () => {
+          _this.choiceTle = '选择织造通知单'
           _this.choiceV = true
         }
       },
@@ -284,7 +294,7 @@ export function mainCrud(_this) {
         width: 120,
         span: 6,
         type: "number",
-        align: "left",
+        align: "right",
         placeholder: " "
       },
       {
@@ -293,7 +303,7 @@ export function mainCrud(_this) {
         width: 130,
         span: 6,
         type: "number",
-        align: "left",
+        align: "right",
         placeholder: " "
       },
       {
@@ -328,7 +338,8 @@ export function mainCrud(_this) {
         span: 6,
         width: 120,
         placeholder: " ",
-        disabled: false
+        disabled: false,
+        hide: true
       },
       {
         label: "紗牌紗批",
@@ -336,7 +347,8 @@ export function mainCrud(_this) {
         span: 6,
         width: 120,
         placeholder: " ",
-        disabled: false
+        disabled: false,
+        hide: true
       },
       {
         label: "紗牌",
@@ -344,7 +356,8 @@ export function mainCrud(_this) {
         span: 6,
         width: 120,
         placeholder: " ",
-        disabled: false
+        disabled: false,
+        hide: true
       },
 
       {
@@ -353,7 +366,7 @@ export function mainCrud(_this) {
         width: 100,
         span: 6,
         type: "number",
-        align: "left",
+        align: "right",
         placeholder: " "
       },
       {
@@ -362,7 +375,7 @@ export function mainCrud(_this) {
         width: 100,
         span: 6,
         type: "number",
-        align: "left",
+        align: "right",
         placeholder: " "
       },
       {
@@ -497,7 +510,7 @@ export function mainCrud(_this) {
         width: 120,
         span: 6,
         type: "number",
-        align: "left",
+        align: "right",
         placeholder: " "
       },
       {
@@ -506,7 +519,7 @@ export function mainCrud(_this) {
         width: 120,
         span: 6,
         type: "number",
-        align: "left",
+        align: "right",
         placeholder: " "
       },
       {
@@ -515,7 +528,7 @@ export function mainCrud(_this) {
         width: 120,
         span: 6,
         type: "number",
-        align: "left",
+        align: "right",
         placeholder: " "
       },
       {
@@ -549,7 +562,8 @@ export function mainCrud(_this) {
         span: 6,
         hide: true,
         width: 80,
-        placeholder: " "
+        placeholder: " ",
+        type: "number"
       },
       {
         label: "縮水(橫縮)",
@@ -557,7 +571,8 @@ export function mainCrud(_this) {
         span: 6,
         hide: true,
         width: 80,
-        placeholder: " "
+        placeholder: " ",
+        type: "number"
       },
 
 
@@ -567,7 +582,8 @@ export function mainCrud(_this) {
         span: 6,
         hide: true,
         width: 80,
-        placeholder: " "
+        placeholder: " ",
+        type: "number"
       },
       {
         label: "縮水(循環)",
@@ -575,7 +591,8 @@ export function mainCrud(_this) {
         span: 6,
         hide: true,
         width: 80,
-        placeholder: " "
+        placeholder: " ",
+        type: "number"
       },
 
       {
@@ -584,7 +601,8 @@ export function mainCrud(_this) {
         span: 6,
         hide: true,
         width: 80,
-        placeholder: " "
+        placeholder: " ",
+        type: "number"
       },
       {
         label: "縮水(平幹)",
@@ -592,7 +610,8 @@ export function mainCrud(_this) {
         span: 6,
         hide: true,
         width: 80,
-        placeholder: " "
+        placeholder: " ",
+        type: "number"
       },
       {
         label: "縮水(拋幹)",
@@ -600,7 +619,8 @@ export function mainCrud(_this) {
         span: 6,
         hide: true,
         width: 80,
-        placeholder: " "
+        placeholder: " ",
+        type: "number"
       },
 
       {
@@ -865,6 +885,8 @@ export function groupCrudOp(_this) {
         width: 180,
         span: 6,
         cell: true,
+        // type: "select",
+        // dicData: []
         // overHidden: true
       },
       {
@@ -1081,6 +1103,29 @@ export function techargueCrud(_this) {
         span: 6,
       },
       {
+        label: "总水量",
+        prop: "totalWater",
+        width: 120,
+        cell: true,
+        span: 6,
+        type: "number",
+        placeholder: " ",
+        change: () => {
+          if (!_this.chooseData.list) {
+            return
+          }
+          _this.$nextTick(() => {
+            _this.chooseData.list.forEach(item => {
+              if (item.measureType && item.measureType.indexOf("g") != -1) {
+                item.useAmount = Number(item.formulaAmount * _this.chooseData.totalWater)
+                isNaN(item.useAmount) ? item.useAmount = 0 : ""
+              }
+            });
+          })
+
+        }
+      },
+      {
         label: "布含水量",
         prop: "wetClothWater",
         width: 120,
@@ -1089,15 +1134,7 @@ export function techargueCrud(_this) {
         type: "number",
         placeholder: " "
       },
-      {
-        label: "总水量",
-        prop: "totalWater",
-        width: 120,
-        cell: true,
-        span: 6,
-        type: "number",
-        placeholder: " "
-      },
+
       {
         label: "副缸外加水量",
         prop: "shotgunWater",
@@ -1127,10 +1164,10 @@ export function codeItemCrud(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 148px)",
+    height: "calc(100vh - 112px)",
     refreshBtn: false,
     columnBtn: false,
-    page: true,
+    page: false,
     labelWidth: 130,
     column: [
       {
@@ -1146,14 +1183,15 @@ export function codeItemCrud(_this) {
         width: 120,
         cell: true,
         span: 6,
+        placeholder: ' '
       },
       {
         label: "物料名稱",
         prop: "mateName",
         width: 200,
-        overHidden: true,
         cell: true,
         span: 6,
+        placeholder: ' '
       },
       {
         label: "物料批次",
@@ -1161,21 +1199,60 @@ export function codeItemCrud(_this) {
         width: 120,
         cell: true,
         span: 6,
+        placeholder: ' '
+
       },
       {
-        label: "數量",
+        label: "配方用量",
+        prop: "formulaAmount",
+        width: 90,
+        cell: true,
+        type: "number",
+        span: 6,
+        placeholder: ' ',
+        change: () => {
+          if (!_this.chooseDtlData.measureType) {
+            return;
+          }
+          _this.$nextTick(() => {
+            if (_this.chooseDtlData.measureType.indexOf("g") == -1 && _this.chooseDtlData.measureType.indexOf("G") == -1) {
+              _this.chooseDtlData.useAmount = Number(_this.form.clothWeight) * Number(_this.chooseDtlData.formulaAmount)
+            } else {
+              _this.chooseDtlData.useAmount = Number(_this.chooseDtlData.formulaAmount * _this.chooseData.totalWater)
+            }
+            isNaN(_this.chooseDtlData.useAmount) ? _this.chooseDtlData.useAmount = 0 : ""
+          })
+        }
+      },
+      {
+        label: "材料度量",
+        prop: "measureType",
+        width: 90,
+        cell: true,
+        span: 6,
+        // type: "select",
+        // dicData: matUnit,
+        placeholder: ' '
+      },
+
+      {
+        label: "材料用量",
         prop: "useAmount",
         width: 90,
         cell: true,
         type: "number",
         span: 6,
+        placeholder: ' '
       },
       {
         label: "單位",
-        prop: "measureType",
+        prop: "formulaUnit",
         width: 90,
         cell: true,
         span: 6,
+        type: "select",
+        dicData: matUnit,
+        placeholder: ' '
       },
       {
         label: "工藝類型",
@@ -1183,7 +1260,22 @@ export function codeItemCrud(_this) {
         width: 90,
         cell: true,
         span: 6,
-        placeholder: " "
+        placeholder: " ",
+        type: "select",
+        dicData: [
+          {
+            label: "增加助剂",
+            value: "add_chemicalmat "
+          },
+          {
+            label: "增加颜料",
+            value: "add_pigment "
+          },
+          {
+            label: "运行",
+            value: "run"
+          }
+        ]
       },
       {
         label: "溫度",
@@ -1219,8 +1311,54 @@ export function codeItemCrud(_this) {
         cell: true,
         type: "number",
         span: 6,
+        placeholder: ' '
       },
     ],
   }
 }
 
+export function carCrud(_this) {
+  return {
+    menu: false,
+    addBtn: false,
+    border: true,
+    highlightCurrentRow: true,
+    height: "calc(100vh - 148px)",
+    refreshBtn: false,
+    columnBtn: false,
+    page: true,
+    labelWidth: 130,
+    column: [
+      {
+        label: "#",
+        prop: "sn",
+        width: 50,
+        align: "center",
+        display: false,
+      },
+      {
+        label: "长车加工项目",
+        prop: "itemName",
+        width: 140,
+        span: 6,
+        cell: true
+      },
+      {
+        label: "练漂参数",
+        prop: "bleachVale",
+        width: 140,
+        span: 6,
+        cell: true,
+        type: "number"
+      },
+      {
+        label: "皂洗参数",
+        prop: "soapValue",
+        width: 140,
+        span: 6,
+        cell: true,
+        type: "number"
+      },
+    ],
+  }
+}

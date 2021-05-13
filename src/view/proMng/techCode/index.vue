@@ -2,13 +2,13 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-13 10:43:51
+ * @LastEditTime: 2021-05-13 15:47:41
  * @Description: 
 -->
 <template>
   <div id="clothFlyPrint">
     <view-container
-      title="漂染工作單打印"
+      title="漂染工艺"
       v-loading="wloading"
       element-loading-text="拼命加载中..."
     >
@@ -75,7 +75,7 @@
 </template>
 <script>
 import { mainForm, mainCrud } from "./data";
-import { get, add, update, del, print } from "./api";
+import { get, add, update, del } from "./api";
 import tem from "./temDlg";
 export default {
   name: "",
@@ -119,12 +119,10 @@ export default {
         })
       ).then((res) => {
         this.crud = res.data.records;
-        this.crud.sort((a, b) => {
-          return a.workDate > b.workDate ? -1 : 1;
+        this.crud = this.crud.sort((a, b) => {
+          return a.bleadyeCode > b.bleadyeCode ? 1 : -1;
         });
         this.crud.forEach((item, i) => {
-          // item.custName = item.custCode;
-          // item.amount = item.amount.toFixed(2);
           item.index = i + 1;
         });
 
