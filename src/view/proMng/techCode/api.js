@@ -2,11 +2,29 @@
  * @Author: Lyl
  * @Date: 2021-02-01 14:06:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-13 14:45:23
+ * @LastEditTime: 2021-05-14 16:05:11
  * @Description:
  */
 
 import axios from 'axios';
+
+export function getImg(id) {
+  return axios({
+    url: '/api/proBleadyeTechCode/findFileById?id=' + id,
+    method: 'get',
+  })
+}
+// 新增
+export function upload(params) {
+  return axios({
+    url: '/api/proBleadyeTechCode/uploadImg',
+    method: 'post',
+    data: params,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  })
+}
 
 export function get(params) {
   return axios({

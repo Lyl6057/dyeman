@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-13 16:09:51
+ * @LastEditTime: 2021-05-14 16:59:54
  * @Description: 
 -->
 <template>
@@ -49,7 +49,7 @@
           @current-row-change="cellClick"
         ></avue-crud>
       </div>
-      <img :src="imgUrl" alt="" height="240px" width="100%" />
+      <img :src="imgUrl" alt="" height="240px" />
     </view-container>
     <choice
       :choiceV="choiceV"
@@ -65,7 +65,17 @@
 <script>
 import choice from "@/components/proMng/index";
 import { mainCrud, dlgForm, dlgCrud } from "./data";
-import { add, update, getDtl, addDtl, updateDtl, delDtl } from "./api";
+import {
+  get,
+  add,
+  update,
+  getDtl,
+  addDtl,
+  updateDtl,
+  delDtl,
+  upload,
+  getImg,
+} from "./api";
 export default {
   name: "techCodeTem",
   props: {
@@ -97,7 +107,7 @@ export default {
       choiceField: "",
       choiceQ: {},
       chooseDtlData: {},
-      imgUrl: "data:image/png;base64,123",
+      imgUrl: "",
     };
   },
   watch: {},
@@ -106,107 +116,119 @@ export default {
       this.wLoading = true;
       this.form = {};
       if (this.isAdd) {
-        // baseCodeSupplyEx({ code: "proWeaveJob" }).then((res) => {
-        //   this.form.weaveJobCode = res.data.data;
-        //   this.code = res.data.data;
-        // });
         setTimeout(() => {
           this.form.workDate = this.$getNowTime();
           this.wLoading = false;
         }, 200);
       } else {
         this.form = this.detail;
+        this.imgUrl =
+          process.env.API_HOST +
+          "/api/proBleadyeTechCode/findFileById?id=" +
+          this.form.bleadyeImageId;
         this.query();
-        // if (this.form.realEnd === "" || this.form.realEnd === null) {
-        //   this.form.nowDate = this.form.planEnd.split(" ")[0];
-        // } else {
-        //   this.form.nowDate = this.form.realEnd.split(" ")[0];
-        // }
-        // this.form.nowDate = this.getNowTime();
         setTimeout(() => {
           this.wLoading = false;
         }, 200);
       }
     },
     save() {
-      for (let i = 0; i < this.crud.length; i++) {
-        if (!this.crud[i].basMateId || !this.crud[i].mateName) {
-          this.$tip.error("材料代码/名称不能為空!");
-          return;
-        }
-      }
       this.wLoading = true;
-      this.$refs.form.validate((valid, done) => {
-        if (valid) {
-          try {
-            Object.keys(this.form).forEach((item) => {
-              if (this.isEmpty(this.form[item])) {
-                delete this.form[item];
-              }
-            });
-            if (this.form.bleadyeCodeId) {
-              // update
-              update(this.form).then((res) => {
-                if (res.data.code == 200) {
-                  // this.$tip.success(this.$t("public.bccg"));
-                  this.saveOther();
-                } else {
-                  this.$tip.error(this.$t("public.bcsb"));
-                }
-                setTimeout(() => {
-                  this.wLoading = false;
-                  this.$emit("refresh");
-
-                  done();
-                }, 200);
-              });
-            } else {
-              // add
-              add(this.form).then((res) => {
-                if (res.data.code == 200) {
-                  this.form.bleadyeCodeId = res.data.data;
-                  this.$tip.success(this.$t("public.bccg"));
-                  this.saveOther();
-                } else {
-                  this.$tip.error(this.$t("public.bcsb"));
-                }
-                setTimeout(() => {
-                  this.wLoading = false;
-                  this.$emit("refresh");
-                  // this.saveOther();
-                  done();
-                }, 200);
-              });
-            }
-          } catch (error) {
-            console.log(error);
-            this.wLoading = false;
-            this.$tip.error(this.$t("public.bcsb"));
-            done();
-          }
-        } else {
+      get({ bleadyeCode: this.form.bleadyeCode }).then((res) => {
+        if (res.data.total > 0 && !this.form.bleadyeCodeId) {
+          this.$tip.error("存在此編號,請重新填寫!");
           this.wLoading = false;
-          this.$tip.error("请补充漂染工艺信息!");
           return;
+        } else {
+          for (let i = 0; i < this.crud.length; i++) {
+            if (!this.crud[i].mateName) {
+              this.$tip.error("材料名称不能為空!");
+              this.wLoading = false;
+              return;
+            }
+          }
+          this.$refs.form.validate((valid, done) => {
+            if (valid) {
+              try {
+                Object.keys(this.form).forEach((item) => {
+                  if (this.isEmpty(this.form[item])) {
+                    delete this.form[item];
+                  }
+                });
+                if (this.form.bleadyeCodeId) {
+                  // update
+                  update(this.form).then((res) => {
+                    if (res.data.code == 200) {
+                      // this.$tip.success(this.$t("public.bccg"));
+                      this.saveOther();
+                      this.upload();
+                    } else {
+                      this.$tip.error(this.$t("public.bcsb"));
+                    }
+                    setTimeout(() => {
+                      this.wLoading = false;
+                      this.$emit("refresh");
+                      done();
+                    }, 200);
+                  });
+                } else {
+                  // add
+                  add(this.form).then((res) => {
+                    if (res.data.code == 200) {
+                      this.form.bleadyeCodeId = res.data.data;
+                      this.$tip.success(this.$t("public.bccg"));
+                      this.saveOther();
+                      this.upload();
+                    } else {
+                      this.$tip.error(this.$t("public.bcsb"));
+                    }
+                    setTimeout(() => {
+                      this.wLoading = false;
+                      this.$emit("refresh");
+                      // this.saveOther();
+                      done();
+                    }, 200);
+                  });
+                }
+              } catch (error) {
+                console.log(error);
+                this.wLoading = false;
+                this.$tip.error(this.$t("public.bcsb"));
+                done();
+              }
+            } else {
+              this.wLoading = false;
+              this.$tip.error("请补充漂染工艺信息!");
+              return;
+            }
+          });
         }
       });
     },
+    upload() {
+      if (this.imgUrl && this.form.bleadyeCodeId) {
+        // 開始上傳圖片！
+        let file = this.dataURLtoFile(this.imgUrl, "file");
+        let formData = new FormData();
+        formData.append("oid", this.form.bleadyeCodeId);
+        formData.append("file", file);
+        upload(formData).then((res) => {
+          // this.imgUrl = "";
+        });
+      }
+    },
     query() {
-      console.log(this.form);
       getDtl(
         Object.assign({
-          proBleadyeTechCodeFk: this.form.bleadyeCodeId,
+          proBleadyeTechCodeFk: this.form.bleadyeCode,
           rows: this.page.pageSize,
           start: this.page.currentPage,
         })
       ).then((res) => {
         this.crud = res.data.records;
-
-        if (this.tabs == "长车加工项目") {
-          this.crud.sort((a, b) => {
-            return a.sn < b.sn ? -1 : 1;
-          });
-        }
+        this.crud.sort((a, b) => {
+          return a.sn < b.sn ? -1 : 1;
+        });
         if (this.crud.length > 0) {
           this.$refs.crud.setCurrentRow(this.crud[0]);
         }
@@ -214,10 +236,6 @@ export default {
         this.crud.forEach((item, i) => {
           item.$cellEdit = true;
           item.index = i + 1;
-          if (this.tabs === "生產工藝") {
-            // item.bleadyeCode = item.proBleadyeTechCodeFk;
-            item.bleadyeName = item.proBleadyeTechCodeFk;
-          }
         });
         this.page.total = res.data.total;
 
@@ -240,7 +258,7 @@ export default {
             // 修改
           } else {
             // 新增
-            data.proBleadyeTechCodeFk = this.form.bleadyeCodeId;
+            data.proBleadyeTechCodeFk = this.form.bleadyeCode;
             addDtl(data).then((res) => {
               item.codeItemIt = res.data.data;
               resolve();
@@ -284,13 +302,17 @@ export default {
       // });
     },
     uploadBefore(file, done, loading) {
+      if (file.name.indexOf("png") == -1 && file.name.indexOf("jpg") == -1) {
+        this.$tip.error("图片格式错误!");
+        loading();
+        return;
+      }
       var reader = new FileReader();
       let _this = this;
       reader.readAsDataURL(file);
       reader.onload = function () {
         _this.imgUrl = reader.result;
       };
-      _this.$message.success("上传前的方法");
       loading();
     },
     add() {
@@ -476,9 +498,24 @@ export default {
         return false;
       }
     },
+    dataURLtoFile(dataurl, filename) {
+      //将base64转换为文件
+      var arr = dataurl.split(","),
+        mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]),
+        n = bstr.length,
+        u8arr = new Uint8Array(n);
+      while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+      }
+      return new File([u8arr], filename, { type: mime });
+    },
   },
   created() {},
   mounted() {
+    document
+      .getElementsByClassName("el-upload el-upload--text")[0]
+      .getElementsByTagName("span")[0].innerHTML = "选择图片";
     this.getData();
   },
   beforeDestroy() {},

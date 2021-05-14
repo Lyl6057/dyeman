@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-13 17:10:09
+ * @LastEditTime: 2021-05-14 16:23:08
  * @Description:
  */
 
@@ -34,6 +34,32 @@ export function mainForm(_this) {
         prop: "bleadyeName",
         span: 6,
         placeholder: " ",
+      },
+      {
+        label: "工艺分类",
+        prop: "techPart",
+        overHidden: true,
+        width: 120,
+        span: 6,
+        type: "select",
+        dicData: [
+          {
+            value: "前处理",
+            label: "前处理"
+          },
+          {
+            value: "后处理",
+            label: "后处理"
+          },
+          {
+            value: "活性染色",
+            label: "活性染色"
+          },
+          {
+            value: "附加",
+            label: "附加"
+          }
+        ]
       },
     ],
   }
@@ -180,26 +206,52 @@ export function mainCrud(_this) {
         type: "number",
         align: "right"
       },
+      {
+        label: "工艺分类",
+        prop: "techPart",
+        overHidden: true,
+        width: 120,
+        span: 6,
+        type: "select",
+        dicData: [
+          {
+            value: "前处理",
+            label: "前处理"
+          },
+          {
+            value: "后处理",
+            label: "后处理"
+          },
+          {
+            value: "活性染色",
+            label: "活性染色"
+          },
+          {
+            value: "附加",
+            label: "附加"
+          }
+        ]
+      },
 
       {
+        label: "工艺备注",
+        prop: "remark",
+        overHidden: true,
+        // width: 250,
+        span: 12,
+      },
+      {
         label: "工艺流程图片",
-        prop: "bleadyeImageId",
+        prop: "btn",
         width: 180,
         span: 6,
         placeholder: " ",
         // sortable: true,
         overHidden: true,
         type: 'upload',
-        loadText: '附件上传中，请稍等',
+        // loadText: '附件上传中，请稍等',
+        hide: true
       },
-      {
-        label: "工艺备注",
-        prop: "remark",
-        overHidden: true,
-        // width: 250,
-        span: 18,
-      },
-
     ],
   }
 
@@ -266,40 +318,62 @@ export function dlgCrud(_this) {
       {
         label: "配方用量",
         prop: "formulaAmount",
-        width: 140,
+        width: 120,
         span: 6,
-        cell: true
+        cell: true,
+        placeholder: " "
+      },
+
+      {
+        label: "材料度量",
+        prop: "measureType",
+        width: 120,
+        span: 6,
+        // overHidden: true,
+        cell: true,
+        placeholder: " ",
+        type: "select",
+        dicData: [
+          {
+            label: "%",
+            value: "%"
+          },
+          {
+            label: "X%",
+            value: "X%"
+          },
+          {
+            label: "g/L",
+            value: "g/L"
+          }
+        ]
       },
       {
         label: "單位",
         prop: "formulaUnit",
-        width: 120,
+        width: 100,
         span: 6,
         cell: true,
         type: "select",
-        dicData: matUnit
-      },
-      {
-        label: "材料度量",
-        prop: "measureType",
-        width: 140,
-        span: 6,
-        // overHidden: true,
-        cell: true
+        dicData: matUnit,
+        placeholder: " "
       },
       {
         label: "运行温度",
         prop: "runTemp",
         span: 6,
         width: 120,
-        cell: true
+        cell: true,
+        placeholder: " "
       },
+
       {
         label: "运行时间(分钟)",
         prop: "runTime",
         span: 6,
         width: 140,
-        cell: true
+        cell: true,
+        placeholder: " "
 
       },
 

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-05-03 13:03:03
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-13 17:43:18
+ * @LastEditTime: 2021-05-14 11:08:01
  * @Description:
  */
 
@@ -648,6 +648,25 @@ export function techCodeF(_this) {
         prop: "techPart",
         span: 6,
         placeholder: " ",
+        type: "select",
+        dicData: [
+          {
+            value: "前处理",
+            label: "前处理"
+          },
+          {
+            value: "后处理",
+            label: "后处理"
+          },
+          {
+            value: "活性染色",
+            label: "活性染色"
+          },
+          {
+            value: "附加",
+            label: "附加"
+          }
+        ]
         // dicData: getDicT("basCustomer", "custName", "custCode")
       },
     ],
@@ -734,12 +753,7 @@ export function TechItemF(_this) {
     emptyBtn: false,
     labelWidth: 150,
     column: [
-      {
-        label: "物料編號",
-        prop: "basMateId",
-        span: 6,
-        placeholder: " ",
-      },
+
       {
         label: "工艺类型",
         prop: "bleadyeType",
@@ -761,6 +775,12 @@ export function TechItemF(_this) {
           }
         ]
       },
+      {
+        label: "物料編號",
+        prop: "basMateId",
+        span: 6,
+        placeholder: " ",
+      },
     ],
   }
 }
@@ -776,6 +796,7 @@ export function TechItemC(_this) {
     columnBtn: false,
     page: true,
     labelWidth: 130,
+    selection: true,
     column: [
       {
         label: "#",
@@ -807,7 +828,7 @@ export function TechItemC(_this) {
         ]
       },
       {
-        label: "物料代碼",
+        label: "物料編號",
         prop: "basMateId",
         overHidden: true,
         width: 120,
@@ -822,12 +843,21 @@ export function TechItemC(_this) {
       },
       {
         label: "用量",
-        prop: "useAmount",
+        prop: "formulaAmount",
         width: 140,
         span: 6,
+        align: "right"
       },
       {
         label: "單位",
+        prop: "formulaUnit",
+        width: 100,
+        span: 6,
+        type: "select",
+        dicData: matUnit
+      },
+      {
+        label: "度量單位",
         prop: "measureType",
         width: 120,
         span: 6,
@@ -837,12 +867,14 @@ export function TechItemC(_this) {
         prop: "runTemp",
         span: 6,
         width: 120,
+        align: "right"
       },
       {
         label: "运行时间(分钟)",
         prop: "runTime",
         span: 6,
         width: 140,
+        align: "right"
 
       },
 

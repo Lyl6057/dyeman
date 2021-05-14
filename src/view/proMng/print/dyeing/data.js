@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-13 19:35:37
+ * @LastEditTime: 2021-05-14 11:20:04
  * @Description:
  */
 
@@ -882,7 +882,7 @@ export function groupCrudOp(_this) {
       {
         label: "项目名称",
         prop: "jobItemName",
-        width: 180,
+        width: 220,
         span: 6,
         cell: true,
         // type: "select",
@@ -1053,7 +1053,7 @@ export function techargueCrud(_this) {
     column: [
       {
         label: "#",
-        prop: "index",
+        prop: "sn",
         width: 50,
         align: "center",
         display: false,
@@ -1232,7 +1232,22 @@ export function codeItemCrud(_this) {
         span: 6,
         // type: "select",
         // dicData: matUnit,
-        placeholder: ' '
+        placeholder: ' ',
+        type: "select",
+        dicData: [
+          {
+            label: "%",
+            value: "%"
+          },
+          {
+            label: "X%",
+            value: "X%"
+          },
+          {
+            label: "g/L",
+            value: "g/L"
+          }
+        ]
       },
 
       {

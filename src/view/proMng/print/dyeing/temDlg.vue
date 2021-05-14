@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-13 19:38:09
+ * @LastEditTime: 2021-05-14 11:29:51
  * @Description: 
 -->
 <template>
@@ -427,7 +427,7 @@ export default {
               return a.vatParamCode < b.vatParamCode ? -1 : 1;
             });
           }
-          if (this.tabs == "长车加工项目") {
+          if (this.tabs == "长车加工项目" || this.tabs === "生產工藝") {
             this.crud.sort((a, b) => {
               return a.sn < b.sn ? -1 : 1;
             });
@@ -514,7 +514,6 @@ export default {
               item.itemId = res.data.data;
               item.vatParamId = res.data.data;
               item.jobTechId = res.data.data;
-
               resolve();
             });
           }
@@ -619,7 +618,10 @@ export default {
         $cellEdit: true,
         signDate: this.$getNowTime("datetime"),
         changeBatchTime: this.$getNowTime("datetime"),
-        sn: this.crud.length > 0 ? this.crud[this.crud.length - 1].sn + 1 : 1,
+        sn:
+          this.crud.length > 0
+            ? Number(this.crud[this.crud.length - 1].sn) + 1
+            : 1,
       });
       this.$refs.crud.setCurrentRow(this.crud[this.crud.length - 1]);
       // } else {
@@ -629,7 +631,7 @@ export default {
     addDtl() {
       this.choiceTle = "選擇工藝材料";
       if (this.chooseData.jobTechId) {
-        this.choiceQ.proBleadyeJobTechargueFk = this.chooseData.jobTechId;
+        this.choiceQ.proBleadyeTechCodeFk = this.chooseData.$proBleadyeTechCodeFk;
       } else {
         this.choiceQ = {};
       }
@@ -761,18 +763,20 @@ export default {
         rows: 999,
       }).then((res) => {
         let data = res.data.records;
+        data.sort((a, b) => {
+          return a.sn < b.sn ? -1 : 1;
+        });
         data.forEach((item, i) => {
           item.$cellEdit = true;
           item.index = i + 1;
           this.chooseData.list.push(Object.assign(item, { index: i + 1 }));
         });
         this.chooseData.list = res.data.records;
+
         if (this.chooseData.list.length > 0) {
           this.$refs.yarnCrud.setCurrentRow(this.chooseData.list[0]);
         }
-        setTimeout(() => {
-          this.dlgLoading = false;
-        }, 200);
+        this.dlgLoading = false;
       });
     },
     check() {
@@ -826,7 +830,10 @@ export default {
           liquorRatio: val.liquorRatio,
           signDate: this.$getNowTime("datetime"),
           changeBatchTime: this.$getNowTime("datetime"),
-          sn: this.crud.length > 0 ? this.crud[this.crud.length - 1].sn + 1 : 1,
+          sn:
+            this.crud.length > 0
+              ? Number(this.crud[this.crud.length - 1].sn) + 1
+              : 1,
         });
 
         getCodeItem({
@@ -840,7 +847,7 @@ export default {
             item.$cellEdit = true;
             item.mateCode = item.basMateId;
             item.proBleadyeCodeItemFk = item.codeItemIt;
-            item.formulaAmount = item.useAmount;
+            item.formulaAmount = item.formulaAmount;
             item.formulaUnit = item.formulaUnit;
             item.useAmount =
               Number(this.form.clothWeight) * Number(item.formulaAmount);
@@ -861,15 +868,42 @@ export default {
         });
       }
       if (this.choiceTle == "選擇工藝材料") {
-        val.index = this.chooseData.list.length + 1;
-        val.$cellEdit = true;
-        val.mateCode = val.basMateId;
-        val.proBleadyeCodeItemFk = val.codeItemIt;
-        val.formulaAmount = val.useAmount;
-        val.formulaUnit = val.measureType;
-        val.useAmount =
-          Number(this.form.clothWeight) * Number(val.formulaAmount);
-        this.chooseData.list.push(val);
+        if (!val.length) {
+          return;
+        }
+        val.forEach((item, i) => {
+          item.index = this.chooseData.list.length + 1;
+          item.$cellEdit = true;
+          item.mateCode = item.basMateId;
+          item.proBleadyeCodeItemFk = item.codeItemIt;
+          item.formulaAmount = item.formulaAmount;
+          item.formulaUnit = item.formulaUnit;
+          item.useAmount =
+            Number(this.form.clothWeight) * Number(item.formulaAmount);
+          isNaN(item.useAmount) ? (item.useAmount = 0) : "";
+          if (item.measureType != null && item.measureType.indexOf("g") != -1) {
+            item.useAmount = 0;
+          }
+          let data = JSON.parse(JSON.stringify(item));
+          this.chooseData.list.push(data);
+        });
+        // val.index = this.chooseData.list.length + 1;
+        // val.$cellEdit = true;
+        // val.mateCode = val.basMateId;
+        // val.proBleadyeCodeItemFk = val.codeItemIt;
+        // val.formulaAmount = val.formulaAmount;
+        // val.formulaUnit = val.formulaUnit;
+        // val.useAmount =
+        //   Number(this.form.clothWeight) * Number(val.formulaAmount);
+        // isNaN(val.useAmount) ? (val.useAmount = 0) : "";
+        // if (val.measureType != null && val.measureType.indexOf("g") != -1) {
+        //   val.useAmount = 0;
+        // }
+        // let data = JSON.parse(JSON.stringify(val));
+        // this.chooseData.list.push(data);
+        this.$refs.yarnCrud.setCurrentRow(
+          this.chooseData.list[this.chooseData.list.length - 1]
+        );
       }
       if (this.choiceTle == "选择织造通知单") {
         val.fabName = val.fabricDesc;

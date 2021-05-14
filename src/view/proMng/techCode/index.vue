@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-13 15:47:41
+ * @LastEditTime: 2021-05-14 09:08:39
  * @Description: 
 -->
 <template>
@@ -15,16 +15,19 @@
       <el-row class="btnList">
         <el-button
           type="success"
-          :disabled="!detail.weaveJobId"
+          :disabled="!detail.bleadyeCodeId"
           @click="handleRowDBLClick(detail)"
           >{{ this.$t("public.update") }}</el-button
         >
         <el-button type="primary" @click="add">{{
           this.$t("public.add")
         }}</el-button>
-        <el-button type="danger" :disabled="!detail.weaveJobId" @click="del">{{
-          this.$t("public.del")
-        }}</el-button>
+        <el-button
+          type="danger"
+          :disabled="!detail.bleadyeCodeId"
+          @click="del"
+          >{{ this.$t("public.del") }}</el-button
+        >
         <el-button type="primary" @click="print" :loading="wloading"
           >打印</el-button
         >
@@ -75,7 +78,7 @@
 </template>
 <script>
 import { mainForm, mainCrud } from "./data";
-import { get, add, update, del } from "./api";
+import { get, add, update, del, getDtl, delDtl } from "./api";
 import tem from "./temDlg";
 export default {
   name: "",
@@ -169,19 +172,26 @@ export default {
     },
     del() {
       this.$tip
-        .cofirm(
-          this.$t("iaoMng.delTle7") +
-            this.detail.weaveJobCode +
-            this.$t("iaoMng.delTle2"),
-          this,
-          {}
-        )
+        .cofirm("是否确定删除選中的數據?", this, {})
         .then(() => {
-          del(this.detail.weaveJobId)
+          del(this.detail.bleadyeCodeId)
             .then((res) => {
               if (res.data.code === 200) {
-                this.$tip.success(this.$t("public.sccg"));
-                this.query();
+                getDtl(
+                  Object.assign({
+                    proBleadyeTechCodeFk: this.detail.bleadyeCode,
+                    rows: 999,
+                    start: 1,
+                  })
+                ).then((res) => {
+                  res.data.records.forEach((item, i) => {
+                    delDtl(item.codeItemIt).then((res) => {});
+                  });
+                });
+                setTimeout(() => {
+                  this.$tip.success(this.$t("public.sccg"));
+                  this.query();
+                }, 200);
               } else {
                 this.$tip.error(this.$t("public.scsb"));
               }
