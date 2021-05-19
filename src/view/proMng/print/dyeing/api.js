@@ -2,12 +2,20 @@
  * @Author: Lyl
  * @Date: 2021-02-01 14:06:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-12 16:51:51
+ * @LastEditTime: 2021-05-17 10:02:15
  * @Description:
  */
 
 import axios from 'axios';
 
+// 獲取基礎工藝
+export function getTechargueList(params) {
+  return axios({
+    url: '/api/baseBleadyeTechargue',
+    method: 'get',
+    params: params
+  })
+}
 // 獲取訂單號
 export function getPo(params) {
   return axios({
@@ -81,7 +89,7 @@ export function del(id) {
 // 打印佈飛
 export function print(params) {
   return axios({
-    url: '/api/proWeaveJob/prinEntity',
+    url: '/api/proBleadyeJob/buildWorkOrder',
     method: 'get',
     params: params
   })

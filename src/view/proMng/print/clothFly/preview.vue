@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:48:57
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-04 16:36:52
+ * @LastEditTime: 2021-05-17 17:04:28
  * @Description: 
 -->
 <template>
@@ -18,11 +18,11 @@
         <div class="content">
           <el-row class="yl_label">
             <el-col :span="9">
-              <div>订单号: <br />Mã số đơn hàng</div>
+              <div>生产单号: <br />Mã số đơn hàng</div>
             </el-col>
             <el-col :span="15"
               ><div style="height: 30px; line-height: 30px">
-                {{ item.poNo }}
+                {{ form.weaveJobCode }}
               </div>
             </el-col>
           </el-row>
@@ -31,8 +31,15 @@
               <div>布类: <br />Loại vải</div>
             </el-col>
             <el-col :span="18"
-              ><div style="height: 30px; line-height: 30px; text-align: left">
-                {{ item.noteCode }}
+              ><div
+                style="
+                  height: 30px;
+                  line-height: 30px;
+                  text-align: left;
+                  overflow: hidden;
+                "
+              >
+                {{ item.fabricName }}
               </div>
             </el-col>
           </el-row>

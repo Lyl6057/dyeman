@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-05-03 13:03:03
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-14 11:08:01
+ * @LastEditTime: 2021-05-17 18:40:27
  * @Description:
  */
 
@@ -649,24 +649,12 @@ export function techCodeF(_this) {
         span: 6,
         placeholder: " ",
         type: "select",
-        dicData: [
-          {
-            value: "前处理",
-            label: "前处理"
-          },
-          {
-            value: "后处理",
-            label: "后处理"
-          },
-          {
-            value: "活性染色",
-            label: "活性染色"
-          },
-          {
-            value: "附加",
-            label: "附加"
-          }
-        ]
+        dicData: getDIC("pro_techCode"),
+        change: () => {
+          _this.$nextTick(() => {
+            _this.query()
+          })
+        }
         // dicData: getDicT("basCustomer", "custName", "custCode")
       },
     ],
@@ -714,6 +702,8 @@ export function techCodeC(_this) {
         overHidden: true,
         width: 140,
         span: 6,
+        type: "select",
+        dicData: getDIC("pro_techCode")
       },
       {
         label: "建议水比",
@@ -721,12 +711,12 @@ export function techCodeC(_this) {
         width: 120,
         span: 6,
       },
-      {
-        label: "工艺流程图片",
-        prop: "bleadyeImageId",
-        span: 6,
-        width: 250,
-      },
+      // {
+      //   label: "工艺流程图片",
+      //   prop: "bleadyeImageId",
+      //   span: 6,
+      //   width: 250,
+      // },
       {
         label: "備註",
         prop: "remark",
@@ -970,7 +960,7 @@ export function WorkStepC(_this) {
         label: "名称",
         prop: "stepName",
         span: 6,
-        width: 180,
+        width: 550,
         placeholder: " ",
         overHidden: true
       },
@@ -978,20 +968,107 @@ export function WorkStepC(_this) {
         label: "描述信息",
         prop: "stepDescribe",
         span: 6,
-        width: 250,
-        placeholder: " ",
-        overHidden: true
-      },
-      {
-        label: "标准产能计算公式",
-        prop: "stepCapacity",
-        span: 6,
         width: 350,
         placeholder: " ",
         overHidden: true
       },
+      // {
+      //   label: "标准产能计算公式",
+      //   prop: "stepCapacity",
+      //   span: 6,
+      //   width: 350,
+      //   placeholder: " ",
+      //   overHidden: true
+      // },
 
 
+    ],
+  }
+}
+
+export function getTechargue(params) {
+  return axios({
+    url: '/api/baseBleadyeTechargue',
+    method: 'get',
+    params: params
+  })
+}
+export function techargueF(_this) {
+  return {
+    submitBtn: false,
+    emptyBtn: false,
+    labelWidth: 150,
+    column: [
+      // {
+      //   label: "参数类型",
+      //   prop: "paramType",
+      //   span: 6,
+      //   placeholder: " ",
+      //   change: () => {
+
+      //   }
+      // },
+      {
+        label: "編號",
+        prop: "paramKey",
+        span: 6,
+        placeholder: " ",
+      },
+    ],
+  }
+}
+
+export function techargueC(_this) {
+  return {
+    menu: false,
+    addBtn: false,
+    border: true,
+    highlightCurrentRow: true,
+    height: "calc(100vh - 162px)",
+    refreshBtn: false,
+    columnBtn: false,
+    page: false,
+    labelWidth: 130,
+    selection: true,
+    column: [
+      {
+        label: "#",
+        prop: "sn",
+        width: 50,
+        align: "center",
+        display: false
+      },
+      // {
+      //   label: "参数类型",
+      //   prop: "paramType",
+      //   span: 6,
+      //   placeholder: " ",
+      //   width: 120
+      // },
+      {
+        label: "編號",
+        prop: "paramKey",
+        span: 6,
+        width: 120,
+        placeholder: " ",
+
+      },
+      {
+        label: "名称",
+        prop: "paramName",
+        span: 6,
+        width: 550,
+        placeholder: " ",
+        overHidden: true
+      },
+      {
+        label: "参数",
+        prop: "paramDefault",
+        span: 6,
+        width: 120,
+        placeholder: " ",
+        align: "right"
+      },
     ],
   }
 }

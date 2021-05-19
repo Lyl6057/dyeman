@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-14 16:59:54
+ * @LastEditTime: 2021-05-17 10:01:17
  * @Description: 
 -->
 <template>
@@ -26,20 +26,13 @@
         }}</el-button>
         <!-- <el-button type="primary" @click="checkOrder">选择订单号</el-button> -->
       </div>
-
       <div class="formBox">
-        <avue-form
-          ref="form"
-          :option="formOp"
-          v-model="form"
-          :upload-before="uploadBefore"
-        >
-        </avue-form>
+        <avue-form ref="form" :option="formOp" v-model="form"> </avue-form>
       </div>
       <div class="crudBox">
         <avue-crud
           ref="crud"
-          id="crud"
+          id="mainCrud"
           :option="crudOp"
           :data="crud"
           :page.sync="page"
@@ -49,7 +42,50 @@
           @current-row-change="cellClick"
         ></avue-crud>
       </div>
-      <img :src="imgUrl" alt="" height="240px" />
+      <div
+        style="
+          width: 100%;
+          height: 240px;
+          border: 1px solid #eee;
+          position: relative;
+        "
+        v-on:paste="handlePaste"
+      >
+        <el-image :src="imgUrl" v-if="imgUrl" :preview-src-list="[imgUrl]">
+        </el-image>
+        <!-- <img
+          class="img"
+          :src="imgUrl"
+          alt=""
+          height="240px"
+          @click="showImg"
+          style="border: 1px solid #ccc"
+        /> -->
+        <span class="image-remove" @click="removeImg" v-if="imgUrl">X</span>
+        <div class="watermark" v-if="!imgUrl">单击此处后 Ctr + V 复制图片</div>
+        <input
+          id="input"
+          ref="input"
+          type="file"
+          accept="image/*"
+          capture="camera"
+          style="display: none"
+          @change="imgChange"
+        />
+      </div>
+      <el-dialog
+        id="colorMng_Dlg imgDlg"
+        :visible.sync="imgVisi"
+        append-to-body
+        top="5vh"
+      >
+        <img
+          @click="imgVisi = false"
+          :src="imgUrl"
+          alt=""
+          style="border: 1px solid #ccc"
+        />
+      </el-dialog>
     </view-container>
     <choice
       :choiceV="choiceV"
@@ -68,6 +104,7 @@ import { mainCrud, dlgForm, dlgCrud } from "./data";
 import {
   get,
   add,
+  del,
   update,
   getDtl,
   addDtl,
@@ -108,6 +145,7 @@ export default {
       choiceQ: {},
       chooseDtlData: {},
       imgUrl: "",
+      imgVisi: false,
     };
   },
   watch: {},
@@ -121,15 +159,21 @@ export default {
           this.wLoading = false;
         }, 200);
       } else {
-        this.form = this.detail;
-        this.imgUrl =
-          process.env.API_HOST +
-          "/api/proBleadyeTechCode/findFileById?id=" +
-          this.form.bleadyeImageId;
-        this.query();
-        setTimeout(() => {
-          this.wLoading = false;
-        }, 200);
+        get({
+          bleadyeCodeId: this.detail.bleadyeCodeId,
+          rows: 999,
+          start: 1,
+        }).then((res) => {
+          this.form = res.data.records[0];
+          if (this.form.bleadyeImageId) {
+            this.imgUrl =
+              process.env.API_HOST +
+              "/api/proBleadyeTechCode/findFileById?id=" +
+              this.form.bleadyeImageId;
+          }
+
+          this.query();
+        });
       }
     },
     save() {
@@ -150,11 +194,11 @@ export default {
           this.$refs.form.validate((valid, done) => {
             if (valid) {
               try {
-                Object.keys(this.form).forEach((item) => {
-                  if (this.isEmpty(this.form[item])) {
-                    delete this.form[item];
-                  }
-                });
+                // Object.keys(this.form).forEach((item) => {
+                //   if (this.isEmpty(this.form[item])) {
+                //     delete this.form[item];
+                //   }
+                // });
                 if (this.form.bleadyeCodeId) {
                   // update
                   update(this.form).then((res) => {
@@ -165,11 +209,6 @@ export default {
                     } else {
                       this.$tip.error(this.$t("public.bcsb"));
                     }
-                    setTimeout(() => {
-                      this.wLoading = false;
-                      this.$emit("refresh");
-                      done();
-                    }, 200);
                   });
                 } else {
                   // add
@@ -182,14 +221,17 @@ export default {
                     } else {
                       this.$tip.error(this.$t("public.bcsb"));
                     }
-                    setTimeout(() => {
-                      this.wLoading = false;
-                      this.$emit("refresh");
-                      // this.saveOther();
-                      done();
-                    }, 200);
+                    // setTimeout(() => {
+                    //   this.wLoading = false;
+                    //   this.$emit("refresh");
+                    //   // this.saveOther();
+                    //   done();
+                    // }, 200);
                   });
                 }
+                setTimeout(() => {
+                  done();
+                }, 200);
               } catch (error) {
                 console.log(error);
                 this.wLoading = false;
@@ -206,7 +248,11 @@ export default {
       });
     },
     upload() {
-      if (this.imgUrl && this.form.bleadyeCodeId) {
+      if (
+        this.imgUrl &&
+        this.imgUrl.indexOf("findFileById") == -1 &&
+        this.form.bleadyeCodeId
+      ) {
         // 開始上傳圖片！
         let file = this.dataURLtoFile(this.imgUrl, "file");
         let formData = new FormData();
@@ -214,6 +260,10 @@ export default {
         formData.append("file", file);
         upload(formData).then((res) => {
           // this.imgUrl = "";
+          setTimeout(() => {
+            this.wLoading = false;
+            this.$emit("refresh");
+          }, 200);
         });
       }
     },
@@ -234,22 +284,32 @@ export default {
         }
         // }
         this.crud.forEach((item, i) => {
+          for (let key in item) {
+            if (item[key] == null) {
+              item[key] = undefined;
+            }
+          }
           item.$cellEdit = true;
           item.index = i + 1;
         });
         this.page.total = res.data.total;
-
-        this.loading = false;
+        setTimeout(() => {
+          this.wLoading = false;
+        }, 200);
       });
     },
     saveOther() {
       if (this.crud.length == 0) {
         return;
       }
-
       this.dlgLoading = true;
       let addDtla = (item, i) => {
         return new Promise((resolve, reject) => {
+          for (let key in item) {
+            if (item[key] == undefined) {
+              item[key] = null;
+            }
+          }
           let data = JSON.parse(JSON.stringify(item));
           if (item.codeItemIt) {
             updateDtl(data).then((res) => {
@@ -301,10 +361,9 @@ export default {
       //   }
       // });
     },
-    uploadBefore(file, done, loading) {
-      if (file.name.indexOf("png") == -1 && file.name.indexOf("jpg") == -1) {
-        this.$tip.error("图片格式错误!");
-        loading();
+    imgChange(e) {
+      let file = document.getElementById("input").files[0];
+      if (!file) {
         return;
       }
       var reader = new FileReader();
@@ -313,7 +372,10 @@ export default {
       reader.onload = function () {
         _this.imgUrl = reader.result;
       };
-      loading();
+    },
+    removeImg() {
+      this.imgUrl = null;
+      this.form.bleadyeImageId = "";
     },
     add() {
       // if (this.tabs != "生產項目") {
@@ -323,17 +385,16 @@ export default {
         sn: this.crud.length > 0 ? this.crud[this.crud.length - 1].sn + 1 : 1,
       });
       this.$refs.crud.setCurrentRow(this.crud[this.crud.length - 1]);
+      this.$nextTick(() => {
+        this.$toTableLow(this, "mainCrud");
+      });
+
       // } else {
       //   this.choiceV = true;
       // }
     },
     del() {
-      if (
-        !this.chooseData.jobTestId &&
-        !this.chooseData.itemId &&
-        !this.chooseData.vatParamId &&
-        !this.chooseData.jobTechId
-      ) {
+      if (!this.chooseData.codeItemIt) {
         this.crud.splice(this.chooseData.index - 1, 1);
         this.chooseData = {};
         this.crud.forEach((item, i) => {
@@ -347,30 +408,11 @@ export default {
       this.$tip
         .cofirm("是否确定删除選中的數據?", this, {})
         .then(() => {
-          this.func
-            .del(
-              this.tabs === "生產項目" || this.tabs === "长车加工项目"
-                ? this.chooseData.itemId
-                : this.tabs === "測試要求"
-                ? this.chooseData.jobTestId
-                : this.tabs === "生產工藝"
-                ? this.chooseData.jobTechId
-                : this.chooseData.vatParamId
-            )
+          delDtl(this.chooseData.codeItemIt)
             .then((res) => {
               if (res.data.code === 200) {
-                if (this.chooseData.list.length > 0) {
-                  this.chooseData.list.forEach((item, i) => {
-                    delTechItem(item.techItemId).then((res) => {});
-                    if (i == this.chooseData.list.length - 1) {
-                      this.query();
-                      this.$tip.success(this.$t("public.sccg"));
-                    }
-                  });
-                } else {
-                  this.query();
-                  this.$tip.success(this.$t("public.sccg"));
-                }
+                this.query();
+                this.$tip.success(this.$t("public.sccg"));
               } else {
                 this.$tip.error(this.$t("public.scsb"));
               }
@@ -385,7 +427,7 @@ export default {
     },
     handleRowDBLClick(val) {
       this.chooseData = val;
-      this.check();
+      // this.check();
       // this.visible = false;
     },
     cellClick(val) {
@@ -433,7 +475,7 @@ export default {
             item.formulaAmount = item.useAmount;
             item.formulaUnit = item.measureType;
             item.useAmount =
-              Number(this.form.clothWeight) * Number(item.formulaAmount);
+              Number(this.form.clothWeight) * Number(item.formulaAmount) * 0.01;
             isNaN(item.useAmount) ? (item.useAmount = 0) : "";
 
             this.crud[this.crud.length - 1].list.push(item);
@@ -452,7 +494,7 @@ export default {
         val.formulaAmount = val.useAmount;
         val.formulaUnit = val.measureType;
         val.useAmount =
-          Number(this.form.clothWeight) * Number(val.formulaAmount);
+          Number(this.form.clothWeight) * Number(val.formulaAmount) * 0.01;
         this.chooseData.list.push(val);
       }
       if (this.choiceTle == "选择织造通知单") {
@@ -477,6 +519,39 @@ export default {
         });
       }
       this.choiceV = false;
+    },
+    showImg() {
+      if (this.imgUrl) {
+        this.imgVisi = true;
+      }
+    },
+    handlePaste(event) {
+      const items = (event.clipboardData || window.clipboardData).items;
+      let file = null;
+
+      if (!items || items.length === 0) {
+        this.$message.error("当前浏览器不支持本地");
+        return;
+      }
+      // 搜索剪切板items
+      for (let i = 0; i < items.length; i++) {
+        if (items[i].type.indexOf("image") !== -1) {
+          file = items[i].getAsFile();
+          break;
+        }
+      }
+      if (!file) {
+        this.$message.error("粘贴内容非图片");
+        return;
+      }
+      // 此时file就是我们的剪切板中的图片对象
+      // 如果需要预览，可以执行下面代码
+      const reader = new FileReader();
+      let _this = this;
+      reader.readAsDataURL(file);
+      reader.onload = function () {
+        _this.imgUrl = reader.result;
+      };
     },
     close() {
       if (this.refresh) {
@@ -513,16 +588,51 @@ export default {
   },
   created() {},
   mounted() {
-    document
-      .getElementsByClassName("el-upload el-upload--text")[0]
-      .getElementsByTagName("span")[0].innerHTML = "选择图片";
+    // document
+    //   .getElementsByClassName("el-upload el-upload--text")[0]
+    //   .getElementsByTagName("span")[0].innerHTML = "选择图片";
     this.getData();
   },
   beforeDestroy() {},
 };
 </script>
 <style lang='stylus'>
+#imgDlg {
+  overflow: auto !important;
+}
+
+.image-remove {
+  position: absolute;
+  color: red;
+  font-size: 24px;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  top: 5px;
+  left: calc(100% - 50px);
+  cursor: pointer;
+}
+
 #techCodeTem {
+  .watermark {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    font-size: 48px;
+    font-weight: 700;
+    color: #ccc;
+    height: 200px;
+    width: 100%;
+    line-height: 200px;
+    text-align: center;
+    z-index: 1;
+  }
+
+  .img {
+    cursor: pointer;
+    z-index: 100;
+  }
+
   .el-input-number__decrease, .el-input-number__increase {
     display: none;
   }
@@ -536,7 +646,7 @@ export default {
   }
 
   .el-input-number .el-input__inner {
-    text-align: left !important;
+    text-align: right !important;
   }
 
   .el-input-number.is-controls-right .el-input__inner {

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-29 14:14:56
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-13 13:31:41
+ * @LastEditTime: 2021-05-19 08:42:15
  * @Description: 
  */
 export default [
@@ -32,6 +32,11 @@ export default [
     path: '/proScheduling',
     name: '生产排单',
     component: resolve => require(['@/view/proMng/Calculator/socket'], resolve)
+  },
+  {
+    path: '/ldOrder',
+    name: '生产排单',
+    component: resolve => require(['@/view/proMng/ldOrder/index'], resolve)
   },
   // 报表
   {

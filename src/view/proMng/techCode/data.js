@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-14 16:23:08
+ * @LastEditTime: 2021-05-17 11:09:43
  * @Description:
  */
 
@@ -42,24 +42,13 @@ export function mainForm(_this) {
         width: 120,
         span: 6,
         type: "select",
-        dicData: [
-          {
-            value: "前处理",
-            label: "前处理"
-          },
-          {
-            value: "后处理",
-            label: "后处理"
-          },
-          {
-            value: "活性染色",
-            label: "活性染色"
-          },
-          {
-            value: "附加",
-            label: "附加"
-          }
-        ]
+        dicData: getDIC("pro_techCode"),
+        change: () => {
+          _this.$nextTick(() => {
+            _this.query()
+          })
+
+        }
       },
     ],
   }
@@ -127,7 +116,7 @@ export function dlgForm(_this) {
         span: 6,
       },
       {
-        label: "單位",
+        label: "度量單位",
         prop: "measureType",
         width: 120,
         span: 6,
@@ -204,7 +193,8 @@ export function mainCrud(_this) {
         width: 100,
         span: 6,
         type: "number",
-        align: "right"
+        align: "right",
+        placeholder: " "
       },
       {
         label: "工艺分类",
@@ -213,26 +203,20 @@ export function mainCrud(_this) {
         width: 120,
         span: 6,
         type: "select",
-        dicData: [
-          {
-            value: "前处理",
-            label: "前处理"
-          },
-          {
-            value: "后处理",
-            label: "后处理"
-          },
-          {
-            value: "活性染色",
-            label: "活性染色"
-          },
-          {
-            value: "附加",
-            label: "附加"
-          }
-        ]
+        dicData: getDIC("pro_techCode")
       },
-
+      {
+        label: "工艺图片",
+        prop: "bleadyeImageId",
+        width: 100,
+        span: 6,
+        placeholder: " ",
+        hide: false,
+        display: false,
+        align: "center",
+        // slot: true,
+        overHidden: true,
+      },
       {
         label: "工艺备注",
         prop: "remark",
@@ -240,17 +224,18 @@ export function mainCrud(_this) {
         // width: 250,
         span: 12,
       },
+
       {
-        label: "工艺流程图片",
+        label: "选择工艺图片",
         prop: "btn",
         width: 180,
         span: 6,
         placeholder: " ",
-        // sortable: true,
-        overHidden: true,
-        type: 'upload',
-        // loadText: '附件上传中，请稍等',
-        hide: true
+        type: "select",
+        hide: true,
+        click: () => {
+          _this.$refs.input.click();
+        }
       },
     ],
   }
@@ -321,7 +306,9 @@ export function dlgCrud(_this) {
         width: 120,
         span: 6,
         cell: true,
-        placeholder: " "
+        placeholder: " ",
+        type: "number",
+        align: "right"
       },
 
       {
@@ -355,16 +342,26 @@ export function dlgCrud(_this) {
         span: 6,
         cell: true,
         type: "select",
-        dicData: matUnit,
+        dicData: [
+          {
+            value: "KG",
+            label: "公斤"
+          },
+          {
+            value: "L",
+            label: "升"
+          }
+        ],
         placeholder: " "
       },
       {
-        label: "运行温度",
+        label: "运行温度(℃)",
         prop: "runTemp",
         span: 6,
         width: 120,
         cell: true,
-        placeholder: " "
+        placeholder: " ",
+        type: "number"
       },
 
       {
@@ -373,7 +370,8 @@ export function dlgCrud(_this) {
         span: 6,
         width: 140,
         cell: true,
-        placeholder: " "
+        placeholder: " ",
+        type: "number"
 
       },
 

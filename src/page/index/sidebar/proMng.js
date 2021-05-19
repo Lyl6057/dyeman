@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-04-01 13:39:35
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-13 13:30:57
+ * @LastEditTime: 2021-05-19 08:41:49
  * @Description:
  */
 
@@ -42,10 +42,14 @@ export function proMng(_this) {
         menuName: "2.生产排单",
         index: "/proScheduling"
       },
+      {
+        menuName: "3.LD生产通知单",
+        index: "/ldOrder"
+      },
     ]
   },
   {
-    menuName: "三.织单生产",
+    menuName: "三.織造生產",
     index: "wovenPro",
     icon: "el-icon-edit-outline",
     children: [
@@ -74,13 +78,17 @@ export function proMng(_this) {
     ]
   },
   {
-    menuName: "四.染单生产",
+    menuName: "四.染整生產",
     index: "dyePro",
     icon: "el-icon-edit-outline",
     children: [
       {
         menuName: "1.漂染工艺",
         index: "/techCode"
+      },
+      {
+        menuName: "2.染整工单",
+        index: "/dyeing"
       },
       // {
       //   menuName: "2.落布记录",
@@ -101,12 +109,12 @@ export function proMng(_this) {
         menuName: "1.织造工单",
         index: "/proWeaveJob"
       },
+      // {
+      //   menuName: "2.染整工单",
+      //   index: "/dyeing"
+      // },
       {
-        menuName: "2.染整工单",
-        index: "/dyeing"
-      },
-      {
-        menuName: "3.布飞打印",
+        menuName: "2.布飞打印",
         index: "/clothFly"
       },
 

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-14 11:29:51
+ * @LastEditTime: 2021-05-19 19:32:16
  * @Description: 
 -->
 <template>
@@ -61,6 +61,7 @@
     <el-dialog
       :visible.sync="visible"
       fullscreen
+      :close-on-press-escape="false"
       append-to-body
       id="viewDlg"
       :element-loading-text="$t('public.loading')"
@@ -86,6 +87,28 @@
               <el-button @click="visible = false" type="warning">{{
                 $t("public.close")
               }}</el-button>
+              <span style="margin-left: 10px" v-if="tabs == '生產工藝'">
+                自动计算</span
+              >
+
+              <el-switch
+                v-if="tabs == '生產工藝'"
+                v-model="mathCtr"
+                active-color="#13ce66"
+                inactive-color="#ccc"
+              >
+              </el-switch>
+              <el-tag
+                style="font-size: 17px; margin-left: 10px"
+                v-if="tabs == '生產工藝'"
+              >
+                重量:{{ detail.clothWeight }}</el-tag
+              >
+              <el-tag style="font-size: 17px" v-if="tabs == '生產工藝'">
+                合缸重量:{{ vatWeight }}</el-tag
+              >
+
+              <!-- <span> </span> -->
             </div>
             <div class="crudBox">
               <avue-crud
@@ -97,7 +120,116 @@
                 @on-load="query"
                 @row-dblclick="handleRowDBLClick"
                 @current-row-change="cellClick"
-              ></avue-crud>
+              >
+                <template slot="bleachSet" slot-scope="scope">
+                  <!-- {{ scope.row.dataStyle }} -->
+                  <div v-if="scope.row.dataStyle === 'string'">
+                    <!-- string 类型 -->
+                    <el-input
+                      v-model="scope.row.bleachSet"
+                      type="number"
+                    ></el-input>
+                  </div>
+                  <div v-else style="text-align: center">
+                    <!-- boolean 类型 -->
+                    <el-checkbox
+                      v-model="scope.row.bleachSet"
+                      :true-label="1"
+                      :false-label="0"
+                    ></el-checkbox>
+                  </div>
+                </template>
+                <template slot="bleachFact" slot-scope="scope">
+                  <!-- {{ scope.row.dataStyle }} -->
+                  <div v-if="scope.row.dataStyle === 'string'">
+                    <!-- string 类型 -->
+                    <el-input
+                      v-model="scope.row.bleachFact"
+                      type="number"
+                    ></el-input>
+                  </div>
+                  <div v-else style="text-align: center">
+                    <!-- boolean 类型 -->
+                    <el-checkbox
+                      v-model="scope.row.bleachFact"
+                      :true-label="1"
+                      :false-label="0"
+                    ></el-checkbox>
+                  </div>
+                </template>
+                <template slot="dyeSet" slot-scope="scope">
+                  <!-- {{ scope.row.dataStyle }} -->
+                  <div v-if="scope.row.dataStyle === 'string'">
+                    <!-- string 类型 -->
+                    <el-input
+                      v-model="scope.row.dyeSet"
+                      type="number"
+                    ></el-input>
+                  </div>
+                  <div v-else style="text-align: center">
+                    <!-- boolean 类型 -->
+                    <el-checkbox
+                      v-model="scope.row.dyeSet"
+                      :true-label="1"
+                      :false-label="0"
+                    ></el-checkbox>
+                  </div>
+                </template>
+                <template slot="dyeFact" slot-scope="scope">
+                  <!-- {{ scope.row.dataStyle }} -->
+                  <div v-if="scope.row.dataStyle === 'string'">
+                    <!-- string 类型 -->
+                    <el-input
+                      v-model="scope.row.dyeFact"
+                      type="number"
+                    ></el-input>
+                  </div>
+                  <div v-else style="text-align: center">
+                    <!-- boolean 类型 -->
+                    <el-checkbox
+                      v-model="scope.row.dyeFact"
+                      :true-label="1"
+                      :false-label="0"
+                    ></el-checkbox>
+                  </div>
+                </template>
+                <template slot="soapSet" slot-scope="scope">
+                  <!-- {{ scope.row.dataStyle }} -->
+                  <div v-if="scope.row.dataStyle === 'string'">
+                    <!-- string 类型 -->
+                    <el-input
+                      v-model="scope.row.soapSet"
+                      type="number"
+                    ></el-input>
+                  </div>
+                  <div v-else style="text-align: center">
+                    <!-- boolean 类型 -->
+                    <el-checkbox
+                      v-model="scope.row.soapSet"
+                      :true-label="1"
+                      :false-label="0"
+                    ></el-checkbox>
+                  </div>
+                </template>
+                <template slot="soapFact" slot-scope="scope">
+                  <!-- {{ scope.row.dataStyle }} -->
+                  <div v-if="scope.row.dataStyle === 'string'">
+                    <!-- string 类型 -->
+                    <el-input
+                      v-model="scope.row.soapFact"
+                      type="number"
+                    ></el-input>
+                  </div>
+                  <div v-else style="text-align: center">
+                    <!-- boolean 类型 -->
+                    <el-checkbox
+                      v-model="scope.row.soapFact"
+                      :true-label="1"
+                      :false-label="0"
+                    ></el-checkbox>
+                  </div>
+                </template>
+              </avue-crud>
             </div> </view-container
         ></el-col>
         <el-col :span="12" v-if="tabs == '生產工藝'">
@@ -114,6 +246,18 @@
                 type="danger"
                 :disabled="Object.keys(chooseDtlData).length == 0"
                 >{{ $t("public.del") }}</el-button
+              >
+              <el-button
+                @click="up"
+                type="primary"
+                :disabled="Object.keys(chooseDtlData).length == 0"
+                >上移</el-button
+              >
+              <el-button
+                @click="down"
+                type="primary"
+                :disabled="Object.keys(chooseDtlData).length == 0"
+                >下移</el-button
               >
             </div>
             <div class="formBox"></div>
@@ -156,6 +300,7 @@ import {
   carCrud,
 } from "./data";
 import {
+  get,
   add,
   update,
   getPo,
@@ -191,9 +336,8 @@ import {
   updateWash,
   delWash,
   getPoDtlb,
+  getTechargueList,
 } from "./api";
-import { getDIC, getDicT, getXDicT, postDicT, preFixInt } from "@/config";
-import { baseCodeSupplyEx } from "@/api/index";
 export default {
   name: "",
   props: {
@@ -209,12 +353,10 @@ export default {
       formOp: mainCrud(this),
       form: {},
       page: {
-        pageSize: 10,
+        pageSize: 20,
         currentPage: 1,
         total: 0,
       },
-      minRows: 1,
-      maxRows: 5,
       dlgWidth: "60%",
       codeSupplyNum: 0,
       previewData: {},
@@ -240,6 +382,19 @@ export default {
       group: [],
       chooseDtlData: {},
       dtlV: false,
+      options: [
+        {
+          value: 1,
+          label: "是",
+        },
+        {
+          value: 0,
+          label: "否",
+        },
+      ],
+      oldW: null,
+      vatWeight: 0,
+      mathCtr: true,
     };
   },
   watch: {},
@@ -254,17 +409,15 @@ export default {
         // });
         setTimeout(() => {
           this.form.workDate = this.$getNowTime();
+          this.form.deliveDate = this.$getNowTime();
           this.wLoading = false;
         }, 200);
       } else {
         this.form = this.detail;
-
-        // if (this.form.realEnd === "" || this.form.realEnd === null) {
-        //   this.form.nowDate = this.form.planEnd.split(" ")[0];
-        // } else {
-        //   this.form.nowDate = this.form.realEnd.split(" ")[0];
-        // }
-        // this.form.nowDate = this.getNowTime();
+        if (!(this.form.mergVatNo instanceof Array) && this.form.mergVatNo) {
+          this.form.mergVatNo = this.form.mergVatNo.split("/");
+        }
+        this.oldW = JSON.parse(JSON.stringify(this.form.clothWeight));
         setTimeout(() => {
           this.wLoading = false;
         }, 200);
@@ -279,14 +432,14 @@ export default {
             if (poDtla.data.rows.length > 0) {
               if (poDtla.data.rows[0].qtyUnit == "KG") {
                 this.form.poAmountKg = poDtla.data.rows[0].fabQty;
-                this.form.poAmountLb = (
-                  Number(this.form.poAmountKg) * 2.2046226
-                ).toFixed(2);
+                // this.form.poAmountLb = (
+                //   Number(this.form.poAmountKg) * 2.2046226
+                // ).toFixed(2);
               } else {
                 this.form.poAmountLb = poDtla.data.rows[0].fabQty;
-                this.form.poAmountKg = (
-                  Number(this.form.poAmountLb) * 0.4535924
-                ).toFixed(2);
+                // this.form.poAmountKg = (
+                //   Number(this.form.poAmountLb) * 0.4535924
+                // ).toFixed(2);
               }
               getPoDtlb({ salPoDtlaFk: poDtla.data.rows[0].salPoDtlaoid }).then(
                 (color) => {
@@ -312,40 +465,157 @@ export default {
               }
             });
             this.form.workDate += " 00:00:00";
+            this.form.deliveDate += " 00:00:00";
+            let vat = "";
+            this.form.mergVatNo.forEach((item, i) => {
+              if (i == this.form.mergVatNo.length - 1) {
+                vat += item;
+              } else {
+                vat += item + "/";
+              }
+            });
+            this.form.mergVatNo = vat;
             // this.form.amount = Number(this.form.amount).toFixed(2);
             // return;
             if (this.form.bleadyeJobId) {
               // update
               this.form.upateTime = this.$getNowTime("datetime");
-              update(this.form).then((res) => {
-                if (res.data.code == 200) {
-                  this.$tip.success(this.$t("public.bccg"));
-                } else {
-                  this.$tip.error(this.$t("public.bcsb"));
-                }
-                setTimeout(() => {
-                  this.wLoading = false;
-                  this.$emit("refresh");
-                  done();
-                }, 200);
-              });
+
+              if (this.oldW != this.form.clothWeight) {
+                this.$tip
+                  .cofirm(
+                    "检测到重量改变会影响生产工艺参数，是否确定修改重量?",
+                    this,
+                    {}
+                  )
+                  .then(() => {
+                    update(this.form).then((res) => {
+                      if (res.data.code == 200) {
+                        getTechargue({
+                          proBleadyeJobFk: this.form.bleadyeJobId,
+                          rows: 999,
+                          start: 1,
+                        }).then((res) => {
+                          if (res.data.records.length > 0) {
+                            res.data.records.forEach((item, i) => {
+                              item.totalWater = Number(
+                                (
+                                  Number(this.form.clothWeight) *
+                                  Number(item.liquorRatio)
+                                ).toFixed(2)
+                              );
+                              item.haltWater =
+                                item.totalWater -
+                                Number(item.shotgunWater) -
+                                Number(item.wetClothWater);
+                              updateTechargue(item).then((tech) => {
+                                getTechItem({
+                                  proBleadyeJobTechargueFk: item.jobTechId,
+                                  star: 1,
+                                  rows: 999,
+                                }).then((resDtl) => {
+                                  resDtl.data.records.forEach((items, j) => {
+                                    if (items.measureType) {
+                                      if (
+                                        items.measureType.indexOf("%") != -1
+                                      ) {
+                                        items.useAmount = Number(
+                                          (
+                                            Number(items.formulaAmount) *
+                                            Number(this.form.clothWeight) *
+                                            0.01
+                                          ).toFixed(2)
+                                        );
+                                      } else if (
+                                        items.measureType.indexOf("g") != -1
+                                      ) {
+                                        items.useAmount = Number(
+                                          Number(items.formulaAmount) *
+                                            Number(item.totalWater).toFixed(2)
+                                        );
+                                      }
+                                      updateTechItem(items).then();
+                                    } else {
+                                      updateTechItem(items).then();
+                                    }
+                                  });
+                                });
+                              });
+                              if (i == res.data.records.length - 1) {
+                                setTimeout(() => {
+                                  this.wLoading = false;
+                                  this.$emit("refresh");
+                                  this.$tip.success(this.$t("public.bccg"));
+                                  done();
+                                }, 500);
+                              }
+                            });
+                          } else {
+                            setTimeout(() => {
+                              this.wLoading = false;
+                              this.$emit("refresh");
+                              this.$tip.success(this.$t("public.bccg"));
+                              done();
+                            }, 200);
+                          }
+                        });
+                        this.oldW = this.form.clothWeight;
+                      } else {
+                        this.wLoading = false;
+                        done();
+                        this.$tip.error(this.$t("public.bcsb"));
+                      }
+                    });
+                  })
+                  .catch((err) => {
+                    this.form.clothWeight = this.oldW;
+                    update(this.form).then((res) => {
+                      if (res.data.code == 200) {
+                        setTimeout(() => {
+                          this.wLoading = false;
+                          this.$emit("refresh");
+                          this.$tip.success(this.$t("public.bccg"));
+                          done();
+                        }, 200);
+                      } else {
+                        this.wLoading = false;
+                        done();
+                        this.$tip.error(this.$t("public.bcsb"));
+                      }
+                    });
+                  });
+              } else {
+                update(this.form).then((res) => {
+                  if (res.data.code == 200) {
+                    setTimeout(() => {
+                      this.wLoading = false;
+                      this.$emit("refresh");
+                      this.$tip.success(this.$t("public.bccg"));
+                      done();
+                    }, 200);
+                  } else {
+                    this.wLoading = false;
+                    done();
+                    this.$tip.error(this.$t("public.bcsb"));
+                  }
+                });
+              }
             } else {
               // add
               this.form.createTime = this.$getNowTime("datetime");
               add(this.form).then((res) => {
                 if (res.data.code == 200) {
                   this.form.bleadyeJobId = res.data.data;
-                  this.$tip.success(this.$t("public.bccg"));
+                  // this.isAdd = false;
+                  this.addOtherData();
                 } else {
                   this.$tip.error(this.$t("public.bcsb"));
-                }
-                setTimeout(() => {
                   this.wLoading = false;
-                  this.$emit("refresh");
-                  done();
-                }, 200);
+                }
+                done();
               });
             }
+            this.form.mergVatNo = this.form.mergVatNo.split("/");
           } catch (error) {
             console.log(error);
             this.wLoading = false;
@@ -358,6 +628,56 @@ export default {
           return;
         }
       });
+    },
+    addOtherData() {
+      getTechargueList()
+        .then((res) => {
+          // 獲取全部基礎工藝
+          let washIndex = 1,
+            dyeIndex = 1,
+            testIndex = 1;
+          res.data.forEach((item, index) => {
+            if (item.paramType === "wash") {
+              // 長車
+              addWash({
+                itemId: item.paramKey,
+                itemName: item.paramName,
+                proBleadyeJobFk: this.form.bleadyeJobId,
+                sn: washIndex++,
+              }).then((res) => {});
+            } else if (item.paramType === "dyevat") {
+              // 染缸
+              addDye({
+                vatParamCode: item.paramKey,
+                vatParamName: item.paramName,
+                dataStyle: item.paramValueType,
+                sn: dyeIndex++,
+                proBleadyeJobFk: this.form.bleadyeJobId,
+              }).then((res) => {});
+            } else if (item.paramType === "test") {
+              // 測試要求
+              addTest({
+                testItemCode: item.paramKey,
+                testName: item.paramName,
+                sn: testIndex++,
+                proBleadyeJobFk: this.form.bleadyeJobId,
+              }).then((res) => {});
+            }
+            if (index == res.data.length - 1) {
+              this.$tip.success(this.$t("public.bccg"));
+              this.wLoading = false;
+              this.$emit("refresh");
+            }
+          });
+          if (!res.data.length) {
+            this.$tip.success(this.$t("public.bccg"));
+            this.wLoading = false;
+            this.$emit("refresh");
+          }
+        })
+        .catch((e) => {
+          this.wLoading = false;
+        });
     },
     query() {
       if (this.tabs == "選擇訂單") {
@@ -390,6 +710,7 @@ export default {
         this.func.del = delTechargue;
         this.func.add = addTechargue;
         this.func.update = updateTechargue;
+        this.getVat();
       } else {
         this.func.get = getWash;
         this.func.del = delWash;
@@ -397,7 +718,7 @@ export default {
         this.func.update = updateWash;
       }
       this.dlgForm.proBleadyeJobFk = this.form.bleadyeJobId;
-      this.loading = true;
+      this.dlgLoading = true;
       this.chooseData = {};
 
       for (let key in this.dlgForm) {
@@ -434,9 +755,16 @@ export default {
           }
           if (this.crud.length > 0) {
             this.$refs.crud.setCurrentRow(this.crud[0]);
+          } else {
+            this.dlgLoading = false;
           }
           // }
           this.crud.forEach((item, i) => {
+            for (let key in item) {
+              if (item[key] == null) {
+                item[key] = undefined;
+              }
+            }
             item.$cellEdit = true;
             item.index = i + 1;
             if (this.tabs === "生產工藝") {
@@ -445,9 +773,21 @@ export default {
             }
           });
           this.page.total = res.data.total;
-
-          this.loading = false;
+          // setTimeout(() => {
+          //   this.dlgLoading = false;
+          // }, 500);
         });
+    },
+    getVat() {
+      // 获取合染缸号的重量
+      this.vatWeight = 0;
+      this.form.mergVatNo.forEach((item, i) => {
+        get({ rows: 10, start: 1, vatNo: item }).then((res) => {
+          res.data.records.forEach((vat) => {
+            this.vatWeight += Number(vat.clothWeight);
+          });
+        });
+      });
     },
     saveOther() {
       if (this.crud.length == 0) {
@@ -498,8 +838,7 @@ export default {
             item.jobTestId ||
             item.itemId ||
             item.vatParamId ||
-            item.jobTechId ||
-            item.itemId
+            item.jobTechId
           ) {
             this.func.update(data).then((res) => {
               resolve();
@@ -611,19 +950,34 @@ export default {
         this.choiceTle = "選擇生产项目";
         this.choiceV = true;
         return;
+      } else if (this.tabs === "长车加工项目") {
+        this.choiceTle = "選擇漂染基礎工藝";
+        this.choiceQ.paramType = "wash";
+        this.choiceV = true;
+        return;
+      } else if (this.tabs === "測試要求") {
+        this.choiceTle = "選擇漂染基礎工藝";
+        this.choiceQ.paramType = "test";
+        this.choiceV = true;
+        return;
+      } else {
+        this.choiceTle = "選擇漂染基礎工藝";
+        this.choiceQ.paramType = "dyevat";
+        this.choiceV = true;
+        return;
       }
       // if (this.tabs != "生產項目") {
-      this.crud.push({
-        index: this.crud.length + 1,
-        $cellEdit: true,
-        signDate: this.$getNowTime("datetime"),
-        changeBatchTime: this.$getNowTime("datetime"),
-        sn:
-          this.crud.length > 0
-            ? Number(this.crud[this.crud.length - 1].sn) + 1
-            : 1,
-      });
-      this.$refs.crud.setCurrentRow(this.crud[this.crud.length - 1]);
+      // this.crud.push({
+      //   index: this.crud.length + 1,
+      //   $cellEdit: true,
+      //   signDate: this.$getNowTime("datetime"),
+      //   changeBatchTime: this.$getNowTime("datetime"),
+      //   sn:
+      //     this.crud.length > 0
+      //       ? Number(this.crud[this.crud.length - 1].sn) + 1
+      //       : 1,
+      // });
+      // this.$refs.crud.setCurrentRow(this.crud[this.crud.length - 1]);
       // } else {
       //   this.choiceV = true;
       // }
@@ -670,18 +1024,18 @@ export default {
             )
             .then((res) => {
               if (res.data.code === 200) {
-                if (this.chooseData.list.length > 0) {
-                  this.chooseData.list.forEach((item, i) => {
-                    delTechItem(item.techItemId).then((res) => {});
-                    if (i == this.chooseData.list.length - 1) {
-                      this.query();
-                      this.$tip.success(this.$t("public.sccg"));
-                    }
-                  });
-                } else {
-                  this.query();
-                  this.$tip.success(this.$t("public.sccg"));
-                }
+                // if (this.chooseData.list.length > 0) {
+                //   this.chooseData.list.forEach((item, i) => {
+                //     delTechItem(item.techItemId).then((res) => {});
+                //     if (i == this.chooseData.list.length - 1) {
+                //       this.query();
+                //       this.$tip.success(this.$t("public.sccg"));
+                //     }
+                //   });
+                // } else {
+                this.query();
+                this.$tip.success(this.$t("public.sccg"));
+                // }
               } else {
                 this.$tip.error(this.$t("public.scsb"));
               }
@@ -750,6 +1104,8 @@ export default {
         this.chooseData.jobTechId
       ) {
         this.getTechItem();
+      } else {
+        this.dlgLoading = false;
       }
     },
     cellDtlClick(val) {
@@ -772,11 +1128,12 @@ export default {
           this.chooseData.list.push(Object.assign(item, { index: i + 1 }));
         });
         this.chooseData.list = res.data.records;
-
         if (this.chooseData.list.length > 0) {
           this.$refs.yarnCrud.setCurrentRow(this.chooseData.list[0]);
         }
-        this.dlgLoading = false;
+        setTimeout(() => {
+          this.dlgLoading = false;
+        }, 200);
       });
     },
     check() {
@@ -822,7 +1179,7 @@ export default {
       }
       if (this.choiceTle == "选择漂染工藝") {
         this.dlgLoading = true;
-        this.crud.push({
+        let params = {
           index: this.crud.length + 1,
           $cellEdit: true,
           proBleadyeTechCodeFk: val.bleadyeCodeId,
@@ -830,11 +1187,14 @@ export default {
           liquorRatio: val.liquorRatio,
           signDate: this.$getNowTime("datetime"),
           changeBatchTime: this.$getNowTime("datetime"),
+          wetClothWater: 0,
+          shotgunWater: 0,
           sn:
             this.crud.length > 0
               ? Number(this.crud[this.crud.length - 1].sn) + 1
               : 1,
-        });
+        };
+        this.crud.push(JSON.parse(JSON.stringify(params)));
 
         getCodeItem({
           proBleadyeTechCodeFk: val.bleadyeCode,
@@ -842,15 +1202,24 @@ export default {
           start: this.page.currentPage,
         }).then((res) => {
           this.crud[this.crud.length - 1].list = [];
+          res.data.records.sort((a, b) => {
+            return a.sn < b.sn ? -1 : 1;
+          });
           res.data.records.forEach((item, i) => {
             item.index = i + 1;
+            item.sn = i + 1;
             item.$cellEdit = true;
             item.mateCode = item.basMateId;
             item.proBleadyeCodeItemFk = item.codeItemIt;
             item.formulaAmount = item.formulaAmount;
             item.formulaUnit = item.formulaUnit;
-            item.useAmount =
-              Number(this.form.clothWeight) * Number(item.formulaAmount);
+            item.useAmount = Number(
+              (
+                Number(this.form.clothWeight) *
+                Number(item.formulaAmount) *
+                0.01
+              ).toFixed(2)
+            );
             isNaN(item.useAmount) ? (item.useAmount = 0) : "";
             if (
               item.measureType != null &&
@@ -862,6 +1231,16 @@ export default {
             this.crud[this.crud.length - 1].list.push(item);
           });
           this.$refs.crud.setCurrentRow(this.crud[this.crud.length - 1]);
+          this.chooseData.totalWater = JSON.parse(
+            JSON.stringify(
+              Number(
+                (
+                  Number(this.form.clothWeight) *
+                  Number(this.chooseData.liquorRatio)
+                ).toFixed(0)
+              )
+            )
+          );
           setTimeout(() => {
             this.dlgLoading = false;
           }, 200);
@@ -873,13 +1252,19 @@ export default {
         }
         val.forEach((item, i) => {
           item.index = this.chooseData.list.length + 1;
+          item.sn = this.chooseData.list.length + 1;
           item.$cellEdit = true;
           item.mateCode = item.basMateId;
           item.proBleadyeCodeItemFk = item.codeItemIt;
           item.formulaAmount = item.formulaAmount;
           item.formulaUnit = item.formulaUnit;
-          item.useAmount =
-            Number(this.form.clothWeight) * Number(item.formulaAmount);
+          item.useAmount = Number(
+            (
+              Number(this.form.clothWeight) *
+              Number(item.formulaAmount) *
+              0.01
+            ).toFixed(2)
+          );
           isNaN(item.useAmount) ? (item.useAmount = 0) : "";
           if (item.measureType != null && item.measureType.indexOf("g") != -1) {
             item.useAmount = 0;
@@ -887,20 +1272,6 @@ export default {
           let data = JSON.parse(JSON.stringify(item));
           this.chooseData.list.push(data);
         });
-        // val.index = this.chooseData.list.length + 1;
-        // val.$cellEdit = true;
-        // val.mateCode = val.basMateId;
-        // val.proBleadyeCodeItemFk = val.codeItemIt;
-        // val.formulaAmount = val.formulaAmount;
-        // val.formulaUnit = val.formulaUnit;
-        // val.useAmount =
-        //   Number(this.form.clothWeight) * Number(val.formulaAmount);
-        // isNaN(val.useAmount) ? (val.useAmount = 0) : "";
-        // if (val.measureType != null && val.measureType.indexOf("g") != -1) {
-        //   val.useAmount = 0;
-        // }
-        // let data = JSON.parse(JSON.stringify(val));
-        // this.chooseData.list.push(data);
         this.$refs.yarnCrud.setCurrentRow(
           this.chooseData.list[this.chooseData.list.length - 1]
         );
@@ -926,7 +1297,92 @@ export default {
           });
         });
       }
+      if (this.choiceTle == "選擇漂染基礎工藝") {
+        val.forEach((item, i) => {
+          let data = {};
+          if (this.tabs == "染缸參數") {
+            data = {
+              vatParamCode: item.paramKey,
+              vatParamName: item.paramName,
+              dataStyle: item.paramValueType,
+              sn: this.crud.length + 1,
+              $cellEdit: true,
+              index:
+                this.crud.length > 0
+                  ? this.crud[this.crud.length - 1].index + 1
+                  : 1,
+            };
+          } else if (this.tabs == "长车加工项目") {
+            data = {
+              itemName: item.paramName,
+              // itemId: item.paramKey,
+              dataStyle: item.paramValueType,
+              sn: this.crud.length + 1,
+              $cellEdit: true,
+              index:
+                this.crud.length > 0
+                  ? this.crud[this.crud.length - 1].index + 1
+                  : 1,
+            };
+          } else if (this.tabs == "測試要求") {
+            data = {
+              testItemCode: item.paramKey,
+              testName: item.paramName,
+              dataStyle: item.paramValueType,
+              sn: this.crud.length + 1,
+              $cellEdit: true,
+              index:
+                this.crud.length > 0
+                  ? this.crud[this.crud.length - 1].index + 1
+                  : 1,
+            };
+          }
+          this.crud.push(data);
+        });
+      }
       this.choiceV = false;
+    },
+    up() {
+      if (Object.keys(this.chooseDtlData).length > 0) {
+        if (this.chooseDtlData.sn === 1) {
+          return;
+        }
+        //在上一项插入该项
+        this.chooseData.list.splice(
+          this.chooseDtlData.sn - 2,
+          0,
+          this.chooseData.list[this.chooseDtlData.sn - 1]
+        );
+        //删除后一项
+        this.chooseData.list.splice(this.chooseDtlData.sn, 1);
+        this.chooseData.list.forEach((item, i) => {
+          item.sn = i + 1;
+        });
+      } else {
+        this.$tip.error("请选择要上移的数据!");
+        return;
+      }
+    },
+    down() {
+      if (Object.keys(this.chooseDtlData).length > 0) {
+        if (this.chooseDtlData.sn === this.chooseData.list.length) {
+          return;
+        }
+        //在下一项插入该项
+        this.chooseData.list.splice(
+          this.chooseDtlData.sn + 1,
+          0,
+          this.chooseData.list[this.chooseDtlData.sn - 1]
+        );
+        //删除前一项
+        this.chooseData.list.splice(this.chooseDtlData.sn - 1, 1);
+        this.chooseData.list.forEach((item, i) => {
+          item.sn = i + 1;
+        });
+      } else {
+        this.$tip.error("请选择要上移的数据!");
+        return;
+      }
     },
     close() {
       if (this.refresh) {
@@ -957,6 +1413,13 @@ export default {
 };
 </script>
 <style lang='stylus'>
+.el-tag--mini {
+  height: 28px !important;
+  // padding: 0 5px;
+  line-height: 28px !important;
+  font-size: 14px;
+}
+
 .el-table__fixed-body-wrapper {
   top: 37px !important;
 }

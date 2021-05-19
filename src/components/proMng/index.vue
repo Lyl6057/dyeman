@@ -65,6 +65,9 @@ import {
   getWorkStep,
   WorkStepF,
   WorkStepC,
+  getTechargue,
+  techargueF,
+  techargueC,
 } from "./data";
 export default {
   name: "",
@@ -124,6 +127,24 @@ export default {
           });
 
           this.loading = false;
+        });
+      } else if (this.choiceTle == "選擇漂染基礎工藝") {
+        this.getData(Object.assign(this.form, this.choiceQ, {})).then((Res) => {
+          this.crud = Res.data;
+          this.crud = this.crud.sort((a, b) => {
+            return a.sn > b.sn ? 1 : -1;
+          });
+          if (this.crud.length === 0) {
+            this.loading = false;
+          }
+          this.crud.forEach((item, index) => {
+            item.index = index + 1;
+            if (index === this.crud.length - 1) {
+              setTimeout(() => {
+                this.loading = false;
+              }, 200);
+            }
+          });
         });
       } else {
         this.getData(
@@ -186,6 +207,11 @@ export default {
   },
   created() {
     switch (this.choiceTle) {
+      case "選擇漂染基礎工藝":
+        this.choiceC = techargueC(this);
+        this.choiceF = techargueF(this);
+        this.getData = getTechargue;
+        break;
       case "选择织造通知单":
         this.choiceC = weaveJobC(this);
         this.choiceF = weaveJobF(this);

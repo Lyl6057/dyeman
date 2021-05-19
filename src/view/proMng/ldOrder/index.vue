@@ -2,31 +2,31 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-15 15:21:38
+ * @LastEditTime: 2021-05-19 11:05:27
  * @Description: 
 -->
 <template>
-  <div id="clothFlyPrint">
+  <div id="ldOrder">
     <view-container
-      title="漂染工艺"
+      title="LD生产通知单"
       v-loading="wloading"
       element-loading-text="拼命加载中..."
     >
       <el-row class="btnList">
         <el-button
           type="success"
-          :disabled="!detail.bleadyeCodeId"
+          :disabled="!detail.weaveJobId"
           @click="handleRowDBLClick(detail)"
           >{{ this.$t("public.update") }}</el-button
         >
         <el-button type="primary" @click="add">{{
           this.$t("public.add")
         }}</el-button>
-        <el-button
-          type="danger"
-          :disabled="!detail.bleadyeCodeId"
-          @click="del"
-          >{{ this.$t("public.del") }}</el-button
+        <el-button type="danger" :disabled="!detail.weaveJobId" @click="del">{{
+          this.$t("public.del")
+        }}</el-button>
+        <el-button type="primary" @click="print" :loading="wloading"
+          >打印</el-button
         >
         <el-button type="primary" @click="query">{{
           this.$t("public.query")
@@ -50,8 +50,7 @@
           @on-load="query"
           @row-dblclick="handleRowDBLClick"
           @current-row-change="cellClick"
-        >
-        </avue-crud>
+        ></avue-crud>
       </el-row>
       <el-dialog
         id="colorMng_Dlg"
@@ -61,14 +60,15 @@
         append-to-body
         :close-on-click-modal="false"
         :close-on-press-escape="false"
+        v-if="dialogVisible"
       >
         <tem-dlg
-          v-if="dialogVisible"
           ref="tem"
           :detail="detail"
           :isAdd="isAdd"
           @close="dialogVisible = false"
           @refresh="query"
+          v-if="dialogVisible"
         ></tem-dlg>
       </el-dialog>
     </view-container>
@@ -76,7 +76,7 @@
 </template>
 <script>
 import { mainForm, mainCrud } from "./data";
-import { get, add, update, del, getDtl, delDtl } from "./api";
+import { get, add, update, del, print } from "./api";
 import tem from "./temDlg";
 export default {
   name: "",
@@ -120,20 +120,7 @@ export default {
         })
       ).then((res) => {
         this.crud = res.data.records;
-        this.crud = this.crud.sort((a, b) => {
-          return a.bleadyeCode > b.bleadyeCode ? 1 : -1;
-        });
         this.crud.forEach((item, i) => {
-          for (let key in item) {
-            if (item[key] == null) {
-              item[key] = undefined;
-            }
-          }
-          if (item.bleadyeImageId) {
-            item.bleadyeImageId = "√";
-          } else {
-            item.bleadyeImageId = "-";
-          }
           item.index = i + 1;
         });
         if (this.crud.length > 0) {
@@ -179,26 +166,19 @@ export default {
     },
     del() {
       this.$tip
-        .cofirm("是否确定删除選中的數據?", this, {})
+        .cofirm(
+          this.$t("iaoMng.delTle7") +
+            this.detail.weaveJobCode +
+            this.$t("iaoMng.delTle2"),
+          this,
+          {}
+        )
         .then(() => {
-          del(this.detail.bleadyeCodeId)
+          del(this.detail.ldNoticeId)
             .then((res) => {
               if (res.data.code === 200) {
-                getDtl(
-                  Object.assign({
-                    proBleadyeTechCodeFk: this.detail.bleadyeCode,
-                    rows: 999,
-                    start: 1,
-                  })
-                ).then((res) => {
-                  res.data.records.forEach((item, i) => {
-                    delDtl(item.codeItemIt).then((res) => {});
-                  });
-                });
-                setTimeout(() => {
-                  this.$tip.success(this.$t("public.sccg"));
-                  this.query();
-                }, 200);
+                this.$tip.success(this.$t("public.sccg"));
+                this.query();
               } else {
                 this.$tip.error(this.$t("public.scsb"));
               }
@@ -212,12 +192,16 @@ export default {
         });
     },
     handleRowDBLClick(val) {
+      this.dialogVisible = true;
       this.isAdd = false;
       this.detail = val;
-      this.dialogVisible = true;
+      // this.print();
     },
     cellClick(val) {
       this.detail = val;
+    },
+    close() {
+      document.getElementsByClassName("el-dialog__headerbtn")[0].click();
     },
   },
   created() {},
@@ -228,6 +212,10 @@ export default {
 };
 </script>
 <style lang='stylus'>
-#name {
+#ldOrder {
+  .has-gutter th {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
 }
 </style>
