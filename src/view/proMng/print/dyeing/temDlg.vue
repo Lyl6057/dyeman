@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-19 19:32:16
+ * @LastEditTime: 2021-05-21 20:15:26
  * @Description: 
 -->
 <template>
@@ -403,24 +403,27 @@ export default {
       this.wLoading = true;
       this.form = {};
       if (this.isAdd) {
-        // baseCodeSupplyEx({ code: "proWeaveJob" }).then((res) => {
-        //   this.form.weaveJobCode = res.data.data;
-        //   this.code = res.data.data;
-        // });
         setTimeout(() => {
           this.form.workDate = this.$getNowTime();
           this.form.deliveDate = this.$getNowTime();
           this.wLoading = false;
         }, 200);
       } else {
+        // get({
+        //   rows: 10,
+        //   start: 1,
+        //   bleadyeJobId: this.detail.bleadyeJobId,
+        // }).then((res) => {
+        //   this.form = res.data.records[0];
+        //   if (!(this.form.mergVatNo instanceof Array) && this.form.mergVatNo) {
         this.form = this.detail;
-        if (!(this.form.mergVatNo instanceof Array) && this.form.mergVatNo) {
-          this.form.mergVatNo = this.form.mergVatNo.split("/");
-        }
+        this.form.mergVatNo = this.form.mergVatNo.split("/");
+        // }
         this.oldW = JSON.parse(JSON.stringify(this.form.clothWeight));
         setTimeout(() => {
           this.wLoading = false;
         }, 200);
+        // });
       }
     },
     getOther(val) {
@@ -464,9 +467,13 @@ export default {
                 delete this.form[item];
               }
             });
+            isNaN(this.form.clothWeight) ? (this.form.clothWeight = "") : "";
+            isNaN(this.form.poAmountKg) ? (this.form.poAmountKg = "") : "";
+            isNaN(this.form.poAmountLb) ? (this.form.poAmountLb = "") : "";
             this.form.workDate += " 00:00:00";
             this.form.deliveDate += " 00:00:00";
             let vat = "";
+            // if (typeof this.form.mergVatNo == "object") {
             this.form.mergVatNo.forEach((item, i) => {
               if (i == this.form.mergVatNo.length - 1) {
                 vat += item;
@@ -474,13 +481,12 @@ export default {
                 vat += item + "/";
               }
             });
+            // }
+
             this.form.mergVatNo = vat;
-            // this.form.amount = Number(this.form.amount).toFixed(2);
-            // return;
             if (this.form.bleadyeJobId) {
               // update
               this.form.upateTime = this.$getNowTime("datetime");
-
               if (this.oldW != this.form.clothWeight) {
                 this.$tip
                   .cofirm(
@@ -491,6 +497,7 @@ export default {
                   .then(() => {
                     update(this.form).then((res) => {
                       if (res.data.code == 200) {
+                        this.oldW = this.form.clothWeight;
                         getTechargue({
                           proBleadyeJobFk: this.form.bleadyeJobId,
                           rows: 999,
@@ -559,7 +566,6 @@ export default {
                             }, 200);
                           }
                         });
-                        this.oldW = this.form.clothWeight;
                       } else {
                         this.wLoading = false;
                         done();
@@ -571,10 +577,13 @@ export default {
                     this.form.clothWeight = this.oldW;
                     update(this.form).then((res) => {
                       if (res.data.code == 200) {
+                        this.oldW = this.form.clothWeight;
+
                         setTimeout(() => {
                           this.wLoading = false;
                           this.$emit("refresh");
                           this.$tip.success(this.$t("public.bccg"));
+
                           done();
                         }, 200);
                       } else {
@@ -587,6 +596,7 @@ export default {
               } else {
                 update(this.form).then((res) => {
                   if (res.data.code == 200) {
+                    this.oldW = this.form.clothWeight;
                     setTimeout(() => {
                       this.wLoading = false;
                       this.$emit("refresh");
@@ -605,8 +615,8 @@ export default {
               this.form.createTime = this.$getNowTime("datetime");
               add(this.form).then((res) => {
                 if (res.data.code == 200) {
+                  this.oldW = this.form.clothWeight;
                   this.form.bleadyeJobId = res.data.data;
-                  // this.isAdd = false;
                   this.addOtherData();
                 } else {
                   this.$tip.error(this.$t("public.bcsb"));
@@ -615,7 +625,9 @@ export default {
                 done();
               });
             }
-            this.form.mergVatNo = this.form.mergVatNo.split("/");
+            // if (this.form.mergVatNo) {
+            //   this.form.mergVatNo = this.form.mergVatNo.split("/");
+            // }
           } catch (error) {
             console.log(error);
             this.wLoading = false;
@@ -780,7 +792,7 @@ export default {
     },
     getVat() {
       // 获取合染缸号的重量
-      this.vatWeight = 0;
+      this.vatWeight = this.form.clothWeight;
       this.form.mergVatNo.forEach((item, i) => {
         get({ rows: 10, start: 1, vatNo: item }).then((res) => {
           res.data.records.forEach((vat) => {
@@ -1283,6 +1295,24 @@ export default {
         val.shrinkWidth = isNaN(val.horizonShrink) ? 0 : val.horizonShrink;
         val.clothWeight = isNaN(val.amount) ? 0 : val.amount;
         this.form = val;
+        // this.form.weaveJobCode =val.weaveJobCode;
+        // this.form.fabName = val.fabName
+        // this.form.salPoNo = val.salPoNo
+        // this.form.custCode = val.custCode
+
+        // this.form.yarnBatchNo =val.yarnBatchNo;
+        // this.form.yarnNumber = val.yarnNumber
+        // this.form.yarnCard = val.yarnCard
+        // this.form.colorName = val.colorName
+
+        //  this.form.colorCode =val.colorCode;
+        // this.form.yarnNumber = val.yarnNumber
+        // this.form.yarnCard = val.yarnCard
+        // this.form.colorName = val.colorName
+
+        this.form.breadthUnit = this.form.breadth.replace(/[^a-z]+/gi, "");
+        this.form.breadth = Number(this.form.breadth.replace(/[^0-9]/gi, ""));
+
         this.getOther();
       }
       if (this.choiceTle == "選擇生产项目") {

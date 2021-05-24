@@ -2,27 +2,27 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-22 08:23:10
+ * @LastEditTime: 2021-05-24 19:16:37
  * @Description: 
 -->
 <template>
-  <div id="ldOrder">
+  <div id="dyeNotice">
     <view-container
-      title="LD生产通知单"
+      title="染整通知单"
       v-loading="wloading"
       element-loading-text="拼命加载中..."
     >
       <el-row class="btnList">
         <el-button
           type="success"
-          :disabled="!detail.ldNoticeId"
+          :disabled="!detail.dyeOrderId"
           @click="handleRowDBLClick(detail)"
           >{{ this.$t("public.update") }}</el-button
         >
         <el-button type="primary" @click="add">{{
           this.$t("public.add")
         }}</el-button>
-        <el-button type="danger" :disabled="!detail.ldNoticeId" @click="del">{{
+        <el-button type="danger" :disabled="!detail.dyeOrderId" @click="del">{{
           this.$t("public.del")
         }}</el-button>
         <el-button type="primary" @click="print" :loading="wloading"
@@ -136,6 +136,9 @@ export default {
           delete this.form[key];
         }
       }
+      if (this.form.dyeDate) {
+        this.form.dyeDate += " 00:00:00";
+      }
       get(
         Object.assign(this.form, {
           rows: this.page.pageSize,
@@ -145,7 +148,6 @@ export default {
         .then((res) => {
           this.crud = res.data.records;
           this.crud.forEach((item, i) => {
-            item.custName = item.custCode;
             item.index = i + 1;
           });
           if (this.crud.length > 0) {
@@ -164,8 +166,8 @@ export default {
       this.pdfDlg = true;
       this.pdfUrl =
         process.env.API_HOST +
-        "/api/proLdNotice/exportpdf?id=" +
-        this.detail.ldNoticeId;
+        "/api/proDyeFinishOrder/exportpdf?id=" +
+        this.detail.dyeOrderId;
     },
     add() {
       this.isAdd = true;
@@ -174,14 +176,14 @@ export default {
     del() {
       this.$tip
         .cofirm(
-          "是否删除客户单号为【 " +
+          "是否删除指令编号为【 " +
             this.detail.orderNo +
             this.$t("iaoMng.delTle2"),
           this,
           {}
         )
         .then(() => {
-          del(this.detail.ldNoticeId)
+          del(this.detail.dyeOrderId)
             .then((res) => {
               if (res.data.code === 200) {
                 this.$tip.success(this.$t("public.sccg"));
@@ -219,10 +221,6 @@ export default {
 };
 </script>
 <style lang='stylus'>
-#ldOrder {
-  .has-gutter th {
-    padding: 0 !important;
-    margin: 0 !important;
-  }
+#dyeNotice {
 }
 </style>

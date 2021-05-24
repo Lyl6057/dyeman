@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-10 14:22:28
+ * @LastEditTime: 2021-05-20 09:50:44
  * @Description: 
 -->
 <template>
@@ -700,24 +700,26 @@ export default {
         this.form.custCode = this.chooseData.custId;
         this.form.custName = this.chooseData.custId;
         getPoDtla({ salPoFk: this.chooseData.salPooid }).then((res) => {
-          let poDtla = res.data.rows[0];
-          this.form.amount = poDtla.fabQty;
-          this.form.colorName = poDtla.colorName;
-          this.form.colorCode = poDtla.dyeColorNo;
-          this.form.fabricDesc = poDtla.fabYcount;
-          this.form.fallCloth = poDtla.fabBreadth;
-          // 获取面料
-          getBom({ salBomFabricoid: poDtla.salBomFabricFk }).then((bom) => {
-            let bomData = bom.data;
-            this.form.gramWeight = bomData.fabWeight;
-            this.form.breadth = bomData.fabWeight;
-            this.form.needleInch = bomData.inchNum;
-            this.form.needleNumber = bomData.totalNeedle;
-            this.form.yarnLength = bomData.yarnLong;
-            this.form.horizonShrink = bomData.shrinkHorizontal;
-            this.form.verticalShrink = bomData.shrinkVertical;
-            // this.form.cylinderHeight = bomData.shrinkVertical;
-          });
+          if (res.data.rows.length) {
+            let poDtla = res.data.rows[0];
+            this.form.amount = poDtla.fabQty;
+            this.form.colorName = poDtla.colorName;
+            this.form.colorCode = poDtla.dyeColorNo;
+            this.form.fabricDesc = poDtla.fabYcount;
+            this.form.fallCloth = poDtla.fabBreadth;
+            // 获取面料
+            getBom({ salBomFabricoid: poDtla.salBomFabricFk }).then((bom) => {
+              let bomData = bom.data;
+              this.form.gramWeight = bomData.fabWeight;
+              this.form.breadth = bomData.fabWeight;
+              this.form.needleInch = bomData.inchNum;
+              this.form.needleNumber = bomData.totalNeedle;
+              this.form.yarnLength = bomData.yarnLong;
+              this.form.horizonShrink = bomData.shrinkHorizontal;
+              this.form.verticalShrink = bomData.shrinkVertical;
+              // this.form.cylinderHeight = bomData.shrinkVertical;
+            });
+          }
           setTimeout(() => {
             this.wLoading = false;
           }, 200);

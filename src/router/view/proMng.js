@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-29 14:14:56
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-19 08:42:15
+ * @LastEditTime: 2021-05-22 08:08:39
  * @Description: 
  */
 export default [
@@ -35,8 +35,13 @@ export default [
   },
   {
     path: '/ldOrder',
-    name: '生产排单',
+    name: 'LD通知單',
     component: resolve => require(['@/view/proMng/ldOrder/index'], resolve)
+  },
+  {
+    path: '/dyeNotice',
+    name: '染整通知單',
+    component: resolve => require(['@/view/proMng/dyeNotice/index'], resolve)
   },
   // 报表
   {

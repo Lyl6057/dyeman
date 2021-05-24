@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-04-01 13:39:35
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-19 08:41:49
+ * @LastEditTime: 2021-05-22 08:09:24
  * @Description:
  */
 
@@ -43,8 +43,12 @@ export function proMng(_this) {
         index: "/proScheduling"
       },
       {
-        menuName: "3.LD生产通知单",
+        menuName: "3.LD通知单",
         index: "/ldOrder"
+      },
+      {
+        menuName: "4.染整通知单",
+        index: "/dyeNotice"
       },
     ]
   },

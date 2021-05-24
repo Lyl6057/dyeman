@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-01 14:06:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-19 10:16:41
+ * @LastEditTime: 2021-05-21 09:29:17
  * @Description:
  */
 
@@ -72,187 +72,81 @@ export function del(id) {
 // 打印佈飛
 export function print(params) {
   return axios({
-    url: '/api/proWeaveJob/prinEntity',
+    url: '/api/proLdNotice/exportpdf',
     method: 'get',
     params: params
   })
 }
 
-// 紗長
-export function getLong(params) {
-  return axios({
-    url: '/api/proWeaveJobLengthChanged/page',
-    method: 'get',
-    params: params
-  })
-}
-
-// 新增
-export function addLong(data) {
-  return axios({
-    url: '/api/proWeaveJobLengthChanged',
-    method: 'post',
-    params: data
-  })
-}
-
-// 修改
-export function updateLong(data) {
-  return axios({
-    url: '/api/proWeaveJobLengthChanged',
-    method: 'put',
-    params: data
-  })
-}
-
-// 刪除
-export function delLong(id) {
-  return axios({
-    url: '/api/proWeaveJobLengthChanged?changedId=' + id,
-    method: 'delete',
-  })
-}
 
 
-export function getYarn(params) {
+export function getComp(params) {
   return axios({
-    url: '/api/proWeaveJobYarn/page',
+    url: '/api/proLdNoticeFabric/page',
     method: 'get',
     params: params
   })
 }
 
 // 新增
-export function addYarn(data) {
+export function addComp(data) {
   return axios({
-    url: '/api/proWeaveJobYarn',
+    url: '/api/proLdNoticeFabric',
     method: 'post',
     params: data
   })
 }
 
 // 修改
-export function updateYarn(data) {
+export function updateComp(data) {
   return axios({
-    url: '/api/proWeaveJobYarn',
+    url: '/api/proLdNoticeFabric',
     method: 'put',
     params: data
   })
 }
 
 // 刪除
-export function delYarn(id) {
+export function delComp(id) {
   return axios({
-    url: '/api/proWeaveJobYarn?useYarnId=' + id,
+    url: '/api/proLdNoticeFabric?compId=' + id,
     method: 'delete',
   })
 }
 
-export function getGroup(params) {
+export function getColor(params) {
   return axios({
-    url: '/api/proWeaveJobGroup/page',
+    url: '/api/proLdNoticeColor/page',
     method: 'get',
     params: params
   })
 }
 
 // 新增
-export function addGroup(data) {
+export function addColor(data) {
   return axios({
-    url: '/api/proWeaveJobGroup',
+    url: '/api/proLdNoticeColor',
     method: 'post',
     params: data
   })
 }
 
 // 修改
-export function updateGroup(data) {
+export function updateColor(data) {
   return axios({
-    url: '/api/proWeaveJobGroup',
+    url: '/api/proLdNoticeColor',
     method: 'put',
     params: data
   })
 }
 
 // 刪除
-export function delGroup(id) {
+export function delColor(id) {
   return axios({
-    url: '/api/proWeaveJobGroup?groupId=' + id,
+    url: '/api/proLdNoticeColor?noticeColorId=' + id,
     method: 'delete',
   })
 }
 
 
-
-export function getCalico(params) {
-  return axios({
-    url: '/api/proWeaveJobCalico/page',
-    method: 'get',
-    params: params
-  })
-}
-
-
-// 新增
-export function addCalico(data) {
-  return axios({
-    url: '/api/proWeaveJobCalico',
-    method: 'post',
-    params: data
-  })
-}
-
-// 修改
-export function updateCalico(data) {
-  return axios({
-    url: '/api/proWeaveJobCalico',
-    method: 'put',
-    params: data
-  })
-}
-
-// 刪除
-export function delCalico(id) {
-  return axios({
-    url: '/api/proWeaveJobCalico?washedId=' + id,
-    method: 'delete',
-  })
-}
-
-
-
-export function getStrain(params) {
-  return axios({
-    url: '/api/proWeaveJobStrain/page',
-    method: 'get',
-    params: params
-  })
-}
-
-
-// 新增
-export function addStrain(data) {
-  return axios({
-    url: '/api/proWeaveJobStrain',
-    method: 'post',
-    params: data
-  })
-}
-
-// 修改
-export function updateStrain(data) {
-  return axios({
-    url: '/api/proWeaveJobStrain',
-    method: 'put',
-    params: data
-  })
-}
-
-// 刪除
-export function delStrain(id) {
-  return axios({
-    url: '/api/proWeaveJobStrain?strainId=' + id,
-    method: 'delete',
-  })
-}
 

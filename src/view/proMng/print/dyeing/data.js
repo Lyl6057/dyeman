@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-19 19:26:32
+ * @LastEditTime: 2021-05-21 19:04:10
  * @Description:
  */
 
@@ -428,7 +428,7 @@ export function mainCrud(_this) {
         width: 90,
         hide: true,
         span: 6,
-        // type: "number",
+        type: "number",
         placeholder: " "
       },
       {
@@ -1167,6 +1167,7 @@ export function techargueCrud(_this) {
           if (_this.mathCtr) {
             _this.$nextTick(() => {
               _this.chooseData.totalWater = Number((Number(_this.form.clothWeight) * Number(_this.chooseData.liquorRatio).toFixed(0)))
+              _this.chooseData.totalWater = _this.chooseData.totalWater.toFixed(0)
             })
           }
         }
