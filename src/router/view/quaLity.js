@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-10 13:20:44
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-07 08:07:50
+ * @LastEditTime: 2021-05-25 09:00:48
  * @Description: 
  */
 export default [
@@ -11,6 +11,11 @@ export default [
     path: "/weight",
     name: "称重",
     component: resolve => require(["@/view/quaLity/weight/index"], resolve)
+  },
+  {
+    path: "/scanWeight",
+    name: "称重",
+    component: resolve => require(["@/view/quaLity/scan/index"], resolve)
   },
   {
     path: "/quaLity",

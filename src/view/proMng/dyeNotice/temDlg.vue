@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-24 19:00:55
+ * @LastEditTime: 2021-05-25 07:59:41
  * @Description: 
 -->
 <template>
@@ -86,7 +86,6 @@
                 id="testCrud"
                 :option="testOp"
                 :data="test"
-                :page.sync="testPage"
                 v-loading="loading"
                 @on-load="query"
                 @current-row-change="cellTestClick"

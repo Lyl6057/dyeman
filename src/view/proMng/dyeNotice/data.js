@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-24 19:17:29
+ * @LastEditTime: 2021-05-25 08:04:01
  * @Description:
  */
 
@@ -632,20 +632,20 @@ export function testCrud(_this) {
         prop: "testCnContent",
         span: 6,
         cell: true,
-        width: 180
+        width: 200
       },
       {
         label: "test items",
         prop: "testEnContent",
         span: 6,
-        cell: true, width: 180
+        cell: true, width: 200
       },
       {
         label: "Kiểm tra nội dung",
         prop: "testVetContent",
         span: 6,
         cell: true,
-        // width: 180
+        width: 250
       }
     ],
   }
