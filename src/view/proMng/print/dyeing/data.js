@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-21 19:04:10
+ * @LastEditTime: 2021-05-28 13:43:07
  * @Description:
  */
 
@@ -1198,7 +1198,11 @@ export function techargueCrud(_this) {
                 // _this.chooseData.haltWater = Number(_this.chooseData.totalWater) - Number(_this.chooseData.wetClothWater) - Number(_this.chooseData.shotgunWater)
                 _this.chooseData.list.forEach(item => {
                   if (item.measureType && item.measureType.indexOf("g") != -1) {
-                    item.useAmount = Number((Number(item.formulaAmount * _this.chooseData.totalWater)).toFixed(0))
+                    if (item.formulaUnit == 'KG') {
+                      item.useAmount = Number((Number(item.formulaAmount * _this.chooseData.totalWater) * 0.001).toFixed(2))
+                    } else {
+                      item.useAmount = Number((Number(item.formulaAmount * _this.chooseData.totalWater)).toFixed(2))
+                    }
                     isNaN(item.useAmount) ? item.useAmount = 0 : ""
                   }
                 });
@@ -1341,8 +1345,6 @@ export function codeItemCrud(_this) {
         placeholder: ' ',
         change: () => {
           if (_this.mathCtr) {
-
-
             if (!_this.chooseDtlData.measureType) {
               return;
             }
@@ -1350,7 +1352,11 @@ export function codeItemCrud(_this) {
               if (_this.chooseDtlData.measureType.indexOf("g") == -1 && _this.chooseDtlData.measureType.indexOf("G") == -1) {
                 _this.chooseDtlData.useAmount = Number((Number(_this.form.clothWeight) * Number(_this.chooseDtlData.formulaAmount) * 0.01).toFixed(2))
               } else {
-                _this.chooseDtlData.useAmount = Number((Number(_this.chooseDtlData.formulaAmount * _this.chooseData.totalWater)).toFixed(2))
+                if (_this.chooseDtlData.formulaUnit == 'KG') {
+                  _this.chooseDtlData.useAmount = Number((Number(_this.chooseDtlData.formulaAmount * _this.chooseData.totalWater * 0.001)).toFixed(2))
+                } else {
+                  _this.chooseDtlData.useAmount = Number((Number(_this.chooseDtlData.formulaAmount * _this.chooseData.totalWater)).toFixed(2))
+                }
               }
               isNaN(_this.chooseDtlData.useAmount) ? _this.chooseDtlData.useAmount = 0 : ""
             })
@@ -1397,6 +1403,7 @@ export function codeItemCrud(_this) {
         prop: "formulaUnit",
         width: 90,
         cell: true,
+        slot: true,
         span: 6,
         type: "select",
         dicData: [

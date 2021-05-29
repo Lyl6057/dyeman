@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-23 16:30:42
+ * @LastEditTime: 2021-05-29 08:42:19
  * @Description: 
 -->
 <template>
@@ -72,6 +72,31 @@
         ></tem-dlg>
       </el-dialog>
     </view-container>
+    <el-dialog
+      id="colorMng_Dlg"
+      :visible.sync="pdfDlg"
+      fullscreen
+      width="100%"
+      append-to-body
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+    >
+      <view-container title="打印預覽">
+        <!-- <div class="btnList">
+            <el-button type="warning" @click="pdfDlg = false">{{
+              this.$t("public.close")
+            }}</el-button>
+            <el-button type="primary" @click="print2">打印</el-button>
+          </div> -->
+        <!--startprint-->
+        <embed
+          id="pdf"
+          style="width: 100vw; height: calc(100vh - 80px)"
+          :src="pdfUrl"
+        />
+        <!--endprint-->
+      </view-container>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -103,6 +128,7 @@ export default {
       input: "",
       wloading: false,
       czsocket: {},
+      pdfDlg: false,
     };
   },
   watch: {},
@@ -135,34 +161,42 @@ export default {
       });
     },
     print() {
-      this.$tip
-        .cofirm(
-          "是否確定打印生產單號為【 " +
-            this.detail.weaveJobCode +
-            this.$t("iaoMng.delTle2"),
-          this,
-          {}
-        )
-        .then(() => {
-          print({ weaveJobCode: this.detail.weaveJobCode }).then((res) => {
-            if (res.data.msg === "打印成功") {
-              this.wloading = true;
-              setTimeout(() => {
-                this.wloading = false;
-                this.$tip.success(res.data.msg);
-              }, 2000);
-            } else {
-              this.wloading = true;
-              setTimeout(() => {
-                this.wloading = false;
-                this.$tip.error(res.data.msg);
-              }, 500);
-            }
-          });
-        })
-        .catch((err) => {
-          this.$tip.warning(this.$t("public.qxcz"));
-        });
+      // this.$tip
+      //   .cofirm(
+      //     "是否確定打印生產單號為【 " +
+      //       this.detail.weaveJobCode +
+      //       this.$t("iaoMng.delTle2"),
+      //     this,
+      //     {}
+      //   )
+      //   .then(() => {
+      //     print({
+      //       id: this.detail.weaveJobId,
+      //       weaveJobCode: this.detail.weaveJobCode,
+      //     }).then((res) => {
+      //       if (res.data.msg === "打印成功") {
+      //         this.wloading = true;
+      //         setTimeout(() => {
+      //           this.wloading = false;
+      //           this.$tip.success(res.data.msg);
+      //         }, 2000);
+      //       } else {
+      //         this.wloading = true;
+      //         setTimeout(() => {
+      //           this.wloading = false;
+      //           this.$tip.error(res.data.msg);
+      //         }, 500);
+      //       }
+      //     });
+      //   })
+      //   .catch((err) => {
+      //     this.$tip.warning(this.$t("public.qxcz"));
+      //   });
+      this.pdfDlg = true;
+      this.pdfUrl =
+        process.env.API_HOST +
+        "/api/proWeaveJob/prinEntityPdf?id=" +
+        this.detail.weaveJobId;
     },
     async print2() {
       console.log(this.input);

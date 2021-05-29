@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-24 19:16:37
+ * @LastEditTime: 2021-05-29 08:04:14
  * @Description: 
 -->
 <template>
@@ -88,7 +88,11 @@
             <el-button type="primary" @click="print2">打印</el-button>
           </div> -->
           <!--startprint-->
-          <embed id="pdf" style="width: 100vw; height: 97vh" :src="pdfUrl" />
+          <embed
+            id="pdf"
+            style="width: 100vw; height: calc(100vh - 80px)"
+            :src="pdfUrl"
+          />
           <!--endprint-->
         </view-container>
       </el-dialog>

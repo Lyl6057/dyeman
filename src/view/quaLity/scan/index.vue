@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-25 15:37:40
+ * @LastEditTime: 2021-05-27 16:05:36
  * @Description: 
 -->
 <template>
@@ -11,21 +11,21 @@
     :element-loading-text="$t('public.loading')"
     v-loading="wLoading"
   >
-    <view-container title="胚布称重">
-      <el-row class="btnList">
-        <!-- <el-button type="success" @click="save">{{
+    <view-container title="QC验布">
+      <!-- <el-row class="btnList"> -->
+      <!-- <el-button type="success" @click="save">{{
           this.$t("public.save")
         }}</el-button> -->
-        <el-button type="primary" @click="query">{{
+      <!-- <el-button type="primary" @click="query">{{
           this.$t("public.query")
-        }}</el-button>
+        }}</el-button> -->
 
-        <!-- <el-button type="success" @click="print">打印</el-button> -->
-        <!-- <el-button type="warning" @click="close">{{
+      <!-- <el-button type="success" @click="print">打印</el-button> -->
+      <!-- <el-button type="warning" @click="close">{{
           this.$t("public.close")
         }}</el-button> -->
-      </el-row>
-      <el-row class="formBox">
+      <!-- </el-row> -->
+      <el-row class="formBox" style="margin-top: 5px">
         <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
       </el-row>
       <el-row class="crudBox">
@@ -33,18 +33,21 @@
           <view-container title="胚布信息">
             <el-card
               class="box-card"
-              style="height: calc(100vh - 215px); overflow: auto"
+              style="height: calc(100vh - 320px); overflow: auto"
             >
               <!-- <div slot="header" class="clearfix">
               <span>布票信息</span>
             </div> -->
               <el-row class="text item">
-                <el-col :span="10">布票号: {{ crud.noteCode }}</el-col>
-                <el-col :span="14">客戶: {{ crud.customerName }}</el-col>
+                <el-col :span="10">生产单号: {{ crud.weaveJobCode }}</el-col>
+                <el-col :span="14">布票号: {{ crud.noteCode }}</el-col>
               </el-row>
               <el-row class="text item">
-                <el-col :span="10">订单号: {{ crud.poNo }}</el-col>
-                <el-col :span="14">布类名称: {{ crud.fabricName }}</el-col>
+                <el-col :span="10">客户编号: {{ crud.customerName }}</el-col>
+                <el-col :span="14">订单号: {{ crud.poNo }}</el-col>
+              </el-row>
+              <el-row class="text item">
+                <el-col :span="24">布类名称: {{ crud.fabricName }}</el-col>
               </el-row>
               <el-row class="text item">
                 <el-col :span="10">机号: {{ crud.loomNo }}</el-col>
@@ -60,7 +63,15 @@
               </el-row>
               <el-row class="text item">
                 <el-col :span="10">验布员工号: {{ crud.clothChecker }}</el-col>
+                <el-col :span="14">值机工号: {{ crud.workNo }}</el-col>
+              </el-row>
+              <el-row class="text item">
+                <el-col :span="10">QC扣减数量: {{ crud.qcTakeOut }}</el-col>
                 <el-col :span="14">验布时间: {{ crud.clothCheckTime }}</el-col>
+              </el-row>
+              <el-row class="text item">
+                <el-col :span="10">载具编号: {{ crud.storeLoadCode }}</el-col>
+                <el-col :span="14">存储位置: {{ crud.storeSiteCode }}</el-col>
               </el-row>
 
               <!-- <div class="btnBox">
@@ -86,16 +97,35 @@
           <view-container title="历史胚布">
             <el-card
               class="border-card"
-              style="height: calc(100vh - 215px); overflow: auto"
+              style="height: calc(100vh - 320px); overflow: auto"
               id="history"
             >
-              <div class="text item" v-for="item in history" :key="item.noteId">
-                <div class="history">
-                  <span>布票号: {{ item.noteCode }}</span>
-                  <span> 重量: {{ item.clothWeight }}</span>
-                  <span>验布员工号: {{ item.clothChecker }}</span>
-                </div>
-                <el-divider style="margin: 0"></el-divider>
+              <div
+                class="text item"
+                v-for="item in history"
+                :key="item.noteId"
+                style="border-bottom: 1px solid #eee"
+              >
+                <el-tooltip
+                  class="item"
+                  effect="dark"
+                  :content="
+                    '布票号' +
+                    item.noteCode +
+                    ' 重量' +
+                    item.clothWeight +
+                    ' 验布员工号' +
+                    item.clothChecker
+                  "
+                  placement="top"
+                >
+                  <div class="history">
+                    <span>布票号: {{ item.noteCode }}</span>
+                    <span> 重量: {{ item.clothWeight }}</span>
+                    <span>验布员工号: {{ item.clothChecker }}</span>
+                  </div>
+                </el-tooltip>
+                <!-- <el-divider style="margin: 0"></el-divider> -->
               </div>
             </el-card>
           </view-container>
@@ -107,7 +137,7 @@
 <script>
 import { mainForm, mainCrud } from "./data";
 import { webSocket } from "@/config/index.js";
-import { get, add, update, del } from "./api";
+import { get, add, update, del, getWeave } from "./api";
 export default {
   name: "",
   data() {
@@ -129,6 +159,7 @@ export default {
       czsocket: {},
       changeList: [],
       wLoading: false,
+      time: null,
     };
   },
   watch: {},
@@ -154,10 +185,30 @@ export default {
           if (this.form.eachNumbers) {
             this.crud.clothWeight = this.form.eachNumbers;
           }
+          if (this.form.workNos) {
+            this.crud.workNo = this.form.workNos;
+          }
+          if (this.form.qcTakeOuts) {
+            this.crud.qcTakeOut = this.form.qcTakeOuts;
+          }
+          if (this.form.storeLoadCodes) {
+            this.crud.storeLoadCode = this.form.storeLoadCodes;
+          }
+          if (this.form.storeSiteCodes) {
+            this.crud.storeSiteCode = this.form.storeSiteCodes;
+          }
+          if (this.crud.weaveJobFk) {
+            getWeave({ weaveJobId: this.crud.weaveJobFk }).then((weave) => {
+              this.crud.weaveJobCode = weave.data[0].weaveJobCode;
+            });
+          }
           this.save();
           // this.form.noteCode = "";
         } else {
           this.$tip.warning("暂无数据!");
+          setTimeout(() => {
+            this.form.noteCode = "";
+          }, 500);
         }
         setTimeout(() => {
           this.wLoading = false;
@@ -174,6 +225,11 @@ export default {
       _this.czsocket.onmessage = function (e) {
         _this.form.eachNumbers = e.data;
       };
+      // setTimeout(() => {
+      //   _this.time = setInterval(() => {
+      //     _this.czsocket.send("weight");
+      //   }, 1000);
+      // }, 200);
     },
     weighing() {
       if (this.czsocket.readyState == 3) {
@@ -186,13 +242,17 @@ export default {
     },
     save() {
       this.wLoading = true;
+      this.crud.clothCheckTime = this.$getNowTime("datetime");
       update(this.crud).then((res) => {
         if (res.data.code == 200) {
           setTimeout(() => {
             this.history.unshift(this.crud);
             this.history = this.$unique(this.history, "noteId");
-            this.form.noteCode = "";
-            if (this.history.length >= 300) {
+            setTimeout(() => {
+              this.form.noteCode = "";
+            }, 500);
+
+            if (this.history.length >= 30) {
               this.history.pop();
             }
             // this.$nextTick(() => {
@@ -223,10 +283,19 @@ export default {
       }
     };
   },
-  beforeDestroy() {},
+  beforeDestroy() {
+    clearInterval(this.time);
+  },
+  destroyed() {
+    clearInterval(this.time);
+  },
 };
 </script>
 <style lang='stylus'>
+.el-tooltip__popper {
+  font-size: 18px !important;
+}
+
 #clothFlyScan {
   .history {
     // display: flex;
@@ -248,8 +317,8 @@ export default {
   }
 
   .el-form-item__label, .el-input__inner {
-    font-size: 20px !important;
-    line-height: 48px !important;
+    font-size: 24px !important;
+    line-height: 58px !important;
   }
 
   .el-tabs__item, .el-button {
@@ -257,8 +326,8 @@ export default {
   }
 
   .avue-form .el-input--mini input {
-    height: 48px;
-    line-height: 48px;
+    height: 58px;
+    line-height: 58px;
   }
 
   .el-card__header {
@@ -277,7 +346,7 @@ export default {
   }
 
   .text {
-    font-size: 20px;
+    font-size: 24px;
     text-align: left;
     text-indent: 2em;
     overflow: hidden;

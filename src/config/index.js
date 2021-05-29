@@ -35,7 +35,7 @@ export const webSocket = {
   },
   setCz(_this) {
     if ('WebSocket' in window) {
-      _this.czsocket = new WebSocket('ws://127.0.0.1:44001/');
+      _this.czsocket = new WebSocket('ws://127.0.0.1:44001/weight');
     } else {
       alert('该浏览器不支持websocket通讯，请切换浏览器！')
     }
@@ -49,6 +49,7 @@ export const webSocket = {
     }
     //接收到消息的回调方法
     _this.czsocket.onmessage = function (event) {
+
     }
     //连接关闭的回调方法
     _this.czsocket.onclose = function () {

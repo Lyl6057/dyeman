@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-04-01 14:08:13
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-25 08:59:59
+ * @LastEditTime: 2021-05-27 09:07:02
  * @Description:
  */
 
@@ -10,17 +10,17 @@ export function quality(_this) {
   return [
     {
       menuName: "一.称重",
-      index: "weight",
+      index: "/weight",
       icon: "el-icon-set-up",
     },
     {
-      menuName: "二.扫码称重",
-      index: "scanWeight",
+      menuName: "二.QC验布",
+      index: "/scanWeight",
       icon: "el-icon-set-up",
     },
     {
       menuName: "三." + _this.$t("caidan.zlxmgl"),
-      index: "quaLity",
+      index: "/quaLity",
       icon: "el-icon-set-up",
     },
     {

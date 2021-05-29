@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-05-03 13:03:03
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-17 18:40:27
+ * @LastEditTime: 2021-05-28 15:39:10
  * @Description:
  */
 
@@ -187,28 +187,28 @@ export function weaveJobC(_this) {
           trigger: "blur"
         }],
       },
-      {
-        label: "客戶名稱",
-        prop: "custName",
-        overHidden: true,
-        width: 200,
-        span: 6,
-        placeholder: "请選擇客戶名稱",
-        type: "select",
-        dicData: cust,
-        change: () => {
-          _this.$nextTick(() => {
-            _this.form.custCode = _this.form.custName
-          })
+      // {
+      //   label: "客戶名稱",
+      //   prop: "custName",
+      //   overHidden: true,
+      //   width: 200,
+      //   span: 6,
+      //   placeholder: "请選擇客戶名稱",
+      //   type: "select",
+      //   dicData: cust,
+      //   change: () => {
+      //     _this.$nextTick(() => {
+      //       _this.form.custCode = _this.form.custName
+      //     })
 
-        }
-      },
+      //   }
+      // },
       {
-        label: "客戶編號",
+        label: "客戶",
         prop: "custCode",
         overHidden: true,
         disabled: false,
-        width: 120,
+        width: 180,
         span: 6,
         placeholder: "请選擇客戶名稱",
         rules: [{
@@ -216,13 +216,15 @@ export function weaveJobC(_this) {
           message: "请選擇客戶名稱",
           trigger: "blur"
         }],
-        change: () => {
-          if (_this.isAdd) {
-            _this.$nextTick(() => {
-              _this.form.weaveJobCode = _this.form.custCode + '-' + _this.code
-            })
-          }
-        }
+        type: "select",
+        dicData: cust
+        // change: () => {
+        //   if (_this.isAdd) {
+        //     _this.$nextTick(() => {
+        //       _this.form.weaveJobCode = _this.form.custCode + '-' + _this.code
+        //     })
+        //   }
+        // }
       },
       {
         label: "織單數量",

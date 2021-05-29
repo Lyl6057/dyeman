@@ -2,34 +2,34 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-29 08:52:29
+ * @LastEditTime: 2021-05-29 09:16:25
  * @Description: 
 -->
 <template>
-  <div id="ldOrder">
+  <div id="finalizeDesign">
     <view-container
-      title="LD生产通知单"
+      title="定型指令单"
       v-loading="wloading"
       element-loading-text="拼命加载中..."
     >
       <el-row class="btnList">
         <el-button
           type="success"
-          :disabled="!detail.ldNoticeId"
+          :disabled="!detail.finishJobId"
           @click="handleRowDBLClick(detail)"
           >{{ this.$t("public.update") }}</el-button
         >
         <el-button type="primary" @click="add">{{
           this.$t("public.add")
         }}</el-button>
-        <el-button type="danger" :disabled="!detail.ldNoticeId" @click="del">{{
+        <el-button type="danger" :disabled="!detail.finishJobId" @click="del">{{
           this.$t("public.del")
         }}</el-button>
         <el-button
           type="primary"
           @click="print"
           :loading="wloading"
-          :disabled="!detail.ldNoticeId"
+          :disabled="!detail.finishJobId"
           >打印</el-button
         >
         <el-button type="primary" @click="query">{{
@@ -153,7 +153,7 @@ export default {
         .then((res) => {
           this.crud = res.data.records;
           this.crud.forEach((item, i) => {
-            item.custName = item.custCode;
+            // item.custName = item.custCode;
             item.index = i + 1;
           });
           if (this.crud.length > 0) {
@@ -182,14 +182,12 @@ export default {
     del() {
       this.$tip
         .cofirm(
-          "是否删除客户单号为【 " +
-            this.detail.orderNo +
-            this.$t("iaoMng.delTle2"),
+          "是否删除缸号为【 " + this.detail.vatNo + this.$t("iaoMng.delTle2"),
           this,
           {}
         )
         .then(() => {
-          del(this.detail.ldNoticeId)
+          del(this.detail.finishJobId)
             .then((res) => {
               if (res.data.code === 200) {
                 this.$tip.success(this.$t("public.sccg"));
@@ -227,10 +225,6 @@ export default {
 };
 </script>
 <style lang='stylus'>
-#ldOrder {
-  .has-gutter th {
-    padding: 0 !important;
-    margin: 0 !important;
-  }
+#finalizeDesign {
 }
 </style>

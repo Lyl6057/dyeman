@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-25 14:18:57
+ * @LastEditTime: 2021-05-27 16:12:28
  * @Description:
  */
 
@@ -17,7 +17,7 @@ export function mainForm(_this) {
   return {
     submitBtn: false,
     emptyBtn: false,
-    labelWidth: 120,
+    labelWidth: 160,
     column: [
       {
         label: "布票号",
@@ -27,23 +27,13 @@ export function mainForm(_this) {
         click: () => {
           _this.type = "bf"
         },
-        change: () => {
-          // _this.$nextTick(() => {
-          //   if (_this.form.noteCode) {
-          //     setTimeout(() => {
-          //       _this.query()
-          //     }, 500)
-
-          //   }
-          // })
-
-        }
       },
       {
         label: "重量",
         prop: "eachNumbers",
         width: 80,
-        align: "right",
+        // align: "left",
+        // type: "number",
         span: 8,
         placeholder: "请打开称重应用"
       },
@@ -56,7 +46,51 @@ export function mainForm(_this) {
           _this.type = "yg"
         }
       },
-
+      {
+        label: "载具编号",
+        prop: "storeLoadCodes",
+        span: 8,
+        placeholder: "请输入载具编号",
+        click: () => {
+          _this.type = "yg"
+        }
+      },
+      {
+        label: "QC扣减数量",
+        prop: "qcTakeOuts",
+        width: 80,
+        // align: "left",
+        // type: "number",
+        span: 8,
+        placeholder: "请输入QC扣减数量"
+      },
+      {
+        label: "值机工号",
+        prop: "workNos",
+        span: 8,
+        placeholder: "请扫描值机工号",
+        click: () => {
+          _this.type = "yg"
+        }
+      },
+      {
+        label: "存储位置",
+        prop: "storeSiteCodes",
+        span: 16,
+        placeholder: "请输入存储位置",
+        type: "select",
+        props: {
+          label: "locationCode",
+          value: "locationCode"
+        },
+        filterable: true,
+        allowCreate: true,
+        defaultFirstOption: true,
+        dicData: getXDicT("whseLocation", "locationCode", "locationCode"),
+        click: () => {
+          _this.type = "yg"
+        }
+      },
     ],
   }
 }

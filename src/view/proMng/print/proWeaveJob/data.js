@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-21 08:03:44
+ * @LastEditTime: 2021-05-26 10:47:25
  * @Description:
  */
 
@@ -201,7 +201,8 @@ export function mainCrud(_this) {
         label: "营销单号",
         prop: "marketOrder",
         span: 6,
-        width: 120,
+        width: 200,
+        overHidden: true
       },
       {
         label: "客戶名稱",
@@ -413,6 +414,7 @@ export function mainCrud(_this) {
         overHidden: true,
         width: 250,
         span: 12,
+        hide: true,
         placeholder: " ",
       },
 

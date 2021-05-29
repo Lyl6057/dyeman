@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-04-01 14:06:19
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-01 15:05:41
+ * @LastEditTime: 2021-05-27 09:06:54
  * @Description:
  */
 export function laboratory(_this) {
@@ -15,13 +15,13 @@ export function laboratory(_this) {
     },
     {
       menuName: '二.色号打办记录',
-      index: "colorPlay",
+      index: "/colorPlay",
       icon: "el-icon-s-order",
       name: "Laboratory",
     },
     {
       menuName: '三.' + _this.$t("menuData.Laboratory[3].name"),
-      index: "Arran",
+      index: "/Arran",
       icon: "el-icon-s-order",
       name: "Laboratory",
     },

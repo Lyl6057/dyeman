@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-01 14:06:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-09 15:09:35
+ * @LastEditTime: 2021-05-28 10:43:30
  * @Description:
  */
 
@@ -11,7 +11,7 @@ import axios from 'axios';
 // 獲取打印記錄
 export function get(params) {
   return axios({
-    url: '/api/proClothNote/page',
+    url: '/api/proClothNote/pageLike',
     method: 'get',
     params: params
   })

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-07 09:52:04
+ * @LastEditTime: 2021-05-28 10:52:51
  * @Description:
  */
 
@@ -110,7 +110,8 @@ export function mainCrud(_this) {
         span: 6,
         width: 100,
         width: 200,
-        overHidden: true
+        overHidden: true,
+        hide: true
       },
       {
         label: "顏色",
@@ -118,7 +119,8 @@ export function mainCrud(_this) {
         disabled: true, placeholder: " ",
         span: 6,
         width: 120,
-        overHidden: true
+        overHidden: true,
+        hide: true
       },
 
       {
@@ -187,6 +189,39 @@ export function mainCrud(_this) {
         cell: true,
         placeholder: " "
       },
+      {
+        label: "QC扣减数量",
+        prop: "qcTakeOut",
+        width: 110,
+        align: "center",
+        span: 6,
+        cell: true,
+        placeholder: " "
+      },
+      {
+        label: "载具编号",
+        prop: "storeLoadCode",
+        span: 8,
+        placeholder: " ",
+        cell: true,
+        width: 120
+      },
+      {
+        label: "存储位置",
+        prop: "storeSiteCode",
+        cell: true,
+        width: 200,
+        placeholder: " ",
+        type: "select",
+        props: {
+          label: "locationCode",
+          value: "locationCode"
+        },
+        filterable: true,
+        allowCreate: true,
+        defaultFirstOption: true,
+        dicData: getXDicT("whseLocation", "locationCode", "locationCode"),
+      },
       // {
       //   label: "單位",
       //   prop: "weightUnit",
@@ -215,22 +250,30 @@ export function mainCrud(_this) {
       //   dicData: matUnit
       // },
 
+      // {
+      //   label: "已打印",
+      //   prop: "isPrinted",
+      //   type: "select",
+      //   disabled: true,
+      //   dicData: [
+      //     {
+      //       value: true,
+      //       label: "是"
+      //     },
+      //     {
+      //       value: false,
+      //       label: "否"
+      //     }
+      //   ],
+      //   span: 6,
+      // },
       {
-        label: "已打印",
-        prop: "isPrinted",
-        type: "select",
-        disabled: true,
-        dicData: [
-          {
-            value: true,
-            label: "是"
-          },
-          {
-            value: false,
-            label: "否"
-          }
-        ],
-        span: 6,
+        label: "备注",
+        prop: "remark",
+        width: 250,
+        placeholder: " ",
+        overHidden: true,
+        cell: true
       },
       {
         label: "打印时间",

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-04-01 13:39:35
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-22 08:09:24
+ * @LastEditTime: 2021-05-29 09:09:44
  * @Description:
  */
 
@@ -50,6 +50,10 @@ export function proMng(_this) {
         menuName: "4.染整通知单",
         index: "/dyeNotice"
       },
+      {
+        menuName: "5.定型指令单",
+        index: "/finalizeDesign"
+      },
     ]
   },
   {
@@ -66,7 +70,11 @@ export function proMng(_this) {
         index: "/outputSchedule"
       },
       {
-        menuName: "3.布飞打印记录",
+        menuName: "3.织造工单",
+        index: "/proWeaveJob"
+      },
+      {
+        menuName: "4.布飞打印记录",
         index: "/buffyPrints"
       },
       // {

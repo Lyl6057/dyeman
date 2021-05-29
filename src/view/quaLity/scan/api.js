@@ -2,11 +2,21 @@
  * @Author: Lyl
  * @Date: 2021-02-01 14:06:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-25 09:32:19
+ * @LastEditTime: 2021-05-26 15:06:47
  * @Description:
  */
 
 import axios from 'axios';
+
+
+// 獲t通知单
+export function getWeave(params) {
+  return axios({
+    url: '/api/proWeaveJob',
+    method: 'get',
+    params: params
+  })
+}
 
 // 獲取打印記錄
 export function get(params) {

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-07 09:41:59
+ * @LastEditTime: 2021-05-27 09:57:23
  * @Description: 
 -->
 <template>
@@ -132,19 +132,20 @@ export default {
     setCz() {
       webSocket.setCz(this);
       let _this = this;
-      console.log(_this.czsocket);
       _this.czsocket.onmessage = function (e) {
-        _this.weight = 500; //e.data;
+        _this.detail.clothWeight = e.data;
       };
     },
     weighing() {
       if (this.czsocket.readyState == 3) {
         this.$tip.error("称重应用未启动，请启动后重新进入此页面!");
         return;
+      } else {
+        this.czsocket.send("weight");
       }
-      setTimeout(() => {
-        this.detail.clothWeight = this.weight;
-      }, 200);
+      // setTimeout(() => {
+      //   this.detail.clothWeight = this.weight;
+      // }, 200);
     },
     save() {
       this.wLoading = true;

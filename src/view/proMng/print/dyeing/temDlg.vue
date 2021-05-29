@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-21 20:15:26
+ * @LastEditTime: 2021-05-28 14:41:51
  * @Description: 
 -->
 <template>
@@ -268,7 +268,34 @@
                 :data="chooseData.list"
                 @on-load="query"
                 @current-row-change="cellDtlClick"
-              ></avue-crud>
+              >
+                <template slot="formulaUnit" slot-scope="scope">
+                  <!-- {{ scope.row.dataStyle }} -->
+                  <div v-if="scope.row.measureType === 'g/L'">
+                    <!-- string 类型 -->
+                    <el-select v-model="scope.row.formulaUnit" placeholder=" ">
+                      <el-option
+                        v-for="item in options"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
+                      >
+                      </el-option>
+                    </el-select>
+                  </div>
+                  <div v-else style="text-align: center">
+                    <el-select v-model="scope.row.formulaUnit" placeholder=" ">
+                      <el-option
+                        v-for="item in option"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
+                      >
+                      </el-option>
+                    </el-select>
+                  </div>
+                </template>
+              </avue-crud>
             </div>
           </view-container>
         </el-col>
@@ -395,6 +422,30 @@ export default {
       oldW: null,
       vatWeight: 0,
       mathCtr: true,
+      options: [
+        {
+          label: "KG",
+          value: "KG",
+        },
+        {
+          label: "g",
+          value: "g",
+        },
+      ],
+      option: [
+        {
+          label: "KG",
+          value: "KG",
+        },
+        {
+          label: "g",
+          value: "g",
+        },
+        {
+          label: "L",
+          value: "L",
+        },
+      ],
     };
   },
   watch: {},
@@ -415,10 +466,10 @@ export default {
         //   bleadyeJobId: this.detail.bleadyeJobId,
         // }).then((res) => {
         //   this.form = res.data.records[0];
-        //   if (!(this.form.mergVatNo instanceof Array) && this.form.mergVatNo) {
         this.form = this.detail;
-        this.form.mergVatNo = this.form.mergVatNo.split("/");
-        // }
+        if (!(this.form.mergVatNo instanceof Array) && this.form.mergVatNo) {
+          this.form.mergVatNo = this.form.mergVatNo.split("/");
+        }
         this.oldW = JSON.parse(JSON.stringify(this.form.clothWeight));
         setTimeout(() => {
           this.wLoading = false;
@@ -536,10 +587,21 @@ export default {
                                       } else if (
                                         items.measureType.indexOf("g") != -1
                                       ) {
-                                        items.useAmount = Number(
-                                          Number(items.formulaAmount) *
-                                            Number(item.totalWater).toFixed(2)
-                                        );
+                                        items.useAmount =
+                                          items.formulaUnit == "KG"
+                                            ? Number(
+                                                (
+                                                  Number(items.formulaAmount) *
+                                                  Number(item.totalWater) *
+                                                  0.001
+                                                ).toFixed(2)
+                                              )
+                                            : Number(
+                                                (
+                                                  Number(items.formulaAmount) *
+                                                  Number(item.totalWater)
+                                                ).toFixed(2)
+                                              );
                                       }
                                       updateTechItem(items).then();
                                     } else {
@@ -625,9 +687,9 @@ export default {
                 done();
               });
             }
-            // if (this.form.mergVatNo) {
-            //   this.form.mergVatNo = this.form.mergVatNo.split("/");
-            // }
+            if (this.form.mergVatNo) {
+              this.form.mergVatNo = this.form.mergVatNo.split("/");
+            }
           } catch (error) {
             console.log(error);
             this.wLoading = false;
@@ -996,11 +1058,11 @@ export default {
     },
     addDtl() {
       this.choiceTle = "選擇工藝材料";
-      if (this.chooseData.jobTechId) {
-        this.choiceQ.proBleadyeTechCodeFk = this.chooseData.$proBleadyeTechCodeFk;
-      } else {
-        this.choiceQ = {};
-      }
+      // if (this.chooseData.jobTechId) {
+      this.choiceQ.proBleadyeTechCodeFk = this.chooseData.$proBleadyeTechCodeFk;
+      // } else {
+      //   this.choiceQ = {};
+      // }
 
       this.choiceV = true;
     },
@@ -1205,15 +1267,15 @@ export default {
             this.crud.length > 0
               ? Number(this.crud[this.crud.length - 1].sn) + 1
               : 1,
+          list: [],
         };
-        this.crud.push(JSON.parse(JSON.stringify(params)));
 
         getCodeItem({
           proBleadyeTechCodeFk: val.bleadyeCode,
-          rows: this.page.pageSize,
-          start: this.page.currentPage,
+          rows: 999,
+          start: 1,
         }).then((res) => {
-          this.crud[this.crud.length - 1].list = [];
+          // this.crud[this.crud.length - 1].list = [];
           res.data.records.sort((a, b) => {
             return a.sn < b.sn ? -1 : 1;
           });
@@ -1240,9 +1302,16 @@ export default {
               item.useAmount = 0;
             }
 
-            this.crud[this.crud.length - 1].list.push(item);
+            params.list.push(JSON.parse(JSON.stringify(item)));
           });
+          this.crud.push(JSON.parse(JSON.stringify(params)));
           this.$refs.crud.setCurrentRow(this.crud[this.crud.length - 1]);
+          // this.$nextTick(() => {
+          //   this.chooseData.list = res.data.records;
+          // });
+          // this.$set(this.chooseData, "list", res.data.records);
+
+          // this.$refs.crud.setCurrentRow(this.crud[this.crud.length - 1]);
           this.chooseData.totalWater = JSON.parse(
             JSON.stringify(
               Number(

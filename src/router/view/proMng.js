@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-29 14:14:56
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-22 08:08:39
+ * @LastEditTime: 2021-05-27 15:54:42
  * @Description: 
  */
 export default [
@@ -43,6 +43,11 @@ export default [
     name: '染整通知單',
     component: resolve => require(['@/view/proMng/dyeNotice/index'], resolve)
   },
+  {
+    path: '/finalizeDesign',
+    name: '定型指令单',
+    component: resolve => require(['@/view/proMng/finalizeDesign/index'], resolve)
+  },
   // 报表
   {
     path: "/buffyPrints", // 布票打印記錄
@@ -61,7 +66,7 @@ export default [
   },
   {
     path: "/outputSchedule", // 生产日产量
-    name: "生产日产量",
+    name: "生产进度",
     component: resolve => require(["@/view/proMng/outputSchedule/index"], resolve),
   },
   // // 染整工单

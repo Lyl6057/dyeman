@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-01 14:06:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-16 08:39:39
+ * @LastEditTime: 2021-05-29 08:39:55
  * @Description:
  */
 
@@ -72,7 +72,7 @@ export function del(id) {
 // 打印佈飛
 export function print(params) {
   return axios({
-    url: '/api/proWeaveJob/prinEntity',
+    url: '/api/proWeaveJob/prinEntityPdf',
     method: 'get',
     params: params
   })
