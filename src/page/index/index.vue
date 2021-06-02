@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-10 14:20:44
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-19 17:13:34
+ * @LastEditTime: 2021-06-02 17:01:30
  * @Description: 
 -->
 <template>
@@ -14,15 +14,13 @@
         </el-header> -->
         <!-- <div style="height: 50px; background: #000"></div> -->
         <el-main class="mainBox">
-          <el-row>
-            <el-col :span="left">
-              <!-- 左侧导航栏 -->
-              <sidebar />
-            </el-col>
-            <el-col :span="right">
-              <router-view />
-            </el-col>
-          </el-row>
+          <div class="sidebar">
+            <!-- 左侧导航栏 -->
+            <sidebar />
+          </div>
+          <div :style="{ marginLeft: isActive ? '50px' : '190px' }">
+            <router-view />
+          </div>
         </el-main>
         <el-header></el-header>
       </div>
@@ -46,12 +44,6 @@ export default {
     isActive() {
       return this.$store.state.isActive;
     },
-    left() {
-      return this.$store.state.left;
-    },
-    right() {
-      return this.$store.state.right;
-    },
   },
 };
 </script>
@@ -60,6 +52,14 @@ export default {
 #top {
   html {
     overflow: hidden;
+  }
+
+  .sidebar {
+    position: absolute;
+    bottom: 0;
+    top: 0;
+    background: #fff;
+    z-index: 1000;
   }
 
   .page {

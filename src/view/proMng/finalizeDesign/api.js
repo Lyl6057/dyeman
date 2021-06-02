@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-01 14:06:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-28 16:20:07
+ * @LastEditTime: 2021-05-31 13:08:10
  * @Description:
  */
 
@@ -72,7 +72,7 @@ export function del(id) {
 // 打印佈飛
 export function print(params) {
   return axios({
-    url: '/api/proLdNotice/exportpdf',
+    url: '/api/proFinishJob/proFinishPdf',
     method: 'get',
     params: params
   })

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-29 09:16:25
+ * @LastEditTime: 2021-05-31 13:11:53
  * @Description: 
 -->
 <template>
@@ -172,8 +172,8 @@ export default {
       this.pdfDlg = true;
       this.pdfUrl =
         process.env.API_HOST +
-        "/api/proLdNotice/exportpdf?id=" +
-        this.detail.ldNoticeId;
+        "/api/proFinishJob/proFinishPdf?id=" +
+        this.detail.finishJobId;
     },
     add() {
       this.isAdd = true;

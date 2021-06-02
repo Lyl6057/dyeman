@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-27 16:05:36
+ * @LastEditTime: 2021-06-02 11:11:36
  * @Description: 
 -->
 <template>
@@ -29,7 +29,44 @@
         <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
       </el-row>
       <el-row class="crudBox">
-        <el-col :span="16">
+        <el-col :span="5">
+          <view-container title="载具信息">
+            <el-card
+              class="border-card"
+              style="height: calc(100vh - 320px); overflow: auto"
+              id="history"
+            >
+              <div
+                class="text item"
+                v-for="item in Load"
+                :key="item.noteId"
+                style="border-bottom: 1px solid #eee"
+              >
+                <el-tooltip
+                  class="item"
+                  effect="dark"
+                  :content="
+                    '布票号' +
+                    item.noteCode +
+                    ' 重量' +
+                    item.clothWeight +
+                    ' 载具编号' +
+                    item.storeLoadCode
+                  "
+                  placement="top"
+                >
+                  <div class="history">
+                    <span>布票号: {{ item.noteCode }}</span>
+                    <span> 重量: {{ item.clothWeight }}</span>
+                    <!-- <span>验布员工号: {{ item.clothChecker }}</span> -->
+                  </div>
+                </el-tooltip>
+                <!-- <el-divider style="margin: 0"></el-divider> -->
+              </div>
+            </el-card>
+          </view-container>
+        </el-col>
+        <el-col :span="14">
           <view-container title="胚布信息">
             <el-card
               class="box-card"
@@ -62,13 +99,14 @@
                 <el-col :span="14">重量单位: {{ crud.weightUnit }}</el-col>
               </el-row>
               <el-row class="text item">
+                <el-col :span="10">QC扣减数量: {{ crud.qcTakeOut }}</el-col>
+                <el-col :span="14">毛重: {{ crud.realWeight }}</el-col>
+              </el-row>
+              <el-row class="text item">
                 <el-col :span="10">验布员工号: {{ crud.clothChecker }}</el-col>
                 <el-col :span="14">值机工号: {{ crud.workNo }}</el-col>
               </el-row>
-              <el-row class="text item">
-                <el-col :span="10">QC扣减数量: {{ crud.qcTakeOut }}</el-col>
-                <el-col :span="14">验布时间: {{ crud.clothCheckTime }}</el-col>
-              </el-row>
+
               <el-row class="text item">
                 <el-col :span="10">载具编号: {{ crud.storeLoadCode }}</el-col>
                 <el-col :span="14">存储位置: {{ crud.storeSiteCode }}</el-col>
@@ -93,7 +131,7 @@
             </el-card>
           </view-container>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="5">
           <view-container title="历史胚布">
             <el-card
               class="border-card"
@@ -122,7 +160,7 @@
                   <div class="history">
                     <span>布票号: {{ item.noteCode }}</span>
                     <span> 重量: {{ item.clothWeight }}</span>
-                    <span>验布员工号: {{ item.clothChecker }}</span>
+                    <!-- <span>验布员工号: {{ item.clothChecker }}</span> -->
                   </div>
                 </el-tooltip>
                 <!-- <el-divider style="margin: 0"></el-divider> -->
@@ -152,6 +190,7 @@ export default {
         total: 0,
       },
       history: [],
+      Load: [],
       loading: false,
       dialogVisible: false,
       detail: {},
@@ -165,6 +204,10 @@ export default {
   watch: {},
   methods: {
     query() {
+      if (!this.form.noteCode) {
+        this.$tip.warning("布票号不能为空!");
+        return;
+      }
       if (!this.form.clothCheckers) {
         this.form.noteCode = "";
         this.$tip.warning("请先扫描或输入员工条码!");
@@ -207,12 +250,13 @@ export default {
         } else {
           this.$tip.warning("暂无数据!");
           setTimeout(() => {
+            this.wLoading = false;
             this.form.noteCode = "";
           }, 500);
         }
-        setTimeout(() => {
-          this.wLoading = false;
-        }, 200);
+        // setTimeout(() => {
+        //   this.wLoading = false;
+        // }, 200);
       });
     },
     handleRowDBLClick(val) {
@@ -225,11 +269,14 @@ export default {
       _this.czsocket.onmessage = function (e) {
         _this.form.eachNumbers = e.data;
       };
-      // setTimeout(() => {
-      //   _this.time = setInterval(() => {
-      //     _this.czsocket.send("weight");
-      //   }, 1000);
-      // }, 200);
+      _this.czsocket.onopen = function (event) {
+        setTimeout(() => {
+          _this.time = setInterval(() => {
+            _this.czsocket.send("weight");
+          }, 1000);
+        }, 200);
+        _this.$tip.success("服务器连接成功!");
+      };
     },
     weighing() {
       if (this.czsocket.readyState == 3) {
@@ -243,11 +290,14 @@ export default {
     save() {
       this.wLoading = true;
       this.crud.clothCheckTime = this.$getNowTime("datetime");
+      this.crud.realWeight =
+        Number(this.crud.clothWeight) + Number(this.crud.qcTakeOut);
       update(this.crud).then((res) => {
         if (res.data.code == 200) {
           setTimeout(() => {
             this.history.unshift(this.crud);
             this.history = this.$unique(this.history, "noteId");
+            this.getLoad();
             setTimeout(() => {
               this.form.noteCode = "";
             }, 500);
@@ -259,10 +309,36 @@ export default {
             //   const dom1 = document.getElementById("history");
             //   dom1.scrollTo(0, dom1.scrollHeight);
             // });
-            this.wLoading = false;
+            // this.wLoading = false;
             this.$tip.success(this.$t("public.bccg"));
           }, 200);
+        } else {
+          this.wLoading = false;
+          this.$tip.success(this.$t("public.bcsb"));
         }
+      });
+    },
+    getLoad() {
+      this.Load = [];
+      if (!this.form.storeLoadCodes) {
+        this.wLoading = false;
+        // this.$tip.warning("载具不能为空!");
+        return;
+      }
+
+      get({ storeLoadCode: this.form.storeLoadCodes }).then((res) => {
+        this.wLoading = true;
+        if (res.data.length) {
+          this.Load = res.data;
+        } else {
+          // this.$tip.warning("暂无数据!");
+          setTimeout(() => {
+            this.form.noteCode = "";
+          }, 500);
+        }
+        setTimeout(() => {
+          this.wLoading = false;
+        }, 200);
       });
     },
     cellClick(val) {
@@ -280,6 +356,8 @@ export default {
       let ev = document.all ? window.event : e;
       if (ev.keyCode === 13 && self.type === "bf") {
         self.query();
+      } else if (ev.keyCode === 13 && self.type === "zj") {
+        self.getLoad();
       }
     };
   },
@@ -317,8 +395,8 @@ export default {
   }
 
   .el-form-item__label, .el-input__inner {
-    font-size: 24px !important;
-    line-height: 58px !important;
+    font-size: 22px !important;
+    line-height: 50px !important;
   }
 
   .el-tabs__item, .el-button {
@@ -346,9 +424,9 @@ export default {
   }
 
   .text {
-    font-size: 24px;
+    font-size: 22px;
     text-align: left;
-    text-indent: 2em;
+    text-indent: 1em;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;

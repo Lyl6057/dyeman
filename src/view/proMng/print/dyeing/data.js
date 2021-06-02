@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-28 13:43:07
+ * @LastEditTime: 2021-06-01 09:56:45
  * @Description:
  */
 
@@ -1420,7 +1420,16 @@ export function codeItemCrud(_this) {
             value: "L"
           }
         ],
-        placeholder: ' '
+        placeholder: ' ',
+        click: () => {
+          console.log("ss");
+        },
+        change: (val) => {
+          // if (val.value == '')
+          //   _this.$nextTick(() => {
+
+          //   })
+        }
       },
       {
         label: "工藝類型",

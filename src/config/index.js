@@ -37,11 +37,11 @@ export const webSocket = {
     if ('WebSocket' in window) {
       _this.czsocket = new WebSocket('ws://127.0.0.1:44001/weight');
     } else {
-      alert('该浏览器不支持websocket通讯，请切换浏览器！')
+      _this.$tip.error('该浏览器不支持websocket通讯，请切换浏览器！')
     }
     //连接发生错误的回调方法
     _this.czsocket.onerror = function () {
-      console.log("称重服务器连接失败，请检查网络!");
+      _this.$tip.error("称重服务器连接失败，请检查网络!");
     };
     //连接成功建立的回调方法
     _this.czsocket.onopen = function (event) {
@@ -62,24 +62,24 @@ export const webSocket = {
   },
   setPrint(_this) {
     if ('WebSocket' in window) {
-      _this.czsocket = new WebSocket('ws://127.0.0.1:44001/print');
+      _this.prsocket = new WebSocket('ws://127.0.0.1:44001/print');
     } else {
-      alert('该浏览器不支持websocket通讯，请切换浏览器！')
+      _this.$tip.error('该浏览器不支持websocket通讯，请切换浏览器！')
     }
     //连接发生错误的回调方法
-    _this.czsocket.onerror = function () {
-      alert("打印应用连接失败，请检查是否启动!");
+    _this.prsocket.onerror = function () {
+      _this.$tip.error("打印应用连接失败，请检查是否启动!");
     };
     //连接成功建立的回调方法
-    _this.czsocket.onopen = function (event) {
+    _this.prsocket.onopen = function (event) {
       _this.$tip.success("打印应用连接成功!");
     }
     //接收到消息的回调方法
-    _this.czsocket.onmessage = function (event) {
+    _this.prsocket.onmessage = function (event) {
     }
     //连接关闭的回调方法
-    _this.czsocket.onclose = function () {
-      _this.czsocket.close();
+    _this.prsocket.onclose = function () {
+      _this.prsocket.close();
       // _this.$tip.warning("连接关闭!");
     }
     // _this.websocket.onsend = function () {

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-24 08:12:20
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-26 10:49:44
+ * @LastEditTime: 2021-06-02 15:50:12
  * @Description: 
  */
 // The Vue build version to load with the `import` command
@@ -27,7 +27,8 @@ import echarts from 'echarts' // echarts
 import i18n from './lang' // Internationalization
 import Print from 'vue-print-nb'
 import vGanttChart from 'v-gantt-chart';
-
+import Fragment from 'vue-fragment'
+Vue.use(Fragment.Plugin)
 Vue.use(vGanttChart);
 // Global instruction 
 Vue.use(Print);

@@ -92,8 +92,6 @@ export default {
     return {
       language: "zh",
       isActive: this.$store.state.isActive,
-      left: 4,
-      right: false,
       isPhone: this.$store.state.phone,
       themeOpen: false,
       drawer: false,
@@ -104,16 +102,7 @@ export default {
   methods: {
     IsActive() {
       this.isActive = !this.isActive;
-      if (this.left == 0) {
-        this.left = 3;
-        this.right = 21;
-      } else {
-        this.left = 0;
-        this.right = 24;
-      }
       this.$store.dispatch("isActive", this.isActive);
-      this.$store.dispatch("isLeft", this.left);
-      this.$store.dispatch("isRight", this.right);
     },
     toPage() {
       this.$router.push({ path: "/home" });

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-27 16:12:28
+ * @LastEditTime: 2021-06-01 08:37:07
  * @Description:
  */
 
@@ -52,7 +52,7 @@ export function mainForm(_this) {
         span: 8,
         placeholder: "请输入载具编号",
         click: () => {
-          _this.type = "yg"
+          _this.type = "zj"
         }
       },
       {

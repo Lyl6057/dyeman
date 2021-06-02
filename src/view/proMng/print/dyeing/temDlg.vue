@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-28 14:41:51
+ * @LastEditTime: 2021-06-01 10:47:48
  * @Description: 
 -->
 <template>
@@ -273,7 +273,11 @@
                   <!-- {{ scope.row.dataStyle }} -->
                   <div v-if="scope.row.measureType === 'g/L'">
                     <!-- string 类型 -->
-                    <el-select v-model="scope.row.formulaUnit" placeholder=" ">
+                    <el-select
+                      v-model="scope.row.formulaUnit"
+                      placeholder=" "
+                      @change="unitCtr(scope)"
+                    >
                       <el-option
                         v-for="item in options"
                         :key="item.value"
@@ -284,7 +288,11 @@
                     </el-select>
                   </div>
                   <div v-else style="text-align: center">
-                    <el-select v-model="scope.row.formulaUnit" placeholder=" ">
+                    <el-select
+                      v-model="scope.row.formulaUnit"
+                      placeholder=" "
+                      @change="unitCtr(scope)"
+                    >
                       <el-option
                         v-for="item in option"
                         :key="item.value"
@@ -450,6 +458,15 @@ export default {
   },
   watch: {},
   methods: {
+    unitCtr(val) {
+      this.$nextTick(() => {
+        if (val.label == "g" && val.row.formulaUnit === "KG") {
+          val.row.useAmount = Number(val.row.useAmount) * 0.001;
+        } else if (val.label == "KG" && val.row.formulaUnit === "g") {
+          val.row.useAmount = Number(val.row.useAmount) * 1000;
+        }
+      });
+    },
     getData() {
       this.wLoading = true;
       this.form = {};

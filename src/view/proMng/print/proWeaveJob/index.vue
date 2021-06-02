@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-29 08:42:19
+ * @LastEditTime: 2021-06-02 18:41:27
  * @Description: 
 -->
 <template>
@@ -129,6 +129,7 @@ export default {
       wloading: false,
       czsocket: {},
       pdfDlg: false,
+      pdfUrl: "",
     };
   },
   watch: {},

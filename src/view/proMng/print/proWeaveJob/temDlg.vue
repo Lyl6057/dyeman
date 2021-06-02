@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-20 09:50:44
+ * @LastEditTime: 2021-06-02 18:44:30
  * @Description: 
 -->
 <template>
@@ -766,10 +766,6 @@ export default {
 };
 </script>
 <style lang='stylus'>
-.el-table__fixed-body-wrapper {
-  top: 37px !important;
-}
-
 #proWeaveJob {
   .formBox {
     height: 100vh !important;

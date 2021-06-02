@@ -2,10 +2,10 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-28 10:52:51
+ * @LastEditTime: 2021-06-02 19:03:22
  * @Description:
  */
-
+import axios from 'axios'
 import {
   getDIC,
   getDicT,
@@ -20,22 +20,35 @@ export function mainForm(_this) {
     labelWidth: 120,
     column: [
       {
+        label: "織單號",
+        prop: "weaveJobFk",
+        span: 6,
+        placeholder: " ",
+        formslot: true,
+        slot: true,
+        type: "select",
+        tip: "MS đơn sản xuất bp Dệt"
+      },
+      {
         label: "訂單號",
         prop: "poNo",
         span: 6,
         placeholder: " ",
+        tip: "Số đơn hàng"
       },
       {
         label: "布票編號",
         prop: "noteCode",
         span: 6,
         placeholder: " ",
+        tip: "Mã vải"
       },
       {
-        label: "机号",
+        label: "机號",
         prop: "loomNo",
         span: 6,
         placeholder: " ",
+        tip: "Mã máy"
       },
       {
         label: "匹號",
@@ -43,6 +56,8 @@ export function mainForm(_this) {
         width: 80,
         align: "right",
         span: 6,
+        placeholder: " ",
+        tip: "Số cây vải"
       },
       // {
       //   label: "機台編號",
@@ -60,14 +75,27 @@ export function mainCrud(_this) {
     addBtn: false,
     cancelBtn: false,
     editBtn: false,
+    delBtn: false,
     menuWidth: 80,
     border: true,
+    index: false,
     highlightCurrentRow: true,
-    height: "calc(100vh - 195px)",
+    height: "calc(100vh - 240px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
     labelWidth: 100,
+    selection: true,
+    showSummary: true,
+    menuTitle: "trọng lượng",
+    sumColumnList: [
+      {
+        label: ' ',
+        name: 'clothWeight',
+        type: 'sum',
+        decimals: 1
+      },
+    ],
     column: [
       {
         label: "#",
@@ -77,16 +105,25 @@ export function mainCrud(_this) {
         display: false
       },
       {
-        label: "訂單號",
-        prop: "poNo",
-        width: 120,
+        label: "織單號(MS đơn sản xuất bp Dệt)",
+        prop: "weaveJobCode",
+        width: 150,
         span: 6,
         placeholder: " ",
         disabled: true,
         overHidden: true
       },
       {
-        label: "布票編號",
+        label: "訂單號(Số đơn hàng)",
+        prop: "poNo",
+        width: 150,
+        span: 6,
+        placeholder: " ",
+        disabled: true,
+        overHidden: true
+      },
+      {
+        label: "布票號(Mã vải)",
         prop: "noteCode",
         width: 170,
         disabled: true, placeholder: " ",
@@ -104,7 +141,7 @@ export function mainCrud(_this) {
       //   overHidden: true
       // },
       {
-        label: "布类名称",
+        label: "布类名称(Tên loại vải)",
         prop: "fabricName",
         disabled: true, placeholder: " ",
         span: 6,
@@ -114,7 +151,7 @@ export function mainCrud(_this) {
         hide: true
       },
       {
-        label: "顏色",
+        label: "顏色(Màu sắc)",
         prop: "proColor",
         disabled: true, placeholder: " ",
         span: 6,
@@ -124,7 +161,7 @@ export function mainCrud(_this) {
       },
 
       {
-        label: "纱批",
+        label: "纱批(Lô sợi)",
         prop: "spi",
         width: 90,
         hide: true,
@@ -132,7 +169,7 @@ export function mainCrud(_this) {
       },
 
       {
-        label: "纱牌",
+        label: "纱牌(Nhãn hiệu sợi)",
         prop: "sp",
         width: 90,
         hide: true,
@@ -148,9 +185,9 @@ export function mainCrud(_this) {
 
       // },
       {
-        label: "机号",
+        label: "机号(Mã máy)",
         prop: "loomNo",
-        width: 70,
+        width: 95,
         hide: false,
         span: 6,
         rules: [{
@@ -158,7 +195,8 @@ export function mainCrud(_this) {
           message: "请输入机号",
           trigger: "blur"
         }],
-        disabled: true
+        disabled: true,
+        sortable: true,
       },
       // {
       //   label: "值机工号",
@@ -174,40 +212,78 @@ export function mainCrud(_this) {
       //   }],
       // },
       {
-        label: "匹號",
+        label: "匹號(Số cây vải)",
         prop: "eachNumber",
-        width: 60,
+        width: 105,
         align: "right",
+        sortable: true,
         span: 6,
+        type: "number",
+        precision: 0
       },
       {
-        label: _this.$t("whseField.zl"),
+        label: "毛重(trọng lượng cả b)",
+        prop: "realWeight",
+        width: 110,
+        align: "right",
+        span: 6,
+        cell: false,
+        placeholder: " ",
+        // type: "number",
+        // precision: 1
+      },
+      {
+        label: _this.$t("whseField.zl") + '(trọng lượng)',
         prop: "clothWeight",
         width: 100,
         align: "center",
         span: 6,
         cell: true,
-        placeholder: " "
+        placeholder: " ",
+        type: "number",
+        precision: 1,
+        change: () => {
+          _this.$nextTick(() => {
+            _this.detail.realWeight = Number(Number(_this.detail.clothWeight) + Number(_this.detail.qcTakeOut)).toFixed(1)
+            if (isNaN(_this.detail.realWeight)) {
+              _this.detail.realWeight = 0
+            }
+          })
+
+        }
       },
       {
-        label: "QC扣减数量",
+        label: "QC扣减数量(Số lượng QC cắt giảm)",
         prop: "qcTakeOut",
-        width: 110,
+        width: 160,
         align: "center",
         span: 6,
         cell: true,
-        placeholder: " "
+        placeholder: " ",
+        type: "number",
+        precision: 1,
+        change: () => {
+          _this.$nextTick(() => {
+            _this.detail.realWeight = Number(Number(_this.detail.clothWeight) + Number(_this.detail.qcTakeOut)).toFixed(1)
+            if (isNaN(_this.detail.realWeight)) {
+              _this.detail.realWeight = 0
+            }
+          })
+
+        }
       },
+
       {
-        label: "载具编号",
+        label: "载具编号(Mã lồng thép)",
         prop: "storeLoadCode",
         span: 8,
         placeholder: " ",
         cell: true,
+        overHidden: true,
         width: 120
       },
       {
-        label: "存储位置",
+        label: "存储位置(Vị trí lưu trữ)",
         prop: "storeSiteCode",
         cell: true,
         width: 200,
@@ -268,15 +344,20 @@ export function mainCrud(_this) {
       //   span: 6,
       // },
       {
-        label: "备注",
+        label: "备注(ghi chú)",
         prop: "remark",
         width: 250,
         placeholder: " ",
-        overHidden: true,
-        cell: true
+        // overHidden: true,
+        cell: true,
+        type: "select",
+        filterable: true,
+        allowCreate: true,
+        defaultFirstOption: true,
+        dicData: getDIC("QC_CLOTH_VISITING_REMOVE"),
       },
       {
-        label: "打印时间",
+        label: "打印时间(thời gian in)",
         prop: "printedTime",
         type: "date",
         format: "yyyy-MM-dd hh:MM:ss",

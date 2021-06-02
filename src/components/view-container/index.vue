@@ -27,6 +27,11 @@ export default {
 </script>
 
 <style lang="stylus">
+// .view-container:nth-child(1) {
+// .el-tabs--border-card {
+// border-top: none;
+// }
+// }
 .view-container {
   // padding: 0 10px;
   border-radius: 10px;

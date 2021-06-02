@@ -1,88 +1,57 @@
+<!--
+ * @Author: Lyl
+ * @Date: 2021-06-02 15:42:19
+ * @LastEditors: Lyl
+ * @LastEditTime: 2021-06-02 18:40:16
+ * @Description: 
+-->
 <template>
-  <div id="sidebar">
-    <el-menu
-      :default-active="this.$route.path"
-      class="eldemo"
-      unique-opened
-      collapse-transition
-      router
-      :collapse="isActive"
-    >
-      <menus :menuData="menuData" :level="0"></menus>
-    </el-menu>
-    <div @click="IsActive" class="menu-icon">
-      <el-divider> <i class="el-icon-d-arrow-right"></i></el-divider>
-    </div>
-  </div>
+  <fragment id="menu">
+    <template v-for="item in menuData">
+      <el-card class="card" :key="item.index" v-if="item.children">
+        <el-submenu :index="item.index">
+          <template>
+            <i slot="title" :class="item.icon"></i>
+            <span v-if="isActive"> {{ item.menuName }}</span>
+            <span v-else slot="title"> {{ item.menuName }}</span>
+          </template>
+          <menuTree :menuData="item.children" :level="level + 1"></menuTree>
+        </el-submenu>
+      </el-card>
+      <el-card v-else :key="item.index" class="oneMenu">
+        <el-menu-item
+          :index="item.index"
+          :style="{ textIndent: level * 30 + 'px' }"
+        >
+          <i :class="item.icon"></i>
+          <span slot="title">{{ item.menuName }}</span>
+        </el-menu-item>
+      </el-card>
+    </template>
+  </fragment>
 </template>
 <script>
-import { menuData } from "./index.js";
-import menus from "./menu.vue";
 export default {
-  components: {
-    menus: menus,
-  },
-  name: "sidebar",
+  name: "MenuTree",
+  props: ["menuData", "level"],
+  components: {},
   data() {
-    return {
-      menuData: menuData(this).menu,
-      isActive: false,
-    };
+    return {};
   },
-  methods: {
-    IsActive() {
-      this.isActive = !this.isActive;
-      this.$store.dispatch("isActive", this.isActive);
+  watch: {},
+  computed: {
+    isActive() {
+      return this.$store.state.isActive;
     },
   },
-  created() {
-    // this.$router.push({ path: "ProWorkflowInfo" }); // 生产管理
-    // this.$router.push({ path: "imWl" });
-    // this.$router.push({ path: "colorMng" });
-    this.$router.push({ path: "weight" });
-  },
-  computed: {},
+  methods: {},
+  created() {},
+  mounted() {},
+  beforeDestroy() {},
 };
 </script>
-
-<style lang="stylus">
-#sidebar {
-  position: relative;
-  height: calc(100vh - 47px);
-
-  .el-menu--collapse {
-    width: 50px !important; // 宽度自己掌握
-    // transition: 0.3s;
-  }
-
-  .el-menu-vertical-demo:not(.el-menu--collapse) {
-    width: 190px !important;
-  }
-
-  // /* 隐藏 > */
-  // .el-menu--collapse .el-submenu__title .el-submenu__icon-arrow {
-  // display: none;
-  // }
-  .menu-icon {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    margin-top: 0.5rem;
-
-    .el-divider__text, .el-link {
-      font-size: 20px !important;
-      padding: 0 10px;
-      color: #909399;
-    }
-
-    .el-icon-d-arrow-right {
-      padding: 2px;
-      border-radius: 15px;
-      border: 1px solid #909399;
-    }
-  }
-
+<style lang='stylus'>
+#menu {
   .oneMenu {
     .el-menu-item {
       padding-left: 0 !important;
@@ -106,7 +75,7 @@ export default {
 
   // height:100vh;
   .eldemo:not(.el-menu--collapse) {
-    height: 95%;
+    height: 100vh;
     // height:500px;
     overflow-y: auto;
     background-color: rgba(0, 0, 0, 0);
