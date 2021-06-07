@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-06-02 19:03:22
+ * @LastEditTime: 2021-06-04 13:33:50
  * @Description:
  */
 import axios from 'axios'
@@ -21,12 +21,12 @@ export function mainForm(_this) {
     column: [
       {
         label: "織單號",
-        prop: "weaveJobFk",
+        prop: "weaveJobCode",
         span: 6,
         placeholder: " ",
-        formslot: true,
-        slot: true,
-        type: "select",
+        // formslot: true,
+        // slot: true,
+        // type: "select",
         tip: "MS đơn sản xuất bp Dệt"
       },
       {
@@ -90,7 +90,7 @@ export function mainCrud(_this) {
     menuTitle: "trọng lượng",
     sumColumnList: [
       {
-        label: ' ',
+        label: '毛重',
         name: 'clothWeight',
         type: 'sum',
         decimals: 1
@@ -197,6 +197,14 @@ export function mainCrud(_this) {
         }],
         disabled: true,
         sortable: true,
+      },
+      {
+        label: "值机工号(Số thẻ người đứng máy)",
+        prop: "workNo",
+        span: 8,
+        placeholder: " ",
+        width: 150,
+        overHidden: true
       },
       // {
       //   label: "值机工号",
@@ -359,6 +367,16 @@ export function mainCrud(_this) {
       {
         label: "打印时间(thời gian in)",
         prop: "printedTime",
+        type: "date",
+        format: "yyyy-MM-dd hh:MM:ss",
+        valueFormat: "yyyy-MM-dd hh:MM:ss",
+        span: 6,
+        align: "center",
+        width: 180
+      },
+      {
+        label: "验布时间(thời gian in)",
+        prop: "clothCheckTime",
         type: "date",
         format: "yyyy-MM-dd hh:MM:ss",
         valueFormat: "yyyy-MM-dd hh:MM:ss",

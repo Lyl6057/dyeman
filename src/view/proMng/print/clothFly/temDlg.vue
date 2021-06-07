@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-04 17:07:27
+ * @LastEditTime: 2021-06-04 16:15:02
  * @Description: 
 -->
 <template>
@@ -116,7 +116,7 @@ export default {
       // 加载进度
       loadedRatio: 0,
       curPageNum: 0,
-      czsocket: "",
+      prsocket: "",
       tabs: "bf",
       crudOp: bfCrud(this),
       crud: [],
@@ -126,13 +126,14 @@ export default {
         "/api/proClothNote/preview?id=" +
         "021308a1-fe63-4336-b234-e8f661ee669e",
       yarnList: [],
-      listType: "1",
+      listType: "3",
+      allData: [],
     };
   },
   watch: {},
   methods: {
     getData() {
-      getBf().then((res) => {});
+      // getBf().then((res) => {});
       this.wLoading = true;
       this.form = this.detail;
       this.form.ps = (Number(this.form.amount) / Number(this.form.pz)).toFixed(
@@ -248,7 +249,7 @@ export default {
                   }
                 });
               };
-              let promiseArr = this.crud.map((item, i) => {
+              let promiseArr = this.allData.map((item, i) => {
                 return del(item, i);
               });
               Promise.all(promiseArr).then((res) => {
@@ -307,6 +308,7 @@ export default {
                     if (i == arr.length - 1) {
                       setTimeout(() => {
                         this.$tip.success("生成成功!");
+                        this.listType = "3";
                         this.getBf();
                         done();
                         this.wLoading = false;
@@ -315,6 +317,7 @@ export default {
                   });
                   if (arr.length == 0) {
                     this.$tip.success("生成成功!");
+                    this.listType = "3";
                     this.getBf();
                     done();
                     this.wLoading = false;
@@ -437,20 +440,25 @@ export default {
         this.crud.forEach((item) => {
           item.$cellEdit = true;
         });
-        if (this.crud.length > 0) {
-          this.form.zjgh = this.crud[0].workNo;
-          this.form.ps = this.crud.length;
-        }
+
         this.crud.sort((a, b) => {
           return a.eachNumber - b.eachNumber;
         });
+        if (this.listType == "3") {
+          this.allData = res.data.records;
+          if (this.allData.length > 0) {
+            this.form.zjgh = this.allData[0].workNo;
+            this.form.ps = this.allData.length;
+            this.form.qsph = this.allData[0].eachNumber;
+          }
+        }
         setTimeout(() => {
           this.wLoading = false;
         }, 200);
       });
     },
     print() {
-      if (this.czsocket.readyState == 3) {
+      if (this.prsocket.readyState == 3) {
         this.$tip.error("打印应用未启动，请打开后重新进入此页面!");
         return;
       }
@@ -461,7 +469,7 @@ export default {
             this.wLoading = true;
             // 打印操作
             this.selectData.forEach((item, i) => {
-              this.czsocket.send(item.noteId);
+              this.prsocket.send(item.noteId);
               // this.$tip.success(
               //   "已发送布飞【 " + item.noteCode + " 】的打印请求!"
               // );
@@ -526,7 +534,7 @@ export default {
     setCz() {
       webSocket.setPrint(this);
       let _this = this;
-      _this.czsocket.onmessage = function (e) {
+      _this.prsocket.onmessage = function (e) {
         console.log(e);
       };
     },

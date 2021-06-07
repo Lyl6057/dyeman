@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-10 14:20:44
  * @LastEditors: Lyl
- * @LastEditTime: 2021-06-02 17:01:30
+ * @LastEditTime: 2021-06-03 08:11:03
  * @Description: 
 -->
 <template>
@@ -18,7 +18,10 @@
             <!-- 左侧导航栏 -->
             <sidebar />
           </div>
-          <div :style="{ marginLeft: isActive ? '50px' : '190px' }">
+          <div
+            :style="{ marginLeft: isActive ? '50px' : '190px' }"
+            style="margin-top: -1px"
+          >
             <router-view />
           </div>
         </el-main>

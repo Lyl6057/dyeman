@@ -11,7 +11,10 @@
       <menus :menuData="menuData" :level="0"></menus>
     </el-menu>
     <div @click="IsActive" class="menu-icon">
-      <el-divider> <i class="el-icon-d-arrow-right"></i></el-divider>
+      <el-divider>
+        <i class="el-icon-d-arrow-right" v-if="isActive"></i
+        ><i class="el-icon-d-arrow-left" v-else></i
+      ></el-divider>
     </div>
   </div>
 </template>
@@ -36,10 +39,10 @@ export default {
     },
   },
   created() {
-    // this.$router.push({ path: "ProWorkflowInfo" }); // 生产管理
+    this.$router.push({ path: "ProWorkflowInfo" }); // 生产管理
     // this.$router.push({ path: "imWl" });
     // this.$router.push({ path: "colorMng" });
-    this.$router.push({ path: "weight" });
+    // this.$router.push({ path: "weight" });
   },
   computed: {},
 };
@@ -55,7 +58,7 @@ export default {
     // transition: 0.3s;
   }
 
-  .el-menu-vertical-demo:not(.el-menu--collapse) {
+  .el-menu-vertical-demo:not(.el-menu--collapse), .eldemo:not(.el-menu--collapse) {
     width: 190px !important;
   }
 
@@ -68,7 +71,6 @@ export default {
     left: 0;
     bottom: 0;
     width: 100%;
-    margin-top: 0.5rem;
 
     .el-divider__text, .el-link {
       font-size: 20px !important;
@@ -76,7 +78,7 @@ export default {
       color: #909399;
     }
 
-    .el-icon-d-arrow-right {
+    .el-icon-d-arrow-right, .el-icon-d-arrow-left {
       padding: 2px;
       border-radius: 15px;
       border: 1px solid #909399;
@@ -106,7 +108,7 @@ export default {
 
   // height:100vh;
   .eldemo:not(.el-menu--collapse) {
-    height: 95%;
+    height: calc(100% - 50px);
     // height:500px;
     overflow-y: auto;
     background-color: rgba(0, 0, 0, 0);

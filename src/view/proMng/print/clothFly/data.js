@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-04 17:07:05
+ * @LastEditTime: 2021-06-05 15:22:53
  * @Description:
  */
 
@@ -554,10 +554,11 @@ export function bfCrud(_this) {
       {
         label: "值机工号",
         prop: "workNo",
-        width: 90,
+        width: 120,
         hide: false,
         span: 6,
-        disabled: true,
+        cell: true,
+        disabled: false,
         rules: [{
           required: true,
           message: "请输入值机工号",
