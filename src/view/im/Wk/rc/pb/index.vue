@@ -1,53 +1,54 @@
 <template>
   <div id="rc">
-    <view-container :title="data.type.split('_')[0]">
-      <div class="btnList">
-        <el-button type="primary" @click="add">{{
-          this.$t("public.add")
-        }}</el-button>
-        <el-button
-          type="success"
-          :disabled="Object.keys(chooseData).length === 0"
-          @click="handleRowDBLClick(chooseData)"
-          >{{ this.$t("public.update") }}</el-button
-        >
-        <el-button type="danger" @click="del">{{
-          this.$t("public.del")
-        }}</el-button>
-
-        <!-- <el-button type="warning" @click="ruleV = true">編號規則配置</el-button> -->
-        <!-- <el-button type="warning" @click="getData">取消</el-button> -->
-        <el-button type="primary" @click="getData">{{
-          this.$t("public.query")
-        }}</el-button>
-        <el-button type="warning" @click="close">{{
-          this.$t("public.close")
-        }}</el-button>
-      </div>
-      <div class="formBox">
-        <avue-form
-          ref="form"
-          :option="everyThing.mainF"
-          v-model="form"
-        ></avue-form>
-      </div>
-      <el-row class="crudBox">
-        <el-col :span="24">
-          <view-container
-            :title="data.type.split('_')[0] + this.$t('iaoMng.rc')"
+    <el-tabs type="border-card" v-model="tab">
+      <el-tab-pane name="rc" :label="data.type.split('_')[0]">
+        <div class="btnList">
+          <el-button type="primary" @click="add">{{
+            this.$t("public.add")
+          }}</el-button>
+          <el-button
+            type="success"
+            :disabled="Object.keys(chooseData).length === 0"
+            @click="handleRowDBLClick(chooseData)"
+            >{{ this.$t("public.update") }}</el-button
           >
-            <avue-crud
-              ref="crud"
-              :option="everyThing.mainC"
-              :data="crud"
-              :page.sync="page"
-              v-loading="loading"
-              @on-load="getData"
-              @row-dblclick="handleRowDBLClick"
-              @current-row-change="cellClick"
-            ></avue-crud> </view-container
-        ></el-col>
-        <!-- <el-col :span="10">
+          <el-button type="danger" @click="del">{{
+            this.$t("public.del")
+          }}</el-button>
+
+          <!-- <el-button type="warning" @click="ruleV = true">編號規則配置</el-button> -->
+          <!-- <el-button type="warning" @click="getData">取消</el-button> -->
+          <el-button type="primary" @click="getData">{{
+            this.$t("public.query")
+          }}</el-button>
+          <el-button type="warning" @click="close">{{
+            this.$t("public.close")
+          }}</el-button>
+        </div>
+        <div class="formBox">
+          <avue-form
+            ref="form"
+            :option="everyThing.mainF"
+            v-model="form"
+          ></avue-form>
+        </div>
+        <el-row class="crudBox">
+          <el-col :span="24">
+            <view-container
+              :title="data.type.split('_')[0] + this.$t('iaoMng.rc')"
+            >
+              <avue-crud
+                ref="crud"
+                :option="everyThing.mainC"
+                :data="crud"
+                :page.sync="page"
+                v-loading="loading"
+                @on-load="getData"
+                @row-dblclick="handleRowDBLClick"
+                @current-row-change="cellClick"
+              ></avue-crud> </view-container
+          ></el-col>
+          <!-- <el-col :span="10">
           <view-container :title="data.type.split('_')[0] + '明细'">
             <avue-crud
               ref="crud"
@@ -55,49 +56,55 @@
               :data="crud"
             ></avue-crud> </view-container
         ></el-col> -->
-      </el-row>
-      <el-dialog
-        id="sxrcDlg"
-        :visible.sync="dialogVisible"
-        width="100%"
-        append-to-body
-        :close-on-click-modal="false"
-        :close-on-press-escape="false"
-        v-if="dialogVisible"
-      >
-        <tem-dlg
-          ref="tem"
-          :datas="data"
-          :detail="detail"
-          :hide="hide"
-          :isAdd="isAdd"
-          @close="temClose"
-        ></tem-dlg>
-      </el-dialog>
-      <el-dialog
-        id="wkRuleDlg"
-        :visible.sync="ruleV"
-        width="50%"
-        append-to-body
-        :close-on-click-modal="false"
-        v-if="ruleV"
-      >
-        <rule-dlg
-          ref="rule"
-          :rcType="'whse_in'"
-          @close="ruleV = false"
-        ></rule-dlg>
-      </el-dialog>
-      <choice
-        :choiceV="choiceV"
-        :choiceTle="choiceTle"
-        :choiceQ="choiceQ"
-        dlgWidth="60%"
-        @choiceData="choiceData"
-        @close="choiceV = false"
-        v-if="choiceV"
-      ></choice>
-    </view-container>
+        </el-row>
+      </el-tab-pane>
+      <el-tab-pane name="pb" label="已入仓胚布">
+        <weight-info></weight-info>
+      </el-tab-pane>
+    </el-tabs>
+
+    <el-dialog
+      id="sxrcDlg"
+      :visible.sync="dialogVisible"
+      width="100%"
+      append-to-body
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+      v-if="dialogVisible"
+    >
+      <tem-dlg
+        ref="tem"
+        :datas="data"
+        :detail="detail"
+        :hide="hide"
+        :isAdd="isAdd"
+        @close="temClose"
+      ></tem-dlg>
+    </el-dialog>
+    <el-dialog
+      id="wkRuleDlg"
+      :visible.sync="ruleV"
+      width="50%"
+      append-to-body
+      :close-on-click-modal="false"
+      v-if="ruleV"
+    >
+      <rule-dlg
+        ref="rule"
+        :rcType="'whse_in'"
+        @close="ruleV = false"
+      ></rule-dlg>
+    </el-dialog>
+    <choice
+      :choiceV="choiceV"
+      :choiceTle="choiceTle"
+      :choiceQ="choiceQ"
+      dlgWidth="60%"
+      @choiceData="choiceData"
+      @close="choiceV = false"
+      v-if="choiceV"
+    ></choice>
+    <!-- </view-container> -->
   </div>
 </template>
 <script>
@@ -107,12 +114,14 @@ import choice from "@/components/choice";
 import { baseCodeSupply, baseCodeSupplyEx } from "@/api/index";
 import { getPb, getPbDetali, addPb, updatePb, delPb } from "@/api/im/Wk/rc";
 import { rcpb1F, rcpb1C, rcpb2C, rcpb2F } from "./data";
+import weightInfo from "./weight/index";
 export default {
   name: "",
   components: {
     temDlg: tem,
     ruleDlg: rule,
     choice: choice,
+    weightInfo,
   },
   data() {
     return {
@@ -120,7 +129,7 @@ export default {
       loading: false,
       data: JSON.parse(localStorage.getItem("imWk")),
       page: {
-        pageSize: 10,
+        pageSize: 50,
         currentPage: 1,
         total: 0,
       },
@@ -141,6 +150,7 @@ export default {
       choiceField: "",
       choiceQ: {},
       isAdd: false,
+      tab: "rc",
     };
   },
   watch: {},

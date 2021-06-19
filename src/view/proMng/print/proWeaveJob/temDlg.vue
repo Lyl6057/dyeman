@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-06-02 18:44:30
+ * @LastEditTime: 2021-06-19 19:07:07
  * @Description: 
 -->
 <template>
@@ -13,32 +13,96 @@
       v-loading="wLoading"
     >
       <div class="btnList">
-        <el-button type="success" @click="save">{{
-          $t("public.save")
-        }}</el-button>
-        <el-button type="primary" @click="checkOrder">选择订单号</el-button>
+        <el-tooltip
+          class="item"
+          effect="dark"
+          content="Bảo tồn"
+          placement="top-start"
+        >
+          <el-button type="success" @click="save" title="save" v-if="canSave">{{
+            $t("public.save")
+          }}</el-button>
+        </el-tooltip>
+
         <el-button
           type="primary"
-          @click="checkYarn"
-          :disabled="!this.form.weaveJobId"
-          >用紗明細</el-button
+          @click="checkOrder"
+          title="checkOrder"
+          v-if="canSave"
+          >选择订单号</el-button
         >
-        <el-button
-          type="primary"
-          @click="checkCalico"
-          :disabled="!this.form.weaveJobId"
-          >洗後規格</el-button
+        <el-tooltip
+          class="item"
+          effect="dark"
+          content="Yarn detail"
+          placement="top-start"
         >
-        <el-button
+          <el-button
+            type="primary"
+            @click="checkYarn"
+            :disabled="!this.form.weaveJobId"
+            v-if="canSave"
+            >用紗明細</el-button
+          >
+        </el-tooltip>
+        <el-tooltip
+          class="item"
+          effect="dark"
+          content="After washing"
+          placement="top-start"
+        >
+          <el-button
+            type="primary"
+            @click="checkCalico"
+            :disabled="!this.form.weaveJobId"
+            v-if="canSave"
+            >洗後規格</el-button
+          >
+        </el-tooltip>
+        <!-- <el-button
           type="primary"
           @click="checkstrain"
           :disabled="!this.form.weaveJobId"
           >輸送張力</el-button
+        > -->
+        <el-tooltip
+          class="item"
+          effect="dark"
+          content="in"
+          placement="top-start"
         >
-        <!-- <el-button type="primary" @click="setPreview">预览</el-button> -->
-        <el-button type="warning" @click="close">{{
-          this.$t("public.close")
-        }}</el-button>
+          <el-button
+            type="primary"
+            @click="print"
+            :disabled="!this.form.weaveJobId"
+            v-if="canSave"
+            >打印</el-button
+          >
+        </el-tooltip>
+        <el-tooltip
+          class="item"
+          effect="dark"
+          content="xuất"
+          placement="top-start"
+        >
+          <el-button
+            type="primary"
+            @click="out"
+            v-if="canSave"
+            :disabled="!this.form.weaveJobId"
+            >导出excel</el-button
+          >
+        </el-tooltip>
+        <el-tooltip
+          class="item"
+          effect="dark"
+          content="đóng"
+          placement="top-start"
+        >
+          <el-button type="warning" @click="close">{{
+            this.$t("public.close")
+          }}</el-button>
+        </el-tooltip>
       </div>
 
       <div class="formBox">
@@ -85,34 +149,62 @@
                 v-if="tabs == '選擇訂單' || tabs == '更改紗長'"
                 >{{ $t("public.choose") }}</el-button
               >
-              <el-button
-                @click="saveOther"
-                type="success"
-                v-if="tabs != '選擇訂單'"
-                >{{ $t("public.save") }}</el-button
+              <el-tooltip
+                class="item"
+                effect="dark"
+                content="Bảo tồn"
+                placement="top-start"
               >
-              <el-button
-                @click="add"
-                type="primary"
-                v-if="tabs != '選擇訂單'"
-                >{{ $t("public.add") }}</el-button
+                <el-button
+                  @click="saveOther"
+                  type="success"
+                  v-if="tabs != '選擇訂單'"
+                  >{{ $t("public.save") }}</el-button
+                >
+              </el-tooltip>
+              <el-tooltip
+                class="item"
+                effect="dark"
+                content="thêm mới "
+                placement="top-start"
               >
-              <el-button
-                @click="del"
-                type="danger"
-                v-if="tabs != '選擇訂單'"
-                :disabled="Object.keys(chooseData).length == 0"
-                >{{ $t("public.del") }}</el-button
+                <el-button
+                  @click="add"
+                  type="primary"
+                  v-if="tabs != '選擇訂單'"
+                  >{{ $t("public.add") }}</el-button
+                >
+              </el-tooltip>
+              <el-tooltip
+                class="item"
+                effect="dark"
+                content="xóa"
+                placement="top-start"
               >
+                <el-button
+                  @click="del"
+                  type="danger"
+                  v-if="tabs != '選擇訂單'"
+                  :disabled="Object.keys(chooseData).length == 0"
+                  >{{ $t("public.del") }}</el-button
+                >
+              </el-tooltip>
               <el-button
                 @click="query"
                 type="primary"
                 v-if="tabs == '選擇訂單'"
                 >{{ $t("public.query") }}</el-button
               >
-              <el-button @click="visible = false" type="warning">{{
-                $t("public.close")
-              }}</el-button>
+              <el-tooltip
+                class="item"
+                effect="dark"
+                content="đóng"
+                placement="top-start"
+              >
+                <el-button @click="visible = false" type="warning">{{
+                  $t("public.close")
+                }}</el-button>
+              </el-tooltip>
             </div>
             <div class="formBox">
               <avue-form
@@ -138,18 +230,32 @@
         <el-col :span="18" v-if="tabs == '用紗分組'">
           <view-container title="用紗明細">
             <div class="btnList">
-              <el-button
-                @click="addDtl"
-                type="primary"
-                :disabled="Object.keys(chooseData).length == 0"
-                >{{ $t("public.add") }}</el-button
+              <el-tooltip
+                class="item"
+                effect="dark"
+                content="thêm mới "
+                placement="top-start"
               >
-              <el-button
-                @click="delDtl"
-                type="danger"
-                :disabled="Object.keys(chooseDtlData).length == 0"
-                >{{ $t("public.del") }}</el-button
+                <el-button
+                  @click="addDtl"
+                  type="primary"
+                  :disabled="Object.keys(chooseData).length == 0"
+                  >{{ $t("public.add") }}</el-button
+                >
+              </el-tooltip>
+              <el-tooltip
+                class="item"
+                effect="dark"
+                content="xóa"
+                placement="top-start"
               >
+                <el-button
+                  @click="delDtl"
+                  type="danger"
+                  :disabled="Object.keys(chooseDtlData).length == 0"
+                  >{{ $t("public.del") }}</el-button
+                >
+              </el-tooltip>
             </div>
             <div class="formBox"></div>
             <div class="crudBox">
@@ -164,6 +270,23 @@
           </view-container>
         </el-col>
       </el-row>
+    </el-dialog>
+    <el-dialog
+      id="colorMng_Dlg"
+      :visible.sync="pdfDlg"
+      fullscreen
+      width="100%"
+      append-to-body
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+    >
+      <view-container title="打印預覽">
+        <embed
+          id="pdf"
+          style="width: 100vw; height: calc(100vh - 80px)"
+          :src="pdfUrl"
+        />
+      </view-container>
     </el-dialog>
     <choice
       :choiceV="choiceV"
@@ -214,10 +337,12 @@ import {
   updateStrain,
   delStrain,
 } from "./api";
-import { getDIC, getDicT, getXDicT, postDicT, preFixInt } from "@/config";
 import { baseCodeSupplyEx } from "@/api/index";
 import preview from "./preview";
-
+import XlsxTemplate from "xlsx-template";
+import JSZipUtils from "jszip-utils";
+import saveAs from "file-saver";
+import { get } from "../../../Energy/Meter/api";
 export default {
   name: "",
   props: {
@@ -264,6 +389,10 @@ export default {
       yarnCrud: yarnCrud(this),
       group: [],
       chooseDtlData: {},
+      pdfDlg: false,
+      pdfUrl: "",
+      yarnlist: [],
+      canSave: true,
     };
   },
   watch: {},
@@ -272,12 +401,16 @@ export default {
       if (this.isAdd) {
         baseCodeSupplyEx({ code: "proWeaveJob" }).then((res) => {
           this.form.weaveJobCode = res.data.data;
+          this.form.calicoFabricRequire = "开幅";
+          this.form.calicoShap = "1";
+          this.form.weaveState = 0;
+          this.form.creator = parent.userID;
           this.code = res.data.data;
         });
       } else {
         this.wLoading = true;
         this.form = this.detail;
-
+        this.getAllYarn();
         // if (this.form.realEnd === "" || this.form.realEnd === null) {
         //   this.form.nowDate = this.form.planEnd.split(" ")[0];
         // } else {
@@ -285,8 +418,100 @@ export default {
         // }
         // this.form.nowDate = this.getNowTime();
         setTimeout(() => {
+          if (this.form.weaveState == "1") {
+            if (parent.userID === this.form.creator) {
+              this.canSave = true;
+            } else {
+              this.canSave = false;
+            }
+          }
+          if (this.form.creator != parent.userID) {
+            this.formOp.column[this.formOp.column.length - 1].disabled = true;
+          }
           this.wLoading = false;
         }, 500);
+      }
+    },
+    print() {
+      this.pdfDlg = true;
+      this.pdfUrl =
+        process.env.API_HOST +
+        "/api/proWeaveJob/prinEntityPdf?id=" +
+        this.form.weaveJobId;
+    },
+    async getAllYarn() {
+      getGroup({
+        star: 1,
+        rows: 999,
+        proWeaveJobFk: this.form.weaveJobId,
+      }).then((group) => {
+        let data = group.data.records.sort((a, b) => {
+          return a.changeBatchTime > b.workchangeBatchTimeDate ? -1 : 1;
+        });
+        if (data.length) {
+          getYarn({
+            star: 1,
+            rows: 999,
+            proWeaveJobGroupFk: data[0].groupId,
+          }).then((yarn) => {
+            this.yarnlist = this.yarnlist.concat(yarn.data.records);
+          });
+        }
+      });
+    },
+    async out() {
+      this.wLoading = true;
+      try {
+        //获得Excel模板的buffer对象
+        const exlBuf = await JSZipUtils.getBinaryContent(
+          "./static/xlxsTemplate/weave.xlsx"
+        );
+        // Create a template
+        var template = new XlsxTemplate(exlBuf);
+        // Replacements take place on first sheet
+        var sheetNumber = "LIGHT";
+        // Set up some placeholder values matching the placeholders in the template
+        var query = this.form;
+        this.form.calicoFabricRequire == "" ||
+        this.form.calicoFabricRequire == "开幅"
+          ? ((this.form.kf = "☑"), (this.form.yt = "□"))
+          : ((this.form.kf = "□"), (this.form.yt = "☑"));
+
+        getCalico({
+          star: 1,
+          rows: 999,
+          proWeaveJobFk: this.form.weaveJobId,
+        }).then((res) => {
+          let xh = res.data.records[0];
+          let arr = this.yarnlist;
+          arr.forEach((item, i) => {
+            item.index = i + 1;
+          });
+          var values = {
+            //数据需要自己提前准备好
+            query,
+            xh,
+            arr,
+          };
+          template.substitute(sheetNumber, values);
+          // Get binary data.
+          var out = template.generate({ type: "blob" });
+          let _this = this;
+          var fun1 = function () {
+            return new Promise((resolve, reject) => {
+              saveAs(out, "织造生产单-" + _this.form.weaveJobCode + ".xlsx");
+              resolve();
+            });
+          };
+          fun1().then((res) => {
+            setTimeout(() => {
+              this.$tip.success("导出成功!");
+              this.wLoading = false;
+            }, 1000);
+          });
+        });
+      } catch (e) {
+        console.log(e);
       }
     },
     save() {
@@ -680,9 +905,12 @@ export default {
         proWeaveJobGroupFk: this.chooseData.groupId,
       }).then((res) => {
         let data = res.data.records;
+        data.sort((a, b) => {
+          return a.sn > b.sn ? 1 : -1;
+        });
         data.forEach((item, i) => {
           item.$cellEdit = true;
-          item.index = i + 1;
+          // item.sn = i + 1;
           this.chooseData.list.push(Object.assign(item, { index: i + 1 }));
         });
         this.chooseData.list = res.data.records;
@@ -741,6 +969,7 @@ export default {
           yarnBatch: item.batchNo,
           yarnBrand: item.yarnsCard,
           unit: "KG",
+          sn: this.chooseData.list.length + 1,
           $cellEdit: true,
         });
       });

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-06-02 18:41:27
+ * @LastEditTime: 2021-06-19 19:08:18
  * @Description: 
 -->
 <template>
@@ -13,25 +13,62 @@
       element-loading-text="拼命加载中..."
     >
       <el-row class="btnList">
-        <el-button
-          type="success"
-          :disabled="!detail.weaveJobId"
-          @click="handleRowDBLClick(detail)"
-          >{{ this.$t("public.update") }}</el-button
+        <el-tooltip
+          class="item"
+          effect="dark"
+          content="cập nhật"
+          placement="top-start"
         >
-        <el-button type="primary" @click="add">{{
-          this.$t("public.add")
-        }}</el-button>
-        <el-button type="danger" :disabled="!detail.weaveJobId" @click="del">{{
-          this.$t("public.del")
-        }}</el-button>
-        <el-button type="primary" @click="print" :loading="wloading"
-          >打印</el-button
+          <el-button
+            type="success"
+            :disabled="!detail.weaveJobId"
+            @click="handleRowDBLClick(detail)"
+            >{{ this.$t("public.update") }}</el-button
+          >
+        </el-tooltip>
+        <el-tooltip
+          class="item"
+          effect="dark"
+          content="thêm mới "
+          placement="top-start"
         >
-        <el-button type="primary" @click="query">{{
-          this.$t("public.query")
-        }}</el-button>
-
+          <el-button type="primary" @click="add">{{
+            this.$t("public.add")
+          }}</el-button>
+        </el-tooltip>
+        <el-tooltip
+          class="item"
+          effect="dark"
+          content="xóa"
+          placement="top-start"
+        >
+          <el-button
+            type="danger"
+            :disabled="!detail.weaveJobId"
+            @click="del"
+            >{{ this.$t("public.del") }}</el-button
+          >
+        </el-tooltip>
+        <el-tooltip
+          class="item"
+          effect="dark"
+          content=" in"
+          placement="top-start"
+        >
+          <el-button type="primary" @click="print" :loading="wloading"
+            >打印</el-button
+          >
+        </el-tooltip>
+        <el-tooltip
+          class="item"
+          effect="dark"
+          content="tìm kiếm"
+          placement="top-start"
+        >
+          <el-button type="primary" @click="query">{{
+            this.$t("public.query")
+          }}</el-button>
+        </el-tooltip>
         <!-- <el-button type="warning" @click="close">{{
           this.$t("public.close")
         }}</el-button> -->
@@ -82,19 +119,11 @@
       :close-on-press-escape="false"
     >
       <view-container title="打印預覽">
-        <!-- <div class="btnList">
-            <el-button type="warning" @click="pdfDlg = false">{{
-              this.$t("public.close")
-            }}</el-button>
-            <el-button type="primary" @click="print2">打印</el-button>
-          </div> -->
-        <!--startprint-->
         <embed
           id="pdf"
           style="width: 100vw; height: calc(100vh - 80px)"
           :src="pdfUrl"
         />
-        <!--endprint-->
       </view-container>
     </el-dialog>
   </div>
@@ -162,37 +191,6 @@ export default {
       });
     },
     print() {
-      // this.$tip
-      //   .cofirm(
-      //     "是否確定打印生產單號為【 " +
-      //       this.detail.weaveJobCode +
-      //       this.$t("iaoMng.delTle2"),
-      //     this,
-      //     {}
-      //   )
-      //   .then(() => {
-      //     print({
-      //       id: this.detail.weaveJobId,
-      //       weaveJobCode: this.detail.weaveJobCode,
-      //     }).then((res) => {
-      //       if (res.data.msg === "打印成功") {
-      //         this.wloading = true;
-      //         setTimeout(() => {
-      //           this.wloading = false;
-      //           this.$tip.success(res.data.msg);
-      //         }, 2000);
-      //       } else {
-      //         this.wloading = true;
-      //         setTimeout(() => {
-      //           this.wloading = false;
-      //           this.$tip.error(res.data.msg);
-      //         }, 500);
-      //       }
-      //     });
-      //   })
-      //   .catch((err) => {
-      //     this.$tip.warning(this.$t("public.qxcz"));
-      //   });
       this.pdfDlg = true;
       this.pdfUrl =
         process.env.API_HOST +
@@ -263,6 +261,10 @@ export default {
       this.dialogVisible = true;
     },
     del() {
+      if (this.detail.creator != parent.userID) {
+        this.$tip.warning("你无权限删除该条数据!");
+        return;
+      }
       this.$tip
         .cofirm(
           this.$t("iaoMng.delTle7") +

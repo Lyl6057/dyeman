@@ -25,6 +25,11 @@ export default [
     name: "库存期初始化",
     component: resolve => require(["@/view/im/Ity/basic/index"], resolve),
   },
+  {
+    path: "/whseVehicle",
+    name: "仓库载具管理",
+    component: resolve => require(["@/view/im/Ity/vehicle/index"], resolve),
+  },
   //仓库工作指引看板
   {
     path: "/imWk",

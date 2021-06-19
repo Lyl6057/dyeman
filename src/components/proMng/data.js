@@ -2,38 +2,1103 @@
  * @Author: Lyl
  * @Date: 2021-05-03 13:03:03
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-28 15:39:10
+ * @LastEditTime: 2021-06-18 10:59:12
  * @Description:
  */
 
-import axios from 'axios';
-import {
-  getDIC,
-  getDicT,
-  getXDicT,
-  postDicT
-} from '@/config'
-let cust = getDicT("basCustomer", "custName", "custCode")
-let supp = getDicT("basSupplier", "suppName", "suppId",)
-let purAttr = getDIC("sal_purAttr")
-let calicoType = getDIC("bas_calicoType")
-let chemicalClass = getDIC("bas_chemicalClass")
-let yarnsFlag = getDIC("pur_yarnsFlag")
-let yarnsPaytype = getDIC("pur_yarnsPaytype")
-let yarnsCollected = getDIC("pur_yarnsCollected")
-let basHardware = getDicT("basHardware", "topcategoryName", "basHardwareoid")
-let basAdsupplies = getDicT("basAdsupplies", "topcategoryName", "basAdsuppliesoid")
-let matUnit = getDIC("bas_matUnit")
-let basChemical = getXDicT("BasChemicalmatNew")
-let basPigment = getXDicT("basPigment")
-let basProductivesupplies = getXDicT("basProductivesuppliesnew")
+import axios from "axios";
+import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
+let cust = getDicT("basCustomer", "custName", "custCode");
+let supp = getDicT("basSupplier", "suppName", "suppId");
+let purAttr = getDIC("sal_purAttr");
+let calicoType = getDIC("bas_calicoType");
+let chemicalClass = getDIC("bas_chemicalClass");
+let yarnsFlag = getDIC("pur_yarnsFlag");
+let yarnsPaytype = getDIC("pur_yarnsPaytype");
+let yarnsCollected = getDIC("pur_yarnsCollected");
+let basHardware = getDicT("basHardware", "topcategoryName", "basHardwareoid");
+let basAdsupplies = getDicT(
+  "basAdsupplies",
+  "topcategoryName",
+  "basAdsuppliesoid"
+);
+let matUnit = getDIC("bas_matUnit");
+let basChemical = getXDicT("BasChemicalmatNew");
+let basPigment = getXDicT("basPigment");
+let basProductivesupplies = getXDicT("basProductivesuppliesnew");
 
+export function dyeF(_this) {
+  return {
+    submitBtn: false,
+    emptyBtn: false,
+    labelWidth: 150,
+    column: [
+      {
+        label: "染缸機台號",
+        prop: "dyeMathine",
+        span: 6,
+        placeholder: " "
+      },
+      {
+        label: "织造生產單號",
+        prop: "weaveJobCode",
+        span: 6,
+        placeholder: " "
+      },
+      {
+        label: "訂單編號",
+        prop: "salPoNo",
+        span: 6,
+        placeholder: " "
+        // dicData: getDicT("basCustomer", "custName", "custCode")
+      },
+      {
+        label: "客戶名稱",
+        prop: "custCode",
+        span: 6,
+        placeholder: " ",
+        type: "select",
+        dicData: cust
+      },
+      {
+        label: "发单日期",
+        prop: "workDate",
+        span: 6,
+        placeholder: " "
+      },
+      {
+        label: "色號",
+        prop: "colorCode",
+        span: 6,
+        placeholder: " "
+      },
+      {
+        label: "缸號",
+        prop: "vatNo",
+        span: 6,
+        placeholder: " "
+      },
+      {
+        label: "值機員",
+        prop: "operator",
+        span: 6,
+        placeholder: " "
+      }
+      // {
+      //   label: _this.$t('whseField.khmc'),
+      //   prop: "colorBh",
+      //   span: 6,
+      //   placeholder: " ",
+      //   type: "select",
+      //   // dicData: getDicT("basCustomer", "custName", "custCode")
+      // },
+    ]
+  };
+}
+export function dyeC(_this) {
+  return {
+    menu: false,
+    addBtn: true,
+    border: true,
+    highlightCurrentRow: true,
+    height: "calc(100vh - 240px)",
+    refreshBtn: false,
+    columnBtn: false,
+    page: true,
+    labelWidth: 130,
+    column: [
+      {
+        label: "#",
+        prop: "index",
+        width: 50,
+        align: "center",
+        display: false
+      },
+      {
+        label: "染缸機台號",
+        prop: "dyeMathine",
+        overHidden: true,
+        width: 130,
+        span: 6,
+        disabled: false,
+        sortable: true,
+        rules: [
+          {
+            required: true,
+            message: "請輸入染缸機台號",
+            trigger: "blur"
+          }
+        ]
+      },
+      {
+        label: "缸號",
+        prop: "vatNo",
+        overHidden: true,
+        width: 140,
+        span: 6,
+        disabled: false,
+        sortable: true,
+        rules: [
+          {
+            required: true,
+            message: "請輸入缸號",
+            trigger: "blur"
+          }
+        ]
+      },
+      {
+        label: "發單日期",
+        prop: "workDate",
+        width: 130,
+        span: 6,
+        type: "date",
+        align: "center",
+        format: "yyyy-MM-dd",
+        valueFormat: "yyyy-MM-dd",
+        placeholder: "请選擇發單日期",
+        sortable: true,
+        rules: [
+          {
+            required: true,
+            message: "请選擇發單日期",
+            trigger: "blur"
+          }
+        ]
+      },
+      {
+        label: "交货日期",
+        prop: "deliveDate",
+        width: 130,
+        span: 6,
+        type: "date",
+        align: "center",
+        format: "yyyy-MM-dd",
+        valueFormat: "yyyy-MM-dd",
+        placeholder: "请選擇交货日期",
+        sortable: true,
+        rules: [
+          {
+            required: true,
+            message: "请選擇交货日期",
+            trigger: "blur"
+          }
+        ]
+      },
+      {
+        label: "管數量",
+        prop: "dyeJarCount",
+        overHidden: true,
+        width: 100,
+        span: 6,
+        disabled: false,
+        rules: [
+          {
+            required: true,
+            message: "請輸入管數量",
+            trigger: "blur"
+          }
+        ],
+        type: "number",
+        align: "right"
+      },
+      {
+        label: "重量",
+        prop: "clothWeight",
+        width: 100,
+        span: 6,
+        type: "number",
+        align: "right",
+        placeholder: " ",
+        rules: [
+          {
+            required: true,
+            message: "请输入重量",
+            trigger: "blur"
+          }
+        ]
+      },
+
+      {
+        label: "交貨地址",
+        prop: "address",
+        overHidden: true,
+        width: 180,
+        span: 12,
+        disabled: false
+      },
+      {
+        label: "織造生產單號",
+        prop: "weaveJobCode",
+        overHidden: true,
+        width: 180,
+        span: 6,
+        disabled: false,
+        placeholder: "請選擇織造生產單號"
+      },
+      {
+        label: "疋數",
+        prop: "pidCount",
+        width: 100,
+        span: 6,
+        type: "number",
+        align: "right",
+        placeholder: " "
+      },
+      {
+        label: "客戶名稱",
+        prop: "custCode",
+        overHidden: true,
+        width: 200,
+        span: 6,
+        placeholder: " ",
+        type: "select",
+        dicData: cust
+        // change: () => {
+        //   _this.$nextTick(() => {
+        //     _this.form.custCode = _this.form.custName
+        //   })
+
+        // }
+      },
+
+      {
+        label: "訂單編號",
+        prop: "salPoNo",
+        width: 180,
+        span: 6,
+        placeholder: " ",
+        // sortable: true,
+        overHidden: true
+      },
+
+      {
+        label: "訂單數量(公斤)",
+        prop: "poAmountKg",
+        width: 130,
+        span: 6,
+        type: "number",
+        align: "right",
+        placeholder: " "
+      },
+      {
+        label: "訂單數量(磅)",
+        prop: "poAmountLb",
+        width: 120,
+        span: 6,
+        type: "number",
+        align: "right",
+        placeholder: " ",
+        hide: true,
+        disabled: true,
+        change: () => {
+          // _this.$nextTick(() => {
+          //   _this.form.poAmountKg = _this.form.poAmountKg * 2.2046226
+          // })
+        }
+      },
+
+      {
+        label: "布類描述",
+        prop: "fabName",
+        placeholder: " ",
+        overHidden: true,
+        width: 250,
+        span: 12,
+        placeholder: " "
+        // rules: [{
+        //   required: true,
+        //   message: "请選擇布類描述",
+        //   trigger: "blur"
+        // }],
+      },
+
+      {
+        label: "布匹成分",
+        prop: "fabElements",
+        placeholder: " ",
+        overHidden: true,
+        width: 250,
+        span: 6
+      },
+
+      {
+        label: "紗線批號",
+        prop: "yarnBatchNo",
+        span: 6,
+        width: 120,
+        placeholder: " ",
+        disabled: false,
+        hide: true
+      },
+      {
+        label: "紗牌紗批",
+        prop: "yarnNumber",
+        span: 6,
+        width: 120,
+        placeholder: " ",
+        disabled: false,
+        hide: true
+      },
+      {
+        label: "紗牌",
+        prop: "yarnCard",
+        span: 6,
+        width: 120,
+        placeholder: " ",
+        disabled: false,
+        hide: true
+      },
+
+      {
+        label: "顏色名稱",
+        prop: "colorName",
+        placeholder: " ",
+        width: 180,
+        overHidden: true,
+        span: 6,
+        placeholder: " "
+        // rules: [{
+        //   required: true,
+        //   message: "请選擇顏色名稱",
+        //   trigger: "blur"
+        // }],
+      },
+      {
+        label: "色號",
+        prop: "colorCode",
+        width: 150,
+        span: 6,
+        overHidden: true,
+        placeholder: " "
+      },
+      {
+        label: "合染缸號",
+        prop: "mergVatNo",
+        overHidden: true,
+        width: 180,
+        span: 12,
+        disabled: false,
+        type: "select",
+        dicData: [],
+        multiple: true,
+        filterable: true,
+        allowCreate: true,
+        defaultFirstOption: true,
+        placeholder: " "
+      },
+
+      {
+        label: "幅寬",
+        prop: "breadth",
+        width: 90,
+        hide: true,
+        span: 6,
+        type: "number",
+        placeholder: " "
+      },
+      {
+        label: "幅寬實用",
+        prop: "breadthActual",
+        width: 90,
+        hide: true,
+        span: 6,
+        type: "number",
+        placeholder: " "
+      },
+      {
+        label: "幅寬連邊",
+        prop: "breadthBorder",
+        width: 90,
+        hide: true,
+        span: 6,
+        type: "number",
+        placeholder: " "
+      },
+      {
+        label: "幅寬單位",
+        prop: "breadthUnit",
+        span: 6,
+        hide: true,
+        placeholder: " ",
+        width: 80,
+        type: "select",
+        dicData: matUnit
+      },
+      {
+        label: "筒徑",
+        prop: "tubeDiam",
+        span: 6,
+        hide: true,
+        placeholder: " ",
+        width: 80,
+        type: "number"
+      },
+      {
+        label: "筒徑單位",
+        prop: "tubeDiamUnit",
+        span: 6,
+        hide: true,
+        placeholder: " ",
+        width: 80,
+        type: "select",
+        dicData: matUnit
+      },
+
+      {
+        label: "針距",
+        prop: "needleDist",
+        span: 6,
+        hide: true,
+        placeholder: " ",
+        width: 80,
+        tyep: "number"
+      },
+      {
+        label: "針距單位",
+        prop: "needleDistUnit",
+        span: 6,
+        hide: true,
+        placeholder: " ",
+        width: 80,
+        type: "select",
+        dicData: matUnit
+      },
+      {
+        label: "紗長",
+        prop: "yarnLength",
+        span: 6,
+        hide: true,
+        placeholder: " ",
+        width: 80,
+        tyep: "number"
+      },
+      {
+        label: "紗長單位",
+        prop: "yarnLengthUnit",
+        span: 6,
+        hide: true,
+        placeholder: " ",
+        width: 80,
+        type: "select",
+        dicData: matUnit
+      },
+
+      {
+        label: "克重",
+        prop: "gramWeight",
+        width: 120,
+        hide: true,
+        span: 6,
+        type: "number",
+        placeholder: " "
+      },
+      {
+        label: "洗前(克重)",
+        prop: "gramWeightBefor",
+        width: 120,
+        hide: true,
+        span: 6,
+        type: "number",
+        placeholder: " "
+      },
+
+      {
+        label: "顏色種類數量",
+        prop: "poColorCount",
+        width: 120,
+        span: 6,
+        type: "number",
+        align: "right",
+        placeholder: " "
+      },
+      {
+        label: "訂單總缸數",
+        prop: "poVatCount",
+        width: 120,
+        span: 6,
+        type: "number",
+        align: "right",
+        placeholder: " "
+      },
+      {
+        label: "当前第幾缸",
+        prop: "vatIndex",
+        width: 120,
+        span: 6,
+        type: "number",
+        align: "right",
+        placeholder: " "
+      },
+      {
+        label: "成品/洗後(克重)",
+        prop: "gramWeightAfter",
+        width: 120,
+        hide: true,
+        span: 6,
+        type: "number",
+        placeholder: " "
+      },
+      {
+        label: "對色缸號",
+        prop: "compVatNo",
+        width: 120,
+        hide: true,
+        placeholder: " ",
+        span: 6
+      },
+      {
+        label: "對色光源",
+        prop: "compLightSource",
+        width: 120,
+        hide: true,
+        placeholder: " ",
+        span: 6
+      },
+      {
+        label: "縮水(直縮)",
+        prop: "shrinkLenth",
+        span: 6,
+        hide: true,
+        width: 80,
+        placeholder: " ",
+        type: "number"
+      },
+      {
+        label: "縮水(橫縮)",
+        prop: "shrinkWidth",
+        span: 6,
+        hide: true,
+        width: 80,
+        placeholder: " ",
+        type: "number"
+      },
+
+      {
+        label: "縮水(扭度)",
+        prop: "shrinkNear",
+        span: 6,
+        hide: true,
+        width: 80,
+        placeholder: " ",
+        type: "number"
+      },
+      {
+        label: "縮水(循環)",
+        prop: "shrinkRotate",
+        span: 6,
+        hide: true,
+        width: 80,
+        placeholder: " ",
+        type: "number"
+      },
+
+      {
+        label: "縮水(掛幹)",
+        prop: "hangDry",
+        span: 6,
+        hide: true,
+        width: 80,
+        placeholder: " ",
+        type: "number"
+      },
+      {
+        label: "縮水(平幹)",
+        prop: "flatDry",
+        span: 6,
+        hide: true,
+        width: 80,
+        placeholder: " ",
+        type: "number"
+      },
+      {
+        label: "縮水(拋幹)",
+        prop: "throwDry",
+        span: 6,
+        hide: true,
+        width: 80,
+        placeholder: " ",
+        type: "number"
+      },
+
+      {
+        label: "稱料員",
+        prop: "mateStockMan",
+        width: 80,
+        span: 6,
+        hide: true,
+        placeholder: " "
+      },
+      {
+        label: "規格參考",
+        prop: "specParam",
+        width: 120,
+        hide: true,
+        placeholder: " ",
+        span: 12
+      },
+      {
+        label: "值機員",
+        prop: "operator",
+        width: 80,
+        span: 6,
+        hide: true,
+        placeholder: " "
+      },
+
+      {
+        label: "工廠負責人",
+        prop: "chargeWeave",
+        width: 80,
+        span: 6,
+        hide: true,
+        placeholder: " "
+      },
+
+      {
+        label: "打印時間",
+        prop: "printDate",
+        placeholder: " ",
+        width: 90,
+        hide: true,
+        type: "datetime",
+        format: "yyyy-MM-dd HH:mm:ss",
+        valueFormat: "yyyy-MM-dd HH:mm:ss",
+        span: 6,
+        display: false
+      }
+    ]
+  };
+}
+export function getDye(params) {
+  return axios({
+    url: "/api/proBleadyeJob/page",
+    method: "get",
+    params: params
+  });
+}
+
+export function getClothNote(params) {
+  return axios({
+    url: "/api/proClothNote/pageLike",
+    method: "get",
+    params: params
+  });
+}
+export function clothNoteF(_this) {
+  return {
+    submitBtn: false,
+    emptyBtn: false,
+    labelWidth: 120,
+    column: [
+      {
+        label: "織單號",
+        prop: "weaveJobCode",
+        span: 6,
+        placeholder: " ",
+        // formslot: true,
+        // slot: true,
+        // type: "select",
+        tip: "MS đơn sản xuất bp Dệt"
+      },
+      {
+        label: "载具编号",
+        tip: "Mã lồng thép",
+        prop: "storeLoadCode",
+        span: 6,
+        placeholder: " ",
+        cell: true,
+        overHidden: true,
+        width: 120
+      },
+      // {
+      //   label: "訂單號",
+      //   prop: "poNo",
+      //   span: 6,
+      //   placeholder: " ",
+      //   tip: "Số đơn hàng"
+      // },
+      {
+        label: "布票編號",
+        prop: "noteCode",
+        span: 6,
+        placeholder: " ",
+        tip: "Mã vải"
+      },
+      {
+        label: "机號",
+        prop: "loomNo",
+        span: 6,
+        placeholder: " ",
+        tip: "Mã máy"
+      },
+      {
+        label: "匹號",
+        prop: "eachNumber",
+        width: 80,
+        align: "right",
+        span: 6,
+        placeholder: " ",
+        tip: "Số cây vải"
+      }
+
+      // {
+      //   label: "胚布状态",
+      //   tip: "clothState",
+      //   prop: "clothState",
+      //   span: 6,
+      //   placeholder: " ",
+      //   cell: true,
+      //   overHidden: true,
+      //   width: 120,
+      //   type: "select",
+      //   defaultIndex: 0,
+      //   valueDefault: 0,
+      //   dicData: [
+      //     // {
+      //     //   label: "未称重",
+      //     //   value: 0
+      //     // },
+      //     {
+      //       label: "已入库",
+      //       value: 2
+      //     },
+      //   ],
+      //   change: () => {
+      //     _this.$nextTick(() => {
+      //       _this.query()
+      //     })
+      //   }
+      // },
+      // {
+      //   label: "验布时间",
+      //   prop: "clothCheckTime",
+      //   type: "date",
+      //   format: "yyyy-MM-dd",
+      //   valueFormat: "yyyy-MM-dd",
+      //   span: 6,
+      //   tip: "thời gian in",
+      //   placeholder: " ",
+      //   align: "center",
+      //   width: 180
+      // }
+    ]
+  };
+}
+export function clothNoteC(_this) {
+  return {
+    menu: false,
+    addBtn: false,
+    cancelBtn: false,
+    editBtn: false,
+    delBtn: false,
+    menuWidth: 80,
+    border: true,
+    index: false,
+    highlightCurrentRow: true,
+    height: "calc(100vh - 240px)",
+    refreshBtn: false,
+    columnBtn: false,
+    page: true,
+    labelWidth: 100,
+    selection: true,
+    // showSummary: true,
+    menuTitle: "trọng lượng",
+    // sumColumnList: [
+    //   {
+    //     label: '毛重',
+    //     name: 'clothWeight',
+    //     type: 'sum',
+    //     decimals: 1
+    //   },
+    // ],
+    column: [
+      {
+        label: "#",
+        prop: "index",
+        width: 50,
+        align: "center",
+        display: false
+      },
+      {
+        label: "織單號(MS đơn sản xuất bp Dệt)",
+        prop: "weaveJobCode",
+        width: 150,
+        span: 6,
+        placeholder: " ",
+        disabled: true,
+        overHidden: true
+      },
+
+      {
+        label: "载具编号(Mã lồng thép)",
+        prop: "storeLoadCode",
+        span: 8,
+        placeholder: " ",
+        cell: true,
+        overHidden: true,
+        sortable: true,
+        width: 120
+      },
+      // {
+      //   label: "訂單號(Số đơn hàng)",
+      //   prop: "poNo",
+      //   width: 150,
+      //   span: 6,
+      //   placeholder: " ",
+      //   disabled: true,
+      //   overHidden: true
+      // },
+      {
+        label: "布票號(Mã vải)",
+        prop: "noteCode",
+        width: 170,
+        disabled: true,
+        placeholder: " ",
+        span: 6,
+        sortable: true,
+        overHidden: true
+      },
+      // {
+      //   label: "客戶",
+      //   prop: "customerName",
+      //   width: 150,
+      //   disabled: true, placeholder: " ",
+      //   span: 6,
+      //   display: false,
+      //   overHidden: true
+      // },
+      {
+        label: "布类名称(Tên loại vải)",
+        prop: "fabricName",
+        disabled: true,
+        placeholder: " ",
+        span: 6,
+        width: 100,
+        width: 200,
+        overHidden: true,
+        hide: true
+      },
+      {
+        label: "顏色(Màu sắc)",
+        prop: "proColor",
+        disabled: true,
+        placeholder: " ",
+        span: 6,
+        width: 120,
+        overHidden: true,
+        hide: true
+      },
+
+      {
+        label: "纱批(Lô sợi)",
+        prop: "spi",
+        width: 90,
+        hide: true,
+        span: 6
+      },
+
+      {
+        label: "纱牌(Nhãn hiệu sợi)",
+        prop: "sp",
+        width: 90,
+        hide: true,
+        span: 6
+      },
+      // {
+      //   label: "机台編號",
+      //   prop: "machineCode",
+      //   width: 110,
+      //   hide: false,
+      //   span: 6,
+      //   disabled: true,
+
+      // },
+      {
+        label: "机號(Mã máy)",
+        prop: "loomNo",
+        width: 95,
+        hide: false,
+        span: 6,
+        rules: [
+          {
+            required: true,
+            message: "请输入机号",
+            trigger: "blur"
+          }
+        ],
+        disabled: true,
+        sortable: true
+      },
+      {
+        label: "值机工号(Số thẻ người đứng máy)",
+        prop: "workNo",
+        span: 8,
+        placeholder: " ",
+        width: 150,
+        overHidden: true
+      },
+      // {
+      //   label: "值机工号",
+      //   prop: "workNo",
+      //   width: 90,
+      //   hide: false,
+      //   span: 6,
+      //   disabled: true,
+      //   rules: [{
+      //     required: true,
+      //     message: "请输入值机工号",
+      //     trigger: "blur"
+      //   }],
+      // },
+      {
+        label: "匹號(Số cây vải)",
+        prop: "eachNumber",
+        width: 105,
+        align: "right",
+        sortable: true,
+        span: 6,
+        type: "number",
+        precision: 0
+      },
+      {
+        label: "毛重(trọng lượng cả b)",
+        prop: "realWeight",
+        width: 120,
+        align: "right",
+        span: 6,
+        cell: false,
+        placeholder: " "
+        // type: "number",
+        // precision: 1
+      },
+      {
+        label: _this.$t("whseField.zl") + "(trọng lượng)",
+        prop: "clothWeight",
+        width: 120,
+        align: "center",
+        span: 6,
+        cell: true,
+        placeholder: " ",
+        type: "number",
+        precision: 1
+      },
+      {
+        label: "QC扣减数量(Số lượng QC cắt giảm)",
+        prop: "qcTakeOut",
+        width: 160,
+        align: "center",
+        span: 6,
+        cell: true,
+        placeholder: " ",
+        type: "number",
+        precision: 1
+      },
+
+      {
+        label: "存储位置(Vị trí lưu trữ)",
+        prop: "storeSiteCode",
+        cell: true,
+        width: 220,
+        placeholder: " ",
+        type: "select",
+        props: {
+          label: "locationCode",
+          value: "locationCode"
+        },
+        filterable: true,
+        allowCreate: true,
+        defaultFirstOption: true,
+        dicData: getXDicT("whseLocation", "locationCode", "locationCode")
+      },
+      // {
+      //   label: "單位",
+      //   prop: "weightUnit",
+      //   width: 80,
+      //   display: false,
+      //   placeholder: " ",
+      //   span: 6,
+      //   type: "select",
+      //   dicData: matUnit
+      // },
+      // {
+      //   label: "長度",
+      //   prop: "clothLength",
+      //   width: 80,
+      //   display: false
+      // },
+
+      // {
+      //   label: "單位",
+      //   prop: "lenUnit",
+      //   width: 80,
+      //   display: false,
+      //   placeholder: " ",
+      //   span: 6,
+      //   type: "select",
+      //   dicData: matUnit
+      // },
+
+      // {
+      //   label: "已打印",
+      //   prop: "isPrinted",
+      //   type: "select",
+      //   disabled: true,
+      //   dicData: [
+      //     {
+      //       value: true,
+      //       label: "是"
+      //     },
+      //     {
+      //       value: false,
+      //       label: "否"
+      //     }
+      //   ],
+      //   span: 6,
+      // },
+      {
+        label: "备注(ghi chú)",
+        prop: "remark",
+        width: 250,
+        placeholder: " ",
+        // overHidden: true,
+        cell: true,
+        type: "select",
+        filterable: true,
+        allowCreate: true,
+        defaultFirstOption: true,
+        dicData: getDIC("QC_CLOTH_VISITING_REMOVE")
+      }
+      // {
+      //   label: "打印时间(thời gian in)",
+      //   prop: "printedTime",
+      //   type: "date",
+      //   format: "yyyy-MM-dd hh:MM:ss",
+      //   valueFormat: "yyyy-MM-dd hh:MM:ss",
+      //   span: 6,
+      //   align: "center",
+      //   sortable: true,
+      //   width: 200
+      // },
+      // {
+      //   label: "验布时间(thời gian in)",
+      //   prop: "clothCheckTime",
+      //   type: "date",
+      //   format: "yyyy-MM-dd hh:mm:ss",
+      //   valueFormat: "yyyy-MM-dd hh:mm:ss",
+      //   span: 6,
+      //   align: "center",
+      //   sortable: true,
+      //   width: 200
+      // }
+    ]
+  };
+}
 export function getWeaveJob(params) {
   return axios({
-    url: '/api/proWeaveJob/page',
-    method: 'get',
+    url: "/api/proWeaveJob/page",
+    method: "get",
     params: params
-  })
+  });
 }
 export function weaveJobF(_this) {
   return {
@@ -45,13 +1110,13 @@ export function weaveJobF(_this) {
         label: "生產單號",
         prop: "weaveJobCode",
         span: 6,
-        placeholder: " ",
+        placeholder: " "
       },
       {
         label: "訂單編號",
         prop: "salPoNo",
         span: 6,
-        placeholder: " ",
+        placeholder: " "
         // dicData: getDicT("basCustomer", "custName", "custCode")
       },
       {
@@ -60,36 +1125,32 @@ export function weaveJobF(_this) {
         span: 6,
         placeholder: " ",
         type: "select",
-        dicData: cust,
-
+        dicData: cust
       },
       {
         label: "開機日期",
         prop: "startDate",
         span: 6,
-        placeholder: " ",
-
-
+        placeholder: " "
       },
       {
         label: "色號",
         prop: "colorCode",
         span: 6,
-        placeholder: " ",
+        placeholder: " "
       },
       {
         label: "機號",
         prop: "mathineCode",
         span: 6,
-        placeholder: " ",
-
+        placeholder: " "
       },
       {
         label: "制單人",
         prop: "creator",
         span: 6,
-        placeholder: " ",
-      },
+        placeholder: " "
+      }
       // {
       //   label: _this.$t('whseField.khmc'),
       //   prop: "colorBh",
@@ -98,8 +1159,8 @@ export function weaveJobF(_this) {
       //   type: "select",
       //   // dicData: getDicT("basCustomer", "custName", "custCode")
       // },
-    ],
-  }
+    ]
+  };
 }
 
 export function weaveJobC(_this) {
@@ -129,11 +1190,13 @@ export function weaveJobC(_this) {
         span: 6,
         disabled: false,
         sortable: true,
-        rules: [{
-          required: true,
-          message: "请输入生產單號",
-          trigger: "blur"
-        }],
+        rules: [
+          {
+            required: true,
+            message: "请输入生產單號",
+            trigger: "blur"
+          }
+        ]
       },
       {
         label: "訂單編號",
@@ -143,11 +1206,13 @@ export function weaveJobC(_this) {
         placeholder: "请選擇訂單編號",
         sortable: true,
         overHidden: true,
-        rules: [{
-          required: true,
-          message: "请選擇訂單編號",
-          trigger: "blur"
-        }],
+        rules: [
+          {
+            required: true,
+            message: "请選擇訂單編號",
+            trigger: "blur"
+          }
+        ]
         // click: () => {
         //   _this.visible = true
         // }
@@ -163,11 +1228,13 @@ export function weaveJobC(_this) {
         valueFormat: "yyyy-MM-dd",
         placeholder: "请選擇出胚布日期",
         sortable: true,
-        rules: [{
-          required: true,
-          message: "请選擇出胚布日期",
-          trigger: "blur"
-        }],
+        rules: [
+          {
+            required: true,
+            message: "请選擇出胚布日期",
+            trigger: "blur"
+          }
+        ]
       },
       {
         label: "成品期",
@@ -181,11 +1248,13 @@ export function weaveJobC(_this) {
         valueFormat: "yyyy-MM-dd",
         placeholder: "请選擇成品期",
         sortable: true,
-        rules: [{
-          required: true,
-          message: "请選擇成品期",
-          trigger: "blur"
-        }],
+        rules: [
+          {
+            required: true,
+            message: "请選擇成品期",
+            trigger: "blur"
+          }
+        ]
       },
       // {
       //   label: "客戶名稱",
@@ -211,11 +1280,13 @@ export function weaveJobC(_this) {
         width: 180,
         span: 6,
         placeholder: "请選擇客戶名稱",
-        rules: [{
-          required: true,
-          message: "请選擇客戶名稱",
-          trigger: "blur"
-        }],
+        rules: [
+          {
+            required: true,
+            message: "请選擇客戶名稱",
+            trigger: "blur"
+          }
+        ],
         type: "select",
         dicData: cust
         // change: () => {
@@ -232,13 +1303,15 @@ export function weaveJobC(_this) {
         width: 100,
         placeholder: "请输入織單數量",
         span: 6,
-        rules: [{
-          required: true,
-          message: "请输入織單數量",
-          trigger: "blur"
-        }],
+        rules: [
+          {
+            required: true,
+            message: "请输入織單數量",
+            trigger: "blur"
+          }
+        ],
         type: "number",
-        align: "left",
+        align: "left"
       },
       {
         label: "開機日期",
@@ -251,11 +1324,13 @@ export function weaveJobC(_this) {
         placeholder: "请選擇開機日期",
         sortable: true,
         span: 6,
-        rules: [{
-          required: true,
-          message: "请選擇開機日期",
-          trigger: "blur"
-        }],
+        rules: [
+          {
+            required: true,
+            message: "请選擇開機日期",
+            trigger: "blur"
+          }
+        ]
       },
       {
         label: "機號",
@@ -263,12 +1338,13 @@ export function weaveJobC(_this) {
         span: 6,
         width: 120,
         placeholder: " ",
-        rules: [{
-          required: true,
-          message: "请輸入機號",
-          trigger: "blur"
-        }],
-
+        rules: [
+          {
+            required: true,
+            message: "请輸入機號",
+            trigger: "blur"
+          }
+        ]
       },
       {
         label: "製單人",
@@ -277,11 +1353,13 @@ export function weaveJobC(_this) {
         hide: false,
         width: 100,
         disabled: false,
-        rules: [{
-          required: true,
-          message: "请输入制单人",
-          trigger: "blur"
-        }],
+        rules: [
+          {
+            required: true,
+            message: "请输入制单人",
+            trigger: "blur"
+          }
+        ]
         // type: "select",
         // dicData:
         //   postDicT('ucmlUserList', 'employeename', 'ucmlUseroid')
@@ -294,11 +1372,13 @@ export function weaveJobC(_this) {
         width: 250,
         span: 12,
         placeholder: "请選擇布類描述",
-        rules: [{
-          required: true,
-          message: "请選擇布類描述",
-          trigger: "blur"
-        }],
+        rules: [
+          {
+            required: true,
+            message: "请選擇布類描述",
+            trigger: "blur"
+          }
+        ]
       },
       {
         label: "顏色名稱",
@@ -308,11 +1388,13 @@ export function weaveJobC(_this) {
         overHidden: true,
         span: 6,
         placeholder: "请選擇顏色名稱",
-        rules: [{
-          required: true,
-          message: "请選擇顏色名稱",
-          trigger: "blur"
-        }],
+        rules: [
+          {
+            required: true,
+            message: "请選擇顏色名稱",
+            trigger: "blur"
+          }
+        ]
       },
       {
         label: "色號",
@@ -366,7 +1448,7 @@ export function weaveJobC(_this) {
         width: 80,
         span: 6,
         hide: true,
-        placeholder: " ",
+        placeholder: " "
         // type: "number",
       },
       {
@@ -395,12 +1477,12 @@ export function weaveJobC(_this) {
         span: 6,
         click: () => {
           if (!_this.form.weaveJobId) {
-            _this.$tip.error("請先保存通知單信息!")
-            return
+            _this.$tip.error("請先保存通知單信息!");
+            return;
           }
-          _this.crudOp = longCrud(_this)
-          _this.visible = true
-          _this.tabs = "更改紗長"
+          _this.crudOp = longCrud(_this);
+          _this.visible = true;
+          _this.tabs = "更改紗長";
         }
       },
 
@@ -429,14 +1511,13 @@ export function weaveJobC(_this) {
         placeholder: " "
       },
 
-
       {
         label: "胚重(左)",
         prop: "calicoLeft",
         width: 90,
         hide: true,
         span: 6,
-        placeholder: " ",
+        placeholder: " "
       },
       {
         label: "胚重(中)",
@@ -469,7 +1550,7 @@ export function weaveJobC(_this) {
         span: 6,
         placeholder: " ",
         hide: true,
-        width: 90,
+        width: 90
       },
       {
         label: "上機工藝",
@@ -485,7 +1566,7 @@ export function weaveJobC(_this) {
         span: 6,
         hide: true,
         placeholder: " ",
-        width: 80,
+        width: 80
       },
       {
         label: "織機食位",
@@ -493,7 +1574,7 @@ export function weaveJobC(_this) {
         width: 80,
         placeholder: " ",
         span: 6,
-        hide: true,
+        hide: true
       },
       {
         label: "輸送盤資料",
@@ -516,7 +1597,7 @@ export function weaveJobC(_this) {
         prop: "clothRackDesc",
         hide: true,
         span: 6,
-        placeholder: " ",
+        placeholder: " "
       },
       {
         label: "循環(自動間)",
@@ -622,16 +1703,16 @@ export function weaveJobC(_this) {
         hide: true,
         display: false
       }
-    ],
-  }
+    ]
+  };
 }
 
 export function getTechCode(params) {
   return axios({
-    url: '/api/proBleadyeTechCode/page',
-    method: 'get',
+    url: "/api/proBleadyeTechCode/page",
+    method: "get",
     params: params
-  })
+  });
 }
 export function techCodeF(_this) {
   return {
@@ -643,7 +1724,7 @@ export function techCodeF(_this) {
         label: "工艺代码编号",
         prop: "bleadyeCode",
         span: 6,
-        placeholder: " ",
+        placeholder: " "
       },
       {
         label: "工艺分类",
@@ -654,13 +1735,13 @@ export function techCodeF(_this) {
         dicData: getDIC("pro_techCode"),
         change: () => {
           _this.$nextTick(() => {
-            _this.query()
-          })
+            _this.query();
+          });
         }
         // dicData: getDicT("basCustomer", "custName", "custCode")
-      },
-    ],
-  }
+      }
+    ]
+  };
 }
 
 export function techCodeC(_this) {
@@ -689,14 +1770,14 @@ export function techCodeC(_this) {
         width: 120,
         span: 6,
         disabled: false,
-        sortable: true,
+        sortable: true
       },
       {
         label: "工艺名称",
         prop: "bleadyeName",
         width: 300,
         span: 6,
-        overHidden: true,
+        overHidden: true
       },
       {
         label: "工艺分类",
@@ -711,7 +1792,7 @@ export function techCodeC(_this) {
         label: "建议水比",
         prop: "liquorRatio",
         width: 120,
-        span: 6,
+        span: 6
       },
       // {
       //   label: "工艺流程图片",
@@ -722,22 +1803,19 @@ export function techCodeC(_this) {
       {
         label: "備註",
         prop: "remark",
-        span: 6,
+        span: 6
         // width: 250,
-
-      },
-
-
-    ],
-  }
+      }
+    ]
+  };
 }
 
 export function getTechItem(params) {
   return axios({
-    url: '/api/proBleadyeCodeItem/page',
-    method: 'get',
+    url: "/api/proBleadyeCodeItem/page",
+    method: "get",
     params: params
-  })
+  });
 }
 export function TechItemF(_this) {
   return {
@@ -745,7 +1823,6 @@ export function TechItemF(_this) {
     emptyBtn: false,
     labelWidth: 150,
     column: [
-
       {
         label: "工艺类型",
         prop: "bleadyeType",
@@ -771,10 +1848,10 @@ export function TechItemF(_this) {
         label: "物料編號",
         prop: "basMateId",
         span: 6,
-        placeholder: " ",
-      },
-    ],
-  }
+        placeholder: " "
+      }
+    ]
+  };
 }
 
 export function TechItemC(_this) {
@@ -824,14 +1901,14 @@ export function TechItemC(_this) {
         prop: "basMateId",
         overHidden: true,
         width: 120,
-        span: 6,
+        span: 6
       },
       {
         label: "物料名称",
         prop: "mateName",
         width: 300,
         span: 6,
-        overHidden: true,
+        overHidden: true
       },
       {
         label: "用量",
@@ -852,7 +1929,7 @@ export function TechItemC(_this) {
         label: "度量單位",
         prop: "measureType",
         width: 120,
-        span: 6,
+        span: 6
       },
       {
         label: "运行温度",
@@ -867,20 +1944,17 @@ export function TechItemC(_this) {
         span: 6,
         width: 140,
         align: "right"
-
-      },
-
-
-    ],
-  }
+      }
+    ]
+  };
 }
 
 export function getWorkStep(params) {
   return axios({
-    url: '/api/baseWorkStepTree',
-    method: 'get',
+    url: "/api/baseWorkStepTree",
+    method: "get",
     params: params
-  })
+  });
 }
 export function WorkStepF(_this) {
   return {
@@ -895,15 +1969,21 @@ export function WorkStepF(_this) {
         placeholder: " ",
         change: () => {
           _this.$nextTick(() => {
-            console.log("ss");
-            if (_this.form.stepCode != '') {
-              _this.crud = _this.backups.filter(i => { return i.stepCode.indexOf(_this.form.stepCode) != -1 && i.stepName.indexOf(_this.form.stepName) != -1 })
-            } else if (_this.form.stepName != '') {
-              _this.crud = _this.backups.filter(i => { return i.stepName.indexOf(_this.form.stepName) != -1 })
+            if (_this.form.stepCode != "") {
+              _this.crud = _this.backups.filter(i => {
+                return (
+                  i.stepCode.indexOf(_this.form.stepCode) != -1 &&
+                  i.stepName.indexOf(_this.form.stepName) != -1
+                );
+              });
+            } else if (_this.form.stepName != "") {
+              _this.crud = _this.backups.filter(i => {
+                return i.stepName.indexOf(_this.form.stepName) != -1;
+              });
             } else {
-              _this.crud = _this.backups
+              _this.crud = _this.backups;
             }
-          })
+          });
         }
       },
       {
@@ -913,19 +1993,25 @@ export function WorkStepF(_this) {
         placeholder: " ",
         change: () => {
           _this.$nextTick(() => {
-            console.log("ss");
-            if (_this.form.stepName != '') {
-              _this.crud = _this.backups.filter(i => { return i.stepCode.indexOf(_this.form.stepCode) != -1 && i.stepName.indexOf(_this.form.stepName) != -1 })
-            } else if (_this.form.stepCode != '') {
-              _this.crud = _this.backups.filter(i => { return i.stepCode.indexOf(_this.form.stepCode) != -1 })
+            if (_this.form.stepName != "") {
+              _this.crud = _this.backups.filter(i => {
+                return (
+                  i.stepCode.indexOf(_this.form.stepCode) != -1 &&
+                  i.stepName.indexOf(_this.form.stepName) != -1
+                );
+              });
+            } else if (_this.form.stepCode != "") {
+              _this.crud = _this.backups.filter(i => {
+                return i.stepCode.indexOf(_this.form.stepCode) != -1;
+              });
             } else {
-              _this.crud = _this.backups
+              _this.crud = _this.backups;
             }
-          })
+          });
         }
-      },
-    ],
-  }
+      }
+    ]
+  };
 }
 
 export function WorkStepC(_this) {
@@ -955,8 +2041,7 @@ export function WorkStepC(_this) {
         prop: "stepCode",
         span: 6,
         width: 120,
-        placeholder: " ",
-
+        placeholder: " "
       },
       {
         label: "名称",
@@ -973,7 +2058,7 @@ export function WorkStepC(_this) {
         width: 350,
         placeholder: " ",
         overHidden: true
-      },
+      }
       // {
       //   label: "标准产能计算公式",
       //   prop: "stepCapacity",
@@ -982,18 +2067,16 @@ export function WorkStepC(_this) {
       //   placeholder: " ",
       //   overHidden: true
       // },
-
-
-    ],
-  }
+    ]
+  };
 }
 
 export function getTechargue(params) {
   return axios({
-    url: '/api/baseBleadyeTechargue',
-    method: 'get',
+    url: "/api/baseBleadyeTechargue",
+    method: "get",
     params: params
-  })
+  });
 }
 export function techargueF(_this) {
   return {
@@ -1014,10 +2097,10 @@ export function techargueF(_this) {
         label: "編號",
         prop: "paramKey",
         span: 6,
-        placeholder: " ",
-      },
-    ],
-  }
+        placeholder: " "
+      }
+    ]
+  };
 }
 
 export function techargueC(_this) {
@@ -1052,8 +2135,7 @@ export function techargueC(_this) {
         prop: "paramKey",
         span: 6,
         width: 120,
-        placeholder: " ",
-
+        placeholder: " "
       },
       {
         label: "名称",
@@ -1070,7 +2152,7 @@ export function techargueC(_this) {
         width: 120,
         placeholder: " ",
         align: "right"
-      },
-    ],
-  }
+      }
+    ]
+  };
 }

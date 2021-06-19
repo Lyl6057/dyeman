@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-29 14:14:56
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-27 15:54:42
+ * @LastEditTime: 2021-06-09 18:35:56
  * @Description: 
  */
 export default [
@@ -94,6 +94,11 @@ export default [
     path: "/techCode", // 漂染工艺
     name: "techCode",
     component: resolve => require(["@/view/proMng/techCode/index"], resolve),
+  },
+  {
+    path: "/revolve", // 染整生产运转单
+    name: "revolve",
+    component: resolve => require(["@/view/proMng/revolve/index"], resolve),
   },
 
   // {

@@ -157,7 +157,7 @@ export default {
     delTle8: "是否确定删除批號為 【",
     delTle9: "是否确定删除缸號為 【",
     delTle10: "是否确定删除原料編號為 【",
-    delTle11: "是否确定删除 ",
+    delTle11: "是否确定删除 【",
     delTle12: " 編號為 【 ",
     delTle13: "是否确定删除顏料編號為 【",
     qxzdjbh: "請先選擇登記編號!",

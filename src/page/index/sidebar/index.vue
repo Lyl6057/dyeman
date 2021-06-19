@@ -49,17 +49,29 @@ export default {
 </script>
 
 <style lang="stylus">
+.el-menu--vertical {
+  .oneMenu, .el-menu-item, .el-submenu__title {
+    height: 39px !important;
+    line-height: 39px !important;
+  }
+
+  .el-menu > span {
+    line-height: 39px;
+    margin-left: 10px;
+  }
+}
+
 #sidebar {
   position: relative;
   height: calc(100vh - 47px);
 
   .el-menu--collapse {
-    width: 50px !important; // 宽度自己掌握
-    // transition: 0.3s;
+    width: 50px; // 宽度自己掌握
+    // transition: 1s;
   }
 
   .el-menu-vertical-demo:not(.el-menu--collapse), .eldemo:not(.el-menu--collapse) {
-    width: 190px !important;
+    width: 190px;
   }
 
   // /* 隐藏 > */
@@ -86,6 +98,9 @@ export default {
   }
 
   .oneMenu {
+    height: 39px !important;
+    line-height: 39px;
+
     .el-menu-item {
       padding-left: 0 !important;
       // text-indent: 0em !important;

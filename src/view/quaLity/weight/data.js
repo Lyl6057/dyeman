@@ -2,17 +2,11 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-06-04 13:33:50
+ * @LastEditTime: 2021-06-19 16:08:12
  * @Description:
  */
-import axios from 'axios'
-import {
-  getDIC,
-  getDicT,
-  getXDicT,
-  postDicT
-} from '@/config'
-let matUnit = getDIC("bas_matUnit")
+import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
+let matUnit = getDIC("bas_matUnit");
 export function mainForm(_this) {
   return {
     submitBtn: false,
@@ -59,15 +53,60 @@ export function mainForm(_this) {
         placeholder: " ",
         tip: "Số cây vải"
       },
-      // {
-      //   label: "機台編號",
-      //   prop: "machineCode",
-      //   span: 6,
-      //   placeholder: " ",
-
-      // },
-    ],
-  }
+      {
+        label: "载具编号",
+        tip: "Mã lồng thép",
+        prop: "storeLoadCode",
+        span: 6,
+        placeholder: " ",
+        cell: true,
+        overHidden: true,
+        width: 120
+      },
+      {
+        label: "胚布状态",
+        tip: "clothState",
+        prop: "clothState",
+        span: 6,
+        placeholder: " ",
+        cell: true,
+        overHidden: true,
+        width: 120,
+        type: "select",
+        dicData: [
+          {
+            label: "未称重",
+            value: 0
+          },
+          {
+            label: "已称重装笼",
+            value: 1
+          },
+          {
+            label: "已入仓",
+            value: 2
+          }
+        ],
+        change: () => {
+          _this.$nextTick(() => {
+            _this.query();
+          });
+        }
+      },
+      {
+        label: "验布时间",
+        prop: "clothCheckTime",
+        type: "date",
+        format: "yyyy-MM-dd",
+        valueFormat: "yyyy-MM-dd",
+        span: 6,
+        tip: "thời gian in",
+        placeholder: " ",
+        align: "center",
+        width: 180
+      }
+    ]
+  };
 }
 export function mainCrud(_this) {
   return {
@@ -88,13 +127,14 @@ export function mainCrud(_this) {
     selection: true,
     showSummary: true,
     menuTitle: "trọng lượng",
+    excelBtn: true,
     sumColumnList: [
       {
-        label: '毛重',
-        name: 'clothWeight',
-        type: 'sum',
+        label: "毛重",
+        name: "clothWeight",
+        type: "sum",
         decimals: 1
-      },
+      }
     ],
     column: [
       {
@@ -126,7 +166,8 @@ export function mainCrud(_this) {
         label: "布票號(Mã vải)",
         prop: "noteCode",
         width: 170,
-        disabled: true, placeholder: " ",
+        disabled: true,
+        placeholder: " ",
         span: 6,
         sortable: true,
         overHidden: true
@@ -143,7 +184,8 @@ export function mainCrud(_this) {
       {
         label: "布类名称(Tên loại vải)",
         prop: "fabricName",
-        disabled: true, placeholder: " ",
+        disabled: true,
+        placeholder: " ",
         span: 6,
         width: 100,
         width: 200,
@@ -153,7 +195,8 @@ export function mainCrud(_this) {
       {
         label: "顏色(Màu sắc)",
         prop: "proColor",
-        disabled: true, placeholder: " ",
+        disabled: true,
+        placeholder: " ",
         span: 6,
         width: 120,
         overHidden: true,
@@ -165,7 +208,7 @@ export function mainCrud(_this) {
         prop: "spi",
         width: 90,
         hide: true,
-        span: 6,
+        span: 6
       },
 
       {
@@ -173,7 +216,7 @@ export function mainCrud(_this) {
         prop: "sp",
         width: 90,
         hide: true,
-        span: 6,
+        span: 6
       },
       // {
       //   label: "机台編號",
@@ -190,13 +233,15 @@ export function mainCrud(_this) {
         width: 95,
         hide: false,
         span: 6,
-        rules: [{
-          required: true,
-          message: "请输入机号",
-          trigger: "blur"
-        }],
+        rules: [
+          {
+            required: true,
+            message: "请输入机号",
+            trigger: "blur"
+          }
+        ],
         disabled: true,
-        sortable: true,
+        sortable: true
       },
       {
         label: "值机工号(Số thẻ người đứng máy)",
@@ -204,6 +249,15 @@ export function mainCrud(_this) {
         span: 8,
         placeholder: " ",
         width: 150,
+        overHidden: true
+      },
+      {
+        label: "验布员工号(Số thẻ người đứng máy)",
+        prop: "clothChecker",
+        span: 8,
+        placeholder: " ",
+        width: 180,
+        sortable: true,
         overHidden: true
       },
       // {
@@ -226,25 +280,24 @@ export function mainCrud(_this) {
         align: "right",
         sortable: true,
         span: 6,
-        type: "number",
-        precision: 0
+        type: "number"
       },
       {
         label: "毛重(trọng lượng cả b)",
         prop: "realWeight",
-        width: 110,
+        width: 120,
         align: "right",
         span: 6,
         cell: false,
-        placeholder: " ",
+        placeholder: " "
         // type: "number",
         // precision: 1
       },
       {
-        label: _this.$t("whseField.zl") + '(trọng lượng)',
+        label: _this.$t("whseField.zl") + "(trọng lượng)",
         prop: "clothWeight",
-        width: 100,
-        align: "center",
+        width: 120,
+        align: "right",
         span: 6,
         cell: true,
         placeholder: " ",
@@ -252,19 +305,27 @@ export function mainCrud(_this) {
         precision: 1,
         change: () => {
           _this.$nextTick(() => {
-            _this.detail.realWeight = Number(Number(_this.detail.clothWeight) + Number(_this.detail.qcTakeOut)).toFixed(1)
+            _this.detail.realWeight = Number(
+              Number(_this.detail.clothWeight) + Number(_this.detail.qcTakeOut)
+            ).toFixed(1);
             if (isNaN(_this.detail.realWeight)) {
-              _this.detail.realWeight = 0
+              _this.detail.realWeight = 0;
             }
-          })
-
+            // if (_this.detail.clothWeight) {
+            //   _this.detail.clothCheckTime = _this.$getNowTime("datetime")
+            //   _this.detail.clothState = 1
+            // } else {
+            //   _this.detail.clothCheckTime = ''
+            //   _this.detail.clothState = 0
+            // }
+          });
         }
       },
       {
         label: "QC扣减数量(Số lượng QC cắt giảm)",
         prop: "qcTakeOut",
         width: 160,
-        align: "center",
+        align: "right",
         span: 6,
         cell: true,
         placeholder: " ",
@@ -272,12 +333,13 @@ export function mainCrud(_this) {
         precision: 1,
         change: () => {
           _this.$nextTick(() => {
-            _this.detail.realWeight = Number(Number(_this.detail.clothWeight) + Number(_this.detail.qcTakeOut)).toFixed(1)
+            _this.detail.realWeight = Number(
+              Number(_this.detail.clothWeight) + Number(_this.detail.qcTakeOut)
+            ).toFixed(1);
             if (isNaN(_this.detail.realWeight)) {
-              _this.detail.realWeight = 0
+              _this.detail.realWeight = 0;
             }
-          })
-
+          });
         }
       },
 
@@ -288,13 +350,14 @@ export function mainCrud(_this) {
         placeholder: " ",
         cell: true,
         overHidden: true,
+        sortable: true,
         width: 120
       },
       {
         label: "存储位置(Vị trí lưu trữ)",
         prop: "storeSiteCode",
         cell: true,
-        width: 200,
+        width: 220,
         placeholder: " ",
         type: "select",
         props: {
@@ -304,7 +367,7 @@ export function mainCrud(_this) {
         filterable: true,
         allowCreate: true,
         defaultFirstOption: true,
-        dicData: getXDicT("whseLocation", "locationCode", "locationCode"),
+        dicData: getXDicT("whseLocation", "locationCode", "locationCode")
       },
       // {
       //   label: "單位",
@@ -362,7 +425,7 @@ export function mainCrud(_this) {
         filterable: true,
         allowCreate: true,
         defaultFirstOption: true,
-        dicData: getDIC("QC_CLOTH_VISITING_REMOVE"),
+        dicData: getDIC("QC_CLOTH_VISITING_REMOVE")
       },
       {
         label: "打印时间(thời gian in)",
@@ -372,19 +435,20 @@ export function mainCrud(_this) {
         valueFormat: "yyyy-MM-dd hh:MM:ss",
         span: 6,
         align: "center",
-        width: 180
+        sortable: true,
+        width: 200
       },
       {
         label: "验布时间(thời gian in)",
         prop: "clothCheckTime",
         type: "date",
-        format: "yyyy-MM-dd hh:MM:ss",
-        valueFormat: "yyyy-MM-dd hh:MM:ss",
+        format: "yyyy-MM-dd hh:mm:ss",
+        valueFormat: "yyyy-MM-dd hh:mm:ss",
         span: 6,
         align: "center",
-        width: 180
+        sortable: true,
+        width: 200
       }
-    ],
-  }
-
+    ]
+  };
 }

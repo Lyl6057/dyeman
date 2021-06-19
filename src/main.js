@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-24 08:12:20
  * @LastEditors: Lyl
- * @LastEditTime: 2021-06-02 15:50:12
+ * @LastEditTime: 2021-06-08 18:07:40
  * @Description: 
  */
 // The Vue build version to load with the `import` command
@@ -27,8 +27,8 @@ import echarts from 'echarts' // echarts
 import i18n from './lang' // Internationalization
 import Print from 'vue-print-nb'
 import vGanttChart from 'v-gantt-chart';
-import Fragment from 'vue-fragment'
-Vue.use(Fragment.Plugin)
+// import Fragment from 'vue-fragment'
+// Vue.use(Fragment.Plugin)
 Vue.use(vGanttChart);
 // Global instruction 
 Vue.use(Print);
@@ -40,8 +40,10 @@ import { getDIC, getDicT, getNowTime, unique, toTableLow, preFixInt } from './co
 // import { http } from './config/api'
 // import i18n from './lang' // Internationalization
 import viewContainer from './components/view-container/index'
+import comNormal from './components/normal'
 // 注册全局容器
 Vue.component('viewContainer', viewContainer)
+Vue.component('comNormal', comNormal)
 //粒子特效
 Vue.use(VueParticles)
 // Vue.use(ElementUI);

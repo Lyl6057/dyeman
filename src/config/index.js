@@ -41,11 +41,11 @@ export const webSocket = {
     }
     //连接发生错误的回调方法
     _this.czsocket.onerror = function () {
-      _this.$tip.error("称重服务器连接失败，请检查网络!");
+      // _this.$tip.error("称重服务器连接失败，请检查网络!");
     };
     //连接成功建立的回调方法
     _this.czsocket.onopen = function (event) {
-      _this.$tip.success("服务器连接成功!");
+      // _this.$tip.success("服务器连接成功!");
     }
     //接收到消息的回调方法
     _this.czsocket.onmessage = function (event) {
@@ -68,11 +68,11 @@ export const webSocket = {
     }
     //连接发生错误的回调方法
     _this.prsocket.onerror = function () {
-      _this.$tip.error("打印应用连接失败，请检查是否启动!");
+      // _this.$tip.error("打印应用连接失败，请检查是否启动!");
     };
     //连接成功建立的回调方法
     _this.prsocket.onopen = function (event) {
-      _this.$tip.success("打印应用连接成功!");
+      // _this.$tip.success("打印应用连接成功!");
     }
     //接收到消息的回调方法
     _this.prsocket.onmessage = function (event) {

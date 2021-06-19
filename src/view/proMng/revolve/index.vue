@@ -2,8 +2,8 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-06-14 16:47:04
- * @Description: 
+ * @LastEditTime: 2021-06-14 18:01:41
+ * @Description:
 -->
 <template>
   <div id="clothFlyPrint">
@@ -99,17 +99,17 @@
   </div>
 </template>
 <script>
-import { mainForm, mainCrud } from "./data";
-import { get, add, update, del, print } from "./api";
-import tem from "./temDlg";
-import html2Canvas from "html2canvas";
-import JsPDF from "jspdf";
+import { mainForm, mainCrud } from './data'
+import { get, add, update, del, print } from './api'
+import tem from './temDlg'
+import html2Canvas from 'html2canvas'
+import JsPDF from 'jspdf'
 export default {
-  name: "",
+  name: '',
   components: {
-    temDlg: tem,
+    temDlg: tem
   },
-  data() {
+  data () {
     return {
       formOp: mainForm(this),
       form: {},
@@ -118,90 +118,90 @@ export default {
       page: {
         pageSize: 20,
         currentPage: 1,
-        total: 0,
+        total: 0
       },
       loading: false,
       dialogVisible: false,
       detail: {},
       isAdd: false,
-      input: "",
+      input: '',
       wloading: false,
       czsocket: {},
       pdfDlg: false,
-      pdfUrl: "",
-    };
+      pdfUrl: ''
+    }
   },
   watch: {},
   methods: {
-    query() {
-      this.loading = true;
-      this.detail = {};
+    query () {
+      this.loading = true
+      this.detail = {}
       for (let key in this.form) {
-        if (this.form[key] == "") {
-          delete this.form[key];
+        if (this.form[key] == '') {
+          delete this.form[key]
         }
       }
       get(
         Object.assign(this.form, {
           rows: this.page.pageSize,
-          start: this.page.currentPage,
+          start: this.page.currentPage
         })
       ).then((res) => {
-        this.crud = res.data.records;
+        this.crud = res.data.records
         this.crud.sort((a, b) => {
-          return a.workDate > b.workDate ? -1 : 1;
-        });
+          return a.workDate > b.workDate ? -1 : 1
+        })
         this.crud.forEach((item, i) => {
           // item.custName = item.custCode;
           // item.amount = item.amount.toFixed(2);
-          item.index = i + 1;
-        });
+          item.index = i + 1
+        })
 
         if (this.crud.length > 0) {
-          this.$refs.crud.setCurrentRow(this.crud[0]);
+          this.$refs.crud.setCurrentRow(this.crud[0])
         }
-        this.page.total = res.data.total;
-        this.loading = false;
-      });
+        this.page.total = res.data.total
+        this.loading = false
+      })
     },
-    print() {
+    print () {
       // this.pdfDlg = true;
       // this.pdfUrl =
       //   process.env.API_HOST +
       //   "/api/proBleadyeJob/buildWorkOrder?id=" +
       //   this.detail.runJobId;
       let domClass = document.get
-      var element = document.querySelector(domClass); // 这个dom元素是要导出pdf的div容器
+      var element = document.querySelector(domClass) // 这个dom元素是要导出pdf的div容器
       html2Canvas(element).then(function (canvas) {
-        var contentWidth = canvas.width;
-        var contentHeight = canvas.height;
+        var contentWidth = canvas.width
+        var contentHeight = canvas.height
 
-        //一页pdf显示html页面生成的canvas高度;
-        var pageHeight = (contentWidth / 592.28) * 841.89;
-        //未生成pdf的html页面高度
-        var leftHeight = contentHeight;
-        //页面偏移
-        let position = 0;
-        //a4纸的尺寸[595.28,841.89]，html页面生成的canvas在pdf中图片的宽高
-        var imgWidth = 555.28;
-        var imgHeight = (592.28 / contentWidth) * contentHeight;
-        var pageData = canvas.toDataURL("image/jpeg", 1.0);
-        var pdf = new JsPDF("", "pt", [contentWidth, contentHeight]); //不分页
-        pdf.addImage(pageData, "JPEG", 0, 0, contentWidth, contentHeight);
-        pdf.save(title + ".pdf");
-      });
+        // 一页pdf显示html页面生成的canvas高度;
+        var pageHeight = (contentWidth / 592.28) * 841.89
+        // 未生成pdf的html页面高度
+        var leftHeight = contentHeight
+        // 页面偏移
+        let position = 0
+        // a4纸的尺寸[595.28,841.89]，html页面生成的canvas在pdf中图片的宽高
+        var imgWidth = 555.28
+        var imgHeight = (592.28 / contentWidth) * contentHeight
+        var pageData = canvas.toDataURL('image/jpeg', 1.0)
+        var pdf = new JsPDF('', 'pt', [contentWidth, contentHeight]) // 不分页
+        pdf.addImage(pageData, 'JPEG', 0, 0, contentWidth, contentHeight)
+        pdf.save(title + '.pdf')
+      })
     },
 
-    add() {
-      this.isAdd = true;
-      this.dialogVisible = true;
+    add () {
+      this.isAdd = true
+      this.dialogVisible = true
     },
-    del() {
+    del () {
       this.$tip
         .cofirm(
-          this.$t("iaoMng.delTle7") +
+          this.$t('iaoMng.delTle7') +
             this.detail.vatNo +
-            this.$t("iaoMng.delTle2"),
+            this.$t('iaoMng.delTle2'),
           this,
           {}
         )
@@ -209,35 +209,35 @@ export default {
           del(this.detail.runJobId)
             .then((res) => {
               if (res.data.code === 200) {
-                this.$tip.success(this.$t("public.sccg"));
-                this.query();
+                this.$tip.success(this.$t('public.sccg'))
+                this.query()
               } else {
-                this.$tip.error(this.$t("public.scsb"));
+                this.$tip.error(this.$t('public.scsb'))
               }
             })
             .catch((err) => {
-              this.$tip.error(this.$t("public.scsb"));
-            });
+              this.$tip.error(this.$t('public.scsb'))
+            })
         })
         .catch((err) => {
-          this.$tip.warning(this.$t("public.qxcz"));
-        });
+          this.$tip.warning(this.$t('public.qxcz'))
+        })
     },
-    handleRowDBLClick(val) {
-      this.isAdd = false;
-      this.detail = val;
-      this.dialogVisible = true;
+    handleRowDBLClick (val) {
+      this.isAdd = false
+      this.detail = val
+      this.dialogVisible = true
     },
-    cellClick(val) {
-      this.detail = val;
-    },
+    cellClick (val) {
+      this.detail = val
+    }
   },
-  created() {},
-  mounted() {
-    this.query();
+  created () {},
+  mounted () {
+    this.query()
   },
-  beforeDestroy() {},
-};
+  beforeDestroy () {}
+}
 </script>
 <style lang='stylus'>
 #name {

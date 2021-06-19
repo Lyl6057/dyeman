@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-04-01 13:39:35
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-29 09:09:44
+ * @LastEditTime: 2021-06-09 18:34:27
  * @Description:
  */
 
@@ -11,7 +11,7 @@ export function proMng(_this) {
   return [{
     menuName: "一.基础设定",
     index: "basic",
-    icon: "el-icon-edit-outline",
+    icon: "el-icon-s-tools",
     children: [
       {
         menuName: "1.生產工序",
@@ -59,7 +59,7 @@ export function proMng(_this) {
   {
     menuName: "三.織造生產",
     index: "wovenPro",
-    icon: "el-icon-edit-outline",
+    icon: "el-icon-toilet-paper",
     children: [
       {
         menuName: "1.生产日产量",
@@ -99,7 +99,11 @@ export function proMng(_this) {
         index: "/techCode"
       },
       {
-        menuName: "2.染整工单",
+        menuName: "2.染整生产运转单",
+        index: "/revolve"
+      },
+      {
+        menuName: "3.染整工单",
         index: "/dyeing"
       },
       // {
@@ -115,7 +119,7 @@ export function proMng(_this) {
   {
     menuName: "五.報表",
     index: "report",
-    icon: "el-icon-edit-outline",
+    icon: "el-icon-document-copy",
     children: [
       {
         menuName: "1.织造工单",

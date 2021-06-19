@@ -2,17 +2,12 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-06-05 15:22:53
+ * @LastEditTime: 2021-06-19 15:47:48
  * @Description:
  */
 
-import {
-  getDIC,
-  getDicT,
-  getXDicT,
-  postDicT
-} from '@/config'
-let cust = getDicT("basCustomer", "custName", "custCode")
+import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
+let cust = getDicT("basCustomer", "custName", "custCode");
 
 export function mainForm(_this) {
   return {
@@ -24,13 +19,13 @@ export function mainForm(_this) {
         label: "生產單號",
         prop: "weaveJobCode",
         span: 6,
-        placeholder: " ",
+        placeholder: " "
       },
       {
         label: "訂單編號",
         prop: "salPoNo",
         span: 6,
-        placeholder: " ",
+        placeholder: " "
         // type: "select",
         // dicData: getDicT("basCustomer", "custName", "custCode")
       },
@@ -38,9 +33,8 @@ export function mainForm(_this) {
         label: "機號",
         prop: "mathineCode",
         span: 6,
-        placeholder: " ",
-
-      },
+        placeholder: " "
+      }
       // {
       //   label: _this.$t('whseField.khmc'),
       //   prop: "colorBh",
@@ -49,8 +43,8 @@ export function mainForm(_this) {
       //   type: "select",
       //   // dicData: getDicT("basCustomer", "custName", "custCode")
       // },
-    ],
-  }
+    ]
+  };
 }
 export function mainCrud(_this) {
   return {
@@ -79,11 +73,13 @@ export function mainCrud(_this) {
         disabled: true,
         sortable: true,
         overHidden: true,
-        rules: [{
-          required: true,
-          message: "请输入生產單號",
-          trigger: "blur"
-        }],
+        rules: [
+          {
+            required: true,
+            message: "请输入生產單號",
+            trigger: "blur"
+          }
+        ]
       },
       {
         label: "訂單編號",
@@ -94,11 +90,13 @@ export function mainCrud(_this) {
         span: 6,
         placeholder: "请選擇訂單編號",
         sortable: true,
-        rules: [{
-          required: true,
-          message: "请選擇訂單編號",
-          trigger: "blur"
-        }],
+        rules: [
+          {
+            required: true,
+            message: "请選擇訂單編號",
+            trigger: "blur"
+          }
+        ]
         // click: () => {
         //   _this.visible = true
         // }
@@ -111,7 +109,7 @@ export function mainCrud(_this) {
         width: 150,
         overHidden: true,
         span: 6,
-        placeholder: "请選擇客戶編號",
+        placeholder: "请選擇客戶編號"
         // type: "select",
         // dicData: cust,
       },
@@ -122,12 +120,14 @@ export function mainCrud(_this) {
         width: 100,
         placeholder: "请输入織單數量",
         span: 6,
-        rules: [{
-          required: true,
-          message: "请输入織單數量",
-          trigger: "blur"
-        }],
-        align: "right",
+        rules: [
+          {
+            required: true,
+            message: "请输入織單數量",
+            trigger: "blur"
+          }
+        ],
+        align: "right"
       },
       {
         label: "開機日期",
@@ -141,11 +141,13 @@ export function mainCrud(_this) {
         placeholder: "请選擇開機日期",
         sortable: true,
         span: 6,
-        rules: [{
-          required: true,
-          message: "请選擇開機日期",
-          trigger: "blur"
-        }],
+        rules: [
+          {
+            required: true,
+            message: "请選擇開機日期",
+            trigger: "blur"
+          }
+        ]
       },
       {
         label: "機號",
@@ -154,17 +156,19 @@ export function mainCrud(_this) {
         span: 6,
         width: 120,
         placeholder: " ",
-        rules: [{
-          required: true,
-          message: "请輸入機號",
-          trigger: "blur"
-        }],
+        rules: [
+          {
+            required: true,
+            message: "请輸入機號",
+            trigger: "blur"
+          }
+        ],
         change: () => {
           let data = _this.yarnList
-            .filter((item) => {
+            .filter(item => {
               return item.groupId == _this.form.proWeaveJobGroupFk;
             })
-            .map((item) => {
+            .map(item => {
               return item;
             });
           if (data.length == 0) {
@@ -179,10 +183,8 @@ export function mainCrud(_this) {
                 _this.$preFixInt(Number(data[0].sn), 2) +
                 _this.form.mathineCode;
             }
-          })
-
+          });
         }
-
       },
       {
         label: "布類描述",
@@ -193,11 +195,13 @@ export function mainCrud(_this) {
         width: 250,
         span: 12,
         placeholder: "请選擇布類描述",
-        rules: [{
-          required: true,
-          message: "请選擇布類描述",
-          trigger: "blur"
-        }],
+        rules: [
+          {
+            required: true,
+            message: "请選擇布類描述",
+            trigger: "blur"
+          }
+        ]
       },
       {
         label: "顏色名稱",
@@ -207,11 +211,13 @@ export function mainCrud(_this) {
         width: 180,
         span: 6,
         placeholder: "请選擇顏色名稱",
-        rules: [{
-          required: true,
-          message: "请選擇顏色名稱",
-          trigger: "blur"
-        }],
+        rules: [
+          {
+            required: true,
+            message: "请選擇顏色名稱",
+            trigger: "blur"
+          }
+        ],
         overHidden: true
       },
       {
@@ -219,7 +225,7 @@ export function mainCrud(_this) {
         disabled: true,
         prop: "colorCode",
         width: 150,
-        span: 6,
+        span: 6
       },
       {
         label: "幅宽",
@@ -228,11 +234,14 @@ export function mainCrud(_this) {
         disabled: true,
         align: "right",
         span: 6,
-        rules: [{
-          required: true,
-          message: "请输入幅宽",
-          trigger: "blur"
-        }]
+        hide: true,
+        rules: [
+          {
+            required: true,
+            message: "请输入幅宽",
+            trigger: "blur"
+          }
+        ]
       },
       {
         label: "克重",
@@ -240,12 +249,15 @@ export function mainCrud(_this) {
         width: 90,
         align: "right",
         disabled: true,
+        hide: true,
         span: 6,
-        rules: [{
-          required: true,
-          message: "请输入克重",
-          trigger: "blur"
-        }]
+        rules: [
+          {
+            required: true,
+            message: "请输入克重",
+            trigger: "blur"
+          }
+        ]
       },
       {
         label: "纱批",
@@ -253,7 +265,7 @@ export function mainCrud(_this) {
         width: 90,
         hide: true,
         align: "right",
-        span: 6,
+        span: 6
         // rules: [{
         //   required: true,
         //   message: "请输入纱批",
@@ -273,8 +285,8 @@ export function mainCrud(_this) {
         },
         span: 6,
         hide: true,
-        change: (val) => {
-          _this.getYarn(val.value)
+        change: val => {
+          _this.getYarn(val.value);
         }
       },
       {
@@ -284,7 +296,7 @@ export function mainCrud(_this) {
         width: 90,
         hide: true,
         span: 12,
-        overHidden: true,
+        overHidden: true
         // type: "textarea",
         // props: {
         //   value: "yarnName",
@@ -299,15 +311,13 @@ export function mainCrud(_this) {
         // }],
       },
 
-
-
       {
         label: "纱牌",
         prop: "yarnBrand",
         width: 90,
         hide: true,
         align: "right",
-        span: 6,
+        span: 6
       },
       // {
       //   label: "纱长",
@@ -334,7 +344,7 @@ export function mainCrud(_this) {
         prop: "zjgh",
         width: 90,
         hide: true,
-        span: 6,
+        span: 6
         // rules: [{
         //   required: true,
         //   message: "请输入值机工号",
@@ -362,16 +372,17 @@ export function mainCrud(_this) {
         // type: "number",
         hide: true,
         span: 6,
-        rules: [{
-          required: true,
-          message: "请输入平均匹重",
-          trigger: "blur"
-        }],
+        rules: [
+          {
+            required: true,
+            message: "请输入平均匹重",
+            trigger: "blur"
+          }
+        ],
         change: () => {
           _this.$nextTick(() => {
-            _this.form.ps = Math.ceil(_this.form.amount / _this.form.pz)
-          })
-
+            _this.form.ps = Math.ceil(_this.form.amount / _this.form.pz);
+          });
         }
       },
       // {
@@ -397,11 +408,13 @@ export function mainCrud(_this) {
         // type: "number",
         hide: true,
         span: 6,
-        rules: [{
-          required: true,
-          message: "请输入匹数",
-          trigger: "blur"
-        }],
+        rules: [
+          {
+            required: true,
+            message: "请输入匹数",
+            trigger: "blur"
+          }
+        ]
       },
       {
         label: "起始疋号",
@@ -411,11 +424,13 @@ export function mainCrud(_this) {
         // type: "number",
         hide: true,
         span: 6,
-        rules: [{
-          required: true,
-          message: "请输入起始疋号",
-          trigger: "blur"
-        }],
+        rules: [
+          {
+            required: true,
+            message: "请输入起始疋号",
+            trigger: "blur"
+          }
+        ]
       },
       // {
       //   label: "总针数",
@@ -440,9 +455,8 @@ export function mainCrud(_this) {
         span: 6,
         hide: true
       }
-    ],
-  }
-
+    ]
+  };
 }
 // let data = getDicT("proWeaveJobGroup", "groupName", "groupId")
 // console.log(data);
@@ -465,7 +479,7 @@ export function bfCrud(_this) {
         prop: "eachNumber",
         width: 60,
         align: "right",
-        span: 6,
+        span: 6
       },
       {
         label: "訂單號",
@@ -480,9 +494,10 @@ export function bfCrud(_this) {
         label: "布票編號",
         prop: "noteCode",
         width: 180,
-        disabled: true, placeholder: " ",
+        disabled: true,
+        placeholder: " ",
         span: 6,
-        sortable: true,
+        sortable: true
       },
       {
         label: "用紗分組",
@@ -495,20 +510,22 @@ export function bfCrud(_this) {
           value: "groupId",
           label: "groupName"
         },
-        span: 6,
+        span: 6
       },
       {
         label: "客戶編號",
         prop: "customerName",
         width: 180,
-        disabled: true, placeholder: " ",
+        disabled: true,
+        placeholder: " ",
         span: 6,
         display: false
       },
       {
         label: "布类名称",
         prop: "fabricName",
-        disabled: true, placeholder: " ",
+        disabled: true,
+        placeholder: " ",
         span: 6,
         width: 100,
         width: 300,
@@ -517,7 +534,8 @@ export function bfCrud(_this) {
       {
         label: "顏色",
         prop: "proColor",
-        disabled: true, placeholder: " ",
+        disabled: true,
+        placeholder: " ",
         span: 6,
         width: 150,
         overHidden: true
@@ -528,7 +546,7 @@ export function bfCrud(_this) {
         prop: "spi",
         width: 90,
         hide: true,
-        span: 6,
+        span: 6
       },
 
       {
@@ -536,7 +554,7 @@ export function bfCrud(_this) {
         prop: "sp",
         width: 90,
         hide: true,
-        span: 6,
+        span: 6
       },
       {
         label: "机号",
@@ -544,11 +562,13 @@ export function bfCrud(_this) {
         width: 100,
         hide: false,
         span: 6,
-        rules: [{
-          required: true,
-          message: "请输入机号",
-          trigger: "blur"
-        }],
+        rules: [
+          {
+            required: true,
+            message: "请输入机号",
+            trigger: "blur"
+          }
+        ],
         disabled: true
       },
       {
@@ -559,11 +579,13 @@ export function bfCrud(_this) {
         span: 6,
         cell: true,
         disabled: false,
-        rules: [{
-          required: true,
-          message: "请输入值机工号",
-          trigger: "blur"
-        }],
+        rules: [
+          {
+            required: true,
+            message: "请输入值机工号",
+            trigger: "blur"
+          }
+        ]
       },
       {
         label: "验布员",
@@ -578,11 +600,13 @@ export function bfCrud(_this) {
         width: 80,
         align: "right",
         span: 6,
-        rules: [{
-          required: true,
-          message: "请输入幅宽",
-          trigger: "blur"
-        }],
+        rules: [
+          {
+            required: true,
+            message: "请输入幅宽",
+            trigger: "blur"
+          }
+        ],
         type: "number"
       },
       {
@@ -592,7 +616,6 @@ export function bfCrud(_this) {
         align: "center",
         span: 6,
         type: "number"
-
       },
       // {
       //   label: "單位",
@@ -627,11 +650,13 @@ export function bfCrud(_this) {
         width: 80,
         align: "right",
         span: 6,
-        rules: [{
-          required: true,
-          message: "请输入克重",
-          trigger: "blur"
-        }]
+        rules: [
+          {
+            required: true,
+            message: "请输入克重",
+            trigger: "blur"
+          }
+        ]
       },
 
       {
@@ -649,7 +674,7 @@ export function bfCrud(_this) {
             label: "否"
           }
         ],
-        span: 6,
+        span: 6
       },
       {
         label: "打印时间",
@@ -661,7 +686,6 @@ export function bfCrud(_this) {
         align: "center",
         width: 180
       }
-    ],
-  }
-
+    ]
+  };
 }

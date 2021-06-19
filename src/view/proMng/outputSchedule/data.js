@@ -2,19 +2,13 @@
  * @Author: Lyl
  * @Date: 2021-04-23 09:03:31
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-27 14:16:06
+ * @LastEditTime: 2021-06-16 14:45:55
  * @Description:
  */
 
-
-import {
-  getDIC,
-  getDicT,
-  getXDicT,
-  postDicT
-} from '@/config'
-let cust = getDicT("basCustomer", "custName", "custCode")
-let matUnit = getDIC("bas_matUnit")
+import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
+let cust = getDicT("basCustomer", "custName", "custCode");
+let matUnit = getDIC("bas_matUnit");
 export function mainForm(_this) {
   return {
     submitBtn: false,
@@ -22,11 +16,26 @@ export function mainForm(_this) {
     labelWidth: 150,
     column: [
       {
-        label: "订单号",
-        prop: "poNo",
-        span: 6,
-        placeholder: " ",
-      },
+        label: "织造生产单号",
+        prop: "weaveJobCode",
+        // type: "select",
+        // dicData: cust,
+        // props: {
+        //   label: "custName",
+        //   value: "salPooid"
+        // },
+        width: 220,
+        overHidden: true,
+        sortable: true,
+        fixed: false,
+        span: 8
+      }
+      // {
+      //   label: "订单号",
+      //   prop: "poNo",
+      //   span: 6,
+      //   placeholder: " ",
+      // },
       // {
       //   label: "客人",
       //   prop: "custId",
@@ -35,18 +44,18 @@ export function mainForm(_this) {
       //   type: "select",
       //   dicData: getDicT("basCustomer", "custName", "custCode")
       // },
-      {
-        label: "产量日期",
-        prop: "gatherDate",
-        span: 6,
-        placeholder: " ",
-        type: "date",
-        align: "center",
-        format: "yyyy-MM-dd",
-        valueFormat: "yyyy-MM-dd",
-      },
-    ],
-  }
+      // {
+      //   label: "产量日期",
+      //   prop: "gatherDate",
+      //   span: 6,
+      //   placeholder: " ",
+      //   type: "date",
+      //   align: "center",
+      //   format: "yyyy-MM-dd",
+      //   valueFormat: "yyyy-MM-dd",
+      // },
+    ]
+  };
 }
 let poData = getXDicT("salPo/list");
 let poColor = getXDicT("salPoColor");
@@ -71,33 +80,47 @@ export function mainCrud(_this) {
         fixed: false
       },
       {
-        label: _this.$t("whseField.khmc"),
-        prop: "custName",
-        type: "select",
-        dicData: cust,
+        label: "织造生产单号",
+        prop: "weaveJobCode",
+        // type: "select",
+        // dicData: cust,
         // props: {
         //   label: "custName",
         //   value: "salPooid"
         // },
-        width: 120,
+        width: 220,
         overHidden: true,
         sortable: true,
         fixed: false
       },
-      {
-        label: _this.$t("whseField.khbh"),
-        prop: "custId",
-        type: "select",
-        dicData: poData,
-        props: {
-          label: "custId",
-          value: "salPooid"
-        },
-        overHidden: true,
-        width: 100,
-        // sortable: true,
-        fixed: false
-      },
+      // {
+      //   label: _this.$t("whseField.khmc"),
+      //   prop: "custName",
+      //   type: "select",
+      //   dicData: cust,
+      //   // props: {
+      //   //   label: "custName",
+      //   //   value: "salPooid"
+      //   // },
+      //   width: 120,
+      //   overHidden: true,
+      //   sortable: true,
+      //   fixed: false
+      // },
+      // {
+      //   label: _this.$t("whseField.khbh"),
+      //   prop: "custId",
+      //   type: "select",
+      //   dicData: poData,
+      //   props: {
+      //     label: "custId",
+      //     value: "salPooid"
+      //   },
+      //   overHidden: true,
+      //   width: 100,
+      //   // sortable: true,
+      //   fixed: false
+      // },
       // {
       //   label: "合同编号",
       //   prop: "custContNo",
@@ -111,25 +134,25 @@ export function mainCrud(_this) {
       //   },
       //   fixed: true
       // },
-      {
-        label: "订单号",
-        prop: "poNo",
-        width: 160,
-        overHidden: true,
-        span: 6,
-        disabled: false,
-        sortable: true,
-        placeholder: " ",
-        overHidden: true,
-        fixed: false
-        // cell: false,
-        // type: "select",
-        // dicData: poData,
-        // props: {
-        //   label: "custName",
-        //   value: "salPooid"
-        // },
-      },
+      // {
+      //   label: "订单号",
+      //   prop: "poNo",
+      //   width: 160,
+      //   overHidden: true,
+      //   span: 6,
+      //   disabled: false,
+      //   sortable: true,
+      //   placeholder: " ",
+      //   overHidden: true,
+      //   fixed: false
+      //   // cell: false,
+      //   // type: "select",
+      //   // dicData: poData,
+      //   // props: {
+      //   //   label: "custName",
+      //   //   value: "salPooid"
+      //   // },
+      // },
       // {
       //   label: "类型",
       //   prop: "poType",
@@ -161,91 +184,91 @@ export function mainCrud(_this) {
       //   cell: false,
       //   fixed: false
       // },
-      {
-        label: "订单日期",
-        prop: "poDate",
-        disabled: false,
-        overHidden: true,
-        width: 120,
-        overHidden: true,
-        span: 6,
-        placeholder: "请選擇日期",
-        sortable: true,
-        props: {
-          label: "poDate",
-          value: "salPooid"
-        },
-        dicData: poData,
-        format: "yyyy-MM-dd",
-        valueFormat: "yyyy-MM-dd",
-        cell: false
-      },
-      {
-        label: "布料编号",
-        prop: "fabId",
-        width: 100,
-        overHidden: true,
-        type: "select",
-        dicData: postDicT("salPoDtlaList", "fabId", "salPoDtlaoid"),
-        cell: false,
-        // sortable: true,
-        fixed: false
-      },
-      {
-        label: _this.$t("whseField.blmc"),
-        prop: "fabName",
-        width: 200,
-        overHidden: true,
-        type: "select",
-        dicData: postDicT("salPoDtlaList", "fabName", "salPoDtlaoid"),
-        fixed: false
-      },
-      {
-        label: "颜色",
-        prop: "colorName",
-        width: 100,
-        overHidden: true,
-        type: "select",
-        props: {
-          label: "colorName",
-          value: "salPoColoroid"
-        },
-        dicData: poColor,
-        // fixed: true
-      },
-      {
-        label: "数量",
-        prop: "colorQty",
-        disabled: true,
-        width: 100,
-        overHidden: true,
-        placeholder: " ",
-        span: 6,
-        align: "right",
-        cell: false,
-        type: "select",
-        props: {
-          label: "colorQty",
-          value: "salPoColoroid"
-        },
-        dicData: poColor,
-      },
-      {
-        label: "统计日期",
-        prop: "gatherDate",
-        disabled: false,
-        overHidden: true,
-        width: 120,
-        overHidden: true,
-        span: 6,
-        placeholder: "请選擇日期",
-        sortable: true,
-        type: "date",
-        align: "center",
-        format: "yyyy-MM-dd",
-        valueFormat: "yyyy-MM-dd",
-        cell: true
-      },
+      // {
+      //   label: "订单日期",
+      //   prop: "poDate",
+      //   disabled: false,
+      //   overHidden: true,
+      //   width: 120,
+      //   overHidden: true,
+      //   span: 6,
+      //   placeholder: "请選擇日期",
+      //   sortable: true,
+      //   props: {
+      //     label: "poDate",
+      //     value: "salPooid"
+      //   },
+      //   dicData: poData,
+      //   format: "yyyy-MM-dd",
+      //   valueFormat: "yyyy-MM-dd",
+      //   cell: false
+      // },
+      // {
+      //   label: "布料编号",
+      //   prop: "fabId",
+      //   width: 100,
+      //   overHidden: true,
+      //   type: "select",
+      //   dicData: postDicT("salPoDtlaList", "fabId", "salPoDtlaoid"),
+      //   cell: false,
+      //   // sortable: true,
+      //   fixed: false
+      // },
+      // {
+      //   label: _this.$t("whseField.blmc"),
+      //   prop: "fabName",
+      //   width: 200,
+      //   overHidden: true,
+      //   type: "select",
+      //   dicData: postDicT("salPoDtlaList", "fabName", "salPoDtlaoid"),
+      //   fixed: false
+      // },
+      // {
+      //   label: "颜色",
+      //   prop: "colorName",
+      //   width: 100,
+      //   overHidden: true,
+      //   type: "select",
+      //   props: {
+      //     label: "colorName",
+      //     value: "salPoColoroid"
+      //   },
+      //   dicData: poColor,
+      //   // fixed: true
+      // },
+      // {
+      //   label: "数量",
+      //   prop: "colorQty",
+      //   disabled: true,
+      //   width: 100,
+      //   overHidden: true,
+      //   placeholder: " ",
+      //   span: 6,
+      //   align: "right",
+      //   cell: false,
+      //   type: "select",
+      //   props: {
+      //     label: "colorQty",
+      //     value: "salPoColoroid"
+      //   },
+      //   dicData: poColor,
+      // },
+      // {
+      //   label: "统计日期",
+      //   prop: "gatherDate",
+      //   disabled: false,
+      //   overHidden: true,
+      //   width: 120,
+      //   overHidden: true,
+      //   span: 6,
+      //   placeholder: "请選擇日期",
+      //   sortable: true,
+      //   type: "date",
+      //   align: "center",
+      //   format: "yyyy-MM-dd",
+      //   valueFormat: "yyyy-MM-dd",
+      //   cell: true
+      // },
       // {
       //   label: "客戶編號",
       //   prop: "custCode",
@@ -258,18 +281,20 @@ export function mainCrud(_this) {
       //   // dicData: cust,
       // },
       {
-        label: "产量",
-        prop: "output",
+        label: "毛重",
+        prop: "clothWeight",
         disabled: false,
         width: 100,
         overHidden: true,
         placeholder: " ",
         span: 6,
-        rules: [{
-          required: true,
-          message: "请输入产量",
-          trigger: "blur"
-        }],
+        rules: [
+          {
+            required: true,
+            message: "请输入毛重",
+            trigger: "blur"
+          }
+        ],
         align: "right",
         cell: true
       },
@@ -281,33 +306,36 @@ export function mainCrud(_this) {
         width: 120,
         placeholder: " ",
         span: 6,
-        rules: [{
-          required: true,
-          message: "请输入QC扣减数量",
-          trigger: "blur"
-        }],
+        rules: [
+          {
+            required: true,
+            message: "请输入QC扣减数量",
+            trigger: "blur"
+          }
+        ],
         align: "right",
         cell: true
       },
       {
-        label: "实际产出量",
-        prop: "realOutPut",
+        label: "净重",
+        prop: "realWeight",
         disabled: false,
         overHidden: true,
         width: 120,
         placeholder: " ",
         span: 6,
-        rules: [{
-          required: true,
-          message: "请输入实际产出量",
-          trigger: "blur"
-        }],
+        rules: [
+          {
+            required: true,
+            message: "请输入实际产出量",
+            trigger: "blur"
+          }
+        ],
         align: "right",
         cell: true
-      },
-    ],
-  }
-
+      }
+    ]
+  };
 }
 export function mainCrud1(_this) {
   return {
@@ -442,7 +470,7 @@ export function mainCrud1(_this) {
           label: "colorName",
           value: "salPoColoroid"
         },
-        dicData: poColor,
+        dicData: poColor
       },
       {
         label: "日期",
@@ -480,11 +508,13 @@ export function mainCrud1(_this) {
         placeholder: " ",
         span: 6,
         type: "number",
-        rules: [{
-          required: true,
-          message: "请输入产量",
-          trigger: "blur"
-        }],
+        rules: [
+          {
+            required: true,
+            message: "请输入产量",
+            trigger: "blur"
+          }
+        ],
         align: "right",
         cell: true
       },
@@ -497,11 +527,13 @@ export function mainCrud1(_this) {
         type: "number",
         placeholder: " ",
         span: 6,
-        rules: [{
-          required: true,
-          message: "请输入QC扣减数量",
-          trigger: "blur"
-        }],
+        rules: [
+          {
+            required: true,
+            message: "请输入QC扣减数量",
+            trigger: "blur"
+          }
+        ],
         align: "right",
         cell: true
       },
@@ -514,17 +546,18 @@ export function mainCrud1(_this) {
         type: "number",
         placeholder: " ",
         span: 6,
-        rules: [{
-          required: true,
-          message: "请输入实际产出量",
-          trigger: "blur"
-        }],
+        rules: [
+          {
+            required: true,
+            message: "请输入实际产出量",
+            trigger: "blur"
+          }
+        ],
         align: "right",
         cell: true
-      },
-    ],
-  }
-
+      }
+    ]
+  };
 }
 // let data = getDicT("proWeaveJobGroup", "groupName", "groupId")
 // console.log(data);
@@ -547,7 +580,7 @@ export function bfCrud(_this) {
         prop: "eachNumber",
         width: 60,
         align: "right",
-        span: 6,
+        span: 6
       },
       {
         label: "訂單號",
@@ -561,9 +594,10 @@ export function bfCrud(_this) {
         label: "布票編號",
         prop: "noteCode",
         width: 180,
-        disabled: true, placeholder: " ",
+        disabled: true,
+        placeholder: " ",
         span: 6,
-        sortable: true,
+        sortable: true
       },
       {
         label: "用紗分組",
@@ -576,20 +610,22 @@ export function bfCrud(_this) {
           value: "groupId",
           label: "groupName"
         },
-        span: 6,
+        span: 6
       },
       {
         label: "客戶編號",
         prop: "customerName",
         width: 180,
-        disabled: true, placeholder: " ",
+        disabled: true,
+        placeholder: " ",
         span: 6,
         display: false
       },
       {
         label: "布类名称",
         prop: "fabricName",
-        disabled: true, placeholder: " ",
+        disabled: true,
+        placeholder: " ",
         span: 6,
         width: 100,
         width: 300,
@@ -598,9 +634,10 @@ export function bfCrud(_this) {
       {
         label: "顏色",
         prop: "proColor",
-        disabled: true, placeholder: " ",
+        disabled: true,
+        placeholder: " ",
         span: 6,
-        width: 100,
+        width: 100
       },
 
       {
@@ -608,7 +645,7 @@ export function bfCrud(_this) {
         prop: "spi",
         width: 90,
         hide: true,
-        span: 6,
+        span: 6
       },
 
       {
@@ -616,7 +653,7 @@ export function bfCrud(_this) {
         prop: "sp",
         width: 90,
         hide: true,
-        span: 6,
+        span: 6
       },
       {
         label: "机号",
@@ -624,11 +661,13 @@ export function bfCrud(_this) {
         width: 100,
         hide: false,
         span: 6,
-        rules: [{
-          required: true,
-          message: "请输入机号",
-          trigger: "blur"
-        }],
+        rules: [
+          {
+            required: true,
+            message: "请输入机号",
+            trigger: "blur"
+          }
+        ],
         disabled: true
       },
       {
@@ -638,11 +677,13 @@ export function bfCrud(_this) {
         hide: false,
         span: 6,
         disabled: true,
-        rules: [{
-          required: true,
-          message: "请输入值机工号",
-          trigger: "blur"
-        }],
+        rules: [
+          {
+            required: true,
+            message: "请输入值机工号",
+            trigger: "blur"
+          }
+        ]
       },
       {
         label: "验布员",
@@ -657,19 +698,20 @@ export function bfCrud(_this) {
         width: 80,
         align: "right",
         span: 6,
-        rules: [{
-          required: true,
-          message: "请输入幅宽",
-          trigger: "blur"
-        }]
+        rules: [
+          {
+            required: true,
+            message: "请输入幅宽",
+            trigger: "blur"
+          }
+        ]
       },
       {
         label: _this.$t("whseField.zl"),
         prop: "clothWeight",
         width: 80,
         align: "center",
-        span: 6,
-
+        span: 6
       },
       // {
       //   label: "單位",
@@ -704,11 +746,13 @@ export function bfCrud(_this) {
         width: 80,
         align: "right",
         span: 6,
-        rules: [{
-          required: true,
-          message: "请输入克重",
-          trigger: "blur"
-        }]
+        rules: [
+          {
+            required: true,
+            message: "请输入克重",
+            trigger: "blur"
+          }
+        ]
       },
 
       {
@@ -726,7 +770,7 @@ export function bfCrud(_this) {
             label: "否"
           }
         ],
-        span: 6,
+        span: 6
       },
       {
         label: "打印时间",
@@ -738,9 +782,8 @@ export function bfCrud(_this) {
         align: "center",
         width: 180
       }
-    ],
-  }
-
+    ]
+  };
 }
 
 export function poForm(_this) {
@@ -753,18 +796,18 @@ export function poForm(_this) {
         label: _this.$t("energy.ddh"),
         prop: "poNo",
         span: 6,
-        placeholder: " ",
+        placeholder: " "
       },
       {
         label: _this.$t("whseField.khbh"),
         prop: "custId",
         span: 6,
-        placeholder: " ",
+        placeholder: " "
         // type: "select",
         // dicData: getDicT("basCustomer", "custName", "custCode")
-      },
-    ],
-  }
+      }
+    ]
+  };
 }
 
 export function poCrud(_this) {
@@ -783,7 +826,7 @@ export function poCrud(_this) {
         prop: "index",
         label: "#",
         width: 50,
-        align: "center",
+        align: "center"
       },
       {
         label: _this.$t("energy.ddh"),
@@ -810,7 +853,7 @@ export function poCrud(_this) {
         width: 160,
         overHidden: true,
         type: "select",
-        dicData: postDicT("salPoDtlaList", "fabId", "salPoFk"),
+        dicData: postDicT("salPoDtlaList", "fabId", "salPoFk")
       },
       {
         label: _this.$t("whseField.blmc"),
@@ -818,15 +861,15 @@ export function poCrud(_this) {
         width: 500,
         overHidden: true,
         type: "select",
-        dicData: postDicT("salPoDtlaList", "fabName", "salPoFk"),
+        dicData: postDicT("salPoDtlaList", "fabName", "salPoFk")
       },
       {
         label: _this.$t("Shipping.ys"),
         prop: "colorName",
         width: 120,
         type: "select",
-        dicData: postDicT("salPoDtlaList", "colorName", "salPoFk"),
-      },
+        dicData: postDicT("salPoDtlaList", "colorName", "salPoFk")
+      }
       // {
       //   label: _this.$t("Shipping.sl"),
       //   prop: "fabQty",
@@ -854,8 +897,5 @@ export function poCrud(_this) {
       //   dicData: matUnit
       // },
     ]
-
-
-  }
-
+  };
 }

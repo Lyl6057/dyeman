@@ -2,16 +2,11 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-29 09:17:21
+ * @LastEditTime: 2021-06-18 16:36:53
  * @Description:
  */
 
-import {
-  getDIC,
-  getDicT,
-  getXDicT,
-  postDicT
-} from '@/config'
+import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
 
 export function mainForm(_this) {
   return {
@@ -26,7 +21,7 @@ export function mainForm(_this) {
         span: 6,
         placeholder: " ",
         type: "select",
-        dicData: cust,
+        dicData: cust
         // dicData: getDicT("basCustomer", "custName", "custCode")
       },
       {
@@ -34,7 +29,7 @@ export function mainForm(_this) {
         tip: "Số đơn hàng",
         prop: "orderNo",
         span: 6,
-        placeholder: " ",
+        placeholder: " "
       },
 
       {
@@ -42,17 +37,17 @@ export function mainForm(_this) {
         tip: "Mã vải",
         prop: "fabricCode",
         span: 6,
-        placeholder: " ",
+        placeholder: " "
       },
       {
         label: "开始日期",
         tip: "Ngày bắt đầu nhận đơn",
         prop: "startDate",
         span: 6,
-        placeholder: " ",
-      },
-    ],
-  }
+        placeholder: " "
+      }
+    ]
+  };
 }
 
 export function dlgForm(_this) {
@@ -65,7 +60,7 @@ export function dlgForm(_this) {
         label: "訂單編號",
         prop: "poNo",
         span: 6,
-        placeholder: " ",
+        placeholder: " "
       },
       {
         label: "客戶",
@@ -73,19 +68,19 @@ export function dlgForm(_this) {
         span: 6,
         placeholder: " ",
         type: "tree",
-        dicData: cust,
+        dicData: cust
       },
       {
         label: "订单狀態",
         prop: "poStatus",
         span: 6,
-        placeholder: " ",
-      },
-    ],
-  }
+        placeholder: " "
+      }
+    ]
+  };
 }
 
-let cust = getDicT("basCustomer", "custName", "custCode")
+let cust = getDicT("basCustomer", "custName", "custCode");
 
 export function mainCrud(_this) {
   return {
@@ -97,7 +92,7 @@ export function mainCrud(_this) {
     refreshBtn: false,
     columnBtn: false,
     page: true,
-    labelPosition: 'top',
+    labelPosition: "top",
     labelWidth: 130,
     column: [
       {
@@ -114,11 +109,17 @@ export function mainCrud(_this) {
         overHidden: true,
         width: 140,
         span: 6,
-        rules: [{
-          required: true,
-          message: "请输入缸号(số lô nhuộm)",
-          trigger: "blur"
-        }],
+        rules: [
+          {
+            required: true,
+            message: "请输入缸号(số lô nhuộm)",
+            trigger: "blur"
+          }
+        ],
+        click: () => {
+          _this.choiceTle = "选择染整工单";
+          _this.choiceV = true;
+        }
       },
       {
         label: "织造通知单",
@@ -127,10 +128,11 @@ export function mainCrud(_this) {
         overHidden: true,
         width: 180,
         span: 6,
-        disabled: false, placeholder: " ",
+        disabled: false,
+        placeholder: " ",
         click: () => {
-          _this.choiceTle = '选择织造通知单'
-          _this.choiceV = true
+          _this.choiceTle = "选择织造通知单";
+          _this.choiceV = true;
         }
       },
       {
@@ -142,11 +144,13 @@ export function mainCrud(_this) {
         disabled: false,
         type: "select",
         dicData: cust,
-        rules: [{
-          required: true,
-          message: "请输入客户",
-          trigger: "blur"
-        }],
+        rules: [
+          {
+            required: true,
+            message: "请输入客户",
+            trigger: "blur"
+          }
+        ],
         tip: "客户(Khách hàng)"
       },
       {
@@ -161,13 +165,14 @@ export function mainCrud(_this) {
         valueFormat: "yyyy-MM-dd",
         placeholder: " ",
         sortable: true,
-        rules: [{
-          required: true,
-          message: "请選擇开单日期(Ngày lập đơn)",
-          trigger: "blur"
-        }],
+        rules: [
+          {
+            required: true,
+            message: "请選擇开单日期(Ngày lập đơn)",
+            trigger: "blur"
+          }
+        ]
       },
-
 
       {
         label: "开单数量(kg)",
@@ -178,11 +183,13 @@ export function mainCrud(_this) {
         type: "number",
         align: "right",
         span: 6,
-        rules: [{
-          required: true,
-          message: "请输入开单数量",
-          trigger: "blur"
-        }],
+        rules: [
+          {
+            required: true,
+            message: "请输入开单数量",
+            trigger: "blur"
+          }
+        ]
       },
       {
         label: "订单数(kg)",
@@ -192,13 +199,14 @@ export function mainCrud(_this) {
         placeholder: " ",
         align: "right",
         span: 6,
-        rules: [{
-          required: true,
-          message: "请输入订单数",
-          trigger: "blur"
-        }],
+        rules: [
+          {
+            required: true,
+            message: "请输入订单数",
+            trigger: "blur"
+          }
+        ]
       },
-
 
       {
         label: "疋数",
@@ -208,7 +216,7 @@ export function mainCrud(_this) {
         placeholder: " ",
         align: "right",
         type: "number",
-        span: 6,
+        span: 6
         // rules: [{
         //   required: true,
         //   message: "请输入疋数",
@@ -226,7 +234,7 @@ export function mainCrud(_this) {
         format: "yyyy-MM-dd",
         valueFormat: "yyyy-MM-dd",
         placeholder: " ",
-        sortable: true,
+        sortable: true
         // rules: [{
         //   required: true,
         //   message: "请選擇交货日期",
@@ -241,7 +249,7 @@ export function mainCrud(_this) {
         placeholder: " ",
         align: "right",
         type: "number",
-        span: 6,
+        span: 6
       },
       {
         label: "第几缸",
@@ -251,7 +259,7 @@ export function mainCrud(_this) {
         placeholder: " ",
         align: "right",
         type: "number",
-        span: 6,
+        span: 6
       },
 
       {
@@ -261,17 +269,7 @@ export function mainCrud(_this) {
         width: 250,
         placeholder: " ",
         overHidden: true,
-        span: 12,
-      },
-
-      {
-        label: "色号",
-        tip: "色号(Số màu)",
-        prop: "colorCode",
-        width: 120,
-        overHidden: true,
-        span: 6,
-        placeholder: " ",
+        span: 12
       },
 
       {
@@ -281,7 +279,17 @@ export function mainCrud(_this) {
         width: 100,
         overHidden: true,
         span: 6,
-        placeholder: " ",
+        placeholder: " "
+      },
+
+      {
+        label: "色号",
+        tip: "色号(Số màu)",
+        prop: "colorCode",
+        width: 120,
+        overHidden: true,
+        span: 6,
+        placeholder: " "
       },
       {
         label: "颜色数量",
@@ -291,7 +299,7 @@ export function mainCrud(_this) {
         placeholder: " ",
         align: "right",
         type: "number",
-        span: 6,
+        span: 6
         // rules: [{
         //   required: true,
         //   message: "请输入颜色数量",
@@ -318,7 +326,6 @@ export function mainCrud(_this) {
           }
         ]
       },
-
 
       {
         label: "出缸幅宽(inch)",
@@ -348,7 +355,8 @@ export function mainCrud(_this) {
         prop: "fabricName",
         width: 250,
         placeholder: " ",
-        span: 12,
+        overHidden: true,
+        span: 12
       },
       {
         label: "干布幅宽(inch)",
@@ -377,7 +385,7 @@ export function mainCrud(_this) {
         width: 250,
         hide: true,
         placeholder: " ",
-        span: 12,
+        span: 12
       },
 
       {
@@ -454,8 +462,8 @@ export function mainCrud(_this) {
             {
               label: "是",
               value: true
-            },
-          ],
+            }
+          ]
         ]
       },
       {
@@ -474,7 +482,7 @@ export function mainCrud(_this) {
         prop: "jobCreator",
         width: 100,
         placeholder: " ",
-        span: 6,
+        span: 6
       },
       {
         label: "审批",
@@ -482,7 +490,7 @@ export function mainCrud(_this) {
         prop: "auditor",
         width: 100,
         placeholder: " ",
-        span: 6,
+        span: 6
       },
       {
         label: "列印日期",
@@ -525,12 +533,10 @@ export function mainCrud(_this) {
     ],
     group: [
       {
-        icon: 'el-icon-s-order',
-        label: '织造通知单信息',
-        prop: 'group1',
+        icon: "el-icon-s-order",
+        label: "织造通知单信息",
+        prop: "group1",
         column: [
-
-
           {
             label: "筒径(inch)",
             tip: "筒径(Khổ máy)",
@@ -610,14 +616,13 @@ export function mainCrud(_this) {
             align: "right",
             type: "number",
             placeholder: " "
-          },
-
+          }
         ]
       },
       {
-        icon: 'el-icon-s-order',
-        label: '成品规格要求',
-        prop: 'group2',
+        icon: "el-icon-s-order",
+        label: "成品规格要求",
+        prop: "group2",
         column: [
           {
             label: "连边幅宽(inch)",
@@ -626,7 +631,8 @@ export function mainCrud(_this) {
             width: 90,
             hide: true,
             span: 6,
-            type: "number", align: "right",
+            type: "number",
+            align: "right",
             placeholder: " "
           },
           {
@@ -714,42 +720,36 @@ export function mainCrud(_this) {
             hide: true,
             span: 6,
             type: "switch",
-            dicData:
-              [
-                {
-                  label: "否",
-                  value: false
-                },
-                {
-                  label: "是",
-                  value: true
-                },
-
-
-              ],
+            dicData: [
+              {
+                label: "否",
+                value: false
+              },
+              {
+                label: "是",
+                value: true
+              }
+            ],
             placeholder: " "
           },
           {
             label: "缩水-平干",
-            tip: "缩水-挂干(Phơi phẳng)",
+            tip: "缩水-平干(Phơi phẳng)",
             prop: "proShrinkSafeDry",
             width: 120,
             hide: true,
             span: 6,
             type: "switch",
-            dicData:
-              [
-                {
-                  label: "否",
-                  value: false
-                },
-                {
-                  label: "是",
-                  value: true
-                },
-
-
-              ],
+            dicData: [
+              {
+                label: "否",
+                value: false
+              },
+              {
+                label: "是",
+                value: true
+              }
+            ],
             placeholder: " "
           },
           {
@@ -760,17 +760,16 @@ export function mainCrud(_this) {
             hide: true,
             span: 6,
             type: "switch",
-            dicData:
-              [
-                {
-                  label: "否",
-                  value: false
-                },
-                {
-                  label: "是",
-                  value: true
-                },
-              ],
+            dicData: [
+              {
+                label: "否",
+                value: false
+              },
+              {
+                label: "是",
+                value: true
+              }
+            ],
             placeholder: " "
           },
           {
@@ -782,12 +781,11 @@ export function mainCrud(_this) {
             span: 6,
             type: "number",
             placeholder: " "
-          },
+          }
         ]
       }
-    ],
-  }
-
+    ]
+  };
 }
 
 export function dlgCrud(_this) {
@@ -808,14 +806,14 @@ export function dlgCrud(_this) {
         prop: "index",
         width: 50,
         align: "center",
-        display: false,
+        display: false
       },
       {
         label: "訂單號",
         prop: "poNo",
         width: 150,
         span: 6,
-        sortable: true,
+        sortable: true
       },
       {
         label: "客人名稱",
@@ -824,17 +822,17 @@ export function dlgCrud(_this) {
         width: 250,
         span: 6,
         type: "select",
-        dicData: cust,
+        dicData: cust
       },
       {
         label: "订单日期",
         prop: "poDate",
         width: 130,
         type: "date",
-        align: 'center',
+        align: "center",
         sortable: true,
         format: "yyyy-MM-dd",
-        valueFormat: "yyyy-MM-dd",
+        valueFormat: "yyyy-MM-dd"
       },
       {
         label: "订单类别",
@@ -850,9 +848,9 @@ export function dlgCrud(_this) {
         width: 110,
         type: "select",
         dicData: getDIC("Status")
-      },
-    ],
-  }
+      }
+    ]
+  };
 }
 // compCrud
 export function gyCrud(_this) {
@@ -861,10 +859,10 @@ export function gyCrud(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 150px)",
+    height: "calc(100vh - 120px)",
     refreshBtn: false,
     columnBtn: false,
-    page: true,
+    page: false,
     labelWidth: 130,
     column: [
       {
@@ -872,14 +870,21 @@ export function gyCrud(_this) {
         prop: "index",
         width: 50,
         align: "center",
-        display: false,
+        display: false
       },
+      // {
+      //   label: "编号",
+      //   prop: "itemCode",
+      //   width: 120,
+      //   span: 6,
+      //   cell: true
+      // },
       {
         label: "项目",
         prop: "itemName",
-        width: 180,
+        width: 400,
         span: 6,
-        cell: true,
+        cell: true
       },
       {
         label: "设定",
@@ -887,22 +892,24 @@ export function gyCrud(_this) {
         width: 150,
         span: 6,
         cell: true,
+        slot: true,
         type: "number",
-        precision: 2,
+        precision: 2
         // overHidden: true,
       },
       {
         label: "实际",
         prop: "itemActual",
+        slot: true,
         width: 150,
         span: 6,
         type: "number",
         precision: 2,
-        cell: true,
+        cell: true
         // overHidden: true,
-      },
-    ],
-  }
+      }
+    ]
+  };
 }
 
 export function pfCrud(_this) {
@@ -911,10 +918,10 @@ export function pfCrud(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 150px)",
+    height: "calc(100vh - 120px)",
     refreshBtn: false,
     columnBtn: false,
-    page: true,
+    page: false,
     labelWidth: 130,
     column: [
       {
@@ -922,7 +929,7 @@ export function pfCrud(_this) {
         prop: "index",
         width: 50,
         align: "center",
-        display: false,
+        display: false
       },
       {
         label: "物料编码",
@@ -962,12 +969,12 @@ export function pfCrud(_this) {
         cell: true,
         change: () => {
           _this.$nextTick(() => {
-            _this.chooseData.waterAmount = Number((_this.form.jobAmount * _this.chooseData.waterRatio).toFixed(2))
-          })
-
+            _this.chooseData.waterAmount = Number(
+              (_this.form.jobAmount * _this.chooseData.waterRatio).toFixed(2)
+            );
+          });
         }
       },
-
 
       {
         label: "水量",
@@ -1001,10 +1008,7 @@ export function pfCrud(_this) {
         maxRows: 9999,
         span: 6,
         cell: true
-      },
-    ],
-  }
+      }
+    ]
+  };
 }
-
-
-

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-06-04 16:15:02
+ * @LastEditTime: 2021-06-11 09:41:30
  * @Description: 
 -->
 <template>
@@ -474,6 +474,7 @@ export default {
               //   "已发送布飞【 " + item.noteCode + " 】的打印请求!"
               // );
               item.isPrinted = true;
+              item.clothState = 0;
               item.printedTime = this.$getNowTime("datetime");
               updateNote(item).then((res) => {});
               if (i === this.selectData.length - 1) {

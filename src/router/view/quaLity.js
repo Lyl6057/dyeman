@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-10 13:20:44
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-25 09:00:48
+ * @LastEditTime: 2021-06-10 14:24:20
  * @Description: 
  */
 export default [
@@ -16,6 +16,11 @@ export default [
     path: "/scanWeight",
     name: "称重",
     component: resolve => require(["@/view/quaLity/scan/index"], resolve)
+  },
+  {
+    path: "/checkInWhse",
+    name: "审核入库",
+    component: resolve => require(["@/view/quaLity/checkInWhse/index"], resolve)
   },
   {
     path: "/quaLity",

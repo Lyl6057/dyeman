@@ -2,19 +2,14 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-17 11:09:43
+ * @LastEditTime: 2021-06-19 15:40:51
  * @Description:
  */
 
-import {
-  getDIC,
-  getDicT,
-  getXDicT,
-  postDicT
-} from '@/config'
+import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
 
-const unit = getDIC("sal_breadthUnit")
-let matUnit = getDIC("bas_matUnit")
+const unit = getDIC("sal_breadthUnit");
+let matUnit = getDIC("bas_matUnit");
 
 export function mainForm(_this) {
   return {
@@ -26,14 +21,13 @@ export function mainForm(_this) {
         label: "工艺编号",
         prop: "bleadyeCode",
         span: 6,
-        placeholder: " ",
-
+        placeholder: " "
       },
       {
         label: "工艺名称",
         prop: "bleadyeName",
         span: 6,
-        placeholder: " ",
+        placeholder: " "
       },
       {
         label: "工艺分类",
@@ -45,13 +39,12 @@ export function mainForm(_this) {
         dicData: getDIC("pro_techCode"),
         change: () => {
           _this.$nextTick(() => {
-            _this.query()
-          })
-
+            _this.query();
+          });
         }
-      },
-    ],
-  }
+      }
+    ]
+  };
 }
 
 export function dlgForm(_this) {
@@ -100,44 +93,41 @@ export function dlgForm(_this) {
         prop: "basMateId",
         overHidden: true,
         width: 120,
-        span: 6,
+        span: 6
       },
       {
         label: "物料名称",
         prop: "mateName",
         width: 300,
         span: 6,
-        overHidden: true,
+        overHidden: true
       },
       {
         label: "用量",
         prop: "useAmount",
         width: 140,
-        span: 6,
+        span: 6
       },
       {
         label: "度量單位",
         prop: "measureType",
         width: 120,
-        span: 6,
+        span: 6
       },
       {
         label: "运行温度",
         prop: "runTemp",
         span: 6,
-        width: 120,
+        width: 120
       },
       {
         label: "运行时间(分钟)",
         prop: "runTime",
         span: 6,
-        width: 140,
-
-      },
-
-
-    ],
-  }
+        width: 140
+      }
+    ]
+  };
 }
 
 export function mainCrud(_this) {
@@ -167,11 +157,13 @@ export function mainCrud(_this) {
         span: 6,
         disabled: false,
         sortable: true,
-        rules: [{
-          required: true,
-          message: "請輸入工艺编号",
-          trigger: "blur"
-        }],
+        rules: [
+          {
+            required: true,
+            message: "請輸入工艺编号",
+            trigger: "blur"
+          }
+        ]
       },
       {
         label: "工艺名称",
@@ -180,11 +172,13 @@ export function mainCrud(_this) {
         width: 350,
         span: 12,
         disabled: false,
-        rules: [{
-          required: true,
-          message: "請輸入工艺名称",
-          trigger: "blur"
-        }],
+        rules: [
+          {
+            required: true,
+            message: "請輸入工艺名称",
+            trigger: "blur"
+          }
+        ]
       },
       {
         label: "建议水比",
@@ -215,14 +209,14 @@ export function mainCrud(_this) {
         display: false,
         align: "center",
         // slot: true,
-        overHidden: true,
+        overHidden: true
       },
       {
         label: "工艺备注",
         prop: "remark",
         overHidden: true,
         // width: 250,
-        span: 12,
+        span: 12
       },
 
       {
@@ -236,10 +230,9 @@ export function mainCrud(_this) {
         click: () => {
           _this.$refs.input.click();
         }
-      },
-    ],
-  }
-
+      }
+    ]
+  };
 }
 
 export function dlgCrud(_this) {
@@ -345,11 +338,15 @@ export function dlgCrud(_this) {
         dicData: [
           {
             value: "KG",
-            label: "公斤"
+            label: "KG"
+          },
+          {
+            value: "g",
+            label: "g"
           },
           {
             value: "L",
-            label: "升"
+            label: "L"
           }
         ],
         placeholder: " "
@@ -372,11 +369,7 @@ export function dlgCrud(_this) {
         cell: true,
         placeholder: " ",
         type: "number"
-
-      },
-
-
-    ],
-  }
+      }
+    ]
+  };
 }
-

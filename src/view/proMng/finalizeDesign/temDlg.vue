@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-28 16:41:49
+ * @LastEditTime: 2021-06-18 16:35:34
  * @Description: 
 -->
 <template>
@@ -16,7 +16,7 @@
         <el-button type="success" @click="save">{{
           $t("public.save")
         }}</el-button>
-        <el-button type="primary" @click="checkOrder">选择织造通知号</el-button>
+        <!-- <el-button type="primary" @click="checkOrder">选择织造通知号</el-button> -->
         <el-button
           type="primary"
           @click="checkProcess"
@@ -77,7 +77,42 @@
                 @on-load="query"
                 @row-dblclick="handleRowDBLClick"
                 @current-row-change="cellClick"
-              ></avue-crud>
+              >
+                <template slot="itemSet" slot-scope="scope">
+                  <div v-if="scope.row.dataStyle === 'string'">
+                    <!-- string 类型 -->
+                    <el-input
+                      v-model="scope.row.itemSet"
+                      type="number"
+                    ></el-input>
+                  </div>
+                  <div v-else style="text-align: center">
+                    <!-- boolean 类型 -->
+                    <el-checkbox
+                      v-model="scope.row.itemSet"
+                      :true-label="1"
+                      :false-label="0"
+                    ></el-checkbox>
+                  </div>
+                </template>
+                <template slot="itemActual" slot-scope="scope">
+                  <div v-if="scope.row.dataStyle === 'string'">
+                    <!-- string 类型 -->
+                    <el-input
+                      v-model="scope.row.itemActual"
+                      type="number"
+                    ></el-input>
+                  </div>
+                  <div v-else style="text-align: center">
+                    <!-- boolean 类型 -->
+                    <el-checkbox
+                      v-model="scope.row.itemActual"
+                      :true-label="1"
+                      :false-label="0"
+                    ></el-checkbox>
+                  </div>
+                </template>
+              </avue-crud>
             </div> </view-container
         ></el-col>
       </el-row>
@@ -109,6 +144,7 @@ import {
   addFormula,
   delFormula,
   updateFormula,
+  getTechargueList,
 } from "./api";
 
 export default {
@@ -126,7 +162,7 @@ export default {
       formOp: mainCrud(this),
       form: {},
       page: {
-        pageSize: 10,
+        pageSize: 20,
         currentPage: 1,
         total: 0,
       },
@@ -148,7 +184,7 @@ export default {
       dlgLoading: false,
       dlgChoose: {},
       choiceV: false,
-      choiceTle: "选择织造通知单",
+      choiceTle: "选择染整工单",
       choiceTarget: {},
       choiceField: "",
       choiceQ: {},
@@ -164,6 +200,10 @@ export default {
       if (this.isAdd) {
         setTimeout(() => {
           this.form.startJobDate = this.$getNowTime("date");
+          this.form.proShrinkHangDry = false;
+          this.form.proShrinkSafeDry = false;
+          this.form.proShrinkThrowDry = false;
+          this.form.mustPreshrunk = false;
           // this.form.sendingSampleQuantity = undefined;
           // this.form.sampleQuantity = undefined;
           // this.form.sampleSize = undefined;
@@ -208,9 +248,12 @@ export default {
               }
             }
             this.form.startJobDate = this.form.startJobDate + " 00:00:00";
-            this.form.goodsDate
-              ? (this.form.goodsDate = this.form.goodsDate + " 00:00:00")
-              : "";
+            if (!this.form.goodsDate.indexOf(" ")) {
+              this.form.goodsDate
+                ? (this.form.goodsDate = this.form.goodsDate + " 00:00:00")
+                : "";
+            }
+
             this.form.printDate
               ? (this.form.printDate = this.form.printDate + " 00:00:00")
               : "";
@@ -236,15 +279,19 @@ export default {
               add(this.form).then((res) => {
                 if (res.data.code == 200) {
                   this.form.finishJobId = res.data.data;
-                  this.$tip.success(this.$t("public.bccg"));
-                } else {
-                  this.$tip.error(this.$t("public.bcsb"));
-                }
-                setTimeout(() => {
-                  this.wLoading = false;
                   this.$emit("refresh");
                   done();
-                }, 200);
+                  this.addPro();
+                  // this.$tip.success(this.$t("public.bccg"));
+                } else {
+                  done();
+                  this.wLoading = false;
+                  this.$tip.error(this.$t("public.bcsb"));
+                }
+                // setTimeout(() => {
+                //   this.wLoading = false;
+
+                // }, 200);
               });
             }
           } catch (error) {
@@ -260,7 +307,26 @@ export default {
         }
       });
     },
+    addPro() {
+      getTechargueList({ paramType: "afterfinish" }).then((res) => {
+        res.data.forEach((item, i) => {
+          addProcess({
+            itemName: item.paramName,
+            itemCode: item.paramKey,
+            dataStyle: item.paramValueType,
+            itemSet: item.paramDefault,
+            proFinishJobFk: this.form.finishJobId,
+          }).then((pro) => {
+            if (i == res.data.length - 1) {
+              this.wLoading = false;
+              this.$tip.success(this.$t("public.bccg"));
+            }
+          });
+        });
+      });
+    },
     query() {
+      this.crud = [];
       if (this.tabs == "選擇訂單") {
         this.func.get = getPo;
       } else if (!this.form.finishJobId) {
@@ -295,12 +361,23 @@ export default {
           })
         )
         .then((res) => {
-          this.crud = res.data.records;
+          this.crud = res.data;
+          if (this.tabs == "生产工艺") {
+            this.crud = this.crud.sort((a, b) => {
+              return Number(a.itemCode.replace(/[^0-9]/gi, "")) >
+                Number(b.itemCode.replace(/[^0-9]/gi, ""))
+                ? 1
+                : -1;
+            });
+          }
           this.crud.forEach((item, i) => {
             item.$cellEdit = true;
+            item.itemSet == null ? (item.itemSet = undefined) : "";
+            item.itemActual == null ? (item.itemActual = undefined) : "";
             item.index = i + 1;
           });
           this.page.total = res.data.total;
+
           if (this.crud.length > 0) {
             this.$refs.crud.setCurrentRow(this.crud[0]);
           }
@@ -372,11 +449,13 @@ export default {
       this.tabs = "生产工艺";
       this.crudOp = gyCrud(this);
       this.visible = true;
+      this.query();
     },
     checkFormula() {
       this.tabs = "后整配方";
       this.crudOp = pfCrud(this);
       this.visible = true;
+      this.query();
     },
     add() {
       // if (this.tabs != "用紗分組") {
@@ -538,23 +617,54 @@ export default {
         this.choiceV = false;
         return;
       }
-      this.form.colorName = val.colorName;
-      this.form.colorCode = val.colorCode;
-      this.form.custCode = val.custCode;
-      this.form.fabricName = val.fabricDesc;
-      this.form.fabricCompone = val.fiberComp;
-      this.form.weaveJobCode = val.weaveJobCode;
-      this.form.tubeDiam = val.cylinderInch;
-      this.form.needleDist = val.guage;
-      this.form.yarnLength = val.yarnLength;
-      this.form.yarnCard = val.yarnBrand;
-      this.form.yarnNumber = val.yarnBatchNo;
-      this.form.yarnCylinderNumber = val.yarnCylinder;
-      this.form.breadth = Number(val.breadth.replace(/[^0-9]/gi, ""));
-      this.form.gramWeight = val.gramWeight;
-      this.form.proWeightAfter = val.gramWeight;
-      this.form.proShrinkHorizontal = val.horizonShrink;
-      this.form.proShrinkVertical = val.verticalShrink;
+      if (this.choiceTle == "选择染整工单") {
+        this.form.vatNo = val.vatNo;
+        this.form.weaveJobCode = val.weaveJobCode;
+        this.form.custCode = val.custCode;
+        // t.formhis.startJobDate = val.xx;
+        this.form.jobAmount = val.clothWeight;
+        this.form.salPpAmount = val.poAmountKg;
+        this.form.pidCount = val.pidCount;
+        this.form.goodsDate = val.deliveDate;
+        this.form.vatCount = val.poVatCount;
+        this.form.vatIndex = val.vatIndex;
+        this.form.deliveryAddress = val.address;
+        this.form.colorCode = val.colorCode;
+        this.form.colorName = val.colorName;
+        this.form.colorCount = val.poColorCount;
+        this.form.dyeAfterBreadth = val.breadth;
+        this.form.dyeAfterWeight = val.gramWeight;
+        this.form.fabricName = val.fabName;
+        this.form.dryClothWeight = val.gramWeightAfter;
+        this.form.fabricCompone = val.fabElements;
+        this.form.proBreadthSide = val.breadthBorder;
+        this.form.proBreadthActual = val.breadthActual;
+        this.form.proWeightBefore = val.gramWeightBefor;
+        this.form.proWeightAfter = val.gramWeightAfter;
+        this.form.proShrinkSafeDry = val.flatDry;
+        this.form.proShrinkTwist = val.shrinkNear;
+        this.form.proShrinkLoop = val.shrinkRotate;
+        this.form.proShrinkHangDry = val.hangDry;
+      } else {
+        this.form.colorName = val.colorName;
+        this.form.colorCode = val.colorCode;
+        this.form.custCode = val.custCode;
+        this.form.fabricName = val.fabricDesc;
+        this.form.fabricCompone = val.fiberComp;
+        this.form.weaveJobCode = val.weaveJobCode;
+        this.form.tubeDiam = val.cylinderInch;
+        this.form.needleDist = val.guage;
+        this.form.yarnLength = val.yarnLength;
+        this.form.yarnCard = val.yarnBrand;
+        this.form.yarnNumber = val.yarnBatchNo;
+        this.form.yarnCylinderNumber = val.yarnCylinder;
+        this.form.breadth = Number(val.breadth.replace(/[^0-9]/gi, ""));
+        this.form.gramWeight = val.gramWeight;
+        this.form.proWeightAfter = val.gramWeight;
+        this.form.proShrinkHorizontal = val.horizonShrink;
+        this.form.proShrinkVertical = val.verticalShrink;
+      }
+
       this.choiceV = false;
     },
     close() {

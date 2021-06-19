@@ -585,7 +585,7 @@ export function rcpb2C(_this) {
         label: _this.$t("whseField.scdh"),
         prop: "prodNo",
         cell: false,
-        width: 140,
+        width: 200,
         hide: _this.hide === '6' || _this.hide === '4' || _this.hide === '7' ? false : true,
         placeholder: _this.$t("whseField.qxzscdh"),//"請選擇生產單號",
         click: (val) => {
@@ -633,7 +633,7 @@ export function rcpb2C(_this) {
         align: "right",
       },
       {
-        label: _this.$t("whseField.mkh"),
+        label: "载具编号",
         prop: "fabticket",
         cell: true,
         width: 140,

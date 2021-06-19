@@ -589,10 +589,6 @@ export default {
   }
 }
 
-.type {
-  margin-left: 5px;
-}
-
 .type .Title {
   width: 100%;
   height: 45px;

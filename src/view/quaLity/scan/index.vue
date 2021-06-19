@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-06-02 11:11:36
+ * @LastEditTime: 2021-06-14 09:06:30
  * @Description: 
 -->
 <template>
@@ -21,9 +21,6 @@
         }}</el-button> -->
 
       <!-- <el-button type="success" @click="print">打印</el-button> -->
-      <!-- <el-button type="warning" @click="close">{{
-          this.$t("public.close")
-        }}</el-button> -->
       <!-- </el-row> -->
       <el-row class="formBox" style="margin-top: 5px">
         <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
@@ -213,6 +210,11 @@ export default {
         this.$tip.warning("请先扫描或输入员工条码!");
         return;
       }
+      if (!this.form.storeLoadCodes) {
+        this.form.noteCode = "";
+        this.$tip.warning("请先扫描或输入载具编号!");
+        return;
+      }
       this.wLoading = true;
       for (let key in this.form) {
         if (!this.form[key]) {
@@ -222,6 +224,11 @@ export default {
       get(this.form).then((res) => {
         if (res.data.length) {
           this.crud = res.data[0];
+          if (this.crud.clothState && this.crud.clothState != "1") {
+            this.$tip.error("此胚布已入库,请重新确认!");
+            this.wLoading = false;
+            return;
+          }
           if (this.form.clothCheckers) {
             this.crud.clothChecker = this.form.clothCheckers;
           }
@@ -292,6 +299,7 @@ export default {
       this.crud.clothCheckTime = this.$getNowTime("datetime");
       this.crud.realWeight =
         Number(this.crud.clothWeight) + Number(this.crud.qcTakeOut);
+      this.crud.clothState = "1";
       update(this.crud).then((res) => {
         if (res.data.code == 200) {
           setTimeout(() => {
@@ -343,9 +351,6 @@ export default {
     },
     cellClick(val) {
       this.detail = val;
-    },
-    close() {
-      document.getElementsByClassName("el-dialog__headerbtn")[0].click();
     },
   },
   created() {},

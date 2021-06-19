@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-24 08:12:20
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-07 08:44:00
+ * @LastEditTime: 2021-06-14 09:18:39
  * @Description: 
 -->
 <template>
@@ -75,10 +75,6 @@ export default {
 </script>
 
 <style lang="stylus">
-* {
-  touch-action: pan-x;
-}
-
 .big {
   .el-table__fixed-header-wrapper {
     top: 37px !important;

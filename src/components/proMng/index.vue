@@ -68,6 +68,12 @@ import {
   getTechargue,
   techargueF,
   techargueC,
+  getClothNote,
+  clothNoteF,
+  clothNoteC,
+  getDye,
+  dyeC,
+  dyeF,
 } from "./data";
 export default {
   name: "",
@@ -81,7 +87,7 @@ export default {
   data() {
     return {
       page: {
-        pageSize: 10,
+        pageSize: 20,
         currentPage: 1,
         total: 0,
       },
@@ -207,6 +213,12 @@ export default {
   },
   created() {
     switch (this.choiceTle) {
+      case "选择胚布信息":
+        this.choiceC = clothNoteC(this);
+        this.choiceF = clothNoteF(this);
+        this.getData = getClothNote;
+        this.form.clothState = 2;
+        break;
       case "選擇漂染基礎工藝":
         this.choiceC = techargueC(this);
         this.choiceF = techargueF(this);
@@ -216,6 +228,11 @@ export default {
         this.choiceC = weaveJobC(this);
         this.choiceF = weaveJobF(this);
         this.getData = getWeaveJob;
+        break;
+      case "选择染整工单":
+        this.choiceC = dyeC(this);
+        this.choiceF = dyeF(this);
+        this.getData = getDye;
         break;
       case "选择漂染工藝":
         this.choiceC = techCodeC(this);
@@ -232,6 +249,7 @@ export default {
         this.choiceF = WorkStepF(this);
         this.getData = getWorkStep;
         break;
+
       default:
         break;
     }

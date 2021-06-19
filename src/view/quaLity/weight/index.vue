@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-06-05 08:09:55
+ * @LastEditTime: 2021-06-19 16:08:34
  * @Description: 
 -->
 <template>
@@ -21,14 +21,28 @@
           this.$t("public.query")
         }}</el-button>
         <el-button type="primary" @click="print">打印</el-button>
+        <el-button type="primary" @click="outExcel">导出</el-button>
+        <el-tooltip
+          class="item"
+          effect="dark"
+          content="同步勾选数据的储存位置,值为第一条勾选的数据"
+          placement="right-start"
+        >
+          <el-button
+            type="primary"
+            @click="syncLoc"
+            :disabled="selectList.length < 2"
+            >同步储存位置</el-button
+          >
+        </el-tooltip>
+
         <!-- <el-button type="warning" @click="close">{{
           this.$t("public.close")
         }}</el-button> -->
       </el-row>
       <el-row class="formBox">
         <avue-form ref="form" :option="formOp" v-model="form">
-          <template slot-scope="scope" slot="weaveJobCode">
-            <!-- {{ item }} -->
+          <!-- <template slot-scope="scope" slot="weaveJobCode">
             <el-select
               v-model="form.weaveJobCode"
               filterable
@@ -48,7 +62,7 @@
               >
               </el-option>
             </el-select>
-          </template>
+          </template> -->
         </avue-form>
       </el-row>
       <el-row class="crudBox">
@@ -63,6 +77,7 @@
           @current-row-change="cellClick"
           :summary-method="summaryMethod"
           @selection-change="selectionChange"
+          @sort-change="sortChange"
         >
           <template slot="menu">
             <el-button size="small" type="primary" @click="weighing"
@@ -102,8 +117,8 @@
 <script>
 import { mainForm, mainCrud } from "./data";
 import { webSocket } from "@/config/index.js";
-import qs from "qs";
 import { get, add, update, del, getJob, updateNote } from "./api";
+import qs from "qs";
 export default {
   name: "",
   components: {},
@@ -112,11 +127,13 @@ export default {
       formOp: mainForm(this),
       form: {
         weaveJobFk: "",
+        clothState: 0,
       },
       crudOp: mainCrud(this),
       crud: [],
       page: {
-        pageSize: 10,
+        pageSize: 50,
+        pageSizes: [20, 50, 100, 200, 500],
         currentPage: 1,
         total: 0,
       },
@@ -134,17 +151,24 @@ export default {
       oldData: {},
       pdfDlg: false,
       pdfUrl: "",
+      ctrKey: false,
+      checkLabel: "",
+      sort: {},
     };
   },
   watch: {},
   methods: {
     query() {
+      let { prop, order } = this.sort;
       this.wLoading = true;
-      for (let key in this.form) {
-        if (!this.form[key]) {
-          delete this.form[key];
-        }
-      }
+      // for (let key in this.form) {
+      //   if (!this.form[key]) {
+      //     delete this.form[key];
+      //   }
+      // }
+      order
+        ? (this.form.sort = prop + (order == "descending" ? ",1" : ",0"))
+        : delete this.form["sort"];
       get(
         Object.assign(this.form, {
           rows: this.page.pageSize,
@@ -172,6 +196,7 @@ export default {
     },
     handleRowDBLClick(val) {
       this.detail = val;
+      this.checkLabel = val.storeSiteCode;
       // this.print();
     },
     setCz() {
@@ -179,6 +204,7 @@ export default {
       let _this = this;
       _this.czsocket.onmessage = function (e) {
         _this.detail.clothWeight = e.data;
+        _this.detail.clothCheckTime = _this.$getNowTime("datetime");
       };
     },
     weighing() {
@@ -194,15 +220,26 @@ export default {
     },
     save() {
       this.wLoading = true;
+      let _this = this;
       this.crud.forEach((item, i) => {
+        if (item.clothWeight > 0 && item.clothState === 0) {
+          item.clothCheckTime = _this.$getNowTime("datetime");
+          item.clothState = 1;
+        }
         update(item).then((res) => {
           if (i == this.crud.length - 1) {
             setTimeout(() => {
-              this.wLoading = false;
+              this.query();
+
               this.$tip.success(this.$t("public.save"));
             }, 200);
           }
         });
+      });
+    },
+    syncLoc() {
+      this.selectList.forEach((item) => {
+        item.storeSiteCode = this.selectList[0].storeSiteCode;
       });
     },
     print() {
@@ -223,7 +260,17 @@ export default {
         return;
       }
     },
+    outExcel() {
+      this.$refs.crud.rowExcel();
+    },
+    sortChange(val) {
+      this.sort = val;
+      this.query();
+    },
     cellClick(val) {
+      if (this.ctrKey && this.checkLabel) {
+        val.storeSiteCode = this.checkLabel;
+      }
       this.detail = val;
       this.oldData.$cellEdit = false;
       // val.$cellEdit = true;
@@ -296,7 +343,20 @@ export default {
   created() {},
   mounted() {
     // this.query();
-    this.setCz();
+    this.form.clothState = 0;
+    let _this = this;
+
+    document.addEventListener("keydown", function (e) {
+      if (e.ctrlKey) {
+        _this.ctrKey = true;
+      }
+    });
+    document.addEventListener("keyup", function (e) {
+      if (e.key == "Control") {
+        _this.ctrKey = false;
+      }
+    });
+    _this.setCz();
   },
   beforeDestroy() {},
 };

@@ -2,18 +2,18 @@
  * @Author: Lyl
  * @Date: 2021-04-23 08:32:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-27 14:37:33
+ * @LastEditTime: 2021-06-16 15:22:48
  * @Description: 
 -->
 <template>
   <div
-    id="prowovenOutput"
+    id="prowovenrealWeight"
     v-loading="loading"
     :element-loading-text="$t('public.loading')"
   >
     <view-container title="生产进度统计">
       <div class="btnList">
-        <el-button type="success" @click="save">{{
+        <!-- <el-button type="success" @click="save">{{
           $t("public.save")
         }}</el-button>
         <el-button
@@ -21,7 +21,7 @@
           @click="del"
           :disabled="Object.keys(chooseData).length == 0"
           >{{ $t("public.del") }}</el-button
-        >
+        > -->
         <el-button type="primary" @click="query">{{
           $t("public.query")
         }}</el-button>
@@ -32,13 +32,15 @@
       <div class="crudBox">
         <el-row>
           <el-col :span="24">
+            <!--       @on-load="query" -->
             <avue-crud
               ref="crud"
               :option="crudOp"
               :data="crud"
               @current-row-change="cellClick"
               :page.sync="page"
-              @on-load="query"
+              @size-change="sizeChange"
+              @current-change="currentChange"
             ></avue-crud
           ></el-col>
           <!-- <el-col :span="10">
@@ -55,7 +57,7 @@
     </view-container>
     <el-tabs v-model="tab" type="border-card">
       <el-tab-pane label="产量统计" name="zzt" class="graphical1">
-        <v-gantt-chart
+        <!-- <v-gantt-chart
           :startTime="startTime"
           :endTime="endTime"
           :datas="datas"
@@ -87,23 +89,19 @@
               >
                 <div slot="reference">{{ data.shedule + "%" }}</div>
               </el-popover>
-
-              <!-- <span class="ganttLabel"
-                >订单数量:{{ data.num }} 完成 {{ data.fnum }}</span -->
-              <!-- > -->
+              <span class="ganttLabel"
+                >订单数量:{{ data.num }} 完成 {{ data.fnum }}</span
+               >
             </div>
           </template>
           <template v-slot:left="{ data }">
-            <!-- <div v-for="items of item" :key="items.index" style="color: #000"> -->
             <div>{{ data.name }}</div>
-
-            <!-- </div> -->
           </template>
           <template v-slot:title>
-            <!-- 你的表头组件 -->
             <div style="displa: flex">订单-颜色</div>
           </template>
-        </v-gantt-chart>
+        </v-gantt-chart> -->
+        <div id="echartMain" style="width: 100%; height: 320px"></div>
       </el-tab-pane>
     </el-tabs>
     <el-dialog
@@ -125,7 +123,7 @@ import { timeConversion } from "@/config/util";
 import { mainForm, mainCrud, mainCrud1 } from "./data";
 import { get, add, del, update, getPoDtla, getPoColor } from "./api";
 export default {
-  name: "prowovenOutput",
+  name: "prowovenrealWeight",
   components: {},
   data() {
     return {
@@ -137,7 +135,7 @@ export default {
       crud1: [],
       loading: false,
       page: {
-        pageSize: 20,
+        pageSize: 10,
         currentPage: 1,
         total: 0,
       },
@@ -148,11 +146,45 @@ export default {
       startTime: "2021-04-23 00:00:00", //时间轴开始时间
       endTime: "2021-05-26 00:00:00", //时间结束时间
       datas: [],
+      resData: [],
     };
   },
   watch: {},
   methods: {
     query() {
+      this.loading = true;
+      get(this.form).then((res) => {
+        this.resData = res.data;
+        this.resData.forEach((item, index) => {
+          item.index = index + 1;
+          // item.realWeight = 55;
+          // item.clothWeight = 100;
+        });
+        this.page.total = this.resData.length;
+        this.crud = this.resData.slice(0, this.page.pageSize);
+        this.setEchats();
+        setTimeout(() => {
+          this.loading = false;
+        }, 200);
+      });
+    },
+    sizeChange(val) {
+      this.page.pageSize = val;
+      this.crud = this.resData.slice(
+        this.page.currentPage > 1 ? (this.page.currentPage - 1) * val : 0,
+        this.page.currentPage * val
+      );
+      this.setEchats();
+    },
+    currentChange(val) {
+      this.page.currentPage = val;
+      this.crud = this.resData.slice(
+        val > 1 ? (val - 1) * this.page.pageSize : 0,
+        val * this.page.pageSize
+      );
+      this.setEchats();
+    },
+    query1() {
       this.loading = true;
       this.crudOp.column[4].hide = false;
       for (let key in this.form) {
@@ -185,7 +217,7 @@ export default {
             item.fabName = item.salPoDtlaFk;
             item.colorName = item.salPoColorFk;
             item.colorQty = item.salPoColorFk;
-            item.realOutPut = item.realOutPut.toFixed(2);
+            item.clothWeight = item.clothWeight.toFixed(2);
             item.$cellEdit = true;
             item.index = i + 1;
           });
@@ -220,6 +252,158 @@ export default {
         });
     },
     setEchats() {
+      let xData = [],
+        weight = [],
+        realWeight = [],
+        qc = [];
+      this.crud.forEach((item) => {
+        xData.push(item.weaveJobCode);
+        weight.push(item.realWeight);
+        realWeight.push(item.clothWeight);
+        qc.push(item.qcTakeOut);
+      });
+      var chartDom = document.getElementById("echartMain");
+      var myChart = this.$echarts.init(chartDom);
+      var option;
+
+      option = {
+        grid: {
+          //直角坐标系内绘图网格
+          show: true, //是否显示直角坐标系网格。[ default: false ]
+          left: "4%", //grid 组件离容器左侧的距离。
+          right: "10px",
+          // borderColor: "#c45455", //网格的边框颜色
+          bottom: "15%", //
+          top: "10%",
+        },
+        tooltip: {
+          trigger: "axis",
+          axisPointer: {
+            type: "cross",
+            crossStyle: {
+              color: "#999",
+            },
+          },
+        },
+        toolbox: {
+          feature: {
+            dataView: { show: true, readOnly: false },
+            magicType: { show: true, type: ["line", "bar"] },
+            restore: { show: true },
+            saveAsImage: { show: true },
+          },
+        },
+        legend: {
+          data: ["净重", "QC扣减数量", "毛重"],
+          textStyle: {
+            fontSize: 16,
+          },
+        },
+        xAxis: [
+          {
+            type: "category",
+            data: xData,
+            axisPointer: {
+              type: "shadow",
+            },
+            axisLabel: {
+              formatter: function (params) {
+                var newParamsName = ""; // 最终拼接成的字符串
+                var paramsNameNumber = params.length; // 实际标签的个数
+                var provideNumber = 10; // 每行能显示的字的个数
+                var rowNumber = Math.ceil(paramsNameNumber / provideNumber); // 换行的话，需要显示几行，向上取整
+                /**
+                 * 判断标签的个数是否大于规定的个数， 如果大于，则进行换行处理 如果不大于，即等于或小于，就返回原标签
+                 */
+                // 条件等同于rowNumber>1
+                if (paramsNameNumber > provideNumber) {
+                  /** 循环每一行,p表示行 */
+                  for (var p = 0; p < rowNumber; p++) {
+                    var tempStr = ""; // 表示每一次截取的字符串
+                    var start = p * provideNumber; // 开始截取的位置
+                    var end = start + provideNumber; // 结束截取的位置
+                    // 此处特殊处理最后一行的索引值
+                    if (p == rowNumber - 1) {
+                      // 最后一次不换行
+                      tempStr = params.substring(start, paramsNameNumber);
+                    } else {
+                      // 每一次拼接字符串并换行
+                      tempStr = params.substring(start, end) + "\n";
+                    }
+                    newParamsName += tempStr; // 最终拼成的字符串
+                  }
+                } else {
+                  // 将旧标签的值赋给新标签
+                  newParamsName = params;
+                }
+                //将最终的字符串返回
+                return newParamsName;
+              },
+              // fontSize: 16,
+            },
+          },
+        ],
+        yAxis: [
+          {
+            type: "value",
+            name: "净重",
+            // min: 0,
+            // max: 250,
+            // interval: 50,
+            axisLabel: {
+              // formatter: "{value} ml",
+              fontSize: 16,
+            },
+          },
+        ],
+        series: [
+          {
+            name: "净重",
+            type: "bar",
+            data: weight,
+            stack: "净重",
+          },
+          {
+            name: "毛重",
+            type: "bar",
+            data: realWeight,
+          },
+          {
+            name: "QC扣减数量",
+            type: "bar",
+            stack: "净重",
+            emphasis: {
+              focus: "series",
+            },
+            data: qc,
+          },
+        ],
+        dataZoom: [
+          {
+            show: true,
+            height: 10,
+            xAxisIndex: [0],
+            bottom: 0,
+            showDetail: false,
+            showDataShadow: false,
+            borderColor: "transparent",
+            textStyle: {
+              fontSize: 0,
+            },
+            endValue: 9, //从0开始的相当于5个
+            backgroundColor: "rgba(0,0,0,0)",
+            borderWidth: 0,
+            handleSize: "0%",
+            handleStyle: {
+              color: "#d3dee5",
+            },
+          },
+        ],
+      };
+
+      option && myChart.setOption(option);
+    },
+    setEchats1() {
       this.endTime =
         timeConversion(
           new Date(this.endTime).valueOf() + 1000 * 24 * 60 * 60
@@ -234,9 +418,9 @@ export default {
         this.datas.push({
           name: item.poNo + "-" + item.$colorName,
           num: item.$colorQty,
-          fnum: item.realOutPut,
+          fnum: item.clothWeight,
           shedule: (
-            (Number(item.realOutPut) / Number(item.$colorQty)) *
+            (Number(item.clothWeight) / Number(item.$colorQty)) *
             100
           ).toFixed(2),
           gtArray: [
@@ -272,7 +456,7 @@ export default {
     },
     save() {
       for (let i = 0; i < this.crud.length; i++) {
-        if (!this.crud[i].gatherDate || !this.crud[i].output) {
+        if (!this.crud[i].gatherDate || !this.crud[i].realWeight) {
           this.$tip.error("日期和产量不能为空!");
           return;
         }
@@ -310,7 +494,7 @@ export default {
   width: 230px !important;
 }
 
-#prowovenOutput {
+#prowovenrealWeight {
   .gantBox {
     color: #5A565B;
     // background-color: rgb(191, 242, 254);

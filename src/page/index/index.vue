@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-10 14:20:44
  * @LastEditors: Lyl
- * @LastEditTime: 2021-06-03 08:11:03
+ * @LastEditTime: 2021-06-08 18:33:57
  * @Description: 
 -->
 <template>
@@ -20,9 +20,9 @@
           </div>
           <div
             :style="{ marginLeft: isActive ? '50px' : '190px' }"
-            style="margin-top: -1px"
+            style="margin-top: -1px; overflow: hidden"
           >
-            <router-view />
+            <router-view key="default" />
           </div>
         </el-main>
         <el-header></el-header>

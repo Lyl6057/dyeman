@@ -2,13 +2,13 @@
  * @Author: Lyl
  * @Date: 2021-04-23 09:20:20
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-23 14:29:43
+ * @LastEditTime: 2021-06-07 15:21:21
  * @Description:
  */
 import axios from 'axios'
 export function get(params) {
   return axios({
-    url: '/api/proWeaveJobDayOutput/page',
+    url: '/api/proWeaveJob/reSummary',
     method: 'get',
     params: params
   })

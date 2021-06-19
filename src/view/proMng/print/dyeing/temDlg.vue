@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-06-01 10:47:48
+ * @LastEditTime: 2021-06-19 14:36:30
  * @Description: 
 -->
 <template>
@@ -461,9 +461,19 @@ export default {
     unitCtr(val) {
       this.$nextTick(() => {
         if (val.label == "g" && val.row.formulaUnit === "KG") {
-          val.row.useAmount = Number(val.row.useAmount) * 0.001;
+          // val.row.useAmount = Number(val.row.useAmount) * 0.001;
+          val.row.useAmount = Number(
+            Number(
+              val.row.formulaAmount * this.detail.clothWeight * 0.01
+            ).toFixed(2)
+          );
         } else if (val.label == "KG" && val.row.formulaUnit === "g") {
-          val.row.useAmount = Number(val.row.useAmount) * 1000;
+          // val.row.useAmount = Number(val.row.useAmount) * 1000;
+          val.row.useAmount = Number(
+            Number(
+              val.row.formulaAmount * this.detail.clothWeight * 0.01 * 1000
+            ).toFixed(4)
+          );
         }
       });
     },

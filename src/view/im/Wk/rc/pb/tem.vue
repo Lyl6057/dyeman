@@ -23,7 +23,7 @@
         <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
       </div>
       <el-row class="crudBox">
-        <el-col :span="hide != '6' && hide != '7' ? 12 : 24">
+        <el-col :span="hide != '7' ? 12 : 24">
           <view-container :title="datas.type.split('_')[0] + $t('iaoMng.rcmx')">
             <div class="btnList">
               <el-button type="primary" @click="add">{{
@@ -45,7 +45,7 @@
               ></avue-crud>
             </div> </view-container
         ></el-col>
-        <el-col :span="12" v-if="hide != '6' && hide != '7'">
+        <el-col :span="12" v-if="hide != '7'">
           <view-container
             :title="datas.type.split('_')[0] + $t('iaoMng.rcphzl')"
           >
@@ -199,12 +199,15 @@ export default {
           item.index = index + 1;
           item.weiUnit = item.weightUnit;
           item.custId = this.detail.custName;
-          setTimeout(() => {
-            this.$refs.dlgcrud.setCurrentRow(this.mx[0]);
-            this.mxOp.showSummary = true;
-            this.loading = false;
-          }, 200);
         });
+        setTimeout(() => {
+          if (this.mx.length) {
+            this.$refs.dlgcrud.setCurrentRow(this.mx[0]);
+          }
+
+          this.mxOp.showSummary = true;
+          this.loading = false;
+        }, 200);
       });
     },
     getPh() {
@@ -533,10 +536,10 @@ export default {
               this.$tip.error(this.$t("iaoMng.saveTle6"));
               return;
             }
-            if (!this.mx[i].loc[j].batchNo) {
-              this.$tip.error(this.$t("iaoMng.saveTle4"));
-              return;
-            }
+            // if (!this.mx[i].loc[j].batchNo) {
+            //   this.$tip.error(this.$t("iaoMng.saveTle4"));
+            //   return;
+            // }
           }
         }
         if (this.hide === "6" && !this.mx[i].countingNo) {
@@ -606,6 +609,7 @@ export default {
         addPb(this.form).then((Res) => {
           baseCodeSupply({ code: "whse_in" }).then((res) => {});
           this.form.whseCalicoinoid = Res.data.data;
+          this.form.sysCreatedby = this.$store.state.userOid;
           if (this.mx.length === 0) {
             this.loading = false;
             this.$tip.success(this.$t("public.bccg"));
@@ -806,9 +810,13 @@ export default {
     },
   },
   created() {},
+  updated() {
+    this.$nextTick(() => {
+      this.$refs["dlgcrud"].doLayout();
+    });
+  },
   mounted() {
     this.form = this.detail;
-    this.form.sysCreatedby = this.$store.state.userOid;
     this.getDetail();
   },
   beforeDestroy() {},

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-04-01 13:39:35
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-01 15:28:17
+ * @LastEditTime: 2021-06-09 15:10:07
  * @Description:
  */
 
@@ -58,7 +58,27 @@ export function whseMng(_this) {
           menuName: "1.库存期初定义", //'1.仓位管理'
           index: "/ityBasic"
         },
+        // {
+        //   menuName: "2.仓库载具管理", //'1.仓位管理'
+        //   index: "/whseVehicle"
+        // },
       ]
+    },
+    {
+      menuName: "四.仓库载具管理", // '仓库管理',
+      index: "whseVehicle",
+      icon: "el-icon-s-order",
+      name: "whseVehicle",
+      // children: [
+      //   {
+      //     menuName: "1.库存期初定义", //'1.仓位管理'
+      //     index: "/ityBasic"
+      //   },
+      //   {
+      //     menuName: "2.仓库载具管理", //'1.仓位管理'
+      //     index: "/whseVehicle"
+      //   },
+      // ]
     }
   ]
 }

@@ -5328,19 +5328,19 @@ export const locF = {
   column: [
 
     {
-      label: i18n.t("whseField.ckdh"),
+      label: i18n.t("whseMng.ckdh"),
       prop: "warehouseId",
       span: 6,
       placeholder: " ",
     },
     {
-      label: i18n.t("whseField.ckmc"),
+      label: i18n.t("whseMng.ckmc"),
       prop: "warehouseName",
       span: 6,
       placeholder: " ",
     },
     {
-      label: i18n.t("whseField.qwm"),
+      label: i18n.t("whseMng.qwm"),
       prop: "areaCode",
       span: 6,
       placeholder: " ",
@@ -5366,13 +5366,13 @@ export const locC = {
       align: "center",
     },
     {
-      label: i18n.t("whseField.ckdh"),
+      label: i18n.t("whseMng.ckdh"),
       prop: "warehouseId",
       width: 140,
 
     },
     {
-      label: i18n.t("whseField.ckmc"),
+      label: i18n.t("whseMng.ckmc"),
       prop: "warehouseName",
       width: 140,
       type: "select",
@@ -5383,14 +5383,14 @@ export const locC = {
       dicData: getDicT("whseWarehouse", "warehouseName", "warehouseId")
     },
     {
-      label: i18n.t("whseField.qwm"),
+      label: i18n.t("whseMng.qwm"),
       prop: "areaCode",
       width: 100,
       type: "select",
       dicData: getDicT("whseShelves",)
     },
     {
-      label: i18n.t("whseField.hwm"),
+      label: i18n.t("whseMng.hwm"),
       prop: "locationCode",
       width: 160,
     },

@@ -2,11 +2,11 @@
  * @Author: Lyl
  * @Date: 2021-06-02 15:42:19
  * @LastEditors: Lyl
- * @LastEditTime: 2021-06-02 18:40:16
+ * @LastEditTime: 2021-06-14 16:44:17
  * @Description: 
 -->
 <template>
-  <fragment id="menu">
+  <div id="menu">
     <template v-for="item in menuData">
       <el-card class="card" :key="item.index" v-if="item.children">
         <el-submenu :index="item.index">
@@ -28,7 +28,7 @@
         </el-menu-item>
       </el-card>
     </template>
-  </fragment>
+  </div>
 </template>
 <script>
 export default {
