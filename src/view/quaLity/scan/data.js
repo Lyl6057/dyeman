@@ -6,13 +6,8 @@
  * @Description:
  */
 
-import {
-  getDIC,
-  getDicT,
-  getXDicT,
-  postDicT
-} from '@/config'
-let matUnit = getDIC("bas_matUnit")
+import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
+let matUnit = getDIC("bas_matUnit");
 export function mainForm(_this) {
   return {
     submitBtn: false,
@@ -25,8 +20,8 @@ export function mainForm(_this) {
         span: 8,
         placeholder: "请扫描布票号条码",
         click: () => {
-          _this.type = "bf"
-        },
+          _this.type = "bf";
+        }
       },
       {
         label: "重量",
@@ -43,7 +38,7 @@ export function mainForm(_this) {
         span: 8,
         placeholder: "请扫描员工条码",
         click: () => {
-          _this.type = "yg"
+          _this.type = "yg";
         }
       },
       {
@@ -52,7 +47,7 @@ export function mainForm(_this) {
         span: 8,
         placeholder: "请输入载具编号",
         click: () => {
-          _this.type = "zj"
+          _this.type = "zj";
         }
       },
       {
@@ -70,7 +65,7 @@ export function mainForm(_this) {
         span: 8,
         placeholder: "请扫描值机工号",
         click: () => {
-          _this.type = "yg"
+          _this.type = "yg";
         }
       },
       {
@@ -88,11 +83,11 @@ export function mainForm(_this) {
         defaultFirstOption: true,
         dicData: getXDicT("whseLocation", "locationCode", "locationCode"),
         click: () => {
-          _this.type = "yg"
+          _this.type = "yg";
         }
-      },
-    ],
-  }
+      }
+    ]
+  };
 }
 export function mainCrud(_this) {
   return {
@@ -129,10 +124,10 @@ export function mainCrud(_this) {
         label: "布票編號",
         prop: "noteCode",
         width: 170,
-        disabled: true, placeholder: " ",
+        disabled: true,
+        placeholder: " ",
         span: 6,
-        overHidden: true,
-
+        overHidden: true
       },
       // {
       //   label: "客戶",
@@ -191,11 +186,13 @@ export function mainCrud(_this) {
         width: 70,
         hide: false,
         span: 6,
-        rules: [{
-          required: true,
-          message: "请输入机号",
-          trigger: "blur"
-        }],
+        rules: [
+          {
+            required: true,
+            message: "请输入机号",
+            trigger: "blur"
+          }
+        ],
         disabled: true
       },
       // {
@@ -216,7 +213,7 @@ export function mainCrud(_this) {
         prop: "eachNumber",
         width: 60,
         align: "right",
-        span: 6,
+        span: 6
       },
 
       // {
@@ -269,8 +266,8 @@ export function mainCrud(_this) {
         label: "打印时间",
         prop: "printedTime",
         type: "date",
-        format: "yyyy-MM-dd hh:MM:ss",
-        valueFormat: "yyyy-MM-dd hh:MM:ss",
+        format: "yyyy-MM-dd HH:mm:ss",
+        valueFormat: "yyyy-MM-dd HH:mm:ss",
         span: 6,
         align: "center",
         width: 180
@@ -291,8 +288,7 @@ export function mainCrud(_this) {
         placeholder: " ",
         // width: 200,
         cell: true
-      },
-    ],
-  }
-
+      }
+    ]
+  };
 }

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-06-11 09:41:30
+ * @LastEditTime: 2021-06-23 09:29:07
  * @Description: 
 -->
 <template>
@@ -14,17 +14,17 @@
     >
       <div class="btnList">
         <el-button type="success" :disabled="crud.length == 0" @click="save"
-          >保存布飞</el-button
+          >保存</el-button
         >
-        <el-button type="primary" @click="add">生成布飞</el-button>
-        <el-button type="primary" @click="readd">重新布飞</el-button>
+        <el-button type="primary" @click="add">生成</el-button>
+        <!-- <el-button type="primary" @click="readd">重新布飞</el-button>  -->
+        <el-button type="danger" @click="del">删除</el-button>
         <el-button
           type="success"
           @click="print"
           :disabled="selectData.length == 0"
           >打印</el-button
         >
-        <!-- <el-button type="primary" @click="setPreview">预览</el-button> -->
 
         <el-button type="warning" @click="close">{{
           this.$t("public.close")
@@ -42,6 +42,25 @@
               <el-radio label="2">已打印</el-radio>
               <el-radio label="3">全部</el-radio>
             </el-radio-group>
+            <span style="margin-left: 20px; font-size: 18px"> 机号: </span>
+
+            <el-select
+              v-model="jh"
+              placeholder="请选择机号"
+              filterable
+              allow-create
+              default-first-option
+              clearable
+              @change="getBf"
+            >
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
           </div>
           <avue-crud
             ref="crud"
@@ -78,8 +97,6 @@ import {
   updateNote,
   getGroup,
 } from "./api";
-import { getDIC, getDicT, getXDicT, postDicT, preFixInt } from "@/config";
-import { baseCodeSupplyEx, baseCodeSupply } from "@/api/index";
 import preview from "./preview";
 export default {
   name: "",
@@ -128,6 +145,8 @@ export default {
       yarnList: [],
       listType: "3",
       allData: [],
+      jh: "",
+      options: [],
     };
   },
   watch: {},
@@ -136,6 +155,14 @@ export default {
       // getBf().then((res) => {});
       this.wLoading = true;
       this.form = this.detail;
+      this.jh = this.form.mathineCode;
+      if (this.jh) {
+        this.options.push({
+          value: this.jh,
+          label: this.jh,
+        });
+      }
+
       this.form.ps = (Number(this.form.amount) / Number(this.form.pz)).toFixed(
         0
       );
@@ -418,6 +445,20 @@ export default {
         }
       });
     },
+    del() {
+      this.$tip.cofirm("是否确定删除选中的布飞信息?").then(() => {
+        this.wLoading = true;
+        this.selectData.forEach((item, i) => {
+          delNote(item.noteId).then((res) => {
+            if (i == this.selectData.length - 1) {
+              this.getBf();
+              this.wLoading = false;
+              this.$tip.success("删除成功!");
+            }
+          });
+        });
+      });
+    },
     getBf() {
       this.wLoading = true;
       let query = {};
@@ -427,6 +468,11 @@ export default {
         query.isPrinted = true;
       } else {
         delete query["isPrinted"];
+      }
+      if (this.jh) {
+        query.machineCode = this.jh;
+      } else {
+        delete query["machineCode"];
       }
       getNote(
         Object.assign(query, {
@@ -440,12 +486,14 @@ export default {
         this.crud.forEach((item) => {
           item.$cellEdit = true;
         });
-
         this.crud.sort((a, b) => {
           return a.eachNumber - b.eachNumber;
         });
         if (this.listType == "3") {
           this.allData = res.data.records;
+          if (this.options.length <= 1) {
+            this.group(this.allData, "machineCode");
+          }
           if (this.allData.length > 0) {
             this.form.zjgh = this.allData[0].workNo;
             this.form.ps = this.allData.length;
@@ -473,10 +521,13 @@ export default {
               // this.$tip.success(
               //   "已发送布飞【 " + item.noteCode + " 】的打印请求!"
               // );
-              item.isPrinted = true;
-              item.clothState = 0;
-              item.printedTime = this.$getNowTime("datetime");
-              updateNote(item).then((res) => {});
+              if (!item.isPrinted) {
+                item.isPrinted = true;
+                item.clothState = 0;
+                item.printedTime = this.$getNowTime("datetime");
+                updateNote(item).then((res) => {});
+              }
+
               if (i === this.selectData.length - 1) {
                 setTimeout(() => {
                   // this.printCtr = true;
@@ -531,6 +582,34 @@ export default {
       mi = mi < 10 ? `0${mi}` : mi;
       s = s < 10 ? `0${s}` : s;
       return `${y}-${m}-${d}`;
+    },
+    group(arr, type) {
+      var map = {},
+        dest = [];
+      for (var i = 0; i < arr.length; i++) {
+        var ai = arr[i];
+        if (!map[ai[type]]) {
+          dest.push({
+            value: ai[type],
+            label: ai[type],
+            // data: [ai],
+          });
+          map[ai[type]] = ai;
+        } else {
+          for (var j = 0; j < dest.length; j++) {
+            var dj = dest[j];
+            if (dj[type] == ai[type]) {
+              // dj.data.push(ai);
+              break;
+            }
+          }
+        }
+      }
+      dest.sort((a, b) => {
+        return a.value > b.value ? 1 : -1;
+      });
+      this.options = dest;
+      // return dest;
     },
     setCz() {
       webSocket.setPrint(this);

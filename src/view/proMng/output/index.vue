@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-04-23 08:32:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-26 09:21:58
+ * @LastEditTime: 2021-06-27 19:12:50
  * @Description: 
 -->
 <template>
@@ -12,7 +12,7 @@
     :element-loading-text="$t('public.loading')"
   >
     <view-container title="生产日产量">
-      <div class="btnList">
+      <!-- <div class="btnList">
         <el-button type="success" @click="save">{{
           $t("public.save")
         }}</el-button>
@@ -22,12 +22,18 @@
           :disabled="Object.keys(chooseData).length == 0"
           >{{ $t("public.del") }}</el-button
         >
-        <el-button type="primary" @click="query">{{
-          $t("public.query")
-        }}</el-button>
-      </div>
-      <div class="formBox">
-        <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
+      </div> -->
+      <div class="btnList" style="margin-top: 10px !important">
+        <el-row>
+          <el-col :span="20">
+            <avue-form ref="form" :option="formOp" v-model="form"></avue-form
+          ></el-col>
+          <el-col :span="4">
+            <el-button type="primary" @click="query" style="margin-top: 4px">{{
+              $t("public.query")
+            }}</el-button></el-col
+          >
+        </el-row>
       </div>
       <div class="crudBox">
         <el-row>
@@ -35,7 +41,7 @@
             <avue-crud
               ref="crud"
               :option="crudOp"
-              :data="crud"
+              :data="cruds"
               @current-row-change="cellClick"
               :page.sync="page"
               @on-load="query"
@@ -54,11 +60,8 @@
       </div>
     </view-container>
     <el-tabs v-model="tab" type="border-card" class="graphical">
-      <el-tab-pane label="柱状图" name="zzt">
-        <div id="zzt"></div>
-      </el-tab-pane>
-      <el-tab-pane label="趋势图" name="qst">
-        <div id="qst" style="height: 325px; width: 87.5vw"></div>
+      <el-tab-pane label="日产量柱状图" name="zzt">
+        <div id="zzt" v-if="echatsV"></div>
       </el-tab-pane>
     </el-tabs>
     <el-dialog
@@ -78,6 +81,7 @@
 <script>
 import { mainForm, mainCrud, mainCrud1 } from "./data";
 import { get, add, del, update, getPoDtla, getPoColor } from "./api";
+import { getYearAndMonthAndDay, getDay } from "@/config/util";
 import poNo from "./poNo";
 export default {
   name: "prowovenOutput",
@@ -91,7 +95,7 @@ export default {
       crudOp: mainCrud(this),
       crud: [],
       crudOp1: mainCrud1(this),
-      crud1: [],
+      cruds: [],
       loading: false,
       page: {
         pageSize: 20,
@@ -102,255 +106,280 @@ export default {
       oldData: {},
       dialogVisible: false,
       tab: "zzt",
+      echatsV: true,
     };
   },
   watch: {},
   methods: {
     query() {
+      if (!this.form.date.length) {
+        this.$tip.warning("请选择起始日期!");
+        return;
+      }
       this.loading = true;
-      this.crudOp.column[4].hide = false;
-      for (let key in this.form) {
-        if (!this.form[key]) {
-          delete this.form[key];
+      let date = [];
+      let edate = [];
+      this.cruds = [];
+      this.crud = [];
+      this.crudOp = mainCrud(this);
+      getYearAndMonthAndDay(this.form.date[0], this.form.date[1]).forEach(
+        (item, i) => {
+          edate.push(item.ym.split("-")[1] + "/" + item.d);
+          date.push(item.ym + "-" + item.d);
+        }
+      );
+      let getArr = (item, i) => {
+        return new Promise((resolve, reject) => {
+          get({ date: item, weaveJobCode: this.form.weaveJobCode })
+            .then((res) => {
+              // this.crud = this.crud.concat(res.data);
+              res.data.forEach((items) => {
+                items.date = item;
+              });
+              resolve(res.data);
+            })
+            .catch((err) => {
+              reject(err);
+            });
+        });
+      };
+      let promiseArr = date.map((item, i) => {
+        return getArr(item, i);
+      });
+      let tleList = [];
+      Promise.all(promiseArr).then((res) => {
+        res.forEach((item) => {
+          let data = [];
+          item.forEach((list) => {
+            if (list.realWeight) {
+              data.push(list);
+            }
+          });
+          this.crud = this.crud.concat(data);
+        });
+        // console.log(this.crud);
+        this.crud.forEach((item, i) => {
+          item.index = i + 1;
+          if (tleList.indexOf(item.weaveJobCode) == -1) {
+            tleList.push(item.weaveJobCode);
+          }
+        });
+        tleList = tleList.sort((a, b) => {
+          return a.substring(a.length - 6) - b.substring(b.length - 6);
+        });
+        this.$nextTick(() => {
+          this.setEchat(tleList, edate, date);
+        });
+      });
+    },
+    setEchat(tleList, edate, date) {
+      var xAxisData = [];
+      var customData = [];
+      let legendData = edate;
+      var dataList = [];
+      var encodeY = [];
+      edate.forEach((item, i) => {
+        this.crudOp.column.push({
+          prop: item,
+          label: item,
+          width: 80,
+          align: "right",
+        });
+        this.crudOp.sumColumnList.push({
+          name: item,
+          type: "sum",
+          label: " ",
+        });
+        if (i == edate.length - 1) {
+          this.crudOp.column.push({
+            prop: "sum",
+            label: "合计",
+            width: 90,
+            align: "right",
+            type: "number",
+            precision: 1,
+            fixed: true,
+          });
+        }
+        encodeY.push(1 + i);
+      });
+
+      legendData.unshift("trend");
+
+      tleList.forEach((item, i) => {
+        this.cruds.push({
+          index: i + 1,
+          weaveJobCode: item,
+        });
+        dataList.push([]);
+        customData.push([]);
+        xAxisData.push(item);
+        customData[i].unshift(i);
+      });
+      for (var i = 0; i < tleList.length; i++) {
+        for (var j = 0; j < date.length; j++) {
+          for (let k = 0; k < this.crud.length; k++) {
+            if (
+              this.crud[k].weaveJobCode == tleList[i] &&
+              this.crud[k].date == date[j] &&
+              this.crud[k].realWeight != null
+            ) {
+              dataList[i].push(this.crud[k].realWeight);
+              customData[i].push(this.crud[k].realWeight);
+              this.cruds[i][edate[j + 1]] = this.crud[k].realWeight;
+              break;
+            } else if (k == this.crud.length - 1) {
+              dataList[i].push(0);
+              customData[i].push(0);
+              this.cruds[i][edate[j + 1]] = 0;
+            }
+          }
         }
       }
-      this.form.gatherDate
-        ? (this.form.gatherDate = this.form.gatherDate + " 00:00:00")
-        : "";
-      get(
-        Object.assign(this.form, {
-          rows: this.page.pageSize,
-          start: this.page.currentPage,
-        })
-      )
-        .then((res) => {
-          let resData = res.data;
-          this.crud = resData.records;
-          this.crud.sort((a, b) => {
-            return Date.parse(a.gatherDate) - Date.parse(b.gatherDate);
-          });
-          this.page.total = resData.total;
-          this.crud.forEach((item, i) => {
-            item.custId = item.salPoFk;
-            item.custContNo = item.salPoFk;
-            item.poType = item.salPoFk;
-            item.fabId = item.salPoDtlaFk;
-            item.fabName = item.salPoDtlaFk;
-            item.colorName = item.salPoColorFk;
-            item.$cellEdit = true;
-            item.index = i + 1;
-          });
-          setTimeout(() => {
-            this.$nextTick(() => {
-              this.crud.forEach((item, i) => {
-                // item.custName = item.$custId;
-                this.$set(item, "custName", item.$custId);
-                this.$set(item, "poType1", item.$poType);
-                this.crudOp.column[4].hide = true;
-              });
-
-              this.setEchats();
-              this.loading = false;
-            });
-          }, 200);
-        })
-        .catch((e) => {
-          console.log(e);
-          this.loading = false;
-        });
-    },
-    setEchats() {
-      let data = this.$unique(this.crud, "gatherDate");
-      let dataList = [];
-      let test = [];
-      data.forEach((item, i) => {
-        dataList.push(item.gatherDate.split(" ")[0]);
-        test.push(item.gatherDate);
+      this.cruds.forEach((item, i) => {
+        item.sum = 0;
+        for (let key in item) {
+          if (key != "weaveJobCode" && key != "sum" && key != "index") {
+            item.sum = Number((item.sum + Number(item[key])).toFixed(1));
+          }
+        }
       });
-      let list = this.$unique(this.crud, "colorName");
-      let relist = [],
-        series = [],
-        lineData = [];
+      let data = [];
+      date.forEach((item, j) => {
+        data.push([]);
+        dataList.forEach((item, i) => {
+          data[j].push(item[j]);
+        });
+      });
+      dataList = data;
+      function renderItem(params, api) {
+        var xValue = api.value(0);
+        var currentSeriesIndices = api.currentSeriesIndices();
+        var barLayout = api.barLayout({
+          barGap: "30%",
+          barCategoryGap: "20%",
+          count: currentSeriesIndices.length - 1,
+        });
 
-      list.forEach((item, i) => {
-        // this.crud.forEach((items,j) =>{
-        //   if (item.$colorName == items.$colorName) { // 颜色相同
-        //     relist
-        //   }
-        // })
-        relist.push(item.$colorName);
-        series.push({
-          name: item.$colorName,
-          type: "bar",
-          barGap: 0,
-          date: item.gatherDate,
-          // label: labelOption,
-          emphasis: {
-            focus: "series",
+        var points = [];
+        for (var i = 0; i < currentSeriesIndices.length; i++) {
+          var seriesIndex = currentSeriesIndices[i];
+          if (seriesIndex !== params.seriesIndex) {
+            var point = api.coord([xValue, api.value(seriesIndex)]);
+            point[0] += barLayout[i - 1].offsetCenter;
+            point[1] -= 20;
+            points.push(point);
+          }
+        }
+        var style = api.style({
+          stroke: api.visual("color"),
+          fill: null,
+        });
+
+        return {
+          type: "polyline",
+          shape: {
+            points: points,
           },
-        });
-        lineData.push({
-          name: item.$colorName,
-          type: "line",
-          stack: item.$colorName + "实际产量",
-        });
-      });
-      series.forEach((item, i) => {
-        item.data = [];
-        this.crud.forEach((items, j) => {
-          if (item.name === items.$colorName) {
-            item.data[test.indexOf(items.gatherDate)] = items.realOutPut;
-          }
-        });
-      });
-      lineData.forEach((item, i) => {
-        item.data = [];
-        this.crud.forEach((items, j) => {
-          if (item.name === items.$colorName) {
-            item.data[test.indexOf(items.gatherDate)] = items.realOutPut;
-          }
-        });
-      });
-      console.log(lineData);
-      var chartDom = document.getElementById("zzt");
-      var myChart = this.$echarts.init(chartDom, "dark");
-      var option;
-      var chartDom1 = document.getElementById("qst");
-      var myChart1 = this.$echarts.init(chartDom1, "dark");
-      var option1;
-      option = {
+          style: style,
+        };
+      }
+
+      let option = {
         tooltip: {
           trigger: "axis",
-          axisPointer: {
-            type: "shadow",
+          formatter: function (params, ticket, callback) {
+            var htmlStr = "";
+            for (var i = 0; i < params.length; i++) {
+              var param = params[i];
+              var xName = param.name; //x轴的名称
+              var seriesName = param.seriesName; //图例名称
+              var value = param.value; //y轴值
+              var color = param.color; //图例颜色
+              if (i === 0) {
+                htmlStr += xName + "<br/>"; //x轴的名称
+              }
+              htmlStr += "<div style='text-align:left;'>";
+              //为了保证和原来的效果一样，这里自己实现了一个点的效果
+              if (value != 0 && seriesName != "trend") {
+                htmlStr +=
+                  '<span style="margin-right:5px;display:inline-block;width:10px;height:10px;border-radius:5px;background-color:' +
+                  color +
+                  ';"></span>';
+                htmlStr += seriesName + "：" + value;
+              }
+
+              htmlStr += "</div>";
+            }
+            return htmlStr;
           },
         },
         grid: {
           top: "13%", //距上边距
           left: "5%", //距离左边距
-          right: "5%", //距离右边距
-          bottom: "10%", //距离下边距
+          right: "1%", //距离右边距
+          bottom: "18%", //距离下边距
         },
         legend: {
-          data: relist, // 类别
-          textStyle: {
-            fontSize: 18,
-            margin: 0,
-            padding: 0,
-          },
+          data: legendData,
+          type: "scroll",
         },
-        toolbox: {
-          show: true,
-          orient: "vertical",
-          left: "right",
-          top: "center",
-          feature: {
-            mark: { show: true },
-            dataView: { show: true, readOnly: false },
-            magicType: {
-              show: true,
-              type: ["line", "bar", "stack", "tiled"],
-            },
-            restore: { show: true },
-            saveAsImage: { show: true },
-          },
-        },
-        xAxis: [
+        dataZoom: [
           {
-            type: "category",
-            axisTick: { show: false },
-            data: dataList, // X轴日期
-            axisLabel: {
-              show: true,
-              textStyle: {
-                fontSize: 16,
-              },
-            },
+            type: "slider",
+            start: 0,
+            end: 50,
+          },
+          {
+            type: "inside",
+            start: 50,
+            end: 70,
           },
         ],
-        yAxis: {
-          type: "value",
-          axisLabel: {
-            show: true,
-            textStyle: {
-              fontSize: 16,
-            },
-          },
-        },
-
-        series: series,
-      };
-
-      option1 = {
-        // title: {
-        //   text: "折线图堆叠",
-        // },
-        tooltip: {
-          trigger: "axis",
-        },
-        legend: {
-          data: relist,
-          textStyle: {
-            fontSize: 18,
-            margin: 0,
-            padding: 0,
-          },
-        },
-        grid: {
-          top: "13%", //距上边距
-          left: "2%", //距离左边距
-          right: "5%", //距离右边距
-          bottom: "2%", //距离下边距
-          containLabel: true,
-        },
-        toolbox: {
-          feature: {
-            saveAsImage: {},
-          },
-        },
         xAxis: {
-          type: "category",
-          boundaryGap: false,
-          data: dataList,
-          axisLabel: {
-            show: true,
-            textStyle: {
-              fontSize: 16,
-            },
-          },
+          data: xAxisData,
         },
-        yAxis: {
-          type: "value",
-          axisLabel: {
-            show: true,
-            textStyle: {
-              fontSize: 16,
+        yAxis: {},
+        series: [
+          {
+            type: "custom",
+            name: "trend",
+            renderItem: renderItem,
+            itemStyle: {
+              borderWidth: 2,
             },
+            encode: {
+              x: 0,
+              y: encodeY,
+            },
+            data: customData,
+            z: 100,
           },
-        },
-        series: lineData,
+        ].concat(
+          this.$echarts.util.map(dataList, function (data, index) {
+            return {
+              type: "bar",
+              animation: false,
+              name: legendData[index + 1],
+              itemStyle: {
+                opacity: 0.8,
+              },
+              data: data,
+            };
+          })
+        ),
       };
-      option && myChart.setOption(option);
-      option1 && myChart1.setOption(option1);
+
+      var chartDom = document.getElementById("zzt");
+      var myChart = this.$echarts.init(chartDom);
+      option && myChart.setOption(option, true);
+      this.loading = false;
     },
     cellClick(val) {
       // this.oldData.$cellEdit = false;
       // this.$set(val, "$cellEdit", true);
       // this.oldData = val;
       this.chooseData = val;
-    },
-    check(val) {
-      // if (Object.keys(val).length > 0) {
-      //   getPoDtla({ salPoFk: val.salPooid }).then((res) => {
-      //     console.log(res);
-      //     val.salPoDtlaoid = res.data.rows[0].salPoDtlaoid;
-      //     getPoColor({ salPoDtlaFk: val.salPoDtlaoid }).then((color) => {
-      //       console.log(color);
-      //     });
-      //   });
-      //   // this.chooseData.
-      // }
-      // this.dialogVisible = false;
     },
     save() {
       for (let i = 0; i < this.crud.length; i++) {
@@ -380,7 +409,11 @@ export default {
   },
   created() {},
   mounted() {
-    this.query();
+    this.$nextTick(() => {
+      this.form.date[0] = "2021-06-13";
+      this.form.date[1] = "2021-06-27";
+      this.query();
+    });
   },
   beforeDestroy() {},
 };
@@ -391,13 +424,33 @@ export default {
     line-height: 29px !important;
   }
 
+  .el-table--mini td, .el-table--mini th {
+    padding: 0;
+  }
+
+  .el-table__body-wrapper {
+    z-index: 2;
+  }
+
   .graphical {
-    height: 350px;
+    height: 385px;
+  }
+
+  .el-range-editor--mini.el-input__inner {
+    height: 35px;
+  }
+
+  .el-range-editor--mini .el-range-input {
+    font-size: 16px;
+  }
+
+  .el-range-editor--mini .el-range-separator {
+    line-height: 28px;
   }
 
   #zzt {
     width: 100% !important;
-    height: 325px;
+    height: 365px;
   }
 }
 </style>

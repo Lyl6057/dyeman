@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-06-19 14:36:30
+ * @LastEditTime: 2021-06-21 09:01:04
  * @Description: 
 -->
 <template>
@@ -1546,10 +1546,9 @@ export default {
   font-size: 14px;
 }
 
-.el-table__fixed-body-wrapper {
-  top: 37px !important;
-}
-
+// .el-table__fixed-body-wrapper {
+// top: 37px !important;
+// }
 #dyeing {
   .el-input-number__decrease, .el-input-number__increase {
     display: none;

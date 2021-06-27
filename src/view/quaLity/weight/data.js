@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-06-19 16:08:12
+ * @LastEditTime: 2021-06-23 16:41:48
  * @Description:
  */
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
@@ -190,7 +190,7 @@ export function mainCrud(_this) {
         width: 100,
         width: 200,
         overHidden: true,
-        hide: true
+        hide: false
       },
       {
         label: "顏色(Màu sắc)",
@@ -431,8 +431,8 @@ export function mainCrud(_this) {
         label: "打印时间(thời gian in)",
         prop: "printedTime",
         type: "date",
-        format: "yyyy-MM-dd hh:MM:ss",
-        valueFormat: "yyyy-MM-dd hh:MM:ss",
+        format: "yyyy-MM-dd HH:mm:ss",
+        valueFormat: "yyyy-MM-dd HH:mm:ss",
         span: 6,
         align: "center",
         sortable: true,
@@ -442,8 +442,8 @@ export function mainCrud(_this) {
         label: "验布时间(thời gian in)",
         prop: "clothCheckTime",
         type: "date",
-        format: "yyyy-MM-dd hh:mm:ss",
-        valueFormat: "yyyy-MM-dd hh:mm:ss",
+        format: "yyyy-MM-dd HH:mm:ss",
+        valueFormat: "yyyy-MM-dd HH:mm:ss",
         span: 6,
         align: "center",
         sortable: true,

@@ -335,15 +335,15 @@ export default {
             prop: "erDate",
             type: "date",
             format: "yyyy-MM-dd",
-            valueFormat: "yyyy-MM-dd hh:mm:ss",
+            valueFormat: "yyyy-MM-dd HH:mm:ss",
             cell: true,
           },
           {
             label: this.$t("energy.cbsj"),
             prop: "erTime",
             type: "time",
-            format: "hh:mm:ss",
-            valueFormat: "hh:mm:ss",
+            format: "HH:mm:ss",
+            valueFormat: "HH:mm:ss",
             cell: true,
           },
           {

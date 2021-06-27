@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-06-19 16:08:34
+ * @LastEditTime: 2021-06-23 16:56:06
  * @Description: 
 -->
 <template>
@@ -309,21 +309,21 @@ export default {
             });
             sums[index] = "選中重量：" + num.toFixed(1);
           }
-          if (index == 8) {
+          if (index == 10) {
             let num = 0;
             this.crud.forEach((item) => {
               num += Number(item.realWeight);
             });
             sums[index] = "毛重：" + num.toFixed(1);
           }
-          if (index == 9) {
+          if (index == 11) {
             let num = 0;
             this.crud.forEach((item) => {
               num += Number(item.clothWeight);
             });
             sums[index] = "重量：" + num.toFixed(1);
           }
-          if (index == 10) {
+          if (index == 12) {
             let num = 0;
             this.crud.forEach((item) => {
               num += Number(item.qcTakeOut);

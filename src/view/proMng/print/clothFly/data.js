@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-06-19 15:47:48
+ * @LastEditTime: 2021-06-23 09:20:47
  * @Description:
  */
 
@@ -106,7 +106,7 @@ export function mainCrud(_this) {
         prop: "custCode",
         overHidden: true,
         disabled: true,
-        width: 150,
+        width: 100,
         overHidden: true,
         span: 6,
         placeholder: "请選擇客戶編號"
@@ -150,6 +150,95 @@ export function mainCrud(_this) {
         ]
       },
       {
+        label: "顏色名稱",
+        prop: "colorName",
+        placeholder: " ",
+        disabled: true,
+        width: 180,
+        span: 6,
+        placeholder: "请選擇顏色名稱",
+        rules: [
+          {
+            required: true,
+            message: "请選擇顏色名稱",
+            trigger: "blur"
+          }
+        ],
+        overHidden: true
+      },
+
+      {
+        label: "布類描述",
+        prop: "fabricDesc",
+        placeholder: " ",
+        overHidden: true,
+        disabled: true,
+        width: 250,
+        span: 12,
+        placeholder: "请選擇布類描述",
+        rules: [
+          {
+            required: true,
+            message: "请選擇布類描述",
+            trigger: "blur"
+          }
+        ]
+      },
+
+      // {
+      //   label: "色號",
+      //   disabled: true,
+      //   prop: "colorCode",
+      //   width: 150,
+      //   span: 6
+      // },
+
+      {
+        label: "幅宽",
+        prop: "breadth",
+        width: 90,
+        disabled: true,
+        align: "right",
+        span: 6,
+        hide: true,
+        rules: [
+          {
+            required: true,
+            message: "请输入幅宽",
+            trigger: "blur"
+          }
+        ]
+      },
+      {
+        label: "克重",
+        prop: "gramWeight",
+        width: 90,
+        align: "right",
+        disabled: true,
+        hide: true,
+        span: 6,
+        rules: [
+          {
+            required: true,
+            message: "请输入克重",
+            trigger: "blur"
+          }
+        ]
+      },
+      // {
+      //   label: "纱批",
+      //   prop: "yarnBatch",
+      //   width: 90,
+      //   hide: true,
+      //   align: "right",
+      //   span: 6
+      //   // rules: [{
+      //   //   required: true,
+      //   //   message: "请输入纱批",
+      //   //   trigger: "blur"
+      //   // }],
+      // },
+      {
         label: "機號",
         prop: "mathineCode",
         disabled: false,
@@ -187,90 +276,33 @@ export function mainCrud(_this) {
         }
       },
       {
-        label: "布類描述",
-        prop: "fabricDesc",
+        label: "布票號编码",
+        prop: "bph",
+        span: 6,
+        hide: true,
         placeholder: " ",
-        overHidden: true,
-        disabled: true,
-        width: 250,
-        span: 12,
-        placeholder: "请選擇布類描述",
-        rules: [
-          {
-            required: true,
-            message: "请選擇布類描述",
-            trigger: "blur"
-          }
-        ]
+        disabled: true
       },
       {
-        label: "顏色名稱",
-        prop: "colorName",
-        placeholder: " ",
-        disabled: true,
-        width: 180,
+        label: "平均匹重",
+        prop: "pz",
+        width: 90,
+        align: "right",
+        // type: "number",
+        hide: true,
         span: 6,
-        placeholder: "请選擇顏色名稱",
         rules: [
           {
             required: true,
-            message: "请選擇顏色名稱",
+            message: "请输入平均匹重",
             trigger: "blur"
           }
         ],
-        overHidden: true
-      },
-      {
-        label: "色號",
-        disabled: true,
-        prop: "colorCode",
-        width: 150,
-        span: 6
-      },
-      {
-        label: "幅宽",
-        prop: "breadth",
-        width: 90,
-        disabled: true,
-        align: "right",
-        span: 6,
-        hide: true,
-        rules: [
-          {
-            required: true,
-            message: "请输入幅宽",
-            trigger: "blur"
-          }
-        ]
-      },
-      {
-        label: "克重",
-        prop: "gramWeight",
-        width: 90,
-        align: "right",
-        disabled: true,
-        hide: true,
-        span: 6,
-        rules: [
-          {
-            required: true,
-            message: "请输入克重",
-            trigger: "blur"
-          }
-        ]
-      },
-      {
-        label: "纱批",
-        prop: "yarnBatch",
-        width: 90,
-        hide: true,
-        align: "right",
-        span: 6
-        // rules: [{
-        //   required: true,
-        //   message: "请输入纱批",
-        //   trigger: "blur"
-        // }],
+        change: () => {
+          _this.$nextTick(() => {
+            _this.form.ps = Math.ceil(_this.form.amount / _this.form.pz);
+          });
+        }
       },
       {
         label: "用紗分組",
@@ -311,14 +343,14 @@ export function mainCrud(_this) {
         // }],
       },
 
-      {
-        label: "纱牌",
-        prop: "yarnBrand",
-        width: 90,
-        hide: true,
-        align: "right",
-        span: 6
-      },
+      // {
+      //   label: "纱牌",
+      //   prop: "yarnBrand",
+      //   width: 90,
+      //   hide: true,
+      //   align: "right",
+      //   span: 6
+      // },
       // {
       //   label: "纱长",
       //   prop: "yarnLong",
@@ -339,18 +371,7 @@ export function mainCrud(_this) {
       //   align: "right", placeholder: " ",
       //   span: 6
       // },
-      {
-        label: "值机工号",
-        prop: "zjgh",
-        width: 90,
-        hide: true,
-        span: 6
-        // rules: [{
-        //   required: true,
-        //   message: "请输入值机工号",
-        //   trigger: "blur"
-        // }],
-      },
+
       // {
       //   label: "机台編號",
       //   prop: "machineCode",
@@ -364,9 +385,18 @@ export function mainCrud(_this) {
       //     trigger: "blur"
       //   }],
       // },
+
+      // {
+      //   label: _this.$t('whseField.dw'),
+      //   prop: "workUnit",
+      //   width: 90,
+      //   span: 6,
+      //   disabled: true
+      // },
+
       {
-        label: "平均匹重",
-        prop: "pz",
+        label: "起始疋号",
+        prop: "qsph",
         width: 90,
         align: "right",
         // type: "number",
@@ -375,30 +405,10 @@ export function mainCrud(_this) {
         rules: [
           {
             required: true,
-            message: "请输入平均匹重",
+            message: "请输入起始疋号",
             trigger: "blur"
           }
-        ],
-        change: () => {
-          _this.$nextTick(() => {
-            _this.form.ps = Math.ceil(_this.form.amount / _this.form.pz);
-          });
-        }
-      },
-      // {
-      //   label: _this.$t('whseField.dw'),
-      //   prop: "workUnit",
-      //   width: 90,
-      //   span: 6,
-      //   disabled: true
-      // },
-      {
-        label: "布票號",
-        prop: "bph",
-        span: 6,
-        hide: true,
-        placeholder: " ",
-        disabled: false
+        ]
       },
       {
         label: "匹数",
@@ -416,22 +426,6 @@ export function mainCrud(_this) {
           }
         ]
       },
-      {
-        label: "起始疋号",
-        prop: "qsph",
-        width: 90,
-        align: "right",
-        // type: "number",
-        hide: true,
-        span: 6,
-        rules: [
-          {
-            required: true,
-            message: "请输入起始疋号",
-            trigger: "blur"
-          }
-        ]
-      },
       // {
       //   label: "总针数",
       //   prop: "totalNeedle",
@@ -440,14 +434,26 @@ export function mainCrud(_this) {
       //   span: 6
       // },
 
+      // {
+      //   label: "日期",
+      //   prop: "nowDate",
+      //   type: "date",
+      //   format: "yyyy-MM-dd",
+      //   valueFormat: "yyyy-MM-dd",
+      //   span: 6,
+      //   hide: true
+      // },
       {
-        label: "日期",
-        prop: "nowDate",
-        type: "date",
-        format: "yyyy-MM-dd",
-        valueFormat: "yyyy-MM-dd",
-        span: 6,
-        hide: true
+        label: "值机工号",
+        prop: "zjgh",
+        width: 90,
+        hide: true,
+        span: 6
+        // rules: [{
+        //   required: true,
+        //   message: "请输入值机工号",
+        //   trigger: "blur"
+        // }],
       },
       {
         label: "验布员",
@@ -467,7 +473,7 @@ export function bfCrud(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 493px)",
+    height: "calc(100vh - 455px)",
     refreshBtn: false,
     columnBtn: false,
     page: false,
@@ -505,6 +511,7 @@ export function bfCrud(_this) {
         prop: "proWeaveJobGroupFk",
         width: 120,
         type: "select",
+        overHidden: true,
         dicData: [],
         props: {
           value: "groupId",
@@ -515,7 +522,7 @@ export function bfCrud(_this) {
       {
         label: "客戶編號",
         prop: "customerName",
-        width: 180,
+        width: 120,
         disabled: true,
         placeholder: " ",
         span: 6,
@@ -594,21 +601,7 @@ export function bfCrud(_this) {
         hide: false,
         cell: true
       },
-      {
-        label: "幅宽",
-        prop: "breadth",
-        width: 80,
-        align: "right",
-        span: 6,
-        rules: [
-          {
-            required: true,
-            message: "请输入幅宽",
-            trigger: "blur"
-          }
-        ],
-        type: "number"
-      },
+
       {
         label: _this.$t("whseField.zl"),
         prop: "clothWeight",
@@ -645,8 +638,25 @@ export function bfCrud(_this) {
       //   dicData: matUnit
       // },
       {
+        label: "幅宽",
+        prop: "breadth",
+        width: 80,
+        align: "right",
+        span: 6,
+        overHidden: true,
+        rules: [
+          {
+            required: true,
+            message: "请输入幅宽",
+            trigger: "blur"
+          }
+        ],
+        type: "number"
+      },
+      {
         label: "克重",
         prop: "gramWeight",
+        overHidden: true,
         width: 80,
         align: "right",
         span: 6,
@@ -680,8 +690,8 @@ export function bfCrud(_this) {
         label: "打印时间",
         prop: "printedTime",
         type: "date",
-        format: "yyyy-MM-dd hh:MM:ss",
-        valueFormat: "yyyy-MM-dd hh:MM:ss",
+        format: "yyyy-MM-dd HH:mm:ss",
+        valueFormat: "yyyy-MM-dd HH:mm:ss",
         span: 6,
         align: "center",
         width: 180

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-06-18 16:36:53
+ * @LastEditTime: 2021-06-26 14:07:25
  * @Description:
  */
 
@@ -886,6 +886,24 @@ export function gyCrud(_this) {
         span: 6,
         cell: true
       },
+      // {
+      //   label: "数据类型",
+      //   prop: "dataStyle",
+      //   width: 120,
+      //   span: 6,
+      //   cell: true,
+      //   type: "select",
+      //   dicData: [
+      //     {
+      //       value: "string",
+      //       label: "输入框"
+      //     },
+      //     {
+      //       value: "boolean",
+      //       label: "选择框"
+      //     }
+      //   ]
+      // },
       {
         label: "设定",
         prop: "itemSet",

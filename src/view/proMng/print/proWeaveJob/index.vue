@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-06-19 19:08:18
+ * @LastEditTime: 2021-06-21 15:21:25
  * @Description: 
 -->
 <template>
@@ -84,6 +84,7 @@
           :data="crud"
           :page.sync="page"
           v-loading="loading"
+          :row-style="rowStyle"
           @on-load="query"
           @row-dblclick="handleRowDBLClick"
           @current-row-change="cellClick"
@@ -299,6 +300,14 @@ export default {
     },
     cellClick(val) {
       this.detail = val;
+    },
+    rowStyle({ row, column, rowIndex }) {
+      if (row.weaveState) {
+        return {
+          backgroundColor: "#FBD295",
+          // color:'#fff'
+        };
+      }
     },
     close() {
       document.getElementsByClassName("el-dialog__headerbtn")[0].click();

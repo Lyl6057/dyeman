@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-06-19 15:32:16
+ * @LastEditTime: 2021-06-21 09:00:51
  * @Description:
 -->
 <template>
@@ -641,10 +641,9 @@ export default {
   font-size: 14px;
 }
 
-.el-table__fixed-body-wrapper {
-  top: 60px !important;
-}
-
+// .el-table__fixed-body-wrapper {
+// top: 60px !important;
+// }
 #revolve {
   .avue-group__header {
     margin-bottom: 10px;

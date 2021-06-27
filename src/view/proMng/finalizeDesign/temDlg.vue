@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-06-18 16:35:34
+ * @LastEditTime: 2021-06-26 14:44:46
  * @Description: 
 -->
 <template>
@@ -69,7 +69,8 @@
             </div>
             <div class="crudBox">
               <avue-crud
-                ref="crud"
+                id="otherCrud"
+                ref="otherCrud"
                 :option="crudOp"
                 :data="crud"
                 :page.sync="page"
@@ -247,11 +248,14 @@ export default {
                 delete this.form[key];
               }
             }
-            this.form.startJobDate = this.form.startJobDate + " 00:00:00";
-            if (!this.form.goodsDate.indexOf(" ")) {
-              this.form.goodsDate
-                ? (this.form.goodsDate = this.form.goodsDate + " 00:00:00")
-                : "";
+            if (
+              this.form.startJobDate &&
+              this.form.startJobDate.indexOf(" ") == -1
+            ) {
+              this.form.startJobDate = this.form.startJobDate + " 00:00:00";
+            }
+            if (this.form.goodsDate && this.form.goodsDate.indexOf(" ") == -1) {
+              this.form.goodsDate = this.form.goodsDate + " 00:00:00";
             }
 
             this.form.printDate
@@ -379,7 +383,7 @@ export default {
           this.page.total = res.data.total;
 
           if (this.crud.length > 0) {
-            this.$refs.crud.setCurrentRow(this.crud[0]);
+            this.$refs.otherCrud.setCurrentRow(this.crud[0]);
           }
           this.loading = false;
         });
@@ -458,12 +462,9 @@ export default {
       this.query();
     },
     add() {
-      // if (this.tabs != "用紗分組") {
-      this.crud.push({
-        index: this.crud.length + 1,
-        $cellEdit: true,
-      });
-      this.$refs.crud.setCurrentRow(this.crud[this.crud.length - 1]);
+      this.choiceTle = "選擇漂染基礎工藝";
+      this.choiceQ.paramType = "afterfinish";
+      this.choiceV = true;
     },
     addDtl() {
       this.chooseData.list.push({
@@ -481,7 +482,7 @@ export default {
           item.index = i + 1;
         });
         if (this.crud.length > 0) {
-          this.$refs.crud.setCurrentRow(this.crud[0]);
+          this.$refs.otherCrud.setCurrentRow(this.crud[0]);
         }
         return;
       }
@@ -645,6 +646,27 @@ export default {
         this.form.proShrinkTwist = val.shrinkNear;
         this.form.proShrinkLoop = val.shrinkRotate;
         this.form.proShrinkHangDry = val.hangDry;
+      } else if (this.choiceTle == "選擇漂染基礎工藝") {
+        val.forEach((item, i) => {
+          let data = {};
+          data = {
+            itemCode: item.paramKey,
+            itemName: item.paramName,
+            dataStyle: item.paramValueType,
+            // sn: this.crud.length + 1,
+            // index: this.crud.length + 1,
+            $cellEdit: true,
+          };
+          this.crud.push(data);
+        });
+        this.crud = this.$unique(this.crud, "itemName");
+        this.crud.forEach((item, i) => {
+          item.sn = i + 1;
+          item.index = i + 1;
+        });
+        this.$nextTick(() => {
+          this.$toTableLow(this, "otherCrud");
+        });
       } else {
         this.form.colorName = val.colorName;
         this.form.colorCode = val.colorCode;

@@ -222,15 +222,6 @@ export default {
             // addDisplay: false
           },
           {
-            label: this.$t("ProWorkflowInfo.sbxh"),
-            prop: "categoryCode",
-            cell: false,
-            type: "select",
-            hide: true,
-            addDisplay: false,
-            dicData: [],
-          },
-          {
             label: this.$t("ProWorkflowInfo.qyid"),
             prop: "areaId",
             type: "select",
@@ -239,16 +230,29 @@ export default {
             width: 100,
           },
           {
-            label: this.$t("ProWorkflowInfo.szmc"),
-            prop: "equipmentName",
-            cell: true,
+            label: this.$t("ProWorkflowInfo.sbxh"),
+            prop: "categoryCode",
+            cell: false,
+            type: "select",
+            hide: false,
+            addDisplay: false,
+            overHidden: true,
             width: 120,
+            dicData: [],
           },
+
+          // {
+          //   label: this.$t("ProWorkflowInfo.szmc"),
+          //   prop: "equipmentName",
+          //   cell: true,
+          //   width: 120,
+          // },
           {
             label: this.$t("ProWorkflowInfo.sbbh"),
             prop: "equipmentCode",
             cell: true,
-            width: 160,
+            width: 120,
+            overHidden: true,
           },
           {
             label: this.$t("ProWorkflowInfo.hzb"),
@@ -303,7 +307,7 @@ export default {
       chooseData: {},
       loading: false,
       page: {
-        pageSize: 10,
+        pageSize: 20,
         currentPage: 1,
         total: 0,
       },
@@ -333,7 +337,7 @@ export default {
               });
             }
           });
-          this.Device.column[1].dicData = this.eqType;
+          this.Device.column[2].dicData = this.eqType;
         })
         .catch((err) => {
           error("系统错误！");
@@ -554,7 +558,7 @@ export default {
     },
     //进入页面默认获取所有的设备信息
     fn_Info() {
-      this.loading = true;
+      // this.loading = true;
       this.$http({
         url: "/api/baseEquipmentList",
         methods: "get",
@@ -566,10 +570,13 @@ export default {
         },
       }).then((res) => {
         this.DeviceData = res.data.rows;
+        this.DeviceData.forEach((item, i) => {
+          item.categoryCode = item.equModel;
+        });
         this.page.total = res.data.total;
-        setTimeout(() => {
-          this.loading = false;
-        }, 200);
+        // setTimeout(() => {
+        //   this.loading = false;
+        // }, 200);
       });
     },
   },

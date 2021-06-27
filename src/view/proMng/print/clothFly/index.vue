@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-23 16:30:34
+ * @LastEditTime: 2021-06-21 08:00:03
  * @Description: 
 -->
 <template>
@@ -27,6 +27,7 @@
           :data="crud"
           :page.sync="page"
           v-loading="loading"
+          :row-style="rowStyle"
           @on-load="query"
           @row-dblclick="handleRowDBLClick"
           @current-row-change="cellClick"
@@ -108,6 +109,10 @@ export default {
       });
     },
     print() {
+      if (this.detail.weaveState) {
+        this.$tip.warning("该织单为草稿状态,无法进行打印操作!");
+        return;
+      }
       if (Object.keys(this.detail).length === 0) {
         return;
       }
@@ -124,6 +129,14 @@ export default {
     },
     close() {
       document.getElementsByClassName("el-dialog__headerbtn")[0].click();
+    },
+    rowStyle({ row, column, rowIndex }) {
+      if (row.weaveState) {
+        return {
+          backgroundColor: "#FBD295",
+          // color:'#fff'
+        };
+      }
     },
   },
   created() {},

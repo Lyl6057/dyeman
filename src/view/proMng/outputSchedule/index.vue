@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-04-23 08:32:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-06-16 15:22:48
+ * @LastEditTime: 2021-06-22 13:52:35
  * @Description: 
 -->
 <template>
@@ -258,8 +258,8 @@ export default {
         qc = [];
       this.crud.forEach((item) => {
         xData.push(item.weaveJobCode);
-        weight.push(item.realWeight);
-        realWeight.push(item.clothWeight);
+        weight.push(item.clothWeight);
+        realWeight.push(item.realWeight);
         qc.push(item.qcTakeOut);
       });
       var chartDom = document.getElementById("echartMain");

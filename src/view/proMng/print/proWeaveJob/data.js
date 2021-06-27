@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-06-19 19:13:31
+ * @LastEditTime: 2021-06-23 15:09:00
  * @Description:
  */
 
@@ -581,17 +581,17 @@ export function mainCrud(_this) {
       //     _this.tabs = "更改紗長";
       //   }
       // },
+      // {
+      //   label: "胚重(左)",
+      //   prop: "calicoLeft",
+      //   tip: "Trọng lượng vải mộc trái",
+      //   width: 90,
+      //   hide: true,
+      //   span: 6,
+      //   placeholder: " "
+      // },
       {
-        label: "胚重(左)",
-        prop: "calicoLeft",
-        tip: "Trọng lượng vải mộc trái",
-        width: 90,
-        hide: true,
-        span: 6,
-        placeholder: " "
-      },
-      {
-        label: "胚重(中)",
+        label: "胚重",
         prop: "calicoMiddle",
         tip: "Trọng lượng vải mộc giữa",
         width: 90,
@@ -600,15 +600,15 @@ export function mainCrud(_this) {
         span: 6
       },
 
-      {
-        label: "胚重(右)",
-        prop: "calicoRight",
-        tip: "Trọng lượng vải mộc phải",
-        width: 90,
-        hide: true,
-        placeholder: " ",
-        span: 6
-      },
+      // {
+      //   label: "胚重(右)",
+      //   prop: "calicoRight",
+      //   tip: "Trọng lượng vải mộc phải",
+      //   width: 90,
+      //   hide: true,
+      //   placeholder: " ",
+      //   span: 6
+      // },
       {
         label: "成衣面",
         prop: "readyMadeFabric",
@@ -657,7 +657,14 @@ export function mainCrud(_this) {
         span: 6,
         hide: true
       },
-
+      {
+        label: "上機工藝",
+        tip: "công nghệ lên máy",
+        prop: "operatProcess",
+        hide: true,
+        span: 12,
+        placeholder: " "
+      },
       {
         label: "布架寬度",
         prop: "clothRackWidth",
@@ -678,12 +685,13 @@ export function mainCrud(_this) {
         span: 6
       },
       {
-        label: "上機工藝",
-        tip: "công nghệ lên máy",
-        prop: "operatProcess",
+        label: "輸送盤資料",
+        tip: "Thông số đĩa dây Cu-roa",
+        prop: "transPlate",
         hide: true,
-        span: 12,
-        placeholder: " "
+        placeholder: " ",
+        placeholder: " ",
+        span: 12
       },
       {
         label: "布架資料",
@@ -703,15 +711,7 @@ export function mainCrud(_this) {
         placeholder: " ",
         span: 6
       },
-      {
-        label: "輸送盤資料",
-        tip: "Thông số đĩa dây Cu-roa",
-        prop: "transPlate",
-        hide: true,
-        placeholder: " ",
-        placeholder: " ",
-        span: 12
-      },
+
       // {
       //   label: "開單複核",
       //   prop: "reviewer",

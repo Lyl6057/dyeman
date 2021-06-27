@@ -6,13 +6,8 @@
  * @Description:
  */
 
-import {
-  getDIC,
-  getDicT,
-  getXDicT,
-  postDicT
-} from '@/config'
-let matUnit = getDIC("bas_matUnit")
+import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
+let matUnit = getDIC("bas_matUnit");
 export function mainForm(_this) {
   return {
     submitBtn: false,
@@ -23,13 +18,13 @@ export function mainForm(_this) {
         label: "訂單號",
         prop: "poNo",
         span: 6,
-        placeholder: " ",
+        placeholder: " "
       },
       {
         label: "布票編號",
         prop: "noteCode",
         span: 6,
-        placeholder: " ",
+        placeholder: " "
       },
       // {
       //   label: "客戶",
@@ -42,8 +37,8 @@ export function mainForm(_this) {
         prop: "eachNumber",
         width: 80,
         align: "right",
-        span: 6,
-      },
+        span: 6
+      }
       // {
       //   label: "機台編號",
       //   prop: "machineCode",
@@ -51,8 +46,8 @@ export function mainForm(_this) {
       //   placeholder: " ",
 
       // },
-    ],
-  }
+    ]
+  };
 }
 export function popupForm(_this) {
   return {
@@ -65,7 +60,7 @@ export function popupForm(_this) {
         prop: "colorNo",
         span: 6,
         placeholder: " ",
-        disabled: true,
+        disabled: true
       },
       {
         label: "颜色深度",
@@ -77,9 +72,8 @@ export function popupForm(_this) {
         dicData: getDIC("bas_colorclTepth"),
         change: () => {
           if (_this.isAdd) {
-            _this.depth()
+            _this.depth();
           }
-
         }
       },
       {
@@ -91,7 +85,7 @@ export function popupForm(_this) {
         type: "number",
         minRows: _this.minRows,
         maxRows: _this.maxRows,
-        disabled: true,
+        disabled: true
         // change: () => {
         //   // if (_this.form.colorDepth == '') {
         //   //   _this.form.dyeWeight = 0
@@ -104,22 +98,21 @@ export function popupForm(_this) {
         prop: "salColorfresh",
         span: 6,
         type: "select",
-        dicData: getDIC("sal_colorFresh"),
+        dicData: getDIC("sal_colorFresh")
       },
       {
-        label: _this.$t('whseField.khmc'),
+        label: _this.$t("whseField.khmc"),
         prop: "custCode",
         span: 6,
         placeholder: "请选择客户",
         disabled: !_this.isAdd,
         click: () => {
-
-          _this.dlgWidth = '60%'
+          _this.dlgWidth = "60%";
           _this.choiceV = !_this.choiceV;
           _this.choiceField = "custCode";
           // _this.choiceQ.purType = '5'
           _this.choiceTarget = _this.form;
-          _this.choiceTle = '选择客戶';
+          _this.choiceTle = "选择客戶";
         },
         type: "select",
         dicData: getDicT("basCustomer", "custName", "custCode")
@@ -132,12 +125,12 @@ export function popupForm(_this) {
         type: "date",
         format: "yyyy-MM-dd",
         valueFormat: "yyyy-MM-dd",
-        align: "center",
+        align: "center"
       },
       {
         label: "颜色英文",
         prop: "colorEngName",
-        span: 6,
+        span: 6
       },
       {
         label: "状态",
@@ -154,7 +147,6 @@ export function popupForm(_this) {
             value: true,
             label: "确定"
           }
-
         ]
       },
       {
@@ -164,19 +156,18 @@ export function popupForm(_this) {
         placeholder: "请选择颜色编号",
         disabled: !_this.isAdd,
         click: () => {
-          _this.dlgWidth = '60%'
+          _this.dlgWidth = "60%";
           _this.choiceV = !_this.choiceV;
           _this.choiceField = "colorBh";
           // _this.choiceQ.purType = '5'
           _this.choiceTarget = _this.form;
           _this.choiceTle = _this.$t("choicDlg.xzshxx");
-        },
+        }
       },
       {
         label: "颜色中文",
         prop: "colorChn",
-        span: 6,
-
+        span: 6
       },
       {
         label: "颜色来源",
@@ -184,13 +175,13 @@ export function popupForm(_this) {
         span: 6,
         placeholder: "请选择颜色来源",
         type: "select",
-        dicData: getDIC("sal_colorSource"),
+        dicData: getDIC("sal_colorSource")
       },
       {
         label: "客色号",
         prop: "custColorBh",
         span: 6,
-        disabled: !_this.isAdd,
+        disabled: !_this.isAdd
       },
       {
         label: "面料",
@@ -199,19 +190,18 @@ export function popupForm(_this) {
         placeholder: "请选择面料",
         disabled: !_this.isAdd,
         click: () => {
-          _this.dlgWidth = '100%'
+          _this.dlgWidth = "100%";
           _this.choiceV = !_this.choiceV;
           _this.choiceField = "fabCode";
           // _this.choiceQ.purType = '5'
           _this.choiceTarget = _this.form;
-          _this.choiceTle = '胚布編碼';
-        },
-
+          _this.choiceTle = "胚布編碼";
+        }
       },
       {
         label: "面料中文描述",
         prop: "fabricDesc",
-        span: 12,
+        span: 12
       },
       {
         label: "面料来源",
@@ -219,7 +209,7 @@ export function popupForm(_this) {
         span: 6,
         placeholder: "请选择面料来源",
         type: "select",
-        dicData: getDIC("LAP_FABSOURCE"),
+        dicData: getDIC("LAP_FABSOURCE")
       },
       {
         label: "第一光源",
@@ -230,13 +220,13 @@ export function popupForm(_this) {
         dicData: getDIC("sal_colorLights"),
         disabled: !_this.isAdd,
         change: () => {
-          _this.lights()
+          _this.lights();
         }
       },
       {
         label: "面料英文描述",
         prop: "fabricDescEng",
-        span: 12,
+        span: 12
       },
       {
         label: "染色类别",
@@ -244,7 +234,7 @@ export function popupForm(_this) {
         span: 6,
         placeholder: "请选择染色类别",
         type: "select",
-        dicData: getDIC("LAP_DYETYPE"),
+        dicData: getDIC("LAP_DYETYPE")
       },
 
       {
@@ -256,7 +246,7 @@ export function popupForm(_this) {
         tags: false,
         type: "select",
         disabled: true,
-        dicData: getDIC("sal_colorLights"),
+        dicData: getDIC("sal_colorLights")
         // change: () => {
         //   _this.lights("2")
         // }
@@ -267,7 +257,7 @@ export function popupForm(_this) {
         span: 6,
         placeholder: "请选择对色标准",
         type: "select",
-        dicData: getDIC("sal_colorStandard"),
+        dicData: getDIC("sal_colorStandard")
       },
       {
         label: "是否双染",
@@ -283,26 +273,22 @@ export function popupForm(_this) {
           {
             label: "是",
             value: true
-          },
+          }
         ]
-
       },
       {
         label: "档案编号",
         prop: "recN0",
         span: 6,
-        disabled: !_this.isAdd,
+        disabled: !_this.isAdd
       },
       {
         label: _this.$t("energy.bz"),
         prop: "remarks",
-        span: 18,
-      },
-
-    ],
-  }
-
-
+        span: 18
+      }
+    ]
+  };
 }
 export function mainCrud(_this) {
   return {
@@ -336,7 +322,8 @@ export function mainCrud(_this) {
         label: "布票編號",
         prop: "noteCode",
         width: 180,
-        disabled: true, placeholder: " ",
+        disabled: true,
+        placeholder: " ",
         span: 6,
         sortable: true,
         overHidden: true
@@ -345,7 +332,8 @@ export function mainCrud(_this) {
         label: "客戶",
         prop: "customerName",
         width: 180,
-        disabled: true, placeholder: " ",
+        disabled: true,
+        placeholder: " ",
         span: 6,
         display: false,
         overHidden: true
@@ -353,7 +341,8 @@ export function mainCrud(_this) {
       {
         label: "布类名称",
         prop: "fabricName",
-        disabled: true, placeholder: " ",
+        disabled: true,
+        placeholder: " ",
         span: 6,
         width: 100,
         width: 300,
@@ -362,7 +351,8 @@ export function mainCrud(_this) {
       {
         label: "顏色",
         prop: "proColor",
-        disabled: true, placeholder: " ",
+        disabled: true,
+        placeholder: " ",
         span: 6,
         width: 100,
         overHidden: true
@@ -373,7 +363,7 @@ export function mainCrud(_this) {
         prop: "spi",
         width: 90,
         hide: true,
-        span: 6,
+        span: 6
       },
 
       {
@@ -381,7 +371,7 @@ export function mainCrud(_this) {
         prop: "sp",
         width: 90,
         hide: true,
-        span: 6,
+        span: 6
       },
       // {
       //   label: "机台編號",
@@ -398,11 +388,13 @@ export function mainCrud(_this) {
         width: 100,
         hide: false,
         span: 6,
-        rules: [{
-          required: true,
-          message: "请输入机号",
-          trigger: "blur"
-        }],
+        rules: [
+          {
+            required: true,
+            message: "请输入机号",
+            trigger: "blur"
+          }
+        ],
         disabled: true
       },
       {
@@ -412,11 +404,13 @@ export function mainCrud(_this) {
         hide: false,
         span: 6,
         disabled: true,
-        rules: [{
-          required: true,
-          message: "请输入值机工号",
-          trigger: "blur"
-        }],
+        rules: [
+          {
+            required: true,
+            message: "请输入值机工号",
+            trigger: "blur"
+          }
+        ]
       },
       {
         label: "幅宽",
@@ -424,19 +418,20 @@ export function mainCrud(_this) {
         width: 80,
         align: "right",
         span: 6,
-        rules: [{
-          required: true,
-          message: "请输入幅宽",
-          trigger: "blur"
-        }]
+        rules: [
+          {
+            required: true,
+            message: "请输入幅宽",
+            trigger: "blur"
+          }
+        ]
       },
       {
         label: _this.$t("whseField.zl"),
         prop: "clothWeight",
         width: 80,
         align: "center",
-        span: 6,
-
+        span: 6
       },
       // {
       //   label: "單位",
@@ -471,18 +466,20 @@ export function mainCrud(_this) {
         width: 80,
         align: "right",
         span: 6,
-        rules: [{
-          required: true,
-          message: "请输入克重",
-          trigger: "blur"
-        }]
+        rules: [
+          {
+            required: true,
+            message: "请输入克重",
+            trigger: "blur"
+          }
+        ]
       },
       {
         label: "匹號",
         prop: "eachNumber",
         width: 80,
         align: "right",
-        span: 6,
+        span: 6
       },
       {
         label: "已打印",
@@ -499,19 +496,18 @@ export function mainCrud(_this) {
             label: "否"
           }
         ],
-        span: 6,
+        span: 6
       },
       {
         label: "打印时间",
         prop: "printedTime",
         type: "date",
-        format: "yyyy-MM-dd hh:MM:ss",
-        valueFormat: "yyyy-MM-dd hh:MM:ss",
+        format: "yyyy-MM-dd HH:mm:ss",
+        valueFormat: "yyyy-MM-dd HH:mm:ss",
         span: 6,
         align: "center",
         width: 180
       }
-    ],
-  }
-
+    ]
+  };
 }

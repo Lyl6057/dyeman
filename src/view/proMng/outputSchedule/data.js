@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-04-23 09:03:31
  * @LastEditors: Lyl
- * @LastEditTime: 2021-06-16 14:45:55
+ * @LastEditTime: 2021-06-22 13:55:51
  * @Description:
  */
 
@@ -280,8 +280,9 @@ export function mainCrud(_this) {
       //   // type: "select",
       //   // dicData: cust,
       // },
+
       {
-        label: "毛重",
+        label: "净重",
         prop: "clothWeight",
         disabled: false,
         width: 100,
@@ -317,7 +318,7 @@ export function mainCrud(_this) {
         cell: true
       },
       {
-        label: "净重",
+        label: "毛重",
         prop: "realWeight",
         disabled: false,
         overHidden: true,
@@ -776,8 +777,8 @@ export function bfCrud(_this) {
         label: "打印时间",
         prop: "printedTime",
         type: "date",
-        format: "yyyy-MM-dd hh:MM:ss",
-        valueFormat: "yyyy-MM-dd hh:MM:ss",
+        format: "yyyy-MM-dd HH:mm:ss",
+        valueFormat: "yyyy-MM-dd HH:mm:ss",
         span: 6,
         align: "center",
         width: 180

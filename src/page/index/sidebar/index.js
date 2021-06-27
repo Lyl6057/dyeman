@@ -9,7 +9,7 @@ export const menuData = _this => {
     menu: [
       ...proMng(_this)
       // ...energy(_this),
-      // ...whseMng(_this)
+      // ...whseMng(_this),
       // ...laboratory(_this),
       // ...quality(_this)
       // 产品管理

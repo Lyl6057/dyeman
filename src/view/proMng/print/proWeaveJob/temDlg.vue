@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-06-19 19:07:07
+ * @LastEditTime: 2021-06-23 16:40:44
  * @Description: 
 -->
 <template>
@@ -79,7 +79,7 @@
             >打印</el-button
           >
         </el-tooltip>
-        <el-tooltip
+        <!-- <el-tooltip
           class="item"
           effect="dark"
           content="xuất"
@@ -92,7 +92,7 @@
             :disabled="!this.form.weaveJobId"
             >导出excel</el-button
           >
-        </el-tooltip>
+        </el-tooltip> -->
         <el-tooltip
           class="item"
           effect="dark"
