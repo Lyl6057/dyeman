@@ -13,10 +13,6 @@ export default {
     lsgz: "臨時工工資"
   },
 
-
-
-
-
   public: {
     add: "新增",
     update: "修改",
@@ -35,7 +31,7 @@ export default {
     qxcz: "取消操作!",
     bccg: "保存成功!",
     bcsb: "保存失敗!",
-    qxxzmx: "請先選擇明顯!",
+    qxxzmx: "請先選擇明顯!"
   },
   whseMng: {
     // 倉位管理
@@ -90,9 +86,10 @@ export default {
     saveTle8: "入倉編號/日期不能為空!",
     saveTle9: "入倉明細的批號/箱數/重量不能為空!",
     saveTle10: "入倉貨位的箱數/重量不能為空!",
-    saveTle11: "入倉貨位的批號/疋號不能為空!",
+    saveTle11: "入倉貨位的批號/疋號不能為空!"
   },
-  iaoMng: { // 出入庫
+  iaoMng: {
+    // 出入庫
     rc: "入倉",
     rcmx: "入倉明細",
     rcphzl: "入倉批號資料",
@@ -157,8 +154,8 @@ export default {
     delTle8: "是否确定删除批號為 【",
     delTle9: "是否确定删除缸號為 【",
     delTle10: "是否确定删除原料編號為 【",
-    delTle11: "是否确定删除 【",
-    delTle12: " 編號為 【 ",
+    delTle11: "是否确定删除",
+    delTle12: "編號為 【 ",
     delTle13: "是否确定删除顏料編號為 【",
     qxzdjbh: "請先選擇登記編號!",
     xzcgdh: "請先選擇採購單號!",
@@ -263,7 +260,6 @@ export default {
     xzshxx: "選擇色號信息",
     xzshzl: "選擇色號資料",
     bhgzpz: "編號規則配置"
-
   },
   whseField: {
     rcbh: "入倉編號",
@@ -430,7 +426,6 @@ export default {
     rslb: "染色類別",
     sfsr: "是否雙染",
     slsl: "申領數量"
-
   },
   ProWorkflowInfo: {
     // LD
@@ -728,12 +723,13 @@ export default {
         data: ""
       }
     ],
-    whseMng: { // 
+    whseMng: {
+      //
       houseMng: "倉庫管理",
       positions: "一.倉位管理",
       inAndOut: "二.出入庫管理",
       inventory: "三.庫存管理"
-    },
+    }
   },
 
   procedure: {

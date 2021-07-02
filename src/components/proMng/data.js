@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-05-03 13:03:03
  * @LastEditors: Lyl
- * @LastEditTime: 2021-06-18 10:59:12
+ * @LastEditTime: 2021-06-30 16:08:32
  * @Description:
  */
 
@@ -679,7 +679,7 @@ export function getDye(params) {
 
 export function getClothNote(params) {
   return axios({
-    url: "/api/proClothNote/pageLike",
+    url: "/api/proClothNote/matching",
     method: "get",
     params: params
   });
@@ -690,16 +690,16 @@ export function clothNoteF(_this) {
     emptyBtn: false,
     labelWidth: 120,
     column: [
-      {
-        label: "織單號",
-        prop: "weaveJobCode",
-        span: 6,
-        placeholder: " ",
-        // formslot: true,
-        // slot: true,
-        // type: "select",
-        tip: "MS đơn sản xuất bp Dệt"
-      },
+      // {
+      //   label: "織單號",
+      //   prop: "weaveJobCode",
+      //   span: 6,
+      //   placeholder: " ",
+      //   // formslot: true,
+      //   // slot: true,
+      //   // type: "select",
+      //   tip: "MS đơn sản xuất bp Dệt"
+      // },
       {
         label: "载具编号",
         tip: "Mã lồng thép",
@@ -708,7 +708,10 @@ export function clothNoteF(_this) {
         placeholder: " ",
         cell: true,
         overHidden: true,
-        width: 120
+        width: 120,
+        change: () => {
+          _this.filterList();
+        }
       },
       // {
       //   label: "訂單號",
@@ -722,14 +725,20 @@ export function clothNoteF(_this) {
         prop: "noteCode",
         span: 6,
         placeholder: " ",
-        tip: "Mã vải"
+        tip: "Mã vải",
+        change: () => {
+          _this.filterList();
+        }
       },
       {
         label: "机號",
         prop: "loomNo",
         span: 6,
         placeholder: " ",
-        tip: "Mã máy"
+        tip: "Mã máy",
+        change: () => {
+          _this.filterList();
+        }
       },
       {
         label: "匹號",
@@ -738,7 +747,10 @@ export function clothNoteF(_this) {
         align: "right",
         span: 6,
         placeholder: " ",
-        tip: "Số cây vải"
+        tip: "Số cây vải",
+        change: () => {
+          _this.filterList();
+        }
       }
 
       // {
@@ -795,22 +807,26 @@ export function clothNoteC(_this) {
     border: true,
     index: false,
     highlightCurrentRow: true,
-    height: "calc(100vh - 240px)",
+    height: "calc(100vh - 170px)",
     refreshBtn: false,
     columnBtn: false,
-    page: true,
+    page: false,
     labelWidth: 100,
     selection: true,
-    // showSummary: true,
+    showSummary: true,
     menuTitle: "trọng lượng",
-    // sumColumnList: [
-    //   {
-    //     label: '毛重',
-    //     name: 'clothWeight',
-    //     type: 'sum',
-    //     decimals: 1
-    //   },
-    // ],
+    sumColumnList: [
+      {
+        label: " ",
+        name: "proBatchNumber",
+        type: "count"
+      },
+      {
+        label: " ",
+        name: "clothWeight",
+        type: "sum"
+      }
+    ],
     column: [
       {
         label: "#",
@@ -821,7 +837,7 @@ export function clothNoteC(_this) {
       },
       {
         label: "織單號(MS đơn sản xuất bp Dệt)",
-        prop: "weaveJobCode",
+        prop: "proBatchNumber",
         width: 150,
         span: 6,
         placeholder: " ",
@@ -960,39 +976,39 @@ export function clothNoteC(_this) {
         type: "number",
         precision: 0
       },
-      {
-        label: "毛重(trọng lượng cả b)",
-        prop: "realWeight",
-        width: 120,
-        align: "right",
-        span: 6,
-        cell: false,
-        placeholder: " "
-        // type: "number",
-        // precision: 1
-      },
+      // {
+      //   label: "毛重(trọng lượng cả b)",
+      //   prop: "realWeight",
+      //   width: 120,
+      //   align: "right",
+      //   span: 6,
+      //   cell: false,
+      //   placeholder: " "
+      //   // type: "number",
+      //   // precision: 1
+      // },
       {
         label: _this.$t("whseField.zl") + "(trọng lượng)",
         prop: "clothWeight",
         width: 120,
-        align: "center",
+        align: "right",
         span: 6,
         cell: true,
         placeholder: " ",
         type: "number",
         precision: 1
       },
-      {
-        label: "QC扣减数量(Số lượng QC cắt giảm)",
-        prop: "qcTakeOut",
-        width: 160,
-        align: "center",
-        span: 6,
-        cell: true,
-        placeholder: " ",
-        type: "number",
-        precision: 1
-      },
+      // {
+      //   label: "QC扣减数量(Số lượng QC cắt giảm)",
+      //   prop: "qcTakeOut",
+      //   width: 160,
+      //   align: "center",
+      //   span: 6,
+      //   cell: true,
+      //   placeholder: " ",
+      //   type: "number",
+      //   precision: 1
+      // },
 
       {
         label: "存储位置(Vị trí lưu trữ)",

@@ -56,6 +56,25 @@
                     >{{ this.$t("public.del") }}</el-button
                   >
                 </template>
+
+                <template slot="equDiaBarrel" slot-scope="scope">
+                  <div v-if="scope.row.categoryId === 'dev-3'">
+                    <!-- string 类型 -->
+                    <el-input
+                      v-model="scope.row.equDiaBarrel"
+                      type="number"
+                    ></el-input>
+                  </div>
+                </template>
+                <template slot="equNeedleSpace" slot-scope="scope">
+                  <div v-if="scope.row.categoryId === 'dev-3'">
+                    <!-- string 类型 -->
+                    <el-input
+                      v-model="scope.row.equNeedleSpace"
+                      type="number"
+                    ></el-input>
+                  </div>
+                </template>
               </avue-crud>
             </div>
           </el-col>
@@ -217,7 +236,11 @@ export default {
             label: this.$t("ProWorkflowInfo.flid"),
             prop: "categoryId",
             type: "select",
-            dicData: DIC.VAILE,
+            dicData: postDicT(
+              "baseEquipmentCategoryList",
+              "categoryId",
+              "categoryId"
+            ),
             cell: false,
             // addDisplay: false
           },
@@ -225,7 +248,7 @@ export default {
             label: this.$t("ProWorkflowInfo.qyid"),
             prop: "areaId",
             type: "select",
-            dicData: DBC.VAILE,
+            dicData: postDicT("baseAreaList", "areaName", "areaId"),
             cell: true,
             width: 100,
           },
@@ -253,6 +276,7 @@ export default {
             cell: true,
             width: 120,
             overHidden: true,
+            sortable: true,
           },
           {
             label: this.$t("ProWorkflowInfo.hzb"),
@@ -268,6 +292,35 @@ export default {
             width: 100,
             align: "right",
           },
+          {
+            label: "筒径",
+            prop: "equDiaBarrel",
+            cell: true,
+            width: 100,
+            align: "right",
+            hide: true,
+            // hide: this.chooseData.parentId != "dev-3",
+            // slot: true,
+          },
+          {
+            label: "针距",
+            prop: "equNeedleSpace",
+            cell: true,
+            width: 100,
+            // slot: true,
+            hide: true,
+            align: "right",
+          },
+          {
+            label: "总针数",
+            prop: "needleCount",
+            cell: true,
+            width: 100,
+            // slot: true,
+            hide: true,
+            align: "right",
+          },
+
           {
             label: this.$t("ProWorkflowInfo.js"),
             prop: "equSpeed",
@@ -304,7 +357,9 @@ export default {
       rowCode: "", //勾选选中ID
       oldData: {},
       upData: {}, //选中数据编辑
-      chooseData: {},
+      chooseData: {
+        parentId: "123",
+      },
       loading: false,
       page: {
         pageSize: 20,
@@ -348,6 +403,15 @@ export default {
       //点击获取设备信息将该条数据存储,方便下方删除数据时作为参数执行获取设备信息函数
       this.chooseData = data;
       sessionStorage.setItem("data", JSON.stringify(data));
+      if (this.chooseData.parentId == "dev-3") {
+        this.Device.column[6].hide = false;
+        this.Device.column[7].hide = false;
+        this.Device.column[8].hide = false;
+      } else {
+        this.Device.column[6].hide = true;
+        this.Device.column[7].hide = true;
+        this.Device.column[8].hide = true;
+      }
       this.fn_Info(); //获取设备信息函数
     },
     // 新增设备信息表
@@ -406,7 +470,7 @@ export default {
     },
     add() {
       this.DeviceData.push({
-        equModel: this.chooseData.categoryCode,
+        categoryCode: this.chooseData.categoryCode,
         equipmentName: this.chooseData.categoryName,
         categoryId: this.chooseData.categoryId,
       });

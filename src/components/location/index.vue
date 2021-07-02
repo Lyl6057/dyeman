@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-24 08:12:20
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-06 07:55:47
+ * @LastEditTime: 2021-07-02 09:30:35
  * @Description: 
 -->
 <template>
@@ -121,7 +121,7 @@ export default {
         });
     },
     add() {
-      if (this.inData && Object.keys(this.inData).length != 0) {
+      if (this.inData && Object.keys(this.inData).length > 1) {
         this.choiceV = true;
       } else {
         this.$tip.error(this.$t("choicDlg.qxzrcmx"));

@@ -180,6 +180,14 @@ export default {
               color: "#409EFF",
               // content: "申购纱线入库看板",
             },
+            {
+              click: () => {
+                this.toView("rc_manual", this.$t("iaoMng.sx") + "_0");
+              },
+              title: "手工入仓",
+              icon: "el-icon-thumb",
+              color: "#409EFF",
+            },
             // {
             //   click: () => {
             //     this.toView("入仓看板");
@@ -285,6 +293,14 @@ export default {
               color: "#409EFF",
               // content: "胚布貨物包入库看板",
             },
+            {
+              click: () => {
+                this.toView("rc_manual", this.$t("iaoMng.pb") + "_0");
+              },
+              title: "手工入仓",
+              icon: "el-icon-thumb",
+              color: "#409EFF",
+            },
           ],
         },
         option3: {
@@ -335,6 +351,14 @@ export default {
               color: "#409EFF",
               // content: "成品布貨物包入库看板",
             },
+            {
+              click: () => {
+                this.toView("rc_manual", "成品布" + "_0");
+              },
+              title: "手工入仓",
+              icon: "el-icon-thumb",
+              color: "#409EFF",
+            },
           ],
         },
         option5: {
@@ -383,6 +407,14 @@ export default {
               color: "#409EFF",
               // content: "申购化工原料入库看板",
             },
+            {
+              click: () => {
+                this.toView("rc_manual", this.$t("iaoMng.hgyl") + "_0");
+              },
+              title: "手工入仓",
+              icon: "el-icon-thumb",
+              color: "#409EFF",
+            },
           ],
         },
         option7: {
@@ -428,6 +460,14 @@ export default {
               icon: "el-icon-s-claim",
               color: "#409EFF",
               // content: "申购颜料入库看板",
+            },
+            {
+              click: () => {
+                this.toView("rc_manual", this.$t("iaoMng.yl") + "_0");
+              },
+              title: "手工入仓",
+              icon: "el-icon-thumb",
+              color: "#409EFF",
             },
           ],
         },
@@ -484,6 +524,14 @@ export default {
               color: "#409EFF",
               // content: "申购化工原料入库看板",
             },
+            {
+              click: () => {
+                this.toView("rc_manual", "五金/行政/生產輔料" + "_0");
+              },
+              title: "手工入仓",
+              icon: "el-icon-thumb",
+              color: "#409EFF",
+            },
           ],
         },
         option6: {
@@ -511,6 +559,14 @@ export default {
               icon: "el-icon-s-claim",
               color: "#409EFF",
               // content: "申购化工原料入库看板",
+            },
+            {
+              click: () => {
+                this.toView("rc_manual", "五金/行政/生產輔料" + "_0");
+              },
+              title: "手工入仓",
+              icon: "el-icon-thumb",
+              color: "#409EFF",
             },
           ],
         },

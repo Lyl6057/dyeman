@@ -1,5 +1,5 @@
 import axios from "axios";
-import { sync } from "rimraf";
+import store from "@/store/index";
 export const webSocket = {
   setWebSoket(_this) {
     if ("WebSocket" in window) {
@@ -88,18 +88,26 @@ export function getDIC(codeTableId) {
   // let resultMap = _this.$store.getters.getDic(codeTableId);
 
   let resultMap = [];
-  axios.get("/api/getcodeValue?codeTableId=" + codeTableId).then(res => {
-    res.data.sort((a, b) => {
-      return a.orderno - b.orderno;
-    });
-    res.data.forEach(item => {
-      resultMap.push({
-        label: item.codename,
-        value: item.codeid
+  if (store.state.DIC.dicMap[codeTableId]) {
+    return store.state.DIC.dicMap[codeTableId];
+  } else {
+    axios.get("/api/getcodeValue?codeTableId=" + codeTableId).then(res => {
+      res.data.sort((a, b) => {
+        return a.orderno - b.orderno;
+      });
+      res.data.forEach(item => {
+        resultMap.push({
+          label: item.codename,
+          value: item.codeid
+        });
       });
     });
-  });
-  return resultMap;
+    store.commit("setDicItem", {
+      key: codeTableId,
+      value: resultMap
+    });
+    return resultMap;
+  }
 }
 
 // 获取下拉字典
@@ -130,38 +138,90 @@ export async function getDbDicT(url, url2) {
 // 获取字典表
 export function getDicT(url, label, value, form = {}) {
   // let resultMap = _this.$store.getters.getDic(codeTableId);
-
   let resultMap = [];
-  axios({
-    url: "/api/" + url,
-    method: "get",
-    params: form
-  }).then(res => {
-    let data = [];
-    if (res.data.rows) {
-      data = res.data.rows;
-    } else {
-      data = res.data;
-    }
-    data.sort((a, b) => {
-      return a.orderno - b.orderno;
-    });
-    data.forEach(item => {
-      for (var key in item) {
-        if (item[key] === 0) {
-          item[key] = "0";
-        }
-        if (item[key] === null) {
-          item[key] = " ";
-        }
+  if (store.state.DIC.dicMap[url]) {
+    return store.state.DIC.dicMap[url];
+  } else {
+    axios({
+      url: "/api/" + url,
+      method: "get",
+      params: form
+    }).then(res => {
+      let data = [];
+      if (res.data.rows) {
+        data = res.data.rows;
+      } else {
+        data = res.data;
       }
-      resultMap.push({
-        label: item[label],
-        value: item[value]
+      data.sort((a, b) => {
+        return a.orderno - b.orderno;
+      });
+      data.forEach(item => {
+        for (var key in item) {
+          if (item[key] === 0) {
+            item[key] = "0";
+          }
+          if (item[key] === null) {
+            item[key] = " ";
+          }
+        }
+        resultMap.push({
+          label: item[label],
+          value: item[value]
+        });
       });
     });
-  });
-  return resultMap;
+    store.commit("setDicItem", {
+      key: url,
+      value: resultMap
+    });
+    return resultMap;
+  }
+}
+// 获取字典表
+export function getDicTs(url, label, value, itemspec, model, msUnit) {
+  // let resultMap = _this.$store.getters.getDic(codeTableId);
+  let resultMap = [];
+  if (store.state.DIC.dicMap[url]) {
+    return store.state.DIC.dicMap[url];
+  } else {
+    axios({
+      url: "/api/" + url,
+      method: "get"
+    }).then(res => {
+      let data = [];
+      if (res.data.rows) {
+        data = res.data.rows;
+      } else {
+        data = res.data;
+      }
+      data.sort((a, b) => {
+        return a.orderno - b.orderno;
+      });
+      data.forEach(item => {
+        for (var key in item) {
+          if (item[key] === 0) {
+            item[key] = "0";
+          }
+          if (item[key] === null) {
+            item[key] = " ";
+          }
+        }
+        resultMap.push({
+          label: item[label],
+          value: item[value],
+          itemspec: item[itemspec],
+          model: item[model],
+          msUnit: item[msUnit]
+        });
+      });
+    });
+    store.commit("setDicItem", {
+      key: url,
+      value: resultMap
+    });
+    return resultMap;
+  }
 }
 export function postDicT(url, label, value, form = {}) {
   // let resultMap = _this.$store.getters.getDic(codeTableId);

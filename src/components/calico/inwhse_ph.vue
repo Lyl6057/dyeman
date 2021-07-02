@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-24 08:12:20
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-03 13:13:15
+ * @LastEditTime: 2021-07-02 08:52:53
  * @Description: 
 -->
 <template>
@@ -81,6 +81,10 @@ export default {
     inData: {},
     api: Object,
     form: Object,
+    loc: {
+      type: Boolean,
+      default: true,
+    },
   },
   components: {
     choice: choice,
@@ -127,6 +131,7 @@ export default {
       // 沒有貨位信息時重新請求數據
       this.loading = true;
       this.loc1C.showSummary = false;
+      this.chooseData = {};
       this.api
         .getLoc({
           rows: 999,

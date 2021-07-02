@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-04-23 08:32:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-06-27 19:12:50
+ * @LastEditTime: 2021-06-27 19:17:52
  * @Description: 
 -->
 <template>
@@ -157,7 +157,6 @@ export default {
           });
           this.crud = this.crud.concat(data);
         });
-        // console.log(this.crud);
         this.crud.forEach((item, i) => {
           item.index = i + 1;
           if (tleList.indexOf(item.weaveJobCode) == -1) {
@@ -203,9 +202,7 @@ export default {
         }
         encodeY.push(1 + i);
       });
-
       legendData.unshift("trend");
-
       tleList.forEach((item, i) => {
         this.cruds.push({
           index: i + 1,
@@ -260,7 +257,6 @@ export default {
           barCategoryGap: "20%",
           count: currentSeriesIndices.length - 1,
         });
-
         var points = [];
         for (var i = 0; i < currentSeriesIndices.length; i++) {
           var seriesIndex = currentSeriesIndices[i];
@@ -275,7 +271,6 @@ export default {
           stroke: api.visual("color"),
           fill: null,
         });
-
         return {
           type: "polyline",
           shape: {
@@ -284,7 +279,6 @@ export default {
           style: style,
         };
       }
-
       let option = {
         tooltip: {
           trigger: "axis",
@@ -369,7 +363,6 @@ export default {
           })
         ),
       };
-
       var chartDom = document.getElementById("zzt");
       var myChart = this.$echarts.init(chartDom);
       option && myChart.setOption(option, true);

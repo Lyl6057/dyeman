@@ -134,6 +134,25 @@ export default {
 
           this.loading = false;
         });
+      } else if (this.choiceTle == "选择胚布信息") {
+        this.backups = [];
+        this.getData(this.choiceQ).then((Res) => {
+          this.crud = Res.data;
+          if (this.crud.length === 0) {
+            this.loading = false;
+          }
+
+          this.crud.forEach((item, index) => {
+            item.index = index + 1;
+            this.backups.push(item);
+            if (index === this.crud.length - 1) {
+              setTimeout(() => {
+                this.filterList();
+                this.loading = false;
+              }, 200);
+            }
+          });
+        });
       } else if (this.choiceTle == "選擇漂染基礎工藝") {
         this.getData(Object.assign(this.form, this.choiceQ, {})).then((Res) => {
           this.crud = Res.data;
@@ -210,6 +229,18 @@ export default {
     selectionChange(val) {
       this.chooseData = val;
     },
+    filterList() {
+      this.crud = JSON.parse(JSON.stringify(this.backups));
+      this.$nextTick(() => {
+        for (let key in this.form) {
+          if (this.form[key]) {
+            this.crud = this.crud.filter(
+              (a) => (a[key] + "").indexOf(this.form[key]) != -1
+            );
+          }
+        }
+      });
+    },
   },
   created() {
     switch (this.choiceTle) {
@@ -217,7 +248,7 @@ export default {
         this.choiceC = clothNoteC(this);
         this.choiceF = clothNoteF(this);
         this.getData = getClothNote;
-        this.form.clothState = 2;
+        // this.form.clothState = 2;
         break;
       case "選擇漂染基礎工藝":
         this.choiceC = techargueC(this);

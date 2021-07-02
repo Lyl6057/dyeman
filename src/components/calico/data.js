@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-24 08:12:20
  * @LastEditors: Lyl
- * @LastEditTime: 2021-06-19 16:26:14
+ * @LastEditTime: 2021-07-01 16:07:36
  * @Description:
  */
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
@@ -112,8 +112,8 @@ export function loc1C(_this) {
       {
         label: _this.$t("whseField.ph"), //"批號",
         prop: "batchNo",
-        cell: true
-        // width: 130,
+        cell: true,
+        width: 180
       },
       {
         label: _this.$t("whseField.ph2"), // "疋號",
@@ -140,16 +140,21 @@ export function loc1C(_this) {
       {
         label: _this.$t("whseField.krbph"), //"客人布票号",
         prop: "custTicket",
-        cell: true,
-        width: 170
+        cell: true
+        // width: 170
       },
       {
         label: _this.$t("whseField.hwm"), //"貨位碼",
         prop: "locationCode",
         cell: true,
         width: 160,
+
+        hide: !_this.loc,
+
         click: () => {
+          // if (_this.popup) {
           _this.choiceV = true;
+          // }
         }
       }
     ]

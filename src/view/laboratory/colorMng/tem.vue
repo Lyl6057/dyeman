@@ -218,12 +218,14 @@ export default {
             this.formOp.column[2].maxRows = 100;
             break;
         }
+
         getDepth({
           codeId: this.form.colorDepth,
           codeTableId: "bas_colorclTepth",
         }).then((res) => {
-          this.form.colorNo =
-            this.code[0].label + res.data[0].reserved1 + this.codeSupplyNum;
+          // this.form.colorNo =
+          //   this.code[0].label + res.data[0].reserved1 + this.codeSupplyNum;
+          this.form.colorNo = res.data[0].reserved1 + this.codeSupplyNum;
         });
       });
     },

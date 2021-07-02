@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-06-21 09:00:51
+ * @LastEditTime: 2021-06-30 16:46:40
  * @Description:
 -->
 <template>
@@ -143,12 +143,14 @@
 <script>
 import choice from "@/components/proMng/index";
 import { mainCrud, dlgForm, dlgCrud, bfOp, testOp, itemOp } from "./data";
+import { timeConversion } from "@/config/util";
 import {
   get,
   add,
   update,
   getPo,
   getPoDtla,
+  getPoDtlb,
   getTest,
   addTest,
   deltest,
@@ -321,6 +323,8 @@ export default {
     },
     add() {
       this.choiceTle = "选择胚布信息";
+      this.choiceQ.weaveJob = this.form.weaveJobCode;
+      this.choiceQ.weight = this.form.clothWeight;
       this.choiceV = true;
     },
     addOther(type) {
@@ -403,8 +407,9 @@ export default {
             // isNaN(this.form.clothWeight) ? (this.form.clothWeight = "") : "";
             // isNaN(this.form.poAmountKg) ? (this.form.poAmountKg = "") : "";
             // isNaN(this.form.poAmountLb) ? (this.form.poAmountLb = "") : "";
-            data.workDate += " 00:00:00";
-            data.deliveDate += " 00:00:00";
+            data.workDate = timeConversion(this.form.workDate);
+
+            data.deliveDate = timeConversion(this.form.deliveDate);
             let vat = "";
             data.mergVatNo.forEach((item, i) => {
               if (i == data.mergVatNo.length - 1) {
@@ -586,7 +591,6 @@ export default {
         });
       }
       if (this.choiceTle == "選擇生产项目") {
-        console.log(this.form.item);
         val.forEach((item, i) => {
           let data = {};
           data = {
