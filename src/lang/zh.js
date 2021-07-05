@@ -90,6 +90,9 @@ export default {
   },
   iaoMng: {
     // 出入庫
+    wjrc: "五金用品入倉",
+    xzrc: "行政用品入倉",
+    flrc: "生產輔料入倉",
     rc: "入倉",
     rcmx: "入倉明細",
     rcphzl: "入倉批號資料",
@@ -121,7 +124,7 @@ export default {
     hgylrc: "化工原料入倉",
     krlyl: "客人來原料",
     hgyl: "化工原料",
-    ylcg: "原料採購",
+    ylcg1: "原料採購",
     wfcth: "外發廠退回",
     sghgyl: "申購化工原料",
     // 顏料入倉
@@ -214,7 +217,8 @@ export default {
     xzcl: "選擇材料",
     shdmx: "選擇送貨單明細",
     xz: "行政",
-    wj: "五金",
+    wj: "五金用品",
+    scfl: "生產輔料",
     xzsxrc: "選擇紗線入庫明細",
     xzpbrc: "選擇胚布入倉明細",
     xzwjxzrc: "選擇五金/行政入倉明細",

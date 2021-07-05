@@ -26,8 +26,14 @@
             <el-col :span="3">
               <avue-data-cardtext :option="rc.option4"></avue-data-cardtext
             ></el-col>
-            <el-col :span="3">
+            <!-- <el-col :span="3">
               <avue-data-cardtext :option="rc.option6"></avue-data-cardtext
+            ></el-col> -->
+            <el-col :span="3">
+              <avue-data-cardtext :option="rc.wj"></avue-data-cardtext
+            ></el-col>
+            <el-col :span="3">
+              <avue-data-cardtext :option="rc.xz"></avue-data-cardtext
             ></el-col>
           </el-row>
         </div>
@@ -383,7 +389,7 @@ export default {
               click: () => {
                 this.toView("rc_cg", this.$t("iaoMng.hgyl") + "_2");
               },
-              title: this.$t("iaoMng.ylcg"),
+              title: this.$t("iaoMng.ylcg1"),
               icon: "el-icon-shopping-cart-2",
               color: "#409EFF",
               // content: "采购入库入库看板",
@@ -526,7 +532,7 @@ export default {
             },
             {
               click: () => {
-                this.toView("rc_manual", "五金/行政/生產輔料" + "_0");
+                this.toView("rc_manual", this.$t("choicDlg.scfl") + "_0");
               },
               title: "手工入仓",
               icon: "el-icon-thumb",
@@ -562,7 +568,43 @@ export default {
             },
             {
               click: () => {
-                this.toView("rc_manual", "五金/行政/生產輔料" + "_0");
+                this.toView("rc_manual", this.$t("choicDlg.scfl") + "_0");
+              },
+              title: "手工入仓",
+              icon: "el-icon-thumb",
+              color: "#409EFF",
+            },
+          ],
+        },
+        wj: {
+          span: 24,
+          data: [
+            {
+              title: this.$t("iaoMng.wjrc"),
+              icon: "yx-icf-cailiaogongcheng",
+              color: "#606266",
+            },
+            {
+              click: () => {
+                this.toView("rc_manual", this.$t("choicDlg.wj") + "_0");
+              },
+              title: "手工入仓",
+              icon: "el-icon-thumb",
+              color: "#409EFF",
+            },
+          ],
+        },
+        xz: {
+          span: 24,
+          data: [
+            {
+              title: this.$t("iaoMng.xzrc"),
+              icon: "yx-icf-cailiaogongcheng",
+              color: "#606266",
+            },
+            {
+              click: () => {
+                this.toView("rc_manual", this.$t("choicDlg.xz") + "_0");
               },
               title: "手工入仓",
               icon: "el-icon-thumb",
@@ -1159,9 +1201,8 @@ export default {
   }
 
   .main {
-    width: 110%;
-    min-width: 1000px;
-    // width: 100%;
+    // min-width: 1000px;
+    width: 100%;
     height: calc(100vh - 80px);
     min-height: 500px;
     overflow: auto;

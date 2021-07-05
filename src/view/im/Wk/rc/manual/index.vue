@@ -194,16 +194,40 @@ import {
   delScfl,
   updateScfl,
   addScfl,
-  // 生产辅料
   getScflDetali,
   addScflDetali,
   updateScflDetali,
   delScflDetali,
-  //  生产辅料
   getScflLocList,
   delScflLoc,
   updateScflLoc,
   addScflLoc,
+  //  五金
+  getWj,
+  delWj,
+  updateWj,
+  addWj,
+  getWjDetali,
+  addWjDetali,
+  updateWjDetali,
+  delWjDetali,
+  getWjLocList,
+  delWjLoc,
+  updateWjLoc,
+  addWjLoc,
+  //  行政
+  getXz,
+  delXz,
+  updateXz,
+  addXz,
+  getXzDetali,
+  addXzDetali,
+  updateXzDetali,
+  delXzDetali,
+  getXzLocList,
+  delXzLoc,
+  updateXzLoc,
+  addXzLoc,
 } from "@/api/im/Wk/rc";
 import choice from "@/components/choice";
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
@@ -296,6 +320,7 @@ export default {
           this.everyThing.addLoc = addSxLoc;
           this.everyThing.delLoc = delSxLoc;
           this.everyThing.updateLoc = updateSxLoc;
+          this.everyThing.batchCode = "sx_in_whse";
           break;
         case this.$t("iaoMng.pb"):
           this.everyThing.get = getPb;
@@ -312,6 +337,7 @@ export default {
           this.everyThing.addLoc = addPbPhDetali;
           this.everyThing.delLoc = delPbPhDetali;
           this.everyThing.updateLoc = updatePbPhDetali;
+          this.everyThing.batchCode = "pb_in_whse";
           break;
         case "成品布":
           this.everyThing.get = getCpb;
@@ -323,24 +349,9 @@ export default {
           this.everyThing.updateDetail = updateCpbDetali;
           this.everyThing.delDetail = delCpbDetali;
           this.everyThing.sx2C = cpb2C(this);
+          this.everyThing.batchCode = "cpb_in_whse";
           break;
-        case "五金/行政/生產輔料":
-          this.everyThing.get = getScfl;
-          this.everyThing.del = delScfl;
-          this.everyThing.update = updateScfl;
-          this.everyThing.sx2C = yjxz2C(this);
-
-          this.everyThing.add = addScfl;
-          this.everyThing.getDetail = getScflDetali;
-          this.everyThing.addDetail = addScflDetali;
-          this.everyThing.updateDetail = updateScflDetali;
-          this.everyThing.delDetail = delScflDetali;
-          this.everyThing.getPh = getScflLocList;
-          this.everyThing.addPh = addScflLoc;
-          this.everyThing.delPh = delScflLoc;
-          this.everyThing.updatePh = updateScflLoc;
-          break;
-        // case this.$t("iaoMng.scfl"):
+        // case "五金/行政/生產輔料":
         //   this.everyThing.get = getScfl;
         //   this.everyThing.del = delScfl;
         //   this.everyThing.update = updateScfl;
@@ -356,6 +367,54 @@ export default {
         //   this.everyThing.delPh = delScflLoc;
         //   this.everyThing.updatePh = updateScflLoc;
         //   break;
+        case this.$t("choicDlg.wj"):
+          this.everyThing.get = getWj;
+          this.everyThing.del = delWj;
+          this.everyThing.update = updateWj;
+          this.everyThing.sx2C = yjxz2C(this);
+          this.everyThing.add = addWj;
+          this.everyThing.getDetail = getWjDetali;
+          this.everyThing.addDetail = addWjDetali;
+          this.everyThing.updateDetail = updateWjDetali;
+          this.everyThing.delDetail = delWjDetali;
+          this.everyThing.getPh = getWjLocList;
+          this.everyThing.addPh = addWjLoc;
+          this.everyThing.delPh = delWjLoc;
+          this.everyThing.updatePh = updateWjLoc;
+          this.everyThing.batchCode = "wj_in_whse";
+          break;
+        case this.$t("choicDlg.xz"):
+          this.everyThing.get = getXz;
+          this.everyThing.del = delXz;
+          this.everyThing.update = updateXz;
+          this.everyThing.sx2C = yjxz2C(this);
+          this.everyThing.add = addXz;
+          this.everyThing.getDetail = getXzDetali;
+          this.everyThing.addDetail = addXzDetali;
+          this.everyThing.updateDetail = updateXzDetali;
+          this.everyThing.delDetail = delXzDetali;
+          this.everyThing.getPh = getXzLocList;
+          this.everyThing.addPh = addXzLoc;
+          this.everyThing.delPh = delXzLoc;
+          this.everyThing.updatePh = updateXzLoc;
+          this.everyThing.batchCode = "xz_in_whse";
+          break;
+        case this.$t("choicDlg.scfl"):
+          this.everyThing.get = getScfl;
+          this.everyThing.del = delScfl;
+          this.everyThing.update = updateScfl;
+          this.everyThing.sx2C = yjxz2C(this);
+          this.everyThing.add = addScfl;
+          this.everyThing.getDetail = getScflDetali;
+          this.everyThing.addDetail = addScflDetali;
+          this.everyThing.updateDetail = updateScflDetali;
+          this.everyThing.delDetail = delScflDetali;
+          this.everyThing.getPh = getScflLocList;
+          this.everyThing.addPh = addScflLoc;
+          this.everyThing.delPh = delScflLoc;
+          this.everyThing.updatePh = updateScflLoc;
+          this.everyThing.batchCode = "scfl_in_whse";
+          break;
         case this.$t("iaoMng.hgyl"):
           this.everyThing.get = getRhl;
           this.everyThing.del = delRhl;
@@ -374,6 +433,7 @@ export default {
           this.everyThing.addLoc = addRhlLoc;
           this.everyThing.delLoc = delRhlLoc;
           this.everyThing.updateLoc = updateRhlLoc;
+          this.everyThing.batchCode = "hgyl_in_whse";
           break;
         case this.$t("iaoMng.yl"):
           this.everyThing.get = getYl;
@@ -393,6 +453,7 @@ export default {
           this.everyThing.addLoc = addYlLoc;
           this.everyThing.delLoc = delYlLoc;
           this.everyThing.updateLoc = updateYlLoc;
+          this.everyThing.batchCode = "yl_in_whse";
           break;
         default:
           break;
@@ -433,12 +494,10 @@ export default {
               item.suppId = item.deliNo;
             }
             if (index === this.crud.length - 1) {
-              // this.everyThing.mainC.column[7].hide = true;
               this.loading = false;
             }
           });
           if (this.crud.length === 0) {
-            // this.everyThing.mainC.column[7].hide = true;
             this.loading = false;
           }
         })

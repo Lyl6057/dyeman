@@ -13,10 +13,6 @@ export default {
     lsgz: "Tiền lương tạm thời"
   },
 
-
-
-
-
   public: {
     add: "Điểm mới",
     update: "Sửa đổi",
@@ -26,7 +22,7 @@ export default {
     save: "Bảo tồn",
     close: "Đóng cửa",
     sc: "生成",
-    lsh: "Dòng chảy số",// 流水號,
+    lsh: "Dòng chảy số", // 流水號,
     loading: "Tải lên một cách khó khăn...",
     updateTle: "請先選擇要修改的數據!",
     delTle: "Hãy chọn dữ liệu cần sửa đổi trước!",
@@ -35,7 +31,7 @@ export default {
     qxcz: "Hủy bỏ chiến dịch!",
     bccg: "Bảo quản thành công!",
     bcsb: "Lưu thất bại",
-    qxxzmx: "請先選擇明顯!",
+    qxxzmx: "請先選擇明顯!"
   },
   whseMng: {
     // 倉位管理
@@ -90,9 +86,13 @@ export default {
     saveTle8: "入倉編號/日期不能為空!",
     saveTle9: "入倉明細的批號/箱數/重量不能為空!",
     saveTle10: "入倉貨位的箱數/重量不能為空!",
-    saveTle11: "入倉貨位的批號/疋號不能為空!",
+    saveTle11: "入倉貨位的批號/疋號不能為空!"
   },
-  iaoMng: { // 出入庫
+  iaoMng: {
+    // 出入庫
+    wjrc: "五金用品入倉",
+    xzrc: "行政用品入倉",
+    flrc: "生產輔料入倉",
     rc: "入倉",
     rcmx: " 入倉明細",
     rcphzl: " 入倉批號資料",
@@ -124,7 +124,7 @@ export default {
     hgylrc: "化工原料入倉",
     krlyl: "客人來原料",
     hgyl: "化工原料",
-    ylcg: "原料採購",
+    ylcg1: "原料採購",
     wfcth: "外發廠退回",
     sghgyl: "申購化工原料",
     // 顏料入倉

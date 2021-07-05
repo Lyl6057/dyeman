@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-06-30 16:46:40
+ * @LastEditTime: 2021-07-05 13:30:54
  * @Description:
 -->
 <template>
@@ -322,6 +322,10 @@ export default {
       });
     },
     add() {
+      if (!this.form.weaveJobCode || !this.form.clothWeight) {
+        this.$tip.warning("請先選擇織造通知單/填寫合計重量!");
+        return;
+      }
       this.choiceTle = "选择胚布信息";
       this.choiceQ.weaveJob = this.form.weaveJobCode;
       this.choiceQ.weight = this.form.clothWeight;

@@ -35,7 +35,7 @@ export default {
     qxcz: "Cancel the operation!",
     bccg: "Save success!",
     bcsb: "Save failed",
-    qxxzmx: "Please select Obvious first!",
+    qxxzmx: "Please select Obvious first!"
   },
   whseMng: {
     // 倉位管理
@@ -88,11 +88,18 @@ export default {
     saveTle6: "Please save the warehousing information first!",
     saveTle7: "The purchase/delivery number cannot be blank!",
     saveTle8: "The warehousing number/date cannot be empty!",
-    saveTle9: "The batch number/carton number/weight of the warehouse entry details should not be empty!",
-    saveTle10: "The number of boxes/weight of warehousing space cannot be empty!",
-    saveTle11: "The lot/piece number of the warehousing space must not be empty!",
+    saveTle9:
+      "The batch number/carton number/weight of the warehouse entry details should not be empty!",
+    saveTle10:
+      "The number of boxes/weight of warehousing space cannot be empty!",
+    saveTle11:
+      "The lot/piece number of the warehousing space must not be empty!"
   },
-  iaoMng: { // 出入庫
+  iaoMng: {
+    // 出入庫
+    wjrc: "五金用品入倉",
+    xzrc: "行政用品入倉",
+    flrc: "生產輔料入倉",
     rc: " warehousing ",
     rcmx: " warehousing detail",
     rcphzl: " batch detail",
@@ -124,7 +131,7 @@ export default {
     hgylrc: "Chemical",
     krlyl: "Guests",
     hgyl: "Chemical",
-    ylcg: "Procurement",
+    ylcg1: "Procurement",
     wfcth: "Outgoing back",
     sghgyl: "Purchase",
     // 顏料入倉
@@ -170,8 +177,10 @@ export default {
     tstzd: "Return notice",
     xzjgzdl: "Please select the processing order first!",
     saveTle1: "The warehousing number/registration number cannot be empty!",
-    saveTle2: "The processing plant in the warehouse entry data cannot be empty!",
-    saveTle3: "The processing order number in the warehouse entry data cannot be empty!",
+    saveTle2:
+      "The processing plant in the warehouse entry data cannot be empty!",
+    saveTle3:
+      "The processing order number in the warehouse entry data cannot be empty!",
     saveTle4: "The batch number cannot be blank!",
     saveTle5: "The number of boxes cannot be empty!",
     saveTle6: "Weight/unit cannot be empty!",
@@ -182,8 +191,10 @@ export default {
     saveTle11: "The customer number cannot be blank!",
     saveTle12: "The cylinder number cannot be empty!",
     saveTle13: "Warehouse No/ Incoming No cannot be empty!",
-    saveTle14: "The warehouse entry number/purchase order number cannot be empty!",
-    saveTle15: "The warehouse entry number/purchase order number/delivery order number cannot be empty!",
+    saveTle14:
+      "The warehouse entry number/purchase order number cannot be empty!",
+    saveTle15:
+      "The warehouse entry number/purchase order number/delivery order number cannot be empty!",
     saveTle16: "Raw material number/raw material name cannot be blank!",
     saveTle17: "The batch number/weight/unit cannot be empty!",
     saveTle18: "The warehousing quantity/unit cannot be empty!",
@@ -218,6 +229,7 @@ export default {
     shdmx: "Delivery note details",
     xz: "administrative",
     wj: "hardware",
+    scfl: "生產輔料",
     xzsxrc: "Select yarn inventory details",
     xzpbrc: "Select grey cloth for storage details",
     xzwjxzrc: "Select hardware/administrative inventory details",
@@ -248,7 +260,8 @@ export default {
     xzpbhwb: "Choose grey cloth cargo bag",
     xzcpbhwb: "Select finished cloth goods package",
     xzshd: "Select delivery note",
-    xzwfylpl: "Select the chemical raw material batching plan in the outside plant",
+    xzwfylpl:
+      "Select the chemical raw material batching plan in the outside plant",
     xzwfflpl: "Select the external auxiliary material batching plan",
     xzwfpbpl: "Select the layout plan of the external fabric",
     xzbcpbpl: "Select the plant germinal cloth batching plan",
@@ -263,7 +276,6 @@ export default {
     xzshxx: "Select the color number information",
     xzshzl: "Select color number data",
     bhgzpz: "Numbering rule configuration"
-
   },
   whseField: {
     rcbh: "Number",
@@ -430,7 +442,6 @@ export default {
     rslb: "Dyeing category",
     sfsr: "Whether the double dye",
     slsl: "Number"
-
   },
   ProWorkflowInfo: {
     //LD

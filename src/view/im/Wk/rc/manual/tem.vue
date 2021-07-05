@@ -154,9 +154,9 @@
                   >
                     <!-- @change="selectChange(scope.row)" -->
                     <el-option
-                      v-for="item in scope.row.materialType == '1'
+                      v-for="item in datas == $t('choicDlg.wj')
                         ? wj
-                        : scope.row.materialType == '2'
+                        : datas == $t('choicDlg.xz')
                         ? xz
                         : scfl"
                       :key="item.value"
@@ -190,14 +190,20 @@
           v-if="
             datas === this.$t('iaoMng.hgyl') ||
             datas === this.$t('iaoMng.yl') ||
-            datas === '五金/行政/生產輔料'
+            datas === this.$t('choicDlg.wj') ||
+            datas === this.$t('choicDlg.xz') ||
+            datas === this.$t('choicDlg.scfl')
           "
         >
           <el-tabs v-model="tabs" type="border-card">
             <el-tab-pane
               :label="datas + this.$t('iaoMng.rcmxhw')"
               name="loc"
-              v-if="datas != '五金/行政/生產輔料'"
+              v-if="
+                datas != this.$t('choicDlg.wj') &&
+                datas != this.$t('choicDlg.xz') &&
+                datas != this.$t('choicDlg.scfl')
+              "
             >
               <loction
                 ref="loc"
@@ -275,6 +281,7 @@ import {
   getAdsuppliesarticles,
   getProductivesupplies,
   baseCodeSupply,
+  baseCodeSupplyEx,
 } from "@/api/index";
 export default {
   components: {
@@ -353,13 +360,13 @@ export default {
         "model",
         "msUnit"
       ),
+      code: "",
     };
   },
   watch: {},
   methods: {
     getDetail() {
       this.mx = [];
-      // this.chooseData = {};
       this.oldData = {};
       this.form = this.detail;
       if (this.isAdd) {
@@ -380,41 +387,8 @@ export default {
           whseDyesalinFk: this.detail.whseDyesalinoid, // 顏料Oid
         })
         .then((res) => {
-          // let dicData = [];
-          // if (this.datas === this.$t("iaoMng.hgyl") || this.datas === this.$t("iaoMng.yl")) {
-          //   getHardwarearticles().then((Res1) => {
-          //     dicData = Res1.data;
-          //     getAdsuppliesarticles().then((Res) => {
-          //       dicData = dicData.concat(Res.data);
-          //       getProductivesupplies().then((scfl) => {
-          //         dicData = dicData.concat(scfl.data);
-          //         let records = res.data;
-          //         this.page.total = records.total;
-          //         this.mxOp.column[4].dicData = dicData;
-          //         this.mx = records.records;
-          //         if (this.mx.length === 0) {
-          //           this.loading = false;
-          //         }
-          //         this.mx.forEach((item, index) => {
-          //           item.index = index + 1;
-          //           item.chinName = item.materialNum;
-          //           if (index === this.mx.length - 1) {
-          //             this.mxOp.showSummary = true;
-          //             setTimeout(() => {
-          //               // this.$refs.mx.setCurrentRow(this.mx[0]);
-          //               // this.getAlloc();
-          //               this.loading = false;
-          //             }, 200);
-          //           }
-          //         });
-          //       });
-          //     });
-          //   });
-          // } else {
-
           let records = res.data;
           this.page.total = records.total;
-          // this.mxOp.column[4].dicData = dicData;
           this.mx = records.records;
           if (this.mx.length === 0) {
             this.loading = false;
@@ -426,19 +400,19 @@ export default {
             item.index = index + 1;
             item.chinName = item.materialNum;
             // item.yarnsName = item.yarnsId;
-            if (this.datas === this.$t("iaoMng.hgyl")) {
-              // 處理英文名稱 、色光、力份信息
-              let data = JSON.parse(JSON.stringify(item.chemicalId));
-              item.ennamelong = item.chemicalId;
-              item.modeltype = item.chemicalId;
-              item.vitality = item.chemicalId;
-            }
-            if (this.datas === this.$t("iaoMng.yl")) {
-              // 處理英文名稱 、色光、力份信息
-              item.ennamelong = item.chemicalId;
-              item.bcColor = item.chemicalId;
-              item.bcForce = item.chemicalId;
-            }
+            // if (this.datas === this.$t("iaoMng.hgyl")) {
+            //   // 處理英文名稱 、色光、力份信息
+            //   let data = JSON.parse(JSON.stringify(item.chemicalId));
+            //   item.ennamelong = item.chemicalId;
+            //   item.modeltype = item.chemicalId;
+            //   item.vitality = item.chemicalId;
+            // }
+            // if (this.datas === this.$t("iaoMng.yl")) {
+            //   // 處理英文名稱 、色光、力份信息
+            //   item.ennamelong = item.chemicalId;
+            //   item.bcColor = item.chemicalId;
+            //   item.bcForce = item.chemicalId;
+            // }
             // item.bcMatengname = item.chemicalId;
             // item.bcColor = item.chemicalId;
             // item.bcForce = item.chemicalId;
@@ -453,7 +427,9 @@ export default {
           });
           // }
           setTimeout(() => {
-            this.$refs.mx.setCurrentRow(this.mx[0] || {});
+            if (this.mx.length) {
+              this.$refs.mx.setCurrentRow(this.mx[0]);
+            }
           }, 200);
         });
     },
@@ -646,8 +622,11 @@ export default {
         weightUnit: "KG",
         $cellEdit: true,
         countingNo: this.mx.length + 1,
-        materialType: "1",
+        // materialType: "1",
+        batchNo: this.code,
       });
+      this.code =
+        this.code.substring(0, 3) + (Number(this.code.substring(3)) + 1);
       this.$refs.mx.setCurrentRow(this.mx[this.mx.length - 1]);
       this.$nextTick(() => {
         this.$toTableLow(this, "mx");
@@ -734,9 +713,9 @@ export default {
             .delPh(
               this.datas === this.$t("iaoMng.yl")
                 ? this.choosePhData.whseDyesainDtlboid
-                : this.datas === "五金/行政/生產輔料"
-                ? this.choosePhData.whseAccessoriesDtlaoid
-                : this.choosePhData.whseChemicalinDtlboid
+                : this.datas === this.$t("iaoMng.hgyl")
+                ? this.choosePhData.whseChemicalinDtlboid
+                : this.choosePhData.whseAccessoriesDtlaoid
             )
             .then((res) => {
               if (res.data.code === 200) {
@@ -770,7 +749,9 @@ export default {
       if (
         this.datas === this.$t("iaoMng.hgyl") ||
         this.datas === this.$t("iaoMng.yl") ||
-        this.datas === "五金/行政/生產輔料"
+        this.datas === this.$t("choicDlg.wj") ||
+        this.datas === this.$t("choicDlg.xz") ||
+        this.datas === this.$t("choicDlg.scfl")
       ) {
         this.getPh();
         // this.getLoc();
@@ -850,7 +831,7 @@ export default {
         for (let i = 0; i < this.mx.length; i++) {
           this.mx[i].chemicalName = this.mx[i].$chemicalId;
           if (!this.mx[i].loc) {
-            break;
+            return;
           }
           for (let j = 0; j < this.mx[i].loc.length; j++) {
             if (!this.mx[i].loc[j].weight) {
@@ -860,14 +841,18 @@ export default {
           }
         }
       }
-      if (this.datas === "五金/行政/生產輔料") {
+      if (
+        this.datas === this.$t("choicDlg.wj") ||
+        this.datas === this.$t("choicDlg.xz") ||
+        this.datas === this.$t("choicDlg.scfl")
+      ) {
         for (let i = 0; i < this.mx.length; i++) {
           if (!this.mx[i].materialNum) {
             this.$tip.error("材料名稱不能为空!");
             return;
           }
           if (!this.mx[i].list) {
-            break;
+            continue;
           }
           for (let j = 0; j < this.mx[i].list.length; j++) {
             if (
@@ -907,7 +892,9 @@ export default {
               if (
                 item.loc &&
                 this.datas != "成品布" &&
-                this.datas != "五金/行政/生產輔料"
+                this.datas != this.$t("choicDlg.wj") &&
+                this.datas != this.$t("choicDlg.xz") &&
+                this.datas != this.$t("choicDlg.scfl")
               ) {
                 item.countingNo = item.loc ? item.loc.length : 0;
                 item.weight = 0;
@@ -915,7 +902,12 @@ export default {
                   item.weight = Number(item.weight) + Number(loc.weight);
                 });
               }
-              if (item.list && this.datas == "五金/行政/生產輔料") {
+              if (
+                item.list &&
+                (this.datas == this.$t("choicDlg.wj") ||
+                  this.datas === this.$t("choicDlg.xz") ||
+                  this.datas === this.$t("choicDlg.scfl"))
+              ) {
                 item.poQty = 0;
                 item.list.forEach((loc) => {
                   item.poQty = Number(item.poQty) + Number(loc.weight);
@@ -945,6 +937,9 @@ export default {
                 data.whseCalicoinFk = this.detail.whseCalicoinoid;
                 data.whseChemicalinFk = this.detail.whseChemicalinoid;
                 data.whseDyesalinFk = this.detail.whseDyesalinoid;
+                baseCodeSupply({ code: this.everyThing.batchCode }).then(
+                  (res) => {}
+                );
                 this.everyThing.addDetail(data).then((res) => {
                   item.whseFinishedclothinDtloid = res.data.data;
                   item.whseYarninDtloid = res.data.data;
@@ -970,7 +965,9 @@ export default {
                   if (
                     this.datas === this.$t("iaoMng.hgyl") ||
                     this.datas === this.$t("iaoMng.yl") ||
-                    this.datas === "五金/行政/生產輔料"
+                    this.datas === this.$t("choicDlg.wj") ||
+                    this.datas === this.$t("choicDlg.xz") ||
+                    this.datas === this.$t("choicDlg.scfl")
                   ) {
                     if (
                       !item.whseChemicalinDtlboid &&
@@ -1022,6 +1019,8 @@ export default {
           });
         });
       } else {
+        this.form.sysCreated = this.$getNowTime("datetime");
+        this.form.sysCreatedby = this.$store.state.userOid;
         this.everyThing.add(this.form).then((res) => {
           if (this.mx.length === 0) {
             setTimeout(() => {
@@ -1043,7 +1042,9 @@ export default {
               if (
                 item.loc &&
                 this.datas != "成品布" &&
-                this.datas != "五金/行政/生產輔料"
+                this.datas != this.$t("choicDlg.wj") &&
+                this.datas != this.$t("choicDlg.xz") &&
+                this.datas != this.$t("choicDlg.scfl")
               ) {
                 item.countingNo = item.loc ? item.loc.length : 0;
                 item.weight = 0;
@@ -1051,7 +1052,12 @@ export default {
                   item.weight = Number(item.weight) + Number(loc.weight);
                 });
               }
-              if (item.list && this.datas == "五金/行政/生產輔料") {
+              if (
+                item.list &&
+                (this.datas == this.$t("choicDlg.wj") ||
+                  this.datas === this.$t("choicDlg.xz") ||
+                  this.datas === this.$t("choicDlg.scfl"))
+              ) {
                 item.poQty = 0;
                 item.list.forEach((loc) => {
                   item.poQty = Number(item.poQty) + Number(loc.weight);
@@ -1081,6 +1087,9 @@ export default {
                 data.whseCalicoinFk = this.form.whseCalicoinoid;
                 data.whseChemicalinFk = this.form.whseChemicalinoid;
                 data.whseDyesalinFk = this.form.whseDyesalinoid;
+                baseCodeSupply({ code: this.everyThing.batchCode }).then(
+                  (res) => {}
+                );
                 this.everyThing.addDetail(data).then((res) => {
                   item.whseYarninDtloid = res.data.data;
                   item.whseCalicoinDtlaoid = res.data.data;
@@ -1106,7 +1115,9 @@ export default {
                   if (
                     this.datas === this.$t("iaoMng.hgyl") ||
                     this.datas === this.$t("iaoMng.yl") ||
-                    this.datas === "五金/行政/生產輔料"
+                    this.datas === this.$t("choicDlg.wj") ||
+                    this.datas === this.$t("choicDlg.xz") ||
+                    this.datas === this.$t("choicDlg.scfl")
                   ) {
                     if (
                       !item.whseChemicalinDtlboid &&
@@ -1166,6 +1177,9 @@ export default {
     },
     selectChange(val, row) {
       row.unitQty = val.msUnit;
+      if (row.batchNo.indexOf(val.value.split("-")[0]) == -1) {
+        row.batchNo = val.value.split("-")[0] + row.batchNo;
+      }
     },
     close() {
       this.$emit("close");
@@ -1181,7 +1195,9 @@ export default {
   },
   created() {},
   mounted() {
-    this.datas === "五金/行政/生產輔料"
+    this.datas === this.$t("choicDlg.wj") ||
+    this.datas === this.$t("choicDlg.xz") ||
+    this.datas === this.$t("choicDlg.scfl")
       ? ((this.tabs = "ph"), (this.countOp = wjxz3C(this)))
       : (this.tabs = "loc");
     this.wj = this.wj.sort((a, b) => {
@@ -1193,7 +1209,9 @@ export default {
     this.scfl = this.scfl.sort((a, b) => {
       return a.value > b.value ? 1 : -1;
     });
-
+    baseCodeSupplyEx({ code: this.everyThing.batchCode }).then((res) => {
+      this.code = res.data.data;
+    });
     // this.getDetail();
   },
   beforeDestroy() {},

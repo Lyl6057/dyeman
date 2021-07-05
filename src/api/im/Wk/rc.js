@@ -498,7 +498,7 @@ export function delYlLoc(id) {
 // ------ 生产辅料
 export function getScfl(params) {
   return axios({
-    url: "/api/whseAccessoriesin/v1.0/listByPage",
+    url: "/api/whseAccessoriesIn/page",
     method: "get",
     params: params
   });
@@ -506,14 +506,14 @@ export function getScfl(params) {
 
 export function addScfl(params) {
   return axios({
-    url: "/api/whseAccessoriesin/v1.0/save",
+    url: "/api/whseAccessoriesIn",
     method: "post",
     params: params
   });
 }
 export function updateScfl(params) {
   return axios({
-    url: "/api/whseAccessoriesin/v1.0/updateById",
+    url: "/api/whseAccessoriesIn",
     method: "put",
     params: params
   });
@@ -521,21 +521,21 @@ export function updateScfl(params) {
 
 export function delScfl(id) {
   return axios({
-    url: "/api/whseAccessoriesin/v1.0/removeById?id=" + id,
+    url: "/api/whseAccessoriesIn?whseAccessoriesinoid=" + id,
     method: "delete"
   });
 }
 
 export function getScflDetali(params) {
   return axios({
-    url: "/api/whseAccessoriesDtl/v1.0/listByPage",
+    url: "/api/whseAccessoriesDtl/page",
     method: "get",
     params: params
   });
 }
 export function addScflDetali(params) {
   return axios({
-    url: "/api/whseAccessoriesDtl/v1.0/save",
+    url: "/api/whseAccessoriesDtl",
     method: "post",
     params: params
   });
@@ -543,7 +543,7 @@ export function addScflDetali(params) {
 
 export function updateScflDetali(params) {
   return axios({
-    url: "/api/whseAccessoriesDtl/v1.0/updateById",
+    url: "/api/whseAccessoriesDtl",
     method: "put",
     params: params
   });
@@ -551,28 +551,28 @@ export function updateScflDetali(params) {
 
 export function delScflDetali(id) {
   return axios({
-    url: "/api/whseAccessoriesDtl/v1.0/removeById?id=" + id,
+    url: "/api/whseAccessoriesDtl?whseAccessoriesDtloid=" + id,
     method: "delete"
   });
 }
 
 export function getScflLoc(params) {
   return axios({
-    url: "/api/whseAccessoriesDtla/v1.0/listByPage",
+    url: "/api/whseAccessoriesDtla/page",
     method: "get",
     params: params
   });
 }
 export function getScflLocList(params) {
   return axios({
-    url: "/api/whseAccessoriesDtla/v1.0/list",
+    url: "/api/whseAccessoriesDtla",
     method: "get",
     params: params
   });
 }
 export function addScflLoc(params) {
   return axios({
-    url: "/api/whseAccessoriesDtla/v1.0/save",
+    url: "/api/whseAccessoriesDtla",
     method: "post",
     params: params
   });
@@ -580,7 +580,7 @@ export function addScflLoc(params) {
 
 export function updateScflLoc(params) {
   return axios({
-    url: "/api/whseAccessoriesDtla/v1.0/updateById",
+    url: "/api/whseAccessoriesDtla",
     method: "put",
     params: params
   });
@@ -588,7 +588,203 @@ export function updateScflLoc(params) {
 
 export function delScflLoc(id) {
   return axios({
-    url: "/api/whseAccessoriesDtla/v1.0/removeById?id=" + id,
+    url: "/api/whseAccessoriesDtla?whseAccessoriesDtlaoid=" + id,
+    method: "delete"
+  });
+}
+
+// ------ 五金
+export function getWj(params) {
+  return axios({
+    url: "/api/whseHardwareIn/page",
+    method: "get",
+    params: params
+  });
+}
+
+export function addWj(params) {
+  return axios({
+    url: "/api/whseHardwareIn",
+    method: "post",
+    params: params
+  });
+}
+export function updateWj(params) {
+  return axios({
+    url: "/api/whseHardwareIn",
+    method: "put",
+    params: params
+  });
+}
+
+export function delWj(id) {
+  return axios({
+    url: "/api/whseHardwareIn?whseAccessoriesinoid=" + id,
+    method: "delete"
+  });
+}
+
+export function getWjDetali(params) {
+  return axios({
+    url: "/api/whseHardwareDtl/page",
+    method: "get",
+    params: params
+  });
+}
+export function addWjDetali(params) {
+  return axios({
+    url: "/api/whseHardwareDtl",
+    method: "post",
+    params: params
+  });
+}
+
+export function updateWjDetali(params) {
+  return axios({
+    url: "/api/whseHardwareDtl",
+    method: "put",
+    params: params
+  });
+}
+
+export function delWjDetali(id) {
+  return axios({
+    url: "/api/whseHardwareDtl?whseAccessoriesDtloid=" + id,
+    method: "delete"
+  });
+}
+
+export function getWjLoc(params) {
+  return axios({
+    url: "/api/whseAccessoriesDtla2/page",
+    method: "get",
+    params: params
+  });
+}
+export function getWjLocList(params) {
+  return axios({
+    url: "/api/whseAccessoriesDtla2",
+    method: "get",
+    params: params
+  });
+}
+export function addWjLoc(params) {
+  return axios({
+    url: "/api/whseAccessoriesDtla2",
+    method: "post",
+    params: params
+  });
+}
+
+export function updateWjLoc(params) {
+  return axios({
+    url: "/api/whseAccessoriesDtla2",
+    method: "put",
+    params: params
+  });
+}
+
+export function delWjLoc(id) {
+  return axios({
+    url: "/api/whseAccessoriesDtla2?whseAccessoriesDtlaoid=" + id,
+    method: "delete"
+  });
+}
+
+// ------ 行政
+export function getXz(params) {
+  return axios({
+    url: "/api/whseOfficeIn/page",
+    method: "get",
+    params: params
+  });
+}
+
+export function addXz(params) {
+  return axios({
+    url: "/api/whseOfficeIn",
+    method: "post",
+    params: params
+  });
+}
+export function updateXz(params) {
+  return axios({
+    url: "/api/whseOfficeIn",
+    method: "put",
+    params: params
+  });
+}
+
+export function delXz(id) {
+  return axios({
+    url: "/api/whseOfficeIn?whseAccessoriesinoid=" + id,
+    method: "delete"
+  });
+}
+
+export function getXzDetali(params) {
+  return axios({
+    url: "/api/whseOfficeDtl/page",
+    method: "get",
+    params: params
+  });
+}
+export function addXzDetali(params) {
+  return axios({
+    url: "/api/whseOfficeDtl",
+    method: "post",
+    params: params
+  });
+}
+
+export function updateXzDetali(params) {
+  return axios({
+    url: "/api/whseOfficeDtl",
+    method: "put",
+    params: params
+  });
+}
+
+export function delXzDetali(id) {
+  return axios({
+    url: "/api/whseOfficeDtl?whseAccessoriesDtloid=" + id,
+    method: "delete"
+  });
+}
+
+export function getXzLoc(params) {
+  return axios({
+    url: "/api/whseOfficeDtla/page",
+    method: "get",
+    params: params
+  });
+}
+export function getXzLocList(params) {
+  return axios({
+    url: "/api/whseOfficeDtla",
+    method: "get",
+    params: params
+  });
+}
+export function addXzLoc(params) {
+  return axios({
+    url: "/api/whseOfficeDtla",
+    method: "post",
+    params: params
+  });
+}
+
+export function updateXzLoc(params) {
+  return axios({
+    url: "/api/whseOfficeDtla",
+    method: "put",
+    params: params
+  });
+}
+
+export function delXzLoc(id) {
+  return axios({
+    url: "/api/whseOfficeDtla?whseAccessoriesDtlaoid=" + id,
     method: "delete"
   });
 }

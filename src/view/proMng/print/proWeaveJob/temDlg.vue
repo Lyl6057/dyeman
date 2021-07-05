@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-06-23 16:40:44
+ * @LastEditTime: 2021-07-05 14:30:29
  * @Description: 
 -->
 <template>
@@ -342,7 +342,7 @@ import preview from "./preview";
 import XlsxTemplate from "xlsx-template";
 import JSZipUtils from "jszip-utils";
 import saveAs from "file-saver";
-import { get } from "../../../Energy/Meter/api";
+import { getBf } from "../clothFly/api";
 export default {
   name: "",
   props: {
@@ -609,7 +609,7 @@ export default {
       }
       this.loading = true;
       this.chooseData = {};
-
+      this.chooseDtlData = {};
       for (let key in this.dlgForm) {
         if (this.dlgForm[key] === "") {
           delete this.dlgForm[key];
@@ -807,6 +807,10 @@ export default {
         }
         return;
       }
+      if (this.chooseData.list && this.chooseData.groupId) {
+        this.$tip.warning("請先刪除用紗明細!");
+        return;
+      }
       this.$tip
         .cofirm("是否确定删除選中的數據?", this, {})
         .then(() => {
@@ -837,6 +841,10 @@ export default {
         });
     },
     delDtl() {
+      if (Object.keys(this.chooseDtlData).length == 0) {
+        this.$tip.warning("請選擇要刪除的數據!");
+        return;
+      }
       if (!this.chooseDtlData.useYarnId) {
         this.chooseData.list.splice(this.chooseDtlData.index - 1, 1);
         // this.chooseDtlData = {};
@@ -848,33 +856,46 @@ export default {
         }
         return;
       }
-      this.$tip
-        .cofirm("是否确定删除選中的數據?", this, {})
-        .then(() => {
-          delYarn(this.chooseDtlData.useYarnId)
-            .then((res) => {
-              if (res.data.code === 200) {
-                // this.query();
-                this.chooseData.list.splice(this.chooseDtlData.index - 1, 1);
-                // this.chooseDtlData = {};
-                this.chooseData.list.forEach((item, i) => {
-                  item.index = i + 1;
+      getBf({ proWeaveJobGroupFk: this.chooseDtlData.proWeaveJobGroupFk }).then(
+        (bf) => {
+          if (bf.data.length) {
+            this.$tip.warning("請用紗明細存在布票信息,無法刪除!");
+            return;
+          }
+          this.$tip
+            .cofirm("是否确定删除選中的數據?", this, {})
+            .then(() => {
+              delYarn(this.chooseDtlData.useYarnId)
+                .then((res) => {
+                  if (res.data.code === 200) {
+                    // this.query();
+                    this.chooseData.list.splice(
+                      this.chooseDtlData.index - 1,
+                      1
+                    );
+                    // this.chooseDtlData = {};
+                    this.chooseData.list.forEach((item, i) => {
+                      item.index = i + 1;
+                    });
+                    if (this.chooseData.list.length > 0) {
+                      this.$refs.yarnCrud.setCurrentRow(
+                        this.chooseData.list[0]
+                      );
+                    }
+                    this.$tip.success(this.$t("public.sccg"));
+                  } else {
+                    this.$tip.error(this.$t("public.scsb"));
+                  }
+                })
+                .catch((err) => {
+                  this.$tip.error(this.$t("public.scsb"));
                 });
-                if (this.chooseData.list.length > 0) {
-                  this.$refs.yarnCrud.setCurrentRow(this.chooseData.list[0]);
-                }
-                this.$tip.success(this.$t("public.sccg"));
-              } else {
-                this.$tip.error(this.$t("public.scsb"));
-              }
             })
             .catch((err) => {
-              this.$tip.error(this.$t("public.scsb"));
+              this.$tip.warning(this.$t("public.qxcz"));
             });
-        })
-        .catch((err) => {
-          this.$tip.warning(this.$t("public.qxcz"));
-        });
+        }
+      );
     },
     handleRowDBLClick(val) {
       this.chooseData = val;
@@ -883,6 +904,7 @@ export default {
     },
     cellClick(val) {
       this.chooseData = val;
+      this.chooseDtlData = {};
       if (!this.chooseData.list) {
         this.chooseData.list = [];
       }

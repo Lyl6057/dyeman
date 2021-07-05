@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-06-21 09:01:04
+ * @LastEditTime: 2021-07-05 08:26:36
  * @Description: 
 -->
 <template>
@@ -548,6 +548,8 @@ export default {
             isNaN(this.form.clothWeight) ? (this.form.clothWeight = "") : "";
             isNaN(this.form.poAmountKg) ? (this.form.poAmountKg = "") : "";
             isNaN(this.form.poAmountLb) ? (this.form.poAmountLb = "") : "";
+            this.form.gramWeight = Number(this.form.gramWeight);
+            this.form.breadth = Number(this.form.breadth);
             this.form.workDate += " 00:00:00";
             this.form.deliveDate += " 00:00:00";
             let vat = "";
@@ -835,13 +837,13 @@ export default {
           })
         )
         .then((res) => {
-          // if (this.tabs == "選擇訂單") {
-          //   this.crud = res.data.rows;
-          // } else {
           this.crud = res.data.records;
           if (this.tabs == "測試要求") {
             this.crud.sort((a, b) => {
-              return a.testItemCode < b.testItemCode ? -1 : 1;
+              return (
+                a.testItemCode.replace(/[^0-9]/gi, "") -
+                b.testItemCode.replace(/[^0-9]/gi, "")
+              );
             });
           }
           if (this.tabs == "染缸參數") {
@@ -859,7 +861,6 @@ export default {
           } else {
             this.dlgLoading = false;
           }
-          // }
           this.crud.forEach((item, i) => {
             for (let key in item) {
               if (item[key] == null) {
@@ -869,14 +870,10 @@ export default {
             item.$cellEdit = true;
             item.index = i + 1;
             if (this.tabs === "生產工藝") {
-              // item.bleadyeCode = item.proBleadyeTechCodeFk;
               item.bleadyeName = item.proBleadyeTechCodeFk;
             }
           });
           this.page.total = res.data.total;
-          // setTimeout(() => {
-          //   this.dlgLoading = false;
-          // }, 500);
         });
     },
     getVat() {

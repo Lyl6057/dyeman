@@ -1025,27 +1025,32 @@ export function yjxz2C(_this) {
         align: "center"
       },
 
-      {
-        label: "材料類型",
-        prop: "materialType", // bcCode
-        cell: true,
-        width: 120,
-        type: "select",
-        dicData: [
-          {
-            label: "五金用品",
-            value: "1"
-          },
-          {
-            label: "行政用品",
-            value: "2"
-          },
-          {
-            label: "生產輔料",
-            value: "3"
-          }
-        ]
-      },
+      // {
+      //   label: "材料類型",
+      //   prop: "materialType", // bcCode
+      //   cell: true,
+      //   width: 120,
+      //   type: "select",
+      //   dicData: [
+      //     {
+      //       label: _this.datas,
+      //       value:
+      //         _this.datas == _this.$t("choicDlg.wj")
+      //           ? "1"
+      //           : _this.datas == _this.$t("choicDlg.xz")
+      //           ? "2"
+      //           : "3"
+      //     },
+      //     {
+      //       label: "行政用品",
+      //       value: "2"
+      //     },
+      //     {
+      //       label: "生產輔料",
+      //       value: "3"
+      //     }
+      //   ]
+      // },
       {
         label: _this.$t("whseField.clmc"),
         prop: "materialNum", //CNNameLong
@@ -1054,6 +1059,14 @@ export function yjxz2C(_this) {
         slot: true
         // overHidden: true
         // dicData: basPigment
+      },
+      {
+        label: _this.$t("energy.dj"),
+        prop: "price",
+        cell: true,
+        width: 100,
+        align: "right",
+        type: "number"
       },
       {
         label: _this.$t("whseField.ph"),
