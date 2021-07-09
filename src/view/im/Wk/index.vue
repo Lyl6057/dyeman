@@ -33,7 +33,7 @@
               <avue-data-cardtext :option="rc.wj"></avue-data-cardtext
             ></el-col>
             <el-col :span="3">
-              <avue-data-cardtext :option="rc.xz"></avue-data-cardtext
+              <avue-data-cardtext :option="rc.rl"></avue-data-cardtext
             ></el-col>
           </el-row>
         </div>
@@ -55,17 +55,21 @@
               <avue-data-cardtext :option="cc.option3"></avue-data-cardtext
             ></el-col>
             <el-col :span="3">
-              <avue-data-cardtext :option="cc.option4"></avue-data-cardtext
+              <avue-data-cardtext :option="cc.option5"></avue-data-cardtext
             ></el-col>
             <!-- <el-col :span="3">
               <avue-data-cardtext :option="cc.option7"></avue-data-cardtext
             ></el-col> -->
-            <!-- <el-col :span="3">
-              <avue-data-cardtext :option="cc.option5"></avue-data-cardtext
-            ></el-col> -->
             <el-col :span="3">
-              <avue-data-cardtext :option="cc.option6"></avue-data-cardtext
+              <avue-data-cardtext :option="cc.option4"></avue-data-cardtext
             ></el-col>
+
+            <el-col :span="3">
+              <avue-data-cardtext :option="cc.wj"></avue-data-cardtext
+            ></el-col>
+            <!-- <el-col :span="3">
+              <avue-data-cardtext :option="cc.xz"></avue-data-cardtext
+            ></el-col> -->
           </el-row>
         </div>
       </el-tab-pane>
@@ -592,11 +596,6 @@ export default {
               icon: "el-icon-thumb",
               color: "#409EFF",
             },
-          ],
-        },
-        xz: {
-          span: 24,
-          data: [
             {
               title: this.$t("iaoMng.xzrc"),
               icon: "yx-icf-cailiaogongcheng",
@@ -605,6 +604,24 @@ export default {
             {
               click: () => {
                 this.toView("rc_manual", this.$t("choicDlg.xz") + "_0");
+              },
+              title: "手工入仓",
+              icon: "el-icon-thumb",
+              color: "#409EFF",
+            },
+          ],
+        },
+        rl: {
+          span: 24,
+          data: [
+            {
+              title: this.$t("iaoMng.rlrc"),
+              icon: "yx-icf-cailiaogongcheng",
+              color: "#606266",
+            },
+            {
+              click: () => {
+                this.toView("rc_manual", this.$t("choicDlg.rl") + "_0");
               },
               title: "手工入仓",
               icon: "el-icon-thumb",
@@ -679,6 +696,14 @@ export default {
               color: "#409EFF",
               // content: "纱线调仓出库看板",
             },
+            {
+              click: () => {
+                this.toView("cc_manual", this.$t("iaoMng.sx") + "_0");
+              },
+              title: "手工出仓",
+              icon: "el-icon-thumb",
+              color: "#409EFF",
+            },
           ],
         },
         option2: {
@@ -743,6 +768,14 @@ export default {
               color: "#409EFF",
               // content: "胚布调仓出库看板",
             },
+            {
+              click: () => {
+                this.toView("cc_manual", this.$t("iaoMng.pb") + "_0");
+              },
+              title: "手工出仓",
+              icon: "el-icon-thumb",
+              color: "#409EFF",
+            },
           ],
         },
         option3: {
@@ -761,6 +794,14 @@ export default {
               icon: "el-icon-s-claim",
               color: "#409EFF",
               // content: "销售出库看板",
+            },
+            {
+              click: () => {
+                this.toView("cc_manual", "成品布" + "_0");
+              },
+              title: "手工出仓",
+              icon: "el-icon-thumb",
+              color: "#409EFF",
             },
           ],
         },
@@ -820,53 +861,53 @@ export default {
             },
           ],
         },
-        // option5: {
-        //   span: 24,
-        //   data: [
-        //     {
-        //       title: "化工原料出库",
-        //       icon: "yx-icf-cailiaogongcheng",
-        //       color: "#606266",
-        //     },
+        option5: {
+          span: 24,
+          data: [
+            {
+              title: "化工原料出库",
+              icon: "yx-icf-cailiaogongcheng",
+              color: "#606266",
+            },
 
-        //     {
-        //       click: () => {
-        //         this.toView("cc_hgyl", "退供应商_4");
-        //       },
-        //       title: "退供应商出库",
-        //       icon: "el-icon-s-claim",
-        //       color: "#409EFF",
-        //       // content: "退供应商出库看板",
-        //     },
-        //     {
-        //       click: () => {
-        //         this.toView("cc_hgyl", "外发加工_2");
-        //       },
-        //       title: "外发加工出库",
-        //       icon: "el-icon-s-home",
-        //       color: "#ccc",
-        //       // content: "外发加工出库看板",
-        //     },
-        //     {
-        //       click: () => {
-        //         this.toView("cc_hgyl", "退客人_3");
-        //       },
-        //       title: "退客人出库",
-        //       icon: "el-icon-user-solid",
-        //       color: "#409EFF",
-        //       // content: "退客人出库看板",
-        //     },
-        //     {
-        //       click: () => {
-        //         this.toView("cc_hgyl", "调仓_5");
-        //       },
-        //       title: "调仓出库",
-        //       icon: "el-icon-s-claim",
-        //       color: "#409EFF",
-        //       // content: "调仓出库看板",
-        //     },
-        //   ],
-        // },
+            {
+              click: () => {
+                this.toView("cc_hgyl", "退供应商_4");
+              },
+              title: "退供应商出库",
+              icon: "el-icon-s-claim",
+              color: "#409EFF",
+              // content: "退供应商出库看板",
+            },
+            {
+              click: () => {
+                this.toView("cc_hgyl", "外发加工_2");
+              },
+              title: "外发加工出库",
+              icon: "el-icon-s-home",
+              color: "#ccc",
+              // content: "外发加工出库看板",
+            },
+            {
+              click: () => {
+                this.toView("cc_hgyl", "退客人_3");
+              },
+              title: "退客人出库",
+              icon: "el-icon-user-solid",
+              color: "#409EFF",
+              // content: "退客人出库看板",
+            },
+            {
+              click: () => {
+                this.toView("cc_hgyl", "调仓_5");
+              },
+              title: "调仓出库",
+              icon: "el-icon-s-claim",
+              color: "#409EFF",
+              // content: "调仓出库看板",
+            },
+          ],
+        },
         option7: {
           span: 24,
           data: [
@@ -877,7 +918,44 @@ export default {
             },
           ],
         },
-        option6: {
+        wj: {
+          span: 24,
+          data: [
+            {
+              title: "五金/行政出库",
+              icon: "el-icon-s-claim",
+              color: "#606266",
+            },
+            {
+              click: () => {
+                this.toView("cc_wjxz", "生产领用_1");
+              },
+              title: "领用出库",
+              icon: "el-icon-s-claim",
+              color: "#409EFF",
+              // content: "领用出库看板",
+            },
+            {
+              click: () => {
+                this.toView("cc_wjxz", "退供应商_4");
+              },
+              title: "退供应商出库",
+              icon: "el-icon-s-claim",
+              color: "#409EFF",
+              // content: "退供应商出库看板",
+            },
+            {
+              click: () => {
+                this.toView("cc_wjxz", "调仓出库_5");
+              },
+              title: "调仓出库",
+              icon: "el-icon-s-claim",
+              color: "#409EFF",
+              // content: "调仓出库看板",
+            },
+          ],
+        },
+        xz: {
           span: 24,
           data: [
             {
@@ -1188,7 +1266,7 @@ export default {
 
   .avue-data-cardText .item {
     padding: 10px 2px;
-    margin: 10px 10px;
+    margin: 10px 5px;
   }
 
   .avue-data-cardText .item-header a {
@@ -1234,7 +1312,7 @@ export default {
     display: none;
   }
 
-  .avue-data-cardText .el-col:nth-child(1) .item {
+  .avue-data-cardText .el-col:nth-child(1) .item, .tabs1 .el-col:nth-child(7) .avue-data-cardText .el-col:nth-child(3) .item {
     background-color: #ccc;
     min-height: 20px;
 

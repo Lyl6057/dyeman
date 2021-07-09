@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-07-05 13:27:22
+ * @LastEditTime: 2021-07-08 16:23:50
  * @Description:
 -->
 <template>
@@ -13,25 +13,60 @@
       element-loading-text="拼命加载中..."
     >
       <el-row class="btnList">
-        <el-button
-          type="success"
-          :disabled="!detail.runJobId"
-          @click="handleRowDBLClick(detail)"
-          >{{ this.$t("public.update") }}</el-button
+        <el-tooltip
+          class="item"
+          effect="dark"
+          content="cập nhật"
+          placement="top-start"
         >
-        <el-button type="primary" @click="add">{{
-          this.$t("public.add")
-        }}</el-button>
-        <el-button type="danger" :disabled="!detail.runJobId" @click="del">{{
-          this.$t("public.del")
-        }}</el-button>
-        <el-button type="primary" @click="print" :loading="wloading"
-          >打印</el-button
-        >
-        <el-button type="primary" @click="query">{{
-          this.$t("public.query")
-        }}</el-button>
+          <el-button
+            type="success"
+            :disabled="!detail.runJobId"
+            @click="handleRowDBLClick(detail)"
+            >{{ this.$t("public.update") }}</el-button
+          >
+        </el-tooltip>
 
+        <el-tooltip
+          class="item"
+          effect="dark"
+          content="thêm mới "
+          placement="top-start"
+        >
+          <el-button type="primary" @click="add">{{
+            this.$t("public.add")
+          }}</el-button>
+        </el-tooltip>
+        <el-tooltip
+          class="item"
+          effect="dark"
+          content="xóa"
+          placement="top-start"
+        >
+          <el-button type="danger" :disabled="!detail.runJobId" @click="del">{{
+            this.$t("public.del")
+          }}</el-button>
+        </el-tooltip>
+        <el-tooltip
+          class="item"
+          effect="dark"
+          content=" in"
+          placement="top-start"
+        >
+          <el-button type="primary" @click="print" :loading="wloading"
+            >打印</el-button
+          >
+        </el-tooltip>
+        <el-tooltip
+          class="item"
+          effect="dark"
+          content="tìm kiếm"
+          placement="top-start"
+        >
+          <el-button type="primary" @click="query">{{
+            this.$t("public.query")
+          }}</el-button>
+        </el-tooltip>
         <!-- <el-button type="warning" @click="close">{{
           this.$t("public.close")
         }}</el-button> -->
@@ -165,38 +200,21 @@ export default {
       });
     },
     print() {
-      // this.pdfDlg = true;
-      // this.pdfUrl =
-      //   process.env.API_HOST +
-      //   "/api/proBleadyeJob/buildWorkOrder?id=" +
-      //   this.detail.runJobId;
-      let domClass = document.get;
-      var element = document.querySelector(domClass); // 这个dom元素是要导出pdf的div容器
-      html2Canvas(element).then(function (canvas) {
-        var contentWidth = canvas.width;
-        var contentHeight = canvas.height;
-
-        // 一页pdf显示html页面生成的canvas高度;
-        var pageHeight = (contentWidth / 592.28) * 841.89;
-        // 未生成pdf的html页面高度
-        var leftHeight = contentHeight;
-        // 页面偏移
-        let position = 0;
-        // a4纸的尺寸[595.28,841.89]，html页面生成的canvas在pdf中图片的宽高
-        var imgWidth = 555.28;
-        var imgHeight = (592.28 / contentWidth) * contentHeight;
-        var pageData = canvas.toDataURL("image/jpeg", 1.0);
-        var pdf = new JsPDF("", "pt", [contentWidth, contentHeight]); // 不分页
-        pdf.addImage(pageData, "JPEG", 0, 0, contentWidth, contentHeight);
-        pdf.save(title + ".pdf");
-      });
+      this.pdfDlg = true;
+      this.pdfUrl =
+        process.env.API_HOST +
+        "/api/proBleadyeRunJob/createBleadyeRunJobPdf?id=" +
+        this.detail.runJobId;
     },
-
     add() {
       this.isAdd = true;
       this.dialogVisible = true;
     },
     del() {
+      if (parent.userID != this.detail.serviceOperator) {
+        this.$tip.warning("当前用户没有权限删除该记录!");
+        return;
+      }
       this.$tip
         .cofirm(
           this.$t("iaoMng.delTle7") +

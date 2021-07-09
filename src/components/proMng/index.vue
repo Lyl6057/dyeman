@@ -33,6 +33,7 @@
           </div>
           <div class="crudBox">
             <avue-crud
+              id="proChoice"
               ref="crud"
               :option="choiceC"
               :data="crud"
@@ -74,6 +75,9 @@ import {
   getDye,
   dyeC,
   dyeF,
+  resolveC,
+  resolveF,
+  getResolve,
 } from "./data";
 export default {
   name: "",
@@ -265,6 +269,11 @@ export default {
         this.choiceF = dyeF(this);
         this.getData = getDye;
         break;
+      case "选择染整运转单":
+        this.choiceC = resolveC(this);
+        this.choiceF = resolveF(this);
+        this.getData = getResolve;
+        break;
       case "选择漂染工藝":
         this.choiceC = techCodeC(this);
         this.choiceF = techCodeF(this);
@@ -287,6 +296,11 @@ export default {
     this.query();
   },
   mounted() {},
+  updated() {
+    this.$nextTick(() => {
+      this.$refs["crud"].doLayout();
+    });
+  },
   beforeDestroy() {},
 };
 </script>

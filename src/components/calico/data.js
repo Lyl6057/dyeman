@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-24 08:12:20
  * @LastEditors: Lyl
- * @LastEditTime: 2021-07-01 16:07:36
+ * @LastEditTime: 2021-07-09 16:55:56
  * @Description:
  */
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
@@ -160,7 +160,148 @@ export function loc1C(_this) {
     ]
   };
 }
+export function creatOutForm(_this) {
+  return {
+    submitBtn: true,
+    emptyBtn: false,
+    labelWidth: 100,
+    menuSpan: 2,
+    column: [
+      {
+        label:
+          _this.type == _this.$t("iaoMng.pb")
+            ? _this.$t("whseField.ph")
+            : _this.$t("whseField.gh"), // "批號",
+        prop: "batchNo",
+        span: 6
+        // rules: [
+        //   {
+        //     required: true,
+        //     message: "該信息不能為空", //"请输入批號",
+        //     trigger: "blur"
+        //   }
+        // ]
+      },
+      {
+        label: _this.$t("whseField.zps"), // "總疋數",
+        prop: "num",
+        span: 6,
+        rules: [
+          {
+            required: true,
+            message: _this.$t("whseField.qsrzps"), //"请输入總疋數",
+            trigger: "blur"
+          }
+        ]
+        // type: "number"
+      },
 
+      {
+        label: _this.$t("whseField.bzzl"), //"標準重量",
+        prop: "weight",
+        span: 6,
+        rules: [
+          {
+            required: true,
+            message: _this.$t("whseField.qsrbzzl"), //"请输入重量",
+            trigger: "blur"
+          }
+        ]
+      },
+      {
+        label: _this.$t("whseField.dw"), //"單位",
+        prop: "weightUnit",
+        span: 6,
+        type: "select",
+        dicData: getDIC("bas_matUnit"),
+        rules: [
+          {
+            required: true,
+            message: _this.$t("whseField.qsrdw"), //"请输入單位",
+            trigger: "blur"
+          }
+        ]
+      },
+      {
+        label: _this.$t("whseField.bph"), //"布票号",
+        prop: "custTicket",
+        span: 6,
+        cell: false,
+        disabled: false
+      }
+    ]
+  };
+}
+export function loc2C(_this) {
+  return {
+    menu: false,
+    addBtn: false,
+    border: true,
+    highlightCurrentRow: true,
+    height: "calc(100vh - 234px)",
+    refreshBtn: false,
+    columnBtn: false,
+    page: false,
+    showSummary: true,
+    sumColumnList: [
+      {
+        label: " ",
+        name: "weight",
+        type: "sum"
+      },
+      {
+        label: " ",
+        name: "woWeights",
+        type: "sum"
+      }
+    ],
+    column: [
+      {
+        label: "#",
+        prop: "index",
+        width: 50,
+        align: "center"
+      },
+      {
+        label:
+          _this.type == _this.$t("iaoMng.pb")
+            ? _this.$t("whseField.ph")
+            : _this.$t("whseField.gh"), //"批號",
+        prop: _this.type == _this.$t("iaoMng.pb") ? "batchNo" : "prodNo",
+        cell: true,
+        width: 180
+      },
+      {
+        label: _this.$t("whseField.ph2"), // "疋號",
+        prop: "countingNo",
+        cell: true,
+        width: 70,
+        align: "right"
+      },
+      {
+        label: _this.$t("whseField.zl"), // "重量",
+        prop: _this.type == _this.$t("iaoMng.pb") ? "weight" : "woWeights",
+        cell: true,
+        width: 80,
+        align: "right"
+      },
+      {
+        label: _this.$t("whseField.dw"), // "單位",
+        prop: _this.type == _this.$t("iaoMng.pb") ? "weightUnit" : "woUnit",
+        cell: true,
+        width: 70,
+        type: "select",
+        dicData: getDIC("bas_matUnit")
+      },
+      {
+        label: _this.$t("whseField.bph"), //"客人布票号",
+        prop: _this.type == _this.$t("iaoMng.pb") ? "custTicket" : "ticketNo",
+        cell: true
+        // width: 170
+      }
+    ]
+  };
+}
 // ---- 纱线
 export function getSx(params) {
   return axios({

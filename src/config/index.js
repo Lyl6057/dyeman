@@ -179,6 +179,41 @@ export function getDicT(url, label, value, form = {}) {
   }
 }
 // 获取字典表
+export function getDicNS(url, label, value, form = {}) {
+  // let resultMap = _this.$store.getters.getDic(codeTableId);
+  let resultMap = [];
+  axios({
+    url: "/api/" + url,
+    method: "get",
+    params: form
+  }).then(res => {
+    let data = [];
+    if (res.data.rows) {
+      data = res.data.rows;
+    } else {
+      data = res.data;
+    }
+    data.sort((a, b) => {
+      return a.orderno - b.orderno;
+    });
+    data.forEach(item => {
+      for (var key in item) {
+        if (item[key] === 0) {
+          item[key] = "0";
+        }
+        if (item[key] === null) {
+          item[key] = " ";
+        }
+      }
+      resultMap.push({
+        label: item[label],
+        value: item[value]
+      });
+    });
+  });
+  return resultMap;
+}
+// 获取字典表
 export function getDicTs(url, label, value, itemspec, model, msUnit) {
   // let resultMap = _this.$store.getters.getDic(codeTableId);
   let resultMap = [];
@@ -236,6 +271,9 @@ export function postDicT(url, label, value, form = {}) {
     }
     data.sort((a, b) => {
       return a.orderno - b.orderno;
+    });
+    data.sort((a, b) => {
+      return a[label] > b[label] ? 1 : -1;
     });
     data.forEach(item => {
       resultMap.push({

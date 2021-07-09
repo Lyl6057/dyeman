@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-04-23 08:32:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-06-27 19:17:52
+ * @LastEditTime: 2021-07-08 16:54:21
  * @Description: 
 -->
 <template>
@@ -403,8 +403,8 @@ export default {
   created() {},
   mounted() {
     this.$nextTick(() => {
-      this.form.date[0] = "2021-06-13";
-      this.form.date[1] = "2021-06-27";
+      this.form.date[0] = getDay(-7);
+      this.form.date[1] = this.$getNowTime("date");
       this.query();
     });
   },

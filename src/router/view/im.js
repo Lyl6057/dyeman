@@ -54,6 +54,12 @@ export default [
         name: "rc_manual",
         component: resolve => require(["@/view/im/Wk/rc/manual/index"], resolve)
       },
+      // 手工出库
+      {
+        path: "/cc_manual",
+        name: "cc_manual",
+        component: resolve => require(["@/view/im/Wk/cc/manual/index"], resolve)
+      },
       {
         // gc 胚布
         path: "/gc_points",

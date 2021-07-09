@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-07-05 13:30:54
+ * @LastEditTime: 2021-07-09 13:57:39
  * @Description:
 -->
 <template>
@@ -14,15 +14,36 @@
       class="not-number-icon"
     >
       <div class="btnList">
-        <el-button type="success" @click="save" :loading="wLoading">{{
-          $t("public.save")
-        }}</el-button>
-        <!-- <el-button type="primary" @click="checkOrder">选择订单号</el-button> -->
-
-        <!-- <el-button type="primary" @click="setPreview">预览</el-button> -->
-        <el-button type="warning" @click="close">{{
-          this.$t("public.close")
-        }}</el-button>
+        <el-tooltip
+          class="item"
+          effect="dark"
+          content="Bảo tồn"
+          placement="top-start"
+        >
+          <el-button type="success" @click="save" :loading="wLoading">{{
+            $t("public.save")
+          }}</el-button>
+        </el-tooltip>
+        <el-tooltip
+          class="item"
+          effect="dark"
+          content=" in"
+          placement="top-start"
+        >
+          <el-button type="primary" @click="print" :disabled="!form.runJobId"
+            >打印</el-button
+          >
+        </el-tooltip>
+        <el-tooltip
+          class="item"
+          effect="dark"
+          content="đóng"
+          placement="top-start"
+        >
+          <el-button type="warning" @click="close">{{
+            this.$t("public.close")
+          }}</el-button>
+        </el-tooltip>
       </div>
 
       <el-row class="formBox" style="width: 100%">
@@ -129,6 +150,23 @@
         </el-col>
       </el-row>
     </view-container>
+    <el-dialog
+      id="colorMng_Dlg"
+      :visible.sync="pdfDlg"
+      fullscreen
+      width="100%"
+      append-to-body
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+    >
+      <view-container title="打印預覽">
+        <embed
+          id="pdf"
+          style="width: 100vw; height: calc(100vh - 80px)"
+          :src="pdfUrl"
+        />
+      </view-container>
+    </el-dialog>
     <choice
       :choiceV="choiceV"
       :choiceTle="choiceTle"
@@ -144,6 +182,7 @@
 import choice from "@/components/proMng/index";
 import { mainCrud, dlgForm, dlgCrud, bfOp, testOp, itemOp } from "./data";
 import { timeConversion } from "@/config/util";
+import { baseCodeSupplyEx, baseCodeSupply } from "@/api/index";
 import {
   get,
   add,
@@ -164,6 +203,8 @@ import {
   updateBf,
   addBf,
   updateNote,
+  getGroup,
+  getYarn,
 } from "./api";
 export default {
   name: "",
@@ -178,7 +219,15 @@ export default {
     return {
       wLoading: false,
       formOp: mainCrud(this),
-      form: {},
+      form: {
+        forClothLockJoin: false,
+        forClothTurnOver: false,
+        forClothTogetherVat: false,
+        forClothOrderHair: false,
+        forClothAgainstHair: false,
+        packGw: false,
+        packNw: false,
+      },
       page: {
         pageSize: 20,
         currentPage: 1,
@@ -211,9 +260,23 @@ export default {
       choosetestData: {},
       chooseitemData: {},
       choosebfData: {},
+      pdfDlg: false,
+      pdfUrl: "",
     };
   },
-  watch: {},
+  watch: {
+    "form.bf": {
+      handler(n, o) {
+        if (n) {
+          this.form.pidCount = n.length;
+          this.form.clothWeight = 0;
+          n.forEach((item) => {
+            this.form.clothWeight += Number(item.clothWeight);
+          });
+        }
+      },
+    },
+  },
   methods: {
     query() {
       get({
@@ -222,10 +285,20 @@ export default {
         runJobId: this.detail.runJobId,
       }).then((res) => {
         this.form = res.data.records[0];
+        Object.keys(this.form).forEach((item) => {
+          if (this.isEmpty(this.form[item])) {
+            delete this.form[item];
+          }
+        });
         if (!(this.form.mergVatNo instanceof Array) && this.form.mergVatNo) {
           this.form.mergVatNo = this.form.mergVatNo.split("/");
         }
-
+        if (
+          !(this.form.compLightSource instanceof Array) &&
+          this.form.compLightSource
+        ) {
+          this.form.compLightSource = this.form.compLightSource.split(",");
+        }
         this.getSublist();
       });
     },
@@ -282,9 +355,20 @@ export default {
       this.form.item = [];
       if (this.isAdd) {
         setTimeout(() => {
-          this.form.workDate = this.$getNowTime();
-          this.form.deliveDate = this.$getNowTime();
-          this.wLoading = false;
+          baseCodeSupplyEx({ code: "dye_batch" }).then((res) => {
+            this.form.workDate = this.$getNowTime();
+            this.form.deliveDate = this.$getNowTime();
+            this.form.vatNo = "DF-" + res.data.data;
+            this.form.weaveFactoryName = "S.POWER";
+            this.form.address = "S.POWER WAREHOUSE";
+            this.form.compLightSource = ["I", "G"];
+            this.form.serviceOperator = parent.userID;
+            this.form.throwDry = "3Washing / 3tumble";
+            this.form.poVatCount = 1;
+            this.form.vatIndex = 1;
+            this.form.poColorCount = 1;
+            this.wLoading = false;
+          });
         }, 200);
       } else {
         this.query();
@@ -293,42 +377,43 @@ export default {
     getOther(val) {
       // { poNo: val.salPoNo }
       this.wLoading = true;
-      getPo().then((po) => {
-        if (po.data.rows.length > 0) {
-          getPoDtla({ salPoFk: po.data.rows[0].salPooid }).then((poDtla) => {
-            if (poDtla.data.rows.length > 0) {
-              if (poDtla.data.rows[0].qtyUnit == "KG") {
-                this.form.poAmountKg = poDtla.data.rows[0].fabQty;
-                // this.form.poAmountLb = (
-                //   Number(this.form.poAmountKg) * 2.2046226
-                // ).toFixed(2);
-              } else {
-                this.form.poAmountLb = poDtla.data.rows[0].fabQty;
-                // this.form.poAmountKg = (
-                //   Number(this.form.poAmountLb) * 0.4535924
-                // ).toFixed(2);
-              }
-              getPoDtlb({ salPoDtlaFk: poDtla.data.rows[0].salPoDtlaoid }).then(
-                (color) => {
-                  this.form.poColorCount = color.data.length;
-                }
-              );
-            }
-          });
-        }
-        setTimeout(() => {
-          this.wLoading = false;
-        }, 500);
-      });
+
+      setTimeout(() => {
+        this.wLoading = false;
+      }, 500);
+      // getPo().then((po) => {
+      //   if (po.data.rows.length > 0) {
+      //     getPoDtla({ salPoFk: po.data.rows[0].salPooid }).then((poDtla) => {
+      //       if (poDtla.data.rows.length > 0) {
+      //         if (poDtla.data.rows[0].qtyUnit == "KG") {
+      //           this.form.poAmountKg = poDtla.data.rows[0].fabQty;
+      //           // this.form.poAmountLb = (
+      //           //   Number(this.form.poAmountKg) * 2.2046226
+      //           // ).toFixed(2);
+      //         } else {
+      //           this.form.poAmountLb = poDtla.data.rows[0].fabQty;
+      //           // this.form.poAmountKg = (
+      //           //   Number(this.form.poAmountLb) * 0.4535924
+      //           // ).toFixed(2);
+      //         }
+      //         getPoDtlb({ salPoDtlaFk: poDtla.data.rows[0].salPoDtlaoid }).then(
+      //           (color) => {
+      //             this.form.poColorCount = color.data.length;
+      //           }
+      //         );
+      //       }
+      //     });
+      // }
+      // });
     },
     add() {
-      if (!this.form.weaveJobCode || !this.form.clothWeight) {
-        this.$tip.warning("請先選擇織造通知單/填寫合計重量!");
+      if (!this.form.weaveJobCode || !this.form.poAmountKg) {
+        this.$tip.warning("請先選擇織造通知單/填寫订单数量!");
         return;
       }
       this.choiceTle = "选择胚布信息";
       this.choiceQ.weaveJob = this.form.weaveJobCode;
-      this.choiceQ.weight = this.form.clothWeight;
+      this.choiceQ.weight = this.form.poAmountKg;
       this.choiceV = true;
     },
     addOther(type) {
@@ -423,9 +508,20 @@ export default {
               }
             });
             data.mergVatNo = vat;
+            let light = "";
+            data.compLightSource.forEach((item, i) => {
+              if (i == data.compLightSource.length - 1) {
+                light += item;
+              } else {
+                light += item + ",";
+              }
+            });
+            data.compLightSource = light;
             data.bf = null;
             data.test = null;
             data.item = null;
+            data.poAmountLb = Number((data.poAmountKg * 2.204623).toFixed(2));
+            data.pidCount = this.form.bf.length || 0;
             if (data.runJobId) {
               // update
               data.upateTime = this.$getNowTime("datetime");
@@ -449,6 +545,7 @@ export default {
               data.createTime = this.$getNowTime("datetime");
               add(data).then((res) => {
                 if (res.data.code == 200) {
+                  baseCodeSupply({ code: "dye_batch" }).then((r) => {});
                   // this.$tip.success(this.$t("public.bccg"));
                   // this.wLoading = false;
                   this.$emit("refresh");
@@ -564,10 +661,50 @@ export default {
         val.shrinkLenth = isNaN(val.verticalShrink) ? 0 : val.verticalShrink;
         val.shrinkWidth = isNaN(val.horizonShrink) ? 0 : val.horizonShrink;
         val.clothWeight = isNaN(val.amount) ? 0 : val.amount;
+        val.fabElements = val.fiberComp;
+        val.poAmountKg = val.clothWeight;
+        val.fabElements = val.fiberComp;
+        val.poAmountKg = val.clothWeight;
+        val.tubeDiam = val.needleInch;
+        val.needleDist = val.guage;
+        val.salPoNo = val.custPoNo;
         this.form = val;
-        this.form.breadthUnit = this.form.breadth.replace(/[^a-z]+/gi, "");
-        this.form.breadth = Number(this.form.breadth.replace(/[^0-9]/gi, ""));
-        this.getOther();
+        // this.form.breadthUnit = this.form.breadth.replace(/[^a-z]+/gi, "");
+        // this.form.breadth = Number(this.form.breadth.replace(/[^0-9]/gi, ""));
+        this.form.bf = [];
+        getGroup({
+          proWeaveJobFk: val.weaveJobId,
+        }).then((res) => {
+          if (res.data.length > 0) {
+            getYarn({ proWeaveJobGroupFk: res.data[0].groupId }).then(
+              (yarn) => {
+                this.form.yarnCard = "";
+                this.form.yarnNumber = "";
+                this.form.yarnCylinder = "";
+                if (yarn.data.length > 1) {
+                  yarn.data.forEach((item, i) => {
+                    if (item.yarnBrand) {
+                      this.form.yarnCard += i + 1 + "." + item.yarnBrand + " ";
+                    }
+                    if (item.yarnBatch) {
+                      this.form.yarnNumber +=
+                        i + 1 + "." + item.yarnBatch + " ";
+                    }
+                    if (item.factoryYarnBatch) {
+                      this.form.yarnCylinder +=
+                        i + 1 + "." + item.factoryYarnBatch + " ";
+                    }
+                  });
+                } else if (yarn.data.length == 1) {
+                  this.form.yarnCard = yarn.data[0].yarnBrand;
+                  this.form.yarnNumber = yarn.data[0].yarnBatch;
+                  this.form.yarnCylinder = yarn.data[0].factoryYarnBatch;
+                }
+              }
+            );
+          }
+        });
+        this.getOther(val);
       }
       if (this.choiceTle == "选择胚布信息") {
         val.forEach((item, i) => {
@@ -608,6 +745,13 @@ export default {
       }
       this.choiceV = false;
     },
+    print() {
+      this.pdfDlg = true;
+      this.pdfUrl =
+        process.env.API_HOST +
+        "/api/proBleadyeRunJob/createBleadyeRunJobPdf?id=" +
+        this.form.runJobId;
+    },
     close() {
       if (this.refresh) {
         this.$emit("refresh");
@@ -621,7 +765,8 @@ export default {
         obj === "undefined" ||
         typeof obj === "undefined" ||
         obj === null ||
-        obj === ""
+        obj === "" ||
+        obj === 0
       ) {
         return true;
       } else {

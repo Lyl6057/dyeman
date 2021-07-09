@@ -1,24 +1,10 @@
 <template>
   <div id="rcDetail">
-    <view-container :title="datas + '入倉資料'" v-loading="wloading">
+    <view-container :title="datas + '出倉資料'" v-loading="wloading">
       <div class="btnList">
-        <!-- <el-button type="primary" @click="getDetail">{{this.$t("public.query")}}</el-button> -->
-        <!-- <el-button type="primary" @click="add">{{this.$t("public.add")}}</el-button>
-        <el-button type="danger" @click="del">{{ this.$t("public.del") }}</el-button> -->
         <el-button type="success" @click="saveAll">{{
           this.$t("public.save")
         }}</el-button>
-        <!-- <el-button
-          type="primary"
-          @click="createCk"
-          v-if="
-            form.whseYarninoid ||
-            form.whseCalicoinoid ||
-            form.whseChemicalinoid ||
-            form.whseDyesalinoid
-          "
-          >{{ $t("iaoMng.scsjd") }}</el-button
-        > -->
         <el-button type="warning" @click="close">{{
           this.$t("public.close")
         }}</el-button>
@@ -30,16 +16,16 @@
         <el-col
           :span="
             datas === this.$t('iaoMng.pb')
-              ? 14
+              ? 12
               : datas === this.$t('iaoMng.hgyl') ||
                 datas === this.$t('iaoMng.yl')
               ? 15
-              : datas === '成品布'
+              : datas === this.$t('iaoMng.sx')
               ? 24
-              : 15
+              : 12
           "
         >
-          <view-container :title="datas + this.$t('iaoMng.rcmx')">
+          <view-container :title="datas + this.$t('iaoMng.ccmx')">
             <div class="btnList">
               <el-button type="primary" @click="add">{{
                 this.$t("public.add")
@@ -200,7 +186,7 @@
         >
           <el-tabs v-model="tabs" type="border-card">
             <el-tab-pane
-              :label="datas + this.$t('iaoMng.rcmxhw')"
+              :label="datas + this.$t('iaoMng.ccmxhw')"
               name="loc"
               v-if="
                 datas != this.$t('choicDlg.wj') &&
@@ -217,7 +203,7 @@
                 :type="datas"
               ></loction>
             </el-tab-pane>
-            <el-tab-pane :label="datas + this.$t('iaoMng.rcphzl')" name="ph">
+            <el-tab-pane :label="datas + this.$t('iaoMng.ccphzl')" name="ph">
               <div class="btnList">
                 <el-button type="primary" @click="addPh">{{
                   this.$t("public.add")
@@ -239,7 +225,7 @@
             </el-tab-pane>
           </el-tabs>
         </el-col>
-        <el-col :span="9" v-if="datas === this.$t('iaoMng.sx')">
+        <!-- <el-col :span="9" v-if="datas === this.$t('iaoMng.sx')">
           <view-container :title="datas + this.$t('iaoMng.rcmxhw')">
             <loction
               ref="loc"
@@ -249,16 +235,20 @@
               :type="datas"
             ></loction>
           </view-container>
-        </el-col>
-        <el-col :span="10" v-if="datas === this.$t('iaoMng.pb')">
-          <view-container :title="datas + this.$t('iaoMng.rcphzl')">
-            <inwhse-ph
+        </el-col> -->
+        <el-col
+          :span="12"
+          v-if="datas === this.$t('iaoMng.pb') || datas === '成品布'"
+        >
+          <view-container :title="datas + this.$t('iaoMng.ccphzl')">
+            <outwhse-ph
               ref="loc"
               :inData="chooseData"
               :api="everyThing"
               :form="form"
               :loc="false"
-            ></inwhse-ph>
+              :type="datas"
+            ></outwhse-ph>
           </view-container>
         </el-col>
       </el-row>
@@ -278,7 +268,7 @@ import { rhl2C, rhl2F, rhl3C, rhl4C, wjxz3C } from "./data";
 import { getDicTs, getDicT, getXDicT, postDicT } from "@/config";
 import { getSubscribe } from "@/const/whse";
 import loction from "@/components/location/index";
-import inwhseph from "@/components/calico/inwhse_ph";
+import outwhseph from "@/components/calico/outwhse_ph";
 import insSheet from "@/components/insSheet/index";
 import {
   getHardwarearticles,
@@ -291,7 +281,7 @@ export default {
   components: {
     loction: loction,
     insSheet: insSheet,
-    inwhsePh: inwhseph,
+    outwhsePh: outwhseph,
   },
   props: {
     datas: String,
@@ -380,6 +370,7 @@ export default {
     getDetail() {
       this.mx = [];
       this.oldData = {};
+      this.chooseData = {};
       this.form = this.detail;
       if (this.isAdd) {
         this.form.sysCreatedby = this.$store.state.userOid;
@@ -387,17 +378,17 @@ export default {
       }
       this.loading = true;
       this.mx = [];
-      this.mxOp.showSummary = false;
+      // this.mxOp.showSummary = false;
       this.everyThing
         .getDetail({
           rows: this.page.pageSize,
           start: this.page.currentPage,
-          whseYarninFk: this.detail.whseYarninoid,
-          whseCalicoinFk: this.detail.whseCalicoinoid,
+          whseRetyarninFk: this.detail.whseRetyarninoid,
+          whseMaterialFk: this.detail.whseMaterialoid,
           whseChemicalinFk: this.detail.whseChemicalinoid, // 化工原料Oid
           whseAccessoriesinFk: this.detail.whseAccessoriesinoid, // 辅料/五金/行政Oid
           whseDyesalinFk: this.detail.whseDyesalinoid, // 顏料Oid
-          whseFinishedclothinFk: this.detail.whseFinishedclothinoid,
+          whseFinclothselloutFk: this.detail.whseFinclothselloutoid,
           whseEnergyInFk: this.detail.energyInId,
         })
         .then((res) => {
@@ -413,6 +404,9 @@ export default {
           this.mx.forEach((item, index) => {
             item.index = index + 1;
             item.chinName = item.materialNum;
+            if (this.datas == "成品布") {
+              item.clothName = item.woMatname;
+            }
             // item.yarnsName = item.yarnsId;
             // if (this.datas === this.$t("iaoMng.hgyl")) {
             //   // 處理英文名稱 、色光、力份信息
@@ -431,10 +425,9 @@ export default {
             // item.bcColor = item.chemicalId;
             // item.bcForce = item.chemicalId;
             if (index === this.mx.length - 1) {
-              this.mxOp.showSummary = true;
+              // this.mxOp.showSummary = true;
               setTimeout(() => {
                 // this.$refs.mx.setCurrentRow(this.mx[0]);
-                // this.getAlloc();
                 this.loading = false;
               }, 200);
             }
@@ -502,56 +495,6 @@ export default {
             }
           });
         });
-    },
-    getAlloc() {
-      if (this.isAdd) {
-        // 获取申购单
-        // this.ctLoading = true;
-        this.mx.forEach((item, i) => {
-          getSubscribe({
-            deliNo: this.form.deliNo,
-            poNo: this.form.purNo,
-            materialNum: item.materialNum,
-            rows: this.phPage.pageSize,
-            start: this.phPage.currentPage,
-          }).then((res) => {
-            let data = res.data;
-            item.alloc = data.records;
-            item.alloc.forEach((item, i) => {
-              item.index = i + 1;
-              // item.appId = item.allocMain;
-              // item.applyNum = item.allocQty;
-            });
-            if (i === this.mx.length - 1) {
-              this.$refs.mx.setCurrentRow(this.mx[0]);
-            }
-          });
-        });
-      } else {
-        // 获取入仓分配
-        this.mx.forEach((item, i) => {
-          this.everyThing
-            .getAlloc({
-              whseChemicalinDtlaFk: item.whseChemicalinDtlaoid,
-              whseAccessoriesDtlFk: item.whseAccessoriesDtloid,
-              rows: this.phPage.pageSize,
-              start: this.phPage.currentPage,
-            })
-            .then((res) => {
-              let data = res.data;
-
-              item.alloc = data.records;
-              item.alloc.forEach((item, i) => {
-                item.index = i + 1;
-                item.appId = item.allocMain;
-                item.applyNum = item.allocQty;
-              });
-              if (i === this.mx.length - 1) {
-                this.$refs.mx.setCurrentRow(this.mx[0]);
-              }
-            });
-        });
-      }
     },
     getLoc() {
       if (this.isAdd) {
@@ -654,16 +597,21 @@ export default {
         return;
       }
       if (
-        !this.chooseData.whseFinishedclothinDtloid &&
-        !this.chooseData.whseYarninDtloid &&
-        !this.chooseData.whseCalicoinDtlaoid &&
+        !this.chooseData.whseFinclothselloutDtlaoid &&
+        !this.chooseData.whseRetyarninDtloid &&
+        !this.chooseData.whseMaterialDlaoid &&
         !this.chooseData.whseChemicalinDtlaoid &&
         !this.chooseData.whseAccessoriesDtloid &&
         !this.chooseData.whseDyesainDtlaoid &&
         !this.chooseData.energyDtloid
       ) {
         this.mx.splice(this.chooseData.index - 1, 1);
-        this.$refs.mx.setCurrentRow(this.mx[this.mx.length - 1] || {});
+        if (this.mx.length > 0) {
+          this.$refs.mx.setCurrentRow(this.mx[this.mx.length - 1]);
+        } else {
+          this.chooseData = {};
+        }
+
         return;
       }
       this.$tip
@@ -676,11 +624,11 @@ export default {
                 : this.datas === this.$t("iaoMng.yl")
                 ? this.chooseData.whseDyesainDtlaoid
                 : this.datas === this.$t("iaoMng.sx")
-                ? this.chooseData.whseYarninDtloid
+                ? this.chooseData.whseRetyarninDtloid
                 : this.datas === this.$t("iaoMng.pb")
-                ? this.chooseData.whseCalicoinDtlaoid
+                ? this.chooseData.whseMaterialDlaoid
                 : this.datas === "成品布"
-                ? this.chooseData.whseFinishedclothinDtloid
+                ? this.chooseData.whseFinclothselloutDtlaoid
                 : this.datas === this.$t("choicDlg.rl")
                 ? this.chooseData.energyDtloid
                 : this.chooseData.whseAccessoriesDtloid
@@ -690,6 +638,7 @@ export default {
                 this.$tip.success(this.$t("public.sccg"));
                 this.modified = true;
                 this.mx.splice(this.chooseData.index - 1, 1);
+                this.chooseData = {};
                 this.getDetail();
               } else {
                 this.$tip.error(this.$t("public.scsb"));
@@ -782,8 +731,6 @@ export default {
       if (!this.chooseData.loc) {
         this.chooseData.loc = [];
       }
-      // this.allocPage.total = this.chooseData.alloc.length;
-      // this.getAlloc();
     },
     cellPhClick(val) {
       this.oldPhData.$cellEdit = false;
@@ -799,30 +746,14 @@ export default {
       if (this.datas === this.$t("iaoMng.sx")) {
         for (let i = 0; i < this.mx.length; i++) {
           if (!this.mx[i].yarnsId || !this.mx[i].weight) {
-            this.$tip.error("紗線名稱/入倉重量不能為空!");
+            this.$tip.error("紗線名稱/出倉重量不能為空!");
             return;
           }
-          // this.mx[i].yarnsId = this.mx[i].yarnsName;
           this.mx[i].yarnsName = this.mx[i].$yarnsName;
-          if (this.mx[i].loc) {
-            for (let j = 0; j < this.mx[i].loc.length; j++) {
-              if (
-                !this.mx[i].loc[j].locationCode ||
-                !this.mx[i].loc[j].weight
-              ) {
-                this.$tip.error("貨位碼/重量不能為空!");
-                return;
-              }
-            }
-          }
         }
       }
       if (this.datas === this.$t("iaoMng.pb")) {
         for (let i = 0; i < this.mx.length; i++) {
-          if (!this.mx[i].fabticket || !this.mx[i].locationCode) {
-            this.$tip.error("載具編號/貨位碼不能為空!");
-            return;
-          }
           this.mx[i].calicoId = this.mx[i].$clothName;
           this.mx[i].weightUnit = "";
           if (this.mx[i].loc) {
@@ -841,9 +772,19 @@ export default {
       }
       if (this.datas === "成品布") {
         for (let i = 0; i < this.mx.length; i++) {
-          if (!this.mx[i].locationCode || !this.mx[i].weight) {
-            this.$tip.error("入倉重量/貨位碼不能為空!");
-            return;
+          this.mx[i].woMatno = this.mx[i].$clothName;
+          this.mx[i].woMatname = this.mx[i].clothName;
+          if (this.mx[i].loc) {
+            for (let j = 0; j < this.mx[i].loc.length; j++) {
+              if (!this.mx[i].loc[j].woWeights || !this.mx[i].loc[j].woUnit) {
+                this.$tip.error(this.$t("iaoMng.saveTle6"));
+                return;
+              }
+              if (!this.mx[i].loc[j].ticketNo) {
+                this.$tip.error("布票號不能為空!");
+                return;
+              }
+            }
           }
         }
       }
@@ -858,7 +799,7 @@ export default {
           }
           for (let j = 0; j < this.mx[i].loc.length; j++) {
             if (!this.mx[i].loc[j].weight) {
-              this.$tip.error("入仓货位数量不能为空!");
+              this.$tip.error("出仓货位数量不能为空!");
               return;
             }
           }
@@ -883,7 +824,7 @@ export default {
               !this.mx[i].list[j].weight &&
               !this.mx[i].list[j].locationCode
             ) {
-              this.$tip.error("入仓数量/貨位碼不能为空!");
+              this.$tip.error("出仓数量/貨位碼不能为空!");
               return;
             }
           }
@@ -891,14 +832,18 @@ export default {
       }
       this.modified = true;
       this.wloading = true;
-      if (this.form.yinDate != "" && this.form.yinDate != undefined) {
-        this.form.yinDate += " 00:00:00";
+      this.form.finStatus = "0";
+      if (this.form.retDate != "" && this.form.retDate != undefined) {
+        this.form.retDate += " 00:00:00";
+      }
+      if (this.form.woDate != "" && this.form.woDate != undefined) {
+        this.form.woDate += " 00:00:00";
       }
       if (
-        this.form.whseFinishedclothinoid ||
+        this.form.whseFinclothselloutoid ||
         this.form.whseAccessoriesinoid ||
-        this.form.whseYarninoid ||
-        this.form.whseCalicoinoid ||
+        this.form.whseRetyarninoid ||
+        this.form.whseMaterialoid ||
         this.form.whseChemicalinoid ||
         this.form.whseDyesalinoid ||
         this.form.energyInId
@@ -914,41 +859,41 @@ export default {
           // this.$emit("getData");
           let addDtla = (item, i) => {
             return new Promise((resolve, reject) => {
-              if (
-                item.loc &&
-                this.datas != "成品布" &&
-                this.datas != this.$t("choicDlg.wj") &&
-                this.datas != this.$t("choicDlg.xz") &&
-                this.datas != this.$t("choicDlg.scfl") &&
-                this.datas != this.$t("choicDlg.rl")
-              ) {
-                item.countingNo = item.loc ? item.loc.length : 0;
-                item.weight = 0;
-                item.loc.forEach((loc) => {
-                  item.weight = Number(item.weight) + Number(loc.weight);
-                });
-              }
-              if (
-                item.list &&
-                (this.datas == this.$t("choicDlg.wj") ||
-                  this.datas === this.$t("choicDlg.xz") ||
-                  this.datas === this.$t("choicDlg.scfl") ||
-                  this.datas === this.$t("choicDlg.rl"))
-              ) {
-                item.poQty = 0;
-                item.list.forEach((loc) => {
-                  item.poQty = Number(item.poQty) + Number(loc.weight);
-                });
-              }
+              // if (
+              //   item.loc &&
+              //   this.datas != "成品布" &&
+              //   this.datas != this.$t("choicDlg.wj") &&
+              //   this.datas != this.$t("choicDlg.xz") &&
+              //   this.datas != this.$t("choicDlg.scfl") &&
+              //   this.datas != this.$t("choicDlg.rl")
+              // ) {
+              //   item.countingNo = item.loc ? item.loc.length : 0;
+              //   item.weight = 0;
+              //   item.loc.forEach((loc) => {
+              //     item.weight = Number(item.weight) + Number(loc.weight);
+              //   });
+              // }
+              // if (
+              //   item.list &&
+              //   (this.datas == this.$t("choicDlg.wj") ||
+              //     this.datas === this.$t("choicDlg.xz") ||
+              //     this.datas === this.$t("choicDlg.scfl") ||
+              //     this.datas === this.$t("choicDlg.rl"))
+              // ) {
+              //   item.poQty = 0;
+              //   item.list.forEach((loc) => {
+              //     item.poQty = Number(item.poQty) + Number(loc.weight);
+              //   });
+              // }
               let data = JSON.parse(JSON.stringify(item));
               data.list = [];
               data.alloc = [];
               data.loc = [];
               if (
-                item.whseFinishedclothinDtloid ||
+                item.whseFinclothselloutDtlaoid ||
                 item.whseAccessoriesDtloid ||
-                item.whseYarninDtloid ||
-                item.whseCalicoinDtlaoid ||
+                item.whseRetyarninDtloid ||
+                item.whseMaterialDlaoid ||
                 item.whseChemicalinDtlaoid ||
                 item.whseDyesainDtlaoid ||
                 item.energyDtloid
@@ -961,9 +906,9 @@ export default {
                 // 新增
                 data.whseEnergyInFk = this.detail.energyInId;
                 data.whseAccessoriesinFk = this.detail.whseAccessoriesinoid;
-                data.whseFinishedclothinFk = this.detail.whseFinishedclothinoid;
-                data.whseYarninFk = this.detail.whseYarninoid;
-                data.whseCalicoinFk = this.detail.whseCalicoinoid;
+                data.whseFinclothselloutFk = this.detail.whseFinclothselloutoid;
+                data.whseRetyarninFk = this.detail.whseRetyarninoid;
+                data.whseMaterialFk = this.detail.whseMaterialoid;
                 data.whseChemicalinFk = this.detail.whseChemicalinoid;
                 data.whseDyesalinFk = this.detail.whseDyesalinoid;
                 baseCodeSupply({ code: this.everyThing.batchCode }).then(
@@ -971,12 +916,12 @@ export default {
                 );
                 this.everyThing.addDetail(data).then((res) => {
                   item.energyDtloid = res.data.data;
-                  item.whseFinishedclothinDtloid = res.data.data;
-                  item.whseYarninDtloid = res.data.data;
-                  item.whseCalicoinDtlaoid = res.data.data;
+                  item.whseFinclothselloutDtlaoid = res.data.data;
+                  item.whseMaterialDlaoid = res.data.data;
                   item.whseChemicalinDtlaoid = res.data.data;
                   item.whseDyesainDtlaoid = res.data.data;
                   item.whseAccessoriesDtloid = res.data.data;
+
                   resolve();
                 });
               }
@@ -1022,20 +967,24 @@ export default {
               if (this.mx[i].loc && this.mx[i].loc.length > 0) {
                 this.mx[i].loc.forEach((item) => {
                   item.whseYarninDtlFk = this.mx[i].whseYarninDtloid;
-                  item.whseCalicoinDtlaFk = this.mx[i].whseCalicoinDtlaoid;
+                  item.whseMaterialDlaFk = this.mx[i].whseMaterialDlaoid;
                   item.whseChemicalinDtlaFk = this.mx[i].whseChemicalinDtlaoid;
                   item.whseDyesainDtlaFk = this.mx[i].whseDyesainDtlaoid;
+                  item.whseFinclothselloutDtlaFk =
+                    this.mx[i].whseFinclothselloutDtlaoid;
                   if (
                     !item.whseYarninDtlaoid &&
-                    !item.whseCalicoinDtlboid &&
+                    !item.whseMaterialDlboid &&
                     !item.whseChemicalinDtlcoid &&
-                    !item.whseDyesainDtlcoid
+                    !item.whseDyesainDtlcoid &&
+                    !item.whseFinclothselloutDtlboid
                   ) {
                     this.everyThing.addLoc(item).then((res) => {
                       item.whseYarninDtlaoid = res.data.data;
-                      item.whseCalicoinDtlboid = res.data.data;
+                      item.whseMaterialDlboid = res.data.data;
                       item.whseChemicalinDtlcoid = res.data.data;
                       item.whseDyesainDtlcoid = res.data.data;
+                      item.whseFinclothselloutDtlboid = res.data.data;
                     });
                   } else {
                     this.everyThing.updateLoc(item).then((res) => {});
@@ -1062,52 +1011,52 @@ export default {
               this.$tip.success(this.$t("public.bccg"));
             }, 200);
           }
-          baseCodeSupply({ code: this.everyThing.code }).then((res) => {});
+          // baseCodeSupply({ code: this.everyThing.code }).then((res) => {});
           this.form.whseChemicalinoid = res.data.data;
           this.form.whseDyesalinoid = res.data.data;
-          this.form.whseYarninoid = res.data.data;
-          this.form.whseCalicoinoid = res.data.data;
-          this.form.whseFinishedclothinoid = res.data.data;
+          this.form.whseRetyarninoid = res.data.data;
+          this.form.whseMaterialoid = res.data.data;
+          this.form.whseFinclothselloutoid = res.data.data;
           this.form.whseAccessoriesinoid = res.data.data;
           this.form.energyInId = res.data.data;
           // this.$emit("getData");
           let addDtla = (item, i) => {
             return new Promise((resolve, reject) => {
-              if (
-                item.loc &&
-                this.datas != "成品布" &&
-                this.datas != this.$t("choicDlg.wj") &&
-                this.datas != this.$t("choicDlg.xz") &&
-                this.datas != this.$t("choicDlg.scfl") &&
-                this.datas != this.$t("choicDlg.rl")
-              ) {
-                item.countingNo = item.loc ? item.loc.length : 0;
-                item.weight = 0;
-                item.loc.forEach((loc) => {
-                  item.weight = Number(item.weight) + Number(loc.weight);
-                });
-              }
-              if (
-                item.list &&
-                (this.datas == this.$t("choicDlg.wj") ||
-                  this.datas === this.$t("choicDlg.xz") ||
-                  this.datas === this.$t("choicDlg.scfl") ||
-                  this.datas === this.$t("choicDlg.rl"))
-              ) {
-                item.poQty = 0;
-                item.list.forEach((loc) => {
-                  item.poQty = Number(item.poQty) + Number(loc.weight);
-                });
-              }
+              // if (
+              //   item.loc &&
+              //   this.datas != "成品布" &&
+              //   this.datas != this.$t("choicDlg.wj") &&
+              //   this.datas != this.$t("choicDlg.xz") &&
+              //   this.datas != this.$t("choicDlg.scfl") &&
+              //   this.datas != this.$t("choicDlg.rl")
+              // ) {
+              //   item.countingNo = item.loc ? item.loc.length : 0;
+              //   item.weight = 0;
+              //   item.loc.forEach((loc) => {
+              //     item.weight = Number(item.weight) + Number(loc.weight);
+              //   });
+              // }
+              // if (
+              //   item.list &&
+              //   (this.datas == this.$t("choicDlg.wj") ||
+              //     this.datas === this.$t("choicDlg.xz") ||
+              //     this.datas === this.$t("choicDlg.scfl") ||
+              //     this.datas === this.$t("choicDlg.rl"))
+              // ) {
+              //   item.poQty = 0;
+              //   item.list.forEach((loc) => {
+              //     item.poQty = Number(item.poQty) + Number(loc.weight);
+              //   });
+              // }
               let data = JSON.parse(JSON.stringify(item));
               data.list = [];
               data.alloc = [];
               data.loc = [];
               if (
-                item.whseFinishedclothinDtloid ||
+                item.whseFinclothselloutDtlaoid ||
                 item.whseAccessoriesDtloid ||
-                item.whseYarninDtloid ||
-                item.whseCalicoinDtlaoid ||
+                item.whseRetyarninDtloid ||
+                item.whseMaterialDlaoid ||
                 item.whseChemicalinDtlaoid ||
                 item.whseDyesainDtlaoid ||
                 item.energyDtloid
@@ -1120,21 +1069,22 @@ export default {
                 // 新增
                 data.whseEnergyInFk = this.form.energyInId;
                 data.whseAccessoriesinFk = this.form.whseAccessoriesinoid;
-                data.whseFinishedclothinFk = this.form.whseFinishedclothinoid;
+                data.whseFinclothselloutFk = this.form.whseFinclothselloutoid;
                 data.whseYarninFk = this.form.whseYarninoid;
-                data.whseCalicoinFk = this.form.whseCalicoinoid;
+                data.whseMaterialFk = this.form.whseMaterialoid;
                 data.whseChemicalinFk = this.form.whseChemicalinoid;
                 data.whseDyesalinFk = this.form.whseDyesalinoid;
+                data.whseRetyarninFk = this.form.whseRetyarninoid;
                 baseCodeSupply({ code: this.everyThing.batchCode }).then(
                   (res) => {}
                 );
                 this.everyThing.addDetail(data).then((res) => {
                   item.energyDtloid = res.data.data;
-                  item.whseYarninDtloid = res.data.data;
-                  item.whseCalicoinDtlaoid = res.data.data;
+                  item.whseRetyarninDtloid = res.data.data;
+                  item.whseMaterialDlaoid = res.data.data;
                   item.whseChemicalinDtlaoid = res.data.data;
                   item.whseDyesainDtlaoid = res.data.data;
-                  item.whseFinishedclothinDtloid = res.data.data;
+                  item.whseFinclothselloutDtlaoid = res.data.data;
                   item.whseAccessoriesDtloid = res.data.data;
                   resolve();
                 });
@@ -1181,21 +1131,24 @@ export default {
               if (this.mx[i].loc && this.mx[i].loc.length > 0) {
                 this.mx[i].loc.forEach((item) => {
                   item.whseYarninDtlFk = this.mx[i].whseYarninDtloid;
-                  item.whseCalicoinDtlaFk = this.mx[i].whseCalicoinDtlaoid;
-
+                  item.whseMaterialDlaFk = this.mx[i].whseMaterialDlaoid;
+                  item.whseFinclothselloutDtlaFk =
+                    this.mx[i].whseFinclothselloutDtlaoid;
                   item.whseChemicalinDtlaFk = this.mx[i].whseChemicalinDtlaoid;
                   item.whseDyesainDtlaFk = this.mx[i].whseDyesainDtlaoid;
                   if (
                     !item.whseYarninDtlaoid &&
-                    !item.whseCalicoinDtlboid &&
+                    !item.whseMaterialDlboid &&
                     !item.whseChemicalinDtlcoid &&
-                    !item.whseDyesainDtlcoid
+                    !item.whseDyesainDtlcoid &&
+                    !item.whseFinclothselloutDtlboid
                   ) {
                     this.everyThing.addLoc(item).then((res) => {
                       item.whseYarninDtlaoid = res.data.data;
-                      item.whseCalicoinDtlboid = res.data.data;
+                      item.whseMaterialDlboid = res.data.data;
                       item.whseChemicalinDtlcoid = res.data.data;
                       item.whseDyesainDtlcoid = res.data.data;
+                      item.whseFinclothselloutDtlboid = res.data.data;
                     });
                   } else {
                     this.everyThing.updateLoc(item).then((res) => {});

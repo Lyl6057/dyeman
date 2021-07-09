@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-07-05 08:26:36
+ * @LastEditTime: 2021-07-09 11:03:32
  * @Description: 
 -->
 <template>
@@ -14,44 +14,103 @@
       class="not-number-icon"
     >
       <div class="btnList">
-        <el-button type="success" @click="save" :loading="wLoading">{{
-          $t("public.save")
-        }}</el-button>
+        <el-tooltip
+          class="item"
+          effect="dark"
+          content="Bảo tồn"
+          placement="top-start"
+        >
+          <el-button type="success" @click="save" :loading="wLoading">{{
+            $t("public.save")
+          }}</el-button>
+        </el-tooltip>
+
         <!-- <el-button type="primary" @click="checkOrder">选择订单号</el-button> -->
-        <el-button
-          type="primary"
-          @click="checkProject"
-          :disabled="!this.form.bleadyeJobId"
-          >生产项目</el-button
+        <el-tooltip
+          class="item"
+          effect="dark"
+          content="Mục sản xuất"
+          placement="top-start"
         >
-        <el-button
-          type="primary"
-          @click="checkTest"
-          :disabled="!this.form.bleadyeJobId"
-          >測試要求</el-button
+          <el-button
+            type="primary"
+            @click="checkProject"
+            :disabled="!this.form.bleadyeJobId"
+            >生产项目</el-button
+          >
+        </el-tooltip>
+        <el-tooltip
+          class="item"
+          effect="dark"
+          content=" Yêu cầu kiểm tra"
+          placement="top-start"
         >
-        <el-button
-          type="primary"
-          @click="checkCar"
-          :disabled="!this.form.bleadyeJobId"
-          >长车加工项目</el-button
+          <el-button
+            type="primary"
+            @click="checkTest"
+            :disabled="!this.form.bleadyeJobId"
+            >測試要求</el-button
+          >
+        </el-tooltip>
+        <el-tooltip
+          class="item"
+          effect="dark"
+          content="Tham số máy dài"
+          placement="top-start"
         >
-        <el-button
-          type="primary"
-          @click="checkstrain"
-          :disabled="!this.form.bleadyeJobId"
-          >染缸參數</el-button
+          <el-button
+            type="primary"
+            @click="checkCar"
+            :disabled="!this.form.bleadyeJobId"
+            >长车加工项目</el-button
+          >
+        </el-tooltip>
+        <el-tooltip
+          class="item"
+          effect="dark"
+          content="Tham  số  bồn  nhuộm"
+          placement="top-start"
         >
-        <el-button
-          type="primary"
-          @click="checkTechItem"
-          :disabled="!this.form.bleadyeJobId"
-          >生產工藝</el-button
+          <el-button
+            type="primary"
+            @click="checkstrain"
+            :disabled="!this.form.bleadyeJobId"
+            >染缸參數</el-button
+          >
+        </el-tooltip>
+
+        <el-tooltip
+          class="item"
+          effect="dark"
+          content="Mục sản xuất"
+          placement="top-start"
         >
+          <el-button
+            type="primary"
+            @click="checkTechItem"
+            :disabled="!this.form.bleadyeJobId"
+            >生產工藝</el-button
+          >
+        </el-tooltip>
         <!-- <el-button type="primary" @click="setPreview">预览</el-button> -->
-        <el-button type="warning" @click="close">{{
-          this.$t("public.close")
-        }}</el-button>
+        <el-tooltip
+          class="item"
+          effect="dark"
+          content=" in"
+          placement="top-start"
+        >
+          <el-button type="primary" @click="print">打印</el-button>
+        </el-tooltip>
+        <el-tooltip
+          class="item"
+          effect="dark"
+          content="đóng"
+          placement="top-start"
+        >
+          <el-button type="warning" @click="close">{{
+            this.$t("public.close")
+          }}</el-button>
+        </el-tooltip>
       </div>
 
       <div class="formBox">
@@ -72,21 +131,49 @@
         <el-col :span="this.tabs == '生產工藝' ? 12 : 24">
           <view-container :title="tabs">
             <div class="btnList">
-              <el-button @click="saveOther" type="success">{{
-                $t("public.save")
-              }}</el-button>
-              <el-button @click="add" type="primary">{{
-                $t("public.add")
-              }}</el-button>
-              <el-button
-                @click="del"
-                type="danger"
-                :disabled="Object.keys(chooseData).length == 0"
-                >{{ $t("public.del") }}</el-button
+              <el-tooltip
+                class="item"
+                effect="dark"
+                content="Bảo tồn"
+                placement="top-start"
               >
-              <el-button @click="visible = false" type="warning">{{
-                $t("public.close")
-              }}</el-button>
+                <el-button @click="saveOther" type="success">{{
+                  $t("public.save")
+                }}</el-button>
+              </el-tooltip>
+              <el-tooltip
+                class="item"
+                effect="dark"
+                content="thêm mới "
+                placement="top-start"
+              >
+                <el-button @click="add" type="primary">{{
+                  $t("public.add")
+                }}</el-button>
+              </el-tooltip>
+              <el-tooltip
+                class="item"
+                effect="dark"
+                content="xóa"
+                placement="top-start"
+              >
+                <el-button
+                  @click="del"
+                  type="danger"
+                  :disabled="Object.keys(chooseData).length == 0"
+                  >{{ $t("public.del") }}</el-button
+                >
+              </el-tooltip>
+              <el-tooltip
+                class="item"
+                effect="dark"
+                content="đóng"
+                placement="top-start"
+              >
+                <el-button @click="visible = false" type="warning">{{
+                  $t("public.close")
+                }}</el-button>
+              </el-tooltip>
               <span style="margin-left: 10px" v-if="tabs == '生產工藝'">
                 自动计算</span
               >
@@ -235,18 +322,32 @@
         <el-col :span="12" v-if="tabs == '生產工藝'">
           <view-container title="工藝明細">
             <div class="btnList">
-              <el-button
-                @click="addDtl"
-                type="primary"
-                :disabled="Object.keys(chooseData).length == 0"
-                >{{ $t("public.add") }}</el-button
+              <el-tooltip
+                class="item"
+                effect="dark"
+                content="thêm mới "
+                placement="top-start"
               >
-              <el-button
-                @click="delDtl"
-                type="danger"
-                :disabled="Object.keys(chooseDtlData).length == 0"
-                >{{ $t("public.del") }}</el-button
+                <el-button
+                  @click="addDtl"
+                  type="primary"
+                  :disabled="Object.keys(chooseData).length == 0"
+                  >{{ $t("public.add") }}</el-button
+                >
+              </el-tooltip>
+              <el-tooltip
+                class="item"
+                effect="dark"
+                content="xóa"
+                placement="top-start"
               >
+                <el-button
+                  @click="delDtl"
+                  type="danger"
+                  :disabled="Object.keys(chooseDtlData).length == 0"
+                  >{{ $t("public.del") }}</el-button
+                >
+              </el-tooltip>
               <el-button
                 @click="up"
                 type="primary"
@@ -318,6 +419,31 @@
       @close="choiceV = false"
       v-if="choiceV"
     ></choice>
+    <el-dialog
+      id="colorMng_Dlg"
+      :visible.sync="pdfDlg"
+      fullscreen
+      width="100%"
+      append-to-body
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+    >
+      <view-container title="打印預覽">
+        <!-- <div class="btnList">
+            <el-button type="warning" @click="pdfDlg = false">{{
+              this.$t("public.close")
+            }}</el-button>
+            <el-button type="primary" @click="print2">打印</el-button>
+          </div> -->
+        <!--startprint-->
+        <embed
+          id="pdf"
+          style="width: 100vw; height: calc(100vh - 80px)"
+          :src="pdfUrl"
+        />
+        <!--endprint-->
+      </view-container>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -454,6 +580,8 @@ export default {
           value: "L",
         },
       ],
+      pdfDlg: false,
+      pdfUrl: "",
     };
   },
   watch: {},
@@ -477,6 +605,13 @@ export default {
         }
       });
     },
+    print() {
+      this.pdfDlg = true;
+      this.pdfUrl =
+        process.env.API_HOST +
+        "/api/proBleadyeJob/buildWorkOrder?id=" +
+        this.form.bleadyeJobId;
+    },
     getData() {
       this.wLoading = true;
       this.form = {};
@@ -494,9 +629,16 @@ export default {
         // }).then((res) => {
         //   this.form = res.data.records[0];
         this.form = this.detail;
+
+        Object.keys(this.form).forEach((item) => {
+          if (this.isEmpty(this.form[item])) {
+            delete this.form[item];
+          }
+        });
         if (!(this.form.mergVatNo instanceof Array) && this.form.mergVatNo) {
           this.form.mergVatNo = this.form.mergVatNo.split("/");
         }
+
         this.oldW = JSON.parse(JSON.stringify(this.form.clothWeight));
         setTimeout(() => {
           this.wLoading = false;
@@ -542,18 +684,17 @@ export default {
           try {
             Object.keys(this.form).forEach((item) => {
               if (this.isEmpty(this.form[item])) {
-                delete this.form[item];
+                this.form[item] = "";
               }
             });
             isNaN(this.form.clothWeight) ? (this.form.clothWeight = "") : "";
             isNaN(this.form.poAmountKg) ? (this.form.poAmountKg = "") : "";
             isNaN(this.form.poAmountLb) ? (this.form.poAmountLb = "") : "";
-            this.form.gramWeight = Number(this.form.gramWeight);
-            this.form.breadth = Number(this.form.breadth);
+            // this.form.gramWeight = Number(this.form.gramWeight);
+            // this.form.breadth = Number(this.form.breadth);
             this.form.workDate += " 00:00:00";
             this.form.deliveDate += " 00:00:00";
             let vat = "";
-            // if (typeof this.form.mergVatNo == "object") {
             this.form.mergVatNo.forEach((item, i) => {
               if (i == this.form.mergVatNo.length - 1) {
                 vat += item;
@@ -561,12 +702,11 @@ export default {
                 vat += item + "/";
               }
             });
-            // }
-
             this.form.mergVatNo = vat;
             if (this.form.bleadyeJobId) {
               // update
               this.form.upateTime = this.$getNowTime("datetime");
+
               if (this.oldW != this.form.clothWeight) {
                 this.$tip
                   .cofirm(
@@ -575,6 +715,7 @@ export default {
                     {}
                   )
                   .then(() => {
+                    this.form.mergVatNo = vat;
                     update(this.form).then((res) => {
                       if (res.data.code == 200) {
                         this.oldW = this.form.clothWeight;
@@ -663,9 +804,11 @@ export default {
                         this.$tip.error(this.$t("public.bcsb"));
                       }
                     });
+                    this.form.mergVatNo = this.form.mergVatNo.split("/");
                   })
                   .catch((err) => {
                     this.form.clothWeight = this.oldW;
+                    this.form.mergVatNo = vat;
                     update(this.form).then((res) => {
                       if (res.data.code == 200) {
                         this.oldW = this.form.clothWeight;
@@ -683,6 +826,7 @@ export default {
                         this.$tip.error(this.$t("public.bcsb"));
                       }
                     });
+                    this.form.mergVatNo = this.form.mergVatNo.split("/");
                   });
               } else {
                 update(this.form).then((res) => {
@@ -699,6 +843,7 @@ export default {
                     done();
                     this.$tip.error(this.$t("public.bcsb"));
                   }
+                  this.form.mergVatNo = this.form.mergVatNo.split("/");
                 });
               }
             } else {
@@ -716,9 +861,9 @@ export default {
                 done();
               });
             }
-            if (this.form.mergVatNo) {
-              this.form.mergVatNo = this.form.mergVatNo.split("/");
-            }
+            // if (this.form.mergVatNo) {
+
+            // }
           } catch (error) {
             console.log(error);
             this.wLoading = false;
@@ -844,6 +989,11 @@ export default {
                 a.testItemCode.replace(/[^0-9]/gi, "") -
                 b.testItemCode.replace(/[^0-9]/gi, "")
               );
+            });
+          }
+          if (this.tabs == "生產項目") {
+            this.crud.sort((a, b) => {
+              return a.sn > b.sn ? 1 : -1;
             });
           }
           if (this.tabs == "染缸參數") {
@@ -1381,42 +1531,39 @@ export default {
           this.chooseData.list[this.chooseData.list.length - 1]
         );
       }
-      if (this.choiceTle == "选择织造通知单") {
-        val.fabName = val.fabricDesc;
+      if (this.choiceTle == "选择染整运转单") {
         val.gramWeightAfter = isNaN(val.gramWeight) ? 0 : val.gramWeight;
         val.shrinkLenth = isNaN(val.verticalShrink) ? 0 : val.verticalShrink;
         val.shrinkWidth = isNaN(val.horizonShrink) ? 0 : val.horizonShrink;
-        val.clothWeight = isNaN(val.amount) ? 0 : val.amount;
+        // val.clothWeight = isNaN(val.amount) ? 0 : val.amount;
+        if (!(val.mergVatNo instanceof Array) && val.mergVatNo) {
+          val.mergVatNo = val.mergVatNo.split("/");
+        }
+        val.dyeJarCount = Number(val.dyeVatType);
+        // if (!(val.compLightSource instanceof Array) && val.compLightSource) {
+        //   val.compLightSource = val.compLightSource.split(",");
+        // }
+        Object.keys(val).forEach((item) => {
+          if (this.isEmpty(val[item])) {
+            delete val[item];
+          }
+        });
         this.form = val;
-        // this.form.weaveJobCode =val.weaveJobCode;
-        // this.form.fabName = val.fabName
-        // this.form.salPoNo = val.salPoNo
-        // this.form.custCode = val.custCode
 
-        // this.form.yarnBatchNo =val.yarnBatchNo;
-        // this.form.yarnNumber = val.yarnNumber
-        // this.form.yarnCard = val.yarnCard
-        // this.form.colorName = val.colorName
+        this.form.poAmountLb = (this.form.poAmountKg * 2.2046226).toFixed(2);
+        // this.form.breadthUnit = this.form.breadth.replace(/[^a-z]+/gi, "");
+        // this.form.breadth = Number(this.form.breadth.replace(/[^0-9]/gi, ""));
 
-        //  this.form.colorCode =val.colorCode;
-        // this.form.yarnNumber = val.yarnNumber
-        // this.form.yarnCard = val.yarnCard
-        // this.form.colorName = val.colorName
-
-        this.form.breadthUnit = this.form.breadth.replace(/[^a-z]+/gi, "");
-        this.form.breadth = Number(this.form.breadth.replace(/[^0-9]/gi, ""));
-
-        this.getOther();
+        // this.getOther();
       }
       if (this.choiceTle == "選擇生产项目") {
         val.forEach((item, i) => {
           this.crud.push({
             jobItemName: item.stepName,
             $cellEdit: true,
-            index:
-              this.crud.length > 0
-                ? this.crud[this.crud.length - 1].index + 1
-                : 1,
+            // sn: item.sn,
+            sn:
+              this.crud.length > 0 ? this.crud[this.crud.length - 1].sn + 1 : 1,
           });
         });
       }
@@ -1520,7 +1667,8 @@ export default {
         obj === "undefined" ||
         typeof obj === "undefined" ||
         obj === null ||
-        obj === ""
+        obj === "" ||
+        obj === 0
       ) {
         return true;
       } else {

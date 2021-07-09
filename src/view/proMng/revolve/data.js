@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-06-30 15:35:52
+ * @LastEditTime: 2021-07-09 11:15:50
  * @Description:
  */
 
@@ -18,7 +18,7 @@ export function mainForm(_this) {
     labelWidth: 150,
     column: [
       {
-        label: "染缸",
+        label: "缸號",
         prop: "vatNo",
         span: 6,
         placeholder: " "
@@ -58,7 +58,7 @@ export function mainForm(_this) {
       },
       {
         label: "开单员",
-        prop: "operator",
+        prop: "serviceOperator",
         span: 6,
         placeholder: " "
       }
@@ -302,7 +302,21 @@ export function mainCrud(_this) {
         width: 120,
         placeholder: " ",
         disabled: false,
-        hide: true
+        hide: true,
+        filterable: true,
+        allowCreate: true,
+        defaultFirstOption: true,
+        type: "select",
+        dicData: [
+          {
+            label: "S.POWER",
+            value: "S.POWER"
+          },
+          {
+            label: "Rise Sun",
+            value: "Rise Sun"
+          }
+        ]
       },
       {
         label: "合染缸號",
@@ -331,7 +345,7 @@ export function mainCrud(_this) {
         placeholder: " "
       },
       {
-        label: "合计",
+        label: "合计数量",
         tip: "Tổng cộng(KG)",
         prop: "clothWeight",
         width: 100,
@@ -342,14 +356,25 @@ export function mainCrud(_this) {
       },
 
       {
-        label: "訂單數量(公斤)",
+        label: "訂單數量(kg)",
         tip: "Số lượng đơn hàng",
         prop: "poAmountKg",
         width: 130,
         span: 8,
         type: "number",
         align: "right",
-        placeholder: " "
+        placeholder: " ",
+        change: () => {
+          if (_this.form.poAmountKg) {
+            return;
+          }
+          _this.$nextTick(() => {
+            _this.form.dyeVatType =
+              Number(_this.form.poAmountKg) / 350 >= 4
+                ? "4"
+                : Math.ceil(Number(_this.form.poAmountKg) / 350) + "";
+          });
+        }
         // change: () => {
         //   _this.$nextTick(() => {
         //     _this.form.poAmountLb = (_this.form.poAmountKg * 2.2046226).toFixed(2)
@@ -390,7 +415,7 @@ export function mainCrud(_this) {
       {
         label: "紗缸",
         tip: "Lô sợi nhà máy",
-        prop: "yarnG",
+        prop: "yarnCylinder",
         span: 8,
         width: 120,
         placeholder: " ",
@@ -446,7 +471,7 @@ export function mainCrud(_this) {
         hide: true,
         placeholder: " ",
         width: 80,
-        tyep: "number"
+        type: "number"
       },
       {
         label: "紗長",
@@ -455,8 +480,8 @@ export function mainCrud(_this) {
         span: 8,
         hide: true,
         placeholder: " ",
-        width: 80,
-        tyep: "number"
+        width: 80
+        // tyep: "number"
       },
       {
         label: "幅寬(Inch)",
@@ -465,7 +490,7 @@ export function mainCrud(_this) {
         width: 90,
         hide: true,
         span: 8,
-        type: "number",
+        // type: "number",
         placeholder: " "
       },
       {
@@ -495,6 +520,7 @@ export function mainCrud(_this) {
         hide: true,
         span: 8,
         placeholder: " ",
+        multiple: true,
         type: "select",
         dicData: getDIC("sal_colorLights")
       },
@@ -508,14 +534,34 @@ export function mainCrud(_this) {
         placeholder: " "
       },
       {
-        label: "开单员",
-        tip: "开单员",
-        prop: "mateStockMan",
-        width: 80,
+        label: "生产用机种",
+        prop: "dyeVatType",
+        tip: "Mô hình",
         span: 8,
         hide: true,
-        placeholder: " "
+        width: 80,
+        placeholder: " ",
+        type: "select",
+        dicData: [
+          {
+            label: "1T",
+            value: "1"
+          },
+          {
+            label: "2T",
+            value: "2"
+          },
+          {
+            label: "3T",
+            value: "3"
+          },
+          {
+            label: "4T",
+            value: "4"
+          }
+        ]
       },
+
       {
         label: "收货要求",
         tip: "Nhận hàng yêu cầu",
@@ -544,17 +590,28 @@ export function mainCrud(_this) {
         width: 80,
         placeholder: " "
       },
+      // {
+      //   label: "列印時間",
+      //   prop: "printDate",
+      //   placeholder: " ",
+      //   width: 90,
+      //   hide: true,
+      //   type: "datetime",
+      //   format: "yyyy-MM-dd HH:mm:ss",
+      //   valueFormat: "yyyy-MM-dd HH:mm:ss",
+      //   span: 8,
+      //   disabled: true,
+      //   display: true
+      // },
       {
-        label: "列印時間",
-        prop: "printDate",
-        placeholder: " ",
-        width: 90,
-        hide: true,
-        type: "datetime",
-        format: "yyyy-MM-dd HH:mm:ss",
-        valueFormat: "yyyy-MM-dd HH:mm:ss",
+        label: "开单员",
+        tip: "开单员",
+        prop: "serviceOperator",
+        width: 80,
         span: 8,
-        display: true
+        disabled: true,
+        // hide: true,
+        placeholder: " "
       },
       {
         label: "备注",
@@ -579,7 +636,7 @@ export function mainCrud(_this) {
             width: 90,
             hide: true,
             span: 8,
-            type: "number",
+            // type: "number",
             placeholder: " "
           },
           {
@@ -589,7 +646,7 @@ export function mainCrud(_this) {
             width: 90,
             hide: true,
             span: 8,
-            type: "number",
+            // type: "number",
             placeholder: " "
           },
           {
@@ -599,7 +656,7 @@ export function mainCrud(_this) {
             width: 120,
             hide: true,
             span: 8,
-            type: "number",
+            // type: "number",
             placeholder: " "
           },
 
@@ -610,7 +667,7 @@ export function mainCrud(_this) {
             width: 120,
             hide: true,
             span: 8,
-            type: "number",
+            // type: "number",
             placeholder: " "
           },
 
@@ -663,8 +720,8 @@ export function mainCrud(_this) {
             span: 8,
             hide: true,
             width: 80,
-            placeholder: " "
-            // type: "number"
+            placeholder: " ",
+            type: "number"
           },
           {
             label: "平干",
@@ -673,8 +730,8 @@ export function mainCrud(_this) {
             span: 8,
             hide: true,
             width: 80,
-            placeholder: " "
-            // type: "number"
+            placeholder: " ",
+            type: "number"
           },
           {
             label: "拋干",
@@ -1017,7 +1074,7 @@ export function itemOp(_this) {
         label: "项目名称",
         prop: "jobItemName",
         overHidden: false,
-        width: 140,
+        // width: 140,
         span: 8,
         disabled: false,
         // sortable: true,
@@ -1031,17 +1088,17 @@ export function itemOp(_this) {
         span: 8,
         placeholder: " ",
         align: "center",
-        type: "switch",
-        dicData: [
-          {
-            label: "否",
-            value: "0"
-          },
-          {
-            label: "是",
-            value: "1"
-          }
-        ],
+        // type: "switch",
+        // dicData: [
+        //   {
+        //     label: "否",
+        //     value: "0"
+        //   },
+        //   {
+        //     label: "是",
+        //     value: "1"
+        //   }
+        // ],
         cell: true
       }
     ]

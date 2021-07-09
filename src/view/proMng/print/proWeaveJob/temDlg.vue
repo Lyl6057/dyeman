@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-07-05 14:30:29
+ * @LastEditTime: 2021-07-09 10:29:02
  * @Description: 
 -->
 <template>
@@ -336,6 +336,10 @@ import {
   getStrain,
   updateStrain,
   delStrain,
+  getMachine,
+  addMachine,
+  delMachine,
+  updateMachine,
 } from "./api";
 import { baseCodeSupplyEx } from "@/api/index";
 import preview from "./preview";
@@ -395,7 +399,13 @@ export default {
       canSave: true,
     };
   },
-  watch: {},
+  watch: {
+    crud(n, o) {
+      if (this.tabs == "機號信息") {
+        this.getMachineList();
+      }
+    },
+  },
   methods: {
     getData() {
       if (this.isAdd) {
@@ -411,6 +421,7 @@ export default {
         this.wLoading = true;
         this.form = this.detail;
         this.getAllYarn();
+        this.getMachineList();
         // if (this.form.realEnd === "" || this.form.realEnd === null) {
         //   this.form.nowDate = this.form.planEnd.split(" ")[0];
         // } else {
@@ -457,6 +468,21 @@ export default {
             this.yarnlist = this.yarnlist.concat(yarn.data.records);
           });
         }
+      });
+    },
+    getMachineList() {
+      getMachine({
+        proWeaveJobFk: this.form.weaveJobId,
+        star: 1,
+        rows: 9,
+      }).then((res) => {
+        this.form.mathineCode = "";
+        res.data.records.sort((a, b) => {
+          return a.recordTime > b.recordTime ? -1 : 1;
+        });
+        res.data.records.forEach((item) => {
+          this.form.mathineCode += item.mathineCode + " / ";
+        });
       });
     },
     async out() {
@@ -578,6 +604,12 @@ export default {
       } else if (!this.form.weaveJobId) {
         this.crud = [];
         return;
+      } else if (this.tabs == "機號信息") {
+        this.func.get = getMachine;
+        this.func.del = delMachine;
+        this.func.add = addMachine;
+        this.func.update = updateMachine;
+        this.dlgForm.proWeaveJobFk = this.form.weaveJobId;
       } else if (this.tabs == "更改紗長") {
         this.func.get = getLong;
         this.func.del = delLong;
@@ -632,6 +664,11 @@ export default {
                 return a.sn - b.sn;
               });
             }
+            if (this.tabs == "機號信息") {
+              this.crud.sort((a, b) => {
+                return a.recordTime > b.recordTime ? -1 : 1;
+              });
+            }
             if (this.crud.length > 0) {
               this.$refs.crud.setCurrentRow(this.crud[0]);
             }
@@ -669,6 +706,10 @@ export default {
           this.$tip.error("輸送張力不能為空!");
           return;
         }
+        if (this.tabs == "機號信息" && !this.crud[i].mathineCode) {
+          this.$tip.error("机号不能為空!");
+          return;
+        }
       }
       this.dlgLoading = true;
       let addDtla = (item, i) => {
@@ -681,7 +722,8 @@ export default {
             item.changedId ||
             item.groupId ||
             item.washedId ||
-            item.strainId
+            item.strainId ||
+            item.useId
           ) {
             this.func.update(data).then((res) => {
               resolve();
@@ -695,6 +737,7 @@ export default {
               item.groupId = res.data.data;
               item.washedId = res.data.data;
               item.strainId = res.data.data;
+              item.useId = res.data.data;
               resolve();
             });
           }
@@ -774,13 +817,19 @@ export default {
       this.visible = true;
     },
     add() {
-      // if (this.tabs != "用紗分組") {
+      if (this.tabs == "用紗分組" && this.crud.length >= 1) {
+        this.$tip.warning("每个织单只允许存在一个用纱分组!");
+        return;
+      }
       this.crud.push({
         index: this.crud.length + 1,
         $cellEdit: true,
         signDate: this.$getNowTime("datetime"),
         changeBatchTime: this.$getNowTime("datetime"),
         sn: this.crud.length > 0 ? this.crud[this.crud.length - 1].sn + 1 : 1,
+        userName: parent.userID,
+        userId: this.$store.state.userId,
+        recordTime: this.$getNowTime("datetime"),
       });
       this.$refs.crud.setCurrentRow(this.crud[this.crud.length - 1]);
       // } else {
@@ -795,7 +844,8 @@ export default {
         !this.chooseData.changedId &&
         !this.chooseData.groupId &&
         !this.chooseData.washedId &&
-        !this.chooseData.strainId
+        !this.chooseData.strainId &&
+        !this.chooseData.useId
       ) {
         this.crud.splice(this.chooseData.index - 1, 1);
         this.chooseData = {};
@@ -822,6 +872,8 @@ export default {
                 ? this.chooseData.groupId
                 : this.tabs === "洗後規格"
                 ? this.chooseData.washedId
+                : this.tabs === "機號信息"
+                ? this.chooseData.useId
                 : this.chooseData.strainId
             )
             .then((res) => {

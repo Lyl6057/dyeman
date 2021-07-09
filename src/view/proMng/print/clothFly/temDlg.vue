@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-06-23 09:29:07
+ * @LastEditTime: 2021-07-08 19:37:54
  * @Description: 
 -->
 <template>
@@ -42,9 +42,9 @@
               <el-radio label="2">已打印</el-radio>
               <el-radio label="3">全部</el-radio>
             </el-radio-group>
-            <span style="margin-left: 20px; font-size: 18px"> 机号: </span>
+            <!-- <span style="margin-left: 20px; font-size: 18px"> 机号: </span> -->
 
-            <el-select
+            <!-- <el-select
               v-model="jh"
               placeholder="请选择机号"
               filterable
@@ -60,7 +60,7 @@
                 :value="item.value"
               >
               </el-option>
-            </el-select>
+            </el-select> -->
           </div>
           <avue-crud
             ref="crud"
@@ -85,6 +85,7 @@
 <script>
 import { mainCrud, bfCrud } from "./data";
 import { webSocket } from "@/config/index.js";
+import { getDIC, getDicT, getXDicT, postDicT, getDicNS } from "@/config";
 import {
   getCodeSupply,
   addBf,
@@ -155,13 +156,18 @@ export default {
       // getBf().then((res) => {});
       this.wLoading = true;
       this.form = this.detail;
-      this.jh = this.form.mathineCode;
-      if (this.jh) {
-        this.options.push({
-          value: this.jh,
-          label: this.jh,
-        });
-      }
+      this.formOp.column[10].dicData = getDicNS(
+        `proWeaveJobUseMachine?proWeaveJobFk=${this.form.weaveJobId}`,
+        "mathineCode",
+        "mathineCode"
+      );
+      // this.jh = this.form.mathineCode;
+      // if (this.jh) {
+      //   this.options.push({
+      //     value: this.jh,
+      //     label: this.jh,
+      //   });
+      // }
 
       this.form.ps = (Number(this.form.amount) / Number(this.form.pz)).toFixed(
         0
@@ -178,6 +184,11 @@ export default {
           this.form.proWeaveJobGroupFk = group.data[0].groupId;
         }
         this.getBf();
+        this.$nextTick(() => {
+          if (this.formOp.column[10].dicData.length) {
+            this.form.mathineCode = this.formOp.column[10].dicData[0].value;
+          }
+        });
         // this.wLoading = false;
       });
     },
@@ -469,8 +480,8 @@ export default {
       } else {
         delete query["isPrinted"];
       }
-      if (this.jh) {
-        query.machineCode = this.jh;
+      if (this.form.mathineCode) {
+        query.machineCode = this.form.mathineCode;
       } else {
         delete query["machineCode"];
       }

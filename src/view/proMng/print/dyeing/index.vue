@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-29 08:01:37
+ * @LastEditTime: 2021-07-06 16:20:55
  * @Description: 
 -->
 <template>
@@ -13,28 +13,64 @@
       element-loading-text="拼命加载中..."
     >
       <el-row class="btnList">
-        <el-button
-          type="success"
-          :disabled="!detail.bleadyeJobId"
-          @click="handleRowDBLClick(detail)"
-          >{{ this.$t("public.update") }}</el-button
+        <el-tooltip
+          class="item"
+          effect="dark"
+          content="cập nhật"
+          placement="top-start"
         >
-        <el-button type="primary" @click="add">{{
-          this.$t("public.add")
-        }}</el-button>
-        <el-button
-          type="danger"
-          :disabled="!detail.bleadyeJobId"
-          @click="del"
-          >{{ this.$t("public.del") }}</el-button
+          <el-button
+            type="success"
+            :disabled="!detail.bleadyeJobId"
+            @click="handleRowDBLClick(detail)"
+            >{{ this.$t("public.update") }}</el-button
+          >
+        </el-tooltip>
+        <el-tooltip
+          class="item"
+          effect="dark"
+          content="thêm mới "
+          placement="top-start"
         >
-        <el-button type="primary" @click="print" :loading="wloading"
-          >打印</el-button
-        >
-        <el-button type="primary" @click="query">{{
-          this.$t("public.query")
-        }}</el-button>
+          <el-button type="primary" @click="add">{{
+            this.$t("public.add")
+          }}</el-button>
+        </el-tooltip>
 
+        <!-- <el-tooltip
+          class="item"
+          effect="dark"
+          content="xóa"
+          placement="top-start"
+        >
+          <el-button
+            type="danger"
+            :disabled="!detail.bleadyeJobId"
+            @click="del"
+            >{{ this.$t("public.del") }}</el-button
+          >
+        </el-tooltip> -->
+        <el-tooltip
+          class="item"
+          effect="dark"
+          content=" in"
+          placement="top-start"
+        >
+          <el-button type="primary" @click="print" :loading="wloading"
+            >打印</el-button
+          >
+        </el-tooltip>
+
+        <el-tooltip
+          class="item"
+          effect="dark"
+          content="tìm kiếm"
+          placement="top-start"
+        >
+          <el-button type="primary" @click="query">{{
+            this.$t("public.query")
+          }}</el-button>
+        </el-tooltip>
         <!-- <el-button type="warning" @click="close">{{
           this.$t("public.close")
         }}</el-button> -->

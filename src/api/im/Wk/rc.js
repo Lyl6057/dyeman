@@ -788,3 +788,101 @@ export function delXzLoc(id) {
     method: "delete"
   });
 }
+
+// ------ 燃料
+export function getRl(params) {
+  return axios({
+    url: "/api/whseEnergyIn/page",
+    method: "get",
+    params: params
+  });
+}
+
+export function addRl(params) {
+  return axios({
+    url: "/api/whseEnergyIn",
+    method: "post",
+    params: params
+  });
+}
+export function updateRl(params) {
+  return axios({
+    url: "/api/whseEnergyIn",
+    method: "put",
+    params: params
+  });
+}
+
+export function delRl(id) {
+  return axios({
+    url: "/api/whseEnergyIn?energyInId=" + id,
+    method: "delete"
+  });
+}
+
+export function getRlDetali(params) {
+  return axios({
+    url: "/api/whseEnergyDtl/page",
+    method: "get",
+    params: params
+  });
+}
+export function addRlDetali(params) {
+  return axios({
+    url: "/api/whseEnergyDtl",
+    method: "post",
+    params: params
+  });
+}
+
+export function updateRlDetali(params) {
+  return axios({
+    url: "/api/whseEnergyDtl",
+    method: "put",
+    params: params
+  });
+}
+
+export function delRlDetali(id) {
+  return axios({
+    url: "/api/whseEnergyDtl?energyDtloid=" + id,
+    method: "delete"
+  });
+}
+
+export function getRlLoc(params) {
+  return axios({
+    url: "/api/whseEnergyDtla/page",
+    method: "get",
+    params: params
+  });
+}
+export function getRlLocList(params) {
+  return axios({
+    url: "/api/whseEnergyDtla",
+    method: "get",
+    params: params
+  });
+}
+export function addRlLoc(params) {
+  return axios({
+    url: "/api/whseEnergyDtla",
+    method: "post",
+    params: params
+  });
+}
+
+export function updateRlLoc(params) {
+  return axios({
+    url: "/api/whseEnergyDtla",
+    method: "put",
+    params: params
+  });
+}
+
+export function delRlLoc(id) {
+  return axios({
+    url: "/api/whseEnergyDtla?whseEnergyDtlaId=" + id,
+    method: "delete"
+  });
+}

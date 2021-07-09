@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-06-23 15:09:00
+ * @LastEditTime: 2021-07-09 08:40:20
  * @Description:
  */
 
@@ -57,6 +57,7 @@ export function mainForm(_this) {
         prop: "mathineCode",
         span: 6,
         placeholder: " ",
+
         tip: "Mã số máy dệt"
       },
       {
@@ -295,7 +296,15 @@ export function mainCrud(_this) {
         tip: "Ckhách hàng PO",
         hide: true
       },
-
+      {
+        label: "布类代码",
+        prop: "custFabricCode",
+        span: 6,
+        width: 120,
+        placeholder: " ",
+        tip: "Fabric Code",
+        hide: true
+      },
       {
         label: "季节",
         prop: "seasonCode",
@@ -306,25 +315,6 @@ export function mainCrud(_this) {
         hide: true
       },
 
-      {
-        label: "製單人",
-        prop: "creator",
-        span: 6,
-        hide: false,
-        width: 100,
-        tip: "Lập đơn",
-        disabled: true,
-        rules: [
-          {
-            required: true,
-            message: "请输入制单人",
-            trigger: "blur"
-          }
-        ]
-        // type: "select",
-        // dicData:
-        //   postDicT('ucmlUserList', 'employeename', 'ucmlUseroid')
-      },
       // {
       //   label: "纱牌",
       //   prop: "yarnBrand",
@@ -496,7 +486,17 @@ export function mainCrud(_this) {
         span: 6,
         width: 120,
         tip: "Mã số máy dệt",
-        placeholder: " "
+        placeholder: " ",
+        readonly: true,
+        click: () => {
+          if (_this.form.weaveJobId) {
+            _this.tabs = "機號信息";
+            _this.crudOp = machineCrud(_this);
+            _this.visible = true;
+          } else {
+            _this.$tip.warning("请先保存织单信息!");
+          }
+        }
         // rules: [
         //   {
         //     required: true,
@@ -810,6 +810,25 @@ export function mainCrud(_this) {
         hide: true,
         placeholder: " ",
         span: 6
+      },
+      {
+        label: "製單人",
+        prop: "creator",
+        span: 6,
+        hide: false,
+        width: 100,
+        tip: "Lập đơn",
+        disabled: true,
+        rules: [
+          {
+            required: true,
+            message: "请输入制单人",
+            trigger: "blur"
+          }
+        ]
+        // type: "select",
+        // dicData:
+        //   postDicT('ucmlUserList', 'employeename', 'ucmlUseroid')
       }
     ]
   };
@@ -953,6 +972,14 @@ export function yarnCrud(_this) {
         label: "纱线名称",
         prop: "yarnName",
         width: 300,
+        // overHidden: true,
+        span: 6,
+        cell: true
+      },
+      {
+        label: "实测纱支",
+        prop: "yarnActual",
+        width: 120,
         // overHidden: true,
         span: 6,
         cell: true
@@ -1165,6 +1192,58 @@ export function strainCrud(_this) {
         cell: true,
         align: "right",
         span: 6
+      }
+    ]
+  };
+}
+export function machineCrud(_this) {
+  return {
+    menu: false,
+    addBtn: false,
+    border: true,
+    highlightCurrentRow: true,
+    height: "calc(100vh - 148px)",
+    refreshBtn: false,
+    columnBtn: false,
+    page: true,
+    labelWidth: 130,
+    column: [
+      {
+        label: "#",
+        prop: "index",
+        width: 50,
+        align: "center",
+        display: false
+      },
+      {
+        label: "機號",
+        prop: "mathineCode",
+        width: 140,
+        cell: true,
+        filterable: true,
+        type: "select",
+        dicData: postDicT(
+          "baseEquipmentList?categoryId=dev-3",
+          "equipmentCode",
+          "equipmentCode"
+        ),
+        span: 6
+      },
+      {
+        label: "记录人",
+        prop: "userName",
+        width: 140,
+        cell: false,
+        span: 6
+      },
+      {
+        label: "记录时间",
+        prop: "recordTime",
+        width: 160,
+        cell: false,
+        span: 6,
+        format: "yyyy-MM-dd HH:mm:ss",
+        valueFormat: "yyyy-MM-dd HH:mm:ss"
       }
     ]
   };

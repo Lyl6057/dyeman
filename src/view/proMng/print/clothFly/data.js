@@ -2,11 +2,11 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-06-23 09:20:47
+ * @LastEditTime: 2021-07-08 19:41:09
  * @Description:
  */
 
-import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
+import { getDIC, getDicT, getXDicT, postDicT, getDicNS } from "@/config";
 let cust = getDicT("basCustomer", "custName", "custCode");
 
 export function mainForm(_this) {
@@ -245,6 +245,14 @@ export function mainCrud(_this) {
         span: 6,
         width: 120,
         placeholder: " ",
+        type: "select",
+        // dicData: getDicNS(
+        //   `proWeaveJobUseMachine?weaveJobFk=${
+        //     _this.form ? _this.form.weaveJobId : ""
+        //   }`,
+        //   "mathineCode",
+        //   "mathineCode"
+        // ),
         rules: [
           {
             required: true,
@@ -253,25 +261,27 @@ export function mainCrud(_this) {
           }
         ],
         change: () => {
-          let data = _this.yarnList
-            .filter(item => {
-              return item.groupId == _this.form.proWeaveJobGroupFk;
-            })
-            .map(item => {
-              return item;
-            });
-          if (data.length == 0) {
-            return;
-          }
+          // let data = _this.yarnList
+          //   .filter(item => {
+          //     return item.groupId == _this.form.proWeaveJobGroupFk;
+          //   })
+          //   .map(item => {
+          //     return item;
+          //   });
+          // if (data.length == 0) {
+          //   return;
+          // }
+
           _this.$nextTick(() => {
-            if (Number(data[0].sn) === 1) {
-              _this.form.bph = _this.form.mathineCode;
-            } else {
-              _this.form.bph =
-                "-" +
-                _this.$preFixInt(Number(data[0].sn), 2) +
-                _this.form.mathineCode;
-            }
+            // if (Number(data[0].sn) === 1) {
+            _this.form.bph = _this.form.mathineCode;
+            _this.getBf();
+            // } else {
+            //   _this.form.bph =
+            //     "-" +
+            //     _this.$preFixInt(Number(data[0].sn), 2) +
+            //     _this.form.mathineCode;
+            // }
           });
         }
       },
@@ -473,7 +483,7 @@ export function bfCrud(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 455px)",
+    height: "calc(100vh - 450px)",
     refreshBtn: false,
     columnBtn: false,
     page: false,

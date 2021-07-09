@@ -6,7 +6,7 @@
       :element-loading-text="$t('public.loading')"
       v-loading="screenLoading"
     >
-      <el-tab-pane :label="data + '手工' + this.$t('iaoMng.rc')" name="tabs1">
+      <el-tab-pane :label="data + '手工' + this.$t('iaoMng.cc')" name="tabs1">
         <div class="btnList">
           <el-button type="primary" @click="add">{{
             this.$t("public.add")
@@ -45,7 +45,7 @@
         </div>
         <el-row class="crudBox">
           <el-col :span="24">
-            <view-container :title="data + '入倉資料'">
+            <view-container :title="data + '出倉資料'">
               <avue-crud
                 ref="crud"
                 :option="everyThing.mainC"
@@ -120,32 +120,44 @@ import tem from "./tem";
 import rule from "@/components/rule";
 import { baseCodeSupply, baseCodeSupplyEx } from "@/api/index";
 import {
-  //紗線
   getSx,
   addSx,
   updateSx,
   delSx,
-  getSxDetali,
+  getSxCcDetali,
   addSxDetali,
   updateSxDetali,
   delSxDetali,
-  getSxLoc,
-  addSxLoc,
-  updateSxLoc,
-  delSxLoc,
-  //胚布
-  getPb,
-  addPb,
-  updatePb,
-  delPb,
-  getPbDetali,
+} from "@/api/im/Wk/cc/sx";
+import {
+  getMaterial,
+  addMaterial,
+  updateMaterial,
+  delMaterial,
+  getPbDetalis,
   addPbDetali,
   updatePbDetali,
   delPbDetali,
-  getPbPh,
-  addPbPhDetali,
-  updatePbPhDetali,
-  delPbPhDetali,
+  getPhDetali,
+  addPhDetali,
+  updatePhDetali,
+  delPhDetali,
+} from "@/api/im/Wk/cc/pb";
+import {
+  getFinclothsellout,
+  addFinclothsellout,
+  updateFinclothsellout,
+  delFinclothsellout,
+  getFinclothselloutDtla,
+  addFinclothselloutDtla,
+  updateFinclothselloutDtla,
+  delFinclothselloutDtla,
+  getFinclothselloutDtlb,
+  addFinclothselloutDtlb,
+  updateFinclothselloutDtlb,
+  delFinclothselloutDtlb,
+} from "@/api/im/Wk/cc/cpb";
+import {
   //成品布
   getCpb,
   addCpb,
@@ -256,18 +268,6 @@ import {
   cpb2C,
   yjxz2C,
 } from "./data";
-import {
-  getvNostockinYarddeliData,
-  getvNostockinCalicodeliData,
-  getvNostockinChemicaldeliData,
-  getvNostockinDyesadeliData,
-  // ------------華麗的分割線
-  getChemicalinAlloc,
-  addChemicalinAlloc,
-  // 五金/行政/辅料入仓分配
-  getAccessoriesinAlloc,
-  addAccessoriesinAlloc,
-} from "./api";
 export default {
   name: "",
   components: {
@@ -316,7 +316,7 @@ export default {
       this.everyThing = {
         mainF: rhl1F(this),
         mainC: rhl1C(this),
-        code: "whse_in",
+        code: "whse_out",
       };
       switch (this.data) {
         case this.$t("iaoMng.sx"):
@@ -324,45 +324,44 @@ export default {
           this.everyThing.del = delSx;
           this.everyThing.update = updateSx;
           this.everyThing.add = addSx;
-          this.everyThing.getDetail = getSxDetali;
+          this.everyThing.getDetail = getSxCcDetali;
           this.everyThing.addDetail = addSxDetali;
           this.everyThing.updateDetail = updateSxDetali;
           this.everyThing.delDetail = delSxDetali;
           this.everyThing.sx2C = sx2C(this);
-          this.everyThing.getLoc = getSxLoc;
-          this.everyThing.addLoc = addSxLoc;
-          this.everyThing.delLoc = delSxLoc;
-          this.everyThing.updateLoc = updateSxLoc;
-          this.everyThing.batchCode = "sx_in_whse";
+          this.everyThing.batchCode = "sx_out_whse";
           break;
         case this.$t("iaoMng.pb"):
-          this.everyThing.get = getPb;
-          this.everyThing.del = delPb;
-          this.everyThing.update = updatePb;
-          this.everyThing.add = addPb;
-          this.everyThing.getPlan = getvNostockinCalicodeliData;
-          this.everyThing.getDetail = getPbDetali;
+          this.everyThing.get = getMaterial;
+          this.everyThing.del = delMaterial;
+          this.everyThing.update = updateMaterial;
+          this.everyThing.add = addMaterial;
+          this.everyThing.getDetail = getPbDetalis;
           this.everyThing.addDetail = addPbDetali;
           this.everyThing.updateDetail = updatePbDetali;
           this.everyThing.delDetail = delPbDetali;
           this.everyThing.sx2C = pb2C(this);
-          this.everyThing.getLoc = getPbPh;
-          this.everyThing.addLoc = addPbPhDetali;
-          this.everyThing.delLoc = delPbPhDetali;
-          this.everyThing.updateLoc = updatePbPhDetali;
-          this.everyThing.batchCode = "pb_in_whse";
+          this.everyThing.getLoc = getPhDetali;
+          this.everyThing.addLoc = addPhDetali;
+          this.everyThing.delLoc = delPhDetali;
+          this.everyThing.updateLoc = updatePhDetali;
+          this.everyThing.batchCode = "pb_out_whse";
           break;
         case "成品布":
-          this.everyThing.get = getCpb;
-          this.everyThing.del = delCpb;
-          this.everyThing.update = updateCpb;
-          this.everyThing.add = addCpb;
-          this.everyThing.getDetail = getCpbDetali;
-          this.everyThing.addDetail = addCpbDetali;
-          this.everyThing.updateDetail = updateCpbDetali;
-          this.everyThing.delDetail = delCpbDetali;
+          this.everyThing.get = getFinclothsellout;
+          this.everyThing.del = delFinclothsellout;
+          this.everyThing.update = updateFinclothsellout;
+          this.everyThing.add = addFinclothsellout;
+          this.everyThing.getDetail = getFinclothselloutDtla;
+          this.everyThing.addDetail = addFinclothselloutDtla;
+          this.everyThing.updateDetail = updateFinclothselloutDtla;
+          this.everyThing.delDetail = delFinclothselloutDtla;
+          this.everyThing.getLoc = getFinclothselloutDtlb;
+          this.everyThing.addLoc = addFinclothselloutDtlb;
+          this.everyThing.delLoc = delFinclothselloutDtlb;
+          this.everyThing.updateLoc = updateFinclothselloutDtlb;
           this.everyThing.sx2C = cpb2C(this);
-          this.everyThing.batchCode = "cpb_in_whse";
+          this.everyThing.batchCode = "cpb_out_whse";
           break;
         case this.$t("choicDlg.wj"):
           this.everyThing.get = getWj;
@@ -378,7 +377,7 @@ export default {
           this.everyThing.addPh = addWjLoc;
           this.everyThing.delPh = delWjLoc;
           this.everyThing.updatePh = updateWjLoc;
-          this.everyThing.batchCode = "wj_in_whse";
+          this.everyThing.batchCode = "wj_out_whse";
           break;
         case this.$t("choicDlg.xz"):
           this.everyThing.get = getXz;
@@ -394,7 +393,7 @@ export default {
           this.everyThing.addPh = addXzLoc;
           this.everyThing.delPh = delXzLoc;
           this.everyThing.updatePh = updateXzLoc;
-          this.everyThing.batchCode = "xz_in_whse";
+          this.everyThing.batchCode = "xz_out_whse";
           break;
         case this.$t("choicDlg.rl"):
           this.everyThing.get = getRl;
@@ -410,7 +409,7 @@ export default {
           this.everyThing.addPh = addRlLoc;
           this.everyThing.delPh = delRlLoc;
           this.everyThing.updatePh = updateRlLoc;
-          this.everyThing.batchCode = "rl_in_whse";
+          this.everyThing.batchCode = "rl_out_whse";
           break;
         case this.$t("choicDlg.scfl"):
           this.everyThing.get = getScfl;
@@ -426,7 +425,7 @@ export default {
           this.everyThing.addPh = addScflLoc;
           this.everyThing.delPh = delScflLoc;
           this.everyThing.updatePh = updateScflLoc;
-          this.everyThing.batchCode = "scfl_in_whse";
+          this.everyThing.batchCode = "scfl_out_whse";
           break;
         case this.$t("iaoMng.hgyl"):
           this.everyThing.get = getRhl;
@@ -446,7 +445,7 @@ export default {
           this.everyThing.addLoc = addRhlLoc;
           this.everyThing.delLoc = delRhlLoc;
           this.everyThing.updateLoc = updateRhlLoc;
-          this.everyThing.batchCode = "hgyl_in_whse";
+          this.everyThing.batchCode = "hgyl_out_whse";
           break;
         case this.$t("iaoMng.yl"):
           this.everyThing.get = getYl;
@@ -466,7 +465,7 @@ export default {
           this.everyThing.addLoc = addYlLoc;
           this.everyThing.delLoc = delYlLoc;
           this.everyThing.updateLoc = updateYlLoc;
-          this.everyThing.batchCode = "yl_in_whse";
+          this.everyThing.batchCode = "yl_out_whse";
           break;
         default:
           break;
@@ -491,21 +490,26 @@ export default {
         .then((res) => {
           let records = res.data;
           this.page.total = records.total;
-          this.changeList = [];
           this.crud = records.records;
-          this.crud.sort((a, b) => {
-            return (
-              b.yinId.substring(b.yinId.length - 6) -
-              a.yinId.substring(a.yinId.length - 6)
-            );
-          });
+          if (this.data == "成品布") {
+            this.crud.sort((a, b) => {
+              return (
+                b.woOutno.substring(b.woOutno.length - 6) -
+                a.woOutno.substring(a.woOutno.length - 6)
+              );
+            });
+          } else {
+            this.crud.sort((a, b) => {
+              return (
+                b.retCode.substring(b.retCode.length - 6) -
+                a.retCode.substring(a.retCode.length - 6)
+              );
+            });
+          }
+
           this.crud.forEach((item, index) => {
             item.finStatus = String(item.finStatus);
             item.index = index + 1;
-            item.suppId = item.purNo;
-            if (this.data === this.$t("iaoMng.yl")) {
-              item.suppId = item.deliNo;
-            }
             if (index === this.crud.length - 1) {
               this.loading = false;
             }
@@ -523,14 +527,15 @@ export default {
       let data = {
         index: this.crud.length + 1,
         $cellEdit: true,
-        yinType: this.hide,
-        yinId: "",
-        yinDate: this.getNowTime(),
-        yinStatus: "1",
-        finStatus: "0",
+        retType: "0",
+        woOutno: "",
+        woDate: this.getNowTime(),
+        retCode: "",
+        retDate: this.getNowTime(),
       };
       baseCodeSupplyEx({ code: this.everyThing.code }).then((res) => {
-        data.yinId = res.data.data;
+        data.retCode = res.data.data;
+        data.woOutno = res.data.data;
         this.detail = data;
         this.screenLoading = false;
         this.isAdd = true;
@@ -543,9 +548,9 @@ export default {
         return;
       }
       if (
-        !this.chooseData.whseFinishedclothinoid &&
-        !this.chooseData.whseYarninoid &&
-        !this.chooseData.whseCalicoinoid &&
+        !this.chooseData.whseFinclothselloutoid &&
+        !this.chooseData.whseRetyarninoid &&
+        !this.chooseData.whseMaterialoid &&
         !this.chooseData.whseChemicalinoid &&
         !this.chooseData.whseDyesalinoid &&
         !this.chooseData.whseAccessoriesinoid &&
@@ -557,8 +562,10 @@ export default {
       }
       this.$tip
         .cofirm(
-          this.$t("iaoMng.delTle1") +
-            this.chooseData.yinId +
+          this.$t("iaoMng.delTle14") +
+            (this.data == "成品布"
+              ? this.chooseData.woOutno
+              : this.chooseData.retCode) +
             this.$t("iaoMng.delTle2"),
           this,
           {}
@@ -569,13 +576,13 @@ export default {
               this.data === this.$t("iaoMng.hgyl")
                 ? this.chooseData.whseChemicalinoid
                 : this.data === this.$t("iaoMng.sx")
-                ? this.chooseData.whseYarninoid
+                ? this.chooseData.whseRetyarninoid
                 : this.data === this.$t("iaoMng.pb")
-                ? this.chooseData.whseCalicoinoid
+                ? this.chooseData.whseMaterialoid
                 : this.data === this.$t("iaoMng.yl")
                 ? this.chooseData.whseDyesalinoid
                 : this.data === "成品布"
-                ? this.chooseData.whseFinishedclothinoid
+                ? this.chooseData.whseFinclothselloutoid
                 : this.data === this.$t("choicDlg.rl")
                 ? this.chooseData.energyInId
                 : this.chooseData.whseAccessoriesinoid
@@ -587,8 +594,8 @@ export default {
                 this.crud.forEach((item, index) => {
                   item.index = index + 1;
                 });
-                this.chooseData = {};
                 this.page.total = this.crud.length;
+                this.chooseData = {};
                 if (this.crud.length > 0) {
                   this.$refs.crud.setCurrentRow(
                     this.crud[this.crud.length - 1]
