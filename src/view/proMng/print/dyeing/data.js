@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-07-09 11:00:35
+ * @LastEditTime: 2021-07-10 15:58:52
  * @Description:
  */
 
@@ -161,11 +161,12 @@ export function mainCrud(_this) {
         width: 140,
         span: 6,
         disabled: false,
+        placeholder: "請選擇缸號",
         sortable: true,
         rules: [
           {
             required: true,
-            message: "請輸入缸號",
+            message: "請選擇缸號",
             trigger: "blur"
           }
         ],
@@ -222,7 +223,7 @@ export function mainCrud(_this) {
         width: 100,
         span: 6,
         disabled: false,
-
+        placeholder: " ",
         // rules: [
         //   {
         //     required: true,
@@ -266,7 +267,8 @@ export function mainCrud(_this) {
         overHidden: true,
         width: 180,
         span: 12,
-        disabled: false
+        disabled: false,
+        placeholder: " "
       },
       {
         label: "織造生產單號",
@@ -276,7 +278,7 @@ export function mainCrud(_this) {
         width: 180,
         span: 6,
         disabled: false,
-        placeholder: "請選擇織造生產單號",
+        placeholder: " ",
         rules: [
           {
             required: true,
@@ -467,26 +469,7 @@ export function mainCrud(_this) {
         // type: "number",
         placeholder: " "
       },
-      {
-        label: "幅寬實用",
-        tip: "Khổ rộng Thực dụng",
-        prop: "breadthActual",
-        width: 90,
-        hide: true,
-        span: 6,
-        // type: "number",
-        placeholder: " "
-      },
-      {
-        label: "幅寬連邊",
-        tip: "Khổ rộng Tiếp giáp",
-        prop: "breadthBorder",
-        width: 90,
-        hide: true,
-        span: 6,
-        // type: "number",
-        placeholder: " "
-      },
+
       // {
       //   label: "幅寬單位",
       //   prop: "breadthUnit",
@@ -572,16 +555,6 @@ export function mainCrud(_this) {
         // type: "number",
         placeholder: " "
       },
-      {
-        label: "洗前(克重)",
-        tip: "Trọng lượng Giặt trước",
-        prop: "gramWeightBefor",
-        width: 120,
-        hide: true,
-        span: 6,
-        // type: "number",
-        placeholder: " "
-      },
 
       {
         label: "顏色數量",
@@ -613,16 +586,7 @@ export function mainCrud(_this) {
         align: "right",
         placeholder: " "
       },
-      {
-        label: "成品/洗後(克重)",
-        prop: "gramWeightAfter",
-        width: 120,
-        tip: "Trọng lượng Giặt sau",
-        hide: true,
-        span: 6,
-        // type: "number",
-        placeholder: " "
-      },
+
       {
         label: "对色标准/缸号",
         tip: "Tiêu chuẩn so màu/Số bồn nhuộm",
@@ -644,88 +608,7 @@ export function mainCrud(_this) {
         type: "select",
         dicData: getDIC("sal_colorLights")
       },
-      {
-        label: "縮水(直縮)",
-        tip: "co rút thẳng",
-        prop: "shrinkLenth",
-        span: 6,
-        hide: true,
-        width: 80,
-        placeholder: " ",
-        type: "number"
-      },
-      {
-        label: "縮水(橫縮)",
-        tip: "Co rút ngang",
-        prop: "shrinkWidth",
-        span: 6,
-        hide: true,
-        width: 80,
-        placeholder: " ",
-        type: "number"
-      },
 
-      {
-        label: "縮水(扭度)",
-        prop: "shrinkNear",
-        tip: "Độ méo",
-        span: 6,
-        hide: true,
-        width: 80,
-        placeholder: " ",
-        type: "number"
-      },
-      {
-        label: "縮水(循環)",
-        prop: "shrinkRotate",
-        tip: "Tuần hoàn",
-        span: 6,
-        hide: true,
-        width: 80,
-        placeholder: " ",
-        type: "number"
-      },
-
-      {
-        label: "縮水(掛幹)",
-        prop: "hangDry",
-        tip: "Treo khô",
-        span: 6,
-        hide: true,
-        width: 80,
-        placeholder: " ",
-        type: "number"
-      },
-      {
-        label: "縮水(平幹)",
-        prop: "flatDry",
-        tip: "Phơi phẳng",
-        span: 6,
-        hide: true,
-        width: 80,
-        placeholder: " ",
-        type: "number"
-      },
-      {
-        label: "縮水(拋幹)",
-        prop: "throwDry",
-        tip: "Vắt khô",
-        span: 6,
-        hide: true,
-        width: 80,
-        placeholder: " ",
-        type: "number"
-      },
-
-      {
-        label: "稱料員",
-        prop: "mateStockMan",
-        tip: "Thợ cân",
-        width: 80,
-        span: 6,
-        hide: true,
-        placeholder: " "
-      },
       {
         label: "規格參考",
         prop: "specParam",
@@ -734,6 +617,15 @@ export function mainCrud(_this) {
         hide: true,
         placeholder: " ",
         span: 12
+      },
+      {
+        label: "稱料員",
+        prop: "mateStockMan",
+        tip: "Thợ cân",
+        width: 80,
+        span: 6,
+        hide: true,
+        placeholder: " "
       },
       {
         label: "值機員",
@@ -767,6 +659,146 @@ export function mainCrud(_this) {
         valueFormat: "yyyy-MM-dd HH:mm:ss",
         span: 6,
         display: false
+      }
+    ],
+    group: [
+      {
+        icon: "el-icon-s-order",
+        label: "成品规格要求 quy cách thành phẩm Y/C",
+        prop: "group1",
+        column: [
+          {
+            label: "幅寬實用",
+            tip: "Khổ rộng Thực dụng",
+            prop: "breadthActual",
+            width: 90,
+            hide: true,
+            span: 6,
+            // type: "number",
+            placeholder: " "
+          },
+          {
+            label: "幅寬連邊",
+            tip: "Khổ rộng Tiếp giáp",
+            prop: "breadthBorder",
+            width: 90,
+            hide: true,
+            span: 6,
+            // type: "number",
+            placeholder: " "
+          },
+          {
+            label: "洗前(克重)",
+            tip: "Trọng lượng Giặt trước",
+            prop: "gramWeightBefor",
+            width: 120,
+            hide: true,
+            span: 6,
+            // type: "number",
+            placeholder: " "
+          },
+          {
+            label: "成品/洗後(克重)",
+            prop: "gramWeightAfter",
+            width: 120,
+            tip: "Trọng lượng Giặt sau",
+            hide: true,
+            span: 6,
+            // type: "number",
+            placeholder: " "
+          },
+          {
+            label: "縮水(直縮)",
+            tip: "co rút thẳng",
+            prop: "shrinkLenth",
+            span: 6,
+            hide: true,
+            width: 80,
+            placeholder: " ",
+            type: "number"
+          },
+          {
+            label: "縮水(橫縮)",
+            tip: "Co rút ngang",
+            prop: "shrinkWidth",
+            span: 6,
+            hide: true,
+            width: 80,
+            placeholder: " ",
+            type: "number"
+          },
+
+          {
+            label: "縮水(扭度)",
+            prop: "shrinkNear",
+            tip: "Độ méo",
+            span: 6,
+            hide: true,
+            width: 80,
+            placeholder: " ",
+            type: "number"
+          },
+          {
+            label: "縮水(循環)",
+            prop: "shrinkRotate",
+            tip: "Tuần hoàn",
+            span: 6,
+            hide: true,
+            width: 80,
+            placeholder: " ",
+            type: "number"
+          },
+
+          {
+            label: "縮水(掛幹)",
+            prop: "hangDry",
+            tip: "Treo khô",
+            span: 6,
+            hide: true,
+            width: 80,
+            placeholder: " ",
+            type: "switch",
+            dicData: [
+              {
+                label: "否",
+                value: 0
+              },
+              {
+                label: "是",
+                value: 1
+              }
+            ]
+          },
+          {
+            label: "縮水(平幹)",
+            prop: "flatDry",
+            tip: "Phơi phẳng",
+            span: 6,
+            hide: true,
+            width: 80,
+            placeholder: " ",
+            type: "switch",
+            dicData: [
+              {
+                label: "否",
+                value: 0
+              },
+              {
+                label: "是",
+                value: 1
+              }
+            ]
+          },
+          {
+            label: "縮水(拋幹)",
+            prop: "throwDry",
+            tip: "Vắt khô",
+            span: 6,
+            hide: true,
+            width: 80,
+            placeholder: " "
+          }
+        ]
       }
     ]
   };

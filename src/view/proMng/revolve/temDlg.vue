@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-07-09 13:57:39
+ * @LastEditTime: 2021-07-16 20:36:57
  * @Description:
 -->
 <template>
@@ -47,21 +47,15 @@
       </div>
 
       <el-row class="formBox" style="width: 100%">
-        <el-col :span="7">
+        <el-col :span="6">
           <view-container title="胚布细码 Chi tiết vải mộc">
-            <div
+            <!-- <div
               class="btnList"
               style="font-size: 24px; color: #409eff; cursor: pointer"
             >
               <i class="el-icon-circle-plus-outline" @click="add"></i>
               <i class="el-icon-remove-outline" @click="del('bf')"></i>
-              <!-- <el-button type="primary" @click="add">{{
-                $t("public.add")
-              }}</el-button>
-              <el-button type="danger" @click="del('bf')">{{
-                $t("public.del")
-              }}</el-button> -->
-            </div>
+            </div> -->
             <avue-crud
               ref="bf"
               id="bf"
@@ -72,9 +66,9 @@
             ></avue-crud>
           </view-container>
         </el-col>
-        <el-col :span="17">
-          <view-container title="基础信息">
-            <div style="height: calc(100vh - 139px); overflow: auto">
+        <el-col :span="18">
+          <view-container title="运转单信息">
+            <div style="height: calc(100vh - 145px); overflow: auto">
               <avue-form
                 ref="form"
                 :option="formOp"
@@ -173,13 +167,14 @@
       :choiceQ="choiceQ"
       dlgWidth="100%"
       @choiceData="choiceData"
-      @close="choiceV = false"
+      @close="closeChoice"
       v-if="choiceV"
     ></choice>
   </div>
 </template>
 <script>
 import choice from "@/components/proMng/index";
+import { getXDicT } from "@/config";
 import { mainCrud, dlgForm, dlgCrud, bfOp, testOp, itemOp } from "./data";
 import { timeConversion } from "@/config/util";
 import { baseCodeSupplyEx, baseCodeSupply } from "@/api/index";
@@ -203,6 +198,7 @@ import {
   updateBf,
   addBf,
   updateNote,
+  updateInwhse,
   getGroup,
   getYarn,
 } from "./api";
@@ -265,17 +261,10 @@ export default {
     };
   },
   watch: {
-    "form.bf": {
-      handler(n, o) {
-        if (n) {
-          this.form.pidCount = n.length;
-          this.form.clothWeight = 0;
-          n.forEach((item) => {
-            this.form.clothWeight += Number(item.clothWeight);
-          });
-        }
-      },
-    },
+    // "form.bf": {
+    //   handler(n, o) {
+    //   },
+    // },
   },
   methods: {
     query() {
@@ -302,20 +291,44 @@ export default {
         this.getSublist();
       });
     },
+    bfChange(n) {
+      if (n) {
+        this.form.pidCount = n.length;
+        this.form.clothWeight = 0;
+        n.forEach((item) => {
+          this.form.clothWeight += Number(item.clothWeight);
+        });
+        this.form.clothWeight = Number(this.form.clothWeight.toFixed(2));
+      }
+    },
+    closeChoice() {
+      this.choiceV = false;
+      // this.bfOp.column[2].hide = true;
+      this.bfOp.column[6].hide = true;
+    },
     getSublist() {
       this.wLoading = true;
+      // this.bfOp.column[6].hide = false;
       getBf({ proBleadyeRunJobFk: this.form.runJobId }).then((bf) => {
+        // let whseData = getXDicT("whseCalicoinDtlb/v1.0/list");
+        // this.bfOp.column[3].dicData = whseData;
+        // this.bfOp.column[6].dicData = whseData;
         this.form.bf = bf.data;
         this.form.bf.sort((a, b) => {
           return a.sn - b.sn;
         });
         this.form.bf.forEach((item, i) => {
+          // item.weight = item.clothNoteCode;
+          // item.whseCalicoinDtlboid = item.clothNoteCode;
           item.sn = i + 1;
-          item.$cellEdit = true;
+          // item.$cellEdit = true;
+          // item.bfWeight = item.clothNoteCode;
         });
+
         if (this.form["bf"].length) {
           this.$refs["bf"].setCurrentRow(this.form["bf"][0]);
         }
+
         getItem({ proBleadyeRunJobFk: this.form.runJobId }).then((item) => {
           this.form.item = item.data;
           this.form.item.sort((a, b) => {
@@ -341,8 +354,9 @@ export default {
               this.$refs["test"].setCurrentRow(this.form["test"][0]);
             }
             setTimeout(() => {
+              // this.bfOp.column[6].hide = true;
               this.wLoading = false;
-            }, 200);
+            }, 500);
           });
         });
       });
@@ -354,6 +368,10 @@ export default {
       this.form.test = [];
       this.form.item = [];
       if (this.isAdd) {
+        let whseData = getXDicT("whseCalicoinDtlb/v1.0/list");
+        this.bfOp.column[2].dicData = whseData;
+        this.bfOp.column[6].dicData = whseData;
+        this.form.bf = bf.data;
         setTimeout(() => {
           baseCodeSupplyEx({ code: "dye_batch" }).then((res) => {
             this.form.workDate = this.$getNowTime();
@@ -411,9 +429,13 @@ export default {
         this.$tip.warning("請先選擇織造通知單/填寫订单数量!");
         return;
       }
+      // this.bfOp.column[2].hide = false;
+      this.bfOp.column[6].hide = false;
       this.choiceTle = "选择胚布信息";
-      this.choiceQ.weaveJob = this.form.weaveJobCode;
-      this.choiceQ.weight = this.form.poAmountKg;
+      // this.choiceQ.weaveJob = this.form.weaveJobCode;
+      this.choiceQ.weaveJobCode = this.form.weaveJobCode;
+      this.choiceQ.clothState = "2";
+      // this.choiceQ.weight = this.form.poAmountKg;
       this.choiceV = true;
     },
     addOther(type) {
@@ -493,11 +515,7 @@ export default {
               }
             });
             let data = JSON.parse(JSON.stringify(this.form));
-            // isNaN(this.form.clothWeight) ? (this.form.clothWeight = "") : "";
-            // isNaN(this.form.poAmountKg) ? (this.form.poAmountKg = "") : "";
-            // isNaN(this.form.poAmountLb) ? (this.form.poAmountLb = "") : "";
             data.workDate = timeConversion(this.form.workDate);
-
             data.deliveDate = timeConversion(this.form.deliveDate);
             let vat = "";
             data.mergVatNo.forEach((item, i) => {
@@ -550,6 +568,7 @@ export default {
                   // this.wLoading = false;
                   this.$emit("refresh");
                   this.form.runJobId = res.data.data;
+                  this.detail.runJobId = res.data.data;
                   this.saveTest();
                 } else {
                   this.$tip.error(this.$t("public.bcsb"));
@@ -611,19 +630,45 @@ export default {
     saveBf() {
       if (this.form.bf.length) {
         this.form.bf.forEach((item, i) => {
-          if (item.recId) {
-            updateBf(item).then((res) => {});
-          } else {
+          if (!item.recId && item.clothWeight) {
+            // 未保存过，以及运转重量 > 0
             item.proBleadyeRunJobFk = this.form.runJobId;
+            // 新增布飞运转记录
             addBf(item).then((res) => {
               item.recId = res.data.data;
             });
-            // 如果是新增布飞，则 修改布飞记录状态 为 3
-            updateNote({ noteId: item.clothNoteId, clothState: 3 }).then(
-              (res) => {}
-            );
+            // 判断布票是否可以修改为出库状态： clothWeight(运转重量) >= weight (剩余重量，即库存)
+            // if (item.clothWeight >= item.$weight) {
+            //   updateNote({ noteId: item.clothNoteId, clothState: 3 }).then(
+            //     (res) => {}
+            //   );
+            // }
+            // 修改库存,
+            updateInwhse({
+              custTicket: item.clothNoteCode,
+              weight: item.$weight - item.clothWeight,
+              whseCalicoinDtlboid: item.$whseCalicoinDtlboid,
+            });
+          }
+          console.log(item);
+          if (item.recId) {
+            // 修改布飞运转记录
+            updateBf(item).then((res) => {});
+            // 判断布票是否可以修改为出库状态： clothWeight(运转重量) >= weight (剩余重量，即库存)
+            // if (item.clothWeight >= item.$weight) {
+            //   updateNote({ noteId: item.clothNoteId, clothState: 3 }).then(
+            //     (res) => {}
+            //   );
+            // }
+            // 修改库存,
+            updateInwhse({
+              custTicket: item.clothNoteCode,
+              weight: item.$weight,
+              whseCalicoinDtlboid: item.$whseCalicoinDtlboid,
+            });
           }
           if (i == this.form.bf.length - 1) {
+            this.getSublist();
             this.wLoading = false;
             this.$tip.success(this.$t("public.bccg"));
           }
@@ -713,9 +758,40 @@ export default {
             clothNoteCode: item.noteCode,
             clothNoteId: item.noteId,
             clothWeight: item.clothWeight,
+            weight: item.noteCode,
+            whseCalicoinDtlboid: item.noteCode,
+            bfWeight: item.noteCode,
+            $cellEdit: true,
           });
         });
         this.form.bf = this.$unique(this.form.bf, "clothNoteId");
+        this.$nextTick(() => {
+          // this.bfOp.column[2].hide = true;
+          this.bfOp.column[6].hide = true;
+          this.form.bf.forEach((item) => {
+            if (!item.recId) {
+              item.clothWeight = item.$weight;
+            }
+          });
+          this.bfChange(this.form.bf);
+          if (this.form.clothWeight > this.form.poAmountKg) {
+            let redundant = this.form.clothWeight - this.form.poAmountKg; // 需要裁减的重量
+            for (let i = 0; i < this.form.bf.length; i++) {
+              // if (!this.form.bf[i].recId) {
+              if (this.form.bf[i].$bfWeight > redundant) {
+                this.form.bf[i].clothWeight -= redundant;
+                this.form.bf[i].weight =
+                  this.form.bf[i].$bfWeight - this.form.bf[i].clothWeight;
+                break;
+              } else {
+                redundant -= this.form.bf[i].$bfWeight;
+                this.form.bf[i].clothWeight = 0;
+              }
+              // }
+            }
+          }
+          this.bfChange(this.form.bf);
+        });
       }
       if (this.choiceTle == "選擇漂染基礎工藝") {
         val.forEach((item, i) => {

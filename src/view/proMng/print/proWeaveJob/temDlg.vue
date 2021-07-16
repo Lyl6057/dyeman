@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-07-09 10:29:02
+ * @LastEditTime: 2021-07-16 16:44:21
  * @Description: 
 -->
 <template>
@@ -828,7 +828,7 @@ export default {
         changeBatchTime: this.$getNowTime("datetime"),
         sn: this.crud.length > 0 ? this.crud[this.crud.length - 1].sn + 1 : 1,
         userName: parent.userID,
-        userId: this.$store.state.userId,
+        userId: this.$store.state.userOid,
         recordTime: this.$getNowTime("datetime"),
       });
       this.$refs.crud.setCurrentRow(this.crud[this.crud.length - 1]);

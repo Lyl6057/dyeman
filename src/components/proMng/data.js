@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-05-03 13:03:03
  * @LastEditors: Lyl
- * @LastEditTime: 2021-07-07 08:08:01
+ * @LastEditTime: 2021-07-13 15:28:11
  * @Description:
  */
 
@@ -1210,9 +1210,16 @@ export function getDye(params) {
   });
 }
 
-export function getClothNote(params) {
+export function getClothNote1(params) {
   return axios({
     url: "/api/proClothNote/matching",
+    method: "get",
+    params: params
+  });
+}
+export function getClothNote(params) {
+  return axios({
+    url: "/api/proClothNote/pageLike",
     method: "get",
     params: params
   });
@@ -1243,7 +1250,7 @@ export function clothNoteF(_this) {
         overHidden: true,
         width: 120,
         change: () => {
-          _this.filterList();
+          // _this.filterList();
         }
       },
       // {
@@ -1260,7 +1267,7 @@ export function clothNoteF(_this) {
         placeholder: " ",
         tip: "Mã vải",
         change: () => {
-          _this.filterList();
+          // _this.filterList();
         }
       },
       {
@@ -1270,7 +1277,7 @@ export function clothNoteF(_this) {
         placeholder: " ",
         tip: "Mã máy",
         change: () => {
-          _this.filterList();
+          // _this.filterList();
         }
       },
       {
@@ -1282,7 +1289,7 @@ export function clothNoteF(_this) {
         placeholder: " ",
         tip: "Số cây vải",
         change: () => {
-          _this.filterList();
+          // _this.filterList();
         }
       }
 
@@ -1343,7 +1350,7 @@ export function clothNoteC(_this) {
     height: "calc(100vh - 170px)",
     refreshBtn: false,
     columnBtn: false,
-    page: false,
+    page: true,
     labelWidth: 100,
     selection: true,
     showSummary: true,

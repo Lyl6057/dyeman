@@ -21,6 +21,11 @@ export default [
   //   ]
   // },
   {
+    path: "/proRevolve",
+    name: "生产运转",
+    component: resolve => require(["@/view/im/Ity/proRevolve/index"], resolve)
+  },
+  {
     path: "/ityBasic",
     name: "库存期初始化",
     component: resolve => require(["@/view/im/Ity/basic/index"], resolve)

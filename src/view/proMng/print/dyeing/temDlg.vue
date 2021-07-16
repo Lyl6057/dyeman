@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-07-09 11:03:32
+ * @LastEditTime: 2021-07-10 15:56:18
  * @Description: 
 -->
 <template>
@@ -1461,13 +1461,25 @@ export default {
             item.proBleadyeCodeItemFk = item.codeItemIt;
             item.formulaAmount = item.formulaAmount;
             item.formulaUnit = item.formulaUnit;
-            item.useAmount = Number(
-              (
-                Number(this.form.clothWeight) *
-                Number(item.formulaAmount) *
-                0.01
-              ).toFixed(2)
-            );
+            if (item.formulaUnit == "g") {
+              item.useAmount = Number(
+                (
+                  Number(this.form.clothWeight) *
+                  Number(item.formulaAmount) *
+                  1000 *
+                  0.01
+                ).toFixed(2)
+              );
+            } else {
+              item.useAmount = Number(
+                (
+                  Number(this.form.clothWeight) *
+                  Number(item.formulaAmount) *
+                  0.01
+                ).toFixed(2)
+              );
+            }
+
             isNaN(item.useAmount) ? (item.useAmount = 0) : "";
             if (
               item.measureType != null &&
@@ -1480,12 +1492,6 @@ export default {
           });
           this.crud.push(JSON.parse(JSON.stringify(params)));
           this.$refs.crud.setCurrentRow(this.crud[this.crud.length - 1]);
-          // this.$nextTick(() => {
-          //   this.chooseData.list = res.data.records;
-          // });
-          // this.$set(this.chooseData, "list", res.data.records);
-
-          // this.$refs.crud.setCurrentRow(this.crud[this.crud.length - 1]);
           this.chooseData.totalWater = JSON.parse(
             JSON.stringify(
               Number(
@@ -1532,9 +1538,8 @@ export default {
         );
       }
       if (this.choiceTle == "选择染整运转单") {
-        val.gramWeightAfter = isNaN(val.gramWeight) ? 0 : val.gramWeight;
-        val.shrinkLenth = isNaN(val.verticalShrink) ? 0 : val.verticalShrink;
-        val.shrinkWidth = isNaN(val.horizonShrink) ? 0 : val.horizonShrink;
+        // val.shrinkLenth = isNaN(val.verticalShrink) ? 0 : val.verticalShrink;
+        // val.shrinkWidth = isNaN(val.horizonShrink) ? 0 : val.horizonShrink;
         // val.clothWeight = isNaN(val.amount) ? 0 : val.amount;
         if (!(val.mergVatNo instanceof Array) && val.mergVatNo) {
           val.mergVatNo = val.mergVatNo.split("/");
@@ -1549,7 +1554,6 @@ export default {
           }
         });
         this.form = val;
-
         this.form.poAmountLb = (this.form.poAmountKg * 2.2046226).toFixed(2);
         // this.form.breadthUnit = this.form.breadth.replace(/[^a-z]+/gi, "");
         // this.form.breadth = Number(this.form.breadth.replace(/[^0-9]/gi, ""));
@@ -1697,6 +1701,11 @@ export default {
 #dyeing {
   .el-input-number__decrease, .el-input-number__increase {
     display: none;
+  }
+
+  .avue-group__header {
+    margin-bottom: 10px;
+    height: 30px;
   }
 
   .avue-form__row {

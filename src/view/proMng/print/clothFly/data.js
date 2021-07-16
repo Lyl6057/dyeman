@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-07-08 19:41:09
+ * @LastEditTime: 2021-07-09 18:30:07
  * @Description:
  */
 
@@ -246,6 +246,7 @@ export function mainCrud(_this) {
         width: 120,
         placeholder: " ",
         type: "select",
+        dicData: [],
         // dicData: getDicNS(
         //   `proWeaveJobUseMachine?weaveJobFk=${
         //     _this.form ? _this.form.weaveJobId : ""

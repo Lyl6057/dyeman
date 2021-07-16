@@ -2,11 +2,20 @@
  * @Author: Lyl
  * @Date: 2021-02-01 14:06:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-07-05 14:24:55
+ * @LastEditTime: 2021-07-09 18:26:54
  * @Description:
  */
 
 import axios from "axios";
+
+// 獲取機號信息
+export function getJh(params) {
+  return axios({
+    url: "/api/proWeaveJobUseMachine",
+    method: "get",
+    params: params
+  });
+}
 
 // 通过排期类型查找工作包
 export function get(params) {

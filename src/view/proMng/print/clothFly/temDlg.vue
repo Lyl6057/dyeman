@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-07-08 19:37:54
+ * @LastEditTime: 2021-07-09 18:38:21
  * @Description: 
 -->
 <template>
@@ -97,6 +97,7 @@ import {
   delNote,
   updateNote,
   getGroup,
+  getJh,
 } from "./api";
 import preview from "./preview";
 export default {
@@ -156,11 +157,11 @@ export default {
       // getBf().then((res) => {});
       this.wLoading = true;
       this.form = this.detail;
-      this.formOp.column[10].dicData = getDicNS(
-        `proWeaveJobUseMachine?proWeaveJobFk=${this.form.weaveJobId}`,
-        "mathineCode",
-        "mathineCode"
-      );
+      // this.formOp.column[10].dicData = getDicNS(
+      //   `proWeaveJobUseMachine?proWeaveJobFk=${this.form.weaveJobId}`,
+      //   "mathineCode",
+      //   "mathineCode"
+      // );
       // this.jh = this.form.mathineCode;
       // if (this.jh) {
       //   this.options.push({
@@ -183,13 +184,26 @@ export default {
         if (group.data.length > 0) {
           this.form.proWeaveJobGroupFk = group.data[0].groupId;
         }
-        this.getBf();
-        this.$nextTick(() => {
-          if (this.formOp.column[10].dicData.length) {
-            this.form.mathineCode = this.formOp.column[10].dicData[0].value;
-          }
-        });
+
+        // this.$nextTick(() => {
+        //   if (this.formOp.column[10].dicData.length) {
+        //     this.form.mathineCode = this.formOp.column[10].dicData[0].value;
+        //   }
+        // });
+
         // this.wLoading = false;
+      });
+      getJh({ proWeaveJobFk: this.form.weaveJobId }).then((res) => {
+        res.data.forEach((item) => {
+          this.formOp.column[10].dicData.push({
+            value: item.mathineCode,
+            label: item.mathineCode,
+          });
+        });
+        if (res.data.length > 0) {
+          this.form.mathineCode = res.data[0].mathineCode;
+        }
+        // this.getBf();
       });
     },
     typeChange() {
@@ -248,7 +262,7 @@ export default {
             this.$preFixInt(Number(data[0].sn), 2) +
             this.form.mathineCode;
         }
-        this.getBf();
+        // this.getBf();
         // if (yarn.data.length > 1) {
         // } else {
         //   // yarn.data.forEach((item) => {

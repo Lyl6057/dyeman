@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-01 14:06:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-07-08 14:59:49
+ * @LastEditTime: 2021-07-13 14:19:02
  * @Description:
  */
 
@@ -81,6 +81,15 @@ export function del(id) {
 export function updateNote(data) {
   return axios({
     url: "/api/proClothNote",
+    method: "put",
+    params: data
+  });
+}
+
+// 修改入仓记录
+export function updateInwhse(data) {
+  return axios({
+    url: "/api/whseCalicoinDtlb/v1.0/updateById",
     method: "put",
     params: data
   });

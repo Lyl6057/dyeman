@@ -2,71 +2,40 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-07-13 18:03:46
- * @Description:
+ * @LastEditTime: 2021-07-15 09:04:29
+ * @Description: 
 -->
 <template>
-  <div id="clothFlyPrint">
+  <div id="finalizeDesign">
     <view-container
-      title="染整生产运转单"
+      title="后整理指令单"
       v-loading="wloading"
       element-loading-text="拼命加载中..."
     >
       <el-row class="btnList">
-        <el-tooltip
-          class="item"
-          effect="dark"
-          content="cập nhật"
-          placement="top-start"
+        <el-button
+          type="success"
+          :disabled="!detail.finishJobId"
+          @click="handleRowDBLClick(detail)"
+          >{{ this.$t("public.update") }}</el-button
         >
-          <el-button
-            type="success"
-            :disabled="!detail.runJobId"
-            @click="handleRowDBLClick(detail)"
-            >{{ this.$t("public.update") }}</el-button
-          >
-        </el-tooltip>
+        <el-button type="primary" @click="add">{{
+          this.$t("public.add")
+        }}</el-button>
+        <el-button type="danger" :disabled="!detail.finishJobId" @click="del">{{
+          this.$t("public.del")
+        }}</el-button>
+        <el-button
+          type="primary"
+          @click="print"
+          :loading="wloading"
+          :disabled="!detail.finishJobId"
+          >打印</el-button
+        >
+        <el-button type="primary" @click="query">{{
+          this.$t("public.query")
+        }}</el-button>
 
-        <el-tooltip
-          class="item"
-          effect="dark"
-          content="thêm mới "
-          placement="top-start"
-        >
-          <el-button type="primary" @click="add">{{
-            this.$t("public.add")
-          }}</el-button>
-        </el-tooltip>
-        <el-tooltip
-          class="item"
-          effect="dark"
-          content="xóa"
-          placement="top-start"
-        >
-          <el-button type="danger" :disabled="!detail.runJobId" @click="del">{{
-            this.$t("public.del")
-          }}</el-button>
-        </el-tooltip>
-        <el-tooltip
-          class="item"
-          effect="dark"
-          content=" in"
-          placement="top-start"
-        >
-          <el-button type="primary" @click="print" :loading="wloading"
-            >打印</el-button
-          >
-        </el-tooltip>
-        <el-tooltip
-          class="item"
-          effect="dark"
-          content="tìm kiếm"
-          placement="top-start"
-        >
-          <el-button type="primary" @click="query">{{
-            this.$t("public.query")
-          }}</el-button>
-        </el-tooltip>
         <!-- <el-button type="warning" @click="close">{{
           this.$t("public.close")
         }}</el-button> -->
@@ -95,12 +64,13 @@
         append-to-body
         :close-on-click-modal="false"
         :close-on-press-escape="false"
+        v-if="dialogVisible"
       >
         <tem-dlg
-          v-if="dialogVisible"
           ref="tem"
           :detail="detail"
           :isAdd="isAdd"
+          :dialogVisible="dialogVisible"
           @close="dialogVisible = false"
           @refresh="query"
         ></tem-dlg>
@@ -115,19 +85,11 @@
         :close-on-press-escape="false"
       >
         <view-container title="打印預覽">
-          <!-- <div class="btnList">
-            <el-button type="warning" @click="pdfDlg = false">{{
-              this.$t("public.close")
-            }}</el-button>
-            <el-button type="primary" @click="print2">打印</el-button>
-          </div> -->
-          <!--startprint-->
           <embed
             id="pdf"
             style="width: 100vw; height: calc(100vh - 80px)"
             :src="pdfUrl"
           />
-          <!--endprint-->
         </view-container>
       </el-dialog>
     </view-container>
@@ -137,8 +99,6 @@
 import { mainForm, mainCrud } from "./data";
 import { get, add, update, del, print } from "./api";
 import tem from "./temDlg";
-import html2Canvas from "html2canvas";
-import JsPDF from "jspdf";
 export default {
   name: "",
   components: {
@@ -171,6 +131,7 @@ export default {
     query() {
       this.loading = true;
       this.detail = {};
+      this.crud = [];
       for (let key in this.form) {
         if (this.form[key] == "") {
           delete this.form[key];
@@ -179,52 +140,55 @@ export default {
       get(
         Object.assign(this.form, {
           rows: this.page.pageSize,
-          start: this.page.currentPage,
+          page: this.page.currentPage,
         })
-      ).then((res) => {
-        this.crud = res.data.records;
-        this.crud.sort((a, b) => {
-          return a.workDate > b.workDate ? -1 : 1;
+      )
+        .then((res) => {
+          res.data.records.forEach((item, i) => {
+            this.crud.push(
+              Object.assign(item.pbfj, item.pbj, { index: i + 1 })
+            );
+          });
+          if (this.crud.length > 0) {
+            this.$refs.crud.setCurrentRow(this.crud[0]);
+          }
+          this.page.total = res.data.total;
+          this.loading = false;
+        })
+        .catch((e) => {
+          this.$tip.error(e);
+          this.loading = false;
+          console.log(e);
         });
-        this.crud.forEach((item, i) => {
-          // item.custName = item.custCode;
-          // item.amount = item.amount.toFixed(2);
-          item.index = i + 1;
-        });
-
-        if (this.crud.length > 0) {
-          this.$refs.crud.setCurrentRow(this.crud[0]);
-        }
-        this.page.total = res.data.total;
-        this.loading = false;
-      });
     },
     print() {
       this.pdfDlg = true;
       this.pdfUrl =
         process.env.API_HOST +
-        "/api/proBleadyeRunJob/createBleadyeRunJobPdf?id=" +
-        this.detail.runJobId;
+        "/api/proBleadyeFinishJob/bleadyeFinishPdf?id=" +
+        this.detail.finishJobId;
     },
     add() {
       this.isAdd = true;
       this.dialogVisible = true;
+      if (this.$refs.tem) {
+        this.$nextTick(() => {
+          this.$refs.tem.form = {};
+          for (let key in this.$refs.tem.form) {
+            delete this.$refs.tem.form[key];
+          }
+        });
+      }
     },
     del() {
-      if (parent.userID != this.detail.serviceOperator) {
-        this.$tip.warning("当前用户没有权限删除该记录!");
-        return;
-      }
       this.$tip
         .cofirm(
-          this.$t("iaoMng.delTle7") +
-            this.detail.vatNo +
-            this.$t("iaoMng.delTle2"),
+          "是否删除缸号为【 " + this.detail.vatNo + this.$t("iaoMng.delTle2"),
           this,
           {}
         )
         .then(() => {
-          del(this.detail.runJobId)
+          del(this.detail.finishJobId)
             .then((res) => {
               if (res.data.code === 200) {
                 this.$tip.success(this.$t("public.sccg"));
@@ -242,22 +206,26 @@ export default {
         });
     },
     handleRowDBLClick(val) {
+      this.dialogVisible = true;
       this.isAdd = false;
       this.detail = val;
-      this.dialogVisible = true;
+      // this.print();
     },
     cellClick(val) {
       this.detail = val;
     },
+    close() {
+      document.getElementsByClassName("el-dialog__headerbtn")[0].click();
+    },
   },
   created() {},
   mounted() {
-    this.query();
+    // this.query();
   },
   beforeDestroy() {},
 };
 </script>
 <style lang='stylus'>
-#name {
+#finalizeDesign {
 }
 </style>
