@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-24 08:12:20
  * @LastEditors: Lyl
- * @LastEditTime: 2021-07-09 16:52:23
+ * @LastEditTime: 2021-07-19 08:44:40
  * @Description: 
 -->
 <template>
@@ -153,10 +153,13 @@ export default {
       if (this.inData && Object.keys(this.inData).length != 0) {
         this.inData.loc.push({
           index: this.inData.loc.length + 1,
-          batchNo: this.type == this.$t("iaoMng.pb") ? this.inData.batchNo : "",
+          batchNo:
+            this.type == this.$t("iaoMng.pb")
+              ? this.inData.batchNo || this.inData.loc.slice(-1)[0].batchNo
+              : "",
           countingNo:
             this.inData.loc.length > 0
-              ? this.inData.loc.slice(-1)[0].countingNo + 1
+              ? Number(this.inData.loc.slice(-1)[0].countingNo) + 1
               : 1,
           weightUnit: this.inData.weiUnit
             ? this.inData.weiUnit

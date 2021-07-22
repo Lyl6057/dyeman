@@ -986,6 +986,14 @@ export function yl2C(_this) {
         dicData: unit
       },
       {
+        label: _this.$t("whseField.cd"),
+        prop: "origin",
+        cell: true,
+        width: 120,
+        type: "select",
+        dicData: getDIC("bas_yarnorigin")
+      },
+      {
         label: _this.$t("energy.dj"),
         prop: "price",
         cell: true,

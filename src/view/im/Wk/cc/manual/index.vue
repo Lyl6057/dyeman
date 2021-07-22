@@ -158,102 +158,72 @@ import {
   delFinclothselloutDtlb,
 } from "@/api/im/Wk/cc/cpb";
 import {
-  //成品布
-  getCpb,
-  addCpb,
-  updateCpb,
-  delCpb,
-  getCpbDetali,
-  addCpbDetali,
-  updateCpbDetali,
-  delCpbDetali,
-  // 化工原料
-  getRhl,
-  delRhl,
-  addRhl,
-  updateRhl,
-  getRhlDetali,
-  addRhlDetali,
-  updateRhlDetali,
-  delRhlDetali,
-  getRhlPh,
-  addRhlPhDetali,
-  updateRhlPhDetali,
-  delRhlPhDetali,
-  getRhlLoc,
-  addRhlLoc,
-  updateRhlLoc,
-  delRhlLoc,
-  // 顔料
-  getYl,
-  delYl,
-  addYl,
-  updateYl,
-  getYlDtla,
-  addYlDtla,
-  updateYlDtla,
-  delYlDtla,
-  getYlDtlb,
-  addYlDtlb,
-  updateYlDtlb,
-  delYlDtlb,
-  getYlLoc,
-  addYlLoc,
-  updateYlLoc,
-  delYlLoc,
-  //  生产辅料
+  getHgyl,
+  addHgyl,
+  updateHgyl,
+  delHgyl,
+  getHgylDtl,
+  addHgylDtl,
+  updateHgylDtl,
+  delHgylDtl,
+  getHgylDtlb,
+  addHgylDtlb,
+  updateHgylDtlb,
+  delHgylDtlb,
+} from "@/api/im/Wk/cc/hgyl";
+import {
   getScfl,
-  delScfl,
-  updateScfl,
   addScfl,
+  updateScfl,
+  delScfl,
   getScflDetali,
   addScflDetali,
   updateScflDetali,
   delScflDetali,
-  getScflLocList,
-  delScflLoc,
-  updateScflLoc,
-  addScflLoc,
-  //  五金
+} from "@/api/im/Wk/cc/scfl";
+import {
+  getYl,
+  addYl,
+  updateYl,
+  delYl,
+  getYlDtl,
+  addYlDtl,
+  updateYlDtl,
+  delYlDtl,
+} from "@/api/im/Wk/cc/yl";
+import {
   getWj,
-  delWj,
-  updateWj,
   addWj,
-  getWjDetali,
-  addWjDetali,
-  updateWjDetali,
-  delWjDetali,
-  getWjLocList,
-  delWjLoc,
-  updateWjLoc,
-  addWjLoc,
-  //  行政
+  updateWj,
+  delWj,
+  getWjDtl,
+  addWjDtl,
+  updateWjDtl,
+  delWjDtl,
+} from "@/api/im/Wk/cc/wj";
+
+import {
   getXz,
-  delXz,
-  updateXz,
   addXz,
-  getXzDetali,
-  addXzDetali,
-  updateXzDetali,
-  delXzDetali,
-  getXzLocList,
-  delXzLoc,
-  updateXzLoc,
-  addXzLoc,
+  updateXz,
+  delXz,
+  getXzDtl,
+  addXzDtl,
+  updateXzDtl,
+  delXzDtl,
+} from "@/api/im/Wk/cc/xz";
+
+import {
   //  燃料
   getRl,
   delRl,
   updateRl,
   addRl,
-  getRlDetali,
-  addRlDetali,
-  updateRlDetali,
-  delRlDetali,
-  getRlLocList,
-  delRlLoc,
-  updateRlLoc,
-  addRlLoc,
-} from "@/api/im/Wk/rc";
+  getRlDtl,
+  addRlDtl,
+  updateRlDtl,
+  delRlDtl,
+} from "@/api/im/Wk/cc/rl";
 import choice from "@/components/choice";
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
 import {
@@ -369,47 +339,32 @@ export default {
           this.everyThing.update = updateWj;
           this.everyThing.sx2C = yjxz2C(this);
           this.everyThing.add = addWj;
-          this.everyThing.getDetail = getWjDetali;
-          this.everyThing.addDetail = addWjDetali;
-          this.everyThing.updateDetail = updateWjDetali;
-          this.everyThing.delDetail = delWjDetali;
-          this.everyThing.getPh = getWjLocList;
-          this.everyThing.addPh = addWjLoc;
-          this.everyThing.delPh = delWjLoc;
-          this.everyThing.updatePh = updateWjLoc;
-          this.everyThing.batchCode = "wj_out_whse";
+          this.everyThing.getDetail = getWjDtl;
+          this.everyThing.addDetail = addWjDtl;
+          this.everyThing.updateDetail = updateWjDtl;
+          this.everyThing.delDetail = delWjDtl;
           break;
         case this.$t("choicDlg.xz"):
           this.everyThing.get = getXz;
           this.everyThing.del = delXz;
           this.everyThing.update = updateXz;
-          this.everyThing.sx2C = yjxz2C(this);
           this.everyThing.add = addXz;
-          this.everyThing.getDetail = getXzDetali;
-          this.everyThing.addDetail = addXzDetali;
-          this.everyThing.updateDetail = updateXzDetali;
-          this.everyThing.delDetail = delXzDetali;
-          this.everyThing.getPh = getXzLocList;
-          this.everyThing.addPh = addXzLoc;
-          this.everyThing.delPh = delXzLoc;
-          this.everyThing.updatePh = updateXzLoc;
-          this.everyThing.batchCode = "xz_out_whse";
+          this.everyThing.sx2C = yjxz2C(this);
+          this.everyThing.getDetail = getXzDtl;
+          this.everyThing.addDetail = addXzDtl;
+          this.everyThing.updateDetail = updateXzDtl;
+          this.everyThing.delDetail = delXzDtl;
           break;
         case this.$t("choicDlg.rl"):
           this.everyThing.get = getRl;
           this.everyThing.del = delRl;
           this.everyThing.update = updateRl;
-          this.everyThing.sx2C = yjxz2C(this);
           this.everyThing.add = addRl;
-          this.everyThing.getDetail = getRlDetali;
-          this.everyThing.addDetail = addRlDetali;
-          this.everyThing.updateDetail = updateRlDetali;
-          this.everyThing.delDetail = delRlDetali;
-          this.everyThing.getPh = getRlLocList;
-          this.everyThing.addPh = addRlLoc;
-          this.everyThing.delPh = delRlLoc;
-          this.everyThing.updatePh = updateRlLoc;
-          this.everyThing.batchCode = "rl_out_whse";
+          this.everyThing.sx2C = yjxz2C(this);
+          this.everyThing.getDetail = getRlDtl;
+          this.everyThing.addDetail = addRlDtl;
+          this.everyThing.updateDetail = updateRlDtl;
+          this.everyThing.delDetail = delRlDtl;
           break;
         case this.$t("choicDlg.scfl"):
           this.everyThing.get = getScfl;
@@ -421,30 +376,25 @@ export default {
           this.everyThing.addDetail = addScflDetali;
           this.everyThing.updateDetail = updateScflDetali;
           this.everyThing.delDetail = delScflDetali;
-          this.everyThing.getPh = getScflLocList;
-          this.everyThing.addPh = addScflLoc;
-          this.everyThing.delPh = delScflLoc;
-          this.everyThing.updatePh = updateScflLoc;
-          this.everyThing.batchCode = "scfl_out_whse";
           break;
         case this.$t("iaoMng.hgyl"):
-          this.everyThing.get = getRhl;
-          this.everyThing.del = delRhl;
-          this.everyThing.update = updateRhl;
-          this.everyThing.add = addRhl;
+          this.everyThing.get = getHgyl;
+          this.everyThing.del = delHgyl;
+          this.everyThing.update = updateHgyl;
+          this.everyThing.add = addHgyl;
           this.everyThing.sx2C = hgyl2C(this);
-          this.everyThing.getDetail = getRhlDetali;
-          this.everyThing.addDetail = addRhlDetali;
-          this.everyThing.updateDetail = updateRhlDetali;
-          this.everyThing.delDetail = delRhlDetali;
-          this.everyThing.getPh = getRhlPh;
-          this.everyThing.addPh = addRhlPhDetali;
-          this.everyThing.updatePh = updateRhlPhDetali;
-          this.everyThing.delPh = delRhlPhDetali;
-          this.everyThing.getLoc = getRhlLoc;
-          this.everyThing.addLoc = addRhlLoc;
-          this.everyThing.delLoc = delRhlLoc;
-          this.everyThing.updateLoc = updateRhlLoc;
+          this.everyThing.getDetail = getHgylDtl;
+          this.everyThing.addDetail = addHgylDtl;
+          this.everyThing.updateDetail = updateHgylDtl;
+          this.everyThing.delDetail = delHgylDtl;
+          this.everyThing.getPh = getHgylDtlb;
+          this.everyThing.addPh = addHgylDtlb;
+          this.everyThing.updatePh = updateHgylDtlb;
+          this.everyThing.delPh = delHgylDtlb;
+          // this.everyThing.getLoc = getRhlLoc;
+          // this.everyThing.addLoc = addRhlLoc;
+          // this.everyThing.delLoc = delRhlLoc;
+          // this.everyThing.updateLoc = updateRhlLoc;
           this.everyThing.batchCode = "hgyl_out_whse";
           break;
         case this.$t("iaoMng.yl"):
@@ -453,18 +403,10 @@ export default {
           this.everyThing.update = updateYl;
           this.everyThing.add = addYl;
           this.everyThing.sx2C = yl2C(this);
-          this.everyThing.getDetail = getYlDtla;
-          this.everyThing.addDetail = addYlDtla;
-          this.everyThing.updateDetail = updateYlDtla;
-          this.everyThing.delDetail = delYlDtla;
-          this.everyThing.getPh = getYlDtlb;
-          this.everyThing.addPh = addYlDtlb;
-          this.everyThing.updatePh = updateYlDtlb;
-          this.everyThing.delPh = delYlDtlb;
-          this.everyThing.getLoc = getYlLoc;
-          this.everyThing.addLoc = addYlLoc;
-          this.everyThing.delLoc = delYlLoc;
-          this.everyThing.updateLoc = updateYlLoc;
+          this.everyThing.getDetail = getYlDtl;
+          this.everyThing.addDetail = addYlDtl;
+          this.everyThing.updateDetail = updateYlDtl;
+          this.everyThing.delDetail = delYlDtl;
           this.everyThing.batchCode = "yl_out_whse";
           break;
         default:
@@ -476,8 +418,14 @@ export default {
           delete this.form[key];
         }
       }
-      if (this.form.yinDate != "" && this.form.yinDate != undefined) {
-        this.form.yinDate += " 00:00:00";
+      if (this.form.retDate != "" && this.form.retDate != undefined) {
+        this.form.retDate += " 00:00:00";
+      }
+      if (this.form.stockDate != "" && this.form.stockDate != undefined) {
+        this.form.stockDate += " 00:00:00";
+      }
+      if (this.form.woDate != "" && this.form.woDate != undefined) {
+        this.form.woDate += " 00:00:00";
       }
       this.everyThing
         .get(
@@ -491,6 +439,15 @@ export default {
           let records = res.data;
           this.page.total = records.total;
           this.crud = records.records;
+          this.crud.forEach((item, index) => {
+            item.finStatus = String(item.finStatus);
+            item.index = index + 1;
+            // item.retCode = item.stockId;
+            // item.retDate = item.stockDate;
+            if (index === this.crud.length - 1) {
+              this.loading = false;
+            }
+          });
           if (this.data == "成品布") {
             this.crud.sort((a, b) => {
               return (
@@ -507,13 +464,6 @@ export default {
             });
           }
 
-          this.crud.forEach((item, index) => {
-            item.finStatus = String(item.finStatus);
-            item.index = index + 1;
-            if (index === this.crud.length - 1) {
-              this.loading = false;
-            }
-          });
           if (this.crud.length === 0) {
             this.loading = false;
           }
@@ -532,10 +482,13 @@ export default {
         woDate: this.getNowTime(),
         retCode: "",
         retDate: this.getNowTime(),
+        stockId: "",
+        stockDate: this.getNowTime(),
       };
       baseCodeSupplyEx({ code: this.everyThing.code }).then((res) => {
         data.retCode = res.data.data;
         data.woOutno = res.data.data;
+        data.stockId = res.data.data;
         this.detail = data;
         this.screenLoading = false;
         this.isAdd = true;
@@ -551,41 +504,39 @@ export default {
         !this.chooseData.whseFinclothselloutoid &&
         !this.chooseData.whseRetyarninoid &&
         !this.chooseData.whseMaterialoid &&
-        !this.chooseData.whseChemicalinoid &&
-        !this.chooseData.whseDyesalinoid &&
-        !this.chooseData.whseAccessoriesinoid &&
-        !this.chooseData.energyInId
+        !this.chooseData.whseRetsuppchemicaloid &&
+        !this.chooseData.dyesalOutId &&
+        !this.chooseData.whseAccessoriesoutoid &&
+        !this.chooseData.energyOutId &&
+        !this.chooseData.whseHardwareOutId &&
+        !this.chooseData.whseOfficeOutId
       ) {
         this.crud.splice(this.chooseData.index - 1, 1);
         this.chooseData = {};
         return;
       }
       this.$tip
-        .cofirm(
-          this.$t("iaoMng.delTle14") +
-            (this.data == "成品布"
-              ? this.chooseData.woOutno
-              : this.chooseData.retCode) +
-            this.$t("iaoMng.delTle2"),
-          this,
-          {}
-        )
+        .cofirm("是否確定刪除選中的數據?", {})
         .then(() => {
           this.everyThing
             .del(
               this.data === this.$t("iaoMng.hgyl")
-                ? this.chooseData.whseChemicalinoid
+                ? this.chooseData.whseRetsuppchemicaloid
                 : this.data === this.$t("iaoMng.sx")
                 ? this.chooseData.whseRetyarninoid
                 : this.data === this.$t("iaoMng.pb")
                 ? this.chooseData.whseMaterialoid
                 : this.data === this.$t("iaoMng.yl")
-                ? this.chooseData.whseDyesalinoid
+                ? this.chooseData.dyesalOutId
                 : this.data === "成品布"
                 ? this.chooseData.whseFinclothselloutoid
                 : this.data === this.$t("choicDlg.rl")
-                ? this.chooseData.energyInId
-                : this.chooseData.whseAccessoriesinoid
+                ? this.chooseData.energyOutId
+                : this.data === this.$t("choicDlg.wj")
+                ? this.chooseData.whseHardwareOutId
+                : this.data === this.$t("choicDlg.xz")
+                ? this.chooseData.whseOfficeOutId
+                : this.chooseData.whseAccessoriesoutoid
             )
             .then((res) => {
               if (res.data.code === 200) {

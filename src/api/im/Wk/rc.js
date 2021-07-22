@@ -380,21 +380,21 @@ export function delRhlLoc(id) {
 // 顔料  ------------------------- 華麗的分割綫------------------------
 export function getYl(params) {
   return axios({
-    url: "/api/whseDyesalIn/page",
+    url: "/api/whseDyesalin/page",
     method: "get",
     params: params
   });
 }
 export function addYl(params) {
   return axios({
-    url: "/api/whseDyesalIn",
+    url: "/api/whseDyesalin",
     method: "post",
     params: params
   });
 }
 export function updateYl(params) {
   return axios({
-    url: "/api/whseDyesalIn",
+    url: "/api/whseDyesalin",
     method: "put",
     params: params
   });
@@ -402,7 +402,7 @@ export function updateYl(params) {
 
 export function delYl(id) {
   return axios({
-    url: "/api/whseDyesalIn?whseDyesalInoid=" + id,
+    url: "/api/whseDyesalin?whseDyesalinoid=" + id,
     method: "delete"
   });
 }

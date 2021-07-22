@@ -2,11 +2,11 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-07-16 18:55:38
+ * @LastEditTime: 2021-07-17 09:48:54
  * @Description:
  */
-
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
+
 let matUnit = getDIC("bas_matUnit");
 export function mainForm(_this) {
   return {
@@ -18,7 +18,7 @@ export function mainForm(_this) {
         label: "缸号",
         prop: "vatNo",
         span: 8,
-        placeholder: "请选择/扫描缸号",
+        placeholder: "请输入/扫描缸号",
         click: () => {
           _this.type = "gh";
         }
@@ -348,7 +348,7 @@ export function dlgCrud(_this) {
     menuWidth: 80,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 300px)",
+    height: "calc(100vh - 350px)",
     refreshBtn: false,
     columnBtn: false,
     page: false,

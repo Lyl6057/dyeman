@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-06-19 16:07:11
+ * @LastEditTime: 2021-07-19 08:55:08
  * @Description:
 -->
 <template>
@@ -182,27 +182,30 @@ export default {
           baseCodeSupply({ code: "whse_in" }).then((res) => {});
           const inwhseId = inwhse.data.data;
           list.forEach((item, i) => {
-            addInDtla({
-              prodNo: item.weaveJobCode,
-              weight: this.checkSum,
-              countingNo: item.data.length,
-              whseCalicoinFk: inwhseId,
-              fabticket: this.selectList[0].storeLoadCode,
-            }).then((dtla) => {
-              const dtlaId = dtla.data.data;
-              item.data.forEach((dtlb, b) => {
-                addInDtlb({
-                  custTicket: dtlb.noteCode,
-                  countingNo: dtlb.eachNumber,
-                  locationCode: dtlb.storeSiteCode,
-                  weight: dtlb.clothWeight,
-                  weightUnit: "KG",
-                  whseCalicoinDtlaFk: dtlaId,
-                }).then((dtlb) => {});
-                if (b == item.data.length - 1 && i == list.length - 1) {
-                  this.query();
-                  this.$tip.success("审核入仓成功!");
-                }
+            baseCodeSupplyEx({ code: "pb_in_whse" }).then((pbIn) => {
+              addInDtla({
+                prodNo: item.weaveJobCode,
+                weight: this.checkSum,
+                countingNo: item.data.length,
+                whseCalicoinFk: inwhseId,
+                fabticket: this.selectList[0].storeLoadCode,
+                batchNo: pbIn.data.data,
+              }).then((dtla) => {
+                const dtlaId = dtla.data.data;
+                item.data.forEach((dtlb, b) => {
+                  addInDtlb({
+                    custTicket: dtlb.noteCode,
+                    countingNo: dtlb.eachNumber,
+                    locationCode: dtlb.storeSiteCode,
+                    weight: dtlb.clothWeight,
+                    weightUnit: "KG",
+                    whseCalicoinDtlaFk: dtlaId,
+                  }).then((dtlb) => {});
+                  if (b == item.data.length - 1 && i == list.length - 1) {
+                    this.query();
+                    this.$tip.success("审核入仓成功!");
+                  }
+                });
               });
             });
           });

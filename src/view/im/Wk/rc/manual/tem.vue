@@ -31,10 +31,9 @@
           :span="
             datas === this.$t('iaoMng.pb')
               ? 14
-              : datas === this.$t('iaoMng.hgyl') ||
-                datas === this.$t('iaoMng.yl')
+              : datas === this.$t('iaoMng.hgyl')
               ? 15
-              : datas === '成品布'
+              : datas === '成品布' || datas === this.$t('iaoMng.yl')
               ? 24
               : 15
           "
@@ -67,7 +66,6 @@
                     v-model="scope.row.yarnsId"
                     placeholder="请选择"
                     filterable
-                    allow-create
                     clearable
                     default-first-option
                     class="customize-select"
@@ -89,8 +87,6 @@
                     v-model="scope.row.clothName"
                     placeholder="请选择"
                     filterable
-                    allow-create
-                    default-first-option
                     clearable
                     class="customize-select"
                   >
@@ -112,8 +108,6 @@
                     v-model="scope.row.chemicalId"
                     placeholder="请选择"
                     filterable
-                    allow-create
-                    default-first-option
                     clearable
                     class="customize-select"
                   >
@@ -130,7 +124,10 @@
                       "
                       :value="item.bcCode"
                     >
-                      <span style="float: left">
+                      <span
+                        style="float: left"
+                        @click="selectChange(item, scope.row)"
+                      >
                         {{
                           item.bcCode +
                           " - " +
@@ -147,7 +144,6 @@
                     v-model="scope.row.materialNum"
                     placeholder="请选择"
                     filterable
-                    allow-create
                     default-first-option
                     clearable
                     class="customize-select"
@@ -191,7 +187,6 @@
           :span="9"
           v-if="
             datas === this.$t('iaoMng.hgyl') ||
-            datas === this.$t('iaoMng.yl') ||
             datas === this.$t('choicDlg.wj') ||
             datas === this.$t('choicDlg.xz') ||
             datas === this.$t('choicDlg.scfl') ||
@@ -399,6 +394,7 @@ export default {
           whseDyesalinFk: this.detail.whseDyesalinoid, // 顏料Oid
           whseFinishedclothinFk: this.detail.whseFinishedclothinoid,
           whseEnergyInFk: this.detail.energyInId,
+          whseOfficeInFk: this.detail.whseAccessoriesinoid,
         })
         .then((res) => {
           let records = res.data;
@@ -482,6 +478,8 @@ export default {
           whseDyesainDtlaFk: this.chooseData.whseDyesainDtlaoid,
           whseAccessoriesDtlFk: this.chooseData.whseAccessoriesDtloid,
           energyDtloid: this.chooseData.energyDtloid,
+          whseOfficeDtlFk: this.chooseData.whseAccessoriesDtloid,
+          whseAccessoriesDtloid: this.chooseData.whseAccessoriesDtloid,
           rows: 999,
           start: 1,
         })
@@ -853,14 +851,12 @@ export default {
       ) {
         for (let i = 0; i < this.mx.length; i++) {
           this.mx[i].chemicalName = this.mx[i].$chemicalId;
-          if (!this.mx[i].loc) {
+          if (!this.mx[i].weight) {
+            this.$tip.error("入仓数量不能为空!");
             return;
           }
-          for (let j = 0; j < this.mx[i].loc.length; j++) {
-            if (!this.mx[i].loc[j].weight) {
-              this.$tip.error("入仓货位数量不能为空!");
-              return;
-            }
+          if (!this.mx[i].loc) {
+            return;
           }
         }
       }
@@ -894,6 +890,7 @@ export default {
       if (this.form.yinDate != "" && this.form.yinDate != undefined) {
         this.form.yinDate += " 00:00:00";
       }
+
       if (
         this.form.whseFinishedclothinoid ||
         this.form.whseAccessoriesinoid ||
@@ -920,7 +917,8 @@ export default {
                 this.datas != this.$t("choicDlg.wj") &&
                 this.datas != this.$t("choicDlg.xz") &&
                 this.datas != this.$t("choicDlg.scfl") &&
-                this.datas != this.$t("choicDlg.rl")
+                this.datas != this.$t("choicDlg.rl") &&
+                this.datas != this.$t("iaoMng.yl")
               ) {
                 item.countingNo = item.loc ? item.loc.length : 0;
                 item.weight = 0;
@@ -966,6 +964,8 @@ export default {
                 data.whseCalicoinFk = this.detail.whseCalicoinoid;
                 data.whseChemicalinFk = this.detail.whseChemicalinoid;
                 data.whseDyesalinFk = this.detail.whseDyesalinoid;
+                data.whseHardwareInFk = this.detail.whseAccessoriesinoid;
+                data.whseOfficeInFk = this.detail.whseAccessoriesinoid;
                 baseCodeSupply({ code: this.everyThing.batchCode }).then(
                   (res) => {}
                 );
@@ -993,9 +993,10 @@ export default {
                   item.whseDyesainDtlaFk = this.mx[i].whseDyesainDtlaoid;
                   item.whseAccessoriesDtlFk = this.mx[i].whseAccessoriesDtloid;
                   item.energyDtloid = this.mx[i].energyDtloid;
+                  item.whseOfficeDtlFk = this.mx[i].whseAccessoriesDtloid;
+                  item.whseAccessoriesDtloid = this.mx[i].whseAccessoriesDtloid;
                   if (
                     this.datas === this.$t("iaoMng.hgyl") ||
-                    this.datas === this.$t("iaoMng.yl") ||
                     this.datas === this.$t("choicDlg.wj") ||
                     this.datas === this.$t("choicDlg.xz") ||
                     this.datas === this.$t("choicDlg.scfl") ||
@@ -1079,7 +1080,8 @@ export default {
                 this.datas != this.$t("choicDlg.wj") &&
                 this.datas != this.$t("choicDlg.xz") &&
                 this.datas != this.$t("choicDlg.scfl") &&
-                this.datas != this.$t("choicDlg.rl")
+                this.datas != this.$t("choicDlg.rl") &&
+                this.datas != this.$t("iaoMng.yl")
               ) {
                 item.countingNo = item.loc ? item.loc.length : 0;
                 item.weight = 0;
@@ -1125,6 +1127,8 @@ export default {
                 data.whseCalicoinFk = this.form.whseCalicoinoid;
                 data.whseChemicalinFk = this.form.whseChemicalinoid;
                 data.whseDyesalinFk = this.form.whseDyesalinoid;
+                data.whseHardwareInFk = this.form.whseAccessoriesinoid;
+                data.whseOfficeInFk = this.form.whseAccessoriesinoid;
                 baseCodeSupply({ code: this.everyThing.batchCode }).then(
                   (res) => {}
                 );
@@ -1152,9 +1156,10 @@ export default {
                   item.whseDyesainDtlaFk = this.mx[i].whseDyesainDtlaoid;
                   item.whseAccessoriesDtlFk = this.mx[i].whseAccessoriesDtloid;
                   item.energyDtloid = this.mx[i].energyDtloid;
+                  item.whseOfficeDtlFk = this.mx[i].whseAccessoriesDtloid;
+                  item.whseAccessoriesDtloid = this.mx[i].whseAccessoriesDtloid;
                   if (
                     this.datas === this.$t("iaoMng.hgyl") ||
-                    this.datas === this.$t("iaoMng.yl") ||
                     this.datas === this.$t("choicDlg.wj") ||
                     this.datas === this.$t("choicDlg.xz") ||
                     this.datas === this.$t("choicDlg.scfl") ||
@@ -1219,12 +1224,17 @@ export default {
       this.sheetV = true;
     },
     selectChange(val, row) {
-      row.unitQty = val.msUnit;
-      if (row.batchNo == null) {
-        row.batchNo = "";
-      }
-      if (row.batchNo.indexOf(val.value.split("-")[0]) == -1) {
-        row.batchNo = val.value.split("-")[0] + row.batchNo;
+      if (this.datas == this.$t("iaoMng.yl")) {
+        row.weightUnit = val.bcUnit;
+        row.chemicalName = val.cnnamelong;
+      } else {
+        row.unitQty = val.msUnit;
+        if (row.batchNo == null) {
+          row.batchNo = "";
+        }
+        if (row.batchNo.indexOf(val.value.split("-")[0]) == -1) {
+          row.batchNo = val.value.split("-")[0] + row.batchNo;
+        }
       }
     },
     close() {

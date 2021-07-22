@@ -2,21 +2,14 @@
  * @Author: Lyl
  * @Date: 2021-05-03 13:03:03
  * @LastEditors: Lyl
- * @LastEditTime: 2021-07-13 15:28:11
+ * @LastEditTime: 2021-07-22 18:44:06
  * @Description:
  */
 
 import axios from "axios";
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
 let cust = getDicT("basCustomer", "custName", "custCode");
-let supp = getDicT("basSupplier", "suppName", "suppId");
-let purAttr = getDIC("sal_purAttr");
-let calicoType = getDIC("bas_calicoType");
-let chemicalClass = getDIC("bas_chemicalClass");
-let yarnsFlag = getDIC("pur_yarnsFlag");
-let yarnsPaytype = getDIC("pur_yarnsPaytype");
-let yarnsCollected = getDIC("pur_yarnsCollected");
-let basHardware = getDicT("basHardware", "topcategoryName", "basHardwareoid");
+let basHardware = getXDicT("basHardwarearticles");
 let basAdsupplies = getDicT(
   "basAdsupplies",
   "topcategoryName",
@@ -25,7 +18,750 @@ let basAdsupplies = getDicT(
 let matUnit = getDIC("bas_matUnit");
 let basChemical = getXDicT("BasChemicalmatNew");
 let basPigment = getXDicT("basPigment");
-let basProductivesupplies = getXDicT("basProductivesuppliesnew");
+let basProductivesupplies = getXDicT("basProductivesupplies");
+let basFuel = getXDicT("basFuel");
+
+export function cpbInF(_this) {
+  return {
+    submitBtn: false,
+    emptyBtn: false,
+    labelWidth: 150,
+    column: [
+      {
+        label: _this.$t("whseField.gh"),
+        prop: "batchNo",
+        cell: true,
+        span: 6,
+        width: 230
+      },
+      {
+        label: _this.$t("whseField.bph"),
+        prop: "fabticket",
+        cell: true,
+        width: 120,
+        span: 6
+      }
+    ]
+  };
+}
+export function cpbInC(_this) {
+  return {
+    menu: false,
+    addBtn: false,
+    border: true,
+    highlightCurrentRow: true,
+    height: "calc(100vh - 200px)",
+    refreshBtn: false,
+    columnBtn: false,
+    page: true,
+    selection: true,
+    column: [
+      {
+        prop: "index",
+        label: "#",
+        width: 50,
+        align: "center"
+      },
+      {
+        label: _this.$t("whseField.gh"),
+        prop: "batchNo",
+        cell: true,
+        width: 230
+      },
+      {
+        label: _this.$t("whseField.bph"),
+        prop: "fabticket",
+        cell: true,
+        width: 230
+      },
+      {
+        label: _this.$t("whseField.ph2"),
+        prop: "countingNo",
+        cell: true,
+        width: 120,
+        align: "right"
+      },
+      {
+        label: _this.$t("whseField.zl"),
+        prop: "weight",
+        cell: true,
+        width: 120,
+        type: "number",
+        align: "right"
+      },
+      {
+        label: _this.$t("whseField.dw"),
+        prop: "weightUnit",
+        cell: true,
+        width: 100,
+        type: "select",
+        type: "select",
+        dicData: getDIC("bas_matUnit")
+      },
+      {
+        label: _this.$t("energy.dj"),
+        prop: "price",
+        cell: true,
+        type: "number",
+        width: 120
+      },
+      {
+        label: _this.$t("whseField.hwm"),
+        prop: "locationCode",
+        cell: true,
+        width: 180
+      }
+    ]
+  };
+}
+export function getCpbIn(params) {
+  return axios({
+    url: "/api/whseFinishedclothinDtl/v1.0/listByPage",
+    method: "get",
+    params: params
+  });
+}
+
+export function rlInF(_this) {
+  return {
+    submitBtn: false,
+    emptyBtn: false,
+    labelWidth: 150,
+    column: [
+      {
+        label: _this.$t("whseField.clbh"),
+        prop: "materialNum", //CNNameLong
+        cell: true,
+        width: 120,
+        span: 6
+      },
+      {
+        label: _this.$t("whseField.ph"),
+        prop: "batchNo",
+        cell: true,
+        span: 6,
+        width: 230
+      }
+    ]
+  };
+}
+export function rlInC(_this) {
+  return {
+    menu: false,
+    addBtn: false,
+    border: true,
+    highlightCurrentRow: true,
+    height: "calc(100vh - 200px)",
+    refreshBtn: false,
+    columnBtn: false,
+    page: true,
+    roykey: "whseChemicalinDtlaoid",
+    selection: true,
+    column: [
+      {
+        label: "#",
+        prop: "index",
+        width: 50,
+        align: "center"
+      },
+      {
+        label: _this.$t("whseField.clbh"),
+        prop: "materialNum", //CNNameLong
+        cell: true,
+        width: 120
+      },
+      {
+        label: _this.$t("whseField.clmc"),
+        prop: "materialName", //CNNameLong
+        cell: true,
+        width: 350,
+        type: "select",
+        props: {
+          label: _this.$store.state.lang === "1" ? "chinName" : "engName",
+          value: "hardwareId"
+        },
+        dicData: basFuel
+      },
+      {
+        label: _this.$t("whseField.ph"),
+        prop: "batchNo",
+        cell: true,
+        width: 230
+      },
+      {
+        label: _this.$t("energy.sl"),
+        prop: "poQty",
+        cell: true,
+        width: 120,
+        type: "number",
+        align: "right"
+      },
+      {
+        label: _this.$t("whseField.dw"),
+        prop: "unitQty",
+        cell: true,
+        width: 120,
+        type: "select",
+        dicData: matUnit
+      },
+      {
+        label: _this.$t("energy.dj"),
+        prop: "price",
+        cell: true,
+        width: 100,
+        align: "right",
+        type: "number",
+        precision: 2
+      }
+    ]
+  };
+}
+export function getRlIn(params) {
+  return axios({
+    url: "/api/whseEnergyDtl/page",
+    method: "get",
+    params: params
+  });
+}
+
+export function hgylInF(_this) {
+  return {
+    submitBtn: false,
+    emptyBtn: false,
+    labelWidth: 150,
+    column: [
+      {
+        label: _this.$t("whseField.clbh"),
+        prop: "chemicalId", //CNNameLong
+        cell: true,
+        width: 120,
+        span: 6
+      },
+      {
+        label: _this.$t("whseField.clmc"),
+        prop: "chemicalName", //CNNameLong
+        cell: true,
+        width: 120,
+        span: 6,
+        type: "select",
+        props: {
+          label: _this.$store.state.lang === "1" ? "chinName" : "engName",
+          value: "hardwareId"
+        },
+        dicData: basChemical
+      },
+      {
+        label: _this.$t("whseField.ph"),
+        prop: "batchNo",
+        cell: true,
+        span: 6,
+        width: 230
+      }
+    ]
+  };
+}
+export function hgylInC(_this) {
+  return {
+    menu: false,
+    addBtn: false,
+    border: true,
+    highlightCurrentRow: true,
+    height: "calc(100vh - 200px)",
+    refreshBtn: false,
+    columnBtn: false,
+    page: true,
+    roykey: "whseChemicalinDtlaoid",
+    selection: true,
+    column: [
+      {
+        label: "#",
+        prop: "index",
+        width: 50,
+        align: "center"
+      },
+      {
+        label: _this.$t("whseField.clbh"),
+        prop: "chemicalId", //CNNameLong
+        cell: true,
+        width: 120
+      },
+      {
+        label: _this.$t("whseField.clmc"),
+        prop: "chemicalName", //CNNameLong
+        cell: true,
+        width: 350,
+        type: "select",
+        props: {
+          label: _this.$store.state.lang === "1" ? "chinName" : "engName",
+          value: "hardwareId"
+        },
+        dicData: basChemical
+      },
+      {
+        label: _this.$t("whseField.ph"),
+        prop: "batchNo",
+        cell: true,
+        width: 230
+      },
+      {
+        label: _this.$t("energy.sl"),
+        prop: "weight",
+        cell: true,
+        width: 120,
+        type: "number",
+        align: "right"
+      },
+      {
+        label: _this.$t("whseField.dw"),
+        prop: "weightUnit",
+        cell: true,
+        width: 120,
+        type: "select",
+        dicData: matUnit
+      },
+      {
+        label: _this.$t("energy.dj"),
+        prop: "price",
+        cell: true,
+        width: 100,
+        align: "right",
+        type: "number",
+        precision: 2
+      }
+    ]
+  };
+}
+export function getHgylIn(params) {
+  return axios({
+    url: "/api/whseChemicalinDtla/v1.0/listByPage",
+    method: "get",
+    params: params
+  });
+}
+
+export function xzInF(_this) {
+  return {
+    submitBtn: false,
+    emptyBtn: false,
+    labelWidth: 150,
+    column: [
+      {
+        label: _this.$t("whseField.clbh"),
+        prop: "materialNum", //CNNameLong
+        cell: true,
+        width: 120,
+        span: 6
+      },
+      {
+        label: _this.$t("whseField.ph"),
+        prop: "batchNo",
+        cell: true,
+        span: 6,
+        width: 230
+      }
+    ]
+  };
+}
+export function xzInC(_this) {
+  return {
+    menu: false,
+    addBtn: false,
+    border: true,
+    highlightCurrentRow: true,
+    height: "calc(100vh - 200px)",
+    refreshBtn: false,
+    columnBtn: false,
+    page: true,
+    roykey: "whseChemicalinDtlaoid",
+    selection: true,
+    column: [
+      {
+        label: "#",
+        prop: "index",
+        width: 50,
+        align: "center"
+      },
+      {
+        label: _this.$t("whseField.clbh"),
+        prop: "materialNum", //CNNameLong
+        cell: true,
+        width: 120
+      },
+      {
+        label: _this.$t("whseField.clmc"),
+        prop: "materialName", //CNNameLong
+        cell: true,
+        width: 350,
+        type: "select",
+        props: {
+          label: _this.$store.state.lang === "1" ? "chinName" : "engName",
+          value: "hardwareId"
+        },
+        dicData: basHardware
+      },
+      {
+        label: _this.$t("whseField.ph"),
+        prop: "batchNo",
+        cell: true,
+        width: 230
+      },
+      {
+        label: _this.$t("energy.sl"),
+        prop: "poQty",
+        cell: true,
+        width: 120,
+        type: "number",
+        align: "right"
+      },
+      {
+        label: _this.$t("whseField.dw"),
+        prop: "unitQty",
+        cell: true,
+        width: 120,
+        type: "select",
+        dicData: matUnit
+      },
+      {
+        label: _this.$t("energy.dj"),
+        prop: "price",
+        cell: true,
+        width: 100,
+        align: "right",
+        type: "number",
+        precision: 2
+      }
+    ]
+  };
+}
+export function getXzIn(params) {
+  return axios({
+    url: "/api/whseOfficeDtl/page",
+    method: "get",
+    params: params
+  });
+}
+
+export function wjInF(_this) {
+  return {
+    submitBtn: false,
+    emptyBtn: false,
+    labelWidth: 150,
+    column: [
+      {
+        label: _this.$t("whseField.clbh"),
+        prop: "materialNum", //CNNameLong
+        cell: true,
+        width: 120,
+        span: 6
+      },
+      {
+        label: _this.$t("whseField.ph"),
+        prop: "batchNo",
+        cell: true,
+        span: 6,
+        width: 230
+      }
+    ]
+  };
+}
+export function wjInC(_this) {
+  return {
+    menu: false,
+    addBtn: false,
+    border: true,
+    highlightCurrentRow: true,
+    height: "calc(100vh - 200px)",
+    refreshBtn: false,
+    columnBtn: false,
+    page: true,
+    roykey: "whseChemicalinDtlaoid",
+    selection: true,
+    column: [
+      {
+        label: "#",
+        prop: "index",
+        width: 50,
+        align: "center"
+      },
+      {
+        label: _this.$t("whseField.clbh"),
+        prop: "materialNum", //CNNameLong
+        cell: true,
+        width: 120
+      },
+      {
+        label: _this.$t("whseField.clmc"),
+        prop: "materialName", //CNNameLong
+        cell: true,
+        width: 350,
+        type: "select",
+        props: {
+          label: _this.$store.state.lang === "1" ? "chinName" : "engName",
+          value: "hardwareId"
+        },
+        dicData: basHardware
+      },
+      {
+        label: _this.$t("whseField.ph"),
+        prop: "batchNo",
+        cell: true,
+        width: 230
+      },
+      {
+        label: _this.$t("energy.sl"),
+        prop: "poQty",
+        cell: true,
+        width: 120,
+        type: "number",
+        align: "right"
+      },
+      {
+        label: _this.$t("whseField.dw"),
+        prop: "unitQty",
+        cell: true,
+        width: 120,
+        type: "select",
+        dicData: matUnit
+      },
+      {
+        label: _this.$t("energy.dj"),
+        prop: "price",
+        cell: true,
+        width: 100,
+        align: "right",
+        type: "number",
+        precision: 2
+      }
+    ]
+  };
+}
+export function getWjIn(params) {
+  return axios({
+    url: "/api/whseHardwareDtl/page",
+    method: "get",
+    params: params
+  });
+}
+
+export function scflInF(_this) {
+  return {
+    submitBtn: false,
+    emptyBtn: false,
+    labelWidth: 150,
+    column: [
+      {
+        label: _this.$t("whseField.clbh"),
+        prop: "materialNum", //CNNameLong
+        cell: true,
+        width: 120,
+        span: 6
+      },
+      {
+        label: _this.$t("whseField.ph"),
+        prop: "batchNo",
+        cell: true,
+        span: 6,
+        width: 230
+      }
+    ]
+  };
+}
+export function scflInC(_this) {
+  return {
+    menu: false,
+    addBtn: false,
+    border: true,
+    highlightCurrentRow: true,
+    height: "calc(100vh - 200px)",
+    refreshBtn: false,
+    columnBtn: false,
+    page: true,
+    roykey: "whseChemicalinDtlaoid",
+    selection: true,
+    column: [
+      {
+        label: "#",
+        prop: "index",
+        width: 50,
+        align: "center"
+      },
+      {
+        label: _this.$t("whseField.clbh"),
+        prop: "materialNum", //CNNameLong
+        cell: true,
+        width: 120
+      },
+      {
+        label: _this.$t("whseField.clmc"),
+        prop: "materialName", //CNNameLong
+        cell: true,
+        width: 350,
+        type: "select",
+        props: {
+          label: _this.$store.state.lang === "1" ? "chinName" : "engName",
+          value: "hardwareId"
+        },
+        dicData: basProductivesupplies
+      },
+      {
+        label: _this.$t("whseField.ph"),
+        prop: "batchNo",
+        cell: true,
+        width: 230
+      },
+      {
+        label: _this.$t("energy.sl"),
+        prop: "poQty",
+        cell: true,
+        width: 120,
+        type: "number",
+        align: "right"
+      },
+      {
+        label: _this.$t("whseField.dw"),
+        prop: "unitQty",
+        cell: true,
+        width: 120,
+        type: "select",
+        dicData: matUnit
+      },
+      {
+        label: _this.$t("energy.dj"),
+        prop: "price",
+        cell: true,
+        width: 100,
+        align: "right",
+        type: "number",
+        precision: 2
+      }
+    ]
+  };
+}
+export function getScflIn(params) {
+  return axios({
+    url: "/api/whseAccessoriesDtl/page",
+    method: "get",
+    params: params
+  });
+}
+
+export function ylInF(_this) {
+  return {
+    submitBtn: false,
+    emptyBtn: false,
+    labelWidth: 150,
+    column: [
+      {
+        label: _this.$t("whseField.ylbh1"),
+        prop: "chemicalId", //CNNameLong
+        cell: true,
+        width: 120,
+        span: 6
+      },
+      {
+        label: _this.$t("whseField.ylmc1"),
+        prop: "chemicalName", //CNNameLong
+        cell: true,
+        width: 350,
+        // slot: true,
+        span: 6,
+        type: "select",
+        props: {
+          label: _this.$store.state.lang === "1" ? "cnnamelong" : "ennamelong",
+          value: _this.$store.state.lang === "1" ? "cnnamelong" : "ennamelong"
+        },
+        filterable: true,
+        // overHidden: true,
+        dicData: basPigment
+      },
+      {
+        label: _this.$t("whseField.ph"),
+        prop: "batchNo",
+        cell: true,
+        span: 6,
+        width: 230
+      }
+    ]
+  };
+}
+export function ylInC(_this) {
+  return {
+    menu: false,
+    addBtn: false,
+    border: true,
+    highlightCurrentRow: true,
+    height: "calc(100vh - 200px)",
+    refreshBtn: false,
+    columnBtn: false,
+    page: true,
+    roykey: "whseChemicalinDtlaoid",
+    selection: true,
+    column: [
+      {
+        label: "#",
+        prop: "index",
+        width: 50,
+        align: "center"
+      },
+      {
+        label: _this.$t("whseField.ylbh1"),
+        prop: "chemicalId", //CNNameLong
+        cell: true,
+        width: 120
+      },
+      {
+        label: _this.$t("whseField.ylmc1"),
+        prop: "chemicalName", //CNNameLong
+        cell: true,
+        width: 350
+      },
+      {
+        label: _this.$t("whseField.ph"),
+        prop: "batchNo",
+        cell: true,
+        width: 230
+      },
+      {
+        label: _this.$t("energy.sl"),
+        prop: "weight",
+        cell: true,
+        width: 120,
+        type: "number",
+        align: "right"
+      },
+      {
+        label: _this.$t("whseField.dw"),
+        prop: "weightUnit",
+        cell: true,
+        width: 120,
+        type: "select",
+        dicData: matUnit
+      },
+      {
+        label: _this.$t("whseField.cd"),
+        prop: "origin",
+        cell: true,
+        width: 120,
+        type: "select",
+        dicData: getDIC("bas_yarnorigin")
+      },
+      {
+        label: _this.$t("energy.dj"),
+        prop: "price",
+        cell: true,
+        type: "number",
+        width: 120
+      }
+    ]
+  };
+}
+export function getYlIn(params) {
+  return axios({
+    url: "/api/whseDyesalInDtla/page",
+    method: "get",
+    params: params
+  });
+}
 
 export function resolveF(_this) {
   return {

@@ -11,61 +11,69 @@ export function rhl1F(_this) {
     column: [
       {
         label: _this.$t("whseField.ccbh"),
-        prop: _this.data == "成品布" ? "woOutno" : "retCode",
+        prop: "woOutno",
         span: 6,
+        display: _this.data == "成品布" ? true : false,
         placeholder: " "
       },
       {
         label: _this.$t("whseField.ccrq"),
-        prop: _this.data == "成品布" ? "woDate" : "retDate",
+        prop: "woDate",
         span: 6,
+        display: _this.data == "成品布" ? true : false,
         placeholder: " ",
         type: "date",
         format: "yyyy-MM-dd",
         valueFormat: "yyyy-MM-dd"
+      },
+      {
+        label: _this.$t("whseField.ccbh"),
+        prop: "retCode",
+        span: 6,
+        display: _this.data == _this.$t("iaoMng.hgyl") ? true : false,
+        placeholder: " "
+      },
+      {
+        label: _this.$t("whseField.ccrq"),
+        prop: "retDate",
+        span: 6,
+        placeholder: " ",
+        type: "date",
+        format: "yyyy-MM-dd",
+        valueFormat: "yyyy-MM-dd",
+        display: _this.data == _this.$t("iaoMng.hgyl") ? true : false
+      },
+      {
+        label: _this.$t("whseField.ccbh"),
+        prop: "stockId",
+        span: 6,
+        display:
+          _this.data == _this.$t("choicDlg.scfl") ||
+          _this.data == _this.$t("iaoMng.yl") ||
+          _this.data == _this.$t("choicDlg.wj") ||
+          _this.data == _this.$t("choicDlg.xz") ||
+          _this.data == _this.$t("choicDlg.rl")
+            ? true
+            : false,
+        placeholder: " "
+      },
+      {
+        label: _this.$t("whseField.ccrq"),
+        prop: "stockDate",
+        span: 6,
+        placeholder: " ",
+        type: "date",
+        format: "yyyy-MM-dd",
+        valueFormat: "yyyy-MM-dd",
+        display:
+          _this.data == _this.$t("choicDlg.scfl") ||
+          _this.data == _this.$t("iaoMng.yl") ||
+          _this.data == _this.$t("choicDlg.wj") ||
+          _this.data == _this.$t("choicDlg.xz") ||
+          _this.data == _this.$t("choicDlg.rl")
+            ? true
+            : false
       }
-
-      // {
-      //   label: _this.$t("whseField.chdh"),
-      //   prop: "purNo",
-      //   span: 6,
-      //   display: _this.data != "成品布",
-      //   placeholder: " "
-      // },
-      // {
-      //   label: _this.$t("whseField.shdh"),
-      //   display: _this.data != "成品布",
-      //   prop: "deliNo",
-      //   span: 6,
-      //   placeholder: " "
-      // },
-      // {
-      //   label: _this.$t("whseField.jyzt"),
-      //   prop: "yinStatus",
-      //   span: 6,
-      //   placeholder: " ",
-      //   type: "select",
-      //   dicData: getDIC("whse_yinstatus"),
-      //   change: () => {
-      //     _this.$nextTick(() => {
-      //       _this.getData();
-      //     });
-      //   }
-      // },
-
-      // {
-      //   label: _this.$t("whseField.cwzt"),
-      //   prop: "finStatus",
-      //   span: 6,
-      //   placeholder: " ",
-      //   type: "select",
-      //   dicData: getDIC("whse_finStatus"),
-      //   change: () => {
-      //     _this.$nextTick(() => {
-      //       _this.getData();
-      //     });
-      //   }
-      // }
     ]
   };
 }
@@ -77,56 +85,72 @@ export function rhl2F(_this) {
     column: [
       {
         label: _this.$t("whseField.ccbh"),
-        prop: _this.datas == "成品布" ? "woOutno" : "retCode",
+        prop: "woOutno",
         span: 6,
-        placeholder: " ",
-        disabled: true
+        display: _this.datas == "成品布" ? true : false,
+        disabled: true,
+        placeholder: " "
       },
       {
         label: _this.$t("whseField.ccrq"),
-        prop: _this.datas == "成品布" ? "woDate" : "retDate",
+        prop: "woDate",
+        span: 6,
+        display: _this.datas == "成品布" ? true : false,
+        placeholder: " ",
+        type: "date",
+        format: "yyyy-MM-dd",
+        valueFormat: "yyyy-MM-dd"
+      },
+      {
+        label: _this.$t("whseField.ccbh"),
+        prop: "retCode",
+        span: 6,
+        disabled: true,
+        display: _this.datas == _this.$t("iaoMng.hgyl") ? true : false,
+        placeholder: " "
+      },
+      {
+        label: _this.$t("whseField.ccrq"),
+        prop: "retDate",
         span: 6,
         placeholder: " ",
         type: "date",
         format: "yyyy-MM-dd",
         valueFormat: "yyyy-MM-dd",
-        disabled: false
+        display: _this.datas == _this.$t("iaoMng.hgyl") ? true : false
       },
-      // {
-      //   label: _this.$t("whseField.chdh"),
-      //   prop: "purNo",
-      //   span: 6,
-      //   placeholder: " ",
-      //   display: _this.datas != "成品布",
-      //   disabled: false
-      // },
-      // {
-      //   label: _this.$t("whseField.shdh"),
-      //   prop: "deliNo",
-      //   display: _this.datas != "成品布",
-      //   span: 6,
-      //   placeholder: " ",
-      //   disabled: false
-      // },
-      // {
-      //   label: _this.$t("whseField.jyzt"),
-      //   prop: "yinStatus",
-      //   span: 6,
-      //   placeholder: " ",
-      //   type: "select",
-      //   disabled: false,
-      //   display: true,
-      //   dicData: getDIC("whse_yinstatus")
-      // },
-      // {
-      //   label: _this.$t("whseField.cwzt"),
-      //   prop: "finStatus",
-      //   span: 6,
-      //   placeholder: " ",
-      //   disabled: false,
-      //   type: "select",
-      //   dicData: getDIC("whse_finStatus")
-      // },
+      {
+        label: _this.$t("whseField.ccbh"),
+        prop: "stockId",
+        span: 6,
+        disabled: true,
+        display:
+          _this.datas == _this.$t("choicDlg.scfl") ||
+          _this.datas == _this.$t("iaoMng.yl") ||
+          _this.datas == _this.$t("choicDlg.wj") ||
+          _this.datas == _this.$t("choicDlg.xz") ||
+          _this.datas == _this.$t("choicDlg.rl")
+            ? true
+            : false,
+        placeholder: " "
+      },
+      {
+        label: _this.$t("whseField.ccrq"),
+        prop: "stockDate",
+        span: 6,
+        placeholder: " ",
+        type: "date",
+        format: "yyyy-MM-dd",
+        valueFormat: "yyyy-MM-dd",
+        display:
+          _this.datas == _this.$t("choicDlg.scfl") ||
+          _this.datas == _this.$t("iaoMng.yl") ||
+          _this.datas == _this.$t("choicDlg.wj") ||
+          _this.datas == _this.$t("choicDlg.xz") ||
+          _this.datas == _this.$t("choicDlg.rl")
+            ? true
+            : false
+      },
       {
         label: _this.$t("whseField.czy"), // "操作员",
         prop: "sysCreatedby",
@@ -174,7 +198,27 @@ export function rhl1C(_this) {
       },
       {
         label: _this.$t("whseField.ccbh"),
-        prop: _this.data === "成品布" ? "woOutno" : "retCode",
+        prop: "woOutno",
+        hide: _this.data != "成品布",
+        cell: false,
+        width: 180
+      },
+      {
+        label: _this.$t("whseField.ccbh"),
+        prop: "retCode",
+        hide: _this.data != _this.$t("iaoMng.hgyl"),
+        cell: false,
+        width: 180
+      },
+      {
+        label: _this.$t("whseField.ccbh"),
+        prop: "stockId",
+        hide:
+          _this.data != _this.$t("choicDlg.scfl") &&
+          _this.data != _this.$t("iaoMng.yl") &&
+          _this.data != _this.$t("choicDlg.wj") &&
+          _this.data != _this.$t("choicDlg.xz") &&
+          _this.data != _this.$t("choicDlg.rl"),
         cell: false,
         width: 180
       },
@@ -183,18 +227,18 @@ export function rhl1C(_this) {
         prop: "retType",
         cell: false,
         width: 100,
-        hide: _this.data === "成品布" ? true : false,
         type: "select",
         dicData: [
           {
-            label: "手工入倉",
+            label: "手工出倉",
             value: "0"
           }
         ]
       },
       {
         label: _this.$t("whseField.ccrq"),
-        prop: _this.data === "成品布" ? "woDate" : "retDate",
+        prop: "woDate",
+        hide: _this.data != "成品布",
         cell: false,
         type: "date",
         format: "yyyy-MM-dd",
@@ -202,40 +246,34 @@ export function rhl1C(_this) {
         width: 120,
         align: "center"
       },
-      // {
-      //   label: _this.$t("whseField.chdh"),
-      //   prop: "purNo",
-      //   span: 6,
-      //   overHidden: true,
-      //   placeholder: " ",
-      //   hide: _this.data == "成品布",
-      //   width: 140
-      // },
-      // {
-      //   label: _this.$t("whseField.shdh"),
-      //   prop: "deliNo",
-      //   span: 6,
-      //   placeholder: " ",
-      //   overHidden: true,
-      //   hide: _this.data == "成品布",
-      //   width: 140
-      // },
-      // {
-      //   label: _this.$t("whseField.jyzt"),
-      //   prop: "yinStatus",
-      //   cell: false,
-      //   width: 120,
-      //   type: "select",
-      //   dicData: getDIC("whse_yinstatus")
-      // },
-      // {
-      //   label: _this.$t("whseField.cwzt"),
-      //   prop: "finStatus",
-      //   cell: false,
-      //   width: 135,
-      //   type: "select",
-      //   dicData: getDIC("whse_finStatus")
-      // },
+      {
+        label: _this.$t("whseField.ccrq"),
+        prop: "retDate",
+        hide: _this.data != _this.$t("iaoMng.hgyl"),
+        cell: false,
+        type: "date",
+        format: "yyyy-MM-dd",
+        valueFormat: "yyyy-MM-dd",
+        width: 120,
+        align: "center"
+      },
+      {
+        label: _this.$t("whseField.ccrq"),
+        prop: "stockDate",
+        hide:
+          _this.data != _this.$t("choicDlg.scfl") &&
+          _this.data != _this.$t("iaoMng.yl") &&
+          _this.data != _this.$t("choicDlg.wj") &&
+          _this.data != _this.$t("choicDlg.xz") &&
+          _this.data != _this.$t("choicDlg.rl"),
+        cell: false,
+        type: "date",
+        format: "yyyy-MM-dd",
+        valueFormat: "yyyy-MM-dd",
+        width: 120,
+        align: "center"
+      },
+
       {
         label: _this.$t("whseField.czy"), //"操作员",
         prop: "sysCreatedby",
@@ -689,28 +727,28 @@ export function cpb3C(_this) {
       },
       {
         label: _this.$t("whseField.gh"),
-        prop: "batchNo",
-        cell: true,
+        prop: "prodNo",
+        cell: false,
         width: 180
       },
 
       {
-        label: _this.$t("whseField.ps"),
+        label: _this.$t("whseField.ph"),
         prop: "countingNo",
-        cell: true,
+        cell: false,
         width: 80,
         align: "right"
       },
       {
         label: _this.$t("whseField.zl"),
-        prop: "weight",
+        prop: "woWeights",
         cell: true,
         width: 100,
         align: "right"
       },
       {
         label: _this.$t("whseField.dw"),
-        prop: "weightUnit",
+        prop: "woUnit",
         cell: true,
         width: 100,
         type: "select",
@@ -718,8 +756,8 @@ export function cpb3C(_this) {
       },
       {
         label: _this.$t("whseField.krbph"),
-        prop: "custTicket",
-        cell: true,
+        prop: "ticketNo",
+        cell: false,
         width: 150
       }
     ]
@@ -732,19 +770,19 @@ export function hgyl2C(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 310px)",
+    height: "calc(100vh - 265px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
     roykey: "whseChemicalinDtlaoid",
-    showSummary: true,
-    sumColumnList: [
-      {
-        label: " ",
-        name: "weight",
-        type: "sum"
-      }
-    ],
+    showSummary: false,
+    // sumColumnList: [
+    //   {
+    //     label: " ",
+    //     name: "weight",
+    //     type: "sum"
+    //   }
+    // ],
     column: [
       {
         label: "#",
@@ -753,53 +791,45 @@ export function hgyl2C(_this) {
         align: "center"
       },
 
-      // {
-      //   label: _this.$t("whseField.ylbh"),
-      //   prop: "chemicalId", // bcCode
-      //   cell: false,
-      //   width: 140
-      // },
+      {
+        label: _this.$t("whseField.ylbh"),
+        prop: "chemicalId", // bcCode
+        cell: false,
+        width: 140
+      },
       {
         label: _this.$t("whseField.ylmc"),
-        prop: "chemicalId", //CNNameLong
-        cell: true,
-        slot: true,
-        width: 350,
-        props: {
-          label: "cnnamelong",
-          value: "bcCode"
-        },
-        type: "select",
-        dicData: basChemicalmat
-      },
-      {
-        label: _this.$t("whseField.ph"),
-        prop: "batchNo",
-        cell: true,
-        width: 230
-      },
-      {
-        label: _this.$t("energy.sl"),
-        prop: "weight",
-        cell: true,
-        width: 120,
-        align: "right"
-      },
-      {
-        label: _this.$t("whseField.dw"),
-        prop: "weightUnit",
-        cell: true,
-        width: 120,
-        type: "select",
-        dicData: unit
-      },
-      {
-        label: _this.$t("energy.dj"),
-        prop: "price",
-        cell: true,
-        type: "number",
-        width: 120
+        prop: "chemicalName", //CNNameLong
+        cell: true
+        // width: 350
+        // props: {
+        //   label: "cnnamelong",
+        //   value: "bcCode"
+        // },
+        // type: "select",
+        // dicData: basChemicalmat
       }
+      // {
+      //   label: _this.$t("whseField.ph"),
+      //   prop: "batchNo",
+      //   cell: true,
+      //   width: 230
+      // },
+      // {
+      //   label: _this.$t("energy.sl"),
+      //   prop: "weight",
+      //   cell: true,
+      //   width: 120,
+      //   align: "right"
+      // },
+      // {
+      //   label: _this.$t("whseField.dw"),
+      //   prop: "weightUnit",
+      //   cell: true,
+      //   width: 120,
+      //   type: "select",
+      //   dicData: unit
+      // }
       // {
       //   label: _this.$t("whseField.xh"),
       //   prop: "modeltype",
@@ -834,16 +864,15 @@ export function yl2C(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 310px)",
+    height: "calc(100vh - 275px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
-    roykey: "whseChemicalinDtlaoid",
     showSummary: true,
     sumColumnList: [
       {
         label: " ",
-        name: "weight",
+        name: "stockQty",
         type: "sum"
       }
     ],
@@ -855,48 +884,41 @@ export function yl2C(_this) {
         align: "center"
       },
 
-      // {
-      //   label: _this.$t("whseField.ylbh1"),
-      //   prop: "chemicalId", // bcCode
-      //   cell: false,
-      //   width: 120
-      // },
+      {
+        label: _this.$t("whseField.ylbh1"),
+        prop: "materialId", // bcCode
+        cell: false,
+        width: 120
+      },
       {
         label: _this.$t("whseField.ylmc1"),
-        prop: "chemicalId", //CNNameLong
-        cell: true,
-        width: 350,
-        slot: true,
-        // overHidden: true,
-        dicData: basPigment
+        prop: "materialName", //CNNameLong
+        cell: false,
+        width: 350
+        // slot: true,
+        // // overHidden: true,
+        // dicData: basPigment
       },
       {
         label: _this.$t("whseField.ph"),
         prop: "batchNo",
-        cell: true,
+        cell: false,
         width: 230
       },
       {
         label: _this.$t("energy.sl"),
-        prop: "weight",
+        prop: "stockQty",
         cell: true,
         width: 120,
         align: "right"
       },
       {
         label: _this.$t("whseField.dw"),
-        prop: "weightUnit",
-        cell: true,
+        prop: "stockUnit",
+        cell: false,
         width: 120,
         type: "select",
         dicData: unit
-      },
-      {
-        label: _this.$t("energy.dj"),
-        prop: "price",
-        cell: true,
-        type: "number",
-        width: 120
       }
       // {
       //   label: _this.$t("whseField.ywmc"),
@@ -945,7 +967,7 @@ export function yjxz2C(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 310px)",
+    height: "calc(100vh - 265px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
@@ -954,7 +976,7 @@ export function yjxz2C(_this) {
     sumColumnList: [
       {
         label: " ",
-        name: "poQty",
+        name: "stockQty",
         type: "sum"
       }
     ],
@@ -965,71 +987,39 @@ export function yjxz2C(_this) {
         width: 50,
         align: "center"
       },
-
-      // {
-      //   label: "材料類型",
-      //   prop: "materialType", // bcCode
-      //   cell: true,
-      //   width: 120,
-      //   type: "select",
-      //   dicData: [
-      //     {
-      //       label: _this.datas,
-      //       value:
-      //         _this.datas == _this.$t("choicDlg.wj")
-      //           ? "1"
-      //           : _this.datas == _this.$t("choicDlg.xz")
-      //           ? "2"
-      //           : "3"
-      //     },
-      //     {
-      //       label: "行政用品",
-      //       value: "2"
-      //     },
-      //     {
-      //       label: "生產輔料",
-      //       value: "3"
-      //     }
-      //   ]
-      // },
+      {
+        label: _this.$t("whseField.clbh"),
+        prop: "materialId", //CNNameLong
+        cell: false,
+        width: 120
+      },
       {
         label: _this.$t("whseField.clmc"),
-        prop: "materialNum", //CNNameLong
-        cell: true,
-        width: 350,
-        slot: true
-        // overHidden: true
-        // dicData: basPigment
+        prop: "materialName", //CNNameLong
+        cell: false,
+        width: 350
       },
 
       {
         label: _this.$t("whseField.ph"),
         prop: "batchNo",
-        cell: true,
+        cell: false,
         width: 230
       },
       {
         label: _this.$t("energy.sl"),
-        prop: "poQty",
+        prop: "stockQty",
         cell: true,
         width: 120,
         align: "right"
       },
       {
         label: _this.$t("whseField.dw"),
-        prop: "unitQty",
-        cell: true,
+        prop: "stockUnit",
+        cell: false,
         width: 120,
         type: "select",
         dicData: unit
-      },
-      {
-        label: _this.$t("energy.dj"),
-        prop: "price",
-        cell: true,
-        width: 100,
-        align: "right",
-        type: "number"
       }
     ]
   };
@@ -1041,7 +1031,7 @@ export function rhl3C(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 274px)",
+    height: "calc(100vh - 229px)",
     refreshBtn: false,
     columnBtn: false,
     page: false,
@@ -1068,17 +1058,10 @@ export function rhl3C(_this) {
         width: 220
       },
       {
-        label: _this.$t("energy.dj"),
-        prop: "price",
-        cell: true,
-        type: "number",
-        width: 120
-      },
-      {
         label: _this.$t("whseField.cd"),
         prop: "origin",
         cell: true,
-        width: 120,
+        width: 140,
         type: "select",
         dicData: getDIC("bas_yarnorigin")
       },
@@ -1088,15 +1071,15 @@ export function rhl3C(_this) {
         cell: true,
         width: 120,
         align: "right"
+      },
+      {
+        label: _this.$t("whseField.dw"),
+        prop: "weightUnit",
+        cell: true,
+        width: 100,
+        type: "select",
+        dicData: unit
       }
-      // {
-      //   label: _this.$t("whseField.dw"),
-      //   prop: "weightUnit",
-      //   cell: true,
-      //   width: 100,
-      //   type: "select",
-      //   dicData: unit
-      // }
     ]
   };
 }
@@ -1107,7 +1090,7 @@ export function wjxz3C(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 274px)",
+    height: "calc(100vh - 229px)",
     refreshBtn: false,
     columnBtn: false,
     page: false,

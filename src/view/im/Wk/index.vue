@@ -43,7 +43,7 @@
           ><i style="font-size: 24px" class="el-icon-truck"></i>
           {{ $t("iaoMng.ccgl") }}</span
         >
-        <div class="main">
+        <div class="main tabs2">
           <el-row>
             <el-col :span="3">
               <avue-data-cardtext :option="cc.option1"></avue-data-cardtext
@@ -57,9 +57,9 @@
             <el-col :span="3">
               <avue-data-cardtext :option="cc.option5"></avue-data-cardtext
             ></el-col>
-            <!-- <el-col :span="3">
+            <el-col :span="3">
               <avue-data-cardtext :option="cc.option7"></avue-data-cardtext
-            ></el-col> -->
+            ></el-col>
             <el-col :span="3">
               <avue-data-cardtext :option="cc.option4"></avue-data-cardtext
             ></el-col>
@@ -67,9 +67,9 @@
             <el-col :span="3">
               <avue-data-cardtext :option="cc.wj"></avue-data-cardtext
             ></el-col>
-            <!-- <el-col :span="3">
-              <avue-data-cardtext :option="cc.xz"></avue-data-cardtext
-            ></el-col> -->
+            <el-col :span="3">
+              <avue-data-cardtext :option="cc.rl"></avue-data-cardtext
+            ></el-col>
           </el-row>
         </div>
       </el-tab-pane>
@@ -776,6 +776,14 @@ export default {
               icon: "el-icon-thumb",
               color: "#409EFF",
             },
+            {
+              click: () => {
+                this.$router.push("proRevolve");
+              },
+              title: "备布出仓",
+              icon: "el-icon-thumb",
+              color: "#409EFF",
+            },
           ],
         },
         option3: {
@@ -859,6 +867,14 @@ export default {
               color: "#409EFF",
               // content: "调仓出库看板",
             },
+            {
+              click: () => {
+                this.toView("cc_manual", this.$t("iaoMng.scfl") + "_0");
+              },
+              title: "手工出仓",
+              icon: "el-icon-thumb",
+              color: "#409EFF",
+            },
           ],
         },
         option5: {
@@ -906,6 +922,14 @@ export default {
               color: "#409EFF",
               // content: "调仓出库看板",
             },
+            {
+              click: () => {
+                this.toView("cc_manual", this.$t("iaoMng.hgyl") + "_0");
+              },
+              title: "手工出仓",
+              icon: "el-icon-thumb",
+              color: "#409EFF",
+            },
           ],
         },
         option7: {
@@ -916,13 +940,21 @@ export default {
               icon: "yx-icf-cailiaogongcheng",
               color: "#606266",
             },
+            {
+              click: () => {
+                this.toView("cc_manual", this.$t("iaoMng.yl") + "_0");
+              },
+              title: "手工出仓",
+              icon: "el-icon-thumb",
+              color: "#409EFF",
+            },
           ],
         },
         wj: {
           span: 24,
           data: [
             {
-              title: "五金/行政出库",
+              title: "五金出库",
               icon: "el-icon-s-claim",
               color: "#606266",
             },
@@ -952,45 +984,78 @@ export default {
               icon: "el-icon-s-claim",
               color: "#409EFF",
               // content: "调仓出库看板",
+            },
+            {
+              click: () => {
+                this.toView("cc_manual", this.$t("choicDlg.wj") + "_0");
+              },
+              title: "手工出仓",
+              icon: "el-icon-thumb",
+              color: "#409EFF",
+            },
+            {
+              title: "行政出库",
+              icon: "el-icon-s-claim",
+              color: "#606266",
+            },
+            {
+              click: () => {
+                this.toView("cc_wjxz", "生产领用_1");
+              },
+              title: "领用出库",
+              icon: "el-icon-s-claim",
+              color: "#409EFF",
+              // content: "领用出库看板",
+            },
+            {
+              click: () => {
+                this.toView("cc_wjxz", "退供应商_4");
+              },
+              title: "退供应商出库",
+              icon: "el-icon-s-claim",
+              color: "#409EFF",
+              // content: "退供应商出库看板",
+            },
+            {
+              click: () => {
+                this.toView("cc_wjxz", "调仓出库_5");
+              },
+              title: "调仓出库",
+              icon: "el-icon-s-claim",
+              color: "#409EFF",
+              // content: "调仓出库看板",
+            },
+            {
+              click: () => {
+                this.toView("cc_manual", this.$t("choicDlg.xz") + "_0");
+              },
+              title: "手工出仓",
+              icon: "el-icon-thumb",
+              color: "#409EFF",
+            },
+          ],
+        },
+        rl: {
+          span: 24,
+          data: [
+            {
+              title: "燃料出库",
+              icon: "yx-icf-cailiaogongcheng",
+              color: "#606266",
+            },
+            {
+              click: () => {
+                this.toView("cc_manual", this.$t("choicDlg.rl") + "_0");
+              },
+              title: "手工出仓",
+              icon: "el-icon-thumb",
+              color: "#409EFF",
             },
           ],
         },
         xz: {
           span: 24,
-          data: [
-            {
-              title: "五金/行政出库",
-              icon: "el-icon-s-claim",
-              color: "#606266",
-            },
-            {
-              click: () => {
-                this.toView("cc_wjxz", "生产领用_1");
-              },
-              title: "领用出库",
-              icon: "el-icon-s-claim",
-              color: "#409EFF",
-              // content: "领用出库看板",
-            },
-            {
-              click: () => {
-                this.toView("cc_wjxz", "退供应商_4");
-              },
-              title: "退供应商出库",
-              icon: "el-icon-s-claim",
-              color: "#409EFF",
-              // content: "退供应商出库看板",
-            },
-            {
-              click: () => {
-                this.toView("cc_wjxz", "调仓出库_5");
-              },
-              title: "调仓出库",
-              icon: "el-icon-s-claim",
-              color: "#409EFF",
-              // content: "调仓出库看板",
-            },
-          ],
+          data: [],
         },
       },
       option: {
@@ -1312,7 +1377,7 @@ export default {
     display: none;
   }
 
-  .avue-data-cardText .el-col:nth-child(1) .item, .tabs1 .el-col:nth-child(7) .avue-data-cardText .el-col:nth-child(3) .item {
+  .avue-data-cardText .el-col:nth-child(1) .item, .tabs1 .el-col:nth-child(7) .avue-data-cardText .el-col:nth-child(3) .item, .tabs2 .el-col:nth-child(7) .avue-data-cardText .el-col:nth-child(6) .item {
     background-color: #ccc;
     min-height: 20px;
 

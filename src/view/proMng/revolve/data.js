@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-07-16 20:36:32
+ * @LastEditTime: 2021-07-17 10:23:20
  * @Description:
  */
 
@@ -514,18 +514,6 @@ export function mainCrud(_this) {
         placeholder: " "
       },
       {
-        label: "对色光源",
-        tip: "Nguồn sáng so màu",
-        prop: "compLightSource",
-        width: 120,
-        hide: true,
-        span: 6,
-        placeholder: " ",
-        multiple: true,
-        type: "select",
-        dicData: getDIC("sal_colorLights")
-      },
-      {
         label: "规格参考",
         tip: "Tiêu chuẩn chất lượng",
         prop: "specParam",
@@ -534,6 +522,19 @@ export function mainCrud(_this) {
         span: 6,
         placeholder: " "
       },
+      {
+        label: "对色光源",
+        tip: "Nguồn sáng so màu",
+        prop: "compLightSource",
+        width: 120,
+        hide: true,
+        span: 12,
+        placeholder: " ",
+        multiple: true,
+        type: "select",
+        dicData: getDIC("sal_colorLights")
+      },
+
       {
         label: "生产用机种",
         prop: "dyeVatType",
@@ -572,15 +573,15 @@ export function mainCrud(_this) {
         // hide: true,
         placeholder: " "
       },
-      {
-        label: "审核",
-        // tip:"Nhận hàng yêu cầu",
-        prop: "auditor",
-        width: 80,
-        span: 6,
-        hide: true,
-        placeholder: " "
-      },
+      // {
+      //   label: "审核",
+      //   // tip:"Nhận hàng yêu cầu",
+      //   prop: "auditor",
+      //   width: 80,
+      //   span: 6,
+      //   hide: true,
+      //   placeholder: " "
+      // },
       {
         label: "收货要求",
         tip: "Nhận hàng yêu cầu",

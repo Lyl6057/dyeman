@@ -39,7 +39,6 @@
               :data="crud"
               :page.sync="page"
               v-loading="loading"
-              @on-load="query"
               @row-dblclick="handleRowDBLClick"
               @current-row-change="cellClick"
               @selection-change="selectionChange"
@@ -78,7 +77,29 @@ import {
   resolveC,
   resolveF,
   getResolve,
+  ylInC,
+  ylInF,
+  getYlIn,
+  scflInC,
+  scflInF,
+  getScflIn,
+  wjInC,
+  wjInF,
+  getWjIn,
+  xzInC,
+  xzInF,
+  getXzIn,
+  hgylInF,
+  hgylInC,
+  getHgylIn,
+  rlInC,
+  rlInF,
+  getRlIn,
+  cpbInC,
+  cpbInF,
+  getCpbIn,
 } from "./data";
+
 export default {
   name: "",
   components: {},
@@ -195,7 +216,15 @@ export default {
               return a.bleadyeCode > b.bleadyeCode ? 1 : -1;
             });
           }
+
           this.crud.forEach((item, index) => {
+            if (
+              this.choiceTle == "选择生产辅料入仓信息" ||
+              this.choiceTle == "选择五金入仓信息" ||
+              this.choiceTle == "选择燃料入仓信息"
+            ) {
+              item.materialName = item.materialNum;
+            }
             item.index = index + 1;
             if (index === this.crud.length - 1) {
               setTimeout(() => {
@@ -250,6 +279,41 @@ export default {
   },
   created() {
     switch (this.choiceTle) {
+      case "选择成品布入仓信息":
+        this.choiceC = cpbInC(this);
+        this.choiceF = cpbInF(this);
+        this.getData = getCpbIn;
+        break;
+      case "选择燃料入仓信息":
+        this.choiceC = rlInC(this);
+        this.choiceF = rlInF(this);
+        this.getData = getRlIn;
+        break;
+      case "选择化工原料入仓信息":
+        this.choiceC = hgylInC(this);
+        this.choiceF = hgylInF(this);
+        this.getData = getHgylIn;
+        break;
+      case "选择行政入仓信息":
+        this.choiceC = xzInC(this);
+        this.choiceF = xzInF(this);
+        this.getData = getXzIn;
+        break;
+      case "选择五金入仓信息":
+        this.choiceC = wjInC(this);
+        this.choiceF = wjInF(this);
+        this.getData = getWjIn;
+        break;
+      case "选择生产辅料入仓信息":
+        this.choiceC = scflInC(this);
+        this.choiceF = scflInF(this);
+        this.getData = getScflIn;
+        break;
+      case "选择颜料入仓信息":
+        this.choiceC = ylInC(this);
+        this.choiceF = ylInF(this);
+        this.getData = getYlIn;
+        break;
       case "选择胚布信息":
         this.choiceC = clothNoteC(this);
         this.choiceF = clothNoteF(this);
@@ -299,9 +363,9 @@ export default {
   },
   mounted() {},
   updated() {
-    this.$nextTick(() => {
-      this.$refs["crud"].doLayout();
-    });
+    // this.$nextTick(() => {
+    //   this.$refs["crud"].doLayout();
+    // });
   },
   beforeDestroy() {},
 };

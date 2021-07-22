@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-06-26 14:07:25
+ * @LastEditTime: 2021-07-17 10:16:22
  * @Description:
  */
 
@@ -15,34 +15,34 @@ export function mainForm(_this) {
     labelWidth: 120,
     column: [
       {
+        label: "缸号",
+        tip: "缸号(số lô nhuộm)",
+        prop: "vatNo",
+        span: 6,
+        placeholder: " "
+      },
+      {
         label: "客户名称",
         tip: "Khách hàng",
         prop: "custCode",
         span: 6,
-        placeholder: " ",
-        type: "select",
-        dicData: cust
+        placeholder: " "
+        // type: "select",
+        // dicData: cust
         // dicData: getDicT("basCustomer", "custName", "custCode")
       },
       {
-        label: "订单号",
-        tip: "Số đơn hàng",
-        prop: "orderNo",
+        label: "织造通知单",
+        prop: "weaveJobCode",
+        tip: "织造通知单(Mã đơn dệt)",
         span: 6,
         placeholder: " "
       },
 
       {
-        label: "布料编号",
-        tip: "Mã vải",
-        prop: "fabricCode",
-        span: 6,
-        placeholder: " "
-      },
-      {
-        label: "开始日期",
-        tip: "Ngày bắt đầu nhận đơn",
-        prop: "startDate",
+        label: "开单日期",
+        tip: "开单日期(Ngày lập đơn)",
+        prop: "startJobDate",
         span: 6,
         placeholder: " "
       }

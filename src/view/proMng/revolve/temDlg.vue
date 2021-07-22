@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-07-16 20:36:57
+ * @LastEditTime: 2021-07-19 10:44:55
  * @Description:
 -->
 <template>
@@ -368,10 +368,6 @@ export default {
       this.form.test = [];
       this.form.item = [];
       if (this.isAdd) {
-        let whseData = getXDicT("whseCalicoinDtlb/v1.0/list");
-        this.bfOp.column[2].dicData = whseData;
-        this.bfOp.column[6].dicData = whseData;
-        this.form.bf = bf.data;
         setTimeout(() => {
           baseCodeSupplyEx({ code: "dye_batch" }).then((res) => {
             this.form.workDate = this.$getNowTime();
@@ -539,7 +535,7 @@ export default {
             data.test = null;
             data.item = null;
             data.poAmountLb = Number((data.poAmountKg * 2.204623).toFixed(2));
-            data.pidCount = this.form.bf.length || 0;
+            // data.pidCount = this.form.bf.length || 0;
             if (data.runJobId) {
               // update
               data.upateTime = this.$getNowTime("datetime");
@@ -650,7 +646,6 @@ export default {
               whseCalicoinDtlboid: item.$whseCalicoinDtlboid,
             });
           }
-          console.log(item);
           if (item.recId) {
             // 修改布飞运转记录
             updateBf(item).then((res) => {});
@@ -702,15 +697,17 @@ export default {
       }
       if (this.choiceTle == "选择织造通知单") {
         val.fabName = val.fabricDesc;
-        val.gramWeightAfter = isNaN(val.gramWeight) ? 0 : val.gramWeight;
-        val.shrinkLenth = isNaN(val.verticalShrink) ? 0 : val.verticalShrink;
-        val.shrinkWidth = isNaN(val.horizonShrink) ? 0 : val.horizonShrink;
+        val.breadthActual = val.breadth;
+        val.gramWeightBefor = val.gramWeight;
+        // val.gramWeightAfter = isNaN(val.gramWeight) ? 0 : val.gramWeight;
+        val.shrinkLenth = val.verticalShrink;
+        val.shrinkWidth = val.horizonShrink;
         val.clothWeight = isNaN(val.amount) ? 0 : val.amount;
         val.fabElements = val.fiberComp;
         val.poAmountKg = val.clothWeight;
         val.fabElements = val.fiberComp;
         val.poAmountKg = val.clothWeight;
-        val.tubeDiam = val.needleInch;
+        // val.tubeDiam = val.needleInch;
         val.needleDist = val.guage;
         val.salPoNo = val.custPoNo;
         this.form = val;

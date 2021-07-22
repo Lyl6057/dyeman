@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-04-01 13:39:35
  * @LastEditors: Lyl
- * @LastEditTime: 2021-07-16 08:33:16
+ * @LastEditTime: 2021-07-17 09:48:09
  * @Description:
  */
 
@@ -56,11 +56,11 @@ export function whseMng(_this) {
         {
           menuName: "1.库存期初定义", //'1.仓位管理'
           index: "/ityBasic"
-        },
-        {
-          menuName: "2.生产运转", //'2.生产运转'
-          index: "/proRevolve"
         }
+        // {
+        //   menuName: "2.生产运转出仓", //'2.生产运转'
+        //   index: "/proRevolve"
+        // }
         // {
         //   menuName: "2.仓库载具管理", //'1.仓位管理'
         //   index: "/whseVehicle"

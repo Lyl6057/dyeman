@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-07-16 23:05:14
+ * @LastEditTime: 2021-07-19 08:35:13
  * @Description: 
 -->
 <template>
@@ -11,7 +11,7 @@
     :element-loading-text="$t('public.loading')"
     v-loading="wLoading"
   >
-    <view-container title="生产运转">
+    <view-container title="生产备布">
       <div class="btnList">
         <el-button
           type="primary"
@@ -116,8 +116,8 @@
       <view-container title="胚布裁剪">
         <div class="btnList">
           <el-button type="success" @click="save2">保存</el-button>
-          <!-- <el-button type="primary">裁剪</el-button -->
-          ><el-button type="warning">关闭</el-button>
+          <!-- <el-button type="primary">裁剪</el-button> -->
+          <el-button type="warning">关闭</el-button>
         </div>
         <div class="formBox">
           <avue-form ref="dlgForm" :option="dlgFormOp" v-model="dlgForm">
@@ -230,7 +230,7 @@ export default {
           delete this.form[key];
         }
       }
-      get(this.form).then((res) => {
+      get({ vatNo: this.form.vatNo }).then((res) => {
         if (res.data.length) {
           this.form = res.data[0];
           this.history = [];
@@ -303,10 +303,12 @@ export default {
         this.loading = true;
         let data = JSON.parse(JSON.stringify(this.history[val - 1]));
         this.dlgForm.noteCode = val;
-        data.clothWeight =
-          data.clothWeight - (this.weight - this.form.clothWeight); // 剩余
-        this.dlgForm.outWeight =
-          this.history[val - 1].clothWeight - data.clothWeight;
+        data.clothWeight = Number(
+          data.clothWeight - (this.weight - this.form.clothWeight)
+        ).toFixed(2); // 剩余
+        this.dlgForm.outWeight = Number(
+          this.history[val - 1].clothWeight - data.clothWeight
+        ).toFixed(2);
         data.realWeight = data.clothWeight;
         data.qcTakeOut = 0;
         data.noteCode += "-A";
@@ -318,7 +320,7 @@ export default {
     save2() {
       this.dLoading = true;
       let whseId = "";
-      baseCodeSupplyEx({ code: "pb_out_whse" }).then((res) => {
+      baseCodeSupplyEx({ code: "whse_out" }).then((res) => {
         addOutWhse({
           retType: "1",
           retDate: this.$getNowTime("datetime"),
@@ -327,33 +329,36 @@ export default {
           sysCreated: this.$getNowTime("datetime"),
           sysCreatedby: this.$store.state.userOid,
         }).then((res) => {
-          baseCodeSupply({ code: "pb_out_whse" }).then((res) => {});
-          whseId = res.data.data;
-          addOutWhseDla({
-            calicoId: this.form.weaveJobCode,
-            whseMaterialFk: whseId,
-          }).then((dla) => {
-            this.history.forEach((item, i) => {
-              if (i == this.dlgForm.noteCode - 1) {
-                // 裁剪的胚布
-                addOutWhseDlb({
-                  batchNo: "test01",
-                  countingNo: i + 1,
-                  custTicket: this.dlgCrud[0].noteCode,
-                  weight: this.dlgCrud[0].clothWeight, // 裁剪后胚布
-                  weightUnit: item.weightUnit,
-                  whseMaterialDlaFk: dla.data.data,
-                }).then();
-              } else {
-                addOutWhseDlb({
-                  batchNo: "test01",
-                  countingNo: i + 1,
-                  custTicket: item.noteCode,
-                  weight: item.clothWeight,
-                  weightUnit: item.weightUnit,
-                  whseMaterialDlaFk: dla.data.data,
-                }).then();
-              }
+          baseCodeSupply({ code: "whse_out" }).then((res) => {});
+          baseCodeSupplyEx({ code: "pb_out_whse" }).then((outPh) => {
+            baseCodeSupply({ code: "pb_out_whse" }).then((res) => {});
+            whseId = res.data.data;
+            addOutWhseDla({
+              calicoId: this.form.weaveJobCode,
+              whseMaterialFk: whseId,
+            }).then((dla) => {
+              this.history.forEach((item, i) => {
+                if (i == this.dlgForm.noteCode - 1) {
+                  // 裁剪的胚布
+                  addOutWhseDlb({
+                    batchNo: outPh.data.data,
+                    countingNo: i + 1,
+                    custTicket: this.dlgCrud[0].noteCode,
+                    weight: this.dlgCrud[0].clothWeight, // 裁剪后胚布
+                    weightUnit: item.weightUnit,
+                    whseMaterialDlaFk: dla.data.data,
+                  }).then();
+                } else {
+                  addOutWhseDlb({
+                    batchNo: outPh.data.data,
+                    countingNo: i + 1,
+                    custTicket: item.noteCode,
+                    weight: item.clothWeight,
+                    weightUnit: item.weightUnit,
+                    whseMaterialDlaFk: dla.data.data,
+                  }).then();
+                }
+              });
             });
           });
         });
@@ -377,15 +382,15 @@ export default {
               noteId: item.noteId,
               clothWeight: this.dlgForm.outWeight,
             }).then((res) => {}); //1.修改原布票重量
-            getInwhse({ custTicket: item.noteCode }).then((res) => {
-              if (res.data.length > 0) {
-                // 有入仓记录,重量全部出完
-                updateInwhse({
-                  whseCalicoinDtlboid: res.data[0].whseCalicoinDtlboid,
-                  weight: this.dlgForm.outWeight, // 剩余重量
-                }).then();
-              }
-            });
+            // getInwhse({ custTicket: item.noteCode }).then((res) => {
+            //   if (res.data.length > 0) {
+            //     // 有入仓记录,重量全部出完
+            //     updateInwhse({
+            //       whseCalicoinDtlboid: res.data[0].whseCalicoinDtlboid,
+            //       weight: this.dlgForm.outWeight, // 剩余重量
+            //     }).then();
+            //   }
+            // });
 
             if (i == this.history.length - 1) {
               setTimeout(() => {
@@ -399,15 +404,15 @@ export default {
             updateNote({ noteId: item.noteId, clothState: 3 }).then(
               (res) => {}
             ); //1.布票状态为出仓
-            getInwhse({ custTicket: item.noteCode }).then((res) => {
-              if (res.data.length > 0) {
-                // 有入仓记录,重量全部出完
-                updateInwhse({
-                  whseCalicoinDtlboid: res.data[0].whseCalicoinDtlboid,
-                  weight: 0,
-                }).then();
-              }
-            });
+            // getInwhse({ custTicket: item.noteCode }).then((res) => {
+            //   if (res.data.length > 0) {
+            //     // 有入仓记录,重量全部出完
+            //     updateInwhse({
+            //       whseCalicoinDtlboid: res.data[0].whseCalicoinDtlboid,
+            //       weight: 0,
+            //     }).then();
+            //   }
+            // });
             addCalico({
               clothNoteCode: item.noteCode,
               clothNoteId: item.noteId,
@@ -430,7 +435,7 @@ export default {
     save() {
       this.wLoading = true;
       let whseId = "";
-      baseCodeSupplyEx({ code: "pb_out_whse" }).then((res) => {
+      baseCodeSupplyEx({ code: "whse_out" }).then((res) => {
         addOutWhse({
           retType: "1",
           retDate: this.$getNowTime("datetime"),
@@ -439,35 +444,38 @@ export default {
           sysCreated: this.$getNowTime("datetime"),
           sysCreatedby: this.$store.state.userOid,
         }).then((res) => {
-          baseCodeSupply({ code: "pb_out_whse" }).then((res) => {});
-          whseId = res.data.data;
-          addOutWhseDla({
-            calicoId: this.form.weaveJobCode,
-            whseMaterialFk: whseId,
-          }).then((dla) => {
-            this.history.forEach((item, i) => {
-              addOutWhseDlb({
-                batchNo: "test01",
-                countingNo: i + 1,
-                custTicket: item.noteCode,
-                weight: item.clothWeight,
-                weightUnit: item.weightUnit,
-                whseMaterialDlaFk: dla.data.data,
-              }).then();
+          baseCodeSupply({ code: "whse_out" }).then((res) => {});
+          baseCodeSupplyEx({ code: "pb_out_whse" }).then((outPh) => {
+            baseCodeSupply({ code: "pb_out_whse" }).then((res) => {});
+            whseId = res.data.data;
+            addOutWhseDla({
+              calicoId: this.form.weaveJobCode,
+              whseMaterialFk: whseId,
+            }).then((dla) => {
+              this.history.forEach((item, i) => {
+                addOutWhseDlb({
+                  batchNo: outPh.data.data,
+                  countingNo: i + 1,
+                  custTicket: item.noteCode,
+                  weight: item.clothWeight,
+                  weightUnit: item.weightUnit,
+                  whseMaterialDlaFk: dla.data.data,
+                }).then();
+              });
             });
           });
         });
         this.history.forEach((item, i) => {
           updateNote({ noteId: item.noteId, clothState: 3 }).then((res) => {}); //1.布票状态为出仓
-          getInwhse({ custTicket: item.noteCode }).then((res) => {
-            if (res.data.length > 0) {
-              // 有入仓记录,重量全部出完
-              updateInwhse({
-                whseCalicoinDtlboid: res.data[0].whseCalicoinDtlboid,
-                weight: 0,
-              }).then();
-            }
-          });
+          // getInwhse({ custTicket: item.noteCode }).then((res) => { // 入仓记录不改变重量
+          //   if (res.data.length > 0) {
+          //     // 有入仓记录,重量全部出完
+          //     updateInwhse({
+          //       whseCalicoinDtlboid: res.data[0].whseCalicoinDtlboid,
+          //       weight: 0,
+          //     }).then();
+          //   }
+          // });
           addCalico({
             clothNoteCode: item.noteCode,
             clothNoteId: item.noteId,
