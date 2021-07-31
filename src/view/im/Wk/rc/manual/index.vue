@@ -32,6 +32,12 @@
           <el-button type="primary" @click="getData">{{
             this.$t("public.query")
           }}</el-button>
+          <el-button
+            type="success"
+            :disabled="Object.keys(chooseData).length === 0"
+            @click="Audit(chooseData)"
+            >审核</el-button
+          >
           <el-button type="warning" @click="close">{{
             this.$t("public.close")
           }}</el-button>
@@ -528,6 +534,7 @@ export default {
         yinDate: this.getNowTime(),
         yinStatus: "1",
         finStatus: "0",
+        stockState: "0",
       };
       baseCodeSupplyEx({ code: this.everyThing.code }).then((res) => {
         data.yinId = res.data.data;
@@ -608,10 +615,42 @@ export default {
         });
     },
     cellClick(val) {
-      this.oldData.$cellEdit = false;
-      this.$set(val, "$cellEdit", true);
+      // this.oldData.$cellEdit = false;
+      // this.$set(val, "$cellEdit", true);
       this.oldData = val;
       this.chooseData = val;
+    },
+    Audit(val) {
+      if (Object.keys(this.chooseData).length === 0) {
+        this.$tip.error("请选择要审核的数据!");
+        return;
+      }
+      this.$tip
+        .cofirm(
+          "是否确定审核通过入仓编号为 【 " +
+            this.chooseData.yinId +
+            " 】的数据",
+          this,
+          {}
+        )
+        .then(() => {
+          this.everyThing
+            .update(Object.assign(this.chooseData, { stockState: 1 }))
+            .then((res) => {
+              if (res.data.code === 200) {
+                this.$tip.success("审核成功!");
+                this.getData();
+              } else {
+                this.$tip.error("审核失败!");
+              }
+            })
+            .catch((err) => {
+              this.$tip.error(this.$t("public.scsb"));
+            });
+        })
+        .catch((err) => {
+          this.$tip.warning(this.$t("public.qxcz"));
+        });
     },
     close() {
       document.getElementsByClassName("el-dialog__headerbtn")[0].click();

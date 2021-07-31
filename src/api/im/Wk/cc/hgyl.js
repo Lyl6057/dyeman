@@ -2,56 +2,56 @@ import axios from "axios";
 
 export function getHgyl(params) {
   return axios({
-    url: "/api/whseChemical/page",
+    url: "/api/whseChemicalOut/page",
     method: "get",
     params: params
   });
 }
 export function addHgyl(params) {
   return axios({
-    url: "/api/whseChemical",
+    url: "/api/whseChemicalOut",
     method: "post",
     params: params
   });
 }
 export function updateHgyl(params) {
   return axios({
-    url: "/api/whseChemical",
+    url: "/api/whseChemicalOut",
     method: "put",
     params: params
   });
 }
 export function delHgyl(id) {
   return axios({
-    url: "/api/whseChemical?whseChemicaloid=" + id,
+    url: "/api/whseChemicalOut?whseChemicalOutId=" + id,
     method: "delete"
   });
 }
 
 export function getHgylDtl(params) {
   return axios({
-    url: "/api/whseChemicalDla/page",
+    url: "/api/whseChemicalOutdtl/page",
     method: "get",
     params: params
   });
 }
 export function addHgylDtl(params) {
   return axios({
-    url: "/api/whseChemicalDla",
+    url: "/api/whseChemicalOutdtl",
     method: "post",
     params: params
   });
 }
 export function updateHgylDtl(params) {
   return axios({
-    url: "/api/whseChemicalDla",
+    url: "/api/whseChemicalOutdtl",
     method: "put",
     params: params
   });
 }
 export function delHgylDtl(id) {
   return axios({
-    url: "/api/whseChemicalDla?whseChemicalDlaoid=" + id,
+    url: "/api/whseChemicalOutdtl?whseChemicalOutdtlId=" + id,
     method: "delete"
   });
 }

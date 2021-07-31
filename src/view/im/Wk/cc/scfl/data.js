@@ -91,17 +91,21 @@ export function rsxkr2F(_this) {
           if (_this.form.stockType === "2") {
             return;
           }
-          _this.choiceV = !_this.choiceV;
+
           _this.choiceField = "spNo";
           _this.oldData = _this.chooseData;
           _this.choiceTarget = _this.oldData;
           _this.mx = [];
           if (_this.form.stockType === "1") {
             _this.choiceQ.purCategory = "3";
-            _this.choiceTle = "申购单";
+            _this.choiceTle = _this.$t("choicDlg.xzsgd");
           } else {
+            _this.choiceQ.type = "5";
+            _this.choiceQ.applyState = "3";
+            _this.choiceQ.collectSucceed = 0;
             _this.choiceTle = _this.$t("choicDlg.xzsqlyd");
           }
+          _this.choiceV = !_this.choiceV;
         },
         placeholder: " ",
         display: _this.hide === "1" ? true : false,

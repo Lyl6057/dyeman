@@ -236,6 +236,17 @@ export function rhl1C(_this) {
         dicData: getDIC("whse_finStatus")
       },
       {
+        label: "入仓状态",
+        prop: "stockState",
+        span: 6,
+        cell: false,
+        placeholder: " ",
+        type: "select",
+        dicData: getDIC("whse_outStatus"),
+        // hide: _this.hide != "6",
+        width: 120
+      },
+      {
         label: _this.$t("whseField.czy"), //"操作员",
         prop: "sysCreatedby",
         span: 6,
@@ -554,7 +565,7 @@ export function sx2C(_this) {
       {
         label: _this.$t("whseField.ph"),
         prop: "batchNo",
-        cell: true,
+        cell: false,
         width: 120
       },
       {
@@ -757,7 +768,7 @@ export function cpb2C(_this) {
       {
         label: _this.$t("whseField.gh"),
         prop: "batchNo",
-        cell: true,
+        cell: false,
         width: 230
       },
       {
@@ -867,7 +878,7 @@ export function hgyl2C(_this) {
       {
         label: _this.$t("whseField.ph"),
         prop: "batchNo",
-        cell: true,
+        cell: false,
         width: 230
       },
       {
@@ -892,6 +903,14 @@ export function hgyl2C(_this) {
         cell: true,
         type: "number",
         width: 120
+      },
+      {
+        label: "货币类型",
+        prop: "currencyType",
+        cell: true,
+        width: 120,
+        type: "select",
+        dicData: getDIC("whse_money_type")
       }
       // {
       //   label: _this.$t("whseField.xh"),
@@ -966,7 +985,7 @@ export function yl2C(_this) {
       {
         label: _this.$t("whseField.ph"),
         prop: "batchNo",
-        cell: true,
+        cell: false,
         width: 230
       },
       {
@@ -999,6 +1018,14 @@ export function yl2C(_this) {
         cell: true,
         type: "number",
         width: 120
+      },
+      {
+        label: "货币类型",
+        prop: "currencyType",
+        cell: true,
+        width: 120,
+        type: "select",
+        dicData: getDIC("whse_money_type")
       }
       // {
       //   label: _this.$t("whseField.ywmc"),
@@ -1107,7 +1134,7 @@ export function yjxz2C(_this) {
       {
         label: _this.$t("whseField.ph"),
         prop: "batchNo",
-        cell: true,
+        cell: false,
         width: 230
       },
       {
@@ -1167,7 +1194,7 @@ export function rhl3C(_this) {
       {
         label: _this.$t("whseField.ph"),
         prop: "batchNo",
-        cell: true,
+        cell: false,
         width: 220
       },
       {

@@ -11,9 +11,13 @@
         <el-button type="success" @click="savePlan" v-if="canSave && isPlan">{{
           this.$t("public.save")
         }}</el-button>
-        <el-button type="success" @click="save" v-if="!isPlan">{{
-          this.$t("public.save")
-        }}</el-button>
+        <el-button
+          type="success"
+          @click="save"
+          v-if="!isPlan"
+          :disabled="detail.stockState == '1'"
+          >{{ this.$t("public.save") }}</el-button
+        >
         <el-button type="warning" @click="close">{{
           this.$t("public.close")
         }}</el-button>
@@ -22,16 +26,30 @@
         <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
       </div>
       <el-row>
-        <el-col :span="hide === '4' || hide === '3' || hide === '5' ? 24 : 12">
+        <el-col
+          :span="
+            hide === '1' || hide === '4' || hide === '3' || hide === '5'
+              ? 24
+              : 12
+          "
+        >
           <view-container :title="datas.type.split('_')[0] + '明细'">
             <div class="btnList" style="margin-bottom: 2px">
               <!-- <el-button type="primary" @click="getDetail">{{this.$t("public.query")}}</el-button> -->
-              <el-button type="primary" @click="add" v-if="canSave">{{
-                this.$t("public.add")
-              }}</el-button>
-              <el-button type="danger" @click="del" v-if="canSave">{{
-                this.$t("public.del")
-              }}</el-button>
+              <el-button
+                type="primary"
+                @click="add"
+                v-if="canSave"
+                :disabled="detail.stockState == '1'"
+                >{{ this.$t("public.add") }}</el-button
+              >
+              <el-button
+                type="danger"
+                @click="del"
+                v-if="canSave"
+                :disabled="detail.stockState == '1'"
+                >{{ this.$t("public.del") }}</el-button
+              >
 
               <!-- <el-button type="warning" @click="getDetail">取消</el-button>
        -->
@@ -46,7 +64,10 @@
               @on-load="getDetail"
             ></avue-crud> </view-container
         ></el-col>
-        <el-col :span="12" v-if="hide != '4' && hide != '3' && hide != '5'">
+        <el-col
+          :span="12"
+          v-if="hide != '4' && hide != '3' && hide != '5' && hide != '1'"
+        >
           <view-container :title="datas.type.split('_')[0] + '批号资料'">
             <div class="btnList" style="margin-bottom: 2px">
               <!-- <el-button type="primary" @click="getDetail">{{this.$t("public.query")}}</el-button> -->
@@ -128,12 +149,21 @@
       @close="choiceV = false"
       v-if="choiceV"
     ></choice>
+    <pro-choice
+      ref="proChoice"
+      :choiceV="proChoiceV"
+      :choiceTle="proChoiceTle"
+      :choiceQ="proChoiceQ"
+      dlgWidth="100%"
+      @choiceData="proChoiceData"
+      @close="proChoiceV = false"
+      v-if="proChoiceV"
+    ></pro-choice>
   </div>
 </template>
 <script>
 import { rsxkr2C, rsxkr2F, sxForm, rsxkr3C, rcpb3C } from "./data";
 import choice from "@/components/choice";
-import {} from "../../rc/pb/data"; // 入仓
 import { getPb, getPbDetali, getPbDetaliList, getPbPh } from "@/api/im/Wk/rc";
 import {
   getPbDetalis,
@@ -176,6 +206,14 @@ import {
   updateTransfercalicoDtl,
   delTransfercalicoDtl,
 } from "@/api/im/Wk/cc/pb";
+import { baseCodeSupply, updatePurApp } from "@/api/index";
+import {
+  getHgylDtl,
+  addHgylDtl,
+  delHgylDtl,
+  updateHgylDtl,
+} from "@/api/im/Wk/cc/hgyl";
+import proChoice from "@/components/proMng/index";
 export default {
   props: {
     datas: Object,
@@ -184,18 +222,22 @@ export default {
     detail: Object,
     isPlan: Boolean,
     PlanForm: Object,
+    isAdd: Boolean,
   },
   name: "",
   components: {
     choice: choice,
+    proChoice: proChoice,
   },
   data() {
     return {
       loading: false,
+      tloading: false,
       page: {
-        pageSize: 10,
+        pageSize: 20,
         currentPage: 1,
         total: 0,
+        pageSizes: [20, 50, 100, 200, 500],
       },
       rcPage: {
         pageSize: 10,
@@ -238,25 +280,18 @@ export default {
       choiceTarget: {},
       choiceField: "",
       choiceQ: {},
+      saved: false,
+      sysCreatedby: "",
+      proChoiceV: false,
+      proChoiceTle: "选择化工原料入仓信息",
+      proChoiceQ: {},
+      purApp: {},
     };
   },
   watch: {},
   methods: {
     getDetail() {
       this.loading = true;
-      if (
-        Object.keys(this.detail).length === 0 ||
-        (!this.detail.whseCalicoselloutoid &&
-          !this.detail.whseMaterialoid &&
-          !this.detail.whseRetsuppcalicooid &&
-          !this.detail.whseRetguestcalicooid &&
-          !this.detail.whseTransfercalicooid)
-      ) {
-        this.mx = [];
-        this.loading = false;
-        return;
-      }
-
       if (this.hide === "3") {
         this.func.getDetail = getRetguestcalicodtl;
         this.func.delDetail = delRetguestcalicodtl;
@@ -285,6 +320,12 @@ export default {
         this.func.delPhDetail = delCalicoselloutDtlb;
         this.func.addPhDetail = addCalicoselloutDtlb;
         // this.mxOp = rsxkr3C(this);
+      } else if (this.hide === "1") {
+        this.func.getDetail = getHgylDtl;
+        this.func.delDetail = delHgylDtl;
+        this.func.updateDetail = updateHgylDtl;
+        this.func.addDetail = addHgylDtl;
+        // this.mxOp = rsxkr3C(this);
       } else {
         this.func.getDetail = getPbDetalis;
         this.func.delDetail = delPbDetali;
@@ -292,6 +333,51 @@ export default {
         this.func.getPhDetail = getPhDetali;
         this.func.delPhDetail = delPhDetali;
         this.func.addPhDetail = addPhDetali;
+      }
+      if (this.isAdd) {
+        this.form = this.detail;
+        // this.form.retType = "1";
+        // if (this.hide === "4") {
+        //   this.$nextTick(() => {
+        //     this.$set(this.mxOp.column[3], "hide", true);
+        //   });
+        // }
+        if (this.hide === "1") {
+          this.mxOp.column[3].hide = true;
+          // this.mxOp.column[5].hide = true;
+          this.mxOp.column[6].hide = true;
+          this.mxOp.column[9].hide = true;
+        }
+        this.loading = false;
+        return;
+      }
+      if (
+        Object.keys(this.detail).length === 0 ||
+        (!this.detail.whseCalicoselloutoid &&
+          !this.detail.whseMaterialoid &&
+          !this.detail.whseRetsuppcalicooid &&
+          !this.detail.whseRetguestcalicooid &&
+          !this.detail.whseTransfercalicooid &&
+          !this.detail.whseChemicalOutId)
+      ) {
+        this.mx = [];
+        this.loading = false;
+        return;
+      }
+
+      this.loading = true;
+      if (this.hide === "1") {
+        this.mxOp.column[3].hide = false;
+        // this.mxOp.column[5].hide = false;
+        this.mxOp.column[6].hide = false;
+        this.mxOp.column[9].hide = false;
+      }
+      this.form = this.detail;
+      this.form.appId = this.detail.appId;
+      if (Object.keys(this.detail).length === 0) {
+        this.mx = [];
+        this.loading = false;
+        return;
       }
       this.func
         .getDetail({
@@ -302,6 +388,7 @@ export default {
           whseTransfercalicoFk: this.detail.whseTransfercalicooid,
           whseCalicoselloutFk: this.detail.whseCalicoselloutoid,
           whseRetguestcalicoFk: this.detail.whseRetguestcalicooid,
+          whseChemicalOutFk: this.detail.whseChemicalOutId,
         })
         .then((res) => {
           let records = res.data;
@@ -311,9 +398,17 @@ export default {
             if (this.hide === "4" || this.hide === "3" || this.hide === "5") {
               this.mxOp.column[3].hide = true;
             }
+            if (this.hide === "1") {
+              this.mxOp.column[3].hide = true;
+              // this.mxOp.column[5].hide = true;
+              this.mxOp.column[6].hide = true;
+              this.mxOp.column[9].hide = true;
+            }
             this.loading = false;
           }
+
           this.mx.forEach((item, index) => {
+            item.$cellEdit = true;
             item.index = index + 1;
             if (this.hide === "4" || this.hide === "3") {
               item.calicoId = item.whseCalicoinDtlaFk;
@@ -329,15 +424,40 @@ export default {
               item.prodNo = item.whseCalicoinDtlaFk;
               item.retCompany = item.traCompany;
             }
+            if (this.hide === "1") {
+              item.bcClass = item.materialId;
+              item.vitality = item.materialId;
+              item.dangerlevel = item.materialId;
+
+              // item.bcColorprison = item.materialId;
+            }
+
             if (index === this.mx.length - 1) {
               setTimeout(() => {
-                if (this.hide != "4" && this.hide != "3" && this.hide != "5") {
-                  this.$refs.dlgcrud.setCurrentRow(this.mx[0]);
-                } else {
-                  this.mxOp.column[3].hide = true;
-                  this.$refs.dlgcrud.setCurrentRow(this.chooseData);
-                }
-                this.loading = false;
+                this.$nextTick(() => {
+                  if (this.mx.length > 0) {
+                    this.$refs.dlgcrud.setCurrentRow(this.mx[0]);
+                  } else {
+                    this.$refs.dlgcrud.setCurrentRow();
+                  }
+
+                  if (this.hide === "1") {
+                    this.$set(this.mxOp.column[3], "hide", true);
+                    // this.$set(this.mxOp.column[5], "hide", true);
+                    this.$set(this.mxOp.column[6], "hide", true);
+                    this.$set(this.mxOp.column[9], "hide", true);
+                  }
+                  // if (
+                  //   this.hide != "4" &&
+                  //   this.hide != "3" &&
+                  //   this.hide != "5"
+                  // ) {
+                  // } else {
+                  //   this.mxOp.column[3].hide = true;
+                  //   // this.$refs.dlgcrud.setCurrentRow(this.chooseData);
+                  // }
+                  this.loading = false;
+                });
               }, 500);
             }
           });
@@ -391,7 +511,47 @@ export default {
         });
     },
     add() {
-      if (this.hide === "6") {
+      if (this.hide === "1") {
+        if (this.form.stockType === "1") {
+          if (!this.form.appId) {
+            this.$tip.warning("请先选择申购单!");
+            return;
+          }
+          if (!this.isAdd) {
+            this.$http
+              .get("/api/purSingle?appId=" + this.form.appId)
+              .then((res) => {
+                this.choiceV = !this.choiceV;
+                this.choiceQ.purSingleFk = res.data[0].purSingleoid;
+                this.choiceTle = this.$t("choicDlg.xzsgdzl");
+              });
+          } else {
+            this.choiceV = !this.choiceV;
+            this.choiceQ.purSingleFk = this.form.purSingleoid;
+            this.choiceTle = this.$t("choicDlg.xzsgdzl");
+          }
+        } else if (this.form.stockType === "2") {
+          this.proChoiceV = true;
+        } else {
+          if (!this.form.appId) {
+            this.$tip.warning("请先选择申请领用单!");
+            return;
+          }
+          if (!this.isAdd) {
+            this.$http
+              .get("/api/purApplication?applyCode=" + this.form.appId)
+              .then((res) => {
+                this.choiceV = !this.choiceV;
+                this.choiceQ.purApplicationFk = res.data[0].purApplicationoid;
+                this.choiceTle = this.$t("choicDlg.xzsqlydmx");
+              });
+          } else {
+            this.choiceV = !this.choiceV;
+            this.choiceQ.purApplicationFk = this.form.purApplicationoid;
+            this.choiceTle = this.$t("choicDlg.xzsqlydmx");
+          }
+        }
+      } else if (this.hide === "6") {
         this.choiceV = !this.choiceV;
         this.choiceField = "woOrderno";
         this.oldData = this.chooseData;
@@ -468,7 +628,8 @@ export default {
         !this.chooseData.whseCalicoselloutDtlaoid &&
         !this.chooseData.whseRetsuppcalicodtloid &&
         !this.chooseData.whseRetguestcalicodtloid &&
-        !this.chooseData.whseTransfercalicoDtloid
+        !this.chooseData.whseTransfercalicoDtloid &&
+        !this.chooseData.whseChemicalOutdtlId
       ) {
         this.mx.splice(this.chooseData.index - 1, 1);
         this.$refs.dlgcrud.setCurrentRow(this.mx[0]);
@@ -484,7 +645,7 @@ export default {
               ? this.chooseData.woMatno
               : this.hide === "4" || this.hide === "3" || this.hide === "5"
               ? this.chooseData.$calicoId
-              : this.chooseData.calicoId) +
+              : this.chooseData.materialId) +
             " 】的数据?",
           this,
           {}
@@ -500,13 +661,17 @@ export default {
                 ? this.chooseData.whseRetguestcalicodtloid
                 : this.hide === "5"
                 ? this.chooseData.whseTransfercalicoDtloid
-                : this.chooseData.whseMaterialDlaoid
+                : this.chooseData.whseChemicalOutdtlId
             )
             .then((res) => {
               if (res.data.code === 200) {
                 this.$tip.success(this.$t("public.sccg"));
                 this.mx.splice(this.chooseData.index - 1, 1);
-                this.getDetail();
+                this.chooseData = {};
+                this.$refs.dlgcrud.setCurrentRow();
+                this.mx.forEach((item, i) => {
+                  item.index = i + 1;
+                });
               } else {
                 this.$tip.error(this.$t("public.scsb"));
               }
@@ -593,7 +758,7 @@ export default {
       this.choosePh = val;
     },
     close() {
-      this.$emit("close");
+      this.$emit("close", this.saved);
     },
     getPbData() {
       this.sxloading = true;
@@ -724,9 +889,8 @@ export default {
               this.sxcheckList[i].custTicket ===
               this.chooseData.list[j].custTicket
             ) {
-              this.sxcheckList[i].whseMaterialDlboid = this.chooseData.list[
-                j
-              ].whseMaterialDlboid;
+              this.sxcheckList[i].whseMaterialDlboid =
+                this.chooseData.list[j].whseMaterialDlboid;
               break;
             }
           }
@@ -758,9 +922,8 @@ export default {
         for (let i = 0; i < this.sxcheckList.length; i++) {
           for (let j = 0; j < this.mx.length; j++) {
             if (this.sxcheckList[i].calicoId === this.mx[j].calicoId) {
-              this.sxcheckList[i].whseMaterialDlaoid = this.mx[
-                j
-              ].whseMaterialDlaoid;
+              this.sxcheckList[i].whseMaterialDlaoid =
+                this.mx[j].whseMaterialDlaoid;
               break;
             }
           }
@@ -792,6 +955,32 @@ export default {
         return;
       }
       this.loading = true;
+      this.saved = true;
+      this.form.sysCreatedby = this.sysCreatedby;
+      if (this.hide === "1") {
+        if (this.form.stockId == "" || this.form.stockDate == null) {
+          this.$tip.error("出仓编号/日期不能为空!");
+          return;
+        }
+        // if (this.form.leader == "") {
+        //   this.$tip.error("领用人不能为空!");
+        //   return;
+        // }
+        if (this.form.stockType == "1" && this.form.appId == "") {
+          this.$tip.error("申购单不能为空!");
+          return;
+        } else if (this.form.stockType == "3" && this.form.appId == "") {
+          this.$tip.error("申购领用单不能为空!");
+          return;
+        }
+        for (let i = 0; i < this.mx.length; i++) {
+          if (!this.mx[i].stockQty || !this.mx[i].stockUnit) {
+            this.$tip.error("出货数量/单位不能为空!");
+            this.loading = false;
+            return;
+          }
+        }
+      }
       if (this.hide === "4" || this.hide === "3" || this.hide === "5") {
         for (let i = 0; i < this.mx.length; i++) {
           if (
@@ -844,6 +1033,66 @@ export default {
             });
           }
         });
+      } else if (this.hide == "1") {
+        this.form.sysCreatedby = this.sysCreatedby;
+        if (this.form.whseChemicalOutId) {
+          this.everyThing.updateF(this.form).then((Res) => {
+            if (this.mx.length === 0) {
+              this.loading = false;
+              this.$tip.success(this.$t("public.bccg"));
+              return;
+            }
+            this.mx.forEach((item, i) => {
+              if (item.whseChemicalOutdtlId) {
+                // 更新
+                this.func.updateDetail(item).then((res) => {});
+              } else {
+                // 新增
+                item.model = item.$model;
+                item.whseChemicalOutFk = this.form.whseChemicalOutId;
+                this.func.addDetail(item).then((res) => {
+                  item.whseChemicalOutdtlId = res.data.data;
+                });
+              }
+              if (i === this.mx.length - 1) {
+                this.loading = false;
+                this.$tip.success(this.$t("public.bccg"));
+              }
+            });
+          });
+        } else {
+          this.everyThing.addF(this.form).then((Res) => {
+            updatePurApp(
+              Object.assign(this.purApp, {
+                collectSucceed: 1,
+              })
+            ).then((res) => {});
+            baseCodeSupply({ code: "whse_out" }).then((res) => {});
+            this.form.whseChemicalOutId = Res.data.data;
+            if (this.mx.length === 0) {
+              this.loading = false;
+              this.$tip.success(this.$t("public.bccg"));
+              return;
+            }
+            this.mx.forEach((item, i) => {
+              if (item.whseChemicalOutdtlId) {
+                // 更新
+                this.func.updateDetail(item).then((res) => {});
+              } else {
+                // 新增
+                item.model = item.$model;
+                item.whseChemicalOutFk = this.form.whseChemicalOutId;
+                this.func.addDetail(item).then((res) => {
+                  item.whseChemicalOutdtlId = res.data.data;
+                });
+              }
+              if (i === this.mx.length - 1) {
+                this.loading = false;
+                this.$tip.success(this.$t("public.bccg"));
+              }
+            });
+          });
+        }
       } else {
         let addDtla = (item, i) => {
           return new Promise((resolve, reject) => {
@@ -870,9 +1119,8 @@ export default {
             if (this.mx[i].list) {
               this.mx[i].list.forEach((item) => {
                 if (!item.whseCalicoselloutDtlboid && this.hide === "6") {
-                  item.whseCalicoselloutDtlaFk = this.mx[
-                    i
-                  ].whseCalicoselloutDtlaoid;
+                  item.whseCalicoselloutDtlaFk =
+                    this.mx[i].whseCalicoselloutDtlaoid;
                   this.func.addPhDetail(item).then((res) => {});
                 }
                 if (
@@ -989,7 +1237,10 @@ export default {
         return;
       }
       // this.oldData.$cellEdit = false;
-      if (this.choiceTle === "选择订单胚布资料") {
+      if (this.choiceTle === this.$t("choicDlg.xzsgd")) {
+        this.form.appId = val.appId;
+        this.form.purSingleoid = val.purSingleoid;
+      } else if (this.choiceTle === "选择订单胚布资料") {
         let data = {
           woMatno: val.fabId,
           woMatname: val.fabName,
@@ -998,24 +1249,111 @@ export default {
         };
         this.mx.push(data);
         // this.changeList.push(data);
-      } else if (
-        this.choiceTle === this.$t("choicDlg.xzpbrc") ||
-        this.choiceTle === this.$t("choicDlg.xzpbph")
-      ) {
-        // let data = {
-        //   woMatno: val.fabId,
-        //   woMatname: val.fabName,
-        //   woOrderno: val.$salPoFk,
-        //   index: this.mx.length + 1,
-        // };
-        if (val.length > 0) {
-          val.forEach((item) => {
-            item.retCompany = item.weightUnit;
-          });
+      } else if (this.choiceTle === this.$t("choicDlg.xzsgdzl")) {
+        this.loading = true;
+        if (this.hide === "1") {
+          this.mxOp.column[3].hide = false;
+          // this.mxOp.column[5].hide = false;
+          this.mxOp.column[6].hide = false;
+          this.mxOp.column[9].hide = false;
         }
-
+        val.forEach((item, i) => {
+          item.$cellEdit = true;
+          item.materialId = item.materialNum;
+          item.materialName = item.chinName;
+          item.company = item.company;
+          item.stockUnit = item.company;
+          item.bcColorprison = item.materialNum;
+          item.vitality = item.materialNum;
+          item.bcClass = item.materialNum;
+          item.dangerlevel = item.materialNum;
+          item.bcForce = item.materialNum;
+          item.stockQty = item.applyNum;
+        });
         this.mx = this.mx.concat(val);
-        // this.changeList.push(data);
+        // this.mx = this.unique(this.mx, "materialId");
+        this.page.total = this.mx.length;
+        this.mx.forEach((e, index) => {
+          e.index = index + 1;
+          if (index == this.mx.length - 1) {
+            setTimeout(() => {
+              this.$nextTick(() => {
+                this.$set(this.mxOp.column[3], "hide", true);
+                // this.$set(this.mxOp.column[5], "hide", true);
+                this.$set(this.mxOp.column[6], "hide", true);
+                this.$set(this.mxOp.column[9], "hide", true);
+                this.loading = false;
+              });
+            }, 500);
+          }
+        });
+      } else if (this.choiceTle === this.$t("choicDlg.xzsgdzl")) {
+        val.forEach((item, i) => {
+          item.$cellEdit = true;
+          item.materialId = item.materialNum;
+          item.materialName = item.chinName;
+          item.company = item.company;
+          item.stockUnit = item.company;
+        });
+        this.mx = this.mx.concat(val);
+        // this.mx = this.unique(this.mx, "materialId");
+        this.page.total = this.mx.length;
+        this.mx.forEach((e, index) => {
+          e.index = index + 1;
+        });
+      } else if (this.choiceTle === this.$t("choicDlg.xzsqlyd")) {
+        this.form.appId = val.applyCode;
+        this.form.purApplicationoid = val.purApplicationoid;
+        this.purApp = val;
+        // this.chooseData.list = this.chooseData.list.concat(val);
+        // this.chooseData.list.forEach((e, index) => {
+        //   e.index = index + 1;
+        //   e.prodNo = e.$prodNo;
+        //   e.woWeights = e.weight;
+        //   e.woUnit = e.weightUnit;
+        //   e.ticketNo = e.custTicket;
+        // });
+      } else if (this.choiceTle === this.$t("choicDlg.xzsqlydmx")) {
+        this.loading = true;
+        if (this.hide === "1") {
+          this.mxOp.column[3].hide = false;
+          // this.mxOp.column[5].hide = false;
+          this.mxOp.column[6].hide = false;
+          this.mxOp.column[9].hide = false;
+          // this.$set(this.mxOp.column[3], "hide", false);
+          // this.$set(this.mxOp.column[6], "hide", false);
+          // this.$set(this.mxOp.column[9], "hide", false);
+        }
+        val.forEach((item, i) => {
+          item.$cellEdit = true;
+          item.materialId = item.materielCode;
+          item.materialName = item.materielName;
+          item.company = item.company;
+          item.stockUnit = item.company;
+          item.bcColorprison = item.materielCode;
+          item.vitality = item.materielCode;
+          item.bcClass = item.materielCode;
+          item.dangerlevel = item.materielCode;
+          item.bcForce = item.materielCode;
+          item.stockQty = item.applyNum;
+        });
+        this.mx = this.mx.concat(val);
+        // this.mx = this.unique(this.mx, "materielCode");
+        this.page.total = this.mx.length;
+        this.mx.forEach((e, index) => {
+          e.index = index + 1;
+          if (index == this.mx.length - 1) {
+            setTimeout(() => {
+              this.$nextTick(() => {
+                this.$set(this.mxOp.column[3], "hide", true);
+                // this.$set(this.mxOp.column[5], "hide", true);
+                this.$set(this.mxOp.column[6], "hide", true);
+                this.$set(this.mxOp.column[9], "hide", true);
+                this.loading = false;
+              });
+            }, 500);
+          }
+        });
       } else {
         this.chooseData.list = this.chooseData.list.concat(val);
         this.chooseData.list.forEach((e, index) => {
@@ -1027,13 +1365,64 @@ export default {
         });
       }
       // this.oldData.$cellEdit = true;
-      for (var key in val) {
-        delete val[key];
-      }
-      for (var key in this.choiceQ) {
-        delete this.choiceQ[key];
-      }
+      // for (var key in val) {
+      //   delete val[key];
+      // }
+      // for (var key in this.choiceQ) {
+      //   delete this.choiceQ[key];
+      // }
       this.choiceV = false;
+    },
+    proChoiceData(val) {
+      if (Object.keys(val).length === 0 || val.length === 0 || val === null) {
+        this.proChoiceV = false;
+        return;
+      }
+      this.loading = true;
+      if (this.proChoiceTle === "选择化工原料入仓信息") {
+        if (this.hide === "1") {
+          this.mxOp.column[3].hide = false;
+          // this.mxOp.column[5].hide = false;
+          this.mxOp.column[6].hide = false;
+          this.mxOp.column[9].hide = false;
+        }
+        val.forEach((item) => {
+          item.$cellEdit = true;
+          item.materialId = item.chemicalId;
+          item.materialName = item.$chemicalName;
+          item.company = item.weightUnit;
+          item.stockUnit = item.weightUnit;
+          item.bcColorprison = item.chemicalId;
+          item.vitality = item.chemicalId;
+          item.bcClass = item.chemicalId;
+          item.dangerlevel = item.chemicalId;
+          item.bcForce = item.chemicalId;
+          item.applyNum = item.weight;
+          item.model = item.chemicalId;
+          item.stockQty = item.weight;
+          item.whseChemicalinFk = item.whseChemicalinDtlaoid;
+        });
+        this.mx = this.mx.concat(val);
+        this.mx = this.unique(this.mx, "batchNo");
+        this.page.total = this.mx.length;
+        this.$nextTick(() => {
+          this.mx.forEach((e, index) => {
+            e.index = index + 1;
+            if (index == this.mx.length - 1) {
+              setTimeout(() => {
+                this.$nextTick(() => {
+                  this.$set(this.mxOp.column[3], "hide", true);
+                  // this.$set(this.mxOp.column[5], "hide", true);
+                  this.$set(this.mxOp.column[6], "hide", true);
+                  this.$set(this.mxOp.column[9], "hide", true);
+                  this.loading = false;
+                });
+              }, 500);
+            }
+          });
+        });
+      }
+      this.proChoiceV = false;
     },
     sxclose() {
       // this.outcrudOp.column[3].hide = true;
@@ -1045,6 +1434,39 @@ export default {
       this.sxcheckList = [];
       this.sxV = false;
     },
+    changeRet(val) {
+      this.mx = [];
+      if (val === "1") {
+        this.mxOp.column[11].hide = true;
+        this.mxOp.column[12].hide = false;
+        this.mxOp.column[12].label = "申购数量";
+        this.formOp.column[7].label = "申购单";
+        if (!this.isAdd) {
+          return;
+        }
+        this.formOp.column[7].disabled = false;
+      } else if (val === "2") {
+        // 其他
+        this.mxOp.column[11].hide = false;
+        this.mxOp.column[11].label = this.$t("whseField.ph");
+        this.mxOp.column[12].hide = false;
+        this.mxOp.column[12].label = "入仓数量";
+        this.formOp.column[7].disabled = true;
+
+        // this.mxOp.column[11].label = "批号";
+        // this.mxOp.column[11].hide = false;
+      } else {
+        this.mxOp.column[11].hide = true;
+        this.mxOp.column[12].hide = false;
+        this.mxOp.column[12].label = "領用数量";
+        if (!this.isAdd) {
+          return;
+        }
+        this.formOp.column[7].disabled = false;
+        this.formOp.column[7].label = "申购领用单";
+      }
+      this.form.appId = "";
+    },
     unique(arr, val) {
       const res = new Map();
       return arr.filter((item) => !res.has(item[val]) && res.set(item[val], 1));
@@ -1052,6 +1474,7 @@ export default {
   },
   created() {},
   mounted() {
+    this.sysCreatedby = this.$store.state.userOid;
     this.rcOp.height = "calc(100vh - 288px)";
     if (this.hide === "3" || this.hide === "4" || this.hide === "5") {
       this.mxOp = rsxkr3C(this);

@@ -4,21 +4,19 @@
       <el-tab-pane :label="data.type.split('_')[0] + '出库资料'" name="tabs1">
         <div class="btnList">
           <!-- <el-button type="warning" @click="getData">取消</el-button> -->
+          <el-button type="primary" @click="add" v-if="hide != '2'">{{
+            this.$t("public.add")
+          }}</el-button>
           <el-button
-            type="primary"
-            @click="add"
-            v-if="hide != '1' && hide != '2'"
-            >{{ this.$t("public.add") }}</el-button
+            type="success"
+            :disabled="Object.keys(chooseData).length === 0"
+            @click="handleRowDBLClick(chooseData)"
+            >{{ this.$t("public.update") }}</el-button
           >
           <el-button type="danger" @click="del">{{
             this.$t("public.del")
           }}</el-button>
-          <el-button
-            type="success"
-            :disabled="changeList.length === 0"
-            @click="save"
-            >{{ this.$t("public.save") }}</el-button
-          >
+
           <!-- <el-button
             type="warning"
             @click="ruleV = true"
@@ -28,6 +26,12 @@
           <el-button type="primary" @click="getData">{{
             this.$t("public.query")
           }}</el-button>
+          <el-button
+            type="success"
+            :disabled="Object.keys(chooseData).length === 0"
+            @click="Audit(chooseData)"
+            >审核</el-button
+          >
           <el-button type="warning" @click="close">{{
             this.$t("public.close")
           }}</el-button>
@@ -67,11 +71,7 @@
           ></el-col> -->
         </el-row>
       </el-tab-pane>
-      <el-tab-pane
-        :label="hide === '1' ? '本厂胚布配料計劃' : '外厂胚布配料計劃'"
-        name="tabs2"
-        v-if="hide === '1' || hide === '2'"
-      >
+      <el-tab-pane label="外厂胚布配料計劃" name="tabs2" v-if="hide === '2'">
         <tab-plan
           :hide="hide"
           :datas="data"
@@ -108,8 +108,9 @@
         :datas="data"
         :everyThing="everyThing"
         :hide="hide"
-        :detail="chooseData"
-        @close="temV = false"
+        :detail="detail"
+        :isAdd="isAdd"
+        @close="temClose"
       ></temDlg>
     </el-dialog>
     <choice
@@ -128,7 +129,6 @@ import tem from "./tem";
 import plan from "./plan";
 import rule from "@/components/rule";
 import choice from "@/components/choice";
-import { baseCodeSupply } from "@/api/index";
 import {
   getMaterial,
   addMaterial,
@@ -163,7 +163,14 @@ import {
   updateTransfercalico,
   delTransfercalico,
 } from "@/api/im/Wk/cc/pb";
+import {
+  baseCodeSupply,
+  baseCodeSupplyEx,
+  getPurApplication,
+  updatePurApp,
+} from "@/api/index";
 import { rsxkr1F, rsxkr1C, rsxkr2C, rsxkr2F } from "./data";
+import { getHgyl, addHgyl, delHgyl, updateHgyl } from "@/api/im/Wk/cc/hgyl";
 export default {
   name: "",
   components: {
@@ -200,6 +207,7 @@ export default {
       choiceTarget: {},
       choiceField: "",
       choiceQ: {},
+      isAdd: false,
     };
   },
   watch: {},
@@ -219,6 +227,12 @@ export default {
         delF: delMaterial,
         updateF: updateMaterial,
       };
+      if (this.hide === "1") {
+        this.everyThing.func = getHgyl;
+        this.everyThing.addF = addHgyl;
+        this.everyThing.delF = delHgyl;
+        this.everyThing.updateF = updateHgyl;
+      }
       if (this.hide === "4") {
         this.everyThing.func = getRetsuppcalico;
         this.everyThing.addF = addRetsuppcalico;
@@ -266,6 +280,14 @@ export default {
           if (this.crud.length === 0) {
             this.loading = false;
           }
+          if (this.hide == "1") {
+            this.crud.sort((a, b) => {
+              return (
+                b.stockId.substring(b.stockId.length - 6) -
+                a.stockId.substring(a.stockId.length - 6)
+              );
+            });
+          }
           this.crud.forEach((item, index) => {
             item.finStatus = String(item.finStatus);
             item.index = index + 1;
@@ -283,50 +305,70 @@ export default {
         });
     },
     add() {
-      if (
-        this.crud.length > 0 &&
-        !this.crud[this.crud.length - 1].whseMaterialoid &&
-        !this.crud[this.crud.length - 1].whseCalicoselloutoid &&
-        !this.crud[this.crud.length - 1].whseRetsuppcalicooid &&
-        !this.crud[this.crud.length - 1].whseRetguestcalicooid &&
-        !this.crud[this.crud.length - 1].whseTransfercalicooid
-      ) {
-        return;
-      }
-      if (Object.keys(this.oldData).length > 0) {
-        this.oldData.$cellEdit = false;
-      }
       let data = {
         index: this.crud.length + 1,
         $cellEdit: true,
         retType: this.hide,
         retCode: "",
         woOutno: "",
+        stockState: "0",
+        stockDate: this.getNowTime(),
         retDate: this.getNowTime(),
-        woDate: this.getNowTime(),
+        stockType: "3",
       };
       // if (this.hide != "1" && this.hide != "2") {
-      baseCodeSupply({ code: "whse_out" }).then((res) => {
-        data.woOutno = res.data.data;
+      baseCodeSupplyEx({ code: "whse_out" }).then((res) => {
+        data.stockId = res.data.data;
         data.retCode = res.data.data;
-        this.crud.push(data);
-        this.$refs.mainCrud.setCurrentRow(this.crud[this.crud.length - 1]);
-        this.iptChange(this.crud[this.crud.length - 1]);
-        this.oldData = this.crud[this.crud.length - 1];
-        this.$nextTick(() => {
-          // 绑定 输入 事件
-          let _this = this;
-          document
-            .getElementsByClassName("el-table__row")
-            [_this.crud.length - 1].addEventListener(
-              "input",
-              function () {
-                _this.iptChange(_this.oldData);
-              },
-              false
-            );
-        });
+        this.detail = data;
+        this.temV = true;
+        this.isAdd = true;
+        return;
       });
+      // if (
+      //   this.crud.length > 0 &&
+      //   !this.crud[this.crud.length - 1].whseMaterialoid &&
+      //   !this.crud[this.crud.length - 1].whseCalicoselloutoid &&
+      //   !this.crud[this.crud.length - 1].whseRetsuppcalicooid &&
+      //   !this.crud[this.crud.length - 1].whseRetguestcalicooid &&
+      //   !this.crud[this.crud.length - 1].whseTransfercalicooid
+      // ) {
+      //   return;
+      // }
+      // if (Object.keys(this.oldData).length > 0) {
+      //   this.oldData.$cellEdit = false;
+      // }
+      // let data = {
+      //   index: this.crud.length + 1,
+      //   $cellEdit: true,
+      //   retType: this.hide,
+      //   retCode: "",
+      //   woOutno: "",
+      //   retDate: this.getNowTime(),
+      //   woDate: this.getNowTime(),
+      // };
+      // // if (this.hide != "1" && this.hide != "2") {
+      // baseCodeSupply({ code: "whse_out" }).then((res) => {
+      //   data.woOutno = res.data.data;
+      //   data.retCode = res.data.data;
+      //   this.crud.push(data);
+      //   this.$refs.mainCrud.setCurrentRow(this.crud[this.crud.length - 1]);
+      //   this.iptChange(this.crud[this.crud.length - 1]);
+      //   this.oldData = this.crud[this.crud.length - 1];
+      //   this.$nextTick(() => {
+      //     // 绑定 输入 事件
+      //     let _this = this;
+      //     document
+      //       .getElementsByClassName("el-table__row")
+      //       [_this.crud.length - 1].addEventListener(
+      //         "input",
+      //         function () {
+      //           _this.iptChange(_this.oldData);
+      //         },
+      //         false
+      //       );
+      //   });
+      // });
       // }
     },
     iptChange(val) {
@@ -357,7 +399,8 @@ export default {
         !this.chooseData.whseCalicoselloutoid &&
         !this.chooseData.whseRetsuppcalicooid &&
         !this.chooseData.whseRetguestcalicooid &&
-        !this.chooseData.whseTransfercalicooid
+        !this.chooseData.whseTransfercalicooid &&
+        !this.chooseData.whseChemicalOutId
       ) {
         this.crud.splice(this.chooseData.index - 1, 1);
         for (let i = 0; i < this.changeList.length; i++) {
@@ -371,8 +414,8 @@ export default {
       this.$tip
         .cofirm(
           "是否确定删除出仓编号为 【 " +
-            (this.chooseData.retCode
-              ? this.chooseData.retCode
+            (this.chooseData.stockId
+              ? this.chooseData.stockId
               : this.chooseData.woOutno) +
             " 】的数据",
           this,
@@ -381,7 +424,7 @@ export default {
         .then(() => {
           this.everyThing
             .delF(
-              this.hide === "1" || this.hide === "2"
+              this.hide === "2"
                 ? this.chooseData.whseMaterialoid
                 : this.hide == "4"
                 ? this.chooseData.whseRetsuppcalicooid
@@ -389,15 +432,59 @@ export default {
                 ? this.chooseData.whseRetguestcalicooid
                 : this.hide == "5"
                 ? this.chooseData.whseTransfercalicooid
+                : this.hide == "1"
+                ? this.chooseData.whseChemicalOutId
                 : this.chooseData.whseCalicoselloutoid
             )
             .then((res) => {
               if (res.data.code === 200) {
+                if (this.hide == "1") {
+                  getPurApplication({ applyCode: this.chooseData.appId }).then(
+                    (res) => {
+                      if (res.data.length > 0) {
+                        res.data[0].collectSucceed = 0;
+                        updatePurApp(res.data[0]).then((ures) => {});
+                      }
+                    }
+                  );
+                }
                 this.$tip.success(this.$t("public.sccg"));
                 this.crud.splice(this.chooseData.index - 1, 1);
                 this.getData();
               } else {
                 this.$tip.error(this.$t("public.scsb"));
+              }
+            })
+            .catch((err) => {
+              this.$tip.error(this.$t("public.scsb"));
+            });
+        })
+        .catch((err) => {
+          this.$tip.warning(this.$t("public.qxcz"));
+        });
+    },
+    Audit(val) {
+      if (Object.keys(this.chooseData).length === 0) {
+        this.$tip.error("请选择要审核的数据!");
+        return;
+      }
+      this.$tip
+        .cofirm(
+          "是否确定审核通过出仓编号为 【 " +
+            this.chooseData.stockId +
+            " 】的数据",
+          this,
+          {}
+        )
+        .then(() => {
+          this.everyThing
+            .updateF(Object.assign(this.chooseData, { stockState: 1 }))
+            .then((res) => {
+              if (res.data.code === 200) {
+                this.$tip.success("审核成功!");
+                this.getData();
+              } else {
+                this.$tip.error("审核失败!");
               }
             })
             .catch((err) => {
@@ -425,24 +512,27 @@ export default {
       this.choiceV = false;
     },
     handleRowDBLClick(row) {
-      if (
-        this.chooseData.whseCalicoselloutoid ||
-        this.chooseData.whseMaterialoid ||
-        this.chooseData.whseRetsuppcalicooid ||
-        this.chooseData.whseRetguestcalicooid ||
-        this.chooseData.whseTransfercalicooid
-      ) {
-        this.temV = true;
-      } else {
-        this.$tip.warning("请先保存该出仓数据!");
-      }
+      // if (
+      //   this.chooseData.whseCalicoselloutoid ||
+      //   this.chooseData.whseMaterialoid ||
+      //   this.chooseData.whseRetsuppcalicooid ||
+      //   this.chooseData.whseRetguestcalicooid ||
+      //   this.chooseData.whseTransfercalicooid
+      // ) {
+      this.detail = row;
+      this.isAdd = false;
+      this.temV = true;
+      // } else {
+      //   this.$tip.warning("请先保存该出仓数据!");
+      // }
       // this.$refs.temDlg.detail = row;
       // this.$refs.temDlg.getDetail();
     },
     cellClick(val) {
-      this.oldData.$cellEdit = false;
-      this.$set(val, "$cellEdit", true);
-      this.oldData = val;
+      // this.oldData.$cellEdit = false;
+      // this.$set(val, "$cellEdit", true);
+      // this.oldData = val;
+      this.detail = val;
       this.chooseData = val;
     },
     save() {
@@ -490,6 +580,12 @@ export default {
     },
     close() {
       document.getElementsByClassName("el-dialog__headerbtn")[0].click();
+    },
+    temClose(val) {
+      if (val) {
+        this.getData();
+      }
+      this.temV = false;
     },
     getNowTime() {
       const time = new Date();

@@ -439,15 +439,6 @@ export default {
           let records = res.data;
           this.page.total = records.total;
           this.crud = records.records;
-          this.crud.forEach((item, index) => {
-            item.finStatus = String(item.finStatus);
-            item.index = index + 1;
-            // item.retCode = item.stockId;
-            // item.retDate = item.stockDate;
-            if (index === this.crud.length - 1) {
-              this.loading = false;
-            }
-          });
           if (this.data == "成品布") {
             this.crud.sort((a, b) => {
               return (
@@ -463,6 +454,15 @@ export default {
               );
             });
           }
+          this.crud.forEach((item, index) => {
+            item.finStatus = String(item.finStatus);
+            item.index = index + 1;
+            // item.retCode = item.stockId;
+            // item.retDate = item.stockDate;
+            if (index === this.crud.length - 1) {
+              this.loading = false;
+            }
+          });
 
           if (this.crud.length === 0) {
             this.loading = false;

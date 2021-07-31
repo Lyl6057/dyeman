@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-10 14:20:47
  * @LastEditors: Lyl
- * @LastEditTime: 2021-07-21 08:29:19
+ * @LastEditTime: 2021-07-30 16:45:05
  * @Description:
  */
 "use strict";
@@ -14,5 +14,5 @@ module.exports = merge(prodEnv, {
   // API_HOST: '"http://127.0.0.1:98"'
   // API_HOST: '"http://192.168.5.166:91"' // yn91
   API_HOST: '"http://192.168.5.1:91"' // yn241
-  // API_HOST: '"http://112.91.115.70:8099/dmps"', // hz
+  // API_HOST: '"http://112.91.115.70:8099/dmps"' // hz
 });

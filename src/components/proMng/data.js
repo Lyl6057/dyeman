@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-05-03 13:03:03
  * @LastEditors: Lyl
- * @LastEditTime: 2021-07-22 18:44:06
+ * @LastEditTime: 2021-07-28 08:47:53
  * @Description:
  */
 
@@ -18,6 +18,7 @@ let basAdsupplies = getDicT(
 let matUnit = getDIC("bas_matUnit");
 let basChemical = getXDicT("BasChemicalmatNew");
 let basPigment = getXDicT("basPigment");
+console.log(basPigment);
 let basProductivesupplies = getXDicT("basProductivesupplies");
 let basFuel = getXDicT("basFuel");
 
@@ -664,15 +665,7 @@ export function ylInF(_this) {
         cell: true,
         width: 350,
         // slot: true,
-        span: 6,
-        type: "select",
-        props: {
-          label: _this.$store.state.lang === "1" ? "cnnamelong" : "ennamelong",
-          value: _this.$store.state.lang === "1" ? "cnnamelong" : "ennamelong"
-        },
-        filterable: true,
-        // overHidden: true,
-        dicData: basPigment
+        span: 6
       },
       {
         label: _this.$t("whseField.ph"),
@@ -713,7 +706,13 @@ export function ylInC(_this) {
         label: _this.$t("whseField.ylmc1"),
         prop: "chemicalName", //CNNameLong
         cell: true,
-        width: 350
+        width: 350,
+        type: "select",
+        props: {
+          label: _this.$store.state.lang === "1" ? "cnnamelong" : "ennamelong",
+          value: "bcCode"
+        },
+        dicData: basPigment
       },
       {
         label: _this.$t("whseField.ph"),
@@ -2465,6 +2464,7 @@ export function weaveJobC(_this) {
     refreshBtn: false,
     columnBtn: false,
     page: true,
+    selection: true,
     labelWidth: 130,
     column: [
       {

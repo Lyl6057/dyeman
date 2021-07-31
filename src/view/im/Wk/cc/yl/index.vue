@@ -26,6 +26,12 @@
           <el-button type="primary" @click="getData">{{
             this.$t("public.query")
           }}</el-button>
+          <el-button
+            type="success"
+            :disabled="Object.keys(chooseData).length === 0"
+            @click="Audit(chooseData)"
+            >审核</el-button
+          >
           <el-button type="warning" @click="close">{{
             this.$t("public.close")
           }}</el-button>
@@ -65,7 +71,7 @@
           ></el-col> -->
         </el-row>
       </el-tab-pane>
-      <el-tab-pane label="外厂辅料配料計劃" name="tabs2" v-if="hide === '2'">
+      <!-- <el-tab-pane label="外厂胚布配料計劃" name="tabs2" v-if="hide === '2'">
         <tab-plan
           :hide="hide"
           :datas="data"
@@ -74,7 +80,7 @@
           :tle="data.type.split('_')[0]"
           @save2reset="getData"
         ></tab-plan>
-      </el-tab-pane>
+      </el-tab-pane> -->
     </el-tabs>
     <el-dialog
       id="wkRuleDlg"
@@ -104,7 +110,6 @@
         :hide="hide"
         :detail="detail"
         :isAdd="isAdd"
-        @updateList="getData"
         @close="temClose"
       ></temDlg>
     </el-dialog>
@@ -121,15 +126,20 @@
 </template>
 <script>
 import tem from "./tem";
-import plan from "./plan";
+// import plan from "./plan";
 import rule from "@/components/rule";
 import choice from "@/components/choice";
-import { baseCodeSupply, baseCodeSupplyEx } from "@/api/index";
 import {
-  getScfl,
-  addScfl,
-  updateScfl,
-  delScfl,
+  baseCodeSupply,
+  baseCodeSupplyEx,
+  getPurApplication,
+  updatePurApp,
+} from "@/api/index";
+import {
+  getYl,
+  addYl,
+  updateYl,
+  delYl,
   getRetsup,
   addRetsup,
   updateRetsup,
@@ -138,18 +148,14 @@ import {
   addTra,
   updateTra,
   delTra,
-  getRetmaterials,
-  addRetmaterials,
-  updateRetmaterials,
-  delRetmaterials,
-} from "@/api/im/Wk/cc/scfl";
+} from "@/api/im/Wk/cc/yl";
 import { rsxkr1F, rsxkr1C, rsxkr2C, rsxkr2F } from "./data";
 export default {
   name: "",
   components: {
     temDlg: tem,
     ruleDlg: rule,
-    tabPlan: plan,
+    // tabPlan: plan,
     choice: choice,
   },
   data() {
@@ -191,43 +197,32 @@ export default {
       this.everyThing = {
         mainF: rsxkr1F(this),
         mainC: rsxkr1C(this),
-        dlgF1: rsxkr2F(this),
+        dlgF1: rsxkr2F,
         dlgC1: rsxkr2C(this),
         dlgC2: {},
         dlgPp: "24:0",
-        // func: getRetmaterials,
-        // addF: addRetmaterials,
-        // delF: delRetmaterials,
-        // updateF: updateRetmaterials,
       };
       if (this.hide === "1") {
         // this.everyThing.mainC.column[13].label = "领用人";
-        this.everyThing.func = getScfl;
-        this.everyThing.addF = addScfl;
-        this.everyThing.delF = delScfl;
-        this.everyThing.updateF = updateScfl;
+        this.everyThing.func = getYl;
+        this.everyThing.addF = addYl;
+        this.everyThing.delF = delYl;
+        this.everyThing.updateF = updateYl;
       }
-      if (this.hide === "2") {
-        // this.everyThing.mainC.column[13].label = "领用人";
-        this.everyThing.func = getRetmaterials;
-        this.everyThing.addF = addRetmaterials;
-        this.everyThing.delF = delRetmaterials;
-        this.everyThing.updateF = updateRetmaterials;
-      }
-      // 退供應商
-      if (this.hide === "4" || this.hide === "3") {
-        this.everyThing.func = getRetsup;
-        this.everyThing.addF = addRetsup;
-        this.everyThing.delF = delRetsup;
-        this.everyThing.updateF = updateRetsup;
-      }
+      // 销售
+      // if (this.hide === "4") {
+      //   this.everyThing.func = getRetsup;
+      //   this.everyThing.addF = addRetsup;
+      //   this.everyThing.delF = delRetsup;
+      //   this.everyThing.updateF = updateRetsup;
+      // }
       // 调仓
-      if (this.hide === "5") {
-        this.everyThing.func = getTra;
-        this.everyThing.addF = addTra;
-        this.everyThing.delF = delTra;
-        this.everyThing.updateF = updateTra;
-      }
+      // if (this.hide === "5") {
+      //   this.everyThing.func = getTra;
+      //   this.everyThing.addF = addTra;
+      //   this.everyThing.delF = delTra;
+      //   this.everyThing.updateF = updateTra;
+      // }
       for (var key in this.form) {
         if (this.form[key] === "") {
           delete this.form[key];
@@ -265,6 +260,7 @@ export default {
               );
             });
           }
+
           this.crud.forEach((item, index) => {
             item.finStatus = String(item.finStatus);
             item.index = index + 1;
@@ -291,6 +287,7 @@ export default {
         woOutno: "",
         stockDate: this.getNowTime(),
         retDate: this.getNowTime(),
+        stockState: "0",
         stockType: "3",
       };
       // if (this.hide != "1" && this.hide != "2") {
@@ -372,7 +369,8 @@ export default {
         this.$tip.error(this.$t("public.delTle"));
         return;
       }
-      if (!this.chooseData.whseRetmaterialsoid) {
+
+      if (!this.chooseData.dyesalOutId) {
         this.crud.splice(this.chooseData.index - 1, 1);
         for (let i = 0; i < this.changeList.length; i++) {
           if (this.changeList[i].index === this.chooseData.index) {
@@ -396,17 +394,27 @@ export default {
           this.everyThing
             .delF(
               this.hide === "1"
-                ? this.chooseData.whseAccessoriesoutoid
+                ? this.chooseData.dyesalOutId
                 : this.hide == "4"
                 ? this.chooseData.whseRetsuppaccessoriesoid
-                : this.hide == "2"
-                ? this.chooseData.whseRetmaterialsoid
+                : this.hide == "3"
+                ? this.chooseData.whseRetguestcalicooid
                 : this.hide == "5"
                 ? this.chooseData.whseTransfercalicooid
                 : this.chooseData.whseCalicoselloutoid
             )
             .then((res) => {
               if (res.data.code === 200) {
+                if (this.hide == "1") {
+                  getPurApplication({ applyCode: this.chooseData.appId }).then(
+                    (res) => {
+                      if (res.data.length > 0) {
+                        res.data[0].collectSucceed = 0;
+                        updatePurApp(res.data[0]).then((ures) => {});
+                      }
+                    }
+                  );
+                }
                 this.$tip.success(this.$t("public.sccg"));
                 this.crud.splice(this.chooseData.index - 1, 1);
                 this.$refs.mainCrud.setCurrentRow();
@@ -506,6 +514,39 @@ export default {
       this.getData();
       this.$tip.success(this.$t("public.bccg"));
     },
+    Audit(val) {
+      if (Object.keys(this.chooseData).length === 0) {
+        this.$tip.error("请选择要审核的数据!");
+        return;
+      }
+      this.$tip
+        .cofirm(
+          "是否确定审核通过出仓编号为 【 " +
+            this.chooseData.stockId +
+            " 】的数据",
+          this,
+          {}
+        )
+        .then(() => {
+          this.everyThing
+            .updateF(Object.assign(this.chooseData, { stockState: 1 }))
+            .then((res) => {
+              if (res.data.code === 200) {
+                this.$tip.success("审核成功!");
+                this.getData();
+              } else {
+                this.$tip.error("审核失败!");
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+              this.$tip.error("审核失败!");
+            });
+        })
+        .catch((err) => {
+          this.$tip.warning(this.$t("public.qxcz"));
+        });
+    },
     close() {
       document.getElementsByClassName("el-dialog__headerbtn")[0].click();
     },
@@ -539,12 +580,6 @@ export default {
 };
 </script>
 <style lang='stylus'>
-#sxrcDlg {
-  .el-dialog.is-fullscreen {
-    overflow: hidden;
-  }
-}
-
 #rc, #rcDetail {
   .formBox {
     margin-bottom: 0px;

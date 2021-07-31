@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-07-10 15:56:18
+ * @LastEditTime: 2021-07-30 15:39:11
  * @Description: 
 -->
 <template>
@@ -1511,6 +1511,7 @@ export default {
         if (!val.length) {
           return;
         }
+        this.dlgLoading = true;
         val.forEach((item, i) => {
           item.index = this.chooseData.list.length + 1;
           item.sn = this.chooseData.list.length + 1;
@@ -1531,11 +1532,20 @@ export default {
             item.useAmount = 0;
           }
           let data = JSON.parse(JSON.stringify(item));
-          this.chooseData.list.push(data);
+          if (this.chooseDtlData.index) {
+            this.chooseData.list.splice(this.chooseDtlData.index + i, 0, data);
+          } else {
+            this.chooseData.list.push(data);
+          }
+        });
+        this.chooseData.list.forEach((item, i) => {
+          item.index = i + 1;
+          item.sn = i + 1;
         });
         this.$refs.yarnCrud.setCurrentRow(
           this.chooseData.list[this.chooseData.list.length - 1]
         );
+        this.dlgLoading = false;
       }
       if (this.choiceTle == "选择染整运转单") {
         // val.shrinkLenth = isNaN(val.verticalShrink) ? 0 : val.verticalShrink;

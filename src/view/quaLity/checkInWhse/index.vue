@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-07-19 08:55:08
+ * @LastEditTime: 2021-07-30 16:14:44
  * @Description:
 -->
 <template>
@@ -195,6 +195,7 @@ export default {
                 item.data.forEach((dtlb, b) => {
                   addInDtlb({
                     custTicket: dtlb.noteCode,
+                    batchNo: pbIn.data.data,
                     countingNo: dtlb.eachNumber,
                     locationCode: dtlb.storeSiteCode,
                     weight: dtlb.clothWeight,

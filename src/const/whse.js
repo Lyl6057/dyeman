@@ -4723,7 +4723,8 @@ export const SingleDtlC = {
     {
       label: i18n.t("whseField.clmc"),
       prop: "chinName",
-      width: 140
+      width: 250,
+      overHidden: true
     },
     {
       label: i18n.t("energy.sl"),
@@ -5004,14 +5005,15 @@ export const purApplicationF = {
   menuBtn: false,
   menu: false,
   column: [
-    {
-      label: i18n.t("whseField.sqlb"),
-      prop: "applyCategory",
-      span: 6,
-      placeholder: " ",
-      type: "select",
-      dicData: getDIC("pur_category")
-    },
+    // {
+    //   label: i18n.t("whseField.sqlb"),
+    //   prop: "applyCategory",
+    //   span: 6,
+    //   placeholder: " ",
+    //   type: "select",
+    //   dicData: getDIC("pur_category"),
+
+    // },
     {
       label: i18n.t("whseField.sqbh"),
       prop: "applyCode",
@@ -5051,7 +5053,8 @@ export const purApplicationC = {
     {
       label: i18n.t("whseField.sqbm"),
       prop: "applyDepartment",
-      width: 120
+      width: 180,
+      overHidden: true
     },
     {
       label: i18n.t("whseField.sqr"),
@@ -5137,7 +5140,7 @@ export const purApplicationDtlC = {
     {
       label: i18n.t("whseField.clmc"),
       prop: "materielName",
-      width: 140
+      width: 300
     },
     {
       label: i18n.t("whseField.slsl"),
@@ -5147,7 +5150,9 @@ export const purApplicationDtlC = {
     {
       label: i18n.t("whseField.dw"),
       prop: "company",
-      width: 100
+      width: 100,
+      type: "select",
+      dicData: matUnit
     },
     {
       label: i18n.t("whseField.ytbz"),

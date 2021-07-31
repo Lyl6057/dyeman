@@ -964,12 +964,29 @@ export default {
         this.choiceC = purApplicationC;
         this.choiceF = purApplicationF;
         this.getData = getPurApplication;
-        this.choiceF.column[0].dicData = this.choiceF.column[0].dicData.filter(
-          (val) => {
-            return val.label === "五金用品" || val.label === "行政用品";
-          }
-        );
-        this.form.applyCategory = this.choiceF.column[0].dicData[0].value;
+        // if (this.choiceQ.type == "8") {
+        //   this.choiceF.column[0].dicData =
+        //     this.choiceF.column[0].dicData.filter((val) => {
+        //       return val.label === "顏料";
+        //     });
+        // } else if (this.choiceQ.type == "1") {
+        //   this.choiceF.column[0].dicData =
+        //     this.choiceF.column[0].dicData.filter((val) => {
+        //       return val.label === "五金用品";
+        //     });
+        // } else if (this.choiceQ.type == "2") {
+        //   this.choiceF.column[0].dicData =
+        //     this.choiceF.column[0].dicData.filter((val) => {
+        //       return val.label === "行政";
+        //     });
+        // } else if (this.choiceQ.type == "5") {
+        //   this.choiceF.column[0].dicData =
+        //     this.choiceF.column[0].dicData.filter((val) => {
+        //       return val.label === "化工原料";
+        //     });
+        // }
+
+        this.form.applyCategory = this.choiceQ.type;
         break;
       case this.$t("choicDlg.xzsqlydmx"):
         this.choiceC = purApplicationDtlC;

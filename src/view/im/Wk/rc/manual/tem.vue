@@ -5,9 +5,12 @@
         <!-- <el-button type="primary" @click="getDetail">{{this.$t("public.query")}}</el-button> -->
         <!-- <el-button type="primary" @click="add">{{this.$t("public.add")}}</el-button>
         <el-button type="danger" @click="del">{{ this.$t("public.del") }}</el-button> -->
-        <el-button type="success" @click="saveAll">{{
-          this.$t("public.save")
-        }}</el-button>
+        <el-button
+          type="success"
+          @click="saveAll"
+          :disabled="detail.stockState == '1'"
+          >{{ this.$t("public.save") }}</el-button
+        >
         <!-- <el-button
           type="primary"
           @click="createCk"
@@ -40,13 +43,19 @@
         >
           <view-container :title="datas + this.$t('iaoMng.rcmx')">
             <div class="btnList">
-              <el-button type="primary" @click="add">{{
-                this.$t("public.add")
-              }}</el-button>
+              <el-button
+                type="primary"
+                @click="add"
+                :disabled="detail.stockState == '1'"
+                >{{ this.$t("public.add") }}</el-button
+              >
               <el-button
                 type="danger"
                 @click="del"
-                :disabled="Object.keys(chooseData).length == 0"
+                :disabled="
+                  Object.keys(chooseData).length == 0 ||
+                  detail.stockState == '1'
+                "
                 >{{ this.$t("public.del") }}</el-button
               >
             </div>
@@ -301,9 +310,10 @@ export default {
     return {
       loading: false,
       page: {
-        pageSize: 10,
+        pageSize: 20,
         currentPage: 1,
         total: 0,
+        pageSizes: [20, 50, 100, 200, 500],
       },
       phPage: {
         pageSize: 10,
@@ -404,7 +414,7 @@ export default {
             this.loading = false;
           }
           this.mx.sort((a, b) => {
-            return a.countingNo - b.countingNo;
+            return a.batchNo - b.batchNo;
           });
           this.mx.forEach((item, index) => {
             item.index = index + 1;
@@ -851,13 +861,10 @@ export default {
       ) {
         for (let i = 0; i < this.mx.length; i++) {
           this.mx[i].chemicalName = this.mx[i].$chemicalId;
-          if (!this.mx[i].weight) {
-            this.$tip.error("入仓数量不能为空!");
-            return;
-          }
-          if (!this.mx[i].loc) {
-            return;
-          }
+          // if (!this.mx[i].weight) {
+          //   this.$tip.error("入仓数量不能为空!");
+          //   return;
+          // }
         }
       }
       if (

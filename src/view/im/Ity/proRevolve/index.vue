@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-07-19 08:35:13
+ * @LastEditTime: 2021-07-30 18:23:28
  * @Description: 
 -->
 <template>
@@ -365,13 +365,23 @@ export default {
         this.history.forEach((item, i) => {
           if (i == this.dlgForm.noteCode - 1) {
             // 新增裁剪出仓的胚布
+            if (item.noteCode.indexOf("-") != -1) {
+              this.dlgCrud[0].noteCode =
+                "-" + item.noteCode.split("-")[1] + "-A";
+            } else if (item.noteCode.indexOf("k") != -1) {
+              this.dlgCrud[0].noteCode =
+                "k" + item.noteCode.split("k")[1] + "-A";
+            } else {
+              this.dlgCrud[0].noteCode =
+                "K" + item.noteCode.split("K")[1] + "-A";
+            }
             addNote(
               Object.assign(this.dlgCrud[0], {
                 sourceNoteId: item.noteId,
               })
             ).then((res) => {
               addCalico({
-                clothNoteCode: item.noteCode,
+                clothNoteCode: item.noteCode + "-A",
                 clothNoteId: res.data.data,
                 clothWeight: this.dlgCrud[0].clothWeight,
                 proBleadyeRunJobFk: this.form.runJobId,
@@ -503,8 +513,10 @@ export default {
         (res) => {
           this.wLoading = true;
           if (res.data.length) {
-            // console.log(res.data[0], this.form.weaveJobId);
-            if (res.data[0].weaveJobFk != this.form.weaveJobId) {
+            if (
+              res.data[0].weaveJobFk.toLocaleLowerCase() !=
+              this.form.weaveJobId.toLocaleLowerCase()
+            ) {
               setTimeout(() => {
                 this.form.clothNoteCode = "";
               }, 500);

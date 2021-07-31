@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-07-09 18:38:21
+ * @LastEditTime: 2021-07-30 15:46:34
  * @Description: 
 -->
 <template>
@@ -184,26 +184,17 @@ export default {
         if (group.data.length > 0) {
           this.form.proWeaveJobGroupFk = group.data[0].groupId;
         }
-
-        // this.$nextTick(() => {
-        //   if (this.formOp.column[10].dicData.length) {
-        //     this.form.mathineCode = this.formOp.column[10].dicData[0].value;
-        //   }
-        // });
-
-        // this.wLoading = false;
-      });
-      getJh({ proWeaveJobFk: this.form.weaveJobId }).then((res) => {
-        res.data.forEach((item) => {
-          this.formOp.column[10].dicData.push({
-            value: item.mathineCode,
-            label: item.mathineCode,
+        getJh({ proWeaveJobFk: this.form.weaveJobId }).then((res) => {
+          res.data.forEach((item) => {
+            this.formOp.column[10].dicData.push({
+              value: item.mathineCode,
+              label: item.mathineCode,
+            });
           });
+          if (res.data.length > 0) {
+            this.form.mathineCode = res.data[0].mathineCode;
+          }
         });
-        if (res.data.length > 0) {
-          this.form.mathineCode = res.data[0].mathineCode;
-        }
-        // this.getBf();
       });
     },
     typeChange() {
@@ -314,6 +305,7 @@ export default {
                     arr.push({
                       breadth: this.form.breadth,
                       clothWeight: "",
+                      weightUnit: "KG",
                       eachNumber: Number(this.form.qsph) + i,
                       fabricName: this.form.fabricDesc,
                       gramWeight: this.form.gramWeight,
@@ -406,6 +398,7 @@ export default {
                 arr.push({
                   breadth: this.form.breadth,
                   clothWeight: "",
+                  weightUnit: "KG",
                   eachNumber: Number(this.form.qsph) + i,
                   fabricName: this.form.fabricDesc,
                   gramWeight: this.form.gramWeight,

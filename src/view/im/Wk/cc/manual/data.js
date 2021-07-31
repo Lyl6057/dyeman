@@ -30,7 +30,11 @@ export function rhl1F(_this) {
         label: _this.$t("whseField.ccbh"),
         prop: "retCode",
         span: 6,
-        display: _this.data == _this.$t("iaoMng.hgyl") ? true : false,
+        display:
+          _this.data == _this.$t("iaoMng.hgyl") ||
+          _this.data == _this.$t("iaoMng.pb")
+            ? true
+            : false,
         placeholder: " "
       },
       {
@@ -41,7 +45,11 @@ export function rhl1F(_this) {
         type: "date",
         format: "yyyy-MM-dd",
         valueFormat: "yyyy-MM-dd",
-        display: _this.data == _this.$t("iaoMng.hgyl") ? true : false
+        display:
+          _this.data == _this.$t("iaoMng.hgyl") ||
+          _this.data == _this.$t("iaoMng.pb")
+            ? true
+            : false
       },
       {
         label: _this.$t("whseField.ccbh"),
@@ -106,7 +114,11 @@ export function rhl2F(_this) {
         prop: "retCode",
         span: 6,
         disabled: true,
-        display: _this.datas == _this.$t("iaoMng.hgyl") ? true : false,
+        display:
+          _this.datas == _this.$t("iaoMng.hgyl") ||
+          _this.datas == _this.$t("iaoMng.pb")
+            ? true
+            : false,
         placeholder: " "
       },
       {
@@ -117,7 +129,11 @@ export function rhl2F(_this) {
         type: "date",
         format: "yyyy-MM-dd",
         valueFormat: "yyyy-MM-dd",
-        display: _this.datas == _this.$t("iaoMng.hgyl") ? true : false
+        display:
+          _this.datas == _this.$t("iaoMng.hgyl") ||
+          _this.datas == _this.$t("iaoMng.pb")
+            ? true
+            : false
       },
       {
         label: _this.$t("whseField.ccbh"),
@@ -206,7 +222,9 @@ export function rhl1C(_this) {
       {
         label: _this.$t("whseField.ccbh"),
         prop: "retCode",
-        hide: _this.data != _this.$t("iaoMng.hgyl"),
+        hide:
+          _this.data != _this.$t("iaoMng.hgyl") &&
+          _this.data != _this.$t("iaoMng.pb"),
         cell: false,
         width: 180
       },
@@ -231,7 +249,7 @@ export function rhl1C(_this) {
         dicData: [
           {
             label: "手工出倉",
-            value: "0"
+            value: "1"
           }
         ]
       },
@@ -249,7 +267,9 @@ export function rhl1C(_this) {
       {
         label: _this.$t("whseField.ccrq"),
         prop: "retDate",
-        hide: _this.data != _this.$t("iaoMng.hgyl"),
+        hide:
+          _this.data != _this.$t("iaoMng.hgyl") &&
+          _this.data != _this.$t("iaoMng.pb"),
         cell: false,
         type: "date",
         format: "yyyy-MM-dd",
@@ -651,14 +671,15 @@ export function pb2C(_this) {
       //   width: 100
       // },
       {
-        label: _this.$t("whseField.pbmc"),
-        prop: "clothName",
-        cell: true,
-        slot: true,
+        label: "生产单号",
+        prop: "calicoId",
+        cell: false
+        // width: 180
+        // slot: true,
         // overHidden: true,
         // width: 350,
-        type: "select",
-        dicData: getDicT("basCalico", "clothName", "calicoId")
+        // type: "select",
+        // dicData: getDicT("basCalico", "clothName", "calicoId")
       }
     ]
   };

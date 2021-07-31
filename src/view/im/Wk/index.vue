@@ -824,7 +824,7 @@ export default {
             {
               click: () => {
                 // this.toView("cc_scfl", "生产领用_1");
-                this.toView("cc_wjxz", "生产领用_1");
+                this.toView("cc_scfl", "生产领用_1");
               },
               title: "领用出库",
               icon: "el-icon-s-claim",
@@ -885,51 +885,59 @@ export default {
               icon: "yx-icf-cailiaogongcheng",
               color: "#606266",
             },
-
             {
               click: () => {
-                this.toView("cc_hgyl", "退供应商_4");
+                this.toView("cc_hgyl", "化工原料生产领用_1");
               },
-              title: "退供应商出库",
+              title: "领用出库",
               icon: "el-icon-s-claim",
               color: "#409EFF",
-              // content: "退供应商出库看板",
+              // content: "领用出库看板",
             },
-            {
-              click: () => {
-                this.toView("cc_hgyl", "外发加工_2");
-              },
-              title: "外发加工出库",
-              icon: "el-icon-s-home",
-              color: "#ccc",
-              // content: "外发加工出库看板",
-            },
-            {
-              click: () => {
-                this.toView("cc_hgyl", "退客人_3");
-              },
-              title: "退客人出库",
-              icon: "el-icon-user-solid",
-              color: "#409EFF",
-              // content: "退客人出库看板",
-            },
-            {
-              click: () => {
-                this.toView("cc_hgyl", "调仓_5");
-              },
-              title: "调仓出库",
-              icon: "el-icon-s-claim",
-              color: "#409EFF",
-              // content: "调仓出库看板",
-            },
-            {
-              click: () => {
-                this.toView("cc_manual", this.$t("iaoMng.hgyl") + "_0");
-              },
-              title: "手工出仓",
-              icon: "el-icon-thumb",
-              color: "#409EFF",
-            },
+            // {
+            //   click: () => {
+            //     this.toView("cc_hgyl", "退供应商_4");
+            //   },
+            //   title: "退供应商出库",
+            //   icon: "el-icon-s-claim",
+            //   color: "#409EFF",
+            //   // content: "退供应商出库看板",
+            // },
+            // {
+            //   click: () => {
+            //     this.toView("cc_hgyl", "外发加工_2");
+            //   },
+            //   title: "外发加工出库",
+            //   icon: "el-icon-s-home",
+            //   color: "#ccc",
+            //   // content: "外发加工出库看板",
+            // },
+            // {
+            //   click: () => {
+            //     this.toView("cc_hgyl", "退客人_3");
+            //   },
+            //   title: "退客人出库",
+            //   icon: "el-icon-user-solid",
+            //   color: "#409EFF",
+            //   // content: "退客人出库看板",
+            // },
+            // {
+            //   click: () => {
+            //     this.toView("cc_hgyl", "调仓_5");
+            //   },
+            //   title: "调仓出库",
+            //   icon: "el-icon-s-claim",
+            //   color: "#409EFF",
+            //   // content: "调仓出库看板",
+            // },
+            // {
+            //   click: () => {
+            //     this.toView("cc_manual", this.$t("iaoMng.hgyl") + "_0");
+            //   },
+            //   title: "手工出仓",
+            //   icon: "el-icon-thumb",
+            //   color: "#409EFF",
+            // },
           ],
         },
         option7: {
@@ -942,12 +950,21 @@ export default {
             },
             {
               click: () => {
-                this.toView("cc_manual", this.$t("iaoMng.yl") + "_0");
+                this.toView("cc_yl", "颜料生产领用_1");
               },
-              title: "手工出仓",
-              icon: "el-icon-thumb",
+              title: "领用出库",
+              icon: "el-icon-s-claim",
               color: "#409EFF",
+              // content: "领用出库看板",
             },
+            // {
+            //   click: () => {
+            //     this.toView("cc_manual", this.$t("iaoMng.yl") + "_0");
+            //   },
+            //   title: "手工出仓",
+            //   icon: "el-icon-thumb",
+            //   color: "#409EFF",
+            // },
           ],
         },
         wj: {
@@ -960,7 +977,7 @@ export default {
             },
             {
               click: () => {
-                this.toView("cc_wjxz", "生产领用_1");
+                this.toView("cc_wj", "生产领用_1");
               },
               title: "领用出库",
               icon: "el-icon-s-claim",
@@ -969,7 +986,7 @@ export default {
             },
             {
               click: () => {
-                this.toView("cc_wjxz", "退供应商_4");
+                this.toView("cc_wj", "退供应商_4");
               },
               title: "退供应商出库",
               icon: "el-icon-s-claim",
@@ -978,7 +995,7 @@ export default {
             },
             {
               click: () => {
-                this.toView("cc_wjxz", "调仓出库_5");
+                this.toView("cc_wj", "调仓出库_5");
               },
               title: "调仓出库",
               icon: "el-icon-s-claim",
@@ -1000,7 +1017,7 @@ export default {
             },
             {
               click: () => {
-                this.toView("cc_wjxz", "生产领用_1");
+                this.toView("cc_xz", "生产领用_1");
               },
               title: "领用出库",
               icon: "el-icon-s-claim",
@@ -1009,7 +1026,7 @@ export default {
             },
             {
               click: () => {
-                this.toView("cc_wjxz", "退供应商_4");
+                this.toView("cc_xz", "退供应商_4");
               },
               title: "退供应商出库",
               icon: "el-icon-s-claim",
@@ -1018,7 +1035,7 @@ export default {
             },
             {
               click: () => {
-                this.toView("cc_wjxz", "调仓出库_5");
+                this.toView("cc_xz", "调仓出库_5");
               },
               title: "调仓出库",
               icon: "el-icon-s-claim",
@@ -1043,13 +1060,22 @@ export default {
               icon: "yx-icf-cailiaogongcheng",
               color: "#606266",
             },
+            // {
+            //   click: () => {
+            //     this.toView("cc_manual", this.$t("choicDlg.rl") + "_0");
+            //   },
+            //   title: "手工出仓",
+            //   icon: "el-icon-thumb",
+            //   color: "#409EFF",
+            // },
             {
               click: () => {
-                this.toView("cc_manual", this.$t("choicDlg.rl") + "_0");
+                this.toView("cc_rl", "燃料生产领用_1");
               },
-              title: "手工出仓",
-              icon: "el-icon-thumb",
+              title: "领用出库",
+              icon: "el-icon-s-claim",
               color: "#409EFF",
+              // content: "领用出库看板",
             },
           ],
         },

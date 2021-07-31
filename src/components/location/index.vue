@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-24 08:12:20
  * @LastEditors: Lyl
- * @LastEditTime: 2021-07-02 09:30:35
+ * @LastEditTime: 2021-07-30 18:46:48
  * @Description: 
 -->
 <template>
@@ -122,7 +122,11 @@ export default {
     },
     add() {
       if (this.inData && Object.keys(this.inData).length > 1) {
-        this.choiceV = true;
+        // this.choiceV = true;
+
+        this.inData.loc.push({
+          index: this.inData.loc.length + 1,
+        });
       } else {
         this.$tip.error(this.$t("choicDlg.qxzrcmx"));
       }

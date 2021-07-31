@@ -39,6 +39,7 @@
               :data="crud"
               :page.sync="page"
               v-loading="loading"
+              @on-load="query"
               @row-dblclick="handleRowDBLClick"
               @current-row-change="cellClick"
               @selection-change="selectionChange"
@@ -115,6 +116,7 @@ export default {
         pageSize: 20,
         currentPage: 1,
         total: 0,
+        pageSizes: [20, 50, 100, 500],
       },
       loading: false,
       choiceC: {},
@@ -224,6 +226,9 @@ export default {
               this.choiceTle == "选择燃料入仓信息"
             ) {
               item.materialName = item.materialNum;
+            }
+            if (this.choiceTle == "选择颜料入仓信息") {
+              item.chemicalName = item.chemicalId;
             }
             item.index = index + 1;
             if (index === this.crud.length - 1) {

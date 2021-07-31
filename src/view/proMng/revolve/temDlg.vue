@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-07-19 10:44:55
+ * @LastEditTime: 2021-07-26 09:03:24
  * @Description:
 -->
 <template>
@@ -696,57 +696,70 @@ export default {
         return;
       }
       if (this.choiceTle == "选择织造通知单") {
-        val.fabName = val.fabricDesc;
-        val.breadthActual = val.breadth;
-        val.gramWeightBefor = val.gramWeight;
-        // val.gramWeightAfter = isNaN(val.gramWeight) ? 0 : val.gramWeight;
-        val.shrinkLenth = val.verticalShrink;
-        val.shrinkWidth = val.horizonShrink;
-        val.clothWeight = isNaN(val.amount) ? 0 : val.amount;
-        val.fabElements = val.fiberComp;
-        val.poAmountKg = val.clothWeight;
-        val.fabElements = val.fiberComp;
-        val.poAmountKg = val.clothWeight;
-        // val.tubeDiam = val.needleInch;
-        val.needleDist = val.guage;
-        val.salPoNo = val.custPoNo;
-        this.form = val;
-        // this.form.breadthUnit = this.form.breadth.replace(/[^a-z]+/gi, "");
-        // this.form.breadth = Number(this.form.breadth.replace(/[^0-9]/gi, ""));
-        this.form.bf = [];
-        getGroup({
-          proWeaveJobFk: val.weaveJobId,
-        }).then((res) => {
-          if (res.data.length > 0) {
-            getYarn({ proWeaveJobGroupFk: res.data[0].groupId }).then(
-              (yarn) => {
-                this.form.yarnCard = "";
-                this.form.yarnNumber = "";
-                this.form.yarnCylinder = "";
-                if (yarn.data.length > 1) {
-                  yarn.data.forEach((item, i) => {
-                    if (item.yarnBrand) {
-                      this.form.yarnCard += i + 1 + "." + item.yarnBrand + " ";
-                    }
-                    if (item.yarnBatch) {
-                      this.form.yarnNumber +=
-                        i + 1 + "." + item.yarnBatch + " ";
-                    }
-                    if (item.factoryYarnBatch) {
-                      this.form.yarnCylinder +=
-                        i + 1 + "." + item.factoryYarnBatch + " ";
-                    }
-                  });
-                } else if (yarn.data.length == 1) {
-                  this.form.yarnCard = yarn.data[0].yarnBrand;
-                  this.form.yarnNumber = yarn.data[0].yarnBatch;
-                  this.form.yarnCylinder = yarn.data[0].factoryYarnBatch;
-                }
-              }
-            );
+        let data = "";
+        let yIndex = 1;
+        val.forEach((item, i) => {
+          item.fabName = item.fabricDesc;
+          item.breadthActual = item.breadth;
+          item.gramWeightBefor = item.gramWeight;
+          // item.gramWeightAfter = isNaN(item.gramWeight) ? 0 : item.gramWeight;
+          item.shrinkLenth = item.verticalShrink;
+          item.shrinkWidth = item.horizonShrink;
+          item.clothWeight = isNaN(item.amount) ? 0 : item.amount;
+          item.fabElements = item.fiberComp;
+          item.poAmountKg = item.clothWeight;
+          item.fabElements = item.fiberComp;
+          item.poAmountKg = item.clothWeight;
+          // item.tubeDiam = item.needleInch;
+          item.needleDist = item.guage;
+          item.salPoNo = item.custPoNo;
+          this.form = item;
+          this.form.yarnCard = "";
+          this.form.yarnNumber = "";
+          this.form.yarnCylinder = "";
+          if (val.length > 1) {
+            data += i + 1 + "." + item.weaveJobCode + " ";
+          } else {
+            data = item.weaveJobCode;
           }
+          this.form.weaveJobCode = data;
+          // this.form.breadthUnit = this.form.breadth.replace(/[^a-z]+/gi, "");
+          // this.form.breadth = Number(this.form.breadth.replace(/[^0-9]/gi, ""));
+          this.form.bf = [];
+          getGroup({
+            proWeaveJobFk: item.weaveJobId,
+          }).then((res) => {
+            if (res.data.length > 0) {
+              getYarn({ proWeaveJobGroupFk: res.data[0].groupId }).then(
+                (yarn) => {
+                  if (yarn.data.length > 1) {
+                    yarn.data.forEach((item, i) => {
+                      if (item.yarnBrand) {
+                        this.form.yarnCard +=
+                          yIndex + "." + item.yarnBrand + " ";
+                      }
+                      if (item.yarnBatch) {
+                        this.form.yarnNumber +=
+                          yIndex + "." + item.yarnBatch + " ";
+                      }
+                      if (item.factoryYarnBatch) {
+                        this.form.yarnCylinder +=
+                          yIndex + "." + item.factoryYarnBatch + " ";
+                      }
+                      yIndex++;
+                    });
+                  } else if (yarn.data.length == 1) {
+                    this.form.yarnCard += yarn.data[0].yarnBrand;
+                    this.form.yarnNumber += yarn.data[0].yarnBatch;
+                    this.form.yarnCylinder += yarn.data[0].factoryYarnBatch;
+                  }
+                }
+              );
+            }
+          });
         });
-        this.getOther(val);
+
+        // this.getOther(val);
       }
       if (this.choiceTle == "选择胚布信息") {
         val.forEach((item, i) => {

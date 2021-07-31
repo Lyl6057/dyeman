@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-07-10 15:58:52
+ * @LastEditTime: 2021-07-29 11:20:42
  * @Description:
  */
 
@@ -241,6 +241,7 @@ export function mainCrud(_this) {
         width: 100,
         span: 6,
         type: "number",
+        disabled: true,
         align: "right",
         placeholder: " ",
         rules: [
@@ -619,6 +620,15 @@ export function mainCrud(_this) {
         span: 12
       },
       {
+        label: "ET序号",
+        prop: "etSn",
+        tip: "ET序号",
+        width: 120,
+        hide: true,
+        placeholder: " ",
+        span: 6
+      },
+      {
         label: "稱料員",
         prop: "mateStockMan",
         tip: "Thợ cân",
@@ -714,8 +724,8 @@ export function mainCrud(_this) {
             span: 6,
             hide: true,
             width: 80,
-            placeholder: " ",
-            type: "number"
+            placeholder: " "
+            // type: "number"
           },
           {
             label: "縮水(橫縮)",
@@ -724,8 +734,8 @@ export function mainCrud(_this) {
             span: 6,
             hide: true,
             width: 80,
-            placeholder: " ",
-            type: "number"
+            placeholder: " "
+            // type: "number"
           },
 
           {

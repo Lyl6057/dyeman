@@ -149,11 +149,29 @@ export default [
         name: "cc_scfl",
         component: resolve => require(["@/view/im/Wk/cc/scfl/index"], resolve)
       },
-      // 五金/行政
+      // 行政
       {
-        path: "/cc_wjxz",
-        name: "cc_wjxz",
-        component: resolve => require(["@/view/im/Wk/cc/wjxz/index"], resolve)
+        path: "/cc_wj",
+        name: "cc_wj",
+        component: resolve => require(["@/view/im/Wk/cc/wj/index"], resolve)
+      },
+      // 行政
+      {
+        path: "/cc_xz",
+        name: "cc_xz",
+        component: resolve => require(["@/view/im/Wk/cc/xz/index"], resolve)
+      },
+      // 颜料
+      {
+        path: "/cc_yl",
+        name: "cc_yl",
+        component: resolve => require(["@/view/im/Wk/cc/yl/index"], resolve)
+      },
+      // 燃料
+      {
+        path: "/cc_rl",
+        name: "cc_rl",
+        component: resolve => require(["@/view/im/Wk/cc/rl/index"], resolve)
       },
       {
         path: "/cc_package",

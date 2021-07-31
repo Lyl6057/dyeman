@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-10 14:05:06
  * @LastEditors: Lyl
- * @LastEditTime: 2021-06-30 17:23:45
+ * @LastEditTime: 2021-07-24 15:49:42
  * @Description:
  */
 "use strict";
@@ -71,7 +71,7 @@ module.exports = {
      * Source Maps
      */
 
-    productionSourceMap: true,
+    productionSourceMap: false,
     // https://webpack.js.org/configuration/devtool/#production
     devtool: "#source-map",
 

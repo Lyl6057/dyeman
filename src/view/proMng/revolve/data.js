@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-07-17 10:23:20
+ * @LastEditTime: 2021-07-24 15:26:00
  * @Description:
  */
 
@@ -613,12 +613,38 @@ export function mainCrud(_this) {
       //   disabled: true,
       //   display: true
       // },
-
+      {
+        label: "ET序号",
+        prop: "etSn",
+        tip: "ET序号",
+        span: 12,
+        hide: true,
+        width: 80,
+        placeholder: " "
+      },
+      {
+        label: "#STLYLE 款号",
+        prop: "styleNo",
+        tip: "#STLYLE 款号",
+        span: 12,
+        hide: true,
+        width: 80,
+        placeholder: " "
+      },
+      {
+        label: "代码",
+        prop: "custStyleCode",
+        tip: "MÃ CODE VẢI XUẤT HÀNG 代码",
+        span: 12,
+        hide: true,
+        width: 80,
+        placeholder: " "
+      },
       {
         label: "备注",
         prop: "remark",
         tip: "Ghi chú",
-        span: 12,
+        span: 24,
         hide: true,
         width: 80,
         placeholder: " "
@@ -679,8 +705,8 @@ export function mainCrud(_this) {
             span: 6,
             hide: true,
             width: 80,
-            placeholder: " ",
-            type: "number"
+            placeholder: " "
+            // type: "number"
           },
           {
             label: "縮水(橫縮)",
@@ -689,8 +715,8 @@ export function mainCrud(_this) {
             span: 6,
             hide: true,
             width: 80,
-            placeholder: " ",
-            type: "number"
+            placeholder: " "
+            // type: "number"
           },
 
           {

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-24 08:12:20
  * @LastEditors: Lyl
- * @LastEditTime: 2021-07-02 10:08:40
+ * @LastEditTime: 2021-07-30 18:47:30
  * @Description:
  */
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
@@ -41,6 +41,11 @@ export function loc1C(_this) {
         label: _this.$t("whseField.hwm"), //"貨位碼",
         prop: "locationCode",
         cell: true,
+        type: "select",
+        filterable: true,
+        allowCreate: true,
+        defaultFirstOption: true,
+        dicData: getDicT("whseLocation", "locationCode", "locationCode"),
         width: 180
       },
       {

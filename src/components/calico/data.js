@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-24 08:12:20
  * @LastEditors: Lyl
- * @LastEditTime: 2021-07-09 16:55:56
+ * @LastEditTime: 2021-07-30 16:28:01
  * @Description:
  */
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
@@ -113,7 +113,7 @@ export function loc1C(_this) {
         label: _this.$t("whseField.ph"), //"批號",
         prop: "batchNo",
         cell: true,
-        width: 180
+        width: 140
       },
       {
         label: _this.$t("whseField.ph2"), // "疋號",
@@ -140,8 +140,8 @@ export function loc1C(_this) {
       {
         label: _this.$t("whseField.krbph"), //"客人布票号",
         prop: "custTicket",
-        cell: true
-        // width: 170
+        cell: true,
+        width: 180
       },
       {
         label: _this.$t("whseField.hwm"), //"貨位碼",
@@ -268,27 +268,27 @@ export function loc2C(_this) {
             ? _this.$t("whseField.ph")
             : _this.$t("whseField.gh"), //"批號",
         prop: _this.type == _this.$t("iaoMng.pb") ? "batchNo" : "prodNo",
-        cell: true,
+        cell: false,
         width: 180
       },
       {
         label: _this.$t("whseField.ph2"), // "疋號",
         prop: "countingNo",
-        cell: true,
+        cell: false,
         width: 70,
         align: "right"
       },
       {
         label: _this.$t("whseField.zl"), // "重量",
         prop: _this.type == _this.$t("iaoMng.pb") ? "weight" : "woWeights",
-        cell: true,
+        cell: false,
         width: 80,
         align: "right"
       },
       {
         label: _this.$t("whseField.dw"), // "單位",
         prop: _this.type == _this.$t("iaoMng.pb") ? "weightUnit" : "woUnit",
-        cell: true,
+        cell: false,
         width: 70,
         type: "select",
         dicData: getDIC("bas_matUnit")
@@ -296,7 +296,7 @@ export function loc2C(_this) {
       {
         label: _this.$t("whseField.bph"), //"客人布票号",
         prop: _this.type == _this.$t("iaoMng.pb") ? "custTicket" : "ticketNo",
-        cell: true
+        cell: false
         // width: 170
       }
     ]
