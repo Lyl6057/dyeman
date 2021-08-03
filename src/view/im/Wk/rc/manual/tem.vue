@@ -400,7 +400,7 @@ export default {
           whseYarninFk: this.detail.whseYarninoid,
           whseCalicoinFk: this.detail.whseCalicoinoid,
           whseChemicalinFk: this.detail.whseChemicalinoid, // 化工原料Oid
-          whseAccessoriesinFk: this.detail.whseAccessoriesinoid, // 辅料/五金/行政Oid
+          whseAccessoriesInFk: this.detail.whseAccessoriesinoid, // 辅料/五金/行政Oid
           whseDyesalinFk: this.detail.whseDyesalinoid, // 顏料Oid
           whseFinishedclothinFk: this.detail.whseFinishedclothinoid,
           whseEnergyInFk: this.detail.energyInId,
@@ -965,7 +965,7 @@ export default {
               } else {
                 // 新增
                 data.whseEnergyInFk = this.detail.energyInId;
-                data.whseAccessoriesinFk = this.detail.whseAccessoriesinoid;
+                data.whseAccessoriesInFk = this.detail.whseAccessoriesinoid;
                 data.whseFinishedclothinFk = this.detail.whseFinishedclothinoid;
                 data.whseYarninFk = this.detail.whseYarninoid;
                 data.whseCalicoinFk = this.detail.whseCalicoinoid;
@@ -1128,7 +1128,7 @@ export default {
               } else {
                 // 新增
                 data.whseEnergyInFk = this.form.energyInId;
-                data.whseAccessoriesinFk = this.form.whseAccessoriesinoid;
+                data.whseAccessoriesInFk = this.form.whseAccessoriesinoid;
                 data.whseFinishedclothinFk = this.form.whseFinishedclothinoid;
                 data.whseYarninFk = this.form.whseYarninoid;
                 data.whseCalicoinFk = this.form.whseCalicoinoid;

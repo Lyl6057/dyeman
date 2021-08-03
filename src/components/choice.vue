@@ -253,6 +253,9 @@ import {
   getCalicoinDtla,
   calicoinDtlaF,
   calicoinDtlaC,
+  // 辅料
+  scflDtlaC,
+  getScflDtla,
   //  貨位
   getLoc,
   locC,
@@ -317,17 +320,17 @@ export default {
         // );
       }
       if (this.choiceTle === this.$t("choicDlg.xzflrc")) {
-        this.choiceF.column[0].dicData = this.choiceF.column[0].dicData.filter(
-          (val) => {
-            return val.label.indexOf("生產輔料") != -1;
-          }
-        );
-        this.$set(
-          this.form,
-          "materialType",
-          this.choiceF.column[0].dicData[0].value
-        );
-        this.$set(this.choiceC.column[2], "hide", false);
+        // this.choiceF.column[0].dicData = this.choiceF.column[0].dicData.filter(
+        //   (val) => {
+        //     return val.label.indexOf("生產輔料") != -1;
+        //   }
+        // );
+        // this.$set(
+        //   this.form,
+        //   "materialType",
+        //   this.choiceF.column[0].dicData[0].value
+        // );
+        // this.$set(this.choiceC.column[2], "hide", false);
       }
       //   if (
       //   this.choiceTle === this.$t("choicDlg.xzwjxzrc") ||
@@ -580,7 +583,7 @@ export default {
               this.choiceTle === this.$t("choicDlg.xzwjxzrc") ||
               this.choiceTle === this.$t("choicDlg.xzflrc")
             ) {
-              this.$set(this.choiceC.column[2], "hide", true);
+              // this.$set(this.choiceC.column[2], "hide", true);
             }
             this.loading = false;
             return;
@@ -629,6 +632,10 @@ export default {
               item.materialName = item.materialNum;
               item.model = item.materialNum;
               item.itemspec = item.materialNum;
+              if (item.whseAccessoriesInFk) {
+                item.whseAccessoriesInFk =
+                  item.whseAccessoriesInFk.toLocaleLowerCase();
+              }
             }
             if (this.choiceTle === this.$t("choicDlg.xzsx")) {
               if (item.functions != null && item.functions != "") {
@@ -652,7 +659,7 @@ export default {
                 this.choiceTle === this.$t("choicDlg.xzwjxzrc") ||
                 this.choiceTle === this.$t("choicDlg.xzflrc")
               ) {
-                this.$set(this.choiceC.column[2], "hide", true);
+                // this.$set(this.choiceC.column[2], "hide", true);
               }
             });
             item.index = index + 1;
@@ -936,9 +943,9 @@ export default {
         this.getData = getCalicoinDtla;
         break;
       case this.$t("choicDlg.xzflrc"):
-        this.choiceC = calicoinDtlaC;
+        this.choiceC = scflDtlaC;
         this.choiceF = calicoinDtlaF;
-        this.getData = getCalicoinDtla;
+        this.getData = getScflDtla;
         break;
       case this.$t("choicDlg.xzlyr"):
         this.choiceC = PersonC;

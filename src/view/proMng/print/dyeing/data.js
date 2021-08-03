@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-07-29 11:20:42
+ * @LastEditTime: 2021-08-02 10:54:15
  * @Description:
  */
 
@@ -1497,6 +1497,7 @@ export function codeItemCrud(_this) {
         width: 200,
         cell: true,
         span: 6,
+        slot: true,
         placeholder: " "
       },
       {
@@ -1505,6 +1506,7 @@ export function codeItemCrud(_this) {
         width: 120,
         cell: true,
         span: 6,
+        slot: true,
         placeholder: " "
       },
       {
@@ -1514,6 +1516,7 @@ export function codeItemCrud(_this) {
         cell: true,
         type: "number",
         span: 6,
+        slot: true,
         placeholder: " ",
         change: () => {
           if (_this.mathCtr) {
@@ -1590,6 +1593,7 @@ export function codeItemCrud(_this) {
         cell: true,
         type: "number",
         span: 6,
+        slot: true,
         placeholder: " "
       },
       {
@@ -1628,15 +1632,16 @@ export function codeItemCrud(_this) {
         cell: true,
         span: 6,
         placeholder: " ",
+        slot: true,
         type: "select",
         dicData: [
           {
             label: "增加助剂",
-            value: "add_chemicalmat "
+            value: "add_chemicalmat"
           },
           {
             label: "增加颜料",
-            value: "add_pigment "
+            value: "add_pigment"
           },
           {
             label: "运行",
@@ -1651,6 +1656,7 @@ export function codeItemCrud(_this) {
         cell: true,
         type: "number",
         span: 6,
+        slot: true,
         placeholder: " "
       },
       {
@@ -1660,6 +1666,7 @@ export function codeItemCrud(_this) {
         cell: true,
         type: "number",
         span: 6,
+        slot: true,
         placeholder: " "
       },
       {
@@ -1669,6 +1676,7 @@ export function codeItemCrud(_this) {
         cell: true,
         type: "number",
         span: 6,
+        slot: true,
         placeholder: " "
       },
       {
@@ -1678,6 +1686,7 @@ export function codeItemCrud(_this) {
         cell: true,
         type: "number",
         span: 6,
+        slot: true,
         placeholder: " "
       }
     ]

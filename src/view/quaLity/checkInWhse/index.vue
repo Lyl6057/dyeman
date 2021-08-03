@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-07-30 16:14:44
+ * @LastEditTime: 2021-08-03 10:50:17
  * @Description:
 -->
 <template>
@@ -181,8 +181,8 @@ export default {
         addInWhse(data).then((inwhse) => {
           baseCodeSupply({ code: "whse_in" }).then((res) => {});
           const inwhseId = inwhse.data.data;
-          list.forEach((item, i) => {
-            baseCodeSupplyEx({ code: "pb_in_whse" }).then((pbIn) => {
+          baseCodeSupplyEx({ code: "pb_in_whse" }).then((pbIn) => {
+            list.forEach((item, i) => {
               addInDtla({
                 prodNo: item.weaveJobCode,
                 weight: this.checkSum,
@@ -209,6 +209,7 @@ export default {
                 });
               });
             });
+            baseCodeSupply({ code: "pb_in_whse" }).then((res) => {});
           });
         });
       });

@@ -185,6 +185,10 @@ export default {
           delete this.form[key];
         }
       }
+
+      if (this.form.retDate && this.form.retDate.indexOf(" ") == -1) {
+        this.form.retDate += " 00:00:00";
+      }
       this.everyThing
         .func(
           Object.assign(this.form, {

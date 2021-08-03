@@ -534,6 +534,8 @@ export default {
           }
         }
       }
+      this.form.list = null;
+      this.form.retDate += " 00:00:00";
       if (
         this.form.whseRetyarninoid ||
         this.form.whseRetreatoid ||
@@ -578,7 +580,7 @@ export default {
           this.form.whseRetyarninoid = res.data.data;
           this.form.whseRetreatoid = res.data.data;
           this.form.whseTransferoid = res.data.data;
-          baseCodeSupply({ code: "whse_out" }).then((res) => {});
+          // baseCodeSupply({ code: "whse_out" }).then((res) => {});
           if (this.mx.length === 0) {
             this.$tip.success("保存成功");
             this.canSave = false;
@@ -669,6 +671,7 @@ export default {
           item.index = i + 1;
           // item.yarnsName = item.yarnsId;
           item.retCompany = item.weightUnit;
+          item.retWeight = item.weight;
           // item.$cellEdit = true;
           if (i === this.mx.length - 1) {
             this.$refs.dlgcrud.setCurrentRow(this.mx[this.mx.length - 1]);
@@ -683,6 +686,13 @@ export default {
       }
       this.choiceV = false;
     },
+  },
+  updated() {
+    setTimeout(() => {
+      this.$nextTick(() => {
+        this.$refs["dlgcrud"].doLayout();
+      });
+    }, 200);
   },
   created() {},
   mounted() {

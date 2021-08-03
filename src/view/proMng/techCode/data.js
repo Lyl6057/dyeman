@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-06-19 15:40:51
+ * @LastEditTime: 2021-08-02 10:56:17
  * @Description:
  */
 
@@ -76,11 +76,11 @@ export function dlgForm(_this) {
         dicData: [
           {
             label: "增加助剂",
-            value: "add_chemicalmat "
+            value: "add_chemicalmat"
           },
           {
             label: "增加颜料",
-            value: "add_pigment "
+            value: "add_pigment"
           },
           {
             label: "运行",
@@ -265,11 +265,11 @@ export function dlgCrud(_this) {
         dicData: [
           {
             label: "增加助剂",
-            value: "add_chemicalmat "
+            value: "add_chemicalmat"
           },
           {
             label: "增加颜料",
-            value: "add_pigment "
+            value: "add_pigment"
           },
           {
             label: "运行",

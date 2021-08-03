@@ -263,6 +263,12 @@ export default {
           delete this.form[key];
         }
       }
+      if (this.form.stockDate && this.form.stockDate.indexOf(" ") == -1) {
+        this.form.stockDate += " 00:00:00";
+      }
+      if (this.form.retDate && this.form.retDate.indexOf(" ") == -1) {
+        this.form.retDate += " 00:00:00";
+      }
       this.everyThing
         .func(
           Object.assign(this.form, {
@@ -312,8 +318,8 @@ export default {
         retCode: "",
         woOutno: "",
         stockState: "0",
-        stockDate: this.getNowTime(),
-        retDate: this.getNowTime(),
+        stockDate: this.$getNowTime("date") + " 00:00:00",
+        retDate: this.$getNowTime("date") + " 00:00:00",
         stockType: "3",
       };
       // if (this.hide != "1" && this.hide != "2") {

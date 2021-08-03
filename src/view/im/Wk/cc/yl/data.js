@@ -22,9 +22,9 @@ export function rsxkr1F(_this) {
         span: 6,
         placeholder: " ",
         // disabled: !_this.isPlan && !_this.isAdd,
-        type: "datetime",
-        format: "yyyy-MM-dd HH:mm:ss",
-        valueFormat: "yyyy-MM-dd HH:mm:ss"
+        type: "date",
+        format: "yyyy-MM-dd",
+        valueFormat: "yyyy-MM-dd"
       },
       // {
       //   label: "出倉日期",
@@ -100,9 +100,9 @@ export function rsxkr2F(_this) {
         span: 6,
         placeholder: " ",
         // disabled: !_this.isPlan && !_this.isAdd,
-        type: "datetime",
-        format: "yyyy-MM-dd HH:mm:ss",
-        valueFormat: "yyyy-MM-dd HH:mm:ss"
+        type: "date",
+        format: "yyyy-MM-dd",
+        valueFormat: "yyyy-MM-dd"
       },
       {
         label: "出仓方式",
@@ -280,9 +280,9 @@ export function rsxkr1C(_this) {
         label: "出倉日期",
         prop: _this.hide === "1" ? "stockDate" : "retDate",
         cell: true,
-        type: "datetime",
-        format: "yyyy-MM-dd HH:mm:ss",
-        valueFormat: "yyyy-MM-dd HH:mm:ss",
+        type: "date",
+        format: "yyyy-MM-dd",
+        valueFormat: "yyyy-MM-dd",
         align: "center",
         width: 200,
         hide: _this.hide === "6"

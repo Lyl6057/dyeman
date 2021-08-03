@@ -106,7 +106,8 @@ export const YarninC = {
       cell: false,
       // width: 350,
       type: "select",
-      dicData: getDicT("basYarnsData", "yarnsName", "yarnsId")
+      dicData: getDicT("basYarnsData", "yarnsName", "yarnsId"),
+      overHidden: true
     },
     {
       label: i18n.t("whseField.ph"),
@@ -3695,7 +3696,7 @@ export const WhseRetyarninoutPlanC = {
   height: "calc(100vh - 200px)",
   refreshBtn: false,
   columnBtn: false,
-  selection: false,
+  selection: true,
   page: true,
   column: [
     {
@@ -4362,6 +4363,14 @@ export const PbDetaliC = {
   ]
 };
 
+// 生产辅料入仓明细
+export function getScflDtla(params) {
+  return axios({
+    url: "/api/whseAccessoriesDtl/page",
+    method: "get",
+    params: params
+  });
+}
 // 五金/行政入仓明细
 export function getCalicoinDtla(params) {
   return axios({
@@ -4377,13 +4386,13 @@ export const calicoinDtlaF = {
   menuBtn: false,
   menu: false,
   column: [
-    {
-      label: i18n.t("whseField.clzl"),
-      prop: "materialType",
-      span: 6,
-      type: "select",
-      dicData: getDIC("pur_category")
-    },
+    // {
+    //   label: i18n.t("whseField.clzl"),
+    //   prop: "materialType",
+    //   span: 6,
+    //   type: "select",
+    //   dicData: getDIC("pur_category")
+    // },
     {
       label: i18n.t("whseField.clbh"),
       prop: "materialNum",
@@ -4418,32 +4427,19 @@ export const calicoinDtlaC = {
     },
     {
       label: i18n.t("whseField.rcbh"),
-      prop: "$whseAccessoriesinFk",
+      prop: "whseAccessoriesInFk",
       cell: true,
       width: 140,
       type: "select",
       dicData: getDicT("whseAccessoriesIn", "yinId", "whseAccessoriesinoid")
     },
-    {
-      label: "入仓编号2",
-      prop: "whseAccessoriesinFk",
-      cell: false,
-      width: 140,
-      type: "select",
-      hide: false,
-      props: {
-        label: "whseAccessoriesinFk",
-        value: "whseAccessoriesDtloid"
-      },
-      dicData: getXDicT("whseAccessoriesIn")
-    },
-    {
-      label: i18n.t("whseField.clzl"),
-      prop: "materialType",
-      width: 100,
-      type: "select",
-      dicData: getDIC("pur_category")
-    },
+    // {
+    //   label: i18n.t("whseField.clzl"),
+    //   prop: "materialType",
+    //   width: 100,
+    //   type: "select",
+    //   dicData: getDIC("pur_category")
+    // },
     {
       label: i18n.t("whseField.clbh"),
       prop: "materialNum",
@@ -4488,6 +4484,99 @@ export const calicoinDtlaC = {
         value: "hardwareId"
       },
       dicData: basWjxz
+    },
+    {
+      label: i18n.t("Shipping.sl"),
+      prop: "poQty",
+      width: 100,
+      align: "right"
+    },
+    {
+      label: i18n.t("whseField.dw"),
+      prop: "unitQty",
+      width: 100,
+      type: "select",
+      dicData: matUnit
+    }
+  ]
+};
+let basScfl = getXDicT("basProductivesupplies");
+export const scflDtlaC = {
+  menu: false,
+  addBtn: false,
+  border: true,
+  highlightCurrentRow: true,
+  height: "calc(100vh - 200px)",
+  refreshBtn: false,
+  columnBtn: false,
+  selection: true,
+  page: true,
+  column: [
+    {
+      prop: "index",
+      label: "#",
+      width: 50,
+      align: "center"
+    },
+    {
+      label: i18n.t("whseField.rcbh"),
+      prop: "whseAccessoriesInFk",
+      cell: false,
+      width: 140,
+      type: "select",
+      dicData: getDicT("whseAccessoriesIn", "yinId", "whseAccessoriesinoid")
+    },
+    // {
+    //   label: i18n.t("whseField.clzl"),
+    //   prop: "materialType",
+    //   width: 100,
+    //   type: "select",
+    //   dicData: getDIC("pur_category")
+    // },
+    {
+      label: i18n.t("whseField.clbh"),
+      prop: "materialNum",
+      width: 140
+    },
+
+    {
+      label: i18n.t("whseField.clmc"),
+      prop: "materialName",
+      width: 150,
+      type: "select",
+      props: {
+        label: "chinName",
+        value: "hardwareId"
+      },
+      cell: false,
+      dicData: basScfl
+    },
+    {
+      label: i18n.t("whseField.ph"),
+      prop: "batchNo",
+      width: 150
+    },
+    {
+      label: i18n.t("whseField.xh"),
+      prop: "model",
+      width: 180,
+      type: "select",
+      props: {
+        label: "model",
+        value: "hardwareId"
+      },
+      dicData: basScfl
+    },
+    {
+      label: i18n.t("whseField.gg"),
+      prop: "itemspec",
+      width: 160,
+      type: "select",
+      props: {
+        label: "itemspec",
+        value: "hardwareId"
+      },
+      dicData: basScfl
     },
     {
       label: i18n.t("Shipping.sl"),

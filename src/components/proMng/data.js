@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-05-03 13:03:03
  * @LastEditors: Lyl
- * @LastEditTime: 2021-07-28 08:47:53
+ * @LastEditTime: 2021-08-02 10:55:56
  * @Description:
  */
 
@@ -3124,11 +3124,11 @@ export function TechItemF(_this) {
         dicData: [
           {
             label: "增加助剂",
-            value: "add_chemicalmat "
+            value: "add_chemicalmat"
           },
           {
             label: "增加颜料",
-            value: "add_pigment "
+            value: "add_pigment"
           },
           {
             label: "运行",
@@ -3176,11 +3176,11 @@ export function TechItemC(_this) {
         dicData: [
           {
             label: "增加助剂",
-            value: "add_chemicalmat "
+            value: "add_chemicalmat"
           },
           {
             label: "增加颜料",
-            value: "add_pigment "
+            value: "add_pigment"
           },
           {
             label: "运行",

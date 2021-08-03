@@ -1,6 +1,6 @@
-import { getDIC, getXDicT, getDicT, postDicT } from '@/config/index'
+import { getDIC, getXDicT, getDicT, postDicT } from "@/config/index";
 
-let whsehouse = getDicT("whseWarehouse", "warehouseName", "whseWarehouseoid")
+let whsehouse = getDicT("whseWarehouse", "warehouseName", "whseWarehouseoid");
 export function rsxkr1F(_this) {
   return {
     submitBtn: false,
@@ -11,7 +11,7 @@ export function rsxkr1F(_this) {
         label: _this.$t("whseField.ccbh"),
         prop: "retCode",
         span: 6,
-        placeholder: " ",
+        placeholder: " "
       },
       {
         label: "出倉日期",
@@ -19,18 +19,18 @@ export function rsxkr1F(_this) {
         span: 6,
         placeholder: " ",
         type: "datetime",
-        format: "yyyy-MM-dd HH:mm:ss",
-        valueFormat: "yyyy-MM-dd HH:mm:ss",
+        format: "yyyy-MM-dd",
+        valueFormat: "yyyy-MM-dd"
       },
       {
         label: "配料单号",
         prop: "batchNumber",
         span: 6,
         placeholder: " ",
-        display: _this.hide === "1" || _this.hide === "2" ? true : false,
-      },
-    ],
-  }
+        display: _this.hide === "1" || _this.hide === "2" ? true : false
+      }
+    ]
+  };
 }
 export function rsxkr2F(_this) {
   return {
@@ -52,7 +52,7 @@ export function rsxkr2F(_this) {
         placeholder: " ",
         type: "date",
         format: "yyyy-MM-dd",
-        valueFormat: "yyyy-MM-dd",
+        valueFormat: "yyyy-MM-dd"
       },
       {
         label: "出仓类型",
@@ -60,7 +60,7 @@ export function rsxkr2F(_this) {
         span: 6,
         type: "select",
         disabled: true,
-        dicData: getDIC('Whse_out_type'),
+        dicData: getDIC("Whse_out_type")
       },
 
       // {
@@ -76,8 +76,7 @@ export function rsxkr2F(_this) {
         span: 6,
         placeholder: " ",
         disabled: true,
-        display: _this.hide === "1" || _this.hide === "2" ? true : false,
-
+        display: _this.hide === "1" || _this.hide === "2" ? true : false
       },
       {
         label: "调入仓",
@@ -104,13 +103,10 @@ export function rsxkr2F(_this) {
         span: 12,
         placeholder: " ",
         disabled: false,
-        display: _this.hide != "2"
-      },
-
-    ],
-  }
-
-
+        display: _this.hide == "4" || _this.hide == "3"
+      }
+    ]
+  };
 }
 export function rsxkr1C(_this) {
   return {
@@ -126,7 +122,7 @@ export function rsxkr1C(_this) {
       {
         label: "whseRetyarninoid",
         prop: "whseRetyarninoid",
-        hide: true,
+        hide: true
       },
       {
         label: "#",
@@ -141,19 +137,19 @@ export function rsxkr1C(_this) {
         type: "datetime",
         format: "yyyy-MM-dd HH:mm:ss",
         valueFormat: "yyyy-MM-dd HH:mm:ss",
-        align: "center",
+        align: "center"
       },
 
       {
         label: "记录删除标记",
         prop: "sysDeleted",
-        hide: true,
+        hide: true
       },
       {
         label: _this.$t("whseField.ccbh"),
         prop: "retCode",
         cell: true,
-        width: 160,
+        width: 160
       },
       {
         label: "出仓类型",
@@ -161,7 +157,7 @@ export function rsxkr1C(_this) {
         cell: false,
         width: 90,
         type: "select",
-        dicData: getDIC('Whse_out_type'),
+        dicData: getDIC("Whse_out_type")
       },
       {
         label: "出倉日期",
@@ -171,7 +167,7 @@ export function rsxkr1C(_this) {
         format: "yyyy-MM-dd",
         valueFormat: "yyyy-MM-dd",
         align: "center",
-        width: 190,
+        width: 190
       },
 
       {
@@ -179,23 +175,21 @@ export function rsxkr1C(_this) {
         prop: "batchNumber",
         cell: true,
         width: 180,
-        hide: _this.hide === "1" || _this.hide === "2" ? false : true,
+        hide: _this.hide === "1" || _this.hide === "2" ? false : true
         // type: "select",
         // dicData:
         //   getDicT('basCustomer', 'custCode', 'custCode')
       },
       {
-        label: _this.$t('whseField.czy'),
+        label: _this.$t("whseField.czy"),
         prop: "sysCreatedby",
         cell: true,
         width: 100,
         type: "select",
-        dicData:
-          postDicT('ucmlUserList', 'employeename', 'ucmlUseroid')
-      },
-    ],
-  }
-
+        dicData: postDicT("ucmlUserList", "employeename", "ucmlUseroid")
+      }
+    ]
+  };
 }
 export function rsxkr2C(_this) {
   return {
@@ -210,62 +204,62 @@ export function rsxkr2C(_this) {
     showSummary: true,
     sumColumnList: [
       {
-        label: ' ',
-        name: 'weight',
-        type: 'sum',
-      }, {
-        label: ' ',
-        name: 'everySpindle',
-        type: 'sum',
+        label: " ",
+        name: "weight",
+        type: "sum"
       },
+      {
+        label: " ",
+        name: "everySpindle",
+        type: "sum"
+      }
     ],
     column: [
       {
         prop: "index",
         label: "#",
         width: 50,
-        align: "center",
-
+        align: "center"
       },
       {
         label: "Whse_retYarnin_dtlOID",
         prop: "whseRetYarninDtloid",
-        hide: true,
+        hide: true
       },
       {
         label: "設備编号",
         prop: "equId",
         cell: false,
         width: 120,
-        hide: _this.hide != '1',
+        hide: _this.hide != "1"
       },
       {
         label: _this.$t("labour.sbmc"),
         prop: "equName",
         cell: false,
         width: 180,
-        hide: _this.hide != '1',
+        hide: _this.hide != "1"
       },
       {
         label: _this.$t("whseField.wfcdh"),
         prop: "refCode",
         cell: false,
-        hide: _this.hide != '2',
-        width: 120,
+        hide: _this.hide != "2",
+        width: 120
       },
       {
         label: _this.$t("whseField.wfcmc"),
         prop: "refName",
-        hide: _this.hide != '2',
+        hide: _this.hide != "2",
         cell: false,
-        width: 120,
+        width: 120
       },
       {
         label: _this.$t("whseField.rcbh"),
         prop: "yinId",
         hide: true,
         // hide: _this.hide != '4',
-        width: 130,
+        width: 130
         // type: "select",
         // dicData: getDicT("whseYarnin/v1.0/list", "batchNo", "yinId"),
       },
@@ -273,7 +267,7 @@ export function rsxkr2C(_this) {
         label: "纱线系统编号",
         prop: "yarnsId",
         cell: false,
-        width: 130,
+        width: 130
       },
       {
         label: _this.$t("whseField.sxmc"),
@@ -281,52 +275,50 @@ export function rsxkr2C(_this) {
         cell: false,
         // width: 450,
         type: "select",
-        dicData: getDicT("basYarnsData", "yarnsName", "yarnsId"),
+        dicData: getDicT("basYarnsData", "yarnsName", "yarnsId")
       },
 
       {
         label: "批次/批号",
         prop: "batchNo",
         cell: false,
-        width: 180,
+        width: 180
       },
       {
         label: _this.$t("whseField.ds"),
         prop: "everySpindle",
         cell: true,
         width: 100,
-        align: "right",
+        align: "right"
       },
       {
         label: _this.$t("whseField.zl"),
         prop: "weight",
         cell: true,
         width: 100,
-        align: "right",
+        align: "right"
       },
       {
-        label: _this.$t('whseField.dw'),
+        label: _this.$t("whseField.dw"),
         prop: "weightUnit",
         cell: true,
         width: 100,
         type: "select",
-        dicData: getDIC("bas_matUnit"),
+        dicData: getDIC("bas_matUnit")
       },
 
       {
         label: "纱线出仓",
         prop: "WhseRetyarninFk",
         hide: true,
-        width: 100,
-
-      },
-    ],
-  }
-
+        width: 100
+      }
+    ]
+  };
 }
 
-let yarninDtl = getXDicT("whseYarninDtl/v1.0/list")
-let yarnin = getXDicT("whseYarnin/v1.0/list")
+let yarninDtl = getXDicT("whseYarninDtl/v1.0/list");
+let yarnin = getXDicT("whseYarnin/v1.0/list");
 // 退客人明细
 export function rsxkr3C(_this) {
   return {
@@ -341,28 +333,27 @@ export function rsxkr3C(_this) {
     showSummary: true,
     sumColumnList: [
       {
-        label: ' ',
-        name: 'retWeight',
-        type: 'sum',
+        label: " ",
+        name: "retWeight",
+        type: "sum"
       },
       {
-        label: ' ',
-        name: 'traWeight',
-        type: 'sum',
-      },
+        label: " ",
+        name: "traWeight",
+        type: "sum"
+      }
     ],
     column: [
       {
         prop: "index",
         label: "#",
         width: 50,
-        align: "center",
-
+        align: "center"
       },
       {
         label: "whseRetreatDtloid",
         prop: "whseRetreatDtloid",
-        hide: true,
+        hide: true
       },
       {
         label: "採購入庫編號",
@@ -374,7 +365,7 @@ export function rsxkr3C(_this) {
           value: "whseYarninDtloid"
         },
         type: "select",
-        dicData: yarninDtl,
+        dicData: yarninDtl
       },
       {
         label: "採購入庫編號",
@@ -386,7 +377,7 @@ export function rsxkr3C(_this) {
           value: "whseYarninoid"
         },
         type: "select",
-        dicData: yarnin,
+        dicData: yarnin
       },
       {
         label: "纱线系统编号",
@@ -398,7 +389,7 @@ export function rsxkr3C(_this) {
           label: "yarnsId",
           value: "whseYarninDtloid"
         },
-        dicData: yarninDtl,
+        dicData: yarninDtl
       },
       {
         label: "纱线名稱",
@@ -411,6 +402,7 @@ export function rsxkr3C(_this) {
         //   value: "whseYarninDtloid"
         // },
         dicData: getDicT("basYarnsData", "yarnsName", "yarnsId"),
+        overHidden: true
       },
       {
         label: "批次/批号",
@@ -422,7 +414,7 @@ export function rsxkr3C(_this) {
           label: "batchNo",
           value: "whseYarninDtloid"
         },
-        dicData: yarninDtl,
+        dicData: yarninDtl
       },
       {
         label: "入倉重量",
@@ -436,7 +428,7 @@ export function rsxkr3C(_this) {
           value: "whseYarninDtloid"
         },
         dicData: yarninDtl,
-        hide: _this.hide == '4' || _this.hide == '3' ? false : true
+        hide: _this.hide == "4" || _this.hide == "3" ? false : true
       },
       {
         label: "退回重量",
@@ -444,16 +436,16 @@ export function rsxkr3C(_this) {
         cell: true,
         width: 140,
         align: "right",
-        hide: _this.hide == '4' || _this.hide == '3' ? false : true
+        hide: _this.hide == "4" || _this.hide == "3" ? false : true
       },
       {
-        label: _this.$t('whseField.dw'),
+        label: _this.$t("whseField.dw"),
         prop: "retCompany",
         cell: true,
         width: 100,
         type: "select",
         dicData: getDIC("bas_matUnit"),
-        hide: _this.hide == '4' || _this.hide == '3' ? false : true
+        hide: _this.hide == "4" || _this.hide == "3" ? false : true
       },
       {
         label: "调仓重量",
@@ -461,28 +453,26 @@ export function rsxkr3C(_this) {
         cell: true,
         width: 140,
         align: "right",
-        hide: _this.hide != '5'
+        hide: _this.hide != "5"
       },
       {
-        label: _this.$t('whseField.dw'),
+        label: _this.$t("whseField.dw"),
         prop: "traCompany",
         cell: true,
         width: 100,
         type: "select",
         dicData: getDIC("bas_matUnit"),
-        hide: _this.hide != '5'
+        hide: _this.hide != "5"
       },
 
       {
         label: "退客人纱",
         prop: "whseRetreatFk",
         hide: true,
-        width: 100,
-
-      },
-    ],
-  }
-
+        width: 100
+      }
+    ]
+  };
 }
 // 本廠配料
 export function planCrud(_this) {
@@ -500,20 +490,18 @@ export function planCrud(_this) {
         prop: "index",
         label: "#",
         width: 50,
-        align: "center",
-
+        align: "center"
       },
       {
         label: "Whse_retYarnin_dtlOID",
         prop: "whseRetYarninDtloid",
-        hide: true,
+        hide: true
       },
       {
         label: _this.$t("whseField.jhbh"),
         prop: "retBatch",
         cell: false,
-        width: 150,
-
+        width: 150
       },
 
       {
@@ -521,74 +509,70 @@ export function planCrud(_this) {
         prop: "equId",
         cell: false,
         width: 120,
-        hide: _this.hide != '1'
-
+        hide: _this.hide != "1"
       },
       {
         label: _this.$t("labour.sbmc"),
         prop: "equName",
         cell: false,
         width: 120,
-        hide: _this.hide != '1'
+        hide: _this.hide != "1"
       },
       {
         label: _this.$t("whseField.wfcdh"),
         prop: "refCode",
         cell: false,
         width: 120,
-        hide: _this.hide != '2'
-
+        hide: _this.hide != "2"
       },
       {
         label: _this.$t("whseField.wfcmc"),
         prop: "refName",
         cell: false,
         width: 120,
-        hide: _this.hide != '2'
+        hide: _this.hide != "2"
       },
       {
         label: _this.$t("whseField.scdh"),
         prop: "prOn",
         cell: false,
-        width: 180,
+        width: 180
       },
       {
         label: _this.$t("whseField.sxbh"),
         prop: "yarnsId",
         cell: false,
-        width: 120,
-
+        width: 120
       },
       {
         label: _this.$t("whseField.sxmc"),
         prop: "yarnsName",
         cell: false,
-        width: 250,
+        width: 250
       },
 
       {
         label: _this.$t("whseField.ph"),
         prop: "batchNo",
         cell: false,
-        width: 180,
+        width: 180
       },
       {
         label: _this.$t("whseField.zl"),
         prop: "weight",
         cell: false,
         width: 100,
-        align: "right",
+        align: "right"
       },
       {
         label: _this.$t("whseField.ds"),
         prop: "everySpindle",
         cell: false,
         align: "right",
-        width: 100,
-      },
-    ],
-  }
-
+        width: 100
+      }
+    ]
+  };
 }
 // 外廠配料
 export function PlanOutCrud(_this) {
@@ -606,20 +590,18 @@ export function PlanOutCrud(_this) {
         prop: "index",
         label: "#",
         width: 50,
-        align: "center",
-
+        align: "center"
       },
       {
         label: "VWhseRetyarninoutPlanoid",
         prop: "VWhseRetyarninoutPlanoid",
-        hide: true,
+        hide: true
       },
       {
         label: "外厂配料计划编号",
         prop: "retBatch",
         cell: true,
-        width: 150,
-
+        width: 150
       },
 
       {
@@ -627,49 +609,46 @@ export function PlanOutCrud(_this) {
         prop: "equId",
         cell: true,
         width: 120,
-        hide: _this.hide != '1'
-
+        hide: _this.hide != "1"
       },
       {
         label: _this.$t("labour.sbmc"),
         prop: "equName",
         cell: true,
         width: 120,
-        hide: _this.hide != '1'
+        hide: _this.hide != "1"
       },
       {
         label: _this.$t("whseField.wfcdh"),
         prop: "refCode",
         cell: true,
         width: 120,
-        hide: _this.hide != '2'
-
+        hide: _this.hide != "2"
       },
       {
         label: _this.$t("whseField.wfcmc"),
         prop: "refName",
         cell: true,
         width: 120,
-        hide: _this.hide != '2'
+        hide: _this.hide != "2"
       },
       {
         label: _this.$t("whseField.scdh"),
         prop: "prOn",
         cell: true,
-        width: 140,
+        width: 140
       },
       {
         label: _this.$t("whseField.sxbh"),
         prop: "yarnsId",
         cell: true,
-        width: 120,
-
+        width: 120
       },
       {
         label: _this.$t("whseField.sxmc"),
         prop: "yarnsName",
         cell: true,
-        width: 250,
+        width: 250
       },
 
       {
@@ -677,25 +656,24 @@ export function PlanOutCrud(_this) {
         prop: "batchNo",
         cell: true,
         width: 180,
-        align: "right",
+        align: "right"
       },
       {
         label: _this.$t("whseField.zl"),
         prop: "weight",
         cell: true,
         width: 100,
-        align: "right",
+        align: "right"
       },
       {
         label: _this.$t("whseField.ds"),
         prop: "everySpindle",
         cell: true,
         align: "right",
-        width: 100,
-      },
-    ],
-  }
-
+        width: 100
+      }
+    ]
+  };
 }
 
 export function planForm(_this) {
@@ -715,31 +693,30 @@ export function planForm(_this) {
         label: _this.$t("ProWorkflowInfo.sbbh"),
         prop: "equId",
         span: 6,
-        display: _this.hide === '1' ? true : false,
-        placeholder: " ",
+        display: _this.hide === "1" ? true : false,
+        placeholder: " "
       },
       {
         label: _this.$t("whseField.gcdh"),
         prop: "refCode",
         span: 6,
         placeholder: " ",
-        display: _this.hide === '2' ? true : false
+        display: _this.hide === "2" ? true : false
       },
       {
         label: _this.$t("whseField.scdh"),
         prop: "prOn",
         span: 6,
-        placeholder: " ",
+        placeholder: " "
       },
       {
         label: "纱线批号",
         prop: "batchNo",
         span: 6,
-        placeholder: " ",
-      },
-
-    ],
-  }
+        placeholder: " "
+      }
+    ]
+  };
 }
 
 export function sxForm(_this) {
@@ -766,16 +743,16 @@ export function sxForm(_this) {
         label: _this.$t("whseField.ph"),
         prop: "batchNo",
         span: 6,
-        placeholder: " ",
+        placeholder: " "
       },
       {
         label: _this.$t("whseField.zl"),
         prop: "weight",
         span: 6,
-        placeholder: " ",
-      },
-    ],
-  }
+        placeholder: " "
+      }
+    ]
+  };
 }
 
 // 退客人纱
@@ -794,20 +771,18 @@ export function whseRetreatCrud(_this) {
         prop: "index",
         label: "#",
         width: 50,
-        align: "center",
-
+        align: "center"
       },
       {
         label: "Whse_retYarnin_dtlOID",
         prop: "whseRetYarninDtloid",
-        hide: true,
+        hide: true
       },
       {
         label: _this.$t("whseField.jhbh"),
         prop: "retBatch",
         cell: true,
-        width: 150,
-
+        width: 150
       },
 
       {
@@ -815,72 +790,68 @@ export function whseRetreatCrud(_this) {
         prop: "equId",
         cell: true,
         width: 120,
-        hide: _this.hide != '1'
-
+        hide: _this.hide != "1"
       },
       {
         label: _this.$t("labour.sbmc"),
         prop: "equName",
         cell: true,
         width: 120,
-        hide: _this.hide != '1'
+        hide: _this.hide != "1"
       },
       {
         label: _this.$t("whseField.wfcdh"),
         prop: "refCode",
         cell: true,
         width: 120,
-        hide: _this.hide != '2'
-
+        hide: _this.hide != "2"
       },
       {
         label: _this.$t("whseField.wfcmc"),
         prop: "refName",
         cell: true,
         width: 120,
-        hide: _this.hide != '2'
+        hide: _this.hide != "2"
       },
       {
         label: _this.$t("whseField.scdh"),
         prop: "prOn",
         cell: true,
-        width: 180,
+        width: 180
       },
       {
         label: _this.$t("whseField.sxbh"),
         prop: "yarnsId",
         cell: true,
-        width: 120,
-
+        width: 120
       },
       {
         label: _this.$t("whseField.sxmc"),
         prop: "yarnsName",
         cell: true,
-        width: 250,
+        width: 250
       },
 
       {
         label: _this.$t("whseField.ph"),
         prop: "batchNo",
         cell: true,
-        width: 180,
+        width: 180
       },
       {
         label: _this.$t("whseField.zl"),
         prop: "weight",
         cell: true,
         width: 100,
-        align: "right",
+        align: "right"
       },
       {
         label: _this.$t("whseField.ds"),
         prop: "everySpindle",
         cell: true,
         align: "right",
-        width: 100,
-      },
-    ],
-  }
-
+        width: 100
+      }
+    ]
+  };
 }

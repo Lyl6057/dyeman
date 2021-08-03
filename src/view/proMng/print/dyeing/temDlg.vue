@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-07-30 15:39:11
+ * @LastEditTime: 2021-08-02 10:56:25
  * @Description: 
 -->
 <template>
@@ -378,6 +378,7 @@
                       v-model="scope.row.formulaUnit"
                       placeholder=" "
                       @change="unitCtr(scope)"
+                      :disabled="scope.row.bleadyeType != 'run'"
                     >
                       <el-option
                         v-for="item in options"
@@ -393,6 +394,7 @@
                       v-model="scope.row.formulaUnit"
                       placeholder=" "
                       @change="unitCtr(scope)"
+                      :disabled="scope.row.bleadyeType != 'run'"
                     >
                       <el-option
                         v-for="item in option"
@@ -403,6 +405,79 @@
                       </el-option>
                     </el-select>
                   </div>
+                </template>
+                 <template slot="bleadyeType" slot-scope="scope">
+                    <!-- string 类型 -->
+                    <el-select
+                      v-model="scope.row.bleadyeType"
+                      placeholder=" "
+                      @change="bleadyeTypeChange(scope)"
+                    >
+                      <el-option
+                        v-for="item in bleadyeType"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value"
+                      >
+                      </el-option>
+                    </el-select>
+                 </template>
+                <template slot="mateName" slot-scope="scope">
+                  <input
+                    v-model="scope.row.mateName"
+                    class="scope-input"
+                    @click="selectValue($event)"
+                  ></input>
+                </template>
+                <template slot="mateBatchNo" slot-scope="scope">
+                  <input
+                    v-model="scope.row.mateBatchNo"
+                    class="scope-input"
+                    @click="selectValue($event)"
+                  ></input>
+                </template>
+                <template slot="formulaAmount" slot-scope="scope">
+                  <input
+                    v-model="scope.row.formulaAmount"
+                    class="scope-input"
+                    @click="selectValue($event)"
+                    @change="changeAmount"
+                  ></input>
+                </template>
+                <template slot="useAmount" slot-scope="scope">
+                  <input
+                    v-model="scope.row.useAmount"
+                    class="scope-input"
+                    @click="selectValue($event)"
+                  ></input>
+                </template>
+                <template slot="runTemp" slot-scope="scope">
+                  <input
+                    v-model="scope.row.runTemp"
+                    class="scope-input"
+                    @click="selectValue($event)"
+                  ></input>
+                </template>
+                <template slot="runTime" slot-scope="scope">
+                  <input
+                    v-model="scope.row.runTime"
+                    class="scope-input"
+                    @click="selectValue($event)"
+                  ></input>
+                </template>
+                <template slot="dilutionRate" slot-scope="scope">
+                  <input
+                    v-model="scope.row.dilutionRate"
+                    class="scope-input"
+                    @click="selectValue($event)"
+                  ></input>
+                </template>
+                <template slot="deliveryQuantity" slot-scope="scope">
+                  <input
+                    v-model="scope.row.deliveryQuantity"
+                    class="scope-input"
+                    @click="selectValue($event)"
+                  ></input>
                 </template>
               </avue-crud>
             </div>
@@ -582,6 +657,20 @@ export default {
       ],
       pdfDlg: false,
       pdfUrl: "",
+      bleadyeType: [
+        {
+          label: "增加助剂",
+          value: "add_chemicalmat",
+        },
+        {
+          label: "增加颜料",
+          value: "add_pigment",
+        },
+        {
+          label: "运行",
+          value: "run",
+        },
+      ],
     };
   },
   watch: {},
@@ -611,6 +700,58 @@ export default {
         process.env.API_HOST +
         "/api/proBleadyeJob/buildWorkOrder?id=" +
         this.form.bleadyeJobId;
+    },
+    selectValue(e) {
+      e.currentTarget.select();
+    },
+    bleadyeTypeChange(val) {
+      if (val.row.bleadyeType == "add_chemicalmat") {
+        val.row.formulaUnit = "KG";
+      } else if (val.row.bleadyeType == "add_pigment") {
+        val.row.formulaUnit = "g";
+      }
+    },
+    changeAmount() {
+      let _this = this;
+      if (_this.mathCtr) {
+        if (!_this.chooseDtlData.measureType) {
+          return;
+        }
+        _this.$nextTick(() => {
+          if (
+            _this.chooseDtlData.measureType.indexOf("g") == -1 &&
+            _this.chooseDtlData.measureType.indexOf("G") == -1
+          ) {
+            _this.chooseDtlData.useAmount = Number(
+              (
+                Number(_this.form.clothWeight) *
+                Number(_this.chooseDtlData.formulaAmount) *
+                0.01
+              ).toFixed(2)
+            );
+          } else {
+            if (_this.chooseDtlData.formulaUnit == "KG") {
+              _this.chooseDtlData.useAmount = Number(
+                Number(
+                  _this.chooseDtlData.formulaAmount *
+                    _this.chooseData.totalWater *
+                    0.001
+                ).toFixed(2)
+              );
+            } else {
+              _this.chooseDtlData.useAmount = Number(
+                Number(
+                  _this.chooseDtlData.formulaAmount *
+                    _this.chooseData.totalWater
+                ).toFixed(2)
+              );
+            }
+          }
+          isNaN(_this.chooseDtlData.useAmount)
+            ? (_this.chooseDtlData.useAmount = 0)
+            : "";
+        });
+      }
     },
     getData() {
       this.wLoading = true;
@@ -1703,6 +1844,23 @@ export default {
   // padding: 0 5px;
   line-height: 28px !important;
   font-size: 14px;
+}
+
+.scope-input {
+  height: 28px;
+  line-height: 28px;
+  -webkit-appearance: none;
+  background-color: #FFF;
+  background-image: none;
+  border-radius: 4px;
+  border: 1px solid #DCDFE6;
+  box-sizing: border-box;
+  color: #606266;
+  display: inline-block;
+  font-size: inherit;
+  outline: 0;
+  padding: 0 5px !important;
+  width: 100%;
 }
 
 // .el-table__fixed-body-wrapper {

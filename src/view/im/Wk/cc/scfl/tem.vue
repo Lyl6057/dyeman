@@ -624,22 +624,18 @@ export default {
           e.index = index + 1;
         });
       } else if (this.choiceTle === this.$t("choicDlg.xzflrc")) {
-        // let data = {
-        //   woMatno: val.fabId,
-        //   woMatname: val.fabName,
-        //   woOrderno: val.$salPoFk,
-        //   index: this.mx.length + 1,
-        // };
         if (val.length > 0) {
           val.forEach((item) => {
             item.$cellEdit = true;
             item.retCompany = item.unitQty;
             item.traCompany = item.unitQty;
             item.materialName = item.$materialName;
+            item.retQty = item.poQty;
             item.model = item.$model;
             item.itemspec = item.$itemspec;
             item.whseAccessoriesinFk = item.whseAccessoriesinoid;
             item.whseAccessoriesDtlFk = item.whseAccessoriesDtloid;
+            item.index = this.mx.length + 1;
           });
         }
 
@@ -660,9 +656,9 @@ export default {
           e.ticketNo = e.custTicket;
         });
       }
-      for (var key in val) {
-        delete val[key];
-      }
+      // for (var key in val) {
+      //   delete val[key];
+      // }
       for (var key in this.choiceQ) {
         delete this.choiceQ[key];
       }

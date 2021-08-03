@@ -488,8 +488,8 @@ export function rcpb3C(_this) {
   };
 }
 
-let rsxkr3CDic = getXDicT("whseAccessoriesIn");
-let basWjxz = getDbDicT("basHardwarearticles", "basAdsuppliesarticles");
+let rsxkr3CDic = getXDicT("whseAccessoriesDtl");
+let basScfl = getXDicT("basProductivesupplies");
 // 退供应商、客人明细
 export function rsxkr3C(_this) {
   return {
@@ -526,29 +526,20 @@ export function rsxkr3C(_this) {
         prop: "whseRetreatDtloid",
         hide: true
       },
-      {
-        label: _this.$t("whseField.rcbh"),
-        prop: "$whseAccessoriesinFk",
-        cell: false,
-        width: 140,
-        type: "select",
-        dicData: getDicT("whseAccessoriesIn", "yinId", "whseAccessoriesinoid"),
-        hide: _this.hide === "5" ? true : false
-      },
-      {
-        label: _this.$t("whseField.rcbh"),
-        prop: "whseAccessoriesinFk",
-        cell: false,
-        width: 500,
-        type: "select",
-        hide: false,
-        props: {
-          label: "whseAccessoriesinFk",
-          value: "whseAccessoriesDtloid"
-        },
-        dicData: rsxkr3CDic,
-        hide: _this.hide === "5" ? true : false
-      },
+      // {
+      //   label: _this.$t("whseField.rcbh"),
+      //   prop: "whseAccessoriesinFk",
+      //   cell: false,
+      //   width: 500,
+      //   type: "select",
+      //   hide: false,
+      //   props: {
+      //     label: "whseAccessoriesinFk",
+      //     value: "whseAccessoriesDtloid"
+      //   },
+      //   dicData: rsxkr3CDic,
+      //   hide: _this.hide === "5" ? true : false
+      // },
       {
         label: _this.$t("whseField.clbh"),
         prop: "materialNum",
@@ -570,7 +561,7 @@ export function rsxkr3C(_this) {
           label: "chinName",
           value: "hardwareId"
         },
-        dicData: basWjxz
+        dicData: basScfl
         // type: "select",
         // dicData: getDicT("whseYarninDtl/v1.0/list", "yarnsId", "whseYarninDtloid"),
       },
@@ -583,7 +574,7 @@ export function rsxkr3C(_this) {
           label: "model",
           value: "hardwareId"
         },
-        dicData: basWjxz,
+        dicData: basScfl,
         hide: _this.hide === "5" ? true : false
       },
       {
@@ -595,7 +586,7 @@ export function rsxkr3C(_this) {
           label: "itemspec",
           value: "hardwareId"
         },
-        dicData: basWjxz,
+        dicData: basScfl,
         hide: _this.hide === "5" ? true : false
       },
       {

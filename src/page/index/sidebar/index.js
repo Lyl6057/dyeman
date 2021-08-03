@@ -7,7 +7,7 @@ import { whseMng } from "./whseMng";
 export const menuData = _this => {
   return {
     menu: [
-      // ...proMng(_this),
+      // ...proMng(_this)
       // ...energy(_this),
       ...whseMng(_this)
       // ...laboratory(_this)
