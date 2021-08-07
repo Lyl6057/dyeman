@@ -127,7 +127,7 @@ export default {
     cpbhwb: "成品布貨物包",
     // 化工原料
     hgylrc: "化工原料入倉",
-    krlyl: "客人來原料",
+    krlhgyl: "客人來原料",
     hgyl: "化工原料",
     ylcg1: "原料採購",
     wfcth: "外發廠退回",

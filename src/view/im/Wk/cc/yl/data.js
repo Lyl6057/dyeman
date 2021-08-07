@@ -46,6 +46,18 @@ export function rsxkr1F(_this) {
       //   dicData: _this.hide === '1' ? getDIC("whse_stock_type") : getDIC('Whse_out_type'),
       //   // display: _this.hide === "1" ? true : false
       // },
+
+      {
+        label: "出仓状态",
+        prop: "stockState",
+        span: 6,
+        cell: true,
+        placeholder: " ",
+        type: "select",
+        dicData: getDIC("whse_outStatus"),
+        // hide: _this.hide != "6",
+        width: 120
+      },
       {
         label: "领用人",
         prop: "leader",
@@ -58,17 +70,6 @@ export function rsxkr1F(_this) {
           _this.hide === "6" || _this.hide === "1" || _this.hide === "2"
             ? true
             : false
-      },
-      {
-        label: "出仓状态",
-        prop: "stockState",
-        span: 6,
-        cell: true,
-        placeholder: " ",
-        type: "select",
-        dicData: getDIC("whse_outStatus"),
-        // hide: _this.hide != "6",
-        width: 120
       }
       // {
       //   label: _this.$t("whseField.czy"),

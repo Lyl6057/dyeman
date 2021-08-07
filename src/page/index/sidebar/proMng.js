@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-04-01 13:39:35
  * @LastEditors: Lyl
- * @LastEditTime: 2021-07-10 08:56:54
+ * @LastEditTime: 2021-08-07 13:39:34
  * @Description:
  */
 
@@ -117,7 +117,38 @@ export function proMng(_this) {
       ]
     },
     {
-      menuName: "五.報表",
+      menuName: "五.批色管理",
+      index: "colorMng",
+      icon: "el-icon-edit-outline",
+      children: [
+        {
+          menuName: "1.出缸批色",
+          index: `/outcodeCard/${1}`
+        },
+        {
+          menuName: "2.定型批色",
+          index: `/codeCard/${2}`
+        },
+        {
+          menuName: "3.成品码卡",
+          index: "/finalCard"
+        }
+        // {
+        //   menuName: "3.染整工单",
+        //   index: "/dyeing"
+        // }
+        // {
+        //   menuName: "2.落布记录",
+        //   index: "染单生产"
+        // },
+        // {
+        //   menuName: "3.布飞打印",
+        //   index: "/proSalSchedule"
+        // },
+      ]
+    },
+    {
+      menuName: "六.報表",
       index: "report",
       icon: "el-icon-document-copy",
       children: [

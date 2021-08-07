@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-07-09 18:30:07
+ * @LastEditTime: 2021-08-04 09:28:05
  * @Description:
  */
 
@@ -243,7 +243,7 @@ export function mainCrud(_this) {
         prop: "mathineCode",
         disabled: false,
         span: 6,
-        width: 120,
+        // width: 120,
         placeholder: " ",
         type: "select",
         dicData: [],
@@ -261,6 +261,7 @@ export function mainCrud(_this) {
             trigger: "blur"
           }
         ],
+        overHidden: true,
         change: () => {
           // let data = _this.yarnList
           //   .filter(item => {

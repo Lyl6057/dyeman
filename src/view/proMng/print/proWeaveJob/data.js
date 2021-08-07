@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-07-09 08:40:20
+ * @LastEditTime: 2021-08-04 09:29:43
  * @Description:
  */
 
@@ -484,9 +484,10 @@ export function mainCrud(_this) {
         label: "機號",
         prop: "mathineCode",
         span: 6,
-        width: 120,
+        width: 180,
         tip: "Mã số máy dệt",
         placeholder: " ",
+        overHidden: true,
         readonly: true,
         click: () => {
           if (_this.form.weaveJobId) {

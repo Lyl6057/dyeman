@@ -855,10 +855,7 @@ export default {
           }
         }
       }
-      if (
-        this.datas === this.$t("iaoMng.hgyl") ||
-        this.datas === this.$t("iaoMng.yl")
-      ) {
+      if (this.datas === this.$t("iaoMng.hgyl")) {
         for (let i = 0; i < this.mx.length; i++) {
           this.mx[i].chemicalName = this.mx[i].$chemicalId;
           // if (!this.mx[i].weight) {

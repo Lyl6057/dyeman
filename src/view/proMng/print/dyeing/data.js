@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-02 10:54:15
+ * @LastEditTime: 2021-08-06 16:10:45
  * @Description:
  */
 
@@ -76,6 +76,76 @@ export function mainForm(_this) {
       //   type: "select",
       //   // dicData: getDicT("basCustomer", "custName", "custCode")
       // },
+    ]
+  };
+}
+
+export function revolveForm(_this) {
+  return {
+    submitBtn: false,
+    emptyBtn: false,
+    labelWidth: 150,
+    column: [
+      {
+        label: "缸號",
+        prop: "vatNo",
+        span: 6,
+        placeholder: " ",
+        change: () => {
+          _this.$nextTick(() => {
+            _this.revolve = _this.revolves.filter(item => {
+              return (
+                item.vatNo.indexOf(_this.revolveForm.vatNo) != -1 &&
+                item.weaveJobCode.indexOf(_this.revolveForm.weaveJobCode) !=
+                  -1 &&
+                item.serviceOperator.indexOf(
+                  _this.revolveForm.serviceOperator
+                ) != -1
+              );
+            });
+          });
+        }
+      },
+      {
+        label: "织造生產單號",
+        prop: "weaveJobCode",
+        span: 6,
+        placeholder: " ",
+        change: () => {
+          _this.$nextTick(() => {
+            _this.revolve = _this.revolves.filter(item => {
+              return (
+                item.vatNo.indexOf(_this.revolveForm.vatNo) != -1 &&
+                item.weaveJobCode.indexOf(_this.revolveForm.weaveJobCode) !=
+                  -1 &&
+                item.serviceOperator.indexOf(
+                  _this.revolveForm.serviceOperator
+                ) != -1
+              );
+            });
+          });
+        }
+      },
+      {
+        label: "开单员",
+        prop: "serviceOperator",
+        span: 6,
+        placeholder: " ",
+        change: () => {
+          _this.$nextTick(() => {
+            _this.revolve = _this.revolves.filter(item => {
+              return (
+                item.vatNo.indexOf(_this.revolveForm.vatNo) != -1 &&
+                item.weaveJobCode.indexOf(_this.revolveForm.weaveJobCode) !=
+                  -1 &&
+                item.serviceOperator.indexOf(
+                  _this.revolveForm.serviceOperator
+                ) != -1
+              );
+            });
+          });
+        }
+      }
     ]
   };
 }

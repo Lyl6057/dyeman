@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-04-01 13:39:35
  * @LastEditors: Lyl
- * @LastEditTime: 2021-07-17 09:48:09
+ * @LastEditTime: 2021-08-04 14:29:41
  * @Description:
  */
 
@@ -56,6 +56,10 @@ export function whseMng(_this) {
         {
           menuName: "1.库存期初定义", //'1.仓位管理'
           index: "/ityBasic"
+        },
+        {
+          menuName: "2.库存查询", //'1.仓位管理'
+          index: "/inventory"
         }
         // {
         //   menuName: "2.生产运转出仓", //'2.生产运转'

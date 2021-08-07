@@ -14,16 +14,16 @@ export function rsxkr1F(_this) {
         placeholder: " ",
         display: _this.hide === "6" ? false : true
       },
-      // {
-      //   label: "出倉日期",
-      //   prop: "stockDate",
-      //   span: 6,
-      //   placeholder: " ",
-      //   type: "datetime",
-      //   display: _this.hide === "6" ? false : true,
-      //   format: "yyyy-MM-dd HH:mm:ss",
-      //   valueFormat: "yyyy-MM-dd HH:mm:ss",
-      // },
+      {
+        label: "出倉日期",
+        prop: _this.hide === "1" ? "stockDate" : "retDate",
+        span: 6,
+        placeholder: " ",
+        type: "datetime",
+        display: _this.hide === "6" ? false : true,
+        format: "yyyy-MM-dd HH:mm:ss",
+        valueFormat: "yyyy-MM-dd HH:mm:ss"
+      },
 
       // {
       //   label: "出倉类型",
@@ -511,6 +511,11 @@ export function rsxkr3C(_this) {
       {
         label: " ",
         name: "retTotalweight",
+        type: "sum"
+      },
+      {
+        label: " ",
+        name: "retQty",
         type: "sum"
       }
     ],

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-29 14:14:56
  * @LastEditors: Lyl
- * @LastEditTime: 2021-07-10 08:57:23
+ * @LastEditTime: 2021-08-07 13:39:38
  * @Description:
  */
 export default [
@@ -55,6 +55,21 @@ export default [
     path: "/afterArrange",
     name: "后整指令单",
     component: resolve => require(["@/view/proMng/afterArrange/index"], resolve)
+  },
+  {
+    path: `/outcodeCard/:type`,
+    name: "出缸批色",
+    component: resolve => require(["@/view/proMng/codeCard/index"], resolve)
+  },
+  {
+    path: `/codeCard/:type`,
+    name: "定型批色",
+    component: resolve => require(["@/view/proMng/codeCard/index"], resolve)
+  },
+  {
+    path: "/finalCard",
+    name: "成品码卡",
+    component: resolve => require(["@/view/proMng/finalCard/index"], resolve)
   },
   // 报表
   {

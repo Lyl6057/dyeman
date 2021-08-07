@@ -31,6 +31,11 @@ export default [
     component: resolve => require(["@/view/im/Ity/basic/index"], resolve)
   },
   {
+    path: "/inventory",
+    name: "库存查询",
+    component: resolve => require(["@/view/im/Ity/inventory/index"], resolve)
+  },
+  {
     path: "/whseVehicle",
     name: "仓库载具管理",
     component: resolve => require(["@/view/im/Ity/vehicle/index"], resolve)

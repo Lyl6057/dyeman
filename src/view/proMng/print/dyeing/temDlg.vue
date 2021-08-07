@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-02 10:56:25
+ * @LastEditTime: 2021-08-07 16:22:50
  * @Description: 
 -->
 <template>
@@ -99,7 +99,7 @@
           content=" in"
           placement="top-start"
         >
-          <el-button type="primary" @click="print">打印</el-button>
+          <el-button type="primary" @click="print" :disabled="!form.bleadyeJobId">打印</el-button>
         </el-tooltip>
         <el-tooltip
           class="item"
@@ -536,6 +536,7 @@ import {
   carCrud,
 } from "./data";
 import {
+  getRevolveList,
   get,
   add,
   update,
@@ -574,11 +575,13 @@ import {
   getPoDtlb,
   getTechargueList,
 } from "./api";
+import { getTest as getTestList, getItem } from "../../revolve/api";
 export default {
   name: "",
   props: {
     detail: Object,
     isAdd: Boolean,
+    revolve: Object,
   },
   components: {
     choice: choice,
@@ -757,11 +760,38 @@ export default {
       this.wLoading = true;
       this.form = {};
       if (this.isAdd) {
-        setTimeout(() => {
+        if (this.revolve.runJobId) {
+          getRevolveList({ runJobId: this.revolve.runJobId }).then((res) => {
+            let val = res.data[0];
+            this.revolve.proBleadyeRunJobFk = val.runJobId;
+
+            if (!(val.mergVatNo instanceof Array) && val.mergVatNo) {
+              val.mergVatNo = val.mergVatNo.split("/");
+            }
+            val.dyeJarCount = Number(val.dyeVatType);
+            // if (!(val.compLightSource instanceof Array) && val.compLightSource) {
+            //   val.compLightSource = val.compLightSource.split(",");
+            // }
+            Object.keys(val).forEach((item) => {
+              if (this.isEmpty(val[item])) {
+                delete val[item];
+              }
+            });
+            this.form = val;
+            this.form.poAmountLb = (this.form.poAmountKg * 2.2046226).toFixed(
+              2
+            );
+            setTimeout(() => {
+              this.wLoading = false;
+            }, 200);
+          });
+        } else {
           this.form.workDate = this.$getNowTime();
           this.form.deliveDate = this.$getNowTime();
-          this.wLoading = false;
-        }, 200);
+          setTimeout(() => {
+            this.wLoading = false;
+          }, 200);
+        }
       } else {
         // get({
         //   rows: 10,
@@ -770,7 +800,6 @@ export default {
         // }).then((res) => {
         //   this.form = res.data.records[0];
         this.form = this.detail;
-
         Object.keys(this.form).forEach((item) => {
           if (this.isEmpty(this.form[item])) {
             delete this.form[item];
@@ -995,6 +1024,32 @@ export default {
                   this.oldW = this.form.clothWeight;
                   this.form.bleadyeJobId = res.data.data;
                   this.addOtherData();
+                  this.wLoading = false;
+                  // getTestList({
+                  //   proBleadyeRunJobFk: val.runJobId,
+                  // }).then((res) => {
+                  //   console.log("test", res);
+                  // });
+                  if (this.revolve.runJobId) {
+                    // 新增生产项目
+                    getItem({
+                      proBleadyeRunJobFk: this.revolve.runJobId,
+                    }).then((pres) => {
+                      pres.data.forEach((item) => {
+                        item.proBleadyeJobFk = res.data.data;
+                        addProject(item).then((pro) => {});
+                      });
+                    });
+                    // 新增测试要求
+                    getTestList({
+                      proBleadyeRunJobFk: this.revolve.runJobId,
+                    }).then((pres) => {
+                      pres.data.forEach((item) => {
+                        item.proBleadyeJobFk = res.data.data;
+                        addTest(item).then((pro) => {});
+                      });
+                    });
+                  }
                 } else {
                   this.$tip.error(this.$t("public.bcsb"));
                   this.wLoading = false;
@@ -1043,15 +1098,16 @@ export default {
                 sn: dyeIndex++,
                 proBleadyeJobFk: this.form.bleadyeJobId,
               }).then((res) => {});
-            } else if (item.paramType === "test") {
-              // 測試要求
-              addTest({
-                testItemCode: item.paramKey,
-                testName: item.paramName,
-                sn: testIndex++,
-                proBleadyeJobFk: this.form.bleadyeJobId,
-              }).then((res) => {});
             }
+            // else if (item.paramType === "test") {
+            //   // 測試要求
+            //   addTest({
+            //     testItemCode: item.paramKey,
+            //     testName: item.paramName,
+            //     sn: testIndex++,
+            //     proBleadyeJobFk: this.form.bleadyeJobId,
+            //   }).then((res) => {});
+            // }
             if (index == res.data.length - 1) {
               this.$tip.success(this.$t("public.bccg"));
               this.wLoading = false;

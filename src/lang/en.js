@@ -134,7 +134,7 @@ export default {
     cpbhwb: "goods package",
     // 化工原料
     hgylrc: "Chemical",
-    krlyl: "Guests",
+    krlhgyl: "Guests",
     hgyl: "Chemical",
     ylcg1: "Procurement",
     wfcth: "Outgoing back",

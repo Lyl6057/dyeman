@@ -382,9 +382,9 @@ export default {
 
             {
               click: () => {
-                this.toView("rc_rhl", this.$t("iaoMng.krlyl") + "_1");
+                this.toView("rc_rhl", this.$t("iaoMng.krlhgyl") + "_1");
               },
-              title: this.$t("iaoMng.krlyl"),
+              title: this.$t("iaoMng.krlhgyl"),
               icon: "el-icon-user-solid",
               color: "#409EFF",
               // content: "客人来化工原料入库看板",

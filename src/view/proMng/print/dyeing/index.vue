@@ -2,144 +2,176 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-07-06 16:20:55
+ * @LastEditTime: 2021-08-06 17:00:31
  * @Description: 
 -->
 <template>
   <div id="clothFlyPrint">
-    <view-container
-      title="漂染工作單打印"
-      v-loading="wloading"
-      element-loading-text="拼命加载中..."
-    >
-      <el-row class="btnList">
-        <el-tooltip
-          class="item"
-          effect="dark"
-          content="cập nhật"
-          placement="top-start"
-        >
-          <el-button
-            type="success"
-            :disabled="!detail.bleadyeJobId"
-            @click="handleRowDBLClick(detail)"
-            >{{ this.$t("public.update") }}</el-button
+    <el-tabs type="border-card">
+      <el-tab-pane
+        label="漂染工作單打印"
+        v-loading="wloading"
+        element-loading-text="拼命加载中..."
+      >
+        <el-row class="btnList">
+          <el-tooltip
+            class="item"
+            effect="dark"
+            content="cập nhật"
+            placement="top-start"
           >
-        </el-tooltip>
-        <el-tooltip
-          class="item"
-          effect="dark"
-          content="thêm mới "
-          placement="top-start"
-        >
-          <el-button type="primary" @click="add">{{
-            this.$t("public.add")
-          }}</el-button>
-        </el-tooltip>
+            <el-button
+              type="success"
+              :disabled="!detail.bleadyeJobId"
+              @click="handleRowDBLClick(detail)"
+              >{{ this.$t("public.update") }}</el-button
+            >
+          </el-tooltip>
+          <el-tooltip
+            class="item"
+            effect="dark"
+            content="thêm mới "
+            placement="top-start"
+          >
+            <el-button type="primary" @click="add({})">{{
+              this.$t("public.add")
+            }}</el-button>
+          </el-tooltip>
+          <el-tooltip
+            class="item"
+            effect="dark"
+            content=" in"
+            placement="top-start"
+          >
+            <el-button type="primary" @click="print" :loading="wloading"
+              >打印</el-button
+            >
+          </el-tooltip>
 
-        <!-- <el-tooltip
-          class="item"
-          effect="dark"
-          content="xóa"
-          placement="top-start"
-        >
-          <el-button
-            type="danger"
-            :disabled="!detail.bleadyeJobId"
-            @click="del"
-            >{{ this.$t("public.del") }}</el-button
+          <el-tooltip
+            class="item"
+            effect="dark"
+            content="tìm kiếm"
+            placement="top-start"
           >
-        </el-tooltip> -->
-        <el-tooltip
-          class="item"
-          effect="dark"
-          content=" in"
-          placement="top-start"
-        >
-          <el-button type="primary" @click="print" :loading="wloading"
-            >打印</el-button
-          >
-        </el-tooltip>
-
-        <el-tooltip
-          class="item"
-          effect="dark"
-          content="tìm kiếm"
-          placement="top-start"
-        >
-          <el-button type="primary" @click="query">{{
-            this.$t("public.query")
-          }}</el-button>
-        </el-tooltip>
-        <!-- <el-button type="warning" @click="close">{{
+            <el-button type="primary" @click="query">{{
+              this.$t("public.query")
+            }}</el-button>
+          </el-tooltip>
+          <!-- <el-button type="warning" @click="close">{{
           this.$t("public.close")
         }}</el-button> -->
-      </el-row>
-      <el-row class="formBox">
-        <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
-      </el-row>
-      <el-row class="crudBox">
-        <avue-crud
-          ref="crud"
-          id="crud"
-          :option="crudOp"
-          :data="crud"
-          :page.sync="page"
-          v-loading="loading"
-          @on-load="query"
-          @row-dblclick="handleRowDBLClick"
-          @current-row-change="cellClick"
-        ></avue-crud>
-      </el-row>
-      <el-dialog
-        id="colorMng_Dlg"
-        :visible.sync="dialogVisible"
-        fullscreen
-        width="100%"
-        append-to-body
-        :close-on-click-modal="false"
-        :close-on-press-escape="false"
-      >
-        <tem-dlg
-          v-if="dialogVisible"
-          ref="tem"
-          :detail="detail"
-          :isAdd="isAdd"
-          @close="dialogVisible = false"
-          @refresh="query"
-        ></tem-dlg>
-      </el-dialog>
-      <el-dialog
-        id="colorMng_Dlg"
-        :visible.sync="pdfDlg"
-        fullscreen
-        width="100%"
-        append-to-body
-        :close-on-click-modal="false"
-        :close-on-press-escape="false"
-      >
-        <view-container title="打印預覽">
-          <!-- <div class="btnList">
+        </el-row>
+        <el-row class="formBox">
+          <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
+        </el-row>
+        <el-row class="crudBox">
+          <avue-crud
+            ref="crud"
+            id="crud"
+            :option="crudOp"
+            :data="crud"
+            :page.sync="page"
+            v-loading="loading"
+            @on-load="query"
+            @row-dblclick="handleRowDBLClick"
+            @current-row-change="cellClick"
+          ></avue-crud>
+        </el-row>
+        <el-dialog
+          id="colorMng_Dlg"
+          :visible.sync="dialogVisible"
+          fullscreen
+          width="100%"
+          append-to-body
+          :close-on-click-modal="false"
+          :close-on-press-escape="false"
+        >
+          <tem-dlg
+            v-if="dialogVisible"
+            ref="tem"
+            :detail="detail"
+            :isAdd="isAdd"
+            :revolve="revolveData"
+            @close="dialogVisible = false"
+            @refresh="refresh"
+          ></tem-dlg>
+        </el-dialog>
+        <el-dialog
+          id="colorMng_Dlg"
+          :visible.sync="pdfDlg"
+          fullscreen
+          width="100%"
+          append-to-body
+          :close-on-click-modal="false"
+          :close-on-press-escape="false"
+        >
+          <view-container title="打印預覽">
+            <!-- <div class="btnList">
             <el-button type="warning" @click="pdfDlg = false">{{
               this.$t("public.close")
             }}</el-button>
             <el-button type="primary" @click="print2">打印</el-button>
           </div> -->
-          <!--startprint-->
-          <embed
-            id="pdf"
-            style="width: 100vw; height: calc(100vh - 80px)"
-            :src="pdfUrl"
-          />
-          <!--endprint-->
-        </view-container>
-      </el-dialog>
-    </view-container>
+            <!--startprint-->
+            <embed
+              id="pdf"
+              style="width: 100vw; height: calc(100vh - 80px)"
+              :src="pdfUrl"
+            />
+            <!--endprint-->
+          </view-container>
+        </el-dialog></el-tab-pane
+      >
+      <el-tab-pane label="未生成漂染单的运转单">
+        <div class="btnList">
+          <el-tooltip
+            class="item"
+            effect="dark"
+            content="tìm kiếm"
+            placement="top-start"
+          >
+            <el-button type="success" @click="add(revolveChoose)">{{
+              this.$t("public.sc")
+            }}</el-button>
+          </el-tooltip>
+          <el-tooltip
+            class="item"
+            effect="dark"
+            content="tìm kiếm"
+            placement="top-start"
+          >
+            <el-button type="primary" @click="revolveQuery">{{
+              this.$t("public.query")
+            }}</el-button>
+          </el-tooltip>
+        </div>
+        <el-row class="formBox">
+          <avue-form
+            ref="revolveForm"
+            :option="revolveFOp"
+            v-model="revolveForm"
+          ></avue-form>
+        </el-row>
+        <el-row class="crudBox">
+          <avue-crud
+            ref="revolveCrud"
+            id="revolveCrud"
+            :option="revolveCOp"
+            :data="revolve"
+            v-loading="revolveLoading"
+            @row-dblclick="revolveDBLClick"
+            @current-row-change="revolveCellClick"
+          ></avue-crud>
+        </el-row>
+      </el-tab-pane>
+    </el-tabs>
   </div>
 </template>
 <script>
-import { mainForm, mainCrud } from "./data";
-import { get, add, update, del, print } from "./api";
+import { mainForm, mainCrud, revolveForm } from "./data";
+import { mainCrud as revolveCrudOp } from "../../revolve/data";
+import { get, add, update, del, print, getRevolve } from "./api";
 import tem from "./temDlg";
 export default {
   name: "",
@@ -157,7 +189,13 @@ export default {
         currentPage: 1,
         total: 0,
       },
+      revolvePage: {
+        pageSize: 20,
+        currentPage: 1,
+        total: 0,
+      },
       loading: false,
+      revolveLoading: false,
       dialogVisible: false,
       detail: {},
       isAdd: false,
@@ -166,10 +204,21 @@ export default {
       czsocket: {},
       pdfDlg: false,
       pdfUrl: "",
+      revolveFOp: revolveForm(this),
+      revolveForm: {},
+      revolveCOp: revolveCrudOp(this),
+      revolveChoose: {},
+      revolve: [],
+      revolves: [],
+      revolveData: {},
     };
   },
   watch: {},
   methods: {
+    refresh() {
+      this.query();
+      this.revolveQuery();
+    },
     query() {
       this.loading = true;
       this.detail = {};
@@ -201,6 +250,44 @@ export default {
         this.loading = false;
       });
     },
+    revolveQuery() {
+      this.revolveLoading = true;
+      getRevolve({
+        rows: 99999,
+        start: 1,
+      }).then((res) => {
+        this.revolves = res.data.records;
+        this.revolves.sort((a, b) => {
+          return a.workDate > b.workDate ? -1 : 1;
+        });
+        this.revolves.forEach((item, i) => {
+          item.index = i + 1;
+        });
+
+        if (this.revolve.length > 0) {
+          this.$refs.revolveCrud.setCurrentRow(this.revolve[0]);
+        }
+        this.revolvePage.total = res.data.total;
+        this.$nextTick(() => {
+          this.revolve = this.revolves.filter((item) => {
+            return (
+              item.vatNo.indexOf(this.revolveForm.vatNo) != -1 &&
+              item.weaveJobCode.indexOf(this.revolveForm.weaveJobCode) != -1 &&
+              item.serviceOperator.indexOf(this.revolveForm.serviceOperator) !=
+                -1
+            );
+          });
+        });
+        this.revolveLoading = false;
+      });
+    },
+    revolveDBLClick(val) {
+      this.revolveChoose = val;
+      this.add(this.revolveChoose);
+    },
+    revolveCellClick(val) {
+      this.revolveChoose = val;
+    },
     print() {
       this.pdfDlg = true;
       this.pdfUrl =
@@ -208,7 +295,8 @@ export default {
         "/api/proBleadyeJob/buildWorkOrder?id=" +
         this.detail.bleadyeJobId;
     },
-    add() {
+    add(val) {
+      this.revolveData = val;
       this.isAdd = true;
       this.dialogVisible = true;
     },
@@ -250,7 +338,10 @@ export default {
   },
   created() {},
   mounted() {
-    this.query();
+    // this.query();
+    this.revolveQuery();
+    this.revolveCOp.page = false;
+    this.revolveCOp.height = "calc(100vh - 160px)";
   },
   beforeDestroy() {},
 };

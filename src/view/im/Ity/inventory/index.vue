@@ -2,32 +2,17 @@
  * @Author: Lyl
  * @Date: 2021-03-24 14:15:12
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-04 15:33:34
+ * @LastEditTime: 2021-08-04 18:07:08
  * @Description: 
 -->
 <template>
-  <div id="ityBasic">
+  <div id="ityInventory">
     <view-container
-      title="库存期初定义"
+      title="库存查询"
       :element-loading-text="loadLabel"
       v-loading="loading"
     >
       <div class="btnList">
-        <el-button type="primary" @click="add">{{
-          this.$t("public.add")
-        }}</el-button>
-        <el-button
-          type="success"
-          :disabled="Object.keys(chooseData).length === 0"
-          @click="handleRowDBLClick(chooseData)"
-          >{{ this.$t("public.update") }}</el-button
-        >
-        <el-button
-          type="danger"
-          @click="del"
-          :disabled="Object.keys(chooseData).length === 0"
-          >{{ this.$t("public.del") }}</el-button
-        >
         <el-button type="primary" @click="getData">{{
           this.$t("public.query")
         }}</el-button>
@@ -48,41 +33,23 @@
         ></avue-crud>
       </div>
     </view-container>
-    <el-dialog
-      id="ityDlg"
-      :visible.sync="dialogVisible"
-      width="100%"
-      append-to-body
-      :close-on-click-modal="false"
-      :close-on-press-escape="false"
-      v-if="dialogVisible"
-    >
-      <tem-dlg
-        ref="tem-dlg"
-        :detail="detail"
-        :isAdd="isAdd"
-        @close="temClose"
-      ></tem-dlg>
-    </el-dialog>
   </div>
 </template>
 <script>
-import { add, get, update, del, updateStock } from "./api";
-import { getDIC, getDicT } from "@/config/index";
-import temDlg from "./temDlg";
+import { getRhl, getRll } from "./api";
+import { getDIC, getDicT, getXDicT } from "@/config/index";
 import { formOp, crudOp, formTemOp } from "./data";
 export default {
   name: "",
-  components: {
-    temDlg: temDlg,
-  },
+  components: {},
   data() {
     return {
       dialogVisible: false,
       loading: false,
       loadLabel: "拼命加载中",
       page: {
-        pageSize: 10,
+        pageSizes: [20, 50, 100, 200, 500],
+        pageSize: 20,
         currentPage: 1,
         total: 0,
       },
@@ -93,23 +60,10 @@ export default {
       detail: {},
       chooseData: {},
       isAdd: false,
-      yarnType: getDIC("bas_yarnsType"),
-      calicoType: getDIC("bas_calicoType"),
-      yarnData: getDicT("basYarnsData", "yarnsName", "yarnsId"),
-      calicoData: getDicT("basCalico", "calicoName", "calicoId"),
-      chemicalData: getDicT("BasChemicalmatNew", "cnnamelong", "bcCode"), // 化工原料
-      productiveData: getDicT(
-        "basProductivesupplies",
-        "chinName",
-        "hardwareId"
-      ), // 生产辅料
-      basHardwareData: getDicT("basHardwarearticles", "chinName", "hardwareId"),
-      basAdsuppliesarticlesData: getDicT(
-        "basAdsuppliesarticles",
-        "chinName",
-        "hardwareId"
-      ),
       allData: [],
+      getFun: null,
+      chemicalData: getXDicT("BasChemicalmatNew"), // 化工原料
+      pigmentData: getXDicT("basPigment"), // 颜料
     };
   },
   watch: {},
@@ -121,7 +75,20 @@ export default {
           delete this.form[key];
         }
       }
-      get(
+      switch (this.form.type) {
+        case "RHL":
+          this.getFun = getRhl;
+          break;
+        case "RLL":
+          this.getFun = getRll;
+          break;
+        default:
+          this.crud = [];
+          this.loading = false;
+          return;
+          break;
+      }
+      this.getFun(
         Object.assign(this.form, {
           rows: this.page.pageSize,
           start: this.page.currentPage,
@@ -133,25 +100,11 @@ export default {
         this.crud.length === 0 ? (this.loading = false) : "";
         this.crud.forEach((item, i) => {
           item.index = i + 1;
-          item.materialName = item.materialId;
-          item.oldpooccupyqty = item.oldpooccupyqty.toFixed(2);
-          item.openingQty = item.openingQty.toFixed(2);
+          // item.materialName = item.materialId;
+          // item.oldpooccupyqty = item.oldpooccupyqty.toFixed(2);
+          // item.openingQty = item.openingQty.toFixed(2);
           if (this.crud.length - 1 === i) {
-            setTimeout(() => {
-              this.$nextTick(() => {
-                this.crudOp.column[2].dicData = this.yarnType.concat(
-                  this.calicoType
-                );
-                this.allData = this.yarnData
-                  .concat(this.calicoData)
-                  .concat(this.chemicalData)
-                  .concat(this.productiveData)
-                  .concat(this.basHardwareData)
-                  .concat(this.basAdsuppliesarticlesData);
-                this.crudOp.column[4].dicData = this.allData;
-              });
-              this.loading = false;
-            }, 200);
+            this.loading = false;
           }
         });
       });
@@ -230,13 +183,20 @@ export default {
       document.getElementsByClassName("el-dialog__headerbtn")[0].click();
     },
   },
-  created() {},
+  created() {
+    this.form.type = "RHL";
+  },
+  updated() {
+    this.$nextTick(() => {
+      this.$refs["crud"].doLayout();
+    });
+  },
   mounted() {},
   beforeDestroy() {},
 };
 </script>
 <style lang='stylus'>
-#ityDlg {
+#ityInventory {
   .el-dialog {
     margin-top: 0 !important;
     height: 100%;

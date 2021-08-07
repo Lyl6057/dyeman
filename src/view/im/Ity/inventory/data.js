@@ -2,15 +2,13 @@
  * @Author: Lyl
  * @Date: 2021-03-24 14:21:15
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-04 15:29:30
+ * @LastEditTime: 2021-08-04 18:06:00
  * @Description:
  */
 
 import { getDIC, getXDicT, getDicT, postDicT, getDbDicT } from "@/config/index";
 
 let kindId = getDIC("bas_censorshipVarieties");
-let yarnsType = getDIC("bas_yarnsType");
-let calicoType = getDIC("bas_calicoType");
 let matUnit = getDIC("bas_matUnit");
 export function formOp(_this) {
   return {
@@ -20,48 +18,30 @@ export function formOp(_this) {
     column: [
       {
         label: "材料种类",
-        prop: "kindId",
+        prop: "type",
         span: 6,
         placeholder: " ",
         type: "select",
         dicData: kindId,
         change: () => {
           _this.$nextTick(() => {
-            _this.form.materialType = "";
-            if (_this.form.kindId === "SX") {
-              _this.formOp.column[1].disabled = false;
-              _this.formOp.column[1].dicData = yarnsType;
-            } else if (_this.form.kindId === "PB") {
-              _this.formOp.column[1].disabled = false;
-              _this.formOp.column[1].type = "select";
-              _this.formOp.column[1].dicData = calicoType;
-            } else {
-              // _this.$set(_this.formOp.column[1], "dicData", [])
-              _this.formOp.column[1].disabled = true;
-              _this.formOp.column[1].dicData = [];
-            }
+            _this.page.currentPage = 1;
+            _this.getData();
           });
         }
       },
       {
-        label: "材料类别",
-        prop: "materialType",
-        span: 6,
-        placeholder: " ",
-        type: "select",
-        dicData: []
-      },
-      {
         label: _this.$t("whseField.clbh"),
-        prop: "materialId",
-        span: 6,
-        placeholder: " "
+        prop: "chemicalId",
+        placeholder: " ",
+        span: 6
       },
       {
         label: _this.$t("whseField.ph"),
         prop: "batchNo",
-        span: 6,
-        placeholder: " "
+        cell: false,
+        placeholder: " ",
+        span: 6
       }
     ]
   };
@@ -140,6 +120,14 @@ export function crudOp(_this) {
     refreshBtn: false,
     columnBtn: false,
     showOverflowTooltip: true,
+    showSummary: true,
+    sumColumnList: [
+      {
+        label: " ",
+        name: "stock",
+        type: "sum"
+      }
+    ],
     page: true,
     column: [
       {
@@ -148,60 +136,41 @@ export function crudOp(_this) {
         width: 50,
         align: "center"
       },
-      {
-        label: "材料种类",
-        prop: "kindId",
-        cell: false,
-        width: 100,
-        type: "select",
-        dicData: kindId
-      },
-      {
-        label: "材料类别",
-        prop: "materialType",
-        cell: false,
-        width: 90,
-        type: "select",
-        dicData: []
-      },
+      // {
+      //   label: "材料种类",
+      //   prop: "kindId",
+      //   width: 100,
+      //   type: "select",
+      //   dicData: kindId
+      // },
       {
         label: _this.$t("whseField.clbh"),
-        prop: "materialId",
-        cell: false,
-        width: 100
+        prop: "chemicalId",
+        width: 140
       },
       {
         label: _this.$t("whseField.clmc"),
-        prop: "materialName",
-        cell: false,
+        prop: "chemicalName",
         type: "select",
         overHidden: true,
-        dicData: []
-        // width: 180,
+        width: 300
       },
       {
         label: _this.$t("whseField.ph"),
         prop: "batchNo",
         cell: false,
-        width: 160
+        width: 180
       },
       {
-        label: "期初数量",
-        prop: "openingQty",
+        label: "库存数量",
+        prop: "stock",
         cell: false,
-        width: 90,
-        align: "right"
-      },
-      {
-        label: "老单占用数",
-        prop: "oldpooccupyqty",
-        cell: false,
-        width: 110,
+        width: 120,
         align: "right"
       },
       {
         label: _this.$t("whseField.dw"),
-        prop: "unitId",
+        prop: "weightUnit",
         cell: false,
         width: 80,
         type: "select",
