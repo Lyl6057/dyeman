@@ -2,13 +2,17 @@
  * @Author: Lyl
  * @Date: 2021-06-02 15:42:19
  * @LastEditors: Lyl
- * @LastEditTime: 2021-06-14 16:44:17
+ * @LastEditTime: 2021-08-16 10:23:45
  * @Description: 
 -->
 <template>
   <div id="menu">
     <template v-for="item in menuData">
-      <el-card class="card" :key="item.index" v-if="item.children">
+      <el-card
+        class="card"
+        :key="item.index"
+        v-if="item.children && !item.hide"
+      >
         <el-submenu :index="item.index">
           <template>
             <i slot="title" :class="item.icon"></i>
@@ -18,7 +22,11 @@
           <menuTree :menuData="item.children" :level="level + 1"></menuTree>
         </el-submenu>
       </el-card>
-      <el-card v-else :key="item.index" class="oneMenu">
+      <el-card
+        v-if="!item.children && !item.hide"
+        :key="item.index"
+        class="oneMenu"
+      >
         <el-menu-item
           :index="item.index"
           :style="{ textIndent: level * 30 + 'px' }"

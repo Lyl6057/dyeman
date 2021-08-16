@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-07-26 09:03:24
+ * @LastEditTime: 2021-08-11 09:44:36
  * @Description:
 -->
 <template>
@@ -381,6 +381,7 @@ export default {
             this.form.poVatCount = 1;
             this.form.vatIndex = 1;
             this.form.poColorCount = 1;
+            this.form.runState = "1";
             this.wLoading = false;
           });
         }, 200);

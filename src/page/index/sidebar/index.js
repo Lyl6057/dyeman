@@ -1,7 +1,7 @@
 // export default {
 import { proMng } from "./proMng";
 // import { whseMng } from "./whseMng";
-// import { energy } from './energy'
+// import { energy } from "./energy";
 // import { laboratory } from "./laboratory";
 // import { quality } from "./quality";
 export const menuData = _this => {
@@ -10,7 +10,7 @@ export const menuData = _this => {
       ...proMng(_this)
       // ...energy(_this),
       // ...whseMng(_this)
-      // ...laboratory(_this)
+      // ...laboratory(_this),
       // ...quality(_this)
       // 产品管理
       // {

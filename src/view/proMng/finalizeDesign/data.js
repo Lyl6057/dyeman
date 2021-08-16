@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-07-17 10:16:22
+ * @LastEditTime: 2021-08-14 16:55:39
  * @Description:
  */
 
@@ -129,11 +129,11 @@ export function mainCrud(_this) {
         width: 180,
         span: 6,
         disabled: false,
-        placeholder: " ",
-        click: () => {
-          _this.choiceTle = "选择织造通知单";
-          _this.choiceV = true;
-        }
+        placeholder: " "
+        // click: () => {
+        //   _this.choiceTle = "选择织造通知单";
+        //   _this.choiceV = true;
+        // }
       },
       {
         label: "客户",
@@ -545,7 +545,7 @@ export function mainCrud(_this) {
             span: 6,
             hide: true,
             placeholder: " ",
-            type: "number",
+            // type: "number",
             align: "right"
           },
           {
@@ -556,7 +556,7 @@ export function mainCrud(_this) {
             span: 6,
             hide: true,
             placeholder: " ",
-            type: "number",
+            // type: "number",
             align: "right"
           },
           {
@@ -602,7 +602,7 @@ export function mainCrud(_this) {
             width: 90,
             hide: true,
             span: 6,
-            type: "number",
+            // type: "number",
             align: "right",
             placeholder: " "
           },
@@ -614,7 +614,7 @@ export function mainCrud(_this) {
             hide: true,
             span: 6,
             align: "right",
-            type: "number",
+            // type: "number",
             placeholder: " "
           }
         ]
@@ -788,6 +788,174 @@ export function mainCrud(_this) {
   };
 }
 
+export function cpForm(_this) {
+  return {
+    submitBtn: false,
+    emptyBtn: false,
+    labelWidth: 150,
+    column: [
+      {
+        label: "连边幅宽(inch)",
+        tip: "连边幅宽(Khổ rộng Tiếp giáp)",
+        prop: "proBreadthSide",
+        width: 90,
+        hide: true,
+        span: 12,
+        type: "number",
+        align: "right",
+        placeholder: " "
+      },
+      {
+        label: "实用幅宽(inch)",
+        tip: "实用幅宽(Thực dụng Tiếp giáp)",
+        prop: "proBreadthActual",
+        width: 120,
+        hide: true,
+        span: 12,
+        type: "number",
+        align: "right",
+        placeholder: " "
+      },
+      {
+        label: "洗前克重(g/m2)",
+        tip: "洗前克重(Trước giặt Trọng lượng)",
+        prop: "proWeightBefore",
+        width: 120,
+        hide: true,
+        span: 12,
+        type: "number",
+        align: "right",
+        placeholder: " "
+      },
+      {
+        label: "洗后克重(g/m2)",
+        tip: "洗后克重(Sau giặt Trọng lượng)",
+        prop: "proWeightAfter",
+        width: 120,
+        hide: true,
+        span: 12,
+        type: "number",
+        align: "right",
+        placeholder: " "
+      },
+      {
+        label: "缩水-直缩(%)",
+        tip: "缩水-直缩(Co rút ngang)",
+        prop: "proShrinkVertical",
+        width: 120,
+        hide: true,
+        span: 12,
+        type: "number",
+        align: "right",
+        placeholder: " "
+      },
+      {
+        label: "缩水-横缩(%)",
+        tip: "缩水-横缩(Co rút ngang)",
+        prop: "proShrinkHorizontal",
+        width: 120,
+        hide: true,
+        span: 12,
+        type: "number",
+        align: "right",
+        placeholder: " "
+      },
+      {
+        label: "缩水-扭度(%)",
+        tip: "缩水-扭度(Độ méo)",
+        prop: "proShrinkTwist",
+        width: 120,
+        hide: true,
+        span: 12,
+        type: "number",
+        align: "right",
+        placeholder: " "
+      },
+      {
+        label: "缩水-循环(inch)",
+        tip: "缩水-循环(Tuần hoàn)",
+        prop: "proShrinkLoop",
+        width: 120,
+        hide: true,
+        span: 12,
+        type: "number",
+        align: "right",
+        placeholder: " "
+      },
+      {
+        label: "缩水-挂干",
+        tip: "缩水-挂干(Treo khô)",
+        prop: "proShrinkHangDry",
+        width: 120,
+        hide: true,
+        span: 12,
+        type: "switch",
+        dicData: [
+          {
+            label: "否",
+            value: false
+          },
+          {
+            label: "是",
+            value: true
+          }
+        ],
+        placeholder: " "
+      },
+      {
+        label: "缩水-平干",
+        tip: "缩水-平干(Phơi phẳng)",
+        prop: "proShrinkSafeDry",
+        width: 120,
+        hide: true,
+        span: 12,
+        type: "switch",
+        dicData: [
+          {
+            label: "否",
+            value: false
+          },
+          {
+            label: "是",
+            value: true
+          }
+        ],
+        placeholder: " "
+      },
+      {
+        label: "缩水-抛干",
+        tip: "缩水-抛干(Vắt khô)",
+        prop: "proShrinkThrowDry",
+        width: 120,
+        hide: true,
+        span: 12,
+        type: "switch",
+        dicData: [
+          {
+            label: "否",
+            value: false
+          },
+          {
+            label: "是",
+            value: true
+          }
+        ],
+        placeholder: " "
+      },
+      {
+        label: "洗抛次数",
+        tip: "缩水-洗抛次数(Số lần giặt và vắt)",
+        prop: "proShrinkWashDryCount",
+        width: 120,
+        hide: true,
+        span: 12,
+        type: "number",
+        placeholder: " "
+      }
+    ]
+  };
+}
+
 export function dlgCrud(_this) {
   return {
     menu: false,
@@ -907,7 +1075,7 @@ export function gyCrud(_this) {
       {
         label: "设定",
         prop: "itemSet",
-        width: 150,
+        width: 120,
         span: 6,
         cell: true,
         slot: true,
@@ -919,7 +1087,7 @@ export function gyCrud(_this) {
         label: "实际",
         prop: "itemActual",
         slot: true,
-        width: 150,
+        width: 120,
         span: 6,
         type: "number",
         precision: 2,
@@ -955,13 +1123,15 @@ export function pfCrud(_this) {
         width: 140,
         overHidden: true,
         span: 6,
+        placeholder: " ",
         cell: true
       },
       {
         label: "物料名称",
         prop: "materialName",
         width: 180,
-        overHidden: true,
+        // overHidden: true,
+        placeholder: " ",
         span: 6,
         cell: true
       },
@@ -970,7 +1140,8 @@ export function pfCrud(_this) {
         prop: "useAmount",
         width: 120,
         type: "number",
-        overHidden: true,
+        // overHidden: true,
+        placeholder: " ",
         maxRows: 9999,
         span: 6,
         cell: true
@@ -980,7 +1151,8 @@ export function pfCrud(_this) {
         prop: "waterRatio",
         width: 120,
         type: "number",
-        overHidden: true,
+        // overHidden: true,
+        placeholder: " ",
         minRows: 0,
         maxRows: 9999,
         span: 6,
@@ -999,7 +1171,8 @@ export function pfCrud(_this) {
         prop: "waterAmount",
         width: 120,
         type: "number",
-        overHidden: true,
+        // overHidden: true,
+        placeholder: " ",
         minRows: 0,
         maxRows: 9999,
         span: 6,
@@ -1010,7 +1183,8 @@ export function pfCrud(_this) {
         prop: "diluteRatio",
         width: 120,
         type: "number",
-        overHidden: true,
+        // overHidden: true,
+        placeholder: " ",
         minRows: 0,
         maxRows: 9999,
         span: 6,
@@ -1021,7 +1195,8 @@ export function pfCrud(_this) {
         prop: "deliveryQuantity",
         width: 120,
         type: "number",
-        overHidden: true,
+        // overHidden: true,
+        placeholder: " ",
         minRows: 0,
         maxRows: 9999,
         span: 6,

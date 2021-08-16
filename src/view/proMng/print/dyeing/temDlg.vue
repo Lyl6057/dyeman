@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-07 16:22:50
+ * @LastEditTime: 2021-08-13 10:47:31
  * @Description: 
 -->
 <template>
@@ -101,6 +101,26 @@
         >
           <el-button type="primary" @click="print" :disabled="!form.bleadyeJobId">打印</el-button>
         </el-tooltip>
+        <el-tooltip
+            class="item"
+            effect="dark"
+            content=" in"
+            placement="top-start"
+          >
+            <el-button type="primary" @click="printOther(1)" :disabled="!form.bleadyeJobId" :loading="wloading"
+              >打印工艺</el-button
+            >
+          </el-tooltip>
+          <el-tooltip
+            class="item"
+            effect="dark"
+            content=" in"
+            placement="top-start"
+          >
+            <el-button type="primary" @click="printOther(2)" :disabled="!form.bleadyeJobId" :loading="wloading"
+              >打印染缸参数</el-button
+            >
+          </el-tooltip>
         <el-tooltip
           class="item"
           effect="dark"
@@ -703,6 +723,20 @@ export default {
         process.env.API_HOST +
         "/api/proBleadyeJob/buildWorkOrder?id=" +
         this.form.bleadyeJobId;
+    },
+    printOther(val) {
+      if (val == 1) {
+        this.pdfUrl =
+          process.env.API_HOST +
+          "/api/proBleadyeJob/buildWorkOrder2?id=" +
+          this.detail.bleadyeJobId;
+      } else {
+        this.pdfUrl =
+          process.env.API_HOST +
+          "/api/proBleadyeJob/buildWorkOrder3?id=" +
+          this.detail.bleadyeJobId;
+      }
+      this.pdfDlg = true;
     },
     selectValue(e) {
       e.currentTarget.select();

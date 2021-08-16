@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-07-15 09:09:55
+ * @LastEditTime: 2021-08-12 10:37:44
  * @Description: 
 -->
 <template>
@@ -173,6 +173,38 @@ export default {
       if (this.isAdd) {
         setTimeout(() => {
           this.form.orderMan = parent.userID;
+          this.form.isRaise = false;
+          this.form.isSanding = false;
+          this.form.isBrush = false;
+          this.form.isBurn = false;
+
+          this.form.isDry = false;
+          this.form.sandingPress1State = false;
+          this.form.sandingRoller1State = false;
+          this.form.sandingPress2State = false;
+
+          this.form.sandingRoller2State = false;
+          this.form.sandingPress3State = false;
+          this.form.sandingRoller3State = false;
+          this.form.sandingPress4State = false;
+
+          this.form.sandingRoller4State = false;
+          this.form.sandingPress5State = false;
+          this.form.sandingRoller5State = false;
+          this.form.sandingPress6State = false;
+
+          this.form.sandingRoller6State = false;
+          this.form.raiseDownOpen = false;
+          this.form.raiseUpOpen = false;
+          this.form.burnFire1 = false;
+
+          this.form.burnFire2 = false;
+          this.form.burnFan1Switch = false;
+          this.form.burnFire3 = false;
+          this.form.burnFire4 = false;
+
+          this.form.burnFan2Switch = false;
+          this.form.burnBlowerSwitch = false;
         }, 100);
       } else {
         this.wLoading = true;
@@ -257,7 +289,7 @@ export default {
       }
       if (this.choiceTle == "选择染整工单") {
         this.form = val;
-        console.log(val);
+        this.form.proBleadyeJobFk = val.bleadyeJobId;
         // this.form.vatNo = val.vatNo;
         // this.form.weaveJobCode = val.weaveJobCode;
         // this.form.custCode = val.custCode;

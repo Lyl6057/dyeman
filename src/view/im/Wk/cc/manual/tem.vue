@@ -70,9 +70,9 @@
                   </el-select>
                 </template>
                 -->
-                <template slot="clothName" slot-scope="scope">
+                <template slot="woMatname" slot-scope="scope">
                   <el-select
-                    v-model="scope.row.clothName"
+                    v-model="scope.row.woMatname"
                     placeholder="请选择"
                     filterable
                     allow-create
@@ -422,9 +422,9 @@ export default {
           this.mx.forEach((item, index) => {
             item.index = index + 1;
             item.chinName = item.materialNum;
-            if (this.datas == "成品布") {
-              item.clothName = item.woMatname;
-            }
+            // if (this.datas == "成品布") {
+            //   item.clothName = item.woMatname;
+            // }
             if (this.datas == this.$t("iaoMng.scfl")) {
               item.materialNum = item.matId;
             }
@@ -455,7 +455,8 @@ export default {
         !this.chooseData.whseChemicalDlaoid &&
         !this.chooseData.energyOutDtlId &&
         !this.chooseData.whseAccessoriesoutDtloid &&
-        !this.chooseData.energyDtloid
+        !this.chooseData.energyDtloid &&
+        !this.chooseData.whseFinclothselloutDtlaoid
       ) {
         this.chooseData.list = [];
         return;
@@ -467,30 +468,38 @@ export default {
         }
       }
       this.ctLoading = true;
-      this.countOp.showSummary = false;
+      // this.countOp.showSummary = false;
       this.everyThing
         .getPh({
           whseChemicalDlaFk: this.chooseData.whseChemicalDlaoid,
           whseDyesainDtlaFk: this.chooseData.energyOutDtlId,
           whseAccessoriesDtlFk: this.chooseData.whseAccessoriesoutDtloid,
           energyDtloid: this.chooseData.energyDtloid,
+          whseFinclothselloutDtlaFk: this.chooseData.whseFinclothselloutDtlaoid,
           rows: 999,
           start: 1,
         })
         .then((res) => {
-          let records = res.data;
-          this.phPage.total = records.total;
           let data = res.data;
-          // data = records.records;
+          this.phPage.total = data.length;
           if (data.length === 0) {
             this.ctLoading = false;
           }
+          if (this.datas == "成品布") {
+            data.sort((a, b) => {
+              return b.prodNo - a.prodNo;
+            });
+          }
           data.forEach((item, index) => {
             item.index = index + 1;
-
             if (index === data.length - 1) {
               this.chooseData.list = data;
-              this.countOp.showSummary = true;
+              setTimeout(() => {
+                this.countOp.showSummary = true;
+                this.$nextTick(() => {
+                  this.$refs.count.doLayout();
+                });
+              }, 200);
               this.ctLoading = false;
             }
           });
@@ -732,7 +741,8 @@ export default {
         !this.choosePhData.whseChemicalDlboid &&
         !this.choosePhData.whseDyesainDtlboid &&
         !this.choosePhData.whseAccessoriesDtlaoid &&
-        !this.choosePhData.whseEnergyDtlaId
+        !this.choosePhData.whseEnergyDtlaId &&
+        !this.choosePhData.whseFinclothselloutDtlboid
       ) {
         this.chooseData.list.splice(this.choosePhData.index - 1, 1);
         this.phPage.total--;
@@ -753,6 +763,8 @@ export default {
                 ? this.choosePhData.whseChemicalDlboid
                 : this.datas === this.$t("choicDlg.rl")
                 ? this.choosePhData.whseEnergyDtlaId
+                : this.datas === "成品布"
+                ? this.choosePhData.whseFinclothselloutDtlboid
                 : this.choosePhData.whseAccessoriesDtlaoid
             )
             .then((res) => {
@@ -784,7 +796,7 @@ export default {
       if (!this.chooseData.list) {
         this.chooseData.list = [];
       }
-      if (this.datas === this.$t("iaoMng.hgyl")) {
+      if (this.datas === this.$t("iaoMng.hgyl") || this.datas === "成品布") {
         this.getPh();
         // this.getLoc();
       }
@@ -832,8 +844,8 @@ export default {
       }
       if (this.datas === "成品布") {
         for (let i = 0; i < this.mx.length; i++) {
-          this.mx[i].woMatno = this.mx[i].$clothName;
-          this.mx[i].woMatname = this.mx[i].clothName;
+          this.mx[i].woMatno = this.mx[i].$woMatname;
+          // this.mx[i].woMatname = this.mx[i].clothName;
           if (this.mx[i].loc) {
             for (let j = 0; j < this.mx[i].loc.length; j++) {
               if (!this.mx[i].loc[j].woWeights || !this.mx[i].loc[j].woUnit) {
@@ -1052,6 +1064,7 @@ export default {
         this.form.sysCreated = this.$getNowTime("datetime");
         this.form.sysCreatedby = this.$store.state.userOid;
         this.everyThing.add(this.form).then((res) => {
+          baseCodeSupply({ code: this.everyThing.code }).then((res) => {});
           if (this.mx.length === 0) {
             setTimeout(() => {
               this.wloading = false;
@@ -1206,9 +1219,9 @@ export default {
       if (row.batchNo == null) {
         row.batchNo = "";
       }
-      if (row.batchNo.indexOf(val.value.split("-")[0]) == -1) {
-        row.batchNo = val.value.split("-")[0] + row.batchNo;
-      }
+      // if (row.batchNo.indexOf(val.value.split("-")[0]) == -1) {
+      //   row.batchNo = val.value.split("-")[0] + row.batchNo;
+      // }
     },
     choiceData(val) {
       if (!val.length) {
@@ -1286,12 +1299,13 @@ export default {
         });
         this.mx = this.$unique(this.mx.concat(val), "batchNo");
       } else if (this.datas == "成品布") {
-        val.forEach((item) => {
+        val.forEach((item, i) => {
           // item.whseOfficeDtlFk = item.whseAccessoriesDtloid;
           item.ticketNo = item.fabticket;
           item.prodNo = item.batchNo;
           item.woWeights = item.weight;
           item.woUnit = item.weightUnit;
+          item.index = this.chooseData.list.length + i + 1;
         });
         this.chooseData.list = this.$unique(
           this.chooseData.list.concat(val),

@@ -7,8 +7,10 @@
       collapse-transition
       router
       :collapse="isActive"
+      v-loading.fullscreen.lock="loading"
+      element-loading-text="拼命加载中"
     >
-      <menus :menuData="menuData" :level="0"></menus>
+      <menus :menuData="list" :level="0"></menus>
     </el-menu>
     <div @click="IsActive" class="menu-icon">
       <el-divider>
@@ -20,6 +22,7 @@
 </template>
 <script>
 import { menuData } from "./index.js";
+import { getAuthority } from "@/api/index";
 import menus from "./menu.vue";
 export default {
   components: {
@@ -29,16 +32,49 @@ export default {
   data() {
     return {
       menuData: menuData(this).menu,
+      list: [],
       isActive: false,
+      loading: true,
     };
   },
   methods: {
+    init() {
+      getAuthority({ name: "LylofErp" }).then((res) => {
+        let menu = [];
+        res.data.forEach((item, i) => {
+          if (item.indexOf("Vue_") != -1) {
+            menu.push(item.split("Vue_")[1]);
+          }
+        });
+        let func = function (list) {
+          list.forEach((item) => {
+            if (menu.indexOf(item.index) != -1) {
+              item.hide = false;
+            } else {
+              item.hide = true;
+            }
+            if (item.children) {
+              func(item.children);
+            }
+            item.index = "/" + item.index;
+          });
+        };
+        func(this.menuData);
+        this.list = this.menuData;
+        this.$nextTick(() => {
+          setTimeout(() => {
+            this.loading = false;
+          }, 200);
+        });
+      });
+    },
     IsActive() {
       this.isActive = !this.isActive;
       this.$store.dispatch("isActive", this.isActive);
     },
   },
   created() {
+    this.init();
     this.$router.push({ path: "ProWorkflowInfo" }); // 生产管理
     // this.$router.push({ path: "imWl" });
     // this.$router.push({ path: "colorMng" });

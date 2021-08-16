@@ -2,61 +2,17 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-11 09:51:13
- * @Description:
+ * @LastEditTime: 2021-08-16 08:19:24
+ * @Description: 
 -->
 <template>
   <div id="clothFlyPrint">
     <view-container
-      title="染整生产运转单"
+      title="織造通知單打印"
       v-loading="wloading"
       element-loading-text="拼命加载中..."
     >
       <el-row class="btnList">
-        <el-tooltip
-          class="item"
-          effect="dark"
-          content="cập nhật"
-          placement="top-start"
-        >
-          <el-button
-            type="success"
-            :disabled="!detail.runJobId"
-            @click="handleRowDBLClick(detail)"
-            >{{ this.$t("public.update") }}</el-button
-          >
-        </el-tooltip>
-
-        <el-tooltip
-          class="item"
-          effect="dark"
-          content="thêm mới "
-          placement="top-start"
-        >
-          <el-button type="primary" @click="add">{{
-            this.$t("public.add")
-          }}</el-button>
-        </el-tooltip>
-        <el-tooltip
-          class="item"
-          effect="dark"
-          content="xóa"
-          placement="top-start"
-        >
-          <el-button type="danger" :disabled="!detail.runJobId" @click="del">{{
-            this.$t("public.del")
-          }}</el-button>
-        </el-tooltip>
-        <el-tooltip
-          class="item"
-          effect="dark"
-          content=" in"
-          placement="top-start"
-        >
-          <el-button type="primary" @click="print" :loading="wloading"
-            >打印</el-button
-          >
-        </el-tooltip>
         <el-tooltip
           class="item"
           effect="dark"
@@ -96,40 +52,16 @@
         append-to-body
         :close-on-click-modal="false"
         :close-on-press-escape="false"
+        v-if="dialogVisible"
       >
         <tem-dlg
-          v-if="dialogVisible"
           ref="tem"
           :detail="detail"
           :isAdd="isAdd"
           @close="dialogVisible = false"
           @refresh="query"
+          v-if="dialogVisible"
         ></tem-dlg>
-      </el-dialog>
-      <el-dialog
-        id="colorMng_Dlg"
-        :visible.sync="pdfDlg"
-        fullscreen
-        width="100%"
-        append-to-body
-        :close-on-click-modal="false"
-        :close-on-press-escape="false"
-      >
-        <view-container title="打印預覽">
-          <!-- <div class="btnList">
-            <el-button type="warning" @click="pdfDlg = false">{{
-              this.$t("public.close")
-            }}</el-button>
-            <el-button type="primary" @click="print2">打印</el-button>
-          </div> -->
-          <!--startprint-->
-          <embed
-            id="pdf"
-            style="width: 100vw; height: calc(100vh - 80px)"
-            :src="pdfUrl"
-          />
-          <!--endprint-->
-        </view-container>
       </el-dialog>
     </view-container>
   </div>
@@ -137,9 +69,9 @@
 <script>
 import { mainForm, mainCrud } from "./data";
 import { get, add, update, del, print } from "./api";
+import XlsxTemplate from "xlsx-template";
+import JSZipUtils from "jszip-utils";
 import tem from "./temDlg";
-import html2Canvas from "html2canvas";
-import JsPDF from "jspdf";
 export default {
   name: "",
   components: {
@@ -184,15 +116,11 @@ export default {
         })
       ).then((res) => {
         this.crud = res.data.records;
-        this.crud.sort((a, b) => {
-          return a.workDate > b.workDate ? -1 : 1;
-        });
         this.crud.forEach((item, i) => {
-          // item.custName = item.custCode;
-          // item.amount = item.amount.toFixed(2);
+          item.custName = item.custCode;
+          item.amount = item.amount.toFixed(2);
           item.index = i + 1;
         });
-
         if (this.crud.length > 0) {
           this.$refs.crud.setCurrentRow(this.crud[0]);
         }
@@ -200,32 +128,25 @@ export default {
         this.loading = false;
       });
     },
-    print() {
-      this.pdfDlg = true;
-      this.pdfUrl =
-        process.env.API_HOST +
-        "/api/proBleadyeRunJob/createBleadyeRunJobPdf?id=" +
-        this.detail.runJobId;
-    },
     add() {
       this.isAdd = true;
       this.dialogVisible = true;
     },
     del() {
-      if (parent.userID != this.detail.serviceOperator) {
-        this.$tip.warning("当前用户没有权限删除该记录!");
+      if (this.detail.creator != parent.userID) {
+        this.$tip.warning("你无权限删除该条数据!");
         return;
       }
       this.$tip
         .cofirm(
           this.$t("iaoMng.delTle7") +
-            this.detail.vatNo +
+            this.detail.weaveJobCode +
             this.$t("iaoMng.delTle2"),
           this,
           {}
         )
         .then(() => {
-          del(this.detail.runJobId)
+          del(this.detail.weaveJobId)
             .then((res) => {
               if (res.data.code === 200) {
                 this.$tip.success(this.$t("public.sccg"));
@@ -242,21 +163,25 @@ export default {
           this.$tip.warning(this.$t("public.qxcz"));
         });
     },
+    handleRowDBLClick(val) {
+      this.dialogVisible = true;
+      this.isAdd = false;
+      this.detail = val;
+      // this.print();
+    },
+    cellClick(val) {
+      this.detail = val;
+    },
     rowStyle({ row, column, rowIndex }) {
-      if (row.runState == "0") {
+      if (row.weaveState) {
         return {
           backgroundColor: "#FBD295",
           // color:'#fff'
         };
       }
     },
-    handleRowDBLClick(val) {
-      this.isAdd = false;
-      this.detail = val;
-      this.dialogVisible = true;
-    },
-    cellClick(val) {
-      this.detail = val;
+    close() {
+      document.getElementsByClassName("el-dialog__headerbtn")[0].click();
     },
   },
   created() {},

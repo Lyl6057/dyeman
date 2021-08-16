@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-08-07 07:57:44
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-07 16:17:30
+ * @LastEditTime: 2021-08-14 16:44:36
  * @Description: 
 -->
 <template>
@@ -204,11 +204,19 @@ export default {
       });
     },
     print() {
+      if (this.type == 1) {
+        this.pdfUrl =
+          process.env.API_HOST +
+          "/api/proAppColorCard/pdfanddbh?id=" +
+          this.detail.cardId;
+      } else {
+        this.pdfUrl =
+          process.env.API_HOST +
+          "/api/proAppColorCard/pdfandcgb?id=" +
+          this.detail.cardId;
+      }
+
       this.pdfDlg = true;
-      this.pdfUrl =
-        process.env.API_HOST +
-        "/api/proBleadyeRunJob/createBleadyeRunJobPdf?id=" +
-        this.detail.cardId;
     },
     add() {
       this.isAdd = true;

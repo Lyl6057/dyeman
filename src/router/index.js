@@ -2,24 +2,24 @@
  * @Author: Lyl
  * @Date: 2021-01-23 08:03:49
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-06 14:40:29
+ * @LastEditTime: 2021-08-16 15:04:26
  * @Description:
  */
 import Vue from "vue";
 import Router from "vue-router";
-// // import cs from '@/router/view/cs'
-// // import da from '@/router/view/da'
-// // import em from '@/router/view/em'
-// // import lv from '@/router/view/lv'
-// // import mto from '@/router/view/mto'
-// import pro from '@/router/view/pro'
-// // import re from '@/router/view/re'
-// // import iq from '@/router/view/iq'
+// import cs from '@/router/view/cs'
+// import da from '@/router/view/da'
+// import em from '@/router/view/em'
+// import lv from '@/router/view/lv'
+// import mto from '@/router/view/mto'
+// import pro from "@/router/view/pro";
+// import re from '@/router/view/re'
+// import iq from '@/router/view/iq'
 // import im from "@/router/view/im";
 // import quaLity from "@/router/view/quaLity";
 // import laboratory from "./view/laboratory";
 import proMng from "./view/proMng";
-// import energy from './view/energy'
+// import energy from "./view/energy";
 Vue.use(Router);
 const originalPush = Router.prototype.push;
 
@@ -55,9 +55,9 @@ export default new Router({
         // ...pro,
         // ...re,
         // ...iq,
-        // ...im
-        // ...quaLity
-        // ...laboratory
+        // ...im,
+        // ...quaLity,
+        // ...laboratory,
         ...proMng
         // ...energy
       ]

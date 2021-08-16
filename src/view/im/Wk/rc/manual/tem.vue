@@ -641,16 +641,37 @@ export default {
       this.ctLoading = false;
     },
     add() {
-      this.mx.push({
-        index: this.mx.length + 1,
-        weightUnit: "KG",
-        $cellEdit: true,
-        countingNo: this.mx.length + 1,
-        // materialType: "1",
-        batchNo: this.code,
-      });
-      this.code =
-        this.code.substring(0, 3) + (Number(this.code.substring(3)) + 1);
+      if (this.datas === "成品布") {
+        if (this.mx.length) {
+          this.mx.push({
+            index: this.mx.length + 1,
+            weightUnit: this.mx[this.mx.length - 1].weightUnit,
+            $cellEdit: true,
+            countingNo: this.mx[this.mx.length - 1].countingNo + 1,
+            price: this.mx[this.mx.length - 1].price,
+            locationCode: this.mx[this.mx.length - 1].locationCode,
+            batchNo: this.mx[this.mx.length - 1].batchNo,
+          });
+        } else {
+          this.mx.push({
+            index: 1,
+            weightUnit: "KG",
+            $cellEdit: true,
+            countingNo: 1,
+          });
+        }
+      } else {
+        this.mx.push({
+          index: this.mx.length + 1,
+          weightUnit: "KG",
+          $cellEdit: true,
+          countingNo: this.mx.length + 1,
+          // materialType: "1",
+          batchNo: this.code,
+        });
+        this.code =
+          this.code.substring(0, 3) + (Number(this.code.substring(3)) + 1);
+      }
       this.$refs.mx.setCurrentRow(this.mx[this.mx.length - 1]);
       this.$nextTick(() => {
         this.$toTableLow(this, "mx");
@@ -671,6 +692,9 @@ export default {
         !this.chooseData.energyDtloid
       ) {
         this.mx.splice(this.chooseData.index - 1, 1);
+        this.mx.forEach((item, i) => {
+          item.index = i + 1;
+        });
         this.$refs.mx.setCurrentRow(this.mx[this.mx.length - 1] || {});
         return;
       }
@@ -970,9 +994,11 @@ export default {
                 data.whseDyesalinFk = this.detail.whseDyesalinoid;
                 data.whseHardwareInFk = this.detail.whseAccessoriesinoid;
                 data.whseOfficeInFk = this.detail.whseAccessoriesinoid;
-                baseCodeSupply({ code: this.everyThing.batchCode }).then(
-                  (res) => {}
-                );
+                if (this.datas != "成品布") {
+                  baseCodeSupply({ code: this.everyThing.batchCode }).then(
+                    (res) => {}
+                  );
+                }
                 this.everyThing.addDetail(data).then((res) => {
                   item.energyDtloid = res.data.data;
                   item.whseFinishedclothinDtloid = res.data.data;
@@ -1067,7 +1093,10 @@ export default {
               this.$tip.success(this.$t("public.bccg"));
             }, 200);
           }
+          // if (this.datas != "成品布") {
           baseCodeSupply({ code: this.everyThing.code }).then((res) => {});
+          // }
+
           this.form.whseChemicalinoid = res.data.data;
           this.form.whseDyesalinoid = res.data.data;
           this.form.whseYarninoid = res.data.data;
@@ -1133,9 +1162,12 @@ export default {
                 data.whseDyesalinFk = this.form.whseDyesalinoid;
                 data.whseHardwareInFk = this.form.whseAccessoriesinoid;
                 data.whseOfficeInFk = this.form.whseAccessoriesinoid;
-                baseCodeSupply({ code: this.everyThing.batchCode }).then(
-                  (res) => {}
-                );
+                if (this.datas != "成品布") {
+                  baseCodeSupply({ code: this.everyThing.batchCode }).then(
+                    (res) => {}
+                  );
+                }
+
                 this.everyThing.addDetail(data).then((res) => {
                   item.energyDtloid = res.data.data;
                   item.whseYarninDtloid = res.data.data;
@@ -1236,9 +1268,9 @@ export default {
         if (row.batchNo == null) {
           row.batchNo = "";
         }
-        if (row.batchNo.indexOf(val.value.split("-")[0]) == -1) {
-          row.batchNo = val.value.split("-")[0] + row.batchNo;
-        }
+        // if (row.batchNo.indexOf(val.value.split("-")[0]) == -1) {
+        //   row.batchNo = val.value.split("-")[0] + row.batchNo;
+        // }
       }
     },
     close() {

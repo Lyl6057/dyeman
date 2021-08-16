@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-07-24 15:26:00
+ * @LastEditTime: 2021-08-13 10:53:28
  * @Description:
  */
 
@@ -635,10 +635,31 @@ export function mainCrud(_this) {
         label: "代码",
         prop: "custStyleCode",
         tip: "MÃ CODE VẢI XUẤT HÀNG 代码",
-        span: 12,
+        span: 6,
         hide: true,
         width: 80,
         placeholder: " "
+      },
+      {
+        label: "运转单状态",
+        tip: "state",
+        disabled: false,
+        prop: "runState",
+        width: 120,
+        type: "switch",
+        dicData: [
+          {
+            label: "正常",
+            value: "1"
+          },
+          {
+            label: "草稿",
+            value: "0"
+          }
+        ],
+        hide: false,
+        placeholder: " ",
+        span: 6
       },
       {
         label: "备注",

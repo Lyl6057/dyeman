@@ -513,7 +513,9 @@ export default {
               item.suppId = item.deliNo;
             }
             if (index === this.crud.length - 1) {
-              this.loading = false;
+              setTimeout(() => {
+                this.loading = false;
+              }, 200);
             }
           });
           if (this.crud.length === 0) {

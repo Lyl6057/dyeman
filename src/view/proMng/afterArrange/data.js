@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-07-17 10:17:25
+ * @LastEditTime: 2021-08-09 10:44:09
  * @Description:
  */
 
@@ -691,6 +691,7 @@ export function form3(_this) {
         prop: "sandingPress1State",
         span: 6,
         type: "switch",
+        valueDefault: "true",
         dicData: [
           {
             label: "出(ra)",

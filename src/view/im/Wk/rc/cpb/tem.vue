@@ -150,10 +150,28 @@ export default {
     },
     add() {
       if (this.hide === "1" || this.hide === "3") {
-        this.choiceV = !this.choiceV;
-        this.choiceTarget = {};
-        this.dlgWidth = "100%";
-        this.choiceTle = this.$t("choicDlg.xzcpbhwb");
+        // this.choiceV = !this.choiceV;
+        // this.choiceTarget = {};
+        // this.dlgWidth = "100%";
+        // this.choiceTle = this.$t("choicDlg.xzcpbhwb");
+        if (this.mx.length) {
+          this.mx.push({
+            index: this.mx.length + 1,
+            weightUnit: this.mx[this.mx.length - 1].weightUnit,
+            $cellEdit: true,
+            countingNo: this.mx[this.mx.length - 1].countingNo + 1,
+            price: this.mx[this.mx.length - 1].price,
+            locationCode: this.mx[this.mx.length - 1].locationCode,
+            batchNo: this.mx[this.mx.length - 1].batchNo,
+          });
+        } else {
+          this.mx.push({
+            index: 1,
+            weightUnit: "KG",
+            $cellEdit: true,
+            countingNo: 1,
+          });
+        }
       }
       if (this.hide === "2") {
         this.mx.push({

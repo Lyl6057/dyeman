@@ -246,6 +246,7 @@ export function rhl1C(_this) {
         cell: false,
         width: 100,
         type: "select",
+        hide: _this.data == "成品布" ? true : false,
         dicData: [
           {
             label: "手工出倉",
@@ -711,7 +712,7 @@ export function cpb2C(_this) {
       // },
       {
         label: "成品布名称",
-        prop: "clothName",
+        prop: "woMatname",
         cell: true,
         slot: true,
         overHidden: true,
@@ -734,11 +735,23 @@ export function cpb3C(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 270px)",
+    height: "calc(100vh - 234px)",
     refreshBtn: false,
     columnBtn: false,
-    page: true,
-    showSummary: false,
+    page: false,
+    showSummary: true,
+    sumColumnList: [
+      {
+        label: " ",
+        name: "prodNo",
+        type: "count"
+      },
+      {
+        label: " ",
+        name: "woWeights",
+        type: "sum"
+      }
+    ],
     column: [
       {
         prop: "index",
@@ -754,7 +767,7 @@ export function cpb3C(_this) {
       },
 
       {
-        label: _this.$t("whseField.ph"),
+        label: _this.$t("whseField.ph2"),
         prop: "countingNo",
         cell: false,
         width: 80,
@@ -774,13 +787,13 @@ export function cpb3C(_this) {
         width: 100,
         type: "select",
         dicData: unit
-      },
-      {
-        label: _this.$t("whseField.krbph"),
-        prop: "ticketNo",
-        cell: false,
-        width: 150
       }
+      // {
+      //   label: _this.$t("whseField.krbph"),
+      //   prop: "ticketNo",
+      //   cell: false,
+      //   width: 150
+      // }
     ]
   };
 }

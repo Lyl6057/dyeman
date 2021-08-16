@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-08-07 07:58:01
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-07 14:54:55
+ * @LastEditTime: 2021-08-14 16:39:32
  * @Description:
  */
 
@@ -259,26 +259,128 @@ export function mainCrud(_this) {
         placeholder: " ",
         row: _this.type == 1 ? false : true
       },
-      {
-        label: "配方",
-        prop: "formula",
-        tip: "cách thức",
-        width: 100,
-        span: 12,
-        placeholder: " ",
-        display: _this.type == 1 ? false : true,
-        hide: true,
-        type: "textarea"
-      },
+      // {
+      //   label: "配方",
+      //   prop: "formula",
+      //   tip: "cách thức",
+      //   width: 100,
+      //   span: 12,
+      //   placeholder: " ",
+      //   display: _this.type == 1 ? false : true,
+      //   hide: true,
+      //   type: "textarea"
+      // },
       {
         label: "评语",
         prop: "remark",
         tip: "Nhận xét",
         width: 100,
-        span: 12,
+        span: 24,
         placeholder: " ",
-        hide: true,
-        type: "textarea"
+        hide: true
+        // type: "textarea"
+      }
+    ]
+  };
+}
+
+export function pfCrud(_this) {
+  return {
+    menu: false,
+    addBtn: false,
+    border: true,
+    highlightCurrentRow: true,
+    height: "calc(100vh - 365px)",
+    refreshBtn: false,
+    columnBtn: false,
+    page: false,
+    labelWidth: 130,
+    column: [
+      {
+        label: "#",
+        prop: "index",
+        width: 50,
+        align: "center",
+        display: false
+      },
+      {
+        label: "物料编码",
+        prop: "materialCode",
+        width: 140,
+        overHidden: true,
+        span: 6,
+        cell: true,
+        placeholder: " "
+      },
+      {
+        label: "物料名称",
+        prop: "materialName",
+        width: 450,
+        span: 6,
+        cell: true,
+        placeholder: " "
+      },
+      {
+        label: "数量",
+        prop: "useAmount",
+        width: 120,
+        type: "number",
+        maxRows: 9999,
+        span: 6,
+        cell: true,
+        placeholder: " "
+      },
+      {
+        label: "浴比",
+        prop: "waterRatio",
+        width: 120,
+        type: "number",
+        minRows: 0,
+        maxRows: 9999,
+        span: 6,
+        cell: true,
+        placeholder: " ",
+        change: () => {
+          _this.$nextTick(() => {
+            _this.chooseData.waterAmount = Number(
+              (_this.form.sumWeight * _this.chooseData.waterRatio).toFixed(2)
+            );
+          });
+        }
+      },
+
+      {
+        label: "水量",
+        prop: "waterAmount",
+        width: 120,
+        type: "number",
+        minRows: 0,
+        maxRows: 9999,
+        span: 6,
+        cell: true,
+        placeholder: " "
+      },
+      {
+        label: "开稀比例",
+        prop: "diluteRatio",
+        width: 120,
+        type: "number",
+        minRows: 0,
+        maxRows: 9999,
+        span: 6,
+        cell: true,
+        placeholder: " "
+      },
+      {
+        label: "输送数量",
+        prop: "deliveryQuantity",
+        width: 120,
+        type: "number",
+        minRows: 0,
+        maxRows: 9999,
+        span: 6,
+        cell: true,
+        placeholder: " "
       }
     ]
   };

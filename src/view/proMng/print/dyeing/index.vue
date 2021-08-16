@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-06 17:00:31
+ * @LastEditTime: 2021-08-13 08:21:49
  * @Description: 
 -->
 <template>
@@ -47,7 +47,26 @@
               >打印</el-button
             >
           </el-tooltip>
-
+          <el-tooltip
+            class="item"
+            effect="dark"
+            content=" in"
+            placement="top-start"
+          >
+            <el-button type="primary" @click="printOther(1)" :loading="wloading"
+              >打印工艺</el-button
+            >
+          </el-tooltip>
+          <el-tooltip
+            class="item"
+            effect="dark"
+            content=" in"
+            placement="top-start"
+          >
+            <el-button type="primary" @click="printOther(2)" :loading="wloading"
+              >打印染缸参数</el-button
+            >
+          </el-tooltip>
           <el-tooltip
             class="item"
             effect="dark"
@@ -162,6 +181,7 @@
             v-loading="revolveLoading"
             @row-dblclick="revolveDBLClick"
             @current-row-change="revolveCellClick"
+            :row-style="rowStyle"
           ></avue-crud>
         </el-row>
       </el-tab-pane>
@@ -255,6 +275,7 @@ export default {
       getRevolve({
         rows: 99999,
         start: 1,
+        runState: "1",
       }).then((res) => {
         this.revolves = res.data.records;
         this.revolves.sort((a, b) => {
@@ -282,11 +303,23 @@ export default {
       });
     },
     revolveDBLClick(val) {
+      if (val.runState == "0") {
+        this.$tip.warning("该运转单为草稿状态,无法进行操作!");
+        return;
+      }
       this.revolveChoose = val;
       this.add(this.revolveChoose);
     },
     revolveCellClick(val) {
       this.revolveChoose = val;
+    },
+    rowStyle({ row, column, rowIndex }) {
+      if (row.runState == "0") {
+        return {
+          backgroundColor: "#FBD295",
+          // color:'#fff'
+        };
+      }
     },
     print() {
       this.pdfDlg = true;
@@ -295,7 +328,25 @@ export default {
         "/api/proBleadyeJob/buildWorkOrder?id=" +
         this.detail.bleadyeJobId;
     },
+    printOther(val) {
+      if (val == 1) {
+        this.pdfUrl =
+          process.env.API_HOST +
+          "/api/proBleadyeJob/buildWorkOrder2?id=" +
+          this.detail.bleadyeJobId;
+      } else {
+        this.pdfUrl =
+          process.env.API_HOST +
+          "/api/proBleadyeJob/buildWorkOrder3?id=" +
+          this.detail.bleadyeJobId;
+      }
+      this.pdfDlg = true;
+    },
     add(val) {
+      if (val.runState == "0") {
+        this.$tip.warning("该运转单为草稿状态,无法进行操作!");
+        return;
+      }
       this.revolveData = val;
       this.isAdd = true;
       this.dialogVisible = true;

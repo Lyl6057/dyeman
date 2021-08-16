@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-04-01 13:39:35
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-07 13:39:34
+ * @LastEditTime: 2021-08-16 14:50:42
  * @Description:
  */
 
@@ -15,15 +15,15 @@ export function proMng(_this) {
       children: [
         {
           menuName: "1.生產工序",
-          index: "/ProWorkflowInfo"
+          index: "ProWorkflowInfo"
         },
         {
           menuName: "2.生产工作包",
-          index: "/ProWorkPackage"
+          index: "ProWorkPackage"
         },
         {
           menuName: "3.生产设备",
-          index: "/EquipmentType"
+          index: "EquipmentType"
         }
       ]
     },
@@ -34,27 +34,27 @@ export function proMng(_this) {
       children: [
         {
           menuName: "1.生产排期",
-          index: "/proSalSchedule"
+          index: "proSalSchedule"
         },
         {
           menuName: "2.生产排单",
-          index: "/proScheduling"
+          index: "proScheduling"
         },
         {
           menuName: "3.LD通知单",
-          index: "/ldOrder"
+          index: "ldOrder"
         },
         {
           menuName: "4.染整通知单",
-          index: "/dyeNotice"
+          index: "dyeNotice"
         },
         {
           menuName: "5.定型指令单",
-          index: "/finalizeDesign"
+          index: "finalizeDesign"
         },
         {
           menuName: "6.后整指令单",
-          index: "/afterArrange"
+          index: "afterArrange"
         }
       ]
     },
@@ -65,19 +65,19 @@ export function proMng(_this) {
       children: [
         {
           menuName: "1.生产日产量",
-          index: "/output"
+          index: "output"
         },
         {
           menuName: "2.生产进度",
-          index: "/outputSchedule"
+          index: "outputSchedule"
         },
         {
           menuName: "3.织造工单",
-          index: "/proWeaveJob"
+          index: "proWeaveJob"
         },
         {
           menuName: "4.布飞打印记录",
-          index: "/buffyPrints"
+          index: "buffyPrints"
         }
         // {
         //   menuName: "3.落布记录",
@@ -96,15 +96,15 @@ export function proMng(_this) {
       children: [
         {
           menuName: "1.漂染工艺",
-          index: "/techCode"
+          index: "techCode"
         },
         {
           menuName: "2.染整生产运转单",
-          index: "/revolve"
+          index: "revolve"
         },
         {
           menuName: "3.染整工单",
-          index: "/dyeing"
+          index: "dyeing"
         }
         // {
         //   menuName: "2.落布记录",
@@ -122,16 +122,16 @@ export function proMng(_this) {
       icon: "el-icon-edit-outline",
       children: [
         {
-          menuName: "1.出缸批色",
-          index: `/outcodeCard/${1}`
+          menuName: "1.出缸码卡",
+          index: `codeCard/${2}`
         },
         {
-          menuName: "2.定型批色",
-          index: `/codeCard/${2}`
+          menuName: "2.定后码卡",
+          index: `outcodeCard/${1}`
         },
         {
           menuName: "3.成品码卡",
-          index: "/finalCard"
+          index: "finalCard"
         }
         // {
         //   menuName: "3.染整工单",
@@ -149,12 +149,12 @@ export function proMng(_this) {
     },
     {
       menuName: "六.報表",
-      index: "report",
+      index: "proReport",
       icon: "el-icon-document-copy",
       children: [
         {
           menuName: "1.织造工单",
-          index: "/proWeaveJob"
+          index: "proWeaveJob"
         },
         // {
         //   menuName: "2.染整工单",
@@ -162,8 +162,12 @@ export function proMng(_this) {
         // },
         {
           menuName: "2.布飞打印",
-          index: "/clothFly"
+          index: "clothFly"
         }
+        // {
+        //   menuName: "3.纱缸查询",
+        //   index: "yarnBatch"
+        // }
       ]
     }
   ];

@@ -152,7 +152,7 @@ import {
   addFinclothselloutDtla,
   updateFinclothselloutDtla,
   delFinclothselloutDtla,
-  getFinclothselloutDtlb,
+  getFinclothselloutDtlbList,
   addFinclothselloutDtlb,
   updateFinclothselloutDtlb,
   delFinclothselloutDtlb,
@@ -326,10 +326,14 @@ export default {
           this.everyThing.addDetail = addFinclothselloutDtla;
           this.everyThing.updateDetail = updateFinclothselloutDtla;
           this.everyThing.delDetail = delFinclothselloutDtla;
-          this.everyThing.getLoc = getFinclothselloutDtlb;
+          this.everyThing.getLoc = getFinclothselloutDtlbList;
           this.everyThing.addLoc = addFinclothselloutDtlb;
           this.everyThing.delLoc = delFinclothselloutDtlb;
           this.everyThing.updateLoc = updateFinclothselloutDtlb;
+          this.everyThing.getPh = getFinclothselloutDtlbList;
+          this.everyThing.addPh = addFinclothselloutDtlb;
+          this.everyThing.updatePh = updateFinclothselloutDtlb;
+          this.everyThing.delPh = delFinclothselloutDtlb;
           this.everyThing.sx2C = cpb2C(this);
           this.everyThing.batchCode = "cpb_out_whse";
           break;

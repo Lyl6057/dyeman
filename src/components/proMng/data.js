@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-05-03 13:03:03
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-02 10:55:56
+ * @LastEditTime: 2021-08-12 15:29:09
  * @Description:
  */
 
@@ -18,7 +18,6 @@ let basAdsupplies = getDicT(
 let matUnit = getDIC("bas_matUnit");
 let basChemical = getXDicT("BasChemicalmatNew");
 let basPigment = getXDicT("basPigment");
-console.log(basPigment);
 let basProductivesupplies = getXDicT("basProductivesupplies");
 let basFuel = getXDicT("basFuel");
 
@@ -36,11 +35,11 @@ export function cpbInF(_this) {
         width: 230
       },
       {
-        label: _this.$t("whseField.bph"),
-        prop: "fabticket",
+        label: _this.$t("whseField.hwm"),
+        prop: "locationCode",
         cell: true,
-        width: 120,
-        span: 6
+        span: 6,
+        width: 180
       }
     ]
   };
@@ -69,12 +68,12 @@ export function cpbInC(_this) {
         cell: true,
         width: 230
       },
-      {
-        label: _this.$t("whseField.bph"),
-        prop: "fabticket",
-        cell: true,
-        width: 230
-      },
+      // {
+      //   label: _this.$t("whseField.bph"),
+      //   prop: "fabticket",
+      //   cell: true,
+      //   width: 230
+      // },
       {
         label: _this.$t("whseField.ph2"),
         prop: "countingNo",
@@ -104,6 +103,7 @@ export function cpbInC(_this) {
         prop: "price",
         cell: true,
         type: "number",
+        align: "right",
         width: 120
       },
       {
@@ -2629,6 +2629,7 @@ export function weaveJobC(_this) {
         prop: "mathineCode",
         span: 6,
         width: 120,
+        hide: true,
         placeholder: " ",
         rules: [
           {

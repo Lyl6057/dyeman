@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-10 14:20:44
  * @LastEditors: Lyl
- * @LastEditTime: 2021-06-08 18:33:57
+ * @LastEditTime: 2021-08-16 09:32:34
  * @Description: 
 -->
 <template>
@@ -34,6 +34,7 @@
 <script>
 import top from "./top/index";
 import sidebar from "./sidebar/index.vue";
+
 export default {
   name: "index",
   components: {
@@ -43,6 +44,8 @@ export default {
   data() {
     return {};
   },
+  created() {},
+  methods: {},
   computed: {
     isActive() {
       return this.$store.state.isActive;

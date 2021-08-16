@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-06 16:10:45
+ * @LastEditTime: 2021-08-11 09:47:28
  * @Description:
  */
 
@@ -242,6 +242,7 @@ export function mainCrud(_this) {
         ],
         click: () => {
           _this.choiceTle = "选择染整运转单";
+          _this.choiceQ.runState = "1";
           _this.choiceV = true;
         }
       },

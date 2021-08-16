@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-07 14:54:01
+ * @LastEditTime: 2021-08-14 16:57:01
  * @Description:
 -->
 <template>
@@ -47,7 +47,7 @@
       </div>
 
       <el-row class="formBox">
-        <div style="height: calc(100vh - 120px); overflow: auto">
+        <div style="overflow: auto">
           <avue-form
             ref="form"
             :option="formOp"
@@ -56,6 +56,41 @@
           ></avue-form>
         </div>
       </el-row>
+      <view-container
+        title="后整配方"
+        :element-loading-text="$t('public.loading')"
+        v-loading="wLoading"
+        v-if="type == 2"
+        class="not-number-icon"
+      >
+        <div class="btnList">
+          <!-- <el-button @click="saveOther" type="success">{{
+            $t("public.save")
+          }}</el-button> -->
+          <el-button @click="add" type="primary">{{
+            $t("public.add")
+          }}</el-button>
+          <el-button
+            @click="del"
+            type="danger"
+            :disabled="Object.keys(chooseData).length == 0"
+            >{{ $t("public.del") }}</el-button
+          >
+        </div>
+        <div class="crudBox">
+          <avue-crud
+            id="otherCrud"
+            ref="otherCrud"
+            :option="crudOp"
+            :data="crud"
+            :page.sync="page"
+            v-loading="loading"
+            @on-load="query"
+            @current-row-change="cellClick"
+          >
+          </avue-crud>
+        </div>
+      </view-container>
     </view-container>
     <el-dialog
       id="colorMng_Dlg"
@@ -88,9 +123,15 @@
 <script>
 import choice from "@/components/proMng/index";
 import { getXDicT } from "@/config";
-import { mainCrud } from "./data";
+import { mainCrud, pfCrud } from "./data";
 import { timeConversion } from "@/config/util";
 import { get, add, update, getWeave } from "./api";
+import {
+  getFormula,
+  addFormula,
+  delFormula,
+  updateFormula,
+} from "../finalizeDesign/api";
 export default {
   name: "",
   props: {
@@ -125,6 +166,7 @@ export default {
       printCtr: false,
       visible: false,
       loading: false,
+      crudOp: pfCrud(this),
       crud: [],
       chooseData: {},
       tabs: "選擇訂單",
@@ -148,7 +190,23 @@ export default {
         cardId: this.detail.cardId,
       }).then((res) => {
         this.form = res.data.records[0];
-        this.wLoading = false;
+        if (this.type == "2") {
+          getFormula({
+            rows: this.page.pageSize,
+            start: this.page.currentPage,
+            proAppColorCardFk: this.form.cardId,
+          }).then((res) => {
+            this.crud = res.data;
+            this.crud.forEach((item, i) => {
+              item.index = i + 1;
+              item.$cellEdit = true;
+            });
+            this.page.total = res.data.total;
+            this.wLoading = false;
+          });
+        } else {
+          this.wLoading = false;
+        }
       });
     },
     closeChoice() {
@@ -170,61 +228,81 @@ export default {
         this.query();
       }
     },
-    add() {
-      if (!this.form.weaveJobCode || !this.form.poAmountKg) {
-        this.$tip.warning("請先選擇織造通知單/填寫订单数量!");
+    saveOther() {
+      if (this.crud.length == 0) {
         return;
       }
-      // this.bfOp.column[2].hide = false;
-      this.bfOp.column[6].hide = false;
-      this.choiceTle = "选择胚布信息";
-      // this.choiceQ.weaveJob = this.form.weaveJobCode;
-      this.choiceQ.weaveJobCode = this.form.weaveJobCode;
-      this.choiceQ.clothState = this.type;
-      // this.choiceQ.weight = this.form.poAmountKg;
-      this.choiceV = true;
-    },
-    del(type) {
-      if (
-        !this["choose" + type + "Data"][
-          type === "bf" ? "recId" : type === "test" ? "jobTestId" : "itemId"
-        ]
-      ) {
-        this.form[type].splice(this["choose" + type + "Data"].sn - 1, 1);
-        this["choose" + type + "Data"] = {};
-        this.form[type].forEach((item, i) => {
-          item.sn = i + 1;
+      // for (let i = 0; i < this.crud.length; i++) {
+      //   if (!this.crud[i].materialCode || !this.crud[i].useAmount) {
+      //     this.$tip.error("后整配方中的物料编号/数量不能为空!");
+      //     return;
+      //   }
+      // }
+      this.dlgLoading = true;
+      let addDtla = (item, i) => {
+        return new Promise((resolve, reject) => {
+          let data = JSON.parse(JSON.stringify(item));
+          data.list = [];
+          data.alloc = [];
+          data.loc = [];
+          if (item.jobItmeId || item.formulaId) {
+            updateFormula(data).then((res) => {
+              resolve();
+            });
+            // 修改
+          } else {
+            // 新增
+            // data.proFinishJobFk = this.form.finishJobId;
+            data.proAppColorCardFk = this.form.cardId;
+            addFormula(data).then((res) => {
+              item.jobItmeId = res.data.data;
+              item.formulaId = res.data.data;
+              resolve();
+            });
+          }
         });
-        if (this.form[type].length > 0) {
-          this.$refs[type].setCurrentRow(this.form[type][0]);
+      };
+      let promiseArr = this.crud.map((item, i) => {
+        return addDtla(item, i);
+      });
+      Promise.all(promiseArr).then((res) => {
+        for (let i = 0; i < this.crud.length; i++) {
+          if (i === this.crud.length - 1) {
+            // this.getDetail();
+            setTimeout(() => {
+              this.dlgLoading = false;
+              // this.query();
+              this.$tip.success(this.$t("public.bccg"));
+            }, 200);
+          }
+        }
+      });
+    },
+    add() {
+      // this.choiceTle = "選擇漂染基礎工藝";
+      // this.choiceQ.paramType = "afterfinish";
+      // this.choiceV = true;
+      this.crud.push({ index: this.crud.length + 1, $cellEdit: true });
+    },
+    del() {
+      if (!this.chooseData.jobItmeId && !this.chooseData.formulaId) {
+        this.crud.splice(this.chooseData.index - 1, 1);
+        this.chooseData = {};
+        this.crud.forEach((item, i) => {
+          item.index = i + 1;
+        });
+        if (this.crud.length > 0) {
+          this.$refs.otherCrud.setCurrentRow(this.crud[0]);
         }
         return;
       }
       this.$tip
         .cofirm("是否确定删除選中的數據?", this, {})
         .then(() => {
-          let delfunc =
-            type === "bf"
-              ? (delfunc = delbf)
-              : type === "test"
-              ? (delfunc = deltest)
-              : (delfunc = delitem);
-          delfunc(
-            type === "bf"
-              ? this["choose" + type + "Data"].recId
-              : type === "test"
-              ? this["choose" + type + "Data"].jobTestId
-              : this["choose" + type + "Data"].itemId
-          )
+          delFormula(this.chooseData.formulaId)
             .then((res) => {
-              if (type == "bf") {
-                // 如果删除的是布飞信息，则需要在胚布记录表里恢复状态为2
-                updateNote({
-                  noteId: this["choose" + type + "Data"].clothNoteId,
-                  clothState: 2,
-                }).then((res) => {});
-              }
               if (res.data.code === 200) {
+                this.query();
                 this.$tip.success(this.$t("public.sccg"));
               } else {
                 this.$tip.error(this.$t("public.scsb"));
@@ -235,7 +313,6 @@ export default {
             });
         })
         .catch((err) => {
-          console.log(err);
           this.$tip.warning(this.$t("public.qxcz"));
         });
     },
@@ -283,6 +360,9 @@ export default {
                 done();
               });
             }
+            if (this.type == "2") {
+              this.saveOther();
+            }
           } catch (error) {
             console.log(error);
             this.wLoading = false;
@@ -297,8 +377,9 @@ export default {
     },
     handleRowDBLClick(val) {
       this.chooseData = val;
-      this.check();
-      // this.visible = false;
+    },
+    cellClick(val) {
+      this.chooseData = val;
     },
     choiceData(val) {
       if (Object.keys(val).length == 0) {
@@ -319,15 +400,43 @@ export default {
         }).then((res) => {
           this.form.custBatchNo = res.data[0].custPoNo;
         });
+      } else if (this.choiceTle == "選擇漂染基礎工藝") {
+        val.forEach((item, i) => {
+          let data = {};
+          data = {
+            materialCode: item.paramKey,
+            materialName: item.paramName,
+            useAmount: item.paramDefault,
+            // sn: this.crud.length + 1,
+            index: this.crud.length + 1,
+            $cellEdit: true,
+          };
+          this.crud.push(data);
+        });
+        this.crud = this.$unique(this.crud, "materialName");
+        this.crud.forEach((item, i) => {
+          item.sn = i + 1;
+          item.index = i + 1;
+        });
+        this.$nextTick(() => {
+          this.$toTableLow(this, "otherCrud");
+        });
       }
       this.choiceV = false;
     },
     print() {
+      if (this.type == "1") {
+        this.pdfUrl =
+          process.env.API_HOST +
+          "/api/proAppColorCard/pdfanddbh?id=" +
+          this.detail.cardId;
+      } else {
+        this.pdfUrl =
+          process.env.API_HOST +
+          "/api/proAppColorCard/pdfandcgb?id=" +
+          this.detail.cardId;
+      }
       this.pdfDlg = true;
-      this.pdfUrl =
-        process.env.API_HOST +
-        "/api/proBleadyeRunJob/createBleadyeRunJobPdf?id=" +
-        this.form.cardId;
     },
     close() {
       if (this.refresh) {

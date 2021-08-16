@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-06-26 14:44:46
+ * @LastEditTime: 2021-08-14 16:54:39
  * @Description: 
 -->
 <template>
@@ -29,6 +29,9 @@
           :disabled="!this.form.finishJobId"
           >后整配方</el-button
         >
+        <el-button type="primary" @click="print" :disabled="!form.finishJobId"
+          >打印</el-button
+        >
         <el-button type="warning" @click="close">{{
           this.$t("public.close")
         }}</el-button>
@@ -48,7 +51,7 @@
       v-if="visible"
     >
       <el-row>
-        <el-col :span="24">
+        <el-col :span="tabs == '生产工艺' ? 12 : 24">
           <view-container :title="tabs">
             <div class="btnList">
               <el-button @click="saveOther" type="success">{{
@@ -116,6 +119,17 @@
               </avue-crud>
             </div> </view-container
         ></el-col>
+        <el-col :span="12" v-if="tabs == '生产工艺'">
+          <view-container title="成品规格要求" style="">
+            <div style="margin-top: 15px; height: calc(100vh - 100px)">
+              <avue-form
+                ref="cpform"
+                :option="cpForm"
+                v-model="form"
+              ></avue-form>
+            </div>
+          </view-container>
+        </el-col>
       </el-row>
     </el-dialog>
     <choice
@@ -127,11 +141,28 @@
       @close="choiceV = false"
       v-if="choiceV"
     ></choice>
+    <el-dialog
+      id="colorMng_Dlg"
+      :visible.sync="pdfDlg"
+      fullscreen
+      width="100%"
+      append-to-body
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+    >
+      <view-container title="打印預覽">
+        <embed
+          id="pdf"
+          style="width: 100vw; height: calc(100vh - 80px)"
+          :src="pdfUrl"
+        />
+      </view-container>
+    </el-dialog>
   </div>
 </template>
 <script>
 import choice from "@/components/proMng/index";
-import { mainCrud, dlgForm, dlgCrud, pfCrud, gyCrud } from "./data";
+import { mainCrud, dlgForm, dlgCrud, pfCrud, gyCrud, cpForm } from "./data";
 import {
   add,
   update,
@@ -179,6 +210,7 @@ export default {
       crud: [],
       dlgFormOp: dlgForm(this),
       dlgForm: {},
+      cpForm: cpForm(this),
       chooseData: {},
       tabs: "選擇訂單",
       func: {},
@@ -193,6 +225,8 @@ export default {
       pfCrud: pfCrud(this),
       group: [],
       chooseDtlData: {},
+      pdfDlg: false,
+      pdfUrl: "",
     };
   },
   watch: {},
@@ -244,7 +278,10 @@ export default {
               ) {
                 continue;
               }
-              if (this.form[key] == "undefined" || !this.form[key]) {
+              if (
+                this.form[key] == "undefined" ||
+                this.form[key] == undefined
+              ) {
                 delete this.form[key];
               }
             }
@@ -310,6 +347,13 @@ export default {
           return;
         }
       });
+    },
+    print() {
+      this.pdfDlg = true;
+      this.pdfUrl =
+        process.env.API_HOST +
+        "/api/proFinishJob/proFinishPdf?id=" +
+        this.form.finishJobId;
     },
     addPro() {
       getTechargueList({ paramType: "afterfinish" }).then((res) => {
@@ -407,6 +451,9 @@ export default {
         }
       }
       this.dlgLoading = true;
+      if (this.tabs == "生产工艺") {
+        this.save();
+      }
       let addDtla = (item, i) => {
         return new Promise((resolve, reject) => {
           let data = JSON.parse(JSON.stringify(item));
@@ -462,9 +509,13 @@ export default {
       this.query();
     },
     add() {
-      this.choiceTle = "選擇漂染基礎工藝";
-      this.choiceQ.paramType = "afterfinish";
-      this.choiceV = true;
+      if (this.tabs != "后整配方") {
+        this.choiceTle = "選擇漂染基礎工藝";
+        this.choiceQ.paramType = "afterfinish";
+        this.choiceV = true;
+      } else {
+        this.crud.push({ index: this.crud.length + 1, $cellEdit: true });
+      }
     },
     addDtl() {
       this.chooseData.list.push({
@@ -639,8 +690,8 @@ export default {
         this.form.dryClothWeight = val.gramWeightAfter;
         this.form.fabricCompone = val.fabElements;
         this.form.proBreadthSide = val.breadthBorder;
-        this.form.proBreadthActual = val.breadthActual;
-        this.form.proWeightBefore = val.gramWeightBefor;
+        this.form.calicoBreadth = val.breadthActual;
+        this.form.calicoWeight = val.gramWeightBefor;
         this.form.proWeightAfter = val.gramWeightAfter;
         this.form.proShrinkSafeDry = val.flatDry;
         this.form.proShrinkTwist = val.shrinkNear;
@@ -650,16 +701,16 @@ export default {
         val.forEach((item, i) => {
           let data = {};
           data = {
-            itemCode: item.paramKey,
-            itemName: item.paramName,
-            dataStyle: item.paramValueType,
+            materialCode: item.paramKey,
+            materialName: item.paramName,
+            useAmount: item.paramDefault,
             // sn: this.crud.length + 1,
-            // index: this.crud.length + 1,
+            index: this.crud.length + 1,
             $cellEdit: true,
           };
           this.crud.push(data);
         });
-        this.crud = this.$unique(this.crud, "itemName");
+        this.crud = this.$unique(this.crud, "materialName");
         this.crud.forEach((item, i) => {
           item.sn = i + 1;
           item.index = i + 1;

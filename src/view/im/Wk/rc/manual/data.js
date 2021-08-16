@@ -735,6 +735,8 @@ export function pb2C(_this) {
     ]
   };
 }
+
+const resolveData = getDicT("proBleadyeRunJob", "vatNo", "vatNo");
 export function cpb2C(_this) {
   return {
     menu: false,
@@ -768,15 +770,20 @@ export function cpb2C(_this) {
       {
         label: _this.$t("whseField.gh"),
         prop: "batchNo",
-        cell: false,
-        width: 230
-      },
-      {
-        label: _this.$t("whseField.bph"),
-        prop: "fabticket",
         cell: true,
-        width: 230
+        width: 230,
+        type: "select",
+        filterable: true,
+        allowCreate: true,
+        defaultFirstOption: true,
+        dicData: resolveData
       },
+      // {
+      //   label: _this.$t("whseField.bph"),
+      //   prop: "fabticket",
+      //   cell: true,
+      //   width: 230
+      // },
       {
         label: _this.$t("whseField.ph2"),
         prop: "countingNo",
@@ -812,7 +819,7 @@ export function cpb2C(_this) {
         label: _this.$t("whseField.hwm"),
         prop: "locationCode",
         cell: true,
-        width: 180,
+        width: 200,
         type: "select",
         filterable: true,
         allowCreate: true,

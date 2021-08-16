@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-04-08 19:27:38
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-08 19:29:56
+ * @LastEditTime: 2021-08-16 13:57:51
  * @Description:
  */
 
@@ -11,22 +11,22 @@ export function energy(_this) {
   return [
     {
       menuName: _this.$t("caidan.nygl"),
-      index: "7",
+      index: "nygl",
       icon: "el-icon-set-up",
       children: [
         {
           menuName: _this.$t("caidan.ybwh"),
-          index: "/Meter"
+          index: "Meter"
         },
         {
           menuName: _this.$t("caidan.nhjl"),
-          index: "/Consume"
+          index: "Consume"
         },
         {
           menuName: "能源成本核算",
-          index: "/egReport"
+          index: "egReport"
         }
       ]
     }
-  ]
+  ];
 }

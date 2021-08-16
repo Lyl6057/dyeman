@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-29 14:14:56
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-07 13:39:38
+ * @LastEditTime: 2021-08-16 08:11:33
  * @Description:
  */
 export default [
@@ -105,6 +105,11 @@ export default [
     name: "proWeaveJob",
     component: resolve =>
       require(["@/view/proMng/print/proWeaveJob/index"], resolve)
+  },
+  {
+    path: "/yarnBatch", // 纱缸查织单
+    name: "yarnBatch",
+    component: resolve => require(["@/view/proMng/yarnBatch/index"], resolve)
   },
   {
     path: "/cropping", // 織造通知單打印

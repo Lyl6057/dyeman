@@ -1,4 +1,19 @@
+/*
+ * @Author: Lyl
+ * @Date: 2021-03-10 13:20:43
+ * @LastEditors: Lyl
+ * @LastEditTime: 2021-08-14 11:13:48
+ * @Description:
+ */
 import axios from "axios";
+
+export function getAuthority(params) {
+  return axios({
+    url: "/api/ucmlUserLists",
+    method: "get",
+    params: params
+  });
+}
 
 export function baseCodeSupply(params) {
   return axios({
