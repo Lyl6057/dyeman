@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-23 08:03:49
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-16 15:04:26
+ * @LastEditTime: 2021-08-16 18:17:52
  * @Description:
  */
 import Vue from "vue";
@@ -55,9 +55,9 @@ export default new Router({
         // ...pro,
         // ...re,
         // ...iq,
-        // ...im,
-        // ...quaLity,
-        // ...laboratory,
+        // ...im
+        // ...quaLity
+        // ...laboratory
         ...proMng
         // ...energy
       ]

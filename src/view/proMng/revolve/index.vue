@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-11 09:51:13
+ * @LastEditTime: 2021-08-17 13:52:53
  * @Description:
 -->
 <template>
@@ -60,6 +60,16 @@
         <el-tooltip
           class="item"
           effect="dark"
+          content="copy"
+          placement="top-start"
+        >
+          <el-button type="primary" @click="copyEvent" :loading="wloading"
+            >复制</el-button
+          >
+        </el-tooltip>
+        <el-tooltip
+          class="item"
+          effect="dark"
           content="tìm kiếm"
           placement="top-start"
         >
@@ -102,6 +112,7 @@
           ref="tem"
           :detail="detail"
           :isAdd="isAdd"
+          :copyC="copyC"
           @close="dialogVisible = false"
           @refresh="query"
         ></tem-dlg>
@@ -165,6 +176,7 @@ export default {
       czsocket: {},
       pdfDlg: false,
       pdfUrl: "",
+      copyC: false,
     };
   },
   watch: {},
@@ -207,8 +219,14 @@ export default {
         "/api/proBleadyeRunJob/createBleadyeRunJobPdf?id=" +
         this.detail.runJobId;
     },
+    copyEvent() {
+      this.isAdd = true;
+      this.copyC = true;
+      this.dialogVisible = true;
+    },
     add() {
       this.isAdd = true;
+      this.copyC = false;
       this.dialogVisible = true;
     },
     del() {

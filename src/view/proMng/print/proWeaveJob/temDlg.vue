@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-07-16 16:44:21
+ * @LastEditTime: 2021-08-17 13:50:41
  * @Description: 
 -->
 <template>
@@ -352,6 +352,7 @@ export default {
   props: {
     detail: Object,
     isAdd: Boolean,
+    copyC: Boolean,
   },
   components: {
     preView: preview,
@@ -410,11 +411,17 @@ export default {
     getData() {
       if (this.isAdd) {
         baseCodeSupplyEx({ code: "proWeaveJob" }).then((res) => {
-          this.form.weaveJobCode = res.data.data;
+          if (this.copyC) {
+            this.form = JSON.parse(JSON.stringify(this.detail));
+            this.form.weaveJobCode = this.detail.weaveJobCode + "A";
+          } else {
+            this.form.weaveJobCode = res.data.data;
+          }
           this.form.calicoFabricRequire = "开幅";
           this.form.calicoShap = "1";
           this.form.weaveState = 0;
           this.form.creator = parent.userID;
+          this.form.weaveJobId = "";
           this.code = res.data.data;
         });
       } else {

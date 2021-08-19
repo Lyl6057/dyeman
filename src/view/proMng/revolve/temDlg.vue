@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-11 09:44:36
+ * @LastEditTime: 2021-08-17 14:09:16
  * @Description:
 -->
 <template>
@@ -207,6 +207,7 @@ export default {
   props: {
     detail: Object,
     isAdd: Boolean,
+    copyC: Boolean,
   },
   components: {
     choice: choice,
@@ -370,19 +371,78 @@ export default {
       if (this.isAdd) {
         setTimeout(() => {
           baseCodeSupplyEx({ code: "dye_batch" }).then((res) => {
-            this.form.workDate = this.$getNowTime();
-            this.form.deliveDate = this.$getNowTime();
-            this.form.vatNo = "DF-" + res.data.data;
-            this.form.weaveFactoryName = "S.POWER";
-            this.form.address = "S.POWER WAREHOUSE";
-            this.form.compLightSource = ["I", "G"];
+            if (this.copyC) {
+              this.form = JSON.parse(JSON.stringify(this.detail));
+              this.form.vatNo += "A";
+              this.form.runJobId = "";
+              Object.keys(this.form).forEach((item) => {
+                if (this.isEmpty(this.form[item])) {
+                  delete this.form[item];
+                }
+              });
+              if (
+                !(this.form.mergVatNo instanceof Array) &&
+                this.form.mergVatNo
+              ) {
+                this.form.mergVatNo = this.form.mergVatNo.split("/");
+              }
+              if (
+                !(this.form.compLightSource instanceof Array) &&
+                this.form.compLightSource
+              ) {
+                this.form.compLightSource =
+                  this.form.compLightSource.split(",");
+              }
+              getItem({ proBleadyeRunJobFk: this.detail.runJobId }).then(
+                (item) => {
+                  this.form.item = item.data;
+                  this.form.item.sort((a, b) => {
+                    return a.sn - b.sn;
+                  });
+                  this.form.item.forEach((item, i) => {
+                    item.sn = i + 1;
+                    item.itemId = "";
+                    item.$cellEdit = true;
+                  });
+                  if (this.form["item"].length) {
+                    this.$refs["item"].setCurrentRow(this.form["item"][0]);
+                  }
+                  getTest({ proBleadyeRunJobFk: this.detail.runJobId }).then(
+                    (test) => {
+                      this.form.test = test.data;
+                      this.form.test.sort((a, b) => {
+                        return a.sn - b.sn;
+                      });
+                      this.form.test.forEach((item, i) => {
+                        item.sn = i + 1;
+                        item.jobTestId = "";
+                        item.$cellEdit = true;
+                      });
+                      if (this.form["test"].length) {
+                        this.$refs["test"].setCurrentRow(this.form["test"][0]);
+                      }
+                      setTimeout(() => {
+                        this.wLoading = false;
+                      }, 500);
+                    }
+                  );
+                }
+              );
+            } else {
+              this.form.workDate = this.$getNowTime();
+              this.form.deliveDate = this.$getNowTime();
+              this.form.vatNo = "DF-" + res.data.data;
+              this.form.weaveFactoryName = "S.POWER";
+              this.form.address = "S.POWER WAREHOUSE";
+              this.form.compLightSource = ["I", "G"];
+              this.form.throwDry = "3Washing / 3tumble";
+              this.form.poVatCount = 1;
+              this.form.vatIndex = 1;
+              this.form.poColorCount = 1;
+              this.form.runState = "1";
+              this.wLoading = false;
+            }
             this.form.serviceOperator = parent.userID;
-            this.form.throwDry = "3Washing / 3tumble";
-            this.form.poVatCount = 1;
-            this.form.vatIndex = 1;
-            this.form.poColorCount = 1;
-            this.form.runState = "1";
-            this.wLoading = false;
           });
         }, 200);
       } else {
@@ -560,7 +620,10 @@ export default {
               data.createTime = this.$getNowTime("datetime");
               add(data).then((res) => {
                 if (res.data.code == 200) {
-                  baseCodeSupply({ code: "dye_batch" }).then((r) => {});
+                  if (!this.copyC) {
+                    baseCodeSupply({ code: "dye_batch" }).then((r) => {});
+                  }
+
                   // this.$tip.success(this.$t("public.bccg"));
                   // this.wLoading = false;
                   this.$emit("refresh");

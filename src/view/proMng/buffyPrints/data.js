@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-03 11:06:59
+ * @LastEditTime: 2021-08-16 15:13:54
  * @Description:
  */
 
@@ -465,6 +465,7 @@ export function mainCrud(_this) {
         prop: "gramWeight",
         width: 80,
         align: "right",
+        overHidden: true,
         span: 6,
         rules: [
           {

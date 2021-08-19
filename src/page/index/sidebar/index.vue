@@ -39,7 +39,7 @@ export default {
   },
   methods: {
     init() {
-      getAuthority({ name: "LylofErp" }).then((res) => {
+      getAuthority({ name: parent.userID }).then((res) => {
         let menu = [];
         res.data.forEach((item, i) => {
           if (item.indexOf("Vue_") != -1) {
@@ -48,21 +48,26 @@ export default {
         });
         let func = function (list) {
           list.forEach((item) => {
-            if (menu.indexOf(item.index) != -1) {
+            if (menu.indexOf(item.index) != -1 || !res.data.length) {
               item.hide = false;
             } else {
               item.hide = true;
             }
+            item.index = "/" + item.index;
             if (item.children) {
               func(item.children);
             }
-            item.index = "/" + item.index;
           });
         };
         func(this.menuData);
         this.list = this.menuData;
+
         this.$nextTick(() => {
           setTimeout(() => {
+            this.$router.push({ path: "ProWorkflowInfo" }); // 生产管理
+            // this.$router.push({ path: "imWl" });
+            // this.$router.push({ path: "colorMng" });
+            // this.$router.push({ path: "weight" });
             this.loading = false;
           }, 200);
         });
@@ -75,10 +80,6 @@ export default {
   },
   created() {
     this.init();
-    this.$router.push({ path: "ProWorkflowInfo" }); // 生产管理
-    // this.$router.push({ path: "imWl" });
-    // this.$router.push({ path: "colorMng" });
-    // this.$router.push({ path: "weight" });
   },
   computed: {},
 };

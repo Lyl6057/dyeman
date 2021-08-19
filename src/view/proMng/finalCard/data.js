@@ -2,12 +2,13 @@
  * @Author: Lyl
  * @Date: 2021-08-07 07:58:01
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-07 14:58:01
+ * @LastEditTime: 2021-08-19 10:20:52
  * @Description:
  */
 
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
-
+let matUnit = getDIC("bas_matUnit");
+let cust = getXDicT("basCustomer");
 export function mainForm(_this) {
   return {
     submitBtn: false,
@@ -47,8 +48,6 @@ export function mainForm(_this) {
     ]
   };
 }
-let matUnit = getDIC("bas_matUnit");
-let cust = getXDicT("basCustomer");
 
 export function mainCrud(_this) {
   return {
@@ -223,6 +222,117 @@ export function mainCrud(_this) {
         type: "select",
         dicData: getDIC("sal_breadthUnit"),
         placeholder: " "
+      }
+    ]
+  };
+}
+
+export function temForm(_this) {
+  return {
+    submitBtn: false,
+    emptyBtn: false,
+    labelWidth: 120,
+    column: [
+      {
+        label: "模板编号",
+        prop: "tempCode",
+        span: 6,
+        placeholder: " "
+      },
+      {
+        label: "模板名称",
+        prop: "tempName",
+        span: 6,
+        placeholder: " "
+      }
+    ]
+  };
+}
+
+export function temCrud(_this) {
+  return {
+    menu: false,
+    addBtn: true,
+    border: true,
+    highlightCurrentRow: true,
+    height: "calc(100vh - 160px)",
+    refreshBtn: false,
+    columnBtn: false,
+    page: false,
+    labelWidth: 120,
+    column: [
+      {
+        label: "#",
+        prop: "index",
+        width: 50,
+        align: "center",
+        display: false
+      },
+      {
+        label: "模板编号",
+        prop: "tempCode",
+        span: 8,
+        width: 120,
+        placeholder: " ",
+        rules: [
+          {
+            required: true,
+            message: "請输入模板编号",
+            trigger: "blur"
+          }
+        ]
+      },
+      {
+        label: "模板名称",
+        prop: "tempName",
+        span: 8,
+        width: 150,
+        placeholder: " ",
+        overHidden: true,
+        rules: [
+          {
+            required: true,
+            message: "請输入模板名称",
+            trigger: "blur"
+          }
+        ]
+      },
+      {
+        label: "模板内容",
+        prop: "tempContent",
+        span: 8,
+        width: 250,
+        overHidden: true,
+        placeholder: " "
+      },
+      {
+        label: "模板说明",
+        prop: "tempDescr",
+        span: 8,
+        width: 250,
+        overHidden: true,
+        placeholder: " "
+      },
+      {
+        label: "模板路径",
+        prop: "tempPath",
+        span: 8,
+        width: 150,
+        overHidden: true,
+        display: false,
+        placeholder: " "
+      },
+      {
+        label: "选择excel模板",
+        prop: "excelName",
+        width: 180,
+        span: 8,
+        placeholder: " ",
+        // type: "select",
+        hide: true,
+        click: () => {
+          _this.$refs.input.click();
+        }
       }
     ]
   };

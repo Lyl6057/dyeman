@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-07 16:09:58
+ * @LastEditTime: 2021-08-18 15:00:36
  * @Description:
 -->
 <template>
@@ -87,9 +87,7 @@
 </template>
 <script>
 import choice from "@/components/proMng/index";
-import { getXDicT } from "@/config";
 import { mainCrud } from "./data";
-import { timeConversion } from "@/config/util";
 import { get, add, update, getRevolve } from "./api";
 export default {
   name: "",
@@ -244,6 +242,11 @@ export default {
         if (valid) {
           try {
             let data = JSON.parse(JSON.stringify(this.form));
+            Object.keys(data).forEach((item) => {
+              if (this.isEmpty(data[item])) {
+                delete data[item];
+              }
+            });
             if (data.appDate && data.appDate.indexOf(" ") < 0) {
               data.appDate += " 00:00:00";
             }
@@ -298,6 +301,19 @@ export default {
       this.chooseData = val;
       this.check();
       // this.visible = false;
+    },
+    isEmpty(obj) {
+      if (
+        obj === "undefined" ||
+        typeof obj === "undefined" ||
+        obj === null ||
+        obj === "" ||
+        obj === 0
+      ) {
+        return true;
+      } else {
+        return false;
+      }
     },
     choiceData(val) {
       if (Object.keys(val).length == 0) {

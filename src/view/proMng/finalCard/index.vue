@@ -2,141 +2,148 @@
  * @Author: Lyl
  * @Date: 2021-08-07 07:57:44
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-07 16:23:35
+ * @LastEditTime: 2021-08-18 09:05:31
  * @Description: 
 -->
 <template>
   <div class="codeCard">
-    <view-container
-      title="成品码卡"
+    <el-tabs
+      type="border-card"
       v-loading="wloading"
       element-loading-text="拼命加载中..."
     >
-      <el-row class="btnList">
-        <el-tooltip
-          class="item"
-          effect="dark"
-          content="cập nhật"
-          placement="top-start"
-        >
-          <el-button
-            type="success"
-            :disabled="!detail.cardId"
-            @click="handleRowDBLClick(detail)"
-            >{{ this.$t("public.update") }}</el-button
+      <el-tab-pane label="成品码卡">
+        <el-row class="btnList">
+          <el-tooltip
+            class="item"
+            effect="dark"
+            content="cập nhật"
+            placement="top-start"
           >
-        </el-tooltip>
+            <el-button
+              type="success"
+              :disabled="!detail.cardId"
+              @click="handleRowDBLClick(detail)"
+              >{{ this.$t("public.update") }}</el-button
+            >
+          </el-tooltip>
 
-        <el-tooltip
-          class="item"
-          effect="dark"
-          content="thêm mới "
-          placement="top-start"
-        >
-          <el-button type="primary" @click="add">{{
-            this.$t("public.add")
-          }}</el-button>
-        </el-tooltip>
-        <el-tooltip
-          class="item"
-          effect="dark"
-          content="xóa"
-          placement="top-start"
-        >
-          <el-button type="danger" :disabled="!detail.cardId" @click="del">{{
-            this.$t("public.del")
-          }}</el-button>
-        </el-tooltip>
-        <el-tooltip
-          class="item"
-          effect="dark"
-          content=" in"
-          placement="top-start"
-        >
-          <el-button
-            type="primary"
-            @click="print"
-            :loading="wloading"
-            :disabled="!detail.cardId"
-            >打印</el-button
+          <el-tooltip
+            class="item"
+            effect="dark"
+            content="thêm mới "
+            placement="top-start"
           >
-        </el-tooltip>
-        <el-tooltip
-          class="item"
-          effect="dark"
-          content="tìm kiếm"
-          placement="top-start"
-        >
-          <el-button type="primary" @click="query">{{
-            this.$t("public.query")
-          }}</el-button>
-        </el-tooltip>
-        <!-- <el-button type="warning" @click="close">{{
+            <el-button type="primary" @click="add">{{
+              this.$t("public.add")
+            }}</el-button>
+          </el-tooltip>
+          <el-tooltip
+            class="item"
+            effect="dark"
+            content="xóa"
+            placement="top-start"
+          >
+            <el-button type="danger" :disabled="!detail.cardId" @click="del">{{
+              this.$t("public.del")
+            }}</el-button>
+          </el-tooltip>
+          <el-tooltip
+            class="item"
+            effect="dark"
+            content=" in"
+            placement="top-start"
+          >
+            <el-button
+              type="primary"
+              @click="print"
+              :loading="wloading"
+              :disabled="!detail.cardId"
+              >打印</el-button
+            >
+          </el-tooltip>
+          <el-tooltip
+            class="item"
+            effect="dark"
+            content="tìm kiếm"
+            placement="top-start"
+          >
+            <el-button type="primary" @click="query">{{
+              this.$t("public.query")
+            }}</el-button>
+          </el-tooltip>
+          <!-- <el-button type="warning" @click="close">{{
           this.$t("public.close")
         }}</el-button> -->
-      </el-row>
-      <el-row class="formBox">
-        <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
-      </el-row>
-      <el-row class="crudBox">
-        <avue-crud
-          ref="crud"
-          id="crud"
-          :option="crudOp"
-          :data="crud"
-          :page.sync="page"
-          v-loading="loading"
-          @on-load="query"
-          @row-dblclick="handleRowDBLClick"
-          @current-row-change="cellClick"
-        ></avue-crud>
-      </el-row>
-      <el-dialog
-        id="colorMng_Dlg"
-        :visible.sync="dialogVisible"
-        fullscreen
-        width="100%"
-        append-to-body
-        :close-on-click-modal="false"
-        :close-on-press-escape="false"
-      >
-        <tem-dlg
-          v-if="dialogVisible"
-          ref="tem"
-          :detail="detail"
-          :isAdd="isAdd"
-          @close="dialogVisible = false"
-          @refresh="query"
-        ></tem-dlg>
-      </el-dialog>
-      <el-dialog
-        id="colorMng_Dlg"
-        :visible.sync="pdfDlg"
-        fullscreen
-        width="100%"
-        append-to-body
-        :close-on-click-modal="false"
-        :close-on-press-escape="false"
-      >
-        <view-container title="打印預覽">
-          <embed
-            id="pdf"
-            style="width: 100vw; height: calc(100vh - 80px)"
-            :src="pdfUrl"
-          />
-        </view-container>
-      </el-dialog>
-    </view-container>
+        </el-row>
+        <el-row class="formBox">
+          <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
+        </el-row>
+        <el-row class="crudBox">
+          <avue-crud
+            ref="crud"
+            id="crud"
+            :option="crudOp"
+            :data="crud"
+            :page.sync="page"
+            v-loading="loading"
+            @on-load="query"
+            @row-dblclick="handleRowDBLClick"
+            @current-row-change="cellClick"
+          ></avue-crud>
+        </el-row>
+        <el-dialog
+          id="colorMng_Dlg"
+          :visible.sync="dialogVisible"
+          fullscreen
+          width="100%"
+          append-to-body
+          :close-on-click-modal="false"
+          :close-on-press-escape="false"
+        >
+          <tem-dlg
+            v-if="dialogVisible"
+            ref="tem"
+            :detail="detail"
+            :isAdd="isAdd"
+            @close="dialogVisible = false"
+            @refresh="query"
+          ></tem-dlg>
+        </el-dialog>
+        <el-dialog
+          id="colorMng_Dlg"
+          :visible.sync="pdfDlg"
+          fullscreen
+          width="100%"
+          append-to-body
+          :close-on-click-modal="false"
+          :close-on-press-escape="false"
+        >
+          <view-container title="打印預覽">
+            <embed
+              id="pdf"
+              style="width: 100vw; height: calc(100vh - 80px)"
+              :src="pdfUrl"
+            />
+          </view-container>
+        </el-dialog>
+      </el-tab-pane>
+      <el-tab-pane label="打印模板">
+        <print-tem> </print-tem>
+      </el-tab-pane>
+    </el-tabs>
   </div>
 </template>
 <script>
 import { mainForm, mainCrud } from "./data";
 import { get, add, update, del, print } from "./api";
 import tem from "./temDlg";
+import printTem from "./printTem.vue";
 export default {
   name: "",
   components: {
     temDlg: tem,
+    printTem,
   },
   data() {
     return {

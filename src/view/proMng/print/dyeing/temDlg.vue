@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-13 10:47:31
+ * @LastEditTime: 2021-08-19 11:10:57
  * @Description: 
 -->
 <template>
@@ -107,7 +107,7 @@
             content=" in"
             placement="top-start"
           >
-            <el-button type="primary" @click="printOther(1)" :disabled="!form.bleadyeJobId" :loading="wloading"
+            <el-button type="primary" @click="printOther(1)" :disabled="!form.bleadyeJobId" :loading="wLoading"
               >打印工艺</el-button
             >
           </el-tooltip>
@@ -117,7 +117,7 @@
             content=" in"
             placement="top-start"
           >
-            <el-button type="primary" @click="printOther(2)" :disabled="!form.bleadyeJobId" :loading="wloading"
+            <el-button type="primary" @click="printOther(2)" :disabled="!form.bleadyeJobId" :loading="wLoading"
               >打印染缸参数</el-button
             >
           </el-tooltip>
@@ -729,12 +729,12 @@ export default {
         this.pdfUrl =
           process.env.API_HOST +
           "/api/proBleadyeJob/buildWorkOrder2?id=" +
-          this.detail.bleadyeJobId;
+          this.form.bleadyeJobId;
       } else {
         this.pdfUrl =
           process.env.API_HOST +
           "/api/proBleadyeJob/buildWorkOrder3?id=" +
-          this.detail.bleadyeJobId;
+          this.form.bleadyeJobId;
       }
       this.pdfDlg = true;
     },

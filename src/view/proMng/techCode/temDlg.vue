@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-17 10:01:17
+ * @LastEditTime: 2021-08-19 14:34:20
  * @Description: 
 -->
 <template>
@@ -20,7 +20,20 @@
         <el-button type="primary" @click="add">{{
           $t("public.add")
         }}</el-button>
+
         <el-button type="danger" @click="del">{{ $t("public.del") }}</el-button>
+        <el-button
+          @click="up"
+          type="primary"
+          :disabled="Object.keys(chooseData).length == 0"
+          >上移</el-button
+        >
+        <el-button
+          @click="down"
+          type="primary"
+          :disabled="Object.keys(chooseData).length == 0"
+          >下移</el-button
+        >
         <el-button type="warning" @click="close">{{
           $t("public.close")
         }}</el-button>
@@ -171,7 +184,6 @@ export default {
               "/api/proBleadyeTechCode/findFileById?id=" +
               this.form.bleadyeImageId;
           }
-
           this.query();
         });
       }
@@ -379,15 +391,31 @@ export default {
     },
     add() {
       // if (this.tabs != "生產項目") {
-      this.crud.push({
+      let data = {
         index: this.crud.length + 1,
         $cellEdit: true,
-        sn: this.crud.length > 0 ? this.crud[this.crud.length - 1].sn + 1 : 1,
-      });
-      this.$refs.crud.setCurrentRow(this.crud[this.crud.length - 1]);
-      this.$nextTick(() => {
-        this.$toTableLow(this, "mainCrud");
-      });
+        // sn: this.crud.length > 0 ? this.crud[this.crud.length - 1].sn + 1 : 1,
+      };
+      if (this.chooseData.index) {
+        this.crud.splice(this.chooseData.$index + 1, 0, data);
+        this.crud.forEach((item, i) => {
+          item.index = i + 1;
+          item.sn = i + 1;
+        });
+        this.$refs.crud.setCurrentRow(this.crud[this.chooseData.$index]);
+      } else {
+        this.crud.push(data);
+        this.crud.forEach((item, i) => {
+          item.index = i + 1;
+          item.sn = i + 1;
+        });
+        this.$refs.crud.setCurrentRow(this.crud[this.crud.length - 1]);
+        this.$nextTick(() => {
+          this.$toTableLow(this, "mainCrud");
+        });
+      }
+
+      // this.crud.push();
 
       // } else {
       //   this.choiceV = true;
@@ -519,6 +547,50 @@ export default {
         });
       }
       this.choiceV = false;
+    },
+    up() {
+      if (Object.keys(this.chooseData).length > 0) {
+        if (this.chooseData.sn === 1) {
+          return;
+        }
+        //在上一项插入该项
+        this.crud.splice(
+          this.chooseData.sn - 2,
+          0,
+          this.crud[this.chooseData.sn - 1]
+        );
+        //删除后一项
+        this.crud.splice(this.chooseData.sn, 1);
+        this.crud.forEach((item, i) => {
+          item.sn = i + 1;
+          item.index = i + 1;
+        });
+      } else {
+        this.$tip.error("请选择要上移的数据!");
+        return;
+      }
+    },
+    down() {
+      if (Object.keys(this.chooseData).length > 0) {
+        if (this.chooseData.sn === this.crud.length) {
+          return;
+        }
+        //在下一项插入该项
+        this.crud.splice(
+          this.chooseData.sn + 1,
+          0,
+          this.crud[this.chooseData.sn - 1]
+        );
+        //删除前一项
+        this.crud.splice(this.chooseData.sn - 1, 1);
+        this.crud.forEach((item, i) => {
+          item.sn = i + 1;
+          item.index = i + 1;
+        });
+      } else {
+        this.$tip.error("请选择要上移的数据!");
+        return;
+      }
     },
     showImg() {
       if (this.imgUrl) {

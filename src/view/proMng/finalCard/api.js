@@ -2,10 +2,23 @@
  * @Author: Lyl
  * @Date: 2021-08-07 07:57:55
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-07 16:02:08
+ * @LastEditTime: 2021-08-19 10:26:30
  * @Description:
  */
 import axios from "axios";
+
+// 新增
+export function upload(params) {
+  return axios({
+    url: "/api/basePrintTemplate/excelfile",
+    method: "post",
+    data: params,
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded"
+    }
+  });
+}
+
 export function get(params) {
   return axios({
     url: "/api/proFinalProductCard/page",
@@ -52,5 +65,39 @@ export function getRevolve(params) {
     url: "/api/proBleadyeRunJob",
     method: "get",
     params: params
+  });
+}
+
+export function getTem(params) {
+  return axios({
+    url: "/api/basePrintTemplate/list",
+    method: "get",
+    params: params
+  });
+}
+
+// 新增
+export function addTem(data) {
+  return axios({
+    url: "/api/basePrintTemplate/save",
+    method: "post",
+    params: data
+  });
+}
+
+// 修改
+export function updateTem(data) {
+  return axios({
+    url: "/api/basePrintTemplate/updateById",
+    method: "put",
+    params: data
+  });
+}
+
+// 修改
+export function delTem(id) {
+  return axios({
+    url: "/api/basePrintTemplate/removeById?id=" + id,
+    method: "delete"
   });
 }

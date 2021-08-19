@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-04 09:29:43
+ * @LastEditTime: 2021-08-17 15:41:46
  * @Description:
  */
 
@@ -1009,6 +1009,11 @@ export function yarnCrud(_this) {
         width: 150,
         span: 6,
         cell: true,
+        type: "select",
+        dicData: getDIC("bas_yarnBrand"),
+        filterable: true,
+        allowCreate: true,
+        defaultFirstOption: true,
         placeholder: " "
       },
       {

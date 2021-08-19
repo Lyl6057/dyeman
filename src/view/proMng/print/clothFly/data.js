@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-04 09:28:05
+ * @LastEditTime: 2021-08-16 15:13:37
  * @Description:
  */
 
@@ -213,6 +213,7 @@ export function mainCrud(_this) {
         label: "克重",
         prop: "gramWeight",
         width: 90,
+        overHidden: true,
         align: "right",
         disabled: true,
         hide: true,
@@ -671,6 +672,7 @@ export function bfCrud(_this) {
         overHidden: true,
         width: 80,
         align: "right",
+        overHidden: true,
         span: 6,
         rules: [
           {

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-06-21 15:21:25
+ * @LastEditTime: 2021-08-17 13:40:18
  * @Description: 
 -->
 <template>
@@ -52,11 +52,21 @@
         <el-tooltip
           class="item"
           effect="dark"
-          content=" in"
+          content="in"
           placement="top-start"
         >
           <el-button type="primary" @click="print" :loading="wloading"
             >打印</el-button
+          >
+        </el-tooltip>
+        <el-tooltip
+          class="item"
+          effect="dark"
+          content="copy"
+          placement="top-start"
+        >
+          <el-button type="primary" @click="copyEvent" :loading="wloading"
+            >复制</el-button
           >
         </el-tooltip>
         <el-tooltip
@@ -104,6 +114,7 @@
           ref="tem"
           :detail="detail"
           :isAdd="isAdd"
+          :copyC="copyC"
           @close="dialogVisible = false"
           @refresh="query"
           v-if="dialogVisible"
@@ -160,6 +171,7 @@ export default {
       czsocket: {},
       pdfDlg: false,
       pdfUrl: "",
+      copyC: false,
     };
   },
   watch: {},
@@ -198,67 +210,14 @@ export default {
         "/api/proWeaveJob/prinEntityPdf?id=" +
         this.detail.weaveJobId;
     },
-    async print2() {
-      console.log(this.input);
-      return;
-      try {
-        //获得Excel模板的buffer对象
-
-        const exlBuf = await JSZipUtils.getBinaryContent(
-          "../../../../../static/zztzd.xlsx"
-        );
-        var template = new XlsxTemplate(exlBuf);
-        var sheetNumber = "織造通知單";
-
-        // Set up some placeholder values matching the placeholders in the template
-        template.substitute(sheetNumber, this.detail);
-        var out = template.generate({ type: "blob" });
-        // let page = window.open("../../../../../static/test.pdf"); //这个url其实是这个接口的地址，参数什么的使用get方式将其带上。如果设置了代理，就在前面加上你的代理就行，如：我设置代理是用了'/api'；所以url=`/api/地址`
-        setTimeout(() => {
-          window.print("../../../../../static/test.pdf"); //这一步就是在新窗口调出打印机
-        }, 500);
-        // var fun1 = function () {
-        //   return new Promise((resolve, reject) => {
-        //     saveAs(out, "織造通知單.xlsx");
-        //     resolve();
-        //   });
-        // };
-        // fun1().then((res) => {
-        //   console.log(res);
-        // });
-      } catch (error) {
-        console.log(error);
-      }
-      // const html = window.document.getElementById("crud").innerHTML;
-      // const win = window.open("", "打印", "height=1100,width=1100");
-      // win.document.write("<html><head><title></title>");
-      // win.document.write("</head><body >");
-      // win.document.write(html);
-      // win.document.write("</body></html>");
-      // win.print();
-    },
-    tableToExcel() {
-      (template =
-        '<html><head><meta charset="UTF-8"></head><body><table  border="1">{table}</table></body></html>'),
-        (base64 = function (s) {
-          return window.btoa(unescape(encodeURIComponent(s)));
-        }),
-        (format = function (s, c) {
-          return s.replace(/{(\w+)}/g, function (m, p) {
-            return c[p];
-          });
-        });
-      return function (table, name) {
-        if (!table.nodeType) table = document.getElementById(table);
-        var ctx = {
-          worksheet: name || "Worksheet",
-          table: table.innerHTML,
-        };
-        window.location.href = uri + base64(format(template, ctx));
-      };
+    copyEvent() {
+      this.isAdd = true;
+      this.copyC = true;
+      this.dialogVisible = true;
     },
     add() {
       this.isAdd = true;
+      this.copyC = false;
       this.dialogVisible = true;
     },
     del() {

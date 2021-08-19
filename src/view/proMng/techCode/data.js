@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-02 10:56:17
+ * @LastEditTime: 2021-08-19 13:36:59
  * @Description:
  */
 
@@ -249,7 +249,7 @@ export function dlgCrud(_this) {
     column: [
       {
         label: "#",
-        prop: "sn",
+        prop: "index",
         width: 50,
         align: "center",
         display: false
