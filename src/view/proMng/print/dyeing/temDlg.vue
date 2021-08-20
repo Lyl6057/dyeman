@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-19 11:10:57
+ * @LastEditTime: 2021-08-20 15:21:10
  * @Description: 
 -->
 <template>
@@ -442,13 +442,13 @@
                       </el-option>
                     </el-select>
                  </template>
-                <template slot="mateName" slot-scope="scope">
+                <!-- <template slot="mateName" slot-scope="scope">
                   <input
                     v-model="scope.row.mateName"
                     class="scope-input"
                     @click="selectValue($event)"
                   ></input>
-                </template>
+                </template> -->
                 <template slot="mateBatchNo" slot-scope="scope">
                   <input
                     v-model="scope.row.mateBatchNo"

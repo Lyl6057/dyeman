@@ -320,9 +320,9 @@ export default {
       }
       this.$tip
         .cofirm(
-          this.$t("public.qdsc1") +
+          this.$t("whseMng.qdsc1") +
             this.chooseData.partitionId +
-            this.$t("public.qdsc2"),
+            this.$t("whseMng.qdsc2"),
           this,
           {}
         )
@@ -376,10 +376,11 @@ export default {
       });
     },
     addLocX() {
-      if (this.change && this.loc.length != 0) {
-        this.$tip.error(this.$t("whseMng.bchwTle"));
-        return;
-      }
+      // if (this.loc.length != 0) {
+      //   console.log("ss");
+      //   this.$tip.error(this.$t("whseMng.bchwTle"));
+      //   return;
+      // }
       if (
         (this.shelvesType === "0" || this.shelvesType === "1") &&
         this.shelves.shelves === ""
@@ -407,130 +408,130 @@ export default {
       }
       // 获取货架流水号
       this.locLoding = true;
-      getShelves({
-        whseWarehouseFk: this.form.whseWarehouseoid,
-        whsePartitionFk: this.chooseData.whsePartitionoid,
-      }).then((res) => {
-        if (res.data.length === 0) {
-          // 获取货架流水号
-          this.shelvesNum = "001";
-        } else {
-          this.shelvesNum = preFixInt(Number(res.data.length) + 1, 3);
-        }
-        if (this.shelvesType === "0") {
-          for (let i = 0; i < this.shelves.cs; i++) {
-            // 层数
-            for (let j = 0; j < this.shelves.hws; j++) {
-              // 货位数
-              for (let k = 0; k < this.shelves.kbs; k++) {
-                // 卡板数
-                let layerCode = preFixInt(i + 1, 2);
-                let latticeCode = preFixInt(j + 1, 2);
-                let cardCode = preFixInt(k + 1, 2);
-                this.loc.push({
-                  warehouseId: this.form.warehouseId,
-                  whseWarehouseFk: this.form.whseWarehouseoid,
-                  areaCode: this.chooseData.areaCode,
-                  shelves: this.shelves.shelves,
-                  shelvesCode: this.shelvesNum,
-                  layerCode: layerCode,
-                  latticeCode: latticeCode,
-                  cardCode: cardCode,
-                  locationCode: `${this.form.warehouseId}-${this.chooseData.areaCode}-${this.shelvesNum}-${layerCode}-${latticeCode}-${cardCode}`,
-                });
-              }
-            }
-          }
-          this.chooseData.shelves = {
-            areaCode: this.chooseData.areaCode,
-            shelves: this.shelves.shelves,
-            shelvesCode: this.shelvesNum,
-            warehouseId: this.form.warehouseId,
-            whsePartitionFk: this.chooseData.whsePartitionoid,
-            whseWarehouseFk: this.form.whseWarehouseoid,
-          };
-        }
-        if (this.shelvesType === "1") {
-          for (let i = 0; i < this.shelves.cs; i++) {
-            // 层数
-            for (let j = 0; j < this.shelves.hws; j++) {
-              // 货位数
+      // getShelves({
+      //   whseWarehouseFk: this.form.whseWarehouseoid,
+      //   whsePartitionFk: this.chooseData.whsePartitionoid,
+      // }).then((res) => {
+      // if (res.data.length === 0) {
+      //   // 获取货架流水号
+      //   this.shelvesNum = "001";
+      // } else {
+      //   this.shelvesNum = preFixInt(Number(res.data.length) + 1, 3);
+      // }
+      if (this.shelvesType === "0") {
+        for (let i = 0; i < this.shelves.cs; i++) {
+          // 层数
+          for (let j = 0; j < this.shelves.hws; j++) {
+            // 货位数
+            for (let k = 0; k < this.shelves.kbs; k++) {
+              // 卡板数
               let layerCode = preFixInt(i + 1, 2);
               let latticeCode = preFixInt(j + 1, 2);
+              // let cardCode = preFixInt(k + 1, 2);
               this.loc.push({
                 warehouseId: this.form.warehouseId,
                 whseWarehouseFk: this.form.whseWarehouseoid,
                 areaCode: this.chooseData.areaCode,
                 shelves: this.shelves.shelves,
-                shelvesCode: this.shelvesNum,
+                // shelvesCode: this.shelvesNum,
                 layerCode: layerCode,
                 latticeCode: latticeCode,
-                locationCode: `${this.form.warehouseId}-${this.chooseData.areaCode}-${this.shelvesNum}-${layerCode}-${latticeCode}-00`,
-              });
-            }
-          }
-          this.chooseData.shelves = {
-            areaCode: this.chooseData.areaCode,
-            shelves: this.shelves.shelves,
-            shelvesCode: this.shelvesNum,
-            warehouseId: this.form.warehouseId,
-            whsePartitionFk: this.chooseData.whsePartitionoid,
-            whseWarehouseFk: this.form.whseWarehouseoid,
-          };
-        }
-        if (this.shelvesType === "2") {
-          for (let i = 0; i < this.shelves.cs; i++) {
-            // 层数
-            for (let j = 0; j < this.shelves.hws; j++) {
-              // 货位数
-              let layerCode = preFixInt(i + 1, 2);
-              let latticeCode = preFixInt(j + 1, 2);
-              this.loc.push({
-                warehouseId: this.form.warehouseId,
-                whseWarehouseFk: this.form.whseWarehouseoid,
-                areaCode: this.chooseData.areaCode,
-                shelves: "",
-                shelvesCode: "000",
-                layerCode: layerCode,
-                latticeCode: latticeCode,
-                locationCode: `${this.form.warehouseId}-${this.chooseData.areaCode}-000-${layerCode}-${latticeCode}-00`,
+                // cardCode: cardCode,
+                locationCode: `${this.form.warehouseId}-${this.chooseData.areaCode}-${this.shelves.shelves}-${layerCode}-${latticeCode}`, //${this.shelvesNum} -${cardCode}
               });
             }
           }
         }
-        if (this.shelvesType === "3") {
-          for (let i = 0; i < this.shelves.hws; i++) {
-            // 层数
+        this.chooseData.shelves = {
+          areaCode: this.chooseData.areaCode,
+          shelves: this.shelves.shelves,
+          // shelvesCode: this.shelvesNum,
+          warehouseId: this.form.warehouseId,
+          whsePartitionFk: this.chooseData.whsePartitionoid,
+          whseWarehouseFk: this.form.whseWarehouseoid,
+        };
+      }
+      if (this.shelvesType === "1") {
+        for (let i = 0; i < this.shelves.cs; i++) {
+          // 层数
+          for (let j = 0; j < this.shelves.hws; j++) {
             // 货位数
-            let latticeCode = preFixInt(i + 1, 2);
+            let layerCode = preFixInt(i + 1, 2);
+            let latticeCode = preFixInt(j + 1, 2);
+            this.loc.push({
+              warehouseId: this.form.warehouseId,
+              whseWarehouseFk: this.form.whseWarehouseoid,
+              areaCode: this.chooseData.areaCode,
+              shelves: this.shelves.shelves,
+              // shelvesCode: this.shelvesNum,
+              layerCode: layerCode,
+              latticeCode: latticeCode,
+              locationCode: `${this.form.warehouseId}-${this.chooseData.areaCode}-${this.shelves.shelves}-${layerCode}-${latticeCode}`, //
+            });
+          }
+        }
+        this.chooseData.shelves = {
+          areaCode: this.chooseData.areaCode,
+          shelves: this.shelves.shelves,
+          // shelvesCode: this.shelvesNum,
+          warehouseId: this.form.warehouseId,
+          whsePartitionFk: this.chooseData.whsePartitionoid,
+          whseWarehouseFk: this.form.whseWarehouseoid,
+        };
+      }
+      if (this.shelvesType === "2") {
+        for (let i = 0; i < this.shelves.cs; i++) {
+          // 层数
+          for (let j = 0; j < this.shelves.hws; j++) {
+            // 货位数
+            let layerCode = preFixInt(i + 1, 2);
+            let latticeCode = preFixInt(j + 1, 2);
             this.loc.push({
               warehouseId: this.form.warehouseId,
               whseWarehouseFk: this.form.whseWarehouseoid,
               areaCode: this.chooseData.areaCode,
               shelves: "",
               shelvesCode: "000",
-              layerCode: "00",
+              layerCode: layerCode,
               latticeCode: latticeCode,
-              locationCode: `${this.form.warehouseId}-${this.chooseData.areaCode}-000-00-${latticeCode}-00`,
+              locationCode: `${this.form.warehouseId}-${this.chooseData.areaCode}-000-${layerCode}-${latticeCode}-00`,
             });
           }
         }
-        this.loc.forEach((item, i) => {
-          item.index = i + 1;
-          if (i === this.loc.length - 1) {
-            this.change = true;
-            this.$refs.loc.setCurrentRow(this.loc[this.loc.length - 1]);
-            this.locLoding = false;
-          }
-        });
-        this.locPage.total = this.loc.length;
-        this.$nextTick(() => {
-          let dom = document
-            .getElementById("loc")
-            .getElementsByClassName("el-table__body-wrapper")[0];
-          dom.scrollTo(0, dom.scrollHeight);
-        });
+      }
+      if (this.shelvesType === "3") {
+        for (let i = 0; i < this.shelves.hws; i++) {
+          // 层数
+          // 货位数
+          let latticeCode = preFixInt(i + 1, 2);
+          this.loc.push({
+            warehouseId: this.form.warehouseId,
+            whseWarehouseFk: this.form.whseWarehouseoid,
+            areaCode: this.chooseData.areaCode,
+            shelves: "",
+            shelvesCode: "000",
+            layerCode: "00",
+            latticeCode: latticeCode,
+            locationCode: `${this.form.warehouseId}-${this.chooseData.areaCode}-000-00-${latticeCode}-00`,
+          });
+        }
+      }
+      this.loc.forEach((item, i) => {
+        item.index = i + 1;
+        if (i === this.loc.length - 1) {
+          this.change = true;
+          this.$refs.loc.setCurrentRow(this.loc[this.loc.length - 1]);
+          this.locLoding = false;
+        }
       });
+      this.locPage.total = this.loc.length;
+      this.$nextTick(() => {
+        let dom = document
+          .getElementById("loc")
+          .getElementsByClassName("el-table__body-wrapper")[0];
+        dom.scrollTo(0, dom.scrollHeight);
+      });
+      // });
     },
     delLoc() {
       if (
@@ -558,9 +559,9 @@ export default {
       }
       this.$tip
         .cofirm(
-          this.$t("public.schw1") +
+          this.$t("whseMng.schw1") +
             this.locChooseData.locationCode +
-            this.$t("public.schw2"),
+            this.$t("whseMng.schw2"),
           this,
           {}
         )
@@ -803,6 +804,9 @@ export default {
       }
       this.locLoding = true;
       this.loc.forEach((item, i) => {
+        if (!item.locationCode) {
+          item.locationCode = `${this.form.warehouseId}-${this.chooseData.areaCode}-${item.shelves}-${item.layerCode}-${item.latticeCode}`; //${this.shelvesNum} -${cardCode} item  shelves
+        }
         if (item.whseLocationoid) {
           updateLocation(item).then((res) => {});
         } else {
@@ -815,7 +819,7 @@ export default {
           setTimeout(() => {
             this.getLoc(1);
             this.change = false;
-            addShelves(this.chooseData.shelves).then((res) => {});
+            // addShelves(this.chooseData.shelves).then((res) => {});
             // this.locLoding = false;
           }, 200);
         }

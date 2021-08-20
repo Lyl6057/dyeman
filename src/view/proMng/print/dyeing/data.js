@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-11 09:47:28
+ * @LastEditTime: 2021-08-20 15:26:45
  * @Description:
  */
 
@@ -1311,7 +1311,7 @@ export function techargueCrud(_this) {
         label: "工艺名稱",
         prop: "bleadyeName",
         width: 180,
-        cell: true,
+        cell: false,
         span: 6,
         props: {
           label: "bleadyeName",
@@ -1549,7 +1549,7 @@ export function codeItemCrud(_this) {
     column: [
       {
         label: "#",
-        prop: "sn",
+        prop: "index",
         width: 50,
         align: "center",
         display: false
@@ -1558,7 +1558,7 @@ export function codeItemCrud(_this) {
         label: "物料代碼",
         prop: "mateCode",
         width: 120,
-        cell: true,
+        cell: false,
         span: 6,
         placeholder: " "
       },
@@ -1566,9 +1566,10 @@ export function codeItemCrud(_this) {
         label: "物料名稱",
         prop: "mateName",
         width: 200,
-        cell: true,
+        cell: false,
         span: 6,
-        slot: true,
+        overHidden: true,
+        // slot: true,
         placeholder: " "
       },
       {
@@ -1700,10 +1701,10 @@ export function codeItemCrud(_this) {
         label: "工藝類型",
         prop: "bleadyeType",
         width: 90,
-        cell: true,
+        cell: false,
         span: 6,
         placeholder: " ",
-        slot: true,
+        // slot: true,
         type: "select",
         dicData: [
           {

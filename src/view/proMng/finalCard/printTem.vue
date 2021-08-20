@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-08-18 08:51:58
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-19 10:57:12
+ * @LastEditTime: 2021-08-20 10:15:02
  * @Description: 
 -->
 <template>
@@ -190,28 +190,37 @@ export default {
         if (valid) {
           try {
             let data = JSON.parse(JSON.stringify(this.dlgform));
-            if (data.tempId) {
+            if (this.isAdd) {
+              this.uploadMb(done);
+            } else if (data.tempId) {
               updateTem(data).then((res) => {
                 if (res.data.code == 200) {
-                  this.uploadMb(done);
-                } else {
-                  this.wLoading = false;
-                  done();
-                  this.$tip.error(this.$t("public.bcsb"));
-                }
-              });
-            } else {
-              addTem(data).then((res) => {
-                if (res.data.code == 200) {
-                  this.dlgform.tempId = res.data.data;
-                  this.uploadMb(done);
+                  this.query();
+                  this.$tip.success(this.$t("public.bccg"));
                 } else {
                   this.$tip.error(this.$t("public.bcsb"));
-                  this.wLoading = false;
                 }
+
                 done();
+                this.dialogVisible = false;
+                this.wLoading = false;
               });
             }
+
+            // if (data.tempId) {
+
+            // } else {
+            //   addTem(data).then((res) => {
+            //     if (res.data.code == 200) {
+            //       this.dlgform.tempId = res.data.data;
+            //       this.uploadMb(done);
+            //     } else {
+            //       this.$tip.error(this.$t("public.bcsb"));
+            //       this.wLoading = false;
+            //     }
+            //     done();
+            //   });
+            // }
           } catch (error) {
             console.log(error);
             this.wLoading = false;
@@ -258,6 +267,7 @@ export default {
     add() {
       this.dlgform = {};
       this.isAdd = true;
+      this.crudOp.column[6].display = true;
       this.dialogVisible = true;
     },
     del() {
@@ -294,6 +304,7 @@ export default {
     handleRowDBLClick(val) {
       this.isAdd = false;
       this.dlgform = val;
+      this.crudOp.column[6].display = false;
       this.dialogVisible = true;
     },
     cellClick(val) {

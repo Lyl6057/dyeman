@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-08-07 07:58:01
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-19 10:20:52
+ * @LastEditTime: 2021-08-20 10:17:15
  * @Description:
  */
 
@@ -286,7 +286,7 @@ export function temCrud(_this) {
         label: "模板名称",
         prop: "tempName",
         span: 8,
-        width: 150,
+        width: 250,
         placeholder: " ",
         overHidden: true,
         rules: [
@@ -317,7 +317,7 @@ export function temCrud(_this) {
         label: "模板路径",
         prop: "tempPath",
         span: 8,
-        width: 150,
+        width: 350,
         overHidden: true,
         display: false,
         placeholder: " "
@@ -325,11 +325,13 @@ export function temCrud(_this) {
       {
         label: "选择excel模板",
         prop: "excelName",
-        width: 180,
+        width: 350,
         span: 8,
         placeholder: " ",
-        // type: "select",
         hide: true,
+        // type: "select",
+        // disabled: _this.isAdd ? false : true,
+        // display: _this.isAdd ? true : false,
         click: () => {
           _this.$refs.input.click();
         }
