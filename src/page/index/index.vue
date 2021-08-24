@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-10 14:20:44
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-16 09:32:34
+ * @LastEditTime: 2021-08-24 09:14:22
  * @Description: 
 -->
 <template>
@@ -16,13 +16,17 @@
         <el-main class="mainBox">
           <div class="sidebar">
             <!-- 左侧导航栏 -->
-            <sidebar />
+            <sidebar-menu />
           </div>
           <div
             :style="{ marginLeft: isActive ? '50px' : '190px' }"
             style="margin-top: -1px; overflow: hidden"
           >
-            <router-view key="default" />
+            <tags></tags>
+            <keep-alive v-if="$route.meta.keepAlive">
+              <router-view></router-view>
+            </keep-alive>
+            <router-view v-else> </router-view>
           </div>
         </el-main>
         <el-header></el-header>
@@ -33,13 +37,14 @@
 
 <script>
 import top from "./top/index";
-import sidebar from "./sidebar/index.vue";
-
+import sidebarMenu from "./sidebar/index.vue";
+import tags from "./tags/index";
 export default {
   name: "index",
   components: {
     top,
-    sidebar,
+    sidebarMenu,
+    tags,
   },
   data() {
     return {};

@@ -1,9 +1,17 @@
 export default [
   // 仓位管理
   {
+    path: "/",
+    name: "主页",
+    redirect: "/imWl"
+  },
+  {
     path: "/imWl",
     name: "仓位管理",
-    component: resolve => require(["@/view/im/Wl/index"], resolve)
+    component: resolve => require(["@/view/im/Wl/index"], resolve),
+    meta: {
+      keepAlive: true
+    }
   },
   //库存管理
   // {
@@ -23,28 +31,43 @@ export default [
   {
     path: "/proRevolve",
     name: "生产运转",
-    component: resolve => require(["@/view/im/Ity/proRevolve/index"], resolve)
+    component: resolve => require(["@/view/im/Ity/proRevolve/index"], resolve),
+    meta: {
+      keepAlive: true
+    }
   },
   {
     path: "/ityBasic",
     name: "库存期初始化",
-    component: resolve => require(["@/view/im/Ity/basic/index"], resolve)
+    component: resolve => require(["@/view/im/Ity/basic/index"], resolve),
+    meta: {
+      keepAlive: true
+    }
   },
   {
     path: "/inventory",
     name: "库存查询",
-    component: resolve => require(["@/view/im/Ity/inventory/index"], resolve)
+    component: resolve => require(["@/view/im/Ity/inventory/index"], resolve),
+    meta: {
+      keepAlive: true
+    }
   },
   {
     path: "/whseVehicle",
     name: "仓库载具管理",
-    component: resolve => require(["@/view/im/Ity/vehicle/index"], resolve)
+    component: resolve => require(["@/view/im/Ity/vehicle/index"], resolve),
+    meta: {
+      keepAlive: true
+    }
   },
   //仓库工作指引看板
   {
     path: "/imWk",
-    name: "仓库工作指引看板",
+    name: "出入库管理",
     component: resolve => require(["@/view/im/Wk/index"], resolve),
+    meta: {
+      keepAlive: true
+    },
     children: [
       // 申购入库
       {
@@ -195,18 +218,27 @@ export default [
   {
     path: "/imHo",
     name: "手动操作",
-    component: resolve => require(["@/view/im/Ho/index"], resolve)
+    component: resolve => require(["@/view/im/Ho/index"], resolve),
+    meta: {
+      keepAlive: true
+    }
   },
   //安全库存
   {
     path: "/imSft",
     name: "安全库存",
-    component: resolve => require(["@/view/im/Sft/index"], resolve)
+    component: resolve => require(["@/view/im/Sft/index"], resolve),
+    meta: {
+      keepAlive: true
+    }
   },
   //手动操作
   {
     path: "/imDg",
     name: "采购需求生成",
-    component: resolve => require(["@/view/im/Dg/index"], resolve)
+    component: resolve => require(["@/view/im/Dg/index"], resolve),
+    meta: {
+      keepAlive: true
+    }
   }
 ];

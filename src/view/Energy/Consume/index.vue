@@ -190,7 +190,7 @@ export default {
         columnBtn: false,
         menuAlign: "center",
         // menuWidth: 100,
-        height: "calc(100vh - 210px)",
+        height: "calc(100vh - 250px)",
         menu: false,
         highlightCurrentRow: true,
         border: true,
@@ -655,7 +655,7 @@ export default {
     text-align: left;
     margin: 0 10px;
     font-size: 16px;
-    height: calc(100vh - 78px);
+    height: calc(100vh - 118px);
     overflow: auto;
   }
 

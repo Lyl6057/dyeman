@@ -225,7 +225,7 @@ export default {
         refreshBtn: false, //刷新按钮
         columnBtn: false, //显隐按钮
         addRowBtn: false,
-        height: "calc(100vh - 150px)",
+        height: "calc(100vh - 190px)",
         selection: true,
         highlightCurrentRow: true,
         dialogHeight: "80%",
@@ -679,7 +679,7 @@ export default {
 }
 
 .height {
-  height: calc(100vh - 88px) !important;
+  height: calc(100vh - 115px) !important;
   margin-top: 5px;
   background-color: #fff;
   overflow: auto;

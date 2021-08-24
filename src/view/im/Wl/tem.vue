@@ -494,7 +494,7 @@ export default {
               shelvesCode: "000",
               layerCode: layerCode,
               latticeCode: latticeCode,
-              locationCode: `${this.form.warehouseId}-${this.chooseData.areaCode}-000-${layerCode}-${latticeCode}-00`,
+              locationCode: `${this.form.warehouseId}-${this.chooseData.areaCode}-${layerCode}-${latticeCode}`,
             });
           }
         }
@@ -512,7 +512,7 @@ export default {
             shelvesCode: "000",
             layerCode: "00",
             latticeCode: latticeCode,
-            locationCode: `${this.form.warehouseId}-${this.chooseData.areaCode}-000-00-${latticeCode}-00`,
+            locationCode: `${this.form.warehouseId}-${this.chooseData.areaCode}-${latticeCode}`,
           });
         }
       }
@@ -805,7 +805,21 @@ export default {
       this.locLoding = true;
       this.loc.forEach((item, i) => {
         if (!item.locationCode) {
-          item.locationCode = `${this.form.warehouseId}-${this.chooseData.areaCode}-${item.shelves}-${item.layerCode}-${item.latticeCode}`; //${this.shelvesNum} -${cardCode} item  shelves
+          if (this.shelvesType === "1") {
+            item.locationCode = `${this.form.warehouseId}-${
+              this.chooseData.areaCode
+            }-${item.shelves || ""}-${item.layerCode || ""}-${
+              item.latticeCode || ""
+            }`; //${this.shelvesNum} -${cardCode} item  shelves
+          } else if (this.shelvesType === "2") {
+            item.locationCode = `${this.form.warehouseId}-${
+              this.chooseData.areaCode
+            }-${item.layerCode || ""}-${item.latticeCode || ""}`;
+          } else if (this.shelvesType === "3") {
+            item.locationCode = `${this.form.warehouseId}-${
+              this.chooseData.areaCode
+            }-${item.latticeCode || ""}`;
+          }
         }
         if (item.whseLocationoid) {
           updateLocation(item).then((res) => {});

@@ -711,12 +711,12 @@ export default {
                   this.tbData[i].qcItemStandardList[j].qcScopeRangeList,
                   "sn"
                 );
-                pz += this.tbData[i].qcItemStandardList[j].qcScopeRangeList
-                  .length;
-                num += this.tbData[i].qcItemStandardList[j].qcScopeRangeList
-                  .length;
-                sum += this.tbData[i].qcItemStandardList[j].qcScopeRangeList
-                  .length;
+                pz +=
+                  this.tbData[i].qcItemStandardList[j].qcScopeRangeList.length;
+                num +=
+                  this.tbData[i].qcItemStandardList[j].qcScopeRangeList.length;
+                sum +=
+                  this.tbData[i].qcItemStandardList[j].qcScopeRangeList.length;
                 this.$set(
                   this.tbData[i].qcItemStandardList[j],
                   "readonly",
@@ -1319,7 +1319,7 @@ export default {
   }
 
   .mainBox {
-    height: calc(100vh - 210px);
+    height: calc(100vh - 240px);
     padding: 0 !important;
     border-bottom: 1px solid #C0C4CC;
     // border-left: 1px solid #C0C4CC;

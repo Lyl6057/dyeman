@@ -335,11 +335,17 @@ export function rsxkr2C(_this) {
         prop: "batchNo",
         cell: _this.hide === "2" || _this.hide === "1" ? true : false,
         width: 230,
+        slot: true,
         type: "select",
         filterable: true,
         allowCreate: true,
         defaultFirstOption: true,
-        dicData: resolveData
+        change: val => {
+          // if (!_this.chooseData.etSn) {
+          //   _this.getEt();
+          // }
+        }
+        // dicData: resolveData
         // click: () => {
         //   if (_this.hide != 2) {
         //     _this.choiceV = !_this.choiceV;
@@ -391,6 +397,18 @@ export function rsxkr2C(_this) {
         allowCreate: true,
         defaultFirstOption: true,
         dicData: getDicT("whseLocation", "locationCode", "locationCode")
+      },
+      {
+        label: "ET序号",
+        prop: "etSn",
+        cell: true,
+        width: 250,
+        overHideen: true
+        // type: "select",
+        // filterable: true,
+        // allowCreate: true,
+        // defaultFirstOption: true,
+        // dicData: []
         // click: () => {
         //   _this.dlgWidth = "100%";
         //   _this.choiceV = !_this.choiceV;

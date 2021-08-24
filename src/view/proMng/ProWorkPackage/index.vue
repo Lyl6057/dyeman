@@ -142,7 +142,7 @@ export default {
         menu: false,
         border: true,
         editBtn: true,
-        height: "calc(100vh - 210px)",
+        height: "calc(100vh - 250px)",
         refreshBtn: false, //刷新按钮
         columnBtn: false, //显隐按钮
         addRowBtn: false,
@@ -223,7 +223,7 @@ export default {
         addBtn: false,
         border: true,
         highlightCurrentRow: true,
-        height: "calc(100vh - 165px)",
+        height: "calc(100vh - 205px)",
         refreshBtn: false,
         columnBtn: false,
         page: false,
@@ -812,6 +812,8 @@ export default {
   .el-checkbox-group {
     padding: 10px 0 10px 25px !important;
     text-align: left;
+    overflow: auto;
+    height: calc(100vh - 250px) !important;
   }
 
   .el-checkbox {
@@ -832,12 +834,12 @@ export default {
 
   .content {
     .el-tree {
-      height: calc(100vh - 200px) !important;
+      height: calc(100vh - 230px) !important;
       overflow: auto;
     }
 
     .el-card {
-      height: calc(100vh - 170px) !important;
+      // height: calc(100vh - 230px) !important;
     }
   }
 

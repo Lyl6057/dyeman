@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-05-03 13:03:03
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-12 15:29:09
+ * @LastEditTime: 2021-08-21 18:30:27
  * @Description:
  */
 
@@ -111,6 +111,13 @@ export function cpbInC(_this) {
         prop: "locationCode",
         cell: true,
         width: 180
+      },
+      {
+        label: "ET序号",
+        prop: "etSn",
+        cell: false,
+        width: 200,
+        overHideen: true
       }
     ]
   };

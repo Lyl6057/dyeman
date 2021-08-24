@@ -32,9 +32,34 @@
                 :page.sync="page"
                 @current-row-change="cellClick"
                 @on-load="getDetail"
-              ></avue-crud>
-            </div> </view-container
-        ></el-col>
+                ><template slot="batchNo" slot-scope="scope">
+                  <el-select
+                    v-model="scope.row.batchNo"
+                    placeholder="请选择"
+                    filterable
+                    default-first-option
+                    clearable
+                    class="customize-select"
+                    @change="selectChange(scope.row)"
+                  >
+                    <!--  -->
+                    <el-option
+                      v-for="item in resolveData"
+                      :key="item.runJobId"
+                      :label="item.label"
+                      :value="item.value"
+                    >
+                      <span style="float: left">
+                        <!-- -->
+                        {{ item.value }}</span
+                      >
+                    </el-option>
+                  </el-select>
+                </template></avue-crud
+              >
+            </div>
+          </view-container></el-col
+        >
       </el-row>
       <choice
         :choiceV="choiceV"
@@ -60,6 +85,8 @@ import {
   delCpbDetali,
 } from "@/api/im/Wk/rc";
 import { baseCodeSupply, baseCodeSupplyEx } from "@/api/index";
+import { getDicTs, getDicT, getXDicT, postDicT } from "@/config";
+import { getProRunJob } from "./api.js";
 export default {
   props: {
     datas: Object,
@@ -98,6 +125,8 @@ export default {
       choiceField: "",
       choiceQ: {},
       dlgWidth: "60%",
+      resolveData: getDicTs("proBleadyeRunJob", "vatNo", "vatNo", "etSn"),
+      // resolveData: [],
       everyThing: {
         // getLoc: getPbPh,
         // delLoc: delPbPhDetali,
@@ -163,6 +192,7 @@ export default {
             price: this.mx[this.mx.length - 1].price,
             locationCode: this.mx[this.mx.length - 1].locationCode,
             batchNo: this.mx[this.mx.length - 1].batchNo,
+            etSn: this.mx[this.mx.length - 1].etSn,
           });
         } else {
           this.mx.push({
@@ -172,6 +202,7 @@ export default {
             countingNo: 1,
           });
         }
+        this.$refs.dlgcrud.setCurrentRow(this.mx[this.mx.length - 1]);
       }
       if (this.hide === "2") {
         this.mx.push({
@@ -240,16 +271,15 @@ export default {
         });
     },
     cellClick(val) {
+      // if (val.etList) {
+      //   this.mxOp.column[7].dicData = val.etList;
+      // } else {
+      //   this.getEt(val);
+      // }
       this.oldData.$cellEdit = false;
       this.$set(val, "$cellEdit", true);
       this.oldData = val;
       this.chooseData = val;
-      // if (!this.chooseData.list) {
-      //   this.chooseData.list = [];
-      // }
-      // if (!this.chooseData.loc) {
-      //   this.chooseData.loc = [];
-      // }
     },
     save() {
       if (this.hide === "1" && this.form.yinId === "") {
@@ -414,14 +444,6 @@ export default {
       this.choiceTarget.yarnsName = val.yarnsId;
       this.choiceTarget[this.choiceField] = val[this.choiceField];
       this.oldData.$cellEdit = true;
-      // if (this.choiceTle === this.$t("choicDlg.pbdd")) {
-      //   this.choiceTarget.prodNo = val.$poNo;
-      //   this.choiceTarget.calicoId = val.fabId;
-      //   this.choiceTarget.clothName = val.fabYcount;
-      // }
-      // if (this.choiceTle === this.$t("choicDlg.pbbm")) {
-      //   this.choiceTarget.clothName = val.$clothName;
-      // }
       if (this.choiceTle === this.$t("choicDlg.xzhw")) {
         this.chooseData.locationCode = val[0].locationCode;
       }
@@ -434,10 +456,6 @@ export default {
             this.$refs.dlgcrud.setCurrentRow(this.mx[this.mx.length - 1]);
           }
         });
-        // }
-        // this.choiceTarget.prodNo = val.prodNo;
-        // this.choiceTarget.fabticket = val.fabticket;
-        // this.choiceTarget.countingNo = val.countingNo;
       }
       if (this.choiceTle === this.$t("iaoMng.xzzld")) {
         val.forEach((item, i) => {
@@ -453,7 +471,6 @@ export default {
           });
         });
         this.mx = this.mx.concat(val);
-        // this.mx = this.$unique(this.mx.concat(val), "prodNo");
         this.page.total = this.mx.length;
         this.mx.forEach((item, i) => {
           item.index = i + 1;
@@ -499,12 +516,87 @@ export default {
       }
       this.choiceV = false;
     },
+    selectChange(val) {
+      if (val.batchNo) {
+        getProRunJob({
+          vatNo: val.batchNo,
+        }).then((res) => {
+          // this.$nextTick(() => {
+          if (res.data.length > 0) {
+            // val.etSn = res.data[0].etSn;
+            this.$set(val, "etSn", res.data[0].etSn);
+          } else {
+            val.etSn = "";
+          }
+          // });
+        });
+      }
+
+      // this.$nextTick(() => {
+      //   let data = JSON.parse(JSON.stringify(item));
+      //   let dicData = [];
+      //   this.mxOp.column[7].dicData = [];
+      //   if (data.itemspec) {
+      //     let list = data.itemspec.replace(/\s*/g, "").split("+");
+      //     list.forEach((item) => {
+      //       if (item) {
+      //         dicData.push({
+      //           label: item,
+      //           value: item,
+      //         });
+      //       }
+      //     });
+      //     row.etSn = data.itemspec.replace(/\s*/g, "").split("+")[0];
+      //     row.batchNo = item.value;
+      //   } else {
+      //     row.etSn = "";
+      //   }
+      //   this.mxOp.column[7].dicData = dicData;
+      //   row.etList = dicData;
+      //   // this.$refs.dlgcrud.setCurrentRow(row);
+      // });
+    },
+    getEt() {
+      // this.$nextTick(() => {
+      //   if (this.chooseData.batchNo) {
+      //     getProRunJob({
+      //       vatNo: this.chooseData.batchNo,
+      //     }).then((res) => {
+      //       if (res.data.length) {
+      //         let data = res.data[0];
+      //         if (!data.etSn) {
+      //           data.etSn = "";
+      //         }
+      //         let list = data.etSn.replace(/\s*/g, "").split("+");
+      //         let etlist = [];
+      //         list.forEach((item) => {
+      //           if (item) {
+      //             etlist.push({
+      //               label: item,
+      //               value: item,
+      //             });
+      //           }
+      //         });
+      //         this.chooseData.etSn = data.etSn
+      //           .replace(/\s*/g, "")
+      //           .split("+")[0];
+      //         console.log(etlist);
+      //         this.mxOp.column[7].dicData = etlist;
+      //       } else {
+      //         this.mxOp.column[7].dicData = [];
+      //       }
+      //     });
+      //   } else {
+      //     // this.mxOp.column[7].dicData = [];
+      //   }
+      // });
+    },
   },
   created() {},
   mounted() {
     this.form = this.detail;
     this.form.sysCreatedby = this.$store.state.userOid;
-    this.getDetail();
+    // this.getDetail();
   },
   beforeDestroy() {},
 };

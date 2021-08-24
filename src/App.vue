@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-24 08:12:20
  * @LastEditors: Lyl
- * @LastEditTime: 2021-06-14 09:18:39
+ * @LastEditTime: 2021-08-24 11:22:03
  * @Description: 
 -->
 <template>
@@ -67,6 +67,7 @@ export default {
         this.setLangs(lang);
       }
     });
+    // window.sessionStorage.setItem("tagView", "[]");
   },
   methods: {
     ...mapActions(["setUsers", "setLangs"]),

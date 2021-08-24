@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-24 14:21:15
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-04 15:29:30
+ * @LastEditTime: 2021-08-24 11:07:13
  * @Description:
  */
 
@@ -136,7 +136,7 @@ export function crudOp(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 195px)",
+    height: "calc(100vh - 235px)",
     refreshBtn: false,
     columnBtn: false,
     showOverflowTooltip: true,

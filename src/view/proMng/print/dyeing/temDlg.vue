@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-20 15:21:10
+ * @LastEditTime: 2021-08-23 09:34:48
  * @Description: 
 -->
 <template>
@@ -99,7 +99,7 @@
           content=" in"
           placement="top-start"
         >
-          <el-button type="primary" @click="print" :disabled="!form.bleadyeJobId">打印</el-button>
+          <el-button type="success" @click="print" :disabled="!form.bleadyeJobId">打印</el-button>
         </el-tooltip>
         <el-tooltip
             class="item"
@@ -107,7 +107,7 @@
             content=" in"
             placement="top-start"
           >
-            <el-button type="primary" @click="printOther(1)" :disabled="!form.bleadyeJobId" :loading="wLoading"
+            <el-button type="success" @click="printOther(1)" :disabled="!form.bleadyeJobId" :loading="wLoading"
               >打印工艺</el-button
             >
           </el-tooltip>
@@ -117,7 +117,7 @@
             content=" in"
             placement="top-start"
           >
-            <el-button type="primary" @click="printOther(2)" :disabled="!form.bleadyeJobId" :loading="wLoading"
+            <el-button type="success" @click="printOther(2)" :disabled="!form.bleadyeJobId" :loading="wLoading"
               >打印染缸参数</el-button
             >
           </el-tooltip>

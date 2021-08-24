@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-20 15:26:45
+ * @LastEditTime: 2021-08-24 10:47:21
  * @Description:
  */
 
@@ -188,7 +188,7 @@ export function mainCrud(_this) {
     addBtn: true,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 240px)",
+    height: "calc(100vh - 280px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
@@ -1311,7 +1311,7 @@ export function techargueCrud(_this) {
         label: "工艺名稱",
         prop: "bleadyeName",
         width: 180,
-        cell: false,
+        cell: true,
         span: 6,
         props: {
           label: "bleadyeName",
@@ -1466,11 +1466,13 @@ export function techargueCrud(_this) {
         span: 6,
         placeholder: " ",
         change: val => {
-          if (!val.value) {
-            _this.$nextTick(() => {
-              _this.chooseData.shotgunWater = 0;
-            });
-          }
+          // if (!val.value) {
+          //   _this.$nextTick(() => {
+          //     console.log(val);
+          //     return;
+          //     _this.chooseData.shotgunWater = 0;
+          //   });
+          // }
           if (_this.mathCtr) {
             _this.$nextTick(() => {
               _this.$set(
@@ -1566,7 +1568,7 @@ export function codeItemCrud(_this) {
         label: "物料名稱",
         prop: "mateName",
         width: 200,
-        cell: false,
+        cell: true,
         span: 6,
         overHidden: true,
         // slot: true,

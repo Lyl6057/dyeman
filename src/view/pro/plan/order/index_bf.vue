@@ -769,7 +769,7 @@ export default {
 
     .box {
       border: 1px solid #000;
-      height: calc(100vh - 100px);
+      height: calc(100vh - 130px);
       margin: 5px;
       overflow-y: hidden;
       overflow-x: auto;

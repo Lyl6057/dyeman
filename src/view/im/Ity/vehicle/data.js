@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-04-23 09:03:31
  * @LastEditors: Lyl
- * @LastEditTime: 2021-06-09 15:13:18
+ * @LastEditTime: 2021-08-24 11:09:49
  * @Description:
  */
 
@@ -101,7 +101,7 @@ export function mainForm(_this) {
     ]
   };
 }
-let poData = getXDicT("salPo/list");
+// let poData = getXDicT("salPo/list");
 let poColor = getXDicT("salPoColor");
 export function mainCrud(_this) {
   return {
@@ -109,7 +109,7 @@ export function mainCrud(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 240px)",
+    height: "calc(100vh - 280px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,

@@ -1307,10 +1307,7 @@ export default {
           item.woUnit = item.weightUnit;
           item.index = this.chooseData.list.length + i + 1;
         });
-        this.chooseData.list = this.$unique(
-          this.chooseData.list.concat(val),
-          "prodNo"
-        );
+        this.chooseData.list = this.chooseData.list.concat(val);
       }
 
       this.choiceV = false;

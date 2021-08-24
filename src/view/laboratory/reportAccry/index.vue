@@ -111,7 +111,7 @@ export default {
         delBtn: false,
         menuWidth: 180,
         menu: false,
-        height: "calc(100vh - 205px)",
+        height: "calc(100vh - 245px)",
         labelWidth: 150,
         dialogWidth: "90%",
         dialogHeight: "80%",

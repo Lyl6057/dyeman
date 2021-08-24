@@ -65,7 +65,7 @@ export default {
         this.$nextTick(() => {
           setTimeout(() => {
             // this.$router.push({ path: "ProWorkflowInfo" }); // 生产管理
-            this.$router.push({ path: "imWl" });
+            // this.$router.push({ path: "imWl" });
             // this.$router.push({ path: "colorMng" });
             // this.$router.push({ path: "weight" });
             this.loading = false;
@@ -105,6 +105,16 @@ export default {
   .el-menu--collapse {
     width: 50px; // 宽度自己掌握
     // transition: 1s;
+  }
+
+  .el-menu-item.is-active:after {
+    content: '';
+    position: absolute;
+    width: 3px;
+    height: 100%;
+    background: #1976d2 !important;
+    top: -0.5px;
+    right: 0;
   }
 
   .el-menu-vertical-demo:not(.el-menu--collapse), .eldemo:not(.el-menu--collapse) {

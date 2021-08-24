@@ -1,64 +1,59 @@
-import {
-  getDIC,
-  getDicT,
-  getXDicT,
-  postDicT
-} from '@/config'
+import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
 
-let colorMng = getXDicT("labTapcolor")
-let cust = getDicT("basCustomer", "custName", "custCode")
+let colorMng = getXDicT("labTapcolor");
+let cust = getDicT("basCustomer", "custName", "custCode");
 export function mainForm(_this) {
   return {
     submitBtn: false,
     emptyBtn: false,
     labelWidth: 150,
-    column: [{
-      label: _this.$t('whseField.khmc'),
-      prop: "custCode",
-      span: 6,
-      placeholder: " ",
-      type: "select",
-      dicData: cust
-    },
-    {
-      label: "颜色编号",
-      prop: "colorBh",
-      span: 6,
-      placeholder: " ",
-    },
-    {
-      label: "颜色中文",
-      prop: "colorChn",
-      span: 6,
-      placeholder: " ",
-    },
-    {
-      label: "颜色英文",
-      prop: "colorEngName",
-      span: 6,
-      placeholder: " ",
-    },
-    {
-      label: "客色号",
-      prop: "custColorBh",
-      span: 6,
-      placeholder: " ",
-    },
-    {
-      label: "面料",
-      prop: "fabricDesc",
-      span: 12,
-      placeholder: " ",
-    },
-    {
-      label: "色号",
-      prop: "colorNo",
-      span: 6,
-      placeholder: " ",
-    },
-
-    ],
-  }
+    column: [
+      {
+        label: _this.$t("whseField.khmc"),
+        prop: "custCode",
+        span: 6,
+        placeholder: " ",
+        type: "select",
+        dicData: cust
+      },
+      {
+        label: "颜色编号",
+        prop: "colorBh",
+        span: 6,
+        placeholder: " "
+      },
+      {
+        label: "颜色中文",
+        prop: "colorChn",
+        span: 6,
+        placeholder: " "
+      },
+      {
+        label: "颜色英文",
+        prop: "colorEngName",
+        span: 6,
+        placeholder: " "
+      },
+      {
+        label: "客色号",
+        prop: "custColorBh",
+        span: 6,
+        placeholder: " "
+      },
+      {
+        label: "面料",
+        prop: "fabricDesc",
+        span: 12,
+        placeholder: " "
+      },
+      {
+        label: "色号",
+        prop: "colorNo",
+        span: 6,
+        placeholder: " "
+      }
+    ]
+  };
 }
 export function popupForm(_this) {
   return {
@@ -71,7 +66,7 @@ export function popupForm(_this) {
         prop: "runNo",
         span: 6,
         placeholder: " ",
-        disabled: true,
+        disabled: true
       },
       {
         label: "色号",
@@ -80,48 +75,44 @@ export function popupForm(_this) {
         placeholder: "请选择色号",
         disabled: false,
         click: () => {
-          _this.dlgWidth = '100%'
+          _this.dlgWidth = "100%";
           _this.choiceV = !_this.choiceV;
           _this.choiceField = "colorNo";
           // _this.choiceQ.purType = '5'
           _this.choiceTarget = _this.form;
           _this.choiceTle = _this.$t("choicDlg.xzshzl");
           _this.$nextTick(() => {
-            if (_this.form.labTapcolorFk === '') {
-
-              _this.form.custCode = ''
-              _this.form.colorChn = ''
-              _this.form.colorSource = ''
-              _this.form.custColorBh = ''
-              _this.form.custColorBh = ''
-              _this.form.fabCode = ''
-              _this.form.fabricDesc = ''
-              _this.form.runcolorQty = 0
-              _this.form.batch = ''
-              _this.form.runcolorType = ''
-              _this.formOp.column[13].disabled = true
-
+            if (_this.form.labTapcolorFk === "") {
+              _this.form.custCode = "";
+              _this.form.colorChn = "";
+              _this.form.colorSource = "";
+              _this.form.custColorBh = "";
+              _this.form.custColorBh = "";
+              _this.form.fabCode = "";
+              _this.form.fabricDesc = "";
+              _this.form.runcolorQty = 0;
+              _this.form.batch = "";
+              _this.form.runcolorType = "";
+              _this.formOp.column[13].disabled = true;
             }
-          })
+          });
         },
         change: () => {
           _this.$nextTick(() => {
-            if (_this.form.labTapcolorFk === '') {
-
-              _this.form.custCode = ''
-              _this.form.colorChn = ''
-              _this.form.colorSource = ''
-              _this.form.custColorBh = ''
-              _this.form.custColorBh = ''
-              _this.form.fabCode = ''
-              _this.form.fabricDesc = ''
-              _this.form.runcolorQty = 0
-              _this.form.batch = ''
-              _this.form.runcolorType = ''
-              _this.formOp.column[13].disabled = true
-
+            if (_this.form.labTapcolorFk === "") {
+              _this.form.custCode = "";
+              _this.form.colorChn = "";
+              _this.form.colorSource = "";
+              _this.form.custColorBh = "";
+              _this.form.custColorBh = "";
+              _this.form.fabCode = "";
+              _this.form.fabricDesc = "";
+              _this.form.runcolorQty = 0;
+              _this.form.batch = "";
+              _this.form.runcolorType = "";
+              _this.formOp.column[13].disabled = true;
             }
-          })
+          });
         },
         disabled: !_this.isAdd,
         type: "select",
@@ -151,10 +142,10 @@ export function popupForm(_this) {
         align: "center",
         type: "date",
         format: "yyyy-MM-dd",
-        valueFormat: "yyyy-MM-dd",
+        valueFormat: "yyyy-MM-dd"
       },
       {
-        label: _this.$t('whseField.khmc'),
+        label: _this.$t("whseField.khmc"),
         prop: "$custCode",
         span: 6,
         placeholder: " ",
@@ -182,7 +173,7 @@ export function popupForm(_this) {
         placeholder: " ",
         disabled: true,
         type: "select",
-        dicData: getDIC("sal_colorSource"),
+        dicData: getDIC("sal_colorSource")
       },
       {
         label: "客色号",
@@ -230,7 +221,7 @@ export function popupForm(_this) {
         disabled: true,
         row: true,
         placeholder: " ",
-        type: "number",
+        type: "number"
       },
       {
         label: "色卡要求",
@@ -238,7 +229,7 @@ export function popupForm(_this) {
         span: 6,
         placeholder: "请选择色卡要求",
         type: "switch",
-        dicData: getDIC("Sal_color_request"),
+        dicData: getDIC("Sal_color_request")
       },
       {
         label: "是否布办",
@@ -253,9 +244,7 @@ export function popupForm(_this) {
           {
             label: "是",
             value: true
-          },
-
-
+          }
         ]
       },
 
@@ -268,7 +257,7 @@ export function popupForm(_this) {
         disabled: true,
         minRows: 0,
         change: () => {
-          _this.colorQty()
+          _this.colorQty();
         }
       },
       {
@@ -277,11 +266,9 @@ export function popupForm(_this) {
         span: 6,
         disabled: true,
         placeholder: " "
-      },
-    ],
-  }
-
-
+      }
+    ]
+  };
 }
 
 export function mainCrud(_this) {
@@ -290,7 +277,7 @@ export function mainCrud(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 285px)",
+    height: "calc(100vh - 325px)",
     refreshBtn: false,
     columnBtn: false,
 
@@ -305,7 +292,7 @@ export function mainCrud(_this) {
       {
         label: "打办编号",
         prop: "runNo",
-        width: 150,
+        width: 150
       },
       {
         label: "色号",
@@ -330,7 +317,7 @@ export function mainCrud(_this) {
       //   // dicData: colorMng
       // },
       {
-        label: _this.$t('whseField.khmc'),
+        label: _this.$t("whseField.khmc"),
         prop: "custCode",
         width: 220,
         type: "select",
@@ -340,7 +327,7 @@ export function mainCrud(_this) {
         label: "颜色编号",
         prop: "colorBh",
         width: 140,
-        type: "select",
+        type: "select"
         // props: {
         //   label: "colorBh",
         //   value: "labTapcoloroid"
@@ -353,7 +340,7 @@ export function mainCrud(_this) {
         width: 120,
         placeholder: " ",
         type: "select",
-        dicData: getDIC("sal_colorSource"),
+        dicData: getDIC("sal_colorSource")
         // props: {
         //   label: "colorSource",
         //   value: "labTapcoloroid"
@@ -364,7 +351,7 @@ export function mainCrud(_this) {
         label: "颜色中文",
         prop: "colorChn",
         width: 120,
-        type: "select",
+        type: "select"
         // props: {
         //   label: "colorChn",
         //   value: "labTapcoloroid"
@@ -374,7 +361,7 @@ export function mainCrud(_this) {
       {
         label: "颜色英文",
         prop: "colorEngName",
-        width: 150,
+        width: 150
         // type: "select",
         // props: {
         //   label: "colorEngName",
@@ -386,7 +373,7 @@ export function mainCrud(_this) {
         label: "客色号",
         prop: "custColorBh",
         width: 130,
-        type: "select",
+        type: "select"
         // props: {
         //   label: "custColorBh",
         //   value: "labTapcoloroid"
@@ -396,7 +383,7 @@ export function mainCrud(_this) {
       {
         label: "面料编号",
         prop: "fabCode",
-        width: 110,
+        width: 110
         // type: "select",
         // props: {
         //   label: "fabCode",
@@ -407,14 +394,13 @@ export function mainCrud(_this) {
       {
         label: "面料",
         prop: "fabricDesc",
-        width: 400,
+        width: 400
         // type: "select",
         // props: {
         //   label: "fabricDesc",
         //   value: "labTapcoloroid"
         // },
         // dicData: colorMng
-
       },
       {
         label: "批次",
@@ -435,27 +421,26 @@ export function mainCrud(_this) {
         prop: "colorRequest",
         width: 120,
         type: "select",
-        dicData: getDIC("Sal_color_request"),
+        dicData: getDIC("Sal_color_request")
       },
       {
         label: "是否布办",
         prop: "isCloth",
         width: 100,
-        type: 'select',
+        type: "select",
         dicData: [
           {
             value: true,
-            label: '是'
+            label: "是"
           },
           {
             value: false,
-            label: '否'
+            label: "否"
           }
         ]
-      },
-    ],
-  }
-
+      }
+    ]
+  };
 }
 
 export function popupCrud(_this) {
@@ -478,7 +463,7 @@ export function popupCrud(_this) {
       {
         label: "色办类型",
         prop: "typeNo",
-        width: 100,
+        width: 100
       },
       {
         label: "交办否",
@@ -530,11 +515,10 @@ export function popupCrud(_this) {
         label: _this.$t("energy.bz"),
         prop: "remarks",
         cell: true,
-        width: 160,
-      },
-    ],
-  }
-
+        width: 160
+      }
+    ]
+  };
 }
 
 export function dtleCrud(_this) {
@@ -551,16 +535,16 @@ export function dtleCrud(_this) {
     sumColumnList: [
       {
         label: " ",
-        name: 'formulaValue',
-        type: 'sum'
-      },
+        name: "formulaValue",
+        type: "sum"
+      }
     ],
     column: [
       {
         label: "行号",
         prop: "lineNo",
         width: 60,
-        align: "center",
+        align: "center"
       },
       {
         label: "原料名称",
@@ -582,26 +566,26 @@ export function dtleCrud(_this) {
           label: "codename",
           value: "codeid"
         },
-        dicData: [],
+        dicData: []
       },
       {
         label: _this.$t("whseField.ph"),
         prop: "batchNo",
-        width: 140,
+        width: 140
       },
       {
         label: _this.$t("whseField.cd"),
         prop: "prodPlace",
         type: "select",
         dicData: getDIC("Whse_Origin"),
-        width: 100,
+        width: 100
       },
       {
         label: "计算",
         prop: "calculateClass",
         width: 60,
         type: "select",
-        dicData: getDIC("sal_calculate"),
+        dicData: getDIC("sal_calculate")
       },
       {
         label: "配方量",
@@ -610,13 +594,9 @@ export function dtleCrud(_this) {
         align: "right",
         cell: true,
         type: "number"
-
-      },
-
-
-    ],
-  }
-
+      }
+    ]
+  };
 }
 
 export function dtlexCrud(_this) {
@@ -662,7 +642,7 @@ export function dtlexCrud(_this) {
         cell: true,
         placeholder: " ",
         type: "number",
-        align: "right",
+        align: "right"
       },
       {
         label: "浴比理论",
@@ -671,7 +651,7 @@ export function dtlexCrud(_this) {
         cell: true,
         type: "number",
         align: "right",
-        placeholder: " ",
+        placeholder: " "
       },
       {
         label: "浴比实际",
@@ -697,10 +677,9 @@ export function dtlexCrud(_this) {
         width: 220,
         cell: true,
         placeholder: " "
-      },
-    ],
-  }
-
+      }
+    ]
+  };
 }
 
 export function dtlfCrud(_this) {
@@ -728,7 +707,7 @@ export function dtlfCrud(_this) {
         cell: true,
         placeholder: " ",
         type: "number",
-        align: "right",
+        align: "right"
       },
       {
         label: "机速",
@@ -737,7 +716,7 @@ export function dtlfCrud(_this) {
         cell: true,
         placeholder: " ",
         type: "number",
-        align: "right",
+        align: "right"
       },
       {
         label: "布封回后边计",
@@ -746,7 +725,7 @@ export function dtlfCrud(_this) {
         cell: true,
         placeholder: " ",
         type: "number",
-        align: "right",
+        align: "right"
       },
       {
         label: "温度",
@@ -776,7 +755,6 @@ export function dtlfCrud(_this) {
         placeholder: " "
       },
 
-
       {
         label: "出机克重",
         prop: "fabricWeight",
@@ -784,7 +762,7 @@ export function dtlfCrud(_this) {
         cell: true,
         type: "number",
         align: "right",
-        placeholder: " ",
+        placeholder: " "
       },
       {
         label: "循环",
@@ -801,10 +779,9 @@ export function dtlfCrud(_this) {
         width: 220,
         cell: true,
         placeholder: " "
-      },
-    ],
-  }
-
+      }
+    ]
+  };
 }
 
 export function dtlixCrud(_this) {
@@ -850,7 +827,7 @@ export function dtlixCrud(_this) {
         cell: true,
         type: "number",
         align: "right",
-        placeholder: " ",
+        placeholder: " "
       },
       {
         label: _this.$t("energy.bz"),
@@ -858,8 +835,7 @@ export function dtlixCrud(_this) {
         width: 220,
         cell: true,
         placeholder: " "
-      },
-    ],
-  }
-
+      }
+    ]
+  };
 }

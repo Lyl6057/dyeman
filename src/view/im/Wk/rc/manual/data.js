@@ -736,7 +736,7 @@ export function pb2C(_this) {
   };
 }
 
-const resolveData = getDicT("proBleadyeRunJob", "vatNo", "vatNo");
+// const resolveData = getDicT("proBleadyeRunJob", "vatNo", "vatNo");
 export function cpb2C(_this) {
   return {
     menu: false,
@@ -771,12 +771,13 @@ export function cpb2C(_this) {
         label: _this.$t("whseField.gh"),
         prop: "batchNo",
         cell: true,
-        width: 230,
+        width: 200,
         type: "select",
+        slot: true,
         filterable: true,
         allowCreate: true,
-        defaultFirstOption: true,
-        dicData: resolveData
+        defaultFirstOption: true
+        // dicData: resolveData
       },
       // {
       //   label: _this.$t("whseField.bph"),
@@ -819,12 +820,20 @@ export function cpb2C(_this) {
         label: _this.$t("whseField.hwm"),
         prop: "locationCode",
         cell: true,
-        width: 200,
+        width: 250,
+        overHidden: true,
         type: "select",
         filterable: true,
         allowCreate: true,
         defaultFirstOption: true,
         dicData: getDicT("whseLocation", "locationCode", "locationCode")
+      },
+      {
+        label: "ET序号",
+        prop: "etSn",
+        cell: true,
+        width: 250,
+        overHideen: true
       },
       {
         label: "成品布入仓",

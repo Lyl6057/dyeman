@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-06-14 09:06:30
+ * @LastEditTime: 2021-08-24 13:36:52
  * @Description: 
 -->
 <template>
@@ -439,8 +439,8 @@ export default {
 
   .item {
     // margin-bottom: 18px;
-    height: 48px;
-    line-height: 48px;
+    height: 46px;
+    line-height: 46px;
   }
 
   .clearfix:before, .clearfix:after {

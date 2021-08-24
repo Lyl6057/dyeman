@@ -76,7 +76,7 @@ export default {
         menu: false,
         border: true,
         editBtn: true,
-        height: "calc(100vh - 210px)",
+        height: "calc(100vh - 240px)",
         refreshBtn: false, //刷新按钮
         columnBtn: false, //显隐按钮
         addRowBtn: false,

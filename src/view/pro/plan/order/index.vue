@@ -771,7 +771,7 @@ export default {
 
     .box {
       border: 1px solid #000;
-      height: calc(100vh - 92px);
+      height: calc(100vh - 128px);
       margin: 5px;
       overflow-y: hidden;
       overflow-x: auto;

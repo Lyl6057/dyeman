@@ -103,7 +103,7 @@ export default {
         dialogHeight: "20%",
         menuPosition: "center",
         highlightCurrentRow: true,
-        height: "calc(100vh - 205px)",
+        height: "calc(100vh - 235px)",
         menu: false,
         column: [
           {

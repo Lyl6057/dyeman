@@ -70,6 +70,30 @@
                 @current-row-change="cellClick"
                 @on-load="getDetail"
               >
+                <template slot="batchNo" slot-scope="scope">
+                  <el-select
+                    v-model="scope.row.batchNo"
+                    placeholder="请选择"
+                    filterable
+                    default-first-option
+                    clearable
+                    class="customize-select"
+                    @change="selectChange(scope.row)"
+                  >
+                    <!--  -->
+                    <el-option
+                      v-for="item in resolveData"
+                      :key="item.runJobId"
+                      :label="item.label"
+                      :value="item.value"
+                    >
+                      <span style="float: left">
+                        <!-- -->
+                        {{ item.value }}</span
+                      >
+                    </el-option>
+                  </el-select>
+                </template>
                 <template slot="yarnsId" slot-scope="scope">
                   <el-select
                     v-model="scope.row.yarnsId"
@@ -291,6 +315,7 @@ import {
   baseCodeSupply,
   baseCodeSupplyEx,
 } from "@/api/index";
+import { getProRunJob } from "./api.js";
 export default {
   components: {
     loction: loction,
@@ -377,6 +402,7 @@ export default {
         "model",
         "msUnit"
       ),
+      resolveData: getDicTs("proBleadyeRunJob", "vatNo", "vatNo", "etSn"),
       code: "",
     };
   },
@@ -651,6 +677,7 @@ export default {
             price: this.mx[this.mx.length - 1].price,
             locationCode: this.mx[this.mx.length - 1].locationCode,
             batchNo: this.mx[this.mx.length - 1].batchNo,
+            etSn: this.mx[this.mx.length - 1].etSn,
           });
         } else {
           this.mx.push({
@@ -1263,6 +1290,21 @@ export default {
       if (this.datas == this.$t("iaoMng.yl")) {
         row.weightUnit = val.bcUnit;
         row.chemicalName = val.cnnamelong;
+      } else if (this.datas == "成品布") {
+        if (val.batchNo) {
+          getProRunJob({
+            vatNo: val.batchNo,
+          }).then((res) => {
+            // this.$nextTick(() => {
+            if (res.data.length > 0) {
+              // val.etSn = res.data[0].etSn;
+              this.$set(val, "etSn", res.data[0].etSn);
+            } else {
+              val.etSn = "";
+            }
+            // });
+          });
+        }
       } else {
         row.unitQty = val.msUnit;
         if (row.batchNo == null) {

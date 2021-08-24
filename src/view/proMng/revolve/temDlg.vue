@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-17 14:09:16
+ * @LastEditTime: 2021-08-23 14:41:25
  * @Description:
 -->
 <template>
@@ -305,7 +305,7 @@ export default {
     closeChoice() {
       this.choiceV = false;
       // this.bfOp.column[2].hide = true;
-      this.bfOp.column[6].hide = true;
+      // this.bfOp.column[6].hide = true;
     },
     getSublist() {
       this.wLoading = true;
@@ -756,10 +756,15 @@ export default {
     },
     choiceData(val) {
       if (Object.keys(val).length == 0) {
-        this.choiceV = false;
+        this.$tip.warning("请先选择数据!");
+        // this.choiceV = false;
         return;
       }
       if (this.choiceTle == "选择织造通知单") {
+        if (!val.length) {
+          this.$tip.warning("请先选择织单!");
+          return;
+        }
         let data = "";
         let yIndex = 1;
         val.forEach((item, i) => {
@@ -772,11 +777,11 @@ export default {
           item.clothWeight = isNaN(item.amount) ? 0 : item.amount;
           item.fabElements = item.fiberComp;
           item.poAmountKg = item.clothWeight;
-          item.fabElements = item.fiberComp;
-          item.poAmountKg = item.clothWeight;
+          // item.fabElements = item.fiberComp;
+          // item.poAmountKg = item.clothWeight;
           // item.tubeDiam = item.needleInch;
           item.needleDist = item.guage;
-          item.salPoNo = item.custPoNo;
+          item.salPoNo = item.salPoNo;
           this.form = item;
           this.form.yarnCard = "";
           this.form.yarnNumber = "";

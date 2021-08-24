@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-04-23 08:32:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-07-08 16:54:21
+ * @LastEditTime: 2021-08-24 10:38:27
  * @Description: 
 -->
 <template>
@@ -310,7 +310,7 @@ export default {
         },
         grid: {
           top: "13%", //距上边距
-          left: "5%", //距离左边距
+          left: "8%", //距离左边距
           right: "1%", //距离右边距
           bottom: "18%", //距离下边距
         },

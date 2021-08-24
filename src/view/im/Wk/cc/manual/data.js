@@ -787,6 +787,13 @@ export function cpb3C(_this) {
         width: 100,
         type: "select",
         dicData: unit
+      },
+      {
+        label: "ET序号",
+        prop: "etSn",
+        cell: false,
+        width: 250,
+        overHideen: true
       }
       // {
       //   label: _this.$t("whseField.krbph"),

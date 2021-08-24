@@ -64,7 +64,7 @@
               </el-col>
               <el-col :span="19">
                 <view-container title="儀表詳細信息" style="margin-left: -1px">
-                  <el-card style="height: calc(100vh - 190px)">
+                  <el-card style="height: calc(100vh - 230px)">
                     <avue-form
                       ref="ybForm"
                       style="margin-top: 10px"
@@ -1019,7 +1019,7 @@ export default {
 
   .content {
     .el-tree {
-      height: calc(100vh - 192px) !important;
+      height: calc(100vh - 232px) !important;
       overflow: auto;
     }
   }

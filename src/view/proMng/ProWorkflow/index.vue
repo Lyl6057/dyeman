@@ -605,12 +605,12 @@ export default {
 
   .content {
     .el-tree {
-      height: calc(100vh - 150px) !important;
+      height: calc(100vh - 180px) !important;
       overflow: auto;
     }
 
     .el-card {
-      height: calc(100vh - 125px) !important;
+      height: calc(100vh - 155px) !important;
     }
   }
 }

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-17 15:41:46
+ * @LastEditTime: 2021-08-24 10:42:14
  * @Description:
  */
 
@@ -117,7 +117,7 @@ export function mainCrud(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 240px)",
+    height: "calc(100vh - 280px)",
     refreshBtn: false,
     columnBtn: false,
     // labelPosition: 'top',

@@ -2,16 +2,11 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-21 09:04:53
+ * @LastEditTime: 2021-08-24 10:23:23
  * @Description:
  */
 
-import {
-  getDIC,
-  getDicT,
-  getXDicT,
-  postDicT
-} from '@/config'
+import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
 
 export function mainForm(_this) {
   return {
@@ -26,7 +21,7 @@ export function mainForm(_this) {
         span: 6,
         placeholder: " ",
         type: "select",
-        dicData: cust,
+        dicData: cust
         // dicData: getDicT("basCustomer", "custName", "custCode")
       },
       {
@@ -34,7 +29,7 @@ export function mainForm(_this) {
         tip: "Số đơn hàng",
         prop: "orderNo",
         span: 6,
-        placeholder: " ",
+        placeholder: " "
       },
 
       {
@@ -42,17 +37,17 @@ export function mainForm(_this) {
         tip: "Mã vải",
         prop: "fabricCode",
         span: 6,
-        placeholder: " ",
+        placeholder: " "
       },
       {
         label: "开始日期",
         tip: "Ngày bắt đầu nhận đơn",
         prop: "startDate",
         span: 6,
-        placeholder: " ",
-      },
-    ],
-  }
+        placeholder: " "
+      }
+    ]
+  };
 }
 
 export function dlgForm(_this) {
@@ -65,7 +60,7 @@ export function dlgForm(_this) {
         label: "訂單編號",
         prop: "poNo",
         span: 6,
-        placeholder: " ",
+        placeholder: " "
       },
       {
         label: "客戶名稱",
@@ -73,19 +68,19 @@ export function dlgForm(_this) {
         span: 6,
         placeholder: " ",
         type: "tree",
-        dicData: cust,
+        dicData: cust
       },
       {
         label: "订单狀態",
         prop: "poStatus",
         span: 6,
-        placeholder: " ",
-      },
-    ],
-  }
+        placeholder: " "
+      }
+    ]
+  };
 }
 
-let cust = getDicT("basCustomer", "custName", "custCode")
+let cust = getDicT("basCustomer", "custName", "custCode");
 
 export function mainCrud(_this) {
   return {
@@ -93,11 +88,11 @@ export function mainCrud(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 190px)",
+    height: "calc(100vh - 236px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
-    labelPosition: 'top',
+    labelPosition: "top",
     labelWidth: 150,
     column: [
       {
@@ -121,15 +116,17 @@ export function mainCrud(_this) {
         allowCreate: true,
         defaultFirstOption: true,
         dicData: cust,
-        rules: [{
-          required: true,
-          message: "请输入客户名称",
-          trigger: "blur"
-        }],
-        change: (val) => {
+        rules: [
+          {
+            required: true,
+            message: "请输入客户名称",
+            trigger: "blur"
+          }
+        ],
+        change: val => {
           _this.$nextTick(() => {
-            _this.form.custCode = _this.form.custName
-          })
+            _this.form.custCode = _this.form.custName;
+          });
         }
       },
       {
@@ -140,11 +137,13 @@ export function mainCrud(_this) {
         span: 6,
         disabled: false,
         sortable: true,
-        rules: [{
-          required: true,
-          message: "请输入客户编号",
-          trigger: "blur"
-        }],
+        rules: [
+          {
+            required: true,
+            message: "请输入客户编号",
+            trigger: "blur"
+          }
+        ],
         tip: "客户编号(Khách hàng số)"
       },
 
@@ -160,11 +159,13 @@ export function mainCrud(_this) {
         valueFormat: "yyyy-MM-dd",
         placeholder: " ",
         sortable: true,
-        rules: [{
-          required: true,
-          message: "请選擇出胚布日期",
-          trigger: "blur"
-        }],
+        rules: [
+          {
+            required: true,
+            message: "请選擇出胚布日期",
+            trigger: "blur"
+          }
+        ]
       },
       {
         label: "接单日期(Ngày đặt hàng)",
@@ -180,11 +181,13 @@ export function mainCrud(_this) {
         valueFormat: "yyyy-MM-dd",
         placeholder: " ",
         // sortable: true,
-        rules: [{
-          required: true,
-          message: "请選擇接单日期",
-          trigger: "blur"
-        }],
+        rules: [
+          {
+            required: true,
+            message: "请選擇接单日期",
+            trigger: "blur"
+          }
+        ]
       },
       {
         label: "订单号(Số đơn hàng)",
@@ -193,11 +196,13 @@ export function mainCrud(_this) {
         width: 140,
         span: 6,
         disabled: false,
-        rules: [{
-          required: true,
-          message: "订单号(Số đơn hàng)",
-          trigger: "blur"
-        }],
+        rules: [
+          {
+            required: true,
+            message: "订单号(Số đơn hàng)",
+            trigger: "blur"
+          }
+        ],
         tip: "订单号(Số đơn hàng"
       },
       {
@@ -207,7 +212,7 @@ export function mainCrud(_this) {
         width: 180,
         span: 6,
         placeholder: " ",
-        overHidden: true,
+        overHidden: true
       },
       {
         label: "合同号(Số hiệu hợp đồng)",
@@ -216,7 +221,7 @@ export function mainCrud(_this) {
         width: 180,
         span: 6,
         placeholder: " ",
-        overHidden: true,
+        overHidden: true
       },
 
       {
@@ -230,7 +235,7 @@ export function mainCrud(_this) {
         align: "center",
         format: "yyyy-MM-dd",
         valueFormat: "yyyy-MM-dd",
-        placeholder: " ",
+        placeholder: " "
         // sortable: true,
       },
 
@@ -241,11 +246,13 @@ export function mainCrud(_this) {
         width: 100,
         placeholder: " ",
         span: 6,
-        rules: [{
-          required: true,
-          message: "请输入送办数量",
-          trigger: "blur"
-        }],
+        rules: [
+          {
+            required: true,
+            message: "请输入送办数量",
+            trigger: "blur"
+          }
+        ]
       },
       {
         label: "办数量(Số lượng  mẫu)",
@@ -254,11 +261,13 @@ export function mainCrud(_this) {
         width: 100,
         placeholder: " ",
         span: 6,
-        rules: [{
-          required: true,
-          message: "请输入办数量",
-          trigger: "blur"
-        }],
+        rules: [
+          {
+            required: true,
+            message: "请输入办数量",
+            trigger: "blur"
+          }
+        ]
       },
       {
         label: "送办大小(Kích thước mẫu)",
@@ -266,7 +275,7 @@ export function mainCrud(_this) {
         prop: "sampleSize",
         width: 100,
         placeholder: " ",
-        span: 6,
+        span: 6
       },
 
       {
@@ -280,7 +289,7 @@ export function mainCrud(_this) {
         align: "center",
         format: "yyyy-MM-dd",
         valueFormat: "yyyy-MM-dd",
-        placeholder: " ",
+        placeholder: " "
       },
       {
         label: "接单人(Người lập)",
@@ -288,7 +297,7 @@ export function mainCrud(_this) {
         width: 100,
         span: 6,
         tip: "接单人(Người lập)",
-        placeholder: " ",
+        placeholder: " "
       },
       {
         label: "跟单人(Người xem xét)",
@@ -296,7 +305,7 @@ export function mainCrud(_this) {
         prop: "consider",
         width: 100,
         span: 6,
-        placeholder: " ",
+        placeholder: " "
       },
       {
         label: "批准人(Người xét duyệt)",
@@ -304,7 +313,7 @@ export function mainCrud(_this) {
         prop: "approvedBy",
         width: 100,
         span: 6,
-        placeholder: " ",
+        placeholder: " "
       },
       {
         label: "洗水(Độ bền giặt)",
@@ -314,7 +323,7 @@ export function mainCrud(_this) {
         width: 120,
         span: 6,
         hide: true,
-        placeholder: " ",
+        placeholder: " "
       },
       {
         label: "水牢度(Độ bền ngâm nước)",
@@ -324,7 +333,7 @@ export function mainCrud(_this) {
         width: 120,
         span: 6,
         hide: true,
-        placeholder: " ",
+        placeholder: " "
       },
       {
         label: "布料编号(Mã vải)",
@@ -333,7 +342,7 @@ export function mainCrud(_this) {
         width: 140,
         span: 6,
         placeholder: " ",
-        overHidden: true,
+        overHidden: true
       },
       {
         label: "胚布面料(Nơi nhập kho vải mộc)",
@@ -342,11 +351,8 @@ export function mainCrud(_this) {
         width: 300,
         span: 12,
         placeholder: " ",
-        overHidden: true,
+        overHidden: true
       },
-
-
-
 
       {
         label: "干摩擦牢度(Độ bền cọ sát khô)",
@@ -356,7 +362,7 @@ export function mainCrud(_this) {
         width: 180,
         span: 6,
         hide: true,
-        placeholder: " ",
+        placeholder: " "
       },
       {
         label: "湿摩擦牢度(Độ bền cọ sát ướt)",
@@ -366,7 +372,7 @@ export function mainCrud(_this) {
         width: 180,
         hide: true,
         span: 6,
-        placeholder: " ",
+        placeholder: " "
       },
       {
         label: "检验标准(Tiêu chuẩn kiểm tra)",
@@ -390,7 +396,8 @@ export function mainCrud(_this) {
           {
             value: "ISO",
             label: "ISO"
-          }, {
+          },
+          {
             value: "M&S",
             label: "M&S"
           },
@@ -401,7 +408,6 @@ export function mainCrud(_this) {
         ]
       },
 
-
       {
         label: "浅色(Màu nhạt)",
         tip: "Light color(Màu nhạt)",
@@ -411,7 +417,7 @@ export function mainCrud(_this) {
         hide: true,
         width: 120,
         span: 6,
-        placeholder: " ",
+        placeholder: " "
       },
       {
         label: "耐汗渍色牢度(Độ bền mồ hôi)",
@@ -421,7 +427,7 @@ export function mainCrud(_this) {
         width: 180,
         hide: true,
         span: 6,
-        placeholder: " ",
+        placeholder: " "
       },
 
       {
@@ -433,7 +439,7 @@ export function mainCrud(_this) {
         disabled: false,
         width: 120,
         span: 6,
-        placeholder: " ",
+        placeholder: " "
       },
       {
         label: "色牢度(Độ bền màu)",
@@ -443,7 +449,7 @@ export function mainCrud(_this) {
         hide: true,
         width: 180,
         span: 6,
-        placeholder: " ",
+        placeholder: " "
       },
 
       {
@@ -455,7 +461,7 @@ export function mainCrud(_this) {
         width: 120,
         hide: true,
         span: 6,
-        placeholder: " ",
+        placeholder: " "
       },
 
       {
@@ -466,9 +472,8 @@ export function mainCrud(_this) {
         hide: true,
         width: 250,
         span: 6,
-        placeholder: " ",
+        placeholder: " "
       },
-
 
       {
         label: "印花方法(Cách in hoa)",
@@ -479,7 +484,7 @@ export function mainCrud(_this) {
         width: 180,
         hide: true,
         span: 6,
-        placeholder: " ",
+        placeholder: " "
       },
       {
         label: "消除印花(Loại bỏ in hoa)",
@@ -490,7 +495,7 @@ export function mainCrud(_this) {
         hide: true,
         width: 180,
         span: 6,
-        placeholder: " ",
+        placeholder: " "
       },
 
       {
@@ -517,9 +522,8 @@ export function mainCrud(_this) {
         hide: true,
         display: false
       }
-    ],
-  }
-
+    ]
+  };
 }
 
 export function dlgCrud(_this) {
@@ -540,14 +544,14 @@ export function dlgCrud(_this) {
         prop: "index",
         width: 50,
         align: "center",
-        display: false,
+        display: false
       },
       {
         label: "訂單號",
         prop: "poNo",
         width: 150,
         span: 6,
-        sortable: true,
+        sortable: true
       },
       {
         label: "客人名稱",
@@ -556,17 +560,17 @@ export function dlgCrud(_this) {
         width: 250,
         span: 6,
         type: "select",
-        dicData: cust,
+        dicData: cust
       },
       {
         label: "订单日期",
         prop: "poDate",
         width: 130,
         type: "date",
-        align: 'center',
+        align: "center",
         sortable: true,
         format: "yyyy-MM-dd",
-        valueFormat: "yyyy-MM-dd",
+        valueFormat: "yyyy-MM-dd"
       },
       {
         label: "订单类别",
@@ -582,9 +586,9 @@ export function dlgCrud(_this) {
         width: 110,
         type: "select",
         dicData: getDIC("Status")
-      },
-    ],
-  }
+      }
+    ]
+  };
 }
 
 export function compCrud(_this) {
@@ -604,7 +608,7 @@ export function compCrud(_this) {
         prop: "index",
         width: 50,
         align: "center",
-        display: false,
+        display: false
       },
       {
         label: "类型(loại)",
@@ -633,7 +637,7 @@ export function compCrud(_this) {
         width: 400,
         span: 6,
         cell: true,
-        overHidden: true,
+        overHidden: true
       },
       {
         label: "纤维组成(Cấu trúc sợi)",
@@ -641,10 +645,10 @@ export function compCrud(_this) {
         width: 400,
         span: 6,
         cell: true,
-        overHidden: true,
-      },
-    ],
-  }
+        overHidden: true
+      }
+    ]
+  };
 }
 
 export function colorCrud(_this) {
@@ -683,10 +687,7 @@ export function colorCrud(_this) {
         overHidden: true,
         span: 6,
         cell: true
-      },
-    ],
-  }
+      }
+    ]
+  };
 }
-
-
-

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-13 08:21:49
+ * @LastEditTime: 2021-08-24 10:48:40
  * @Description: 
 -->
 <template>
@@ -392,7 +392,7 @@ export default {
     // this.query();
     this.revolveQuery();
     this.revolveCOp.page = false;
-    this.revolveCOp.height = "calc(100vh - 160px)";
+    this.revolveCOp.height = "calc(100vh - 200px)";
   },
   beforeDestroy() {},
 };

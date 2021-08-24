@@ -798,12 +798,12 @@ export default {
                   this.tbData[i].labCheckStandard[j].labCheckScopeRange,
                   "sn"
                 );
-                pz += this.tbData[i].labCheckStandard[j].labCheckScopeRange
-                  .length;
-                num += this.tbData[i].labCheckStandard[j].labCheckScopeRange
-                  .length;
-                sum += this.tbData[i].labCheckStandard[j].labCheckScopeRange
-                  .length;
+                pz +=
+                  this.tbData[i].labCheckStandard[j].labCheckScopeRange.length;
+                num +=
+                  this.tbData[i].labCheckStandard[j].labCheckScopeRange.length;
+                sum +=
+                  this.tbData[i].labCheckStandard[j].labCheckScopeRange.length;
                 this.$set(this.tbData[i].labCheckStandard[j], "readonly", true);
                 if (this.tbData[i].labCheckStandard != null) {
                   for (
@@ -1168,7 +1168,7 @@ export default {
 
   .mainBox {
     font-size: 15px;
-    height: calc(100vh - 242px);
+    height: calc(100vh - 282px);
     padding: 0 !important;
     border-bottom: 1px solid #C0C4CC;
     // border-top: 1px solid #C0C4CC;

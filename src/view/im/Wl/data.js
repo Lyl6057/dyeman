@@ -132,7 +132,7 @@ export function mainCrud(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 235px)",
+    height: "calc(100vh - 275px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
