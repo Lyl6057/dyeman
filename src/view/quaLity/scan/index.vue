@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-24 13:36:52
+ * @LastEditTime: 2021-08-25 15:17:58
  * @Description: 
 -->
 <template>
@@ -170,7 +170,7 @@
   </div>
 </template>
 <script>
-import { mainForm, mainCrud } from "./data";
+import { mainForm } from "./data";
 import { webSocket } from "@/config/index.js";
 import { get, add, update, del, getWeave } from "./api";
 export default {
@@ -179,7 +179,7 @@ export default {
     return {
       formOp: mainForm(this),
       form: {},
-      crudOp: mainCrud(this),
+      // crudOp: mainCrud(this),
       crud: {},
       page: {
         pageSize: 20,

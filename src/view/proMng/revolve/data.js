@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-24 10:45:08
+ * @LastEditTime: 2021-08-28 10:33:19
  * @Description:
  */
 
@@ -228,14 +228,22 @@ export function mainCrud(_this) {
         // sortable: true,
         overHidden: true
       },
-
+      {
+        label: "合同号",
+        prop: "contractNo",
+        tip: "Số hợp đồng",
+        span: 6,
+        hide: true,
+        width: 80,
+        placeholder: " "
+      },
       {
         label: "交货地址",
         tip: "Địa chỉ giao hàng",
         prop: "address",
         overHidden: true,
         width: 180,
-        span: 12,
+        span: 6,
         disabled: false,
         placeholder: " "
       },
@@ -613,6 +621,7 @@ export function mainCrud(_this) {
       //   disabled: true,
       //   display: true
       // },
+
       {
         label: "ET序号",
         prop: "etSn",
@@ -622,6 +631,7 @@ export function mainCrud(_this) {
         width: 80,
         placeholder: " "
       },
+
       {
         label: "#STLYLE 款号",
         prop: "styleNo",

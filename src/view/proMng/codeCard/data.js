@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-08-07 07:58:01
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-24 10:50:14
+ * @LastEditTime: 2021-08-27 19:07:12
  * @Description:
  */
 
@@ -128,19 +128,19 @@ export function mainCrud(_this) {
         tip: "Số lô nhuộm",
         overHidden: true,
         width: 140,
-        span: 6,
+        span: 8,
         disabled: false,
         sortable: true,
-        placeholder: "請选择缸號",
+        placeholder: "請输入缸號",
         rules: [
           {
             required: true,
-            message: "請选择缸號",
+            message: "請输入缸號",
             trigger: "blur"
           }
         ],
         click: () => {
-          _this.choiceV = true;
+          // _this.choiceV = true;
         }
       },
       {
@@ -149,13 +149,20 @@ export function mainCrud(_this) {
         prop: "custCode",
         overHidden: true,
         width: 200,
-        span: 6,
+        span: 8,
         placeholder: " ",
         filterable: true,
         allowCreate: true,
         defaultFirstOption: true,
         type: "select",
         dicData: cust,
+        rules: [
+          {
+            required: true,
+            message: "請选择客户名称",
+            trigger: "blur"
+          }
+        ],
         props: {
           value: "custCode",
           label: "custName"
@@ -182,7 +189,7 @@ export function mainCrud(_this) {
         label: "批色日期",
         prop: "appDate",
         width: 130,
-        span: 6,
+        span: 8,
         tip: "Ngày lập đơn",
         type: "date",
         align: "center",
@@ -205,7 +212,7 @@ export function mainCrud(_this) {
         placeholder: " ",
         width: 180,
         overHidden: true,
-        span: 6,
+        span: 8,
         placeholder: " "
       },
       {
@@ -213,7 +220,7 @@ export function mainCrud(_this) {
         tip: "Số màu",
         prop: "colorNo",
         width: 150,
-        span: 6,
+        span: 8,
         overHidden: true,
         placeholder: " "
       },
@@ -221,11 +228,28 @@ export function mainCrud(_this) {
         label: "客批号",
         prop: "custBatchNo",
         tip: "Mã vải",
-        span: 6,
+        span: 8,
         width: 180,
         placeholder: " ",
         overHidden: true,
         disabled: false
+      },
+      {
+        label: "重量",
+        tip: "Tổng cộng(KG)",
+        prop: "sumWeight",
+        width: 100,
+        span: 8,
+        type: "number",
+        align: "right",
+        placeholder: " ",
+        rules: [
+          {
+            required: true,
+            message: "請输入重量",
+            trigger: "blur"
+          }
+        ]
       },
       {
         label: "布類",
@@ -234,31 +258,50 @@ export function mainCrud(_this) {
         tip: "Loại vải",
         overHidden: true,
         width: 250,
-        span: 12,
+        span: 16,
         placeholder: " "
       },
 
-      {
-        label: "重量",
-        tip: "Tổng cộng(KG)",
-        prop: "sumWeight",
-        width: 100,
-        span: 6,
-        type: "number",
-        align: "right",
-        placeholder: " "
-      },
       {
         label: "疋數",
         prop: "pidCount",
         tip: "Cây",
         width: 100,
-        span: 6,
+        span: 8,
         type: "number",
         align: "right",
         placeholder: " ",
-        row: _this.type == 1 ? false : true
+        rules: [
+          {
+            required: true,
+            message: "請输入疋數",
+            trigger: "blur"
+          }
+        ]
+        // row: _this.type == 1 ? false : true
       },
+      {
+        label: "對色光源",
+        tip: "Nguồn sáng so màu",
+        prop: "colorLights",
+        width: 120,
+        hide: true,
+        placeholder: " ",
+        span: 16,
+        multiple: true,
+        type: "select",
+        dicData: getDIC("sal_colorLights")
+      },
+      {
+        label: "对色标准",
+        tip: "Tiêu chuẩn so màu/Số bồn nhuộm",
+        prop: "colorStandard",
+        width: 120,
+        hide: true,
+        placeholder: " ",
+        span: 8
+      },
+
       // {
       //   label: "配方",
       //   prop: "formula",
@@ -275,7 +318,7 @@ export function mainCrud(_this) {
         prop: "remark",
         tip: "Nhận xét",
         width: 100,
-        span: 24,
+        span: 16,
         placeholder: " ",
         hide: true
         // type: "textarea"

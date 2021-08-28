@@ -66,44 +66,65 @@ export default [
     name: "出入库管理",
     component: resolve => require(["@/view/im/Wk/index"], resolve),
     meta: {
-      keepAlive: true
+      keepAlive: false
     },
     children: [
       // 申购入库
       {
         path: "/rc_sg",
         name: "rc_sg",
-        component: resolve => require(["@/view/im/Wk/rc/sg/index"], resolve)
+        component: resolve => require(["@/view/im/Wk/rc/sg/index"], resolve),
+        meta: {
+          keepAlive: false
+        }
       },
       // 采购入库
       {
         path: "/rc_cg",
         name: "rc_cg",
-        component: resolve => require(["@/view/im/Wk/rc/cg/index"], resolve)
+        component: resolve => require(["@/view/im/Wk/rc/cg/index"], resolve),
+        meta: {
+          keepAlive: false
+        }
       },
       // 手工入库
       {
         path: "/rc_manual",
         name: "rc_manual",
-        component: resolve => require(["@/view/im/Wk/rc/manual/index"], resolve)
+        component: resolve =>
+          require(["@/view/im/Wk/rc/manual/index"], resolve),
+        meta: {
+          keepAlive: false
+        }
       },
       // 手工出库
       {
         path: "/cc_manual",
         name: "cc_manual",
-        component: resolve => require(["@/view/im/Wk/cc/manual/index"], resolve)
+        component: resolve =>
+          require(["@/view/im/Wk/cc/manual/index"], resolve),
+        meta: {
+          keepAlive: false
+        }
       },
       {
         // gc 胚布
         path: "/gc_points",
         name: "gc点数看板",
         component: resolve =>
-          require(["@/view/im/Wk/grayCloth/points/index"], resolve)
+          require(["@/view/im/Wk/grayCloth/points/index"], resolve),
+        meta: {
+          keepAlive: false
+        }
       },
       {
         path: "/rc_kanban",
         name: "入仓看板",
-        component: resolve => require(["@/view/im/Wk/rc/kanban/index"], resolve)
+        component: resolve =>
+          require(["@/view/im/Wk/rc/kanban/index"], resolve),
+        meta: {
+          keepAlive: false
+        }
       },
       // {
       //   path: "/gc_outbound",
@@ -114,103 +135,154 @@ export default [
       {
         path: "/rc_sx",
         name: "rc_sx",
-        component: resolve => require(["@/view/im/Wk/rc/sx/index"], resolve)
+        component: resolve => require(["@/view/im/Wk/rc/sx/index"], resolve),
+        meta: {
+          keepAlive: false
+        }
       },
       //  胚布入仓
       {
         path: "/rc_pb",
         name: "rc_pb",
-        component: resolve => require(["@/view/im/Wk/rc/pb/index"], resolve)
+        component: resolve => require(["@/view/im/Wk/rc/pb/index"], resolve),
+        meta: {
+          keepAlive: false
+        }
       },
       //  成品布入仓
       {
         path: "/rc_cpb",
         name: "rc_cpb",
-        component: resolve => require(["@/view/im/Wk/rc/cpb/index"], resolve)
+        component: resolve => require(["@/view/im/Wk/rc/cpb/index"], resolve),
+        meta: {
+          keepAlive: false
+        }
       },
       //  染化料入仓
       {
         path: "/rc_rhl",
         name: "rc_rhl",
-        component: resolve => require(["@/view/im/Wk/rc/rhl/index"], resolve)
+        component: resolve => require(["@/view/im/Wk/rc/rhl/index"], resolve),
+        meta: {
+          keepAlive: false
+        }
       },
       //  染化料入仓
       {
         path: "/rc_yl",
         name: "rc_yl",
-        component: resolve => require(["@/view/im/Wk/rc/yl/index"], resolve)
+        component: resolve => require(["@/view/im/Wk/rc/yl/index"], resolve),
+        meta: {
+          keepAlive: false
+        }
       },
       //  生产辅料入仓
       {
         path: "/rc_scfl",
         name: "rc_scfl",
-        component: resolve => require(["@/view/im/Wk/rc/scfl/index"], resolve)
+        component: resolve => require(["@/view/im/Wk/rc/scfl/index"], resolve),
+        meta: {
+          keepAlive: false
+        }
       },
 
       //  纱线出仓
       {
         path: "/cc_sx",
         name: "cc_sx",
-        component: resolve => require(["@/view/im/Wk/cc/sx/index"], resolve)
+        component: resolve => require(["@/view/im/Wk/cc/sx/index"], resolve),
+        meta: {
+          keepAlive: false
+        }
       },
       //  胚布出仓
       {
         path: "/cc_pb",
         name: "cc_pb",
-        component: resolve => require(["@/view/im/Wk/cc/pb/index"], resolve)
+        component: resolve => require(["@/view/im/Wk/cc/pb/index"], resolve),
+        meta: {
+          keepAlive: false
+        }
       },
       //  成品布出仓
       {
         path: "/cc_cpb",
         name: "cc_cpb",
-        component: resolve => require(["@/view/im/Wk/cc/cpb/index"], resolve)
+        component: resolve => require(["@/view/im/Wk/cc/cpb/index"], resolve),
+        meta: {
+          keepAlive: false
+        }
       },
       //  化工原料出仓
       {
         path: "/cc_hgyl",
         name: "cc_hgyl",
-        component: resolve => require(["@/view/im/Wk/cc/hgyl/index"], resolve)
+        component: resolve => require(["@/view/im/Wk/cc/hgyl/index"], resolve),
+        meta: {
+          keepAlive: false
+        }
       },
       // //  生产辅料出仓
       {
         path: "/cc_scfl",
         name: "cc_scfl",
-        component: resolve => require(["@/view/im/Wk/cc/scfl/index"], resolve)
+        component: resolve => require(["@/view/im/Wk/cc/scfl/index"], resolve),
+        meta: {
+          keepAlive: false
+        }
       },
       // 行政
       {
         path: "/cc_wj",
         name: "cc_wj",
-        component: resolve => require(["@/view/im/Wk/cc/wj/index"], resolve)
+        component: resolve => require(["@/view/im/Wk/cc/wj/index"], resolve),
+        meta: {
+          keepAlive: false
+        }
       },
       // 行政
       {
         path: "/cc_xz",
         name: "cc_xz",
-        component: resolve => require(["@/view/im/Wk/cc/xz/index"], resolve)
+        component: resolve => require(["@/view/im/Wk/cc/xz/index"], resolve),
+        meta: {
+          keepAlive: false
+        }
       },
       // 颜料
       {
         path: "/cc_yl",
         name: "cc_yl",
-        component: resolve => require(["@/view/im/Wk/cc/yl/index"], resolve)
+        component: resolve => require(["@/view/im/Wk/cc/yl/index"], resolve),
+        meta: {
+          keepAlive: false
+        }
       },
       // 燃料
       {
         path: "/cc_rl",
         name: "cc_rl",
-        component: resolve => require(["@/view/im/Wk/cc/rl/index"], resolve)
+        component: resolve => require(["@/view/im/Wk/cc/rl/index"], resolve),
+        meta: {
+          keepAlive: false
+        }
       },
       {
         path: "/cc_package",
         name: "cc_package",
-        component: resolve => require(["@/view/im/Wk/rc/package"], resolve)
+        component: resolve => require(["@/view/im/Wk/rc/package"], resolve),
+        meta: {
+          keepAlive: false
+        }
       },
       {
         path: "/count_warehouse",
         name: "count_warehouse",
         component: resolve =>
-          require(["@/view/im/Wk/count/warehouse/index"], resolve)
+          require(["@/view/im/Wk/count/warehouse/index"], resolve),
+        meta: {
+          keepAlive: false
+        }
       }
     ]
   },

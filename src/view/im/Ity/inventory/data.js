@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-24 14:21:15
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-24 11:07:40
+ * @LastEditTime: 2021-08-26 18:53:00
  * @Description:
  */
 
@@ -120,6 +120,7 @@ export function crudOp(_this) {
     refreshBtn: false,
     columnBtn: false,
     showOverflowTooltip: true,
+    excelBtn: true,
     showSummary: true,
     sumColumnList: [
       {
@@ -153,7 +154,7 @@ export function crudOp(_this) {
         prop: "chemicalName",
         type: "select",
         overHidden: true,
-        width: 300
+        width: 400
       },
       {
         label: _this.$t("whseField.ph"),

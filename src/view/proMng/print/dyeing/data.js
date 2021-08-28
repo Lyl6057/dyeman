@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-24 10:47:21
+ * @LastEditTime: 2021-08-27 10:44:54
  * @Description:
  */
 
@@ -241,9 +241,11 @@ export function mainCrud(_this) {
           }
         ],
         click: () => {
-          _this.choiceTle = "选择染整运转单";
-          _this.choiceQ.runState = "1";
-          _this.choiceV = true;
+          if (!_this.copyCtr) {
+            _this.choiceTle = "选择染整运转单";
+            _this.choiceQ.runState = "1";
+            _this.choiceV = true;
+          }
         }
       },
       {
@@ -1284,6 +1286,7 @@ export function techargueCrud(_this) {
     height: "calc(100vh - 148px)",
     refreshBtn: false,
     columnBtn: false,
+    selection: true,
     page: true,
     labelWidth: 130,
     column: [

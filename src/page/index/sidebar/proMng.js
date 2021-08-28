@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-04-01 13:39:35
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-18 15:10:56
+ * @LastEditTime: 2021-08-27 13:37:55
  * @Description:
  */
 
@@ -122,15 +122,19 @@ export function proMng(_this) {
       icon: "el-icon-edit-outline",
       children: [
         {
-          menuName: "1.出缸码卡",
-          index: `codeCard/${2}`
+          menuName: "1.批色码卡",
+          index: "codeCard"
         },
+        // {
+        //   menuName: "1.出缸码卡",
+        //   index: `codeCard/${2}`
+        // },
+        // {
+        //   menuName: "2.定后码卡",
+        //   index: `outcodeCard/${1}`
+        // },
         {
-          menuName: "2.定后码卡",
-          index: `outcodeCard/${1}`
-        },
-        {
-          menuName: "3.成品码卡",
+          menuName: "2.成品码卡",
           index: "finalCard"
         }
         // {

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-24 10:42:14
+ * @LastEditTime: 2021-08-28 10:04:25
  * @Description:
  */
 
@@ -271,15 +271,15 @@ export function mainCrud(_this) {
         ]
       },
       {
-        label: "織單數量",
+        label: "織胚數量",
         prop: "amount",
         width: 100,
-        placeholder: "请输入織單數量",
+        placeholder: "请输入織胚數量",
         span: 6,
         rules: [
           {
             required: true,
-            message: "请输入織單數量",
+            message: "请输入織胚數量",
             trigger: "blur"
           }
         ],
@@ -342,7 +342,44 @@ export function mainCrud(_this) {
       //   tip: "Lô sợi nhà máy",
       //   hide: true
       // },
+      {
+        label: "纱线数量",
+        prop: "yarnAmount",
+        width: 100,
+        placeholder: "请输入纱线数量",
+        span: 6,
+        type: "number",
+        align: "left",
+        tip: " Số lượng sợi "
+      },
+      {
+        label: "合同数量",
+        prop: "contractAmount",
+        width: 100,
+        placeholder: "请输入合同数量",
+        span: 6,
+        type: "number",
+        align: "left",
+        tip: "Số lượng của hợp đồng"
+      },
 
+      {
+        label: "布類描述",
+        prop: "fabricDesc",
+        placeholder: " ",
+        overHidden: true,
+        width: 250,
+        span: 12,
+        placeholder: "请選擇布類描述",
+        rules: [
+          {
+            required: true,
+            message: "请選擇布類描述",
+            trigger: "blur"
+          }
+        ],
+        tip: "Loại vải "
+      },
       {
         label: "顏色名稱",
         prop: "colorName",
@@ -373,23 +410,16 @@ export function mainCrud(_this) {
       },
 
       {
-        label: "布類描述",
-        prop: "fabricDesc",
+        label: "纤维成分比例",
+        prop: "fiberComp",
         placeholder: " ",
         overHidden: true,
         width: 250,
+        tip: "Tỷ lệ sơ sợi",
         span: 12,
-        placeholder: "请選擇布類描述",
-        rules: [
-          {
-            required: true,
-            message: "请選擇布類描述",
-            trigger: "blur"
-          }
-        ],
-        tip: "Loại vải "
+        hide: true,
+        placeholder: " "
       },
-
       {
         label: "胚布要求",
         prop: "calicoFabricRequire",
@@ -430,18 +460,6 @@ export function mainCrud(_this) {
           }
         ]
       },
-      {
-        label: "纤维成分比例",
-        prop: "fiberComp",
-        placeholder: " ",
-        overHidden: true,
-        width: 250,
-        tip: "Tỷ lệ sơ sợi",
-        span: 12,
-        hide: true,
-        placeholder: " "
-      },
-
       {
         label: "成品/洗後(克重)",
         prop: "gramWeight",

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-24 14:15:12
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-04 18:07:08
+ * @LastEditTime: 2021-08-27 08:54:20
  * @Description: 
 -->
 <template>
@@ -16,6 +16,7 @@
         <el-button type="primary" @click="getData">{{
           this.$t("public.query")
         }}</el-button>
+        <el-button type="primary" @click="outExcel">导出</el-button>
       </div>
       <div class="formBox">
         <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
@@ -36,9 +37,12 @@
   </div>
 </template>
 <script>
-import { getRhl, getRll } from "./api";
+import { getRhl, getRll, getRhlList, getRllList } from "./api";
 import { getDIC, getDicT, getXDicT } from "@/config/index";
 import { formOp, crudOp, formTemOp } from "./data";
+import XlsxTemplate from "xlsx-template";
+import JSZipUtils from "jszip-utils";
+import saveAs from "file-saver";
 export default {
   name: "",
   components: {},
@@ -62,6 +66,7 @@ export default {
       isAdd: false,
       allData: [],
       getFun: null,
+      getList: null,
       chemicalData: getXDicT("BasChemicalmatNew"), // 化工原料
       pigmentData: getXDicT("basPigment"), // 颜料
     };
@@ -78,9 +83,11 @@ export default {
       switch (this.form.type) {
         case "RHL":
           this.getFun = getRhl;
+          this.getList = getRhlList;
           break;
         case "RLL":
           this.getFun = getRll;
+          this.getList = getRllList;
           break;
         default:
           this.crud = [];
@@ -98,6 +105,9 @@ export default {
         this.page.total = data.total;
         this.crud = data.records;
         this.crud.length === 0 ? (this.loading = false) : "";
+        this.crud.sort((a, b) => {
+          return a.chemicalId > b.chemicalId ? 1 : -1;
+        });
         this.crud.forEach((item, i) => {
           item.index = i + 1;
           // item.materialName = item.materialId;
@@ -108,6 +118,60 @@ export default {
           }
         });
       });
+    },
+    async outExcel() {
+      this.loading = true;
+      try {
+        //获得Excel模板的buffer对象
+        const exlBuf = await JSZipUtils.getBinaryContent(
+          "./static/xlxsTemplate/inventory.xlsx"
+        );
+        // Create a template
+        var template = new XlsxTemplate(exlBuf);
+        // Replacements take place on first sheet
+        var sheetNumber = "Sheet1";
+        // Set up some placeholder values matching the placeholders in the template
+        this.getList().then((res) => {
+          this.crud = res.data;
+          this.crud.sort((a, b) => {
+            return a.chemicalId > b.chemicalId ? 1 : -1;
+          });
+          this.crud.forEach((item, i) => {
+            item.index = i + 1;
+          });
+          // this.crud = arr;
+          // console.log(this.crud);
+          // return;
+          var values = {
+            arr: this.crud,
+          };
+          this.$nextTick(() => {
+            template.substitute(sheetNumber, values);
+            // Get binary data.
+            var out = template.generate({ type: "blob" });
+            let _this = this;
+            var fun1 = function () {
+              return new Promise((resolve, reject) => {
+                saveAs(out, _this.form.$type + "库存明细" + ".xlsx");
+                resolve();
+              });
+            };
+            fun1().then((res) => {
+              setTimeout(() => {
+                this.$tip.success("导出成功!");
+                this.loading = false;
+                this.getData();
+              }, 1000);
+            });
+          });
+        });
+      } catch (e) {
+        console.log(e);
+      }
+
+      // return;
+      // this.crudOp.title = this.form.$type + "库存明细";
+      // this.$refs.crud.rowExcel();
     },
     add() {
       this.isAdd = false;

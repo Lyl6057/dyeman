@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-24 10:48:40
+ * @LastEditTime: 2021-08-27 10:41:45
  * @Description: 
 -->
 <template>
@@ -37,6 +37,32 @@
               this.$t("public.add")
             }}</el-button>
           </el-tooltip>
+          <!-- <el-tooltip
+            class="item"
+            effect="dark"
+            content="xóa"
+            placement="top-start"
+          >
+            <el-button
+              type="danger"
+              :disabled="!detail.bleadyeJobId"
+              @click="del"
+              >{{ this.$t("public.del") }}</el-button
+            >
+          </el-tooltip> -->
+          <el-tooltip
+            class="item"
+            effect="dark"
+            content="thêm mới "
+            placement="top-start"
+          >
+            <el-button
+              type="warning"
+              :disabled="!detail.bleadyeJobId"
+              @click="addCopy"
+              >返工</el-button
+            >
+          </el-tooltip>
           <el-tooltip
             class="item"
             effect="dark"
@@ -47,7 +73,7 @@
               >打印</el-button
             >
           </el-tooltip>
-          <el-tooltip
+          <!-- <el-tooltip
             class="item"
             effect="dark"
             content=" in"
@@ -66,7 +92,7 @@
             <el-button type="primary" @click="printOther(2)" :loading="wloading"
               >打印染缸参数</el-button
             >
-          </el-tooltip>
+          </el-tooltip> -->
           <el-tooltip
             class="item"
             effect="dark"
@@ -112,6 +138,7 @@
             :detail="detail"
             :isAdd="isAdd"
             :revolve="revolveData"
+            :copyCtr="copyCtr"
             @close="dialogVisible = false"
             @refresh="refresh"
           ></tem-dlg>
@@ -231,6 +258,7 @@ export default {
       revolve: [],
       revolves: [],
       revolveData: {},
+      copyCtr: false,
     };
   },
   watch: {},
@@ -246,6 +274,9 @@ export default {
         if (this.form[key] == "") {
           delete this.form[key];
         }
+      }
+      if (this.form.vatNo && this.form.vatNo.indexOf("%") == -1) {
+        this.form.vatNo = "%" + this.form.vatNo;
       }
       get(
         Object.assign(this.form, {
@@ -265,6 +296,9 @@ export default {
 
         if (this.crud.length > 0) {
           this.$refs.crud.setCurrentRow(this.crud[0]);
+        }
+        if (this.form.vatNo && this.form.vatNo.indexOf("%") != -1) {
+          this.form.vatNo = this.form.vatNo.split("%")[1];
         }
         this.page.total = res.data.total;
         this.loading = false;
@@ -347,11 +381,16 @@ export default {
         this.$tip.warning("该运转单为草稿状态,无法进行操作!");
         return;
       }
+      this.copyCtr = false;
       this.revolveData = val;
       this.isAdd = true;
       this.dialogVisible = true;
     },
     del() {
+      if (parent.userID != this.detail.serviceOperator) {
+        this.$tip.warning("当前用户没有权限删除该记录!");
+        return;
+      }
       this.$tip
         .cofirm(
           this.$t("iaoMng.delTle7") +
@@ -377,6 +416,11 @@ export default {
         .catch((err) => {
           this.$tip.warning(this.$t("public.qxcz"));
         });
+    },
+    addCopy() {
+      this.copyCtr = true;
+      this.isAdd = true;
+      this.dialogVisible = true;
     },
     handleRowDBLClick(val) {
       this.isAdd = false;

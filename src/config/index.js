@@ -65,11 +65,11 @@ export const webSocket = {
     }
     //连接发生错误的回调方法
     _this.prsocket.onerror = function() {
-      // _this.$tip.error("打印应用连接失败，请检查是否启动!");
+      _this.$tip.error("打印应用连接失败，请检查是否启动!");
     };
     //连接成功建立的回调方法
     _this.prsocket.onopen = function(event) {
-      // _this.$tip.success("打印应用连接成功!");
+      _this.$tip.success("打印应用连接成功!");
     };
     //接收到消息的回调方法
     _this.prsocket.onmessage = function(event) {};
@@ -156,6 +156,11 @@ export function getDicT(url, label, value, form = {}) {
       data.sort((a, b) => {
         return a.orderno - b.orderno;
       });
+      if (url == "whseLocation") {
+        data.sort((a, b) => {
+          return a.locationCode > b.locationCode ? 1 : -1;
+        });
+      }
       data.forEach(item => {
         for (var key in item) {
           if (item[key] === 0) {

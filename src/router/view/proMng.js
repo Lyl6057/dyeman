@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-29 14:14:56
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-23 18:09:39
+ * @LastEditTime: 2021-08-27 14:48:35
  * @Description:
  */
 export default [
@@ -90,21 +90,21 @@ export default [
     }
   },
   {
-    path: `/outcodeCard/:type`,
-    name: "出缸批色",
+    path: `/codeCard`,
+    name: "出缸/定后码卡",
     component: resolve => require(["@/view/proMng/codeCard/index"], resolve),
     meta: {
       keepAlive: true
     }
   },
-  {
-    path: `/codeCard/:type`,
-    name: "定型批色",
-    component: resolve => require(["@/view/proMng/codeCard/index"], resolve),
-    meta: {
-      keepAlive: true
-    }
-  },
+  // {
+  //   path: `/codeCard/:type`,
+  //   name: "定型批色",
+  //   component: resolve => require(["@/view/proMng/codeCard/index"], resolve),
+  //   meta: {
+  //     keepAlive: true
+  //   }
+  // },
   {
     path: "/finalCard",
     name: "成品码卡",

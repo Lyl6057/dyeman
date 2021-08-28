@@ -2,138 +2,151 @@
  * @Author: Lyl
  * @Date: 2021-08-07 07:57:44
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-14 16:44:36
+ * @LastEditTime: 2021-08-27 19:09:05
  * @Description: 
 -->
 <template>
-  <div class="codeCard">
-    <view-container
-      :title="type == 1 ? '出缸码卡' : '定型码卡'"
-      v-loading="wloading"
-      element-loading-text="拼命加载中..."
-    >
-      <el-row class="btnList">
+  <div id="codeCard">
+    <el-row>
+      <el-col :span="16">
+        <view-container
+          title="出缸/定型码卡"
+          v-loading="wloading"
+          element-loading-text="拼命加载中..."
+        >
+          <el-row class="formBox">
+            <avue-form
+              ref="form"
+              :option="crudOp"
+              v-model="form"
+              style="margin-top: 15px"
+            ></avue-form>
+          </el-row>
+          <el-row
+            class="btnList"
+            style="text-align: center; width: 98%; margin: 0 auto; height: 40px"
+          >
+            <span>张数</span>
+            <el-input
+              v-model="sheetNum"
+              type="number"
+              style="width: 70px; margin-right: 20px"
+            ></el-input>
+            <!-- <el-tooltip
+          class="item"
+          effect="dark"
+          content="cập nhật"
+          placement="top-start"
+        > -->
+            <el-button type="primary" @click="query" :disabled="!form.vatNo"
+              >查询</el-button
+            >
+            <!-- </el-tooltip> -->
+            <!-- <el-tooltip
+          class="item"
+          effect="dark"
+          content="cập nhật"
+          placement="top-start"
+        > -->
+            <el-button type="primary" :disabled="!form.vatNo" @click="print(1)"
+              >出缸</el-button
+            >
+            <!-- </el-tooltip>
         <el-tooltip
           class="item"
           effect="dark"
           content="cập nhật"
           placement="top-start"
-        >
-          <el-button
-            type="success"
-            :disabled="!detail.cardId"
-            @click="handleRowDBLClick(detail)"
-            >{{ this.$t("public.update") }}</el-button
-          >
-        </el-tooltip>
-
-        <el-tooltip
-          class="item"
-          effect="dark"
-          content="thêm mới "
-          placement="top-start"
-        >
-          <el-button type="primary" @click="add">{{
-            this.$t("public.add")
-          }}</el-button>
-        </el-tooltip>
-        <el-tooltip
-          class="item"
-          effect="dark"
-          content="xóa"
-          placement="top-start"
-        >
-          <el-button type="danger" :disabled="!detail.cardId" @click="del">{{
-            this.$t("public.del")
-          }}</el-button>
-        </el-tooltip>
-        <el-tooltip
-          class="item"
-          effect="dark"
-          content=" in"
-          placement="top-start"
-        >
-          <el-button
-            type="primary"
-            @click="print"
-            :loading="wloading"
-            :disabled="!detail.cardId"
-            >打印</el-button
-          >
-        </el-tooltip>
-        <el-tooltip
-          class="item"
-          effect="dark"
-          content="tìm kiếm"
-          placement="top-start"
-        >
-          <el-button type="primary" @click="query">{{
-            this.$t("public.query")
-          }}</el-button>
-        </el-tooltip>
-        <!-- <el-button type="warning" @click="close">{{
+        > -->
+            <el-button type="primary" :disabled="!form.vatNo" @click="print(2)"
+              >定后</el-button
+            >
+            <!-- </el-tooltip> -->
+            <!-- <el-button type="warning" @click="close">{{
           this.$t("public.close")
         }}</el-button> -->
-      </el-row>
-      <el-row class="formBox">
-        <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
-      </el-row>
-      <el-row class="crudBox">
-        <avue-crud
-          ref="crud"
-          id="crud"
-          :option="crudOp"
-          :data="crud"
-          :page.sync="page"
-          v-loading="loading"
-          @on-load="query"
-          @row-dblclick="handleRowDBLClick"
-          @current-row-change="cellClick"
-        ></avue-crud>
-      </el-row>
-      <el-dialog
-        id="colorMng_Dlg"
-        :visible.sync="dialogVisible"
-        fullscreen
-        width="100%"
-        append-to-body
-        :close-on-click-modal="false"
-        :close-on-press-escape="false"
+          </el-row>
+        </view-container></el-col
       >
-        <tem-dlg
-          v-if="dialogVisible"
-          ref="tem"
-          :detail="detail"
-          :isAdd="isAdd"
-          :type="type"
-          @close="dialogVisible = false"
-          @refresh="query"
-        ></tem-dlg>
-      </el-dialog>
-      <el-dialog
-        id="colorMng_Dlg"
-        :visible.sync="pdfDlg"
-        fullscreen
-        width="100%"
-        append-to-body
-        :close-on-click-modal="false"
-        :close-on-press-escape="false"
-      >
-        <view-container title="打印預覽">
-          <embed
-            id="pdf"
-            style="width: 100vw; height: calc(100vh - 80px)"
-            :src="pdfUrl"
-          />
+      <el-col :span="8">
+        <view-container title="历史记录">
+          <el-card
+            class="border-card"
+            style="height: calc(100vh - 120px); overflow: auto"
+            id="history"
+          >
+            <div
+              class="text item"
+              v-for="item in history"
+              :key="item.noteId"
+              style="border-bottom: 1px solid #eee"
+            >
+              <el-tooltip
+                class="item"
+                effect="dark"
+                :content="'缸号' + item.vatNo + ' 重量' + item.sumWeight"
+                placement="top"
+              >
+                <div class="history">
+                  <span>缸号: {{ item.vatNo }}</span>
+                  <span> 重量: {{ item.sumWeight }}</span>
+                  <el-tag
+                    style="float: right; margin-top: 14px; margin-right: 5px"
+                    >{{ item.appState == 1 ? "出缸" : "定后" }}</el-tag
+                  >
+                  <!-- <span>验布员工号: {{ item.clothChecker }}</span> -->
+                </div>
+              </el-tooltip>
+              <!-- <el-divider style="margin: 0"></el-divider> -->
+            </div>
+          </el-card>
         </view-container>
-      </el-dialog>
-    </view-container>
+      </el-col>
+    </el-row>
+
+    <el-dialog
+      id="colorMng_Dlg"
+      :visible.sync="dialogVisible"
+      fullscreen
+      width="100%"
+      append-to-body
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+    >
+      <tem-dlg
+        v-if="dialogVisible"
+        ref="tem"
+        :detail="detail"
+        :isAdd="isAdd"
+        :type="type"
+        @close="dialogVisible = false"
+        @refresh="query"
+      ></tem-dlg>
+    </el-dialog>
+    <el-dialog
+      id="colorMng_Dlg"
+      :visible.sync="pdfDlg"
+      fullscreen
+      width="100%"
+      append-to-body
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+    >
+      <view-container title="打印預覽">
+        <embed
+          id="pdf"
+          style="width: 100vw; height: calc(100vh - 80px)"
+          :src="pdfUrl"
+        />
+      </view-container>
+    </el-dialog>
   </div>
 </template>
 <script>
 import { mainForm, mainCrud } from "./data";
-import { get, add, update, del, print } from "./api";
+import { get, add, update, del, print, getJob, getWeave } from "./api";
 import tem from "./temDlg";
+import { webSocket } from "@/config/index.js";
 export default {
   name: "",
   components: {
@@ -143,6 +156,7 @@ export default {
     return {
       formOp: mainForm(this),
       form: {},
+      vatForm: {},
       crudOp: mainCrud(this),
       crud: [],
       page: {
@@ -151,6 +165,7 @@ export default {
         currentPage: 1,
         total: 0,
       },
+      sheetNum: 1,
       loading: false,
       dialogVisible: false,
       detail: {},
@@ -161,62 +176,154 @@ export default {
       pdfDlg: false,
       pdfUrl: "",
       type: this.$route.params.type,
+      prsocket: null,
+      tabs: "form",
+      history: [],
     };
   },
-  watch: {
-    type(n, o) {
-      this.query();
-    },
+  watch: {},
+  created() {
+    this.form.appDate = this.$getNowTime("date");
+
+    let self = this;
+    document.onkeydown = function (e) {
+      let ev = document.all ? window.event : e;
+      if (ev.keyCode === 13) {
+        self.query();
+      }
+    };
   },
-  created() {},
   methods: {
     query() {
-      this.loading = true;
+      this.wloading = true;
       this.detail = {};
-      for (let key in this.form) {
-        if (this.form[key] == "") {
-          delete this.form[key];
-        }
+      if (!this.form.vatNo) {
+        this.$tip.warning("暂无数据");
+        return;
       }
-      if (this.form.appDate && this.form.appDate.indexOf(" ") < 0) {
-        this.form.appDate += " 00:00:00";
-      }
-      get(
-        Object.assign(this.form, {
-          rows: this.page.pageSize,
-          start: this.page.currentPage,
-          appState: this.type,
-        })
-      ).then((res) => {
-        this.crud = res.data.records;
-        this.crud.sort((a, b) => {
-          return a.appDate > b.appDate ? -1 : 1;
-        });
-        this.crud.forEach((item, i) => {
-          item.index = i + 1;
-        });
-
-        if (this.crud.length > 0) {
-          this.$refs.crud.setCurrentRow(this.crud[0]);
+      getJob({
+        // rows: this.page.pageSize,
+        // start: this.page.currentPage,
+        vatNo: this.form.vatNo,
+      }).then((res) => {
+        if (res.data.length > 0) {
+          let val = res.data[0];
+          this.form = res.data[0];
+          this.form.vatNo = val.vatNo;
+          this.form.custName = val.custName;
+          this.form.colorName = val.colorName;
+          this.form.colorNo = val.colorCode;
+          this.form.custCode = val.custCode;
+          this.form.fabricName = val.fabName;
+          this.form.sumWeight = val.clothWeight;
+          this.form.pidCount = val.pidCount;
+          this.form.colorStandard = val.compVatNo;
+          this.form.colorLights = val.compLightSource;
+          getWeave({
+            weaveJobCode: this.form.weaveJobCode,
+          }).then((weave) => {
+            this.form.custBatchNo = weave.data[0].custPoNo;
+            this.$tip.success("查询成功!");
+          });
+        } else {
+          this.form.vatNo = "";
+          this.form.custName = "";
+          this.form.colorName = "";
+          this.form.colorNo = "";
+          this.form.custCode = "";
+          this.form.fabricName = "";
+          this.form.pidCount = null;
+          this.form.sumWeight = null;
+          this.form.custBatchNo = "";
+          this.$tip.warning("暂无数据!");
         }
-        this.page.total = res.data.total;
-        this.loading = false;
+        setTimeout(() => {
+          this.wloading = false;
+        }, 200);
       });
     },
-    print() {
-      if (this.type == 1) {
-        this.pdfUrl =
-          process.env.API_HOST +
-          "/api/proAppColorCard/pdfanddbh?id=" +
-          this.detail.cardId;
-      } else {
-        this.pdfUrl =
-          process.env.API_HOST +
-          "/api/proAppColorCard/pdfandcgb?id=" +
-          this.detail.cardId;
-      }
+    print(type) {
+      this.$refs.form.validate((valid, done) => {
+        if (valid) {
+          try {
+            this.$tip
+              .cofirm(
+                "是否确认打印缸号为 【" +
+                  this.form.vatNo +
+                  " 】的" +
+                  (type == 1 ? "出缸" : "定后") +
+                  "码卡",
+                this,
+                {}
+              )
+              .then(() => {
+                get({
+                  vatNo: this.form.vatNo,
+                  appState: type,
+                }).then((res) => {
+                  if (res.data.length) {
+                    // 更新数据
+                    let data = JSON.parse(JSON.stringify(this.form));
+                    data.cardId = res.data[0].cardId;
+                    data.appState = res.data[0].appState;
+                    if (data.appDate && data.appDate.indexOf(" ") < 0) {
+                      data.appDate += " 00:00:00";
+                    }
+                    update(data).then((res) => {});
+                    this.history.unshift(data);
+                    this.history = this.$unique(this.history, "cardId");
+                    // 发送打印请求
+                    if (this.sheetNum) {
+                      for (let i = 0; i < this.sheetNum; i++) {
+                        setTimeout(() => {
+                          this.prsocket.send("appColor:" + res.data[0].cardId);
+                        }, 200);
 
-      this.pdfDlg = true;
+                        if (i == this.sheetNum - 1) {
+                          this.$tip.success("已发送全部打印请求!");
+                          done();
+                        }
+                      }
+                    } else {
+                      this.prsocket.send("appColor:" + res.data[0].cardId);
+                      this.$tip.success("已发送打印请求!");
+                      done();
+                    }
+                  } else {
+                    // 新增后再发送请求
+                    let data = JSON.parse(JSON.stringify(this.form));
+                    if (data.appDate && data.appDate.indexOf(" ") < 0) {
+                      data.appDate += " 00:00:00";
+                    }
+                    data.custName = data.$custCodex;
+                    data.appState = type;
+                    add(data).then((res) => {
+                      if (res.data.code == 200) {
+                        data.cardId = res.data.data;
+                        this.history.unshift(data);
+                        this.history = this.$unique(this.history, "cardId");
+                        this.prsocket.send("appColor:" + res.data.data);
+                      }
+                      done();
+                    });
+                  }
+                });
+              })
+              .catch((err) => {
+                done();
+                this.$tip.warning(this.$t("public.qxcz"));
+              });
+          } catch (error) {
+            console.log(error);
+            this.wLoading = false;
+            this.$tip.error(this.$t("public.bcsb"));
+            done();
+          }
+        } else {
+          this.wLoading = false;
+          this.$tip.error("请补充批色码卡信息!");
+        }
+      });
     },
     add() {
       this.isAdd = true;
@@ -261,15 +368,55 @@ export default {
     cellClick(val) {
       this.detail = val;
     },
+    setCz() {
+      webSocket.setPrint(this);
+      let _this = this;
+      _this.prsocket.onmessage = function (e) {};
+    },
   },
   beforeRouteEnter(to, form, next) {
     next((vm) => {
-      vm.type = to.params.type;
+      vm.setCz();
     });
   },
 };
 </script>
-<style>
-.codeCard {
+<style lang="stylus">
+#codeCard {
+  .el-tag {
+    font-size: 16px;
+  }
+
+  .avue-form .el-input--mini input {
+    height: 48px !important;
+    line-height: 48px !important;
+  }
+
+  .el-input__inner, .el-form-item__label {
+    font-size: 22px !important;
+    line-height: 45px !important;
+  }
+
+  .el-button, .el-button--mini.is-round {
+    padding: 8px 12px 8px 12px !important;
+    font-size: 20px !important;
+    margin-left: 20px;
+  }
+
+  .text {
+    font-size: 22px;
+    text-align: left;
+    // text-indent: 1em;
+    margin-left: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .item {
+    // margin-bottom: 18px;
+    height: 46px;
+    line-height: 46px;
+  }
 }
 </style>

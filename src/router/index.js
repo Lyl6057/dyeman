@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-23 08:03:49
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-24 15:08:38
+ * @LastEditTime: 2021-08-27 10:35:37
  * @Description:
  */
 import Vue from "vue";
@@ -17,9 +17,9 @@ import store from "@/store/index";
 // import re from '@/router/view/re'
 // import iq from '@/router/view/iq'
 // import im from "@/router/view/im";
-import quaLity from "@/router/view/quaLity";
+// import quaLity from "@/router/view/quaLity";
 // import laboratory from "./view/laboratory";
-// import proMng from "./view/proMng";
+import proMng from "./view/proMng";
 // import energy from "./view/energy";
 Vue.use(Router);
 const originalPush = Router.prototype.push;
@@ -57,9 +57,9 @@ const router = new Router({
         // ...re,
         // ...iq,
         // ...im
-        ...quaLity
+        // ...quaLity
         // ...laboratory
-        // ...proMng
+        ...proMng
         // ...energy
       ]
     },
@@ -90,7 +90,7 @@ export default router;
  * @params to 路由变化
  */
 export function handleTagViewAndKeeplive(to) {
-  if (to != null) {
+  if (to != null && to.meta.keepAlive) {
     // 判断要添加的 to 是否是公共路由
     // for (let i = 0; i < constantRoutes.length; i++) {
     //   if (constantRoutes[i].path === to.path) {

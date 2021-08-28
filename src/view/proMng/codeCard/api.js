@@ -2,10 +2,18 @@
  * @Author: Lyl
  * @Date: 2021-08-07 07:57:55
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-07 14:46:57
+ * @LastEditTime: 2021-08-26 13:46:03
  * @Description:
  */
 import axios from "axios";
+
+export function getJob(params) {
+  return axios({
+    url: "/api/proBleadyeJob",
+    method: "get",
+    params: params
+  });
+}
 
 export function getWeave(params) {
   return axios({
@@ -17,7 +25,7 @@ export function getWeave(params) {
 
 export function get(params) {
   return axios({
-    url: "/api/proAppColorCard/page",
+    url: "/api/proAppColorCard",
     method: "get",
     params: params
   });

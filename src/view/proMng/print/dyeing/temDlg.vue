@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-23 09:34:48
+ * @LastEditTime: 2021-08-27 11:28:24
  * @Description: 
 -->
 <template>
@@ -187,6 +187,19 @@
               <el-tooltip
                 class="item"
                 effect="dark"
+                content="in"
+                placement="top-start"
+              >
+                <el-button
+                  @click="printGy"
+                  type="primary"
+                  :disabled="printList.length == 0"
+                  >打印</el-button
+                >
+              </el-tooltip>
+              <el-tooltip
+                class="item"
+                effect="dark"
                 content="đóng"
                 placement="top-start"
               >
@@ -227,6 +240,7 @@
                 @on-load="query"
                 @row-dblclick="handleRowDBLClick"
                 @current-row-change="cellClick"
+                @selection-change="selectionChange"
               >
                 <template slot="bleachSet" slot-scope="scope">
                   <!-- {{ scope.row.dataStyle }} -->
@@ -602,6 +616,7 @@ export default {
     detail: Object,
     isAdd: Boolean,
     revolve: Object,
+    copyCtr: Boolean,
   },
   components: {
     choice: choice,
@@ -694,6 +709,7 @@ export default {
           value: "run",
         },
       ],
+      printList: [],
     };
   },
   watch: {},
@@ -715,6 +731,39 @@ export default {
             ).toFixed(4)
           );
         }
+      });
+    },
+    getCopy() {
+      getProject({
+        proBleadyeJobFk: this.detail.bleadyeJobId,
+        rows: 999,
+        start: 1,
+      }).then((res) => {
+        this.form.project = res.data.records;
+      });
+      getTest({
+        proBleadyeJobFk: this.detail.bleadyeJobId,
+        rows: 999,
+        start: 1,
+      }).then((res) => {
+        this.form.test = res.data.records;
+      });
+      getDye({
+        proBleadyeJobFk: this.detail.bleadyeJobId,
+        rows: 999,
+        start: 1,
+      }).then((res) => {
+        this.form.dye = res.data.records;
+      });
+      getWash({
+        proBleadyeJobFk: this.detail.bleadyeJobId,
+        rows: 999,
+        start: 1,
+      }).then((res) => {
+        this.form.wash = res.data.records;
+        setTimeout(() => {
+          this.wLoading = false;
+        }, 500);
       });
     },
     print() {
@@ -794,7 +843,27 @@ export default {
       this.wLoading = true;
       this.form = {};
       if (this.isAdd) {
-        if (this.revolve.runJobId) {
+        if (this.copyCtr) {
+          this.form = JSON.parse(JSON.stringify(this.detail));
+          this.form.bleadyeJobId = "";
+          get({ rows: 10, start: 1, vatNo: "%" + this.form.vatNo + "-" }).then(
+            (res) => {
+              this.form.vatNo =
+                this.form.vatNo + "-" + (res.data.records.length + 1);
+            }
+          );
+          // if (this.form.vatNo.split("-").length <= 2) {
+          //   this.form.vatNo = this.form.vatNo + "-1";
+          // } else {
+          //   this.form.vatNo =
+          //     this.form.vatNo.split("-")[0] +
+          //     "-" +
+          //     this.form.vatNo.split("-")[1] +
+          //     "-" +
+          //     (Number(this.form.vatNo.split("-")[2]) + 1);
+          // }
+          this.getCopy();
+        } else if (this.revolve.runJobId) {
           getRevolveList({ runJobId: this.revolve.runJobId }).then((res) => {
             let val = res.data[0];
             this.revolve.proBleadyeRunJobFk = val.runJobId;
@@ -842,8 +911,15 @@ export default {
         if (!(this.form.mergVatNo instanceof Array) && this.form.mergVatNo) {
           this.form.mergVatNo = this.form.mergVatNo.split("/");
         }
-
         this.oldW = JSON.parse(JSON.stringify(this.form.clothWeight));
+
+        // // 获取工艺列表
+        // getTechargue({
+
+        // }).then(res =>{
+
+        // })
+
         setTimeout(() => {
           this.wLoading = false;
         }, 200);
@@ -1053,12 +1129,16 @@ export default {
             } else {
               // add
               this.form.createTime = this.$getNowTime("datetime");
-              add(this.form).then((res) => {
+              let data = JSON.parse(JSON.stringify(this.form));
+              data.project = "";
+              data.test = "";
+              data.wash = "";
+              data.dye = "";
+              add(data).then((res) => {
                 if (res.data.code == 200) {
                   this.oldW = this.form.clothWeight;
                   this.form.bleadyeJobId = res.data.data;
                   this.addOtherData();
-                  this.wLoading = false;
                   // getTestList({
                   //   proBleadyeRunJobFk: val.runJobId,
                   // }).then((res) => {
@@ -1108,55 +1188,81 @@ export default {
       });
     },
     addOtherData() {
-      getTechargueList()
-        .then((res) => {
-          // 獲取全部基礎工藝
-          let washIndex = 1,
-            dyeIndex = 1,
-            testIndex = 1;
-          res.data.forEach((item, index) => {
-            if (item.paramType === "wash") {
-              // 長車
-              addWash({
-                itemId: item.paramKey,
-                itemName: item.paramName,
-                proBleadyeJobFk: this.form.bleadyeJobId,
-                sn: washIndex++,
-              }).then((res) => {});
-            } else if (item.paramType === "dyevat") {
-              // 染缸
-              addDye({
-                vatParamCode: item.paramKey,
-                vatParamName: item.paramName,
-                dataStyle: item.paramValueType,
-                sn: dyeIndex++,
-                proBleadyeJobFk: this.form.bleadyeJobId,
-              }).then((res) => {});
-            }
-            // else if (item.paramType === "test") {
-            //   // 測試要求
-            //   addTest({
-            //     testItemCode: item.paramKey,
-            //     testName: item.paramName,
-            //     sn: testIndex++,
-            //     proBleadyeJobFk: this.form.bleadyeJobId,
-            //   }).then((res) => {});
-            // }
-            if (index == res.data.length - 1) {
+      if (this.copyCtr) {
+        // copy  生产项目
+        this.form.project.forEach((item) => {
+          item.proBleadyeJobFk = this.form.bleadyeJobId;
+          addProject(item).then();
+        });
+        // 测试要求
+        this.form.test.forEach((item) => {
+          item.proBleadyeJobFk = this.form.bleadyeJobId;
+          addTest(item).then();
+        });
+        // 染缸参数
+        this.form.dye.forEach((item) => {
+          item.proBleadyeJobFk = this.form.bleadyeJobId;
+          addDye(item).then();
+        });
+        // 长车
+        this.form.wash.forEach((item, i) => {
+          item.proBleadyeJobFk = this.form.bleadyeJobId;
+          addWash(item).then((res) => {});
+        });
+        setTimeout(() => {
+          this.wLoading = false;
+        }, 1000);
+      } else {
+        getTechargueList()
+          .then((res) => {
+            // 獲取全部基礎工藝
+            let washIndex = 1,
+              dyeIndex = 1,
+              testIndex = 1;
+            res.data.forEach((item, index) => {
+              if (item.paramType === "wash") {
+                // 長車
+                addWash({
+                  itemId: item.paramKey,
+                  itemName: item.paramName,
+                  proBleadyeJobFk: this.form.bleadyeJobId,
+                  sn: washIndex++,
+                }).then((res) => {});
+              } else if (item.paramType === "dyevat") {
+                // 染缸
+                addDye({
+                  vatParamCode: item.paramKey,
+                  vatParamName: item.paramName,
+                  dataStyle: item.paramValueType,
+                  sn: dyeIndex++,
+                  proBleadyeJobFk: this.form.bleadyeJobId,
+                }).then((res) => {});
+              }
+              // else if (item.paramType === "test") {
+              //   // 測試要求
+              //   addTest({
+              //     testItemCode: item.paramKey,
+              //     testName: item.paramName,
+              //     sn: testIndex++,
+              //     proBleadyeJobFk: this.form.bleadyeJobId,
+              //   }).then((res) => {});
+              // }
+              if (index == res.data.length - 1) {
+                this.$tip.success(this.$t("public.bccg"));
+                this.wLoading = false;
+                this.$emit("refresh");
+              }
+            });
+            if (!res.data.length) {
               this.$tip.success(this.$t("public.bccg"));
               this.wLoading = false;
               this.$emit("refresh");
             }
-          });
-          if (!res.data.length) {
-            this.$tip.success(this.$t("public.bccg"));
+          })
+          .catch((e) => {
             this.wLoading = false;
-            this.$emit("refresh");
-          }
-        })
-        .catch((e) => {
-          this.wLoading = false;
-        });
+          });
+      }
     },
     query() {
       if (this.tabs == "選擇訂單") {
@@ -1254,6 +1360,12 @@ export default {
               item.bleadyeName = item.proBleadyeTechCodeFk;
             }
           });
+          if (this.tabs === "生產工藝") {
+            this.$nextTick(() => {
+              this.$refs.crud.toggleSelection(this.crud);
+            });
+          }
+
           this.page.total = res.data.total;
         });
     },
@@ -1590,6 +1702,9 @@ export default {
     cellDtlClick(val) {
       this.chooseDtlData = val;
     },
+    selectionChange(val) {
+      this.printList = val;
+    },
     getTechItem() {
       this.dlgLoading = true;
       getTechItem({
@@ -1857,6 +1972,27 @@ export default {
       }
       this.choiceV = false;
     },
+    printGy() {
+      if (this.printList.length) {
+        this.wLoading = true;
+        this.$nextTick(() => {
+          let uuidList = [];
+          this.printList.forEach((item, i) => {
+            uuidList.push(item.jobTechId);
+            if (i == this.printList.length - 1) {
+              this.pdfUrl =
+                process.env.API_HOST +
+                "/api/proBleadyeJob/buildWorkOrder4?jobTechId=" +
+                uuidList;
+              this.wLoading = false;
+              this.pdfDlg = true;
+            }
+          });
+        });
+      } else {
+        this.$tip.warning("请勾选要打印的工艺!");
+      }
+    },
     up() {
       if (Object.keys(this.chooseDtlData).length > 0) {
         if (this.chooseDtlData.sn === 1) {
@@ -1953,9 +2089,10 @@ export default {
   width: 100%;
 }
 
-// .el-table__fixed-body-wrapper {
-// top: 37px !important;
-// }
+.avue-crud__tip {
+  display: none !important;
+}
+
 #dyeing {
   .el-input-number__decrease, .el-input-number__increase {
     display: none;

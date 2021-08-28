@@ -1165,7 +1165,6 @@ export default {
   watch: {},
   methods: {
     toView(val, type) {
-      this.dialogVisible = true;
       type ? (this.kanban = false) : (this.kanban = true);
 
       let data = {
@@ -1176,6 +1175,7 @@ export default {
         name: val,
         params: data,
       });
+      this.dialogVisible = true;
 
       // this.$router.push({
       //   path: val,
