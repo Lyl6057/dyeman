@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-26 15:03:02
+ * @LastEditTime: 2021-08-31 18:51:36
  * @Description:
 -->
 <template>
@@ -325,7 +325,7 @@ export default {
             if (data.appDate && data.appDate.indexOf(" ") < 0) {
               data.appDate += " 00:00:00";
             }
-            data.custName = data.$custCodex;
+            data.custName = data.$custCode;
             if (data.cardId) {
               // update
               data.upateTime = this.$getNowTime("datetime");

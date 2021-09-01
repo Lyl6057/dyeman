@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-08-07 07:57:44
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-27 19:09:05
+ * @LastEditTime: 2021-09-01 10:10:12
  * @Description: 
 -->
 <template>
@@ -76,7 +76,7 @@
             id="history"
           >
             <div
-              class="text item"
+              class="historyText"
               v-for="item in history"
               :key="item.noteId"
               style="border-bottom: 1px solid #eee"
@@ -219,12 +219,13 @@ export default {
           this.form.pidCount = val.pidCount;
           this.form.colorStandard = val.compVatNo;
           this.form.colorLights = val.compLightSource;
-          getWeave({
-            weaveJobCode: this.form.weaveJobCode,
-          }).then((weave) => {
-            this.form.custBatchNo = weave.data[0].custPoNo;
-            this.$tip.success("查询成功!");
-          });
+          this.form.custBatchNo = val.salPoNo;
+          // getWeave({
+          //   weaveJobCode: this.form.weaveJobCode,
+          // }).then((weave) => {
+          //   this.form.custBatchNo = weave.data[0].custPoNo;
+          this.$tip.success("查询成功!");
+          // });
         } else {
           this.form.vatNo = "";
           this.form.custName = "";
@@ -403,7 +404,7 @@ export default {
     margin-left: 20px;
   }
 
-  .text {
+  .historText {
     font-size: 22px;
     text-align: left;
     // text-indent: 1em;
@@ -411,12 +412,12 @@ export default {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    height: 46px;
+    line-height: 46px;
   }
 
   .item {
     // margin-bottom: 18px;
-    height: 46px;
-    line-height: 46px;
   }
 }
 </style>

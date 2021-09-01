@@ -2,11 +2,11 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-18 15:00:36
+ * @LastEditTime: 2021-08-28 13:20:34
  * @Description:
 -->
 <template>
-  <div id="codeCard">
+  <div id="finalCard">
     <view-container
       :title="(isAdd ? '新增' : '修改') + '成品码卡'"
       :element-loading-text="$t('public.loading')"
@@ -372,7 +372,7 @@ export default {
 // .el-table__fixed-body-wrapper {
 // top: 60px !important;
 // }
-#codeCard {
+#finalCard {
   .avue-group__header {
     margin-bottom: 10px;
     height: 30px;

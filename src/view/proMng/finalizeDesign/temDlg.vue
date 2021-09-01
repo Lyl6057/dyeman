@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-25 14:26:51
+ * @LastEditTime: 2021-08-31 16:28:00
  * @Description: 
 -->
 <template>
@@ -684,8 +684,8 @@ export default {
         this.form.colorCode = val.colorCode;
         this.form.colorName = val.colorName;
         this.form.colorCount = val.poColorCount;
-        this.form.dyeAfterBreadth = val.breadth;
-        this.form.dyeAfterWeight = val.gramWeight;
+        // this.form.dyeAfterBreadth = val.breadth;
+        // this.form.dyeAfterWeight = val.gramWeight;
         this.form.fabricName = val.fabName;
         this.form.dryClothWeight = val.gramWeightAfter;
         this.form.fabricCompone = val.fabElements;

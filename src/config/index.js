@@ -40,11 +40,11 @@ export const webSocket = {
     }
     //连接发生错误的回调方法
     _this.czsocket.onerror = function() {
-      // _this.$tip.error("称重服务器连接失败，请检查网络!");
+      _this.$tip.error("称重服务连接失败，请检查网络!");
     };
     //连接成功建立的回调方法
     _this.czsocket.onopen = function(event) {
-      // _this.$tip.success("服务器连接成功!");
+      _this.$tip.success("称重服务连接成功!");
     };
     //接收到消息的回调方法
     _this.czsocket.onmessage = function(event) {};
@@ -136,7 +136,7 @@ export async function getDbDicT(url, url2) {
 }
 
 // 获取字典表
-export function getDicT(url, label, value, form = {}) {
+export function getDicT(url, label, value, form = {}, sort) {
   // let resultMap = _this.$store.getters.getDic(codeTableId);
   let resultMap = [];
   if (store.state.DIC.dicMap[url]) {
@@ -159,6 +159,11 @@ export function getDicT(url, label, value, form = {}) {
       if (url == "whseLocation") {
         data.sort((a, b) => {
           return a.locationCode > b.locationCode ? 1 : -1;
+        });
+      }
+      if (sort) {
+        data.sort((a, b) => {
+          return a[sort] > b[sort] ? -1 : 1;
         });
       }
       data.forEach(item => {
@@ -358,8 +363,12 @@ export function unique(arr, val) {
 export function preFixInt(num, n) {
   return (Array(n).join(0) + num).slice(-n);
 }
+/**
+ * 滾動至表格底部
+ * @param _this 当前作用域
+ * @param tableName  表格ID
+ */
 
-// 滾動至表格最低
 export function toTableLow(_this, tableName = "crud") {
   // const dom = _this.$refs[tableName].$el
   const dom1 = document

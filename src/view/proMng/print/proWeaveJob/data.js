@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-28 10:04:25
+ * @LastEditTime: 2021-08-31 15:06:35
  * @Description:
  */
 
@@ -276,13 +276,13 @@ export function mainCrud(_this) {
         width: 100,
         placeholder: "请输入織胚數量",
         span: 6,
-        rules: [
-          {
-            required: true,
-            message: "请输入織胚數量",
-            trigger: "blur"
-          }
-        ],
+        // rules: [
+        //   {
+        //     required: true,
+        //     message: "请输入織胚數量",
+        //     trigger: "blur"
+        //   }
+        // ],
         type: "number",
         align: "left",
         tip: "Số lượng sợi cần dệt"
@@ -419,435 +419,445 @@ export function mainCrud(_this) {
         span: 12,
         hide: true,
         placeholder: " "
-      },
+      }
+    ],
+    group: [
       {
-        label: "胚布要求",
-        prop: "calicoFabricRequire",
-        placeholder: " ",
-        overHidden: true,
-        width: 250,
-        hide: true,
-        type: "switch",
-        tip: "Yêu cầu khác",
-        dicData: [
+        icon: " ",
+        label: " ",
+        prop: "group1",
+        column: [
           {
-            value: "开幅",
-            label: "开幅(Xẻ biên)"
+            label: "胚布要求",
+            prop: "calicoFabricRequire",
+            placeholder: " ",
+            overHidden: true,
+            width: 250,
+            hide: true,
+            type: "switch",
+            tip: "Yêu cầu khác",
+            dicData: [
+              {
+                value: "开幅",
+                label: "开幅(Xẻ biên)"
+              },
+              {
+                value: "圆筒",
+                label: "圆筒(Không xẻ biên)"
+              }
+            ],
+            span: 6
           },
           {
-            value: "圆筒",
-            label: "圆筒(Không xẻ biên)"
-          }
-        ],
-        span: 6
-      },
-      {
-        label: "抽針/圓筒",
-        prop: "calicoShap",
-        width: 90,
-        span: 6,
-        hide: true,
-        placeholder: " ",
-        type: "switch",
-        dicData: [
-          {
-            value: "1",
-            label: "抽針"
+            label: "抽針/圓筒",
+            prop: "calicoShap",
+            width: 90,
+            span: 6,
+            hide: true,
+            placeholder: " ",
+            type: "switch",
+            dicData: [
+              {
+                value: "1",
+                label: "抽針"
+              },
+              {
+                value: "2",
+                label: "圆筒"
+              }
+            ]
           },
           {
-            value: "2",
-            label: "圆筒"
+            label: "成品/洗後(克重)",
+            prop: "gramWeight",
+            width: 120,
+            hide: true,
+            span: 6,
+            // type: "number",
+            placeholder: " ",
+            tip: "Trọng lượng trước giặt"
+          },
+          {
+            label: "門幅",
+            prop: "breadth",
+            tip: "Thực dụng",
+            width: 90,
+            hide: true,
+            span: 6,
+            // type: "number",
+            placeholder: " "
+          },
+          {
+            label: "橫縮",
+            prop: "horizonShrink",
+            tip: "Co rút ngang",
+            span: 6,
+            hide: true,
+            width: 80,
+            placeholder: " "
+          },
+          {
+            label: "直縮",
+            prop: "verticalShrink",
+            tip: "Co rút thẳng",
+            width: 80,
+            span: 6,
+            hide: true,
+            placeholder: " "
+          },
+          {
+            label: "機號",
+            prop: "mathineCode",
+            span: 12,
+            width: 180,
+            tip: "Mã số máy dệt",
+            placeholder: " ",
+            overHidden: true,
+            readonly: true,
+            click: () => {
+              if (_this.form.weaveJobId) {
+                _this.tabs = "機號信息";
+                _this.crudOp = machineCrud(_this);
+                _this.visible = true;
+              } else {
+                _this.$tip.warning("请先保存织单信息!");
+              }
+            }
+            // rules: [
+            //   {
+            //     required: true,
+            //     message: "请輸入機號",
+            //     trigger: "blur"
+            //   }
+            // ]
+          },
+          {
+            label: "筒径(inch)",
+            tip: "Khổ máy ",
+            prop: "cylinderInch",
+            width: 80,
+            span: 6,
+            hide: true,
+            placeholder: " ",
+            type: "number"
+          },
+
+          {
+            label: "针距（G）",
+            tip: "Số kim mỗi inch",
+            prop: "guage",
+            width: 80,
+            span: 6,
+            hide: true,
+            placeholder: " ",
+            type: "number"
+          },
+          {
+            label: "其他要求",
+            prop: "otherRequire",
+            tip: "Yêu cầu khác",
+            placeholder: " ",
+            hide: true,
+            span: 12,
+            placeholder: " "
+          },
+          {
+            label: "針寸數",
+            prop: "needleInch",
+            tip: "Tổng số kim",
+            width: 80,
+            span: 6,
+            hide: true,
+            placeholder: " "
+            // type: "number",
+          },
+          {
+            label: "縂針數",
+            tip: "縂針數",
+            prop: "needleNumber",
+            width: 80,
+            placeholder: " ",
+            type: "number",
+            span: 6,
+            hide: true
+          },
+          {
+            label: "紗長",
+            tip: "Độ dài sợi",
+            prop: "yarnLength",
+            width: 80,
+            placeholder: " ",
+            span: 6,
+            hide: true
+          },
+          // {
+          //   label: "更改紗長",
+          //   prop: "yarnLenghtChanged",
+          //   tip: "Thay đổi độ dài sợi",
+          //   width: 90,
+          //   hide: true,
+          //   placeholder: " ",
+          //   span: 6,
+          //   click: () => {
+          //     if (!_this.form.weaveJobId) {
+          //       _this.$tip.error("請先保存通知單信息!");
+          //       return;
+          //     }
+          //     _this.crudOp = longCrud(_this);
+          //     _this.visible = true;
+          //     _this.tabs = "更改紗長";
+          //   }
+          // },
+          // {
+          //   label: "胚重(左)",
+          //   prop: "calicoLeft",
+          //   tip: "Trọng lượng vải mộc trái",
+          //   width: 90,
+          //   hide: true,
+          //   span: 6,
+          //   placeholder: " "
+          // },
+          {
+            label: "胚重",
+            prop: "calicoMiddle",
+            tip: "Trọng lượng vải mộc giữa",
+            width: 90,
+            placeholder: " ",
+            hide: true,
+            span: 6
+          },
+
+          // {
+          //   label: "胚重(右)",
+          //   prop: "calicoRight",
+          //   tip: "Trọng lượng vải mộc phải",
+          //   width: 90,
+          //   hide: true,
+          //   placeholder: " ",
+          //   span: 6
+          // },
+          {
+            label: "成衣面",
+            prop: "readyMadeFabric",
+            tip: "Mặt thành vải",
+            width: 120,
+            hide: true,
+            placeholder: " ",
+            span: 6
+          },
+          {
+            label: "落布封度",
+            prop: "fallCloth",
+            tip: "Độ lớn cuộn vải",
+            span: 6,
+            placeholder: " ",
+            hide: true,
+            width: 90
+          },
+
+          {
+            label: "機速",
+            prop: "mathineSpeed",
+            tip: "Tốc độ máy",
+            width: 90,
+            hide: true,
+            placeholder: " ",
+            span: 6
+          },
+
+          {
+            label: "筒口高度",
+            tip: "Độ hở mâm trên dưới",
+            prop: "cylinderHeight",
+            span: 6,
+            hide: true,
+            placeholder: " ",
+            width: 80
+          },
+
+          {
+            label: "織機食位",
+            prop: "weaveEnter",
+            tip: "Vị trí kim dệt",
+            width: 80,
+            placeholder: " ",
+            span: 6,
+            hide: true
+          },
+
+          {
+            label: "布架寬度",
+            prop: "clothRackWidth",
+            tip: "Khổ vải trên giá vải",
+            placeholder: " ",
+            hide: true,
+            placeholder: " ",
+            span: 6
+          },
+          {
+            label: "上機工藝",
+            tip: "công nghệ lên máy",
+            prop: "operatProcess",
+            hide: true,
+            span: 12,
+            placeholder: " "
+          },
+          {
+            label: "循環(自動間)",
+            tip: "Tuần hoàn (vải sọc tự động)",
+            prop: "loopSpace",
+            width: 90,
+            hide: true,
+            placeholder: " ",
+            span: 6
+          },
+
+          {
+            label: "布架資料",
+            prop: "clothRackDesc",
+            tip: "Thông số giá vải",
+            hide: true,
+            span: 6,
+            placeholder: " "
+          },
+          {
+            label: "輸送盤資料",
+            tip: "Thông số đĩa dây Cu-roa",
+            prop: "transPlate",
+            hide: true,
+            placeholder: " ",
+            placeholder: " ",
+            span: 12
+          },
+          {
+            label: "轉速/重量/匹",
+            tip: "Số đường dệt/trọng lượng/cây",
+            prop: "rotaSpeed",
+            width: 90,
+            hide: true,
+            placeholder: " ",
+            span: 6
+          },
+
+          // {
+          //   label: "開單複核",
+          //   prop: "reviewer",
+          //   span: 6,
+          //   hide: true,
+          //   placeholder: " ",
+          //   width: 90,
+          // },
+
+          // {
+          //   label: "矯機人簽名",
+          //   prop: "machineCalibration",
+          //   width: 80,
+          //   span: 6,
+          //   placeholder: " ",
+          //   hide: true,
+          // },
+          // {
+          //   label: "最終評語",
+          //   prop: "evaluateComment",
+          //   hide: true,
+          //   placeholder: " ",
+          //   span: 12
+          // },
+          // {
+          //   label: "機修復核人",
+          //   prop: "machineMaintenance",
+          //   placeholder: " ",
+          //   hide: true,
+          //   span: 6
+          // },
+          // {
+          //   label: "質檢複核",
+          //   prop: "qcReviewer",
+          //   hide: true,
+          //   placeholder: " ",
+          //   span: 6
+          // },
+          // {
+          //   label: "運轉複核",
+          //   prop: "transfer",
+          //   width: 90,
+          //   hide: true,
+          //   placeholder: " ",
+          //   span: 6
+          // },
+
+          // {
+          //   label: "評語簽名",
+          //   prop: "appraiser",
+          //   span: 6,
+          //   hide: true,
+          //   placeholder: " ",
+          //   width: 80,
+          // },
+          {
+            label: "創建日期",
+            prop: "createTime",
+            placeholder: " ",
+            width: 90,
+            hide: true,
+            type: "datetime",
+            format: "yyyy-MM-dd HH:mm:ss",
+            valueFormat: "yyyy-MM-dd HH:mm:ss",
+            span: 6,
+            display: false
+          },
+
+          {
+            label: "修改日期",
+            prop: "upateTime",
+            type: "datetime",
+            format: "yyyy-MM-dd HH:mm:ss",
+            valueFormat: "yyyy-MM-dd HH:mm:ss",
+            span: 6,
+            placeholder: " ",
+            hide: true,
+            display: false
+          },
+          {
+            label: "织单状态",
+            tip: "state",
+            disabled: false,
+            prop: "weaveState",
+            type: "switch",
+            dicData: [
+              {
+                label: "正常",
+                value: 0
+              },
+              {
+                label: "草稿",
+                value: 1
+              }
+            ],
+            hide: true,
+            placeholder: " ",
+            span: 6
+          },
+          {
+            label: "製單人",
+            prop: "creator",
+            span: 6,
+            hide: false,
+            width: 100,
+            tip: "Lập đơn",
+            disabled: true,
+            rules: [
+              {
+                required: true,
+                message: "请输入制单人",
+                trigger: "blur"
+              }
+            ]
+            // type: "select",
+            // dicData:
+            //   postDicT('ucmlUserList', 'employeename', 'ucmlUseroid')
           }
         ]
-      },
-      {
-        label: "成品/洗後(克重)",
-        prop: "gramWeight",
-        width: 120,
-        hide: true,
-        span: 6,
-        // type: "number",
-        placeholder: " ",
-        tip: "Trọng lượng trước giặt"
-      },
-      {
-        label: "門幅",
-        prop: "breadth",
-        tip: "Thực dụng",
-        width: 90,
-        hide: true,
-        span: 6,
-        // type: "number",
-        placeholder: " "
-      },
-      {
-        label: "橫縮",
-        prop: "horizonShrink",
-        tip: "Co rút ngang",
-        span: 6,
-        hide: true,
-        width: 80,
-        placeholder: " "
-      },
-      {
-        label: "直縮",
-        prop: "verticalShrink",
-        tip: "Co rút thẳng",
-        width: 80,
-        span: 6,
-        hide: true,
-        placeholder: " "
-      },
-      {
-        label: "機號",
-        prop: "mathineCode",
-        span: 6,
-        width: 180,
-        tip: "Mã số máy dệt",
-        placeholder: " ",
-        overHidden: true,
-        readonly: true,
-        click: () => {
-          if (_this.form.weaveJobId) {
-            _this.tabs = "機號信息";
-            _this.crudOp = machineCrud(_this);
-            _this.visible = true;
-          } else {
-            _this.$tip.warning("请先保存织单信息!");
-          }
-        }
-        // rules: [
-        //   {
-        //     required: true,
-        //     message: "请輸入機號",
-        //     trigger: "blur"
-        //   }
-        // ]
-      },
-      {
-        label: "筒径(inch)",
-        tip: "Khổ máy ",
-        prop: "cylinderInch",
-        width: 80,
-        span: 6,
-        hide: true,
-        placeholder: " ",
-        type: "number"
-      },
-      {
-        label: "其他要求",
-        prop: "otherRequire",
-        tip: "Yêu cầu khác",
-        placeholder: " ",
-        hide: true,
-        span: 12,
-        placeholder: " "
-      },
-      {
-        label: "针距（G）",
-        tip: "Số kim mỗi inch",
-        prop: "guage",
-        width: 80,
-        span: 6,
-        hide: true,
-        placeholder: " ",
-        type: "number"
-      },
-      {
-        label: "針寸數",
-        prop: "needleInch",
-        tip: "Tổng số kim",
-        width: 80,
-        span: 6,
-        hide: true,
-        placeholder: " "
-        // type: "number",
-      },
-      {
-        label: "縂針數",
-        tip: "縂針數",
-        prop: "needleNumber",
-        width: 80,
-        placeholder: " ",
-        type: "number",
-        span: 6,
-        hide: true
-      },
-      {
-        label: "紗長",
-        tip: "Độ dài sợi",
-        prop: "yarnLength",
-        width: 80,
-        placeholder: " ",
-        span: 6,
-        hide: true
-      },
-      // {
-      //   label: "更改紗長",
-      //   prop: "yarnLenghtChanged",
-      //   tip: "Thay đổi độ dài sợi",
-      //   width: 90,
-      //   hide: true,
-      //   placeholder: " ",
-      //   span: 6,
-      //   click: () => {
-      //     if (!_this.form.weaveJobId) {
-      //       _this.$tip.error("請先保存通知單信息!");
-      //       return;
-      //     }
-      //     _this.crudOp = longCrud(_this);
-      //     _this.visible = true;
-      //     _this.tabs = "更改紗長";
-      //   }
-      // },
-      // {
-      //   label: "胚重(左)",
-      //   prop: "calicoLeft",
-      //   tip: "Trọng lượng vải mộc trái",
-      //   width: 90,
-      //   hide: true,
-      //   span: 6,
-      //   placeholder: " "
-      // },
-      {
-        label: "胚重",
-        prop: "calicoMiddle",
-        tip: "Trọng lượng vải mộc giữa",
-        width: 90,
-        placeholder: " ",
-        hide: true,
-        span: 6
-      },
-
-      // {
-      //   label: "胚重(右)",
-      //   prop: "calicoRight",
-      //   tip: "Trọng lượng vải mộc phải",
-      //   width: 90,
-      //   hide: true,
-      //   placeholder: " ",
-      //   span: 6
-      // },
-      {
-        label: "成衣面",
-        prop: "readyMadeFabric",
-        tip: "Mặt thành vải",
-        width: 120,
-        hide: true,
-        placeholder: " ",
-        span: 6
-      },
-      {
-        label: "落布封度",
-        prop: "fallCloth",
-        tip: "Độ lớn cuộn vải",
-        span: 6,
-        placeholder: " ",
-        hide: true,
-        width: 90
-      },
-
-      {
-        label: "機速",
-        prop: "mathineSpeed",
-        tip: "Tốc độ máy",
-        width: 90,
-        hide: true,
-        placeholder: " ",
-        span: 6
-      },
-
-      {
-        label: "筒口高度",
-        tip: "Độ hở mâm trên dưới",
-        prop: "cylinderHeight",
-        span: 6,
-        hide: true,
-        placeholder: " ",
-        width: 80
-      },
-
-      {
-        label: "織機食位",
-        prop: "weaveEnter",
-        tip: "Vị trí kim dệt",
-        width: 80,
-        placeholder: " ",
-        span: 6,
-        hide: true
-      },
-      {
-        label: "上機工藝",
-        tip: "công nghệ lên máy",
-        prop: "operatProcess",
-        hide: true,
-        span: 12,
-        placeholder: " "
-      },
-      {
-        label: "布架寬度",
-        prop: "clothRackWidth",
-        tip: "Khổ vải trên giá vải",
-        placeholder: " ",
-        hide: true,
-        placeholder: " ",
-        span: 6
-      },
-
-      {
-        label: "循環(自動間)",
-        tip: "Tuần hoàn (vải sọc tự động)",
-        prop: "loopSpace",
-        width: 90,
-        hide: true,
-        placeholder: " ",
-        span: 6
-      },
-      {
-        label: "輸送盤資料",
-        tip: "Thông số đĩa dây Cu-roa",
-        prop: "transPlate",
-        hide: true,
-        placeholder: " ",
-        placeholder: " ",
-        span: 12
-      },
-      {
-        label: "布架資料",
-        prop: "clothRackDesc",
-        tip: "Thông số giá vải",
-        hide: true,
-        span: 6,
-        placeholder: " "
-      },
-
-      {
-        label: "轉速/重量/匹",
-        tip: "Số đường dệt/trọng lượng/cây",
-        prop: "rotaSpeed",
-        width: 90,
-        hide: true,
-        placeholder: " ",
-        span: 6
-      },
-
-      // {
-      //   label: "開單複核",
-      //   prop: "reviewer",
-      //   span: 6,
-      //   hide: true,
-      //   placeholder: " ",
-      //   width: 90,
-      // },
-
-      // {
-      //   label: "矯機人簽名",
-      //   prop: "machineCalibration",
-      //   width: 80,
-      //   span: 6,
-      //   placeholder: " ",
-      //   hide: true,
-      // },
-      // {
-      //   label: "最終評語",
-      //   prop: "evaluateComment",
-      //   hide: true,
-      //   placeholder: " ",
-      //   span: 12
-      // },
-      // {
-      //   label: "機修復核人",
-      //   prop: "machineMaintenance",
-      //   placeholder: " ",
-      //   hide: true,
-      //   span: 6
-      // },
-      // {
-      //   label: "質檢複核",
-      //   prop: "qcReviewer",
-      //   hide: true,
-      //   placeholder: " ",
-      //   span: 6
-      // },
-      // {
-      //   label: "運轉複核",
-      //   prop: "transfer",
-      //   width: 90,
-      //   hide: true,
-      //   placeholder: " ",
-      //   span: 6
-      // },
-
-      // {
-      //   label: "評語簽名",
-      //   prop: "appraiser",
-      //   span: 6,
-      //   hide: true,
-      //   placeholder: " ",
-      //   width: 80,
-      // },
-      {
-        label: "創建日期",
-        prop: "createTime",
-        placeholder: " ",
-        width: 90,
-        hide: true,
-        type: "datetime",
-        format: "yyyy-MM-dd HH:mm:ss",
-        valueFormat: "yyyy-MM-dd HH:mm:ss",
-        span: 6,
-        display: false
-      },
-
-      {
-        label: "修改日期",
-        prop: "upateTime",
-        type: "datetime",
-        format: "yyyy-MM-dd HH:mm:ss",
-        valueFormat: "yyyy-MM-dd HH:mm:ss",
-        span: 6,
-        placeholder: " ",
-        hide: true,
-        display: false
-      },
-      {
-        label: "织单状态",
-        tip: "state",
-        disabled: false,
-        prop: "weaveState",
-        type: "switch",
-        dicData: [
-          {
-            label: "正常",
-            value: 0
-          },
-          {
-            label: "草稿",
-            value: 1
-          }
-        ],
-        hide: true,
-        placeholder: " ",
-        span: 6
-      },
-      {
-        label: "製單人",
-        prop: "creator",
-        span: 6,
-        hide: false,
-        width: 100,
-        tip: "Lập đơn",
-        disabled: true,
-        rules: [
-          {
-            required: true,
-            message: "请输入制单人",
-            trigger: "blur"
-          }
-        ]
-        // type: "select",
-        // dicData:
-        //   postDicT('ucmlUserList', 'employeename', 'ucmlUseroid')
       }
     ]
   };

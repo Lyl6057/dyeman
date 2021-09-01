@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-17 13:50:41
+ * @LastEditTime: 2021-08-31 16:12:27
  * @Description: 
 -->
 <template>
@@ -106,7 +106,7 @@
       </div>
 
       <div class="formBox">
-        <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
+        <avue-form ref="form" :option="formOp" v-model="form"> </avue-form>
       </div>
       <!-- <view-container title="打印预览(仅供参考)">
         <pre-view ref="preview" :detail="previewData"></pre-view>
@@ -552,7 +552,7 @@ export default {
         if (valid) {
           try {
             this.wLoading = true;
-            this.form.amount = Number(this.form.amount).toFixed(2);
+            // this.form.amount = Number(this.form.amount).toFixed(2);
 
             for (let key in this.form) {
               if (this.form[key] == "undefined") {
@@ -1077,6 +1077,12 @@ export default {
 </script>
 <style lang='stylus'>
 #proWeaveJob {
+  .avue-group__header {
+    height: 15px;
+    line-height: 15px;
+    margin-bottom: 10px;
+  }
+
   .formBox {
     height: 100vh !important;
   }

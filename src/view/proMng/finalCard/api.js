@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-08-07 07:57:55
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-20 09:22:48
+ * @LastEditTime: 2021-08-31 18:53:37
  * @Description:
  */
 import axios from "axios";
@@ -21,7 +21,7 @@ export function upload(params) {
 
 export function get(params) {
   return axios({
-    url: "/api/proFinalProductCard/page",
+    url: "/api/proFinalProductCard",
     method: "get",
     params: params
   });
@@ -55,6 +55,14 @@ export function del(id) {
 export function getWeave(params) {
   return axios({
     url: "/api/proWeaveJob",
+    method: "get",
+    params: params
+  });
+}
+
+export function getBleadye(params) {
+  return axios({
+    url: "/api/proBleadyeJob",
     method: "get",
     params: params
   });

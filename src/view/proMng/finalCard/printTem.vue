@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-08-18 08:51:58
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-20 10:15:02
+ * @LastEditTime: 2021-08-31 13:43:38
  * @Description: 
 -->
 <template>
@@ -58,7 +58,13 @@
       </el-tooltip>
     </el-row>
     <el-row class="formBox">
-      <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
+      <avue-form
+        ref="form"
+        :option="formOp"
+        v-model="form"
+        :upload-after="uploadAfter"
+      >
+      </avue-form>
     </el-row>
     <el-row class="crudBox">
       <avue-crud
@@ -121,7 +127,13 @@
               :option="crudOp"
               v-model="dlgform"
               style="margin-top: 5px"
-            ></avue-form>
+            >
+              <template slot-scope="scope" slot="excelName">
+                <el-button type="primary" @click="$refs.input.click()"
+                  >上传</el-button
+                >
+              </template></avue-form
+            >
           </div>
         </el-row>
       </view-container>
@@ -257,11 +269,12 @@ export default {
           }
         });
       } else {
+        this.$tip.warning("请选择要上传的模板");
         this.wLoading = false;
-        this.query();
-        this.dialogVisible = false;
+        // this.query();
+        // this.dialogVisible = false;
         done();
-        this.$tip.success(this.$t("public.bccg"));
+        // this.$tip.success(this.$t("public.bccg"));
       }
     },
     add() {
@@ -318,6 +331,9 @@ export default {
       this.mbfile = file;
       this.dlgform.excelName = file.name;
       this.dlgform.tempName = file.name;
+    },
+    uploadAfter(e) {
+      console.log(e);
     },
   },
 };
