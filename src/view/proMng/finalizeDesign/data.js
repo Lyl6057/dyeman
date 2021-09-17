@@ -379,8 +379,8 @@ export function mainCrud(_this) {
         tip: "干布克重(Trọng lượng )"
       },
       {
-        label: "成分",
-        tip: "成分(Thành phần)",
+        label: "成份",
+        tip: "成份(Thành phần)",
         prop: "fabricCompone",
         width: 250,
         hide: true,

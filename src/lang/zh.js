@@ -393,7 +393,7 @@ export default {
     sh: "色號",
     gn: "功能",
     krmlms: "客人面料描述",
-    krcfyq: "客人成分要求",
+    krcfyq: "客人成份要求",
     jz: "機種",
     blx: "布類型",
     sc: "紗長",

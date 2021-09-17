@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-27 11:28:24
+ * @LastEditTime: 2021-09-15 16:39:10
  * @Description: 
 -->
 <template>
@@ -474,6 +474,7 @@
                   <input
                     v-model="scope.row.formulaAmount"
                     class="scope-input"
+                    type="number"
                     @click="selectValue($event)"
                     @change="changeAmount"
                   ></input>
@@ -482,6 +483,8 @@
                   <input
                     v-model="scope.row.useAmount"
                     class="scope-input"
+                    :max="10"
+                    type="number"
                     @click="selectValue($event)"
                   ></input>
                 </template>
@@ -489,6 +492,7 @@
                   <input
                     v-model="scope.row.runTemp"
                     class="scope-input"
+                    type="number"
                     @click="selectValue($event)"
                   ></input>
                 </template>
@@ -496,6 +500,7 @@
                   <input
                     v-model="scope.row.runTime"
                     class="scope-input"
+                    type="number"
                     @click="selectValue($event)"
                   ></input>
                 </template>
@@ -503,6 +508,7 @@
                   <input
                     v-model="scope.row.dilutionRate"
                     class="scope-input"
+                    type="number"
                     @click="selectValue($event)"
                   ></input>
                 </template>
@@ -510,6 +516,7 @@
                   <input
                     v-model="scope.row.deliveryQuantity"
                     class="scope-input"
+                    type="number"
                     @click="selectValue($event)"
                   ></input>
                 </template>
@@ -808,13 +815,23 @@ export default {
             _this.chooseDtlData.measureType.indexOf("g") == -1 &&
             _this.chooseDtlData.measureType.indexOf("G") == -1
           ) {
-            _this.chooseDtlData.useAmount = Number(
-              (
-                Number(_this.form.clothWeight) *
-                Number(_this.chooseDtlData.formulaAmount) *
-                0.01
-              ).toFixed(2)
-            );
+            if (_this.chooseDtlData.formulaUnit == "KG") {
+              _this.chooseDtlData.useAmount = Number(
+                (
+                  Number(_this.vatWeight) *
+                  Number(_this.chooseDtlData.formulaAmount) *
+                  0.01
+                ).toFixed(2)
+              );
+            } else {
+              _this.chooseDtlData.useAmount = Number(
+                (
+                  Number(_this.vatWeight) *
+                  Number(_this.chooseDtlData.formulaAmount) *
+                  10
+                ).toFixed(2)
+              );
+            }
           } else {
             if (_this.chooseDtlData.formulaUnit == "KG") {
               _this.chooseDtlData.useAmount = Number(

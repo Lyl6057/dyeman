@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-27 10:41:45
+ * @LastEditTime: 2021-09-15 10:11:39
  * @Description: 
 -->
 <template>
@@ -50,19 +50,19 @@
               >{{ this.$t("public.del") }}</el-button
             >
           </el-tooltip> -->
-          <el-tooltip
+          <!-- <el-tooltip
             class="item"
             effect="dark"
             content="thêm mới "
             placement="top-start"
+          > -->
+          <el-button
+            type="warning"
+            :disabled="!detail.bleadyeJobId"
+            @click="addCopy"
+            >返工</el-button
           >
-            <el-button
-              type="warning"
-              :disabled="!detail.bleadyeJobId"
-              @click="addCopy"
-              >返工</el-button
-            >
-          </el-tooltip>
+          <!-- </el-tooltip> -->
           <el-tooltip
             class="item"
             effect="dark"

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-24 13:33:33
+ * @LastEditTime: 2021-09-11 14:12:39
  * @Description:
  */
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
@@ -360,14 +360,14 @@ export function mainCrud(_this) {
         width: 220,
         placeholder: " ",
         type: "select",
-        props: {
-          label: "locationCode",
-          value: "locationCode"
-        },
+        // props: {
+        //   label: "locationCode",
+        //   value: "locationCode"
+        // },
         filterable: true,
         allowCreate: true,
         defaultFirstOption: true,
-        dicData: getXDicT("whseLocation", "locationCode", "locationCode")
+        dicData: getDicT("whseLocation", "locationCode", "locationCode")
       },
       // {
       //   label: "單位",

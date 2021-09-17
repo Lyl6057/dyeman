@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-19 14:34:20
+ * @LastEditTime: 2021-09-15 10:10:57
  * @Description: 
 -->
 <template>
@@ -14,14 +14,36 @@
       class="not-number-icon"
     >
       <div class="btnList">
-        <el-button type="success" @click="save" :loading="wLoading">{{
-          $t("public.save")
-        }}</el-button>
-        <el-button type="primary" @click="add">{{
-          $t("public.add")
-        }}</el-button>
-
-        <el-button type="danger" @click="del">{{ $t("public.del") }}</el-button>
+        <el-tooltip
+          class="item"
+          effect="dark"
+          content="Bảo tồn"
+          placement="top-start"
+        >
+          <el-button type="success" @click="save" :loading="wLoading">{{
+            $t("public.save")
+          }}</el-button>
+        </el-tooltip>
+        <el-tooltip
+          class="item"
+          effect="dark"
+          content="thêm mới "
+          placement="top-start"
+        >
+          <el-button type="primary" @click="add">{{
+            $t("public.add")
+          }}</el-button>
+        </el-tooltip>
+        <el-tooltip
+          class="item"
+          effect="dark"
+          content="xóa"
+          placement="top-start"
+        >
+          <el-button type="danger" @click="del">{{
+            $t("public.del")
+          }}</el-button>
+        </el-tooltip>
         <el-button
           @click="up"
           type="primary"
@@ -34,9 +56,16 @@
           :disabled="Object.keys(chooseData).length == 0"
           >下移</el-button
         >
-        <el-button type="warning" @click="close">{{
-          $t("public.close")
-        }}</el-button>
+        <el-tooltip
+          class="item"
+          effect="dark"
+          content="đóng"
+          placement="top-start"
+        >
+          <el-button type="warning" @click="close">{{
+            $t("public.close")
+          }}</el-button>
+        </el-tooltip>
         <!-- <el-button type="primary" @click="checkOrder">选择订单号</el-button> -->
       </div>
       <div class="formBox">
@@ -206,11 +235,11 @@ export default {
           this.$refs.form.validate((valid, done) => {
             if (valid) {
               try {
-                // Object.keys(this.form).forEach((item) => {
-                //   if (this.isEmpty(this.form[item])) {
-                //     delete this.form[item];
-                //   }
-                // });
+                Object.keys(this.form).forEach((item) => {
+                  if (this.isEmpty(this.form[item])) {
+                    delete this.form[item];
+                  }
+                });
                 if (this.form.bleadyeCodeId) {
                   // update
                   update(this.form).then((res) => {
@@ -312,6 +341,9 @@ export default {
     },
     saveOther() {
       if (this.crud.length == 0) {
+        this.dlgLoading = false;
+        this.query();
+        this.$tip.success(this.$t("public.bccg"));
         return;
       }
       this.dlgLoading = true;
@@ -323,6 +355,11 @@ export default {
             }
           }
           let data = JSON.parse(JSON.stringify(item));
+          if (data.bleadyeType == "add_chemicalmat") {
+            data.formulaUnit = "KG";
+          } else if (data.bleadyeType == "add_pigment") {
+            data.formulaUnit = "g";
+          }
           if (item.codeItemIt) {
             updateDtl(data).then((res) => {
               resolve();

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-31 16:38:51
+ * @LastEditTime: 2021-09-11 08:52:09
  * @Description:
 -->
 <template>
@@ -595,9 +595,7 @@ export default {
             data.bf = null;
             data.test = null;
             data.item = null;
-            data.poAmountLb = Number(
-              (data.poAmountKg || 0 * 2.204623).toFixed(2)
-            );
+            data.poAmountLb = Number((data.poAmountKg * 2.204623).toFixed(2));
             // data.pidCount = this.form.bf.length || 0;
             if (data.runJobId) {
               // update

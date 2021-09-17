@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-07-30 15:46:34
+ * @LastEditTime: 2021-09-15 16:51:54
  * @Description: 
 -->
 <template>
@@ -428,6 +428,7 @@ export default {
                   yarnBrand: this.form.yarnBrand,
                   yarnBatch: this.form.yarnBatch,
                   proWeaveJobGroupFk: this.form.proWeaveJobGroupFk,
+                  weaveJobFk: this.form.weaveJobId,
                 });
               }
               setTimeout(() => {

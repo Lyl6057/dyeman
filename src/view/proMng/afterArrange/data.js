@@ -319,8 +319,8 @@ export function mainCrud(_this) {
         display: true
       },
       {
-        label: "成分",
-        tip: "成分(Thành phần)",
+        label: "成份",
+        tip: "成份(Thành phần)",
         prop: "fabElements",
         width: 250,
         hide: true,

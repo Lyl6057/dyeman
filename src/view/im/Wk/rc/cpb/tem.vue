@@ -162,6 +162,9 @@ export default {
         let records = res.data;
         this.page.total = records.total;
         this.mx = records.records;
+        this.mx.sort((a, b) => {
+          return a.batchNo - b.batchNo ? 1 : -1;
+        });
         if (this.mx.length === 0) {
           this.loading = false;
         }

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-08-07 07:57:44
  * @LastEditors: Lyl
- * @LastEditTime: 2021-09-01 10:10:12
+ * @LastEditTime: 2021-09-05 11:12:18
  * @Description: 
 -->
 <template>
@@ -184,20 +184,13 @@ export default {
   watch: {},
   created() {
     this.form.appDate = this.$getNowTime("date");
-
-    let self = this;
-    document.onkeydown = function (e) {
-      let ev = document.all ? window.event : e;
-      if (ev.keyCode === 13) {
-        self.query();
-      }
-    };
   },
   methods: {
     query() {
       this.wloading = true;
       this.detail = {};
       if (!this.form.vatNo) {
+        this.wloading = false;
         this.$tip.warning("暂无数据");
         return;
       }
@@ -378,7 +371,18 @@ export default {
   beforeRouteEnter(to, form, next) {
     next((vm) => {
       vm.setCz();
+      let self = vm;
+      document.onkeydown = function (e) {
+        let ev = document.all ? window.event : e;
+        if (ev.keyCode === 13) {
+          self.query();
+        }
+      };
     });
+  },
+  beforeRouteLeave(to, from, next) {
+    document.onkeydown = null;
+    next();
   },
 };
 </script>

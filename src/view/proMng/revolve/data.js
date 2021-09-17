@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-28 10:33:19
+ * @LastEditTime: 2021-09-13 09:32:19
  * @Description:
  */
 
@@ -229,7 +229,7 @@ export function mainCrud(_this) {
         overHidden: true
       },
       {
-        label: "合同号",
+        label: "客人PO",
         prop: "contractNo",
         tip: "Số hợp đồng",
         span: 6,
@@ -318,7 +318,7 @@ export function mainCrud(_this) {
       },
 
       {
-        label: "布匹成分",
+        label: "布匹成份",
         prop: "fabElements",
         tip: "Thành phần",
         placeholder: " ",

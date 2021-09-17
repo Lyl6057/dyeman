@@ -61,7 +61,6 @@ export default {
         };
         func(this.menuData);
         this.list = this.menuData;
-
         this.$nextTick(() => {
           setTimeout(() => {
             // this.$router.push({ path: "ProWorkflowInfo" }); // 生产管理

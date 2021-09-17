@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-08-18 08:51:58
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-31 13:43:38
+ * @LastEditTime: 2021-09-10 18:07:38
  * @Description: 
 -->
 <template>
@@ -20,8 +20,8 @@
       >
         <el-button
           type="success"
-          :disabled="!dlgform.tempId"
-          @click="handleRowDBLClick(dlgform)"
+          :disabled="!detail.tempId"
+          @click="handleRowDBLClick(detail)"
           >{{ this.$t("public.update") }}</el-button
         >
       </el-tooltip>
@@ -42,9 +42,17 @@
         content="xóa"
         placement="top-start"
       >
-        <el-button type="danger" :disabled="!dlgform.tempId" @click="del">{{
+        <el-button type="danger" :disabled="!detail.tempId" @click="del">{{
           this.$t("public.del")
         }}</el-button>
+      </el-tooltip>
+      <el-tooltip
+        class="item"
+        effect="dark"
+        content="tìm kiếm"
+        placement="top-start"
+      >
+        <el-button type="primary" @click="down">下载</el-button>
       </el-tooltip>
       <el-tooltip
         class="item"
@@ -142,7 +150,15 @@
 </template>
 <script>
 import { temForm, temCrud } from "./data";
-import { getTem, addTem, updateTem, delTem, print, upload } from "./api";
+import {
+  getTem,
+  addTem,
+  updateTem,
+  delTem,
+  print,
+  upload,
+  download,
+} from "./api";
 export default {
   name: "",
   data() {
@@ -280,7 +296,7 @@ export default {
     add() {
       this.dlgform = {};
       this.isAdd = true;
-      this.crudOp.column[6].display = true;
+      this.crudOp.column[3].display = true;
       this.dialogVisible = true;
     },
     del() {
@@ -291,13 +307,13 @@ export default {
       this.$tip
         .cofirm(
           this.$t("iaoMng.delTle9") +
-            this.dlgform.tempCode +
+            this.detail.tempCode +
             this.$t("iaoMng.delTle2"),
           this,
           {}
         )
         .then(() => {
-          delTem(this.dlgform.tempId)
+          delTem(this.detail.tempId)
             .then((res) => {
               if (res.data.code === 200) {
                 this.$tip.success(this.$t("public.sccg"));
@@ -317,11 +333,12 @@ export default {
     handleRowDBLClick(val) {
       this.isAdd = false;
       this.dlgform = val;
-      this.crudOp.column[6].display = false;
+      this.crudOp.column[3].display = false;
       this.dialogVisible = true;
     },
     cellClick(val) {
       this.dlgform = val;
+      this.detail = val;
     },
     fileChange(e) {
       let file = document.getElementById("input").files[0];
@@ -334,6 +351,17 @@ export default {
     },
     uploadAfter(e) {
       console.log(e);
+    },
+    down() {
+      // let url = "http://192.168.5.1:91/api/"
+      // download({ name: this.detail.tempName.split(".")[0] }).then((res) => {
+      //   console.log(res);
+      // });
+      let name = encodeURI(
+        "http://192.168.5.1:92/api/basePrintTemplate/download?name=" +
+          this.detail.tempName.split(".")[0]
+      );
+      window.open(name);
     },
   },
 };

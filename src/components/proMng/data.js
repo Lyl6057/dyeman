@@ -1010,7 +1010,7 @@ export function resolveC(_this) {
       },
 
       {
-        label: "布匹成分",
+        label: "布匹成份",
         prop: "fabElements",
         tip: "Thành phần",
         placeholder: " ",
@@ -1588,7 +1588,7 @@ export function dyeC(_this) {
       },
 
       {
-        label: "布匹成分",
+        label: "布匹成份",
         prop: "fabElements",
         placeholder: " ",
         overHidden: true,

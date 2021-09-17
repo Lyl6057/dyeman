@@ -410,7 +410,7 @@ export function mainCrud(_this) {
       },
 
       {
-        label: "纤维成分比例",
+        label: "纤维成份比例",
         prop: "fiberComp",
         placeholder: " ",
         overHidden: true,

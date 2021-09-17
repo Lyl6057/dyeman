@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-27 10:44:54
+ * @LastEditTime: 2021-09-15 16:20:44
  * @Description:
  */
 
@@ -181,7 +181,6 @@ export function dlgForm(_this) {
 }
 
 let cust = getDicT("basCustomer", "custName", "custCode");
-
 export function mainCrud(_this) {
   return {
     menu: false,
@@ -452,7 +451,7 @@ export function mainCrud(_this) {
       },
 
       {
-        label: "布匹成分",
+        label: "布匹成份",
         prop: "fabElements",
         tip: "Thành phần",
         placeholder: " ",
@@ -463,7 +462,7 @@ export function mainCrud(_this) {
 
       {
         label: "紗線批號",
-        tip: "Số lót",
+        tip: "Lô sợi nhà máy",
         prop: "yarnBatchNo",
         span: 6,
         width: 120,
@@ -473,7 +472,7 @@ export function mainCrud(_this) {
       },
       {
         label: "紗牌紗批",
-        tip: "Nhãn hiệu sợi",
+        tip: "Lót sợi",
         prop: "yarnNumber",
         span: 6,
         width: 120,
@@ -1273,10 +1272,9 @@ export function dyeCrud(_this) {
     ]
   };
 }
+
 let bleadyeCode = getXDicT("proBleadyeTechCode");
-// bleadyeCode = bleadyeCode.sort((a, b) => {
-//   return a.bleadyeCode > b.bleadyeCode ? 1 : -1
-// })
+
 export function techargueCrud(_this) {
   return {
     menu: false,
@@ -1293,7 +1291,8 @@ export function techargueCrud(_this) {
       {
         label: "#",
         prop: "sn",
-        width: 50,
+        width: 80,
+        cell: true,
         align: "center",
         display: false
       },
@@ -1605,13 +1604,23 @@ export function codeItemCrud(_this) {
                 _this.chooseDtlData.measureType.indexOf("g") == -1 &&
                 _this.chooseDtlData.measureType.indexOf("G") == -1
               ) {
-                _this.chooseDtlData.useAmount = Number(
-                  (
-                    Number(_this.form.clothWeight) *
-                    Number(_this.chooseDtlData.formulaAmount) *
-                    0.01
-                  ).toFixed(2)
-                );
+                if (_this.chooseDtlData.formulaUnit == "KG") {
+                  _this.chooseDtlData.useAmount = Number(
+                    (
+                      Number(_this.form.clothWeight) *
+                      Number(_this.chooseDtlData.formulaAmount) *
+                      0.01
+                    ).toFixed(2)
+                  );
+                } else {
+                  _this.chooseDtlData.useAmount = Number(
+                    (
+                      Number(_this.form.clothWeight) *
+                      Number(_this.chooseDtlData.formulaAmount) *
+                      10
+                    ).toFixed(2)
+                  );
+                }
               } else {
                 if (_this.chooseDtlData.formulaUnit == "KG") {
                   _this.chooseDtlData.useAmount = Number(

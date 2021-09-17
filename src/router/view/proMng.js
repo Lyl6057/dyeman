@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-29 14:14:56
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-27 14:48:35
+ * @LastEditTime: 2021-09-11 10:59:07
  * @Description:
  */
 export default [
@@ -105,14 +105,7 @@ export default [
   //     keepAlive: true
   //   }
   // },
-  {
-    path: "/finalCard",
-    name: "成品码卡",
-    component: resolve => require(["@/view/proMng/finalCard/index"], resolve),
-    meta: {
-      keepAlive: true
-    }
-  },
+
   // 报表
   {
     path: "/buffyPrints", // 布票打印記錄

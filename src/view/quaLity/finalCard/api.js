@@ -2,10 +2,19 @@
  * @Author: Lyl
  * @Date: 2021-08-07 07:57:55
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-31 18:53:37
+ * @LastEditTime: 2021-09-08 16:11:49
  * @Description:
  */
 import axios from "axios";
+
+// download
+export function download(params) {
+  return axios({
+    url: "/api/basePrintTemplate/download",
+    method: "get",
+    params: params
+  });
+}
 
 // 新增
 export function upload(params) {

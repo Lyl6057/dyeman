@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-04-01 13:39:35
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-27 13:37:55
+ * @LastEditTime: 2021-09-11 11:01:07
  * @Description:
  */
 
@@ -124,7 +124,7 @@ export function proMng(_this) {
         {
           menuName: "1.批色码卡",
           index: "codeCard"
-        },
+        }
         // {
         //   menuName: "1.出缸码卡",
         //   index: `codeCard/${2}`
@@ -133,10 +133,10 @@ export function proMng(_this) {
         //   menuName: "2.定后码卡",
         //   index: `outcodeCard/${1}`
         // },
-        {
-          menuName: "2.成品码卡",
-          index: "finalCard"
-        }
+        // {
+        //   menuName: "2.成品码卡",
+        //   index: "finalCard"
+        // }
         // {
         //   menuName: "3.染整工单",
         //   index: "/dyeing"

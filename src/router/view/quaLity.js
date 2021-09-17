@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-10 13:20:44
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-23 19:13:08
+ * @LastEditTime: 2021-09-14 14:41:45
  * @Description:
  */
 export default [
@@ -14,7 +14,7 @@ export default [
   },
   {
     path: "/weight",
-    name: "称重",
+    name: "胚布台账",
     component: resolve => require(["@/view/quaLity/weight/index"], resolve),
     meta: {
       keepAlive: true
@@ -22,7 +22,7 @@ export default [
   },
   {
     path: "/scanWeight",
-    name: "QC验布",
+    name: "胚布称重",
     component: resolve => require(["@/view/quaLity/scan/index"], resolve),
     meta: {
       keepAlive: true
@@ -30,7 +30,7 @@ export default [
   },
   {
     path: "/checkInWhse",
-    name: "审核入库",
+    name: "胚布审核入库",
     component: resolve =>
       require(["@/view/quaLity/checkInWhse/index"], resolve),
     meta: {
@@ -38,7 +38,7 @@ export default [
     }
   },
   {
-    path: "/quaLity",
+    path: "/qualityMng",
     name: "品质项目管理",
     component: resolve => require(["@/view/quaLity/QuaLity/index"], resolve),
     meta: {
@@ -105,6 +105,40 @@ export default [
     name: "检测项目基础定义",
     component: resolve =>
       require(["@/view/quaLity/testItem/index.vue"], resolve),
+    meta: {
+      keepAlive: true
+    }
+  },
+  {
+    path: "/finishedCodeCard",
+    name: "成品台账",
+    component: resolve =>
+      require(["@/view/quaLity/codeCard/index.vue"], resolve),
+    meta: {
+      keepAlive: true
+    }
+  },
+  {
+    path: "/finishedCheck",
+    name: "成品审核入库",
+    component: resolve =>
+      require(["@/view/quaLity/finishedCheck/index.vue"], resolve),
+    meta: {
+      keepAlive: true
+    }
+  },
+  {
+    path: "/finalCard",
+    name: "成品码卡",
+    component: resolve => require(["@/view/quaLity/finalCard/index"], resolve),
+    meta: {
+      keepAlive: true
+    }
+  },
+  {
+    path: "/MarkMng",
+    name: "唛头打印",
+    component: resolve => require(["@/view/quaLity/MarkMng/index"], resolve),
     meta: {
       keepAlive: true
     }
