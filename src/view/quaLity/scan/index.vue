@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-25 15:17:58
+ * @LastEditTime: 2021-09-27 10:01:37
  * @Description: 
 -->
 <template>
@@ -64,69 +64,56 @@
           </view-container>
         </el-col>
         <el-col :span="14">
-          <view-container title="胚布信息">
-            <el-card
-              class="box-card"
-              style="height: calc(100vh - 320px); overflow: auto"
-            >
-              <!-- <div slot="header" class="clearfix">
-              <span>布票信息</span>
-            </div> -->
-              <el-row class="text item">
-                <el-col :span="10">生产单号: {{ crud.weaveJobCode }}</el-col>
-                <el-col :span="14">布票号: {{ crud.noteCode }}</el-col>
-              </el-row>
-              <el-row class="text item">
-                <el-col :span="10">客户编号: {{ crud.customerName }}</el-col>
-                <el-col :span="14">订单号: {{ crud.poNo }}</el-col>
-              </el-row>
-              <el-row class="text item">
-                <el-col :span="24">布类名称: {{ crud.fabricName }}</el-col>
-              </el-row>
-              <el-row class="text item">
-                <el-col :span="10">机号: {{ crud.loomNo }}</el-col>
-                <el-col :span="14">顏色: {{ crud.proColor }}</el-col>
-              </el-row>
-              <el-row class="text item">
-                <el-col :span="10">匹號: {{ crud.eachNumber }}</el-col>
-                <el-col :span="14">打印时间: {{ crud.printedTime }}</el-col>
-              </el-row>
-              <el-row class="text item">
-                <el-col :span="10">重量: {{ crud.clothWeight }}</el-col>
-                <el-col :span="14">重量单位: {{ crud.weightUnit }}</el-col>
-              </el-row>
-              <el-row class="text item">
-                <el-col :span="10">QC扣减数量: {{ crud.qcTakeOut }}</el-col>
-                <el-col :span="14">毛重: {{ crud.realWeight }}</el-col>
-              </el-row>
-              <el-row class="text item">
-                <el-col :span="10">验布员工号: {{ crud.clothChecker }}</el-col>
-                <el-col :span="14">值机工号: {{ crud.workNo }}</el-col>
-              </el-row>
+          <el-tabs type="border-card" v-model="tabs">
+            <el-tab-pane name="pb" label="胚布信息">
+              <div style="height: calc(100vh - 320px); overflow: auto">
+                <el-row class="text item">
+                  <el-col :span="10">生产单号: {{ crud.weaveJobCode }}</el-col>
+                  <el-col :span="14">布票号: {{ crud.noteCode }}</el-col>
+                </el-row>
+                <el-row class="text item">
+                  <el-col :span="10">客户编号: {{ crud.customerName }}</el-col>
+                  <el-col :span="14">订单号: {{ crud.poNo }}</el-col>
+                </el-row>
+                <el-row class="text item">
+                  <el-col :span="24">布类名称: {{ crud.fabricName }}</el-col>
+                </el-row>
+                <el-row class="text item">
+                  <el-col :span="10">机号: {{ crud.loomNo }}</el-col>
+                  <el-col :span="14">顏色: {{ crud.proColor }}</el-col>
+                </el-row>
+                <el-row class="text item">
+                  <el-col :span="10">匹號: {{ crud.eachNumber }}</el-col>
+                  <el-col :span="14">打印时间: {{ crud.printedTime }}</el-col>
+                </el-row>
+                <el-row class="text item">
+                  <el-col :span="10">重量: {{ crud.clothWeight }}</el-col>
+                  <el-col :span="14">重量单位: {{ crud.weightUnit }}</el-col>
+                </el-row>
+                <el-row class="text item">
+                  <el-col :span="10">QC扣减数量: {{ crud.qcTakeOut }}</el-col>
+                  <el-col :span="14">毛重: {{ crud.realWeight }}</el-col>
+                </el-row>
+                <el-row class="text item">
+                  <el-col :span="10"
+                    >验布员工号: {{ crud.clothChecker }}</el-col
+                  >
+                  <el-col :span="14">值机工号: {{ crud.workNo }}</el-col>
+                </el-row>
 
-              <el-row class="text item">
-                <el-col :span="10">载具编号: {{ crud.storeLoadCode }}</el-col>
-                <el-col :span="14">存储位置: {{ crud.storeSiteCode }}</el-col>
-              </el-row>
-
-              <!-- <div class="btnBox">
-                <el-button
-                  type="success"
-                  class="button"
-                  :disabled="!crud.noteId"
-                  @click="save"
-                  >保存</el-button
-                >
-                <el-button
-                  type="primary"
-                  class="button"
-                  @click="weighing"
-                  :disabled="!crud.noteId"
-                  >称重</el-button
-                >
-              </div> -->
-            </el-card>
-          </view-container>
+                <el-row class="text item">
+                  <el-col :span="10">载具编号: {{ crud.storeLoadCode }}</el-col>
+                  <el-col :span="14">存储位置: {{ crud.storeSiteCode }}</el-col>
+                </el-row>
+              </div>
+            </el-tab-pane>
+            <el-tab-pane name="qc" label="验布项目">
+              <div style="height: calc(100vh - 320px); overflow: auto">
+                <avue-form ref="form" :option="qcForm" v-model="qcItem">
+                </avue-form>
+              </div>
+            </el-tab-pane>
+          </el-tabs>
         </el-col>
         <el-col :span="5">
           <view-container title="历史胚布">
@@ -165,6 +152,62 @@
             </el-card>
           </view-container>
         </el-col>
+        <el-dialog
+          title
+          :visible.sync="qcDlg"
+          class="standardDlg"
+          fullscreen
+          append-to-body
+          :close-on-click-modal="false"
+          v-if="qcDlg"
+        >
+          <view-container title="选择检验项目">
+            <div class="btnList">
+              <el-button type="success" @click="check">确定</el-button>
+              <el-button type="warning" @click="qcDlg = false">{{
+                this.$t("public.close")
+              }}</el-button>
+              <span style="margin-left: 10px; font-size: 16px">疵点类型:</span>
+              <el-select
+                v-model="qcType"
+                multiple
+                placeholder="请选择"
+                style="width: 350px"
+                @change="typeChange"
+              >
+                <el-option
+                  v-for="item in options"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                >
+                </el-option>
+              </el-select>
+            </div>
+            <div
+              class="formBox qc-check-item"
+              style="height: calc(100vh - 120px); overflow: auto"
+            >
+              <avue-form ref="form" :option="qcForm" v-model="qcItem">
+              </avue-form>
+              <!-- <div v-for="qc in qcItems" :key="qc.itemId">
+                <div v-if="qc.valueType == '1'">
+                  <el-input v-model="input" placeholder="请输入内容"></el-input>
+                </div>
+                <div v-else>
+                  <el-checkbox
+                    :label="qc.sn + '-' + qc.itemName"
+                    :key="qc.sn"
+                    >{{ qc.itemName }}</el-checkbox
+                  >
+                </div> -->
+              <!-- </div> -->
+              <!-- <el-checkbox-group v-model="qcItem">
+                
+              </el-checkbox-group> -->
+            </div>
+          </view-container>
+        </el-dialog>
       </el-row>
     </view-container>
   </div>
@@ -172,7 +215,17 @@
 <script>
 import { mainForm } from "./data";
 import { webSocket } from "@/config/index.js";
-import { get, add, update, del, getWeave } from "./api";
+import {
+  get,
+  add,
+  update,
+  del,
+  getWeave,
+  getQcItem,
+  getQcRecord,
+  addQcRecord,
+  updateQcRecord,
+} from "./api";
 export default {
   name: "",
   data() {
@@ -196,6 +249,38 @@ export default {
       changeList: [],
       wLoading: false,
       time: null,
+      qcDlg: false,
+      checkAll: false,
+      qcItem: {},
+      qcItems: [],
+      isIndeterminate: true,
+      qcForm: {
+        submitBtn: false,
+        emptyBtn: false,
+        labelPosition: "top",
+        labelWidth: 160,
+        group: [],
+      },
+      qcType: [],
+      options: [
+        {
+          label: "纱疵",
+          value: 1,
+        },
+        {
+          label: "织疵",
+          value: 2,
+        },
+        {
+          label: "染疵",
+          value: 3,
+        },
+        {
+          label: "结构",
+          value: 4,
+        },
+      ],
+      tabs: "pb",
     };
   },
   watch: {},
@@ -215,7 +300,7 @@ export default {
         this.$tip.warning("请先扫描或输入载具编号!");
         return;
       }
-      this.wLoading = true;
+      // this.wLoading = true;
       for (let key in this.form) {
         if (!this.form[key]) {
           delete this.form[key];
@@ -250,6 +335,46 @@ export default {
           if (this.crud.weaveJobFk) {
             getWeave({ weaveJobId: this.crud.weaveJobFk }).then((weave) => {
               this.crud.weaveJobCode = weave.data[0].weaveJobCode;
+            });
+          }
+          if (this.form.qcClothCheckItem) {
+            getQcRecord({
+              proClothNoteFk: this.crud.noteId,
+            }).then((note) => {
+              if (note.data.length) {
+                // update
+                let data = note.data[0];
+                // for (let key in data) {
+                //   if (key != "recordId" && key != "proClothNoteFk") {
+                //     data[key] = "";
+                //   }
+                // }
+                for (let key in this.qcItem) {
+                  // if (this.qcItem[key]) {
+                  data[key.split("-")[1]] =
+                    this.qcItem[key] instanceof Array
+                      ? this.qcItem[key].join(",")
+                      : this.qcItem[key];
+                  // }
+                }
+                // this.qcItem.recordId = note.data
+                data.checkDate = this.$getNowTime("datetime");
+                updateQcRecord(data).then((res) => {});
+              } else {
+                // add
+                let data = {};
+                for (let key in this.qcItem) {
+                  if (this.qcItem[key]) {
+                    data[key.split("-")[1]] =
+                      this.qcItem[key] instanceof Array
+                        ? this.qcItem[key].join(",")
+                        : this.qcItem[key];
+                  }
+                }
+                data.proClothNoteFk = this.crud.noteId;
+                data.checkDate = this.$getNowTime("datetime");
+                addQcRecord(data).then((res) => {});
+              }
             });
           }
           this.save();
@@ -349,13 +474,92 @@ export default {
         }, 200);
       });
     },
+    check() {
+      // console.log(this.qcItem);
+      // this.form.qcClothCheckItem = this.qcItem;
+      this.form.qcClothCheckItem = "";
+      for (let key in this.qcItem) {
+        if (
+          this.qcItem[key] &&
+          key.indexOf("$") == -1 &&
+          this.qcItem[key].length
+        ) {
+          this.form.qcClothCheckItem +=
+            key.split("-")[0] + ":" + this.qcItem[key] + ";";
+        }
+      }
+      console.log(this.qcItem);
+      this.qcDlg = false;
+    },
     cellClick(val) {
       this.detail = val;
+    },
+    typeChange() {
+      getQcItem().then((res) => {
+        res.data.sort((a, b) => a.sn - b.sn);
+        let dicArr = [
+          {
+            value: "A",
+            label: "A",
+          },
+          {
+            value: "B",
+            label: "B",
+          },
+          {
+            value: "C",
+            label: "C",
+          },
+          {
+            value: "D",
+            label: "D",
+          },
+          {
+            value: "E",
+            label: "E",
+          },
+        ];
+        res.data = res.data.filter(
+          (a) => this.qcType.indexOf(a.checkType) != -1
+        );
+        this.qcItems = res.data;
+        this.qcForm.group = [];
+        this.qcForm.group[0] = {};
+        this.qcForm.group[1] = {};
+        this.qcForm.group[2] = {};
+        this.qcForm.group[3] = {};
+        this.qcType.forEach((item) => {
+          this.qcForm.group[item - 1] = {
+            icon: "el-icon-info",
+            label:
+              item == 1
+                ? "纱疵"
+                : item == 2
+                ? "织疵"
+                : item == 3
+                ? "染疵"
+                : "结构",
+            prop: "basic" + item,
+            labelPosition: "top",
+            column: [],
+          };
+        });
+        res.data.forEach((item) => {
+          this.qcForm.group[item.checkType - 1].column.push({
+            label: item.itemName,
+            prop: item.itemName + "-checkItem" + item.sn + "Value",
+            span: 6,
+            type: item.valueType == 1 ? "input" : "checkbox",
+            dicData: item.valueType == 1 ? [] : dicArr,
+          });
+        });
+      });
     },
   },
   created() {},
   mounted() {
     this.setCz();
+    // this.formOp.column[7].dicData = this.qcItems;
     let self = this;
     document.onkeydown = function (e) {
       let ev = document.all ? window.event : e;
@@ -379,6 +583,27 @@ export default {
   font-size: 18px !important;
 }
 
+.el-tag {
+  font-size: 16px !important;
+}
+
+.avue-group__header, .el-collapse-item__header {
+  margin-bottom: 0px;
+  height: 35px;
+  line-height: 35px;
+  background: #eee;
+  font-size: 24px;
+}
+
+.avue-group .el-collapse-item__arrow {
+  margin-top: 0;
+}
+
+// .qc-check-item .el-checkbox {
+// width: 25%;
+// margin: 3px 0;
+// overflow: hidden;
+// }
 #clothFlyScan {
   .history {
     // display: flex;
