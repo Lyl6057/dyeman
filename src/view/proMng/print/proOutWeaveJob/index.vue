@@ -2,13 +2,13 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-09-30 09:34:17
+ * @LastEditTime: 2021-09-30 14:12:50
  * @Description: 
 -->
 <template>
   <div id="clothFlyPrint">
     <view-container
-      title="織造通知單打印"
+      title="外发织造通知单"
       v-loading="wloading"
       element-loading-text="拼命加载中..."
     >
@@ -55,7 +55,11 @@
           content="in"
           placement="top-start"
         >
-          <el-button type="primary" @click="print" :loading="wloading"
+          <el-button
+            type="primary"
+            @click="print"
+            :loading="wloading"
+            :disabled="!detail.weaveJobId"
             >打印</el-button
           >
         </el-tooltip>
@@ -188,13 +192,13 @@ export default {
         Object.assign(this.form, {
           rows: this.page.pageSize,
           start: this.page.currentPage,
-          isWorkOut: 0,
+          isWorkOut: 1,
         })
       ).then((res) => {
         this.crud = res.data.records;
         this.crud.forEach((item, i) => {
           item.custName = item.custCode;
-          item.amount = item.amount.toFixed(2);
+          // item.amount = item.amount.toFixed(2);
           item.index = i + 1;
         });
         if (this.crud.length > 0) {

@@ -2,34 +2,34 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-09-27 16:50:38
+ * @LastEditTime: 2021-09-30 14:45:03
  * @Description: 
 -->
 <template>
-  <div id="finalizeDesign">
+  <div id="colorSend">
     <view-container
-      title="唛头打印"
+      title="批色送办"
       v-loading="wloading"
       element-loading-text="拼命加载中..."
     >
       <el-row class="btnList">
         <el-button
           type="success"
-          :disabled="!detail.markId"
+          :disabled="!detail.sendExId"
           @click="handleRowDBLClick(detail)"
           >{{ this.$t("public.update") }}</el-button
         >
         <el-button type="primary" @click="add">{{
           this.$t("public.add")
         }}</el-button>
-        <el-button type="danger" :disabled="!detail.markId" @click="del">{{
+        <el-button type="danger" :disabled="!detail.sendExId" @click="del">{{
           this.$t("public.del")
         }}</el-button>
         <el-button
           type="primary"
           @click="print"
           :loading="wloading"
-          :disabled="!detail.markId"
+          :disabled="!selectionList.length"
           >打印</el-button
         >
         <el-button type="primary" @click="query">{{
@@ -54,6 +54,7 @@
           @on-load="query"
           @row-dblclick="handleRowDBLClick"
           @current-row-change="cellClick"
+          @selection-change="selectionChange"
         ></avue-crud>
       </el-row>
       <el-dialog
@@ -77,6 +78,23 @@
         ></tem-dlg>
       </el-dialog>
     </view-container>
+    <el-dialog
+      id="colorMng_Dlg"
+      :visible.sync="pdfDlg"
+      fullscreen
+      width="100%"
+      append-to-body
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+    >
+      <view-container title="打印預覽">
+        <embed
+          id="pdf"
+          style="width: 100vw; height: calc(100vh - 80px)"
+          :src="pdfUrl"
+        />
+      </view-container>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -110,6 +128,7 @@ export default {
       pdfDlg: false,
       pdfUrl: "",
       prsocket: null,
+      selectionList: [],
     };
   },
   watch: {},
@@ -121,6 +140,9 @@ export default {
         if (this.form[key] == "") {
           delete this.form[key];
         }
+      }
+      if (this.form.sendDate && this.form.sendDate.indexOf(" ") == -1) {
+        this.form.sendDate += " 00:00:00";
       }
       get(
         Object.assign(this.form, {
@@ -146,17 +168,27 @@ export default {
           console.log(e);
         });
     },
+    selectionChange(val) {
+      this.selectionList = val;
+    },
     print() {
-      if (this.prsocket == null || this.prsocket.readyState == 3) {
-        this.$tip.error("打印应用未启动，请打开后重新进入此页面!");
-        return;
-      }
-      this.wLoading = true;
-      this.prsocket.send("shipMark:" + this.detail.markId);
-      setTimeout(() => {
-        this.wLoading = false;
-        this.$tip.success("已发送打印请求!");
-      }, 200);
+      // if (this.prsocket == null || this.prsocket.readyState == 3) {
+      //   this.$tip.error("打印应用未启动，请打开后重新进入此页面!");
+      //   return;
+      // }
+      // this.wLoading = true;
+      // this.prsocket.send("shipMark:" + this.detail.sendExId);
+      // setTimeout(() => {
+      //   this.wLoading = false;
+      //   this.$tip.success("已发送打印请求!");
+      // }, 200);
+      let id = [];
+      this.selectionList.forEach((item) => {
+        id.push(item.sendExId);
+      });
+      this.pdfUrl =
+        process.env.API_HOST + "/api/proAppSendSample/scPdf?id=" + id;
+      this.pdfDlg = true;
     },
     add() {
       this.isAdd = true;
@@ -170,7 +202,7 @@ export default {
           {}
         )
         .then(() => {
-          del(this.detail.markId)
+          del(this.detail.sendExId)
             .then((res) => {
               if (res.data.code === 200) {
                 this.$tip.success(this.$t("public.sccg"));
@@ -208,18 +240,21 @@ export default {
     this.query();
   },
   beforeDestroy() {},
-  beforeRouteEnter(to, form, next) {
-    next((vm) => {
-      vm.setPrint();
-    });
-  },
-  beforeRouteLeave(to, from, next) {
-    this.prsocket = null;
-    next();
-  },
+  // beforeRouteEnter(to, form, next) {
+  //   next((vm) => {
+  //     vm.setPrint();
+  //   });
+  // },
+  // beforeRouteLeave(to, from, next) {
+  //   this.prsocket = null;
+  //   next();
+  // },
 };
 </script>
 <style lang='stylus'>
-#finalizeDesign {
+#colorSend {
+  .avue-crud__tip {
+    display: none;
+  }
 }
 </style>

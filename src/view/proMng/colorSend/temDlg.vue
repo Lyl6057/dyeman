@@ -2,13 +2,13 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-09-27 09:10:20
+ * @LastEditTime: 2021-09-30 14:45:35
  * @Description: 
 -->
 <template>
   <div id="ldOrderDlg">
     <view-container
-      :title="(isAdd ? '新增' : '修改') + '唛头信息'"
+      :title="(isAdd ? '新增' : '修改') + '批色送办信息'"
       :element-loading-text="$t('public.loading')"
       v-loading="wLoading"
     >
@@ -16,9 +16,9 @@
         <el-button type="success" @click="save">{{
           $t("public.save")
         }}</el-button>
-        <el-button type="primary" @click="print" :disabled="!form.markId"
+        <!-- <el-button type="primary" @click="print" :disabled="!form.sendExId"
           >打印</el-button
-        >
+        > -->
         <el-button type="warning" @click="close">{{
           this.$t("public.close")
         }}</el-button>
@@ -58,7 +58,7 @@
 </template>
 <script>
 import choice from "@/components/proMng/index";
-import { mainCrud, dlgForm, dlgCrud, pfCrud, gyCrud, cpForm } from "./data";
+import { mainCrud } from "./data";
 import { add, update } from "./api";
 
 export default {
@@ -88,11 +88,8 @@ export default {
       printCtr: false,
       visible: false,
       loading: false,
-      crudOp: dlgCrud(this),
+      crudOp: mainCrud(this),
       crud: [],
-      dlgFormOp: dlgForm(this),
-      dlgForm: {},
-      cpForm: cpForm(this),
       chooseData: {},
       tabs: "選擇訂單",
       func: {},
@@ -104,8 +101,6 @@ export default {
       choiceField: "",
       choiceQ: {},
       code: "",
-      pfCrud: pfCrud(this),
-      group: [],
       chooseDtlData: {},
       pdfDlg: false,
       pdfUrl: "",
@@ -116,7 +111,8 @@ export default {
     getData() {
       if (this.isAdd) {
         setTimeout(() => {
-          this.form.originPlace = "06";
+          this.form.sendDate = this.$getNowTime("date");
+          this.form.isFristVat = false;
         }, 100);
       } else {
         this.wLoading = true;
@@ -146,7 +142,16 @@ export default {
               }
             }
             this.form.custName = this.form.$custCode;
-            if (this.form.markId) {
+            if (this.form.sendDate && this.form.sendDate.indexOf(" ") == -1) {
+              this.form.sendDate += " 00:00:00";
+            }
+            if (
+              this.form.custReplyDate &&
+              this.form.custReplyDate.indexOf(" ") == -1
+            ) {
+              this.form.custReplyDate += " 00:00:00";
+            }
+            if (this.form.sendExId) {
               // update
               // this.form.upateTime = this.$getNowTime("datetime");
               update(this.form).then((res) => {
@@ -166,7 +171,7 @@ export default {
               // this.form.createTime = this.$getNowTime("datetime");
               add(this.form).then((res) => {
                 if (res.data.code == 200) {
-                  this.form.markId = res.data.data;
+                  this.form.sendExId = res.data.data;
 
                   this.$emit("refresh");
                   done();

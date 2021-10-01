@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-04-01 13:39:35
  * @LastEditors: Lyl
- * @LastEditTime: 2021-09-11 11:01:07
+ * @LastEditTime: 2021-10-01 15:34:07
  * @Description:
  */
 
@@ -76,9 +76,14 @@ export function proMng(_this) {
           index: "proWeaveJob"
         },
         {
-          menuName: "4.布飞打印记录",
+          menuName: "4.外发织造工单",
+          index: "proOutWeaveJob"
+        },
+        {
+          menuName: "5.布飞打印记录",
           index: "buffyPrints"
         }
+
         // {
         //   menuName: "3.落布记录",
         //   index: "/cropping"
@@ -124,11 +129,19 @@ export function proMng(_this) {
         {
           menuName: "1.批色码卡",
           index: "codeCard"
+        },
+        {
+          menuName: "2.LD打样",
+          index: `ldDrawDesign`
+        },
+        {
+          menuName: "2.批色送办",
+          index: "colorSend"
+        },
+        {
+          menuName: "3.批色回修单",
+          index: "colorRepair"
         }
-        // {
-        //   menuName: "1.出缸码卡",
-        //   index: `codeCard/${2}`
-        // },
         // {
         //   menuName: "2.定后码卡",
         //   index: `outcodeCard/${1}`

@@ -2,13 +2,13 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-09-27 09:10:20
+ * @LastEditTime: 2021-09-28 15:09:39
  * @Description: 
 -->
 <template>
   <div id="ldOrderDlg">
     <view-container
-      :title="(isAdd ? '新增' : '修改') + '唛头信息'"
+      :title="(isAdd ? '新增' : '修改') + '批色回修单信息'"
       :element-loading-text="$t('public.loading')"
       v-loading="wLoading"
     >
@@ -16,7 +16,7 @@
         <el-button type="success" @click="save">{{
           $t("public.save")
         }}</el-button>
-        <el-button type="primary" @click="print" :disabled="!form.markId"
+        <el-button type="primary" @click="print" :disabled="!form.workId"
           >打印</el-button
         >
         <el-button type="warning" @click="close">{{
@@ -37,28 +37,11 @@
       @close="choiceV = false"
       v-if="choiceV"
     ></choice>
-    <el-dialog
-      id="colorMng_Dlg"
-      :visible.sync="pdfDlg"
-      fullscreen
-      width="100%"
-      append-to-body
-      :close-on-click-modal="false"
-      :close-on-press-escape="false"
-    >
-      <view-container title="打印預覽">
-        <embed
-          id="pdf"
-          style="width: 100vw; height: calc(100vh - 80px)"
-          :src="pdfUrl"
-        />
-      </view-container>
-    </el-dialog>
   </div>
 </template>
 <script>
 import choice from "@/components/proMng/index";
-import { mainCrud, dlgForm, dlgCrud, pfCrud, gyCrud, cpForm } from "./data";
+import { mainCrud } from "./data";
 import { add, update } from "./api";
 
 export default {
@@ -88,11 +71,8 @@ export default {
       printCtr: false,
       visible: false,
       loading: false,
-      crudOp: dlgCrud(this),
+      crudOp: mainCrud(this),
       crud: [],
-      dlgFormOp: dlgForm(this),
-      dlgForm: {},
-      cpForm: cpForm(this),
       chooseData: {},
       tabs: "選擇訂單",
       func: {},
@@ -104,8 +84,6 @@ export default {
       choiceField: "",
       choiceQ: {},
       code: "",
-      pfCrud: pfCrud(this),
-      group: [],
       chooseDtlData: {},
       pdfDlg: false,
       pdfUrl: "",
@@ -116,7 +94,8 @@ export default {
     getData() {
       if (this.isAdd) {
         setTimeout(() => {
-          this.form.originPlace = "06";
+          this.form.createTime = this.$getNowTime("date");
+          this.form.isFristVat = false;
         }, 100);
       } else {
         this.wLoading = true;
@@ -146,7 +125,16 @@ export default {
               }
             }
             this.form.custName = this.form.$custCode;
-            if (this.form.markId) {
+            if (this.form.sendDate && this.form.sendDate.indexOf(" ") == -1) {
+              this.form.sendDate += " 00:00:00";
+            }
+            if (
+              this.form.custReplyDate &&
+              this.form.custReplyDate.indexOf(" ") == -1
+            ) {
+              this.form.custReplyDate += " 00:00:00";
+            }
+            if (this.form.workId) {
               // update
               // this.form.upateTime = this.$getNowTime("datetime");
               update(this.form).then((res) => {
@@ -166,7 +154,7 @@ export default {
               // this.form.createTime = this.$getNowTime("datetime");
               add(this.form).then((res) => {
                 if (res.data.code == 200) {
-                  this.form.markId = res.data.data;
+                  this.form.workId = res.data.data;
 
                   this.$emit("refresh");
                   done();

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-10 13:20:44
  * @LastEditors: Lyl
- * @LastEditTime: 2021-09-14 14:41:45
+ * @LastEditTime: 2021-10-01 14:24:54
  * @Description:
  */
 export default [
@@ -10,7 +10,7 @@ export default [
   {
     path: "/",
     name: "主页",
-    redirect: "/weight"
+    redirect: "/scanWeight"
   },
   {
     path: "/weight",
@@ -33,6 +33,14 @@ export default [
     name: "胚布审核入库",
     component: resolve =>
       require(["@/view/quaLity/checkInWhse/index"], resolve),
+    meta: {
+      keepAlive: true
+    }
+  },
+  {
+    path: "/clothQc",
+    name: "QC验布",
+    component: resolve => require(["@/view/quaLity/clothQc/index"], resolve),
     meta: {
       keepAlive: true
     }

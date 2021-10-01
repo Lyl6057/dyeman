@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-01 14:06:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-09-21 10:59:44
+ * @LastEditTime: 2021-10-01 14:57:32
  * @Description:
  */
 
@@ -44,9 +44,18 @@ export function getQcItem(params) {
   });
 }
 
-export function getWeave(params) {
+// 修改佈飛记录
+export function updateNote(data) {
   return axios({
-    url: "/api/proWeaveJob",
+    url: "/api/proClothNote",
+    method: "put",
+    params: data
+  });
+}
+// 獲取打印記錄
+export function getJob(params) {
+  return axios({
+    url: "/api/proWeaveJob/page",
     method: "get",
     params: params
   });
@@ -55,7 +64,7 @@ export function getWeave(params) {
 // 獲取打印記錄
 export function get(params) {
   return axios({
-    url: "/api/proClothNote",
+    url: "/api/proClothNote/pageLike",
     method: "get",
     params: params
   });
@@ -92,5 +101,32 @@ export function printBf(id) {
   return axios({
     url: "/api/proClothNote/printing?id=" + id,
     method: "get"
+  });
+}
+
+// 新增入仓记录
+export function addInWhse(data) {
+  return axios({
+    url: "/api/whseCalicoin/v1.0/save",
+    method: "post",
+    params: data
+  });
+}
+
+// 新增入仓明细
+export function addInDtla(data) {
+  return axios({
+    url: "/api/whseCalicoinDtla/v1.0/save",
+    method: "post",
+    params: data
+  });
+}
+
+// 新增入仓批号资料
+export function addInDtlb(data) {
+  return axios({
+    url: "/api/whseCalicoinDtlb/v1.0/save",
+    method: "post",
+    params: data
   });
 }

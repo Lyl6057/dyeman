@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-08-07 07:57:44
  * @LastEditors: Lyl
- * @LastEditTime: 2021-09-05 11:12:18
+ * @LastEditTime: 2021-09-24 18:45:53
  * @Description: 
 -->
 <template>
@@ -408,7 +408,7 @@ export default {
     margin-left: 20px;
   }
 
-  .historText {
+  .historyText {
     font-size: 22px;
     text-align: left;
     // text-indent: 1em;

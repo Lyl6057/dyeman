@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-25 15:18:03
+ * @LastEditTime: 2021-09-27 10:46:56
  * @Description:
  */
 
@@ -81,18 +81,46 @@ export function mainForm(_this) {
         span: 16,
         placeholder: "请输入存储位置",
         type: "select",
-        props: {
-          label: "locationCode",
-          value: "locationCode"
-        },
+        // props: {
+        //   label: "locationCode",
+        //   value: "locationCode"
+        // },
         filterable: true,
         allowCreate: true,
         defaultFirstOption: true,
-        dicData: getXDicT("whseLocation", "locationCode", "locationCode"),
+        dicData: getDicT("whseLocation", "locationCode", "locationCode"),
         click: () => {
           _this.type = "yg";
         }
+      },
+
+      {
+        label: "QC查布",
+        prop: "qcClothCheckItem",
+        span: 8,
+        formslot: true
+        // placeholder: "请选择QC查布",
+        // readonly: true,
+        // click: () => {
+        //   _this.qcDlg = true;
+        //   // _this.qcItem = [];
+        // }
+        // type: "select",
+        // dicData: []
+        // filterable: true,
+        // allowCreate: true,
+        // defaultFirstOption: true,
+        // dicData: getDicT("qcClothCheckItem", "itemName", "itemCode")
       }
     ]
+  };
+}
+
+export function qcForm(_this) {
+  return {
+    submitBtn: false,
+    emptyBtn: false,
+    labelWidth: 160,
+    column: []
   };
 }

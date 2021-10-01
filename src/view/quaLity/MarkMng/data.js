@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-09-14 16:06:09
+ * @LastEditTime: 2021-09-27 16:47:17
  * @Description:
  */
 
@@ -16,7 +16,7 @@ export function mainForm(_this) {
     column: [
       {
         label: "缸号",
-        // tip: "开单日期(Ngày lập đơn)",
+        tip: "lô nhuộm",
         prop: "vatNo",
         span: 6,
         placeholder: " "
@@ -30,7 +30,7 @@ export function mainForm(_this) {
       },
       {
         label: "订单编号",
-        // tip: "Khách hàng",
+        tip: "Mã số đơn hàng",
         prop: "poNo",
         span: 6,
         placeholder: " "
@@ -41,7 +41,7 @@ export function mainForm(_this) {
       {
         label: "客户",
         prop: "custCode",
-        // tip: "织造通知单(Mã đơn dệt)",
+        tip: "Khách hàng",
         span: 6,
         placeholder: " ",
         type: "select",
@@ -105,7 +105,7 @@ export function mainCrud(_this) {
       },
       {
         label: "缸号",
-        tip: "缸号(số lô nhuộm)",
+        tip: "số lô nhuộm",
         prop: "vatNo",
         overHidden: true,
         width: 140,
@@ -129,18 +129,18 @@ export function mainCrud(_this) {
         width: 150,
         span: 6,
         disabled: false,
-        rules: [
-          {
-            required: true,
-            message: "请输入唛头编号",
-            trigger: "blur"
-          }
-        ],
+        // rules: [
+        //   {
+        //     required: true,
+        //     message: "请输入唛头编号",
+        //     trigger: "blur"
+        //   }
+        // ],
         placeholder: " "
       },
       {
         label: "订单编号",
-        // tip: "Khách hàng",
+        tip: "Mã số đơn hàng",
         prop: "poNo",
         span: 6,
         placeholder: " ",
@@ -159,7 +159,7 @@ export function mainCrud(_this) {
         disabled: false,
         type: "select",
         dicData: cust,
-        tip: "客户(Khách hàng)"
+        tip: "Khách hàng"
       },
       {
         label: "唛头数量",
@@ -181,6 +181,7 @@ export function mainCrud(_this) {
       },
       {
         label: "面料编号",
+        tip: "mã vải",
         prop: "fabricCode",
         overHidden: true,
         width: 180,
@@ -190,7 +191,7 @@ export function mainCrud(_this) {
       },
       {
         label: "总成份",
-        tip: "总成份(Thành phần)",
+        tip: "thành phần",
         prop: "fabComponents",
         width: 250,
         overHidden: true,
@@ -200,7 +201,7 @@ export function mainCrud(_this) {
 
       {
         label: "布种",
-        // tip: "布类(Loại vải)",
+        tip: "mô tả vải",
         prop: "fabFabrics",
         width: 250,
         placeholder: " ",
@@ -209,7 +210,7 @@ export function mainCrud(_this) {
       },
       {
         label: "颜色",
-        // tip: "颜色(Màu)",
+        tip: "Màu",
         prop: "colorName",
         width: 140,
         overHidden: true,
@@ -219,7 +220,7 @@ export function mainCrud(_this) {
 
       {
         label: "工厂色号",
-        // tip: "色号",
+        tip: "mã màu nhà máy",
         prop: "factoryColor",
         width: 140,
         overHidden: true,
@@ -228,7 +229,7 @@ export function mainCrud(_this) {
       },
       {
         label: "客户色号",
-        // tip: "色号",
+        tip: "mã màu KH",
         prop: "custColor",
         width: 140,
         overHidden: true,
@@ -238,6 +239,7 @@ export function mainCrud(_this) {
 
       {
         label: "连边门幅",
+        tip: "khổ rộng liền biên",
         prop: "sideFabWidth",
         width: 120,
         hide: true,
@@ -248,6 +250,7 @@ export function mainCrud(_this) {
       {
         label: "实用门幅",
         prop: "realFabWidth",
+        tip: "khổ rộng thực dụng",
         width: 120,
         hide: true,
         align: "right",
@@ -257,6 +260,7 @@ export function mainCrud(_this) {
       {
         label: "洗前克重",
         prop: "beforeGramWeight",
+        tip: "TL trước giặt",
         width: 120,
         hide: true,
         align: "right",
@@ -266,6 +270,7 @@ export function mainCrud(_this) {
       {
         label: "洗后克重",
         prop: "afterGramWeight",
+        tip: "TL sau giặt",
         width: 120,
         hide: true,
         align: "right",
@@ -274,6 +279,7 @@ export function mainCrud(_this) {
       },
       {
         label: "产地",
+        tip: "nơi sản xuất",
         prop: "originPlace",
         overHidden: true,
         width: 120,
@@ -285,6 +291,7 @@ export function mainCrud(_this) {
       },
       {
         label: "备注",
+        tip: "ghi chú",
         prop: "remark",
         overHidden: true,
         width: 180,

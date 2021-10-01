@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-29 14:14:56
  * @LastEditors: Lyl
- * @LastEditTime: 2021-09-11 10:59:07
+ * @LastEditTime: 2021-09-30 09:29:20
  * @Description:
  */
 export default [
@@ -153,9 +153,18 @@ export default [
   },
   {
     path: "/proWeaveJob", // 織造通知單打印
-    name: "織造通知單打印",
+    name: "織造通知單",
     component: resolve =>
       require(["@/view/proMng/print/proWeaveJob/index"], resolve),
+    meta: {
+      keepAlive: true
+    }
+  },
+  {
+    path: "/proOutWeaveJob", // 外发織造通知單打印
+    name: "外发織造通知單",
+    component: resolve =>
+      require(["@/view/proMng/print/proOutWeaveJob/index"], resolve),
     meta: {
       keepAlive: true
     }
@@ -194,8 +203,32 @@ export default [
     meta: {
       keepAlive: true
     }
+  },
+  {
+    path: "/ldDrawDesign",
+    name: "LD打样",
+    component: resolve =>
+      require(["@/view/proMng/ldDrawDesign/index.vue"], resolve),
+    meta: {
+      keepAlive: true
+    }
+  },
+  {
+    path: "/colorSend",
+    name: "批色送办",
+    component: resolve => require(["@/view/proMng/colorSend/index"], resolve),
+    meta: {
+      keepAlive: true
+    }
+  },
+  {
+    path: "/colorRepair",
+    name: "批色回修单",
+    component: resolve => require(["@/view/proMng/colorRepair/index"], resolve),
+    meta: {
+      keepAlive: true
+    }
   }
-
   // {
   //   path: '/EquipmentSchedule',
   //   name: '设备排期',

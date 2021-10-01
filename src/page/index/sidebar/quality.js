@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-04-01 14:08:13
  * @LastEditors: Lyl
- * @LastEditTime: 2021-09-14 16:51:56
+ * @LastEditTime: 2021-10-01 14:29:25
  * @Description:
  */
 
@@ -24,6 +24,10 @@ export function quality(_this) {
         {
           menuName: "3.胚布台账",
           index: "weight"
+        },
+        {
+          menuName: "4.QC验布",
+          index: "clothQc"
         }
       ]
     },
