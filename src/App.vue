@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-24 08:12:20
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-24 11:22:03
+ * @LastEditTime: 2021-10-04 13:29:04
  * @Description: 
 -->
 <template>
@@ -36,16 +36,9 @@ import axios from "axios";
 export default {
   name: "App",
   data() {
-    return {
-      big: false,
-    };
+    return {};
   },
   mounted() {
-    // window.onresize = function () {
-    //   if (window.screen.width > 1600) {
-    //     this.big = true;
-    //   }
-    // };
     // parent.userID
     axios({
       url: "/api/ucmlUser",

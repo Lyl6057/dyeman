@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-29 14:14:56
  * @LastEditors: Lyl
- * @LastEditTime: 2021-09-30 09:29:20
+ * @LastEditTime: 2021-10-06 15:49:51
  * @Description:
  */
 export default [
@@ -225,6 +225,14 @@ export default [
     path: "/colorRepair",
     name: "批色回修单",
     component: resolve => require(["@/view/proMng/colorRepair/index"], resolve),
+    meta: {
+      keepAlive: true
+    }
+  },
+  {
+    path: "/proCanvas",
+    name: "染厂canvas",
+    component: resolve => require(["@/view/proMng/canvas/index"], resolve),
     meta: {
       keepAlive: true
     }

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-10-01 19:24:21
+ * @LastEditTime: 2021-10-02 14:39:00
  * @Description:
 -->
 <template>
@@ -52,9 +52,7 @@
               <el-button type="success" @click="save">{{
                 this.$t("public.save")
               }}</el-button>
-              <el-button type="primary" @click="checkDlg = true"
-                >选择验布项目</el-button
-              >
+              <el-button type="primary" @click="openCheck">验布项目</el-button>
             </div>
             <div style="height: calc(100vh - 275px); overflow: auto">
               <avue-form ref="form" :option="checkForm" v-model="checkQc">
@@ -204,6 +202,7 @@ export default {
           value: 4,
         },
       ],
+      existed: [],
     };
   },
   watch: {},
@@ -249,68 +248,81 @@ export default {
       this.getQcItem(val);
     },
     getQcItem(val) {
-      this.checkForm.column = [];
-      this.$nextTick(() => {
-        getQcRecord({ proClothNoteFk: val.noteId }).then((res) => {
-          if (res.data.length) {
-            let record = res.data[0];
-            for (let key in record) {
-              if (
-                (key.indexOf("checkItem") != -1 || key == "remark") &&
-                record[key]
-              ) {
-                let data = this.checkItem[key.replace(/[^0-9]/gi, "") - 1];
-                this.checkForm.column.push({
-                  prop: key,
-                  label: data.itemName,
-                  type: data.valueType == 1 ? "input" : "checkbox",
-                  dicData: data.valueType == 1 ? [] : this.dicArr,
-                  span: 12,
-                });
-                this.checkQc[key] = record[key];
-              } else {
-                this.checkQc[key] = "";
-              }
+      // this.existed = [];
+      getQcRecord({ proClothNoteFk: val.noteId }).then((res) => {
+        this.checkForm.column = [];
+        if (res.data.length) {
+          let record = res.data[0];
+          for (let key in record) {
+            if (key.indexOf("checkItem") != -1 && record[key]) {
+              let data = this.checkItem[key.replace(/[^0-9]/gi, "") - 1];
+              this.checkForm.column.push({
+                prop: key,
+                label: data.itemName,
+                type: data.valueType == 1 ? "input" : "checkbox",
+                dicData: data.valueType == 1 ? [] : this.dicArr,
+                span: 12,
+              });
+            } else if (key == "remark") {
+              this.checkForm.column.push({
+                prop: key,
+                label: "备注",
+                type: "input",
+                span: 12,
+              });
             }
           }
-        });
+          this.$nextTick(() => {
+            this.checkQc = record;
+          });
+        }
       });
+    },
+    openCheck() {
+      this.checkDlg = true;
+      setTimeout(() => {
+        this.checkForm.column.forEach((item) => {
+          if (item.prop != "remark") {
+            let prop =
+              item.label +
+              "-" +
+              item.prop +
+              "-" +
+              (item.type == "input" ? "1" : "2");
+            this.qcItem[prop] = true;
+          }
+        });
+      }, 500);
     },
     save() {
       this.wLoading = true;
       if (Object.keys(this.checkQc).length > 0) {
-        getQcRecord({
-          proClothNoteFk: this.crud.noteId,
-        }).then((note) => {
-          if (note.data.length) {
-            // update
-            let data = note.data[0];
-            for (let key in this.checkQc) {
-              // if (this.qcItem[key]) {
-              data[key] =
+        if (this.checkQc.recordId) {
+          // update
+          for (let key in this.checkQc) {
+            // if (this.qcItem[key]) {
+            this.checkQc[key] =
+              this.checkQc[key] instanceof Array
+                ? this.checkQc[key].join(",")
+                : this.checkQc[key];
+            // }
+          }
+          this.checkQc.checkDate = this.$getNowTime("datetime");
+          updateQcRecord(this.checkQc).then((res) => {});
+        } else {
+          // add
+          for (let key in this.checkQc) {
+            if (this.checkQc[key]) {
+              this.checkQc[key] =
                 this.checkQc[key] instanceof Array
                   ? this.checkQc[key].join(",")
                   : this.checkQc[key];
-              // }
             }
-            data.checkDate = this.$getNowTime("datetime");
-            updateQcRecord(data).then((res) => {});
-          } else {
-            // add
-            let data = {};
-            for (let key in this.checkQc) {
-              if (this.checkQc[key]) {
-                data[key] =
-                  this.checkQc[key] instanceof Array
-                    ? this.checkQc[key].join(",")
-                    : this.checkQc[key];
-              }
-            }
-            data.proClothNoteFk = this.crud.noteId;
-            data.checkDate = this.$getNowTime("datetime");
-            addQcRecord(data).then((res) => {});
           }
-        });
+          this.checkQc.proClothNoteFk = this.detail.noteId;
+          this.checkQc.checkDate = this.$getNowTime("datetime");
+          addQcRecord(this.checkQc).then((res) => {});
+        }
         setTimeout(() => {
           this.wLoading = false;
           this.$tip.success("保存成功!");
@@ -321,31 +333,38 @@ export default {
       // console.log(this.qcItem);
       // this.form.qcClothCheckItem = this.qcItem;
       // this.form.qcClothCheckItem = "";
-      // this.checkForm.column = [];
-      for (let key in this.qcItem) {
-        if (
-          this.qcItem[key] &&
-          key.indexOf("$") == -1 &&
-          key.indexOf("-all") == -1 &&
-          !key in this.checkQc
-        ) {
-          // this.form.qcClothCheckItem +=
-          //   key.split("-")[0] + ":" + this.qcItem[key] + ";";
-          this.checkForm.column.push({
-            label: key.split("-")[0],
-            prop: key.split("-")[1],
-            span: 12,
-            type: key.split("-")[2] == "1" ? "input" : "checkbox",
-            dicData: key.split("-")[2] == "1" ? [] : this.dicArr,
-          });
-          // this.checkQc[key.split("-")[1]] = this.qcItem[key];
-        }
-      }
+      this.checkForm.column = [];
+      // if (this.existed.indexOf("remark") == -1) {
       this.checkForm.column.push({
         label: "备注",
         prop: "remark",
         span: 24,
       });
+      // this.checkQc = {};
+      // this.existed.push("remark");
+      // }
+      for (let key in this.qcItem) {
+        let props = key.split("-");
+        if (
+          this.qcItem[key] &&
+          key.indexOf("$") == -1 &&
+          key.indexOf("-all") == -1
+        ) {
+          // this.form.qcClothCheckItem +=
+          //   key.split("-")[0] + ":" + this.qcItem[key] + ";";
+          this.checkForm.column.push({
+            label: props[0],
+            prop: props[1],
+            span: 12,
+            type: props[2] == "1" ? "input" : "checkbox",
+            dicData: props[2] == "1" ? [] : this.dicArr,
+          });
+          // this.existed.push(key.split("-")[1]);
+          // this.checkQc[key.split("-")[1]] = this.qcItem[key];
+        } else if (key.indexOf("$") == -1) {
+          this.checkQc[props[1]] = "";
+        }
+      }
       this.checkDlg = false;
     },
     sortChange(val) {

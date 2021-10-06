@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-09-30 14:45:35
+ * @LastEditTime: 2021-10-06 15:44:54
  * @Description: 
 -->
 <template>
@@ -59,7 +59,7 @@
 <script>
 import choice from "@/components/proMng/index";
 import { mainCrud } from "./data";
-import { add, update } from "./api";
+import { add, update, getVat } from "./api";
 
 export default {
   name: "",
@@ -112,6 +112,7 @@ export default {
       if (this.isAdd) {
         setTimeout(() => {
           this.form.sendDate = this.$getNowTime("date");
+          this.form.appColorQc = parent.userID;
           this.form.isFristVat = false;
         }, 100);
       } else {
@@ -260,10 +261,30 @@ export default {
         this.$emit("close");
       }
     },
+    queryVat() {
+      if (this.form.vatNo) {
+        getVat({ vatNo: this.form.vatNo }).then((res) => {
+          if (res.data.length) {
+            this.form.custCode = res.data[0].custCode;
+            this.form.colorName = res.data[0].colorName;
+            this.form.fabFabrics = res.data[0].fabName;
+          } else {
+            this.$tip.warning("暂无此缸号!");
+          }
+        });
+      }
+    },
   },
   created() {},
   mounted() {
     this.getData();
+    let self = this;
+    document.onkeydown = function (e) {
+      let ev = document.all ? window.event : e;
+      if (ev.keyCode === 13) {
+        self.queryVat();
+      }
+    };
   },
   beforeDestroy() {},
 };

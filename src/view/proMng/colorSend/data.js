@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-09-30 14:47:44
+ * @LastEditTime: 2021-10-06 15:40:56
  * @Description:
  */
 
@@ -84,13 +84,13 @@ export function mainCrud(_this) {
         rules: [
           {
             required: true,
-            message: "请选择缸号(số lô nhuộm)",
+            message: "请输入缸号(số lô nhuộm)",
             trigger: "blur"
           }
         ],
         click: () => {
-          _this.choiceTle = "选择染整工单";
-          _this.choiceV = true;
+          // _this.choiceTle = "选择染整工单";
+          // _this.choiceV = true;
         }
       },
       {

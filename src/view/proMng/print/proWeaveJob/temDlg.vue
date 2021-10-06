@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-09-30 09:35:38
+ * @LastEditTime: 2021-10-06 10:56:38
  * @Description: 
 -->
 <template>
@@ -703,6 +703,12 @@ export default {
           if (!this.crud[i].groupName || !this.crud[i].changeBatchTime) {
             this.$tip.error("批次分組名稱/更換時間不能為空!");
             return;
+          }
+          for (let j = 0; j < this.crud[i].list.length; j++) {
+            if (!this.crud[i].list[j].yarnRatio) {
+              this.$tip.error("用纱比例不能為空!");
+              return;
+            }
           }
         }
 

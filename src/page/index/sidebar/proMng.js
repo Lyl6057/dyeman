@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-04-01 13:39:35
  * @LastEditors: Lyl
- * @LastEditTime: 2021-10-01 15:34:07
+ * @LastEditTime: 2021-10-06 15:49:54
  * @Description:
  */
 
@@ -110,6 +110,10 @@ export function proMng(_this) {
         {
           menuName: "3.染整工单",
           index: "dyeing"
+        },
+        {
+          menuName: "4.染整载具",
+          index: "proCanvas"
         }
         // {
         //   menuName: "2.落布记录",
@@ -130,10 +134,10 @@ export function proMng(_this) {
           menuName: "1.批色码卡",
           index: "codeCard"
         },
-        {
-          menuName: "2.LD打样",
-          index: `ldDrawDesign`
-        },
+        // {
+        //   menuName: "2.LD打样",
+        //   index: `ldDrawDesign`
+        // },
         {
           menuName: "2.批色送办",
           index: "colorSend"

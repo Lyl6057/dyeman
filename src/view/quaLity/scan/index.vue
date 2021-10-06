@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-10-01 18:59:03
+ * @LastEditTime: 2021-10-06 15:10:52
  * @Description: 
 -->
 <template>
@@ -349,14 +349,14 @@ export default {
         this.$tip.warning("请先扫描或输入载具编号!");
         return;
       }
-      if (
-        this.Load.length &&
-        this.clothSum >= 1000 &&
-        this.form.storeLoadCodes == this.Load[0].storeLoadCode
-      ) {
-        this.$tip.error("该载具超重，请重新选择载具!");
-        return;
-      }
+      // if (
+      //   this.Load.length &&
+      //   this.clothSum >= 1000 &&
+      //   this.form.storeLoadCodes == this.Load[0].storeLoadCode
+      // ) {
+      //   this.$tip.error("该载具超重，请重新选择载具!");
+      //   return;
+      // }
       // this.wLoading = true;
       for (let key in this.form) {
         if (!this.form[key]) {

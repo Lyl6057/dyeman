@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-09-15 16:20:44
+ * @LastEditTime: 2021-10-05 15:21:36
  * @Description:
  */
 
@@ -1347,7 +1347,7 @@ export function techargueCrud(_this) {
           if (_this.mathCtr) {
             _this.$nextTick(() => {
               _this.chooseData.totalWater = Number(
-                Number(_this.form.clothWeight) *
+                Number(_this.vatWeight) *
                   Number(_this.chooseData.liquorRatio).toFixed(0)
               );
               _this.chooseData.totalWater = _this.chooseData.totalWater.toFixed(
@@ -1381,7 +1381,7 @@ export function techargueCrud(_this) {
                     Number(_this.chooseData.totalWater) -
                       Number(_this.chooseData.wetClothWater) *
                         0.01 *
-                        _this.form.clothWeight -
+                        _this.vatWeight -
                       Number(_this.chooseData.shotgunWater)
                   ).toFixed(0)
                 );
@@ -1396,7 +1396,7 @@ export function techargueCrud(_this) {
                     Number(_this.chooseData.totalWater) -
                       Number(_this.chooseData.wetClothWater) *
                         0.01 *
-                        _this.form.clothWeight -
+                        _this.vatWeight -
                       Number(_this.chooseData.shotgunWater)
                   ).toFixed(0)
                 );
@@ -1449,7 +1449,7 @@ export function techargueCrud(_this) {
                   Number(_this.chooseData.totalWater) -
                     Number(_this.chooseData.wetClothWater) *
                       0.01 *
-                      _this.form.clothWeight -
+                      _this.vatWeight -
                     Number(_this.chooseData.shotgunWater)
                 ).toFixed(0)
               );
@@ -1484,7 +1484,7 @@ export function techargueCrud(_this) {
                   Number(_this.chooseData.totalWater) -
                     Number(_this.chooseData.wetClothWater) *
                       0.01 *
-                      _this.form.clothWeight -
+                      _this.vatWeight -
                     Number(_this.chooseData.shotgunWater)
                 ).toFixed(0)
               );

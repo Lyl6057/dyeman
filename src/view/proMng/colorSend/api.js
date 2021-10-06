@@ -2,12 +2,19 @@
  * @Author: Lyl
  * @Date: 2021-02-01 14:06:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-09-28 10:35:56
+ * @LastEditTime: 2021-10-06 15:39:56
  * @Description:
  */
 
 import axios from "axios";
 
+export function getVat(params) {
+  return axios({
+    url: "/api/proBleadyeJob",
+    method: "get",
+    params: params
+  });
+}
 export function get(params) {
   return axios({
     url: "/api/proAppSendSample/page",

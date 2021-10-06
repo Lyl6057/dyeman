@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-24 08:12:20
  * @LastEditors: Lyl
- * @LastEditTime: 2021-09-01 18:09:56
+ * @LastEditTime: 2021-10-05 11:12:51
  * @Description:
  */
 // The Vue build version to load with the `import` command
@@ -15,7 +15,7 @@ import Avue from "@smallwei/avue";
 import "@smallwei/avue/lib/index.css";
 import ElementUI from "element-ui";
 import "element-ui/lib/theme-chalk/index.css";
-import VueParticles from "vue-particles";
+// import VueParticles from "vue-particles";
 import Sortable from "sortablejs";
 import store from "./store";
 import "./styles/index.styl";
@@ -54,7 +54,7 @@ import comNormal from "./components/normal";
 Vue.component("viewContainer", viewContainer);
 Vue.component("comNormal", comNormal);
 //粒子特效
-Vue.use(VueParticles);
+// Vue.use(VueParticles);
 // Vue.use(ElementUI);
 
 Vue.prototype.$echarts = echarts; // echarts
