@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-09-11 14:12:39
+ * @LastEditTime: 2021-10-07 19:52:41
  * @Description:
  */
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
@@ -85,6 +85,10 @@ export function mainForm(_this) {
           {
             label: "已入仓",
             value: 2
+          },
+          {
+            label: "已出仓",
+            value: 3
           }
         ],
         change: () => {

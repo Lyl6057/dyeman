@@ -2,13 +2,12 @@
  * @Author: Lyl
  * @Date: 2021-03-10 14:20:47
  * @LastEditors: Lyl
- * @LastEditTime: 2021-07-30 16:45:05
+ * @LastEditTime: 2021-10-08 18:51:26
  * @Description:
  */
 "use strict";
 const merge = require("webpack-merge");
 const prodEnv = require("./prod.env");
-
 module.exports = merge(prodEnv, {
   NODE_ENV: '"development"',
   // API_HOST: '"http://127.0.0.1:98"'

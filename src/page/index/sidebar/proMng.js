@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-04-01 13:39:35
  * @LastEditors: Lyl
- * @LastEditTime: 2021-10-06 15:49:54
+ * @LastEditTime: 2021-10-08 08:13:47
  * @Description:
  */
 
@@ -112,8 +112,8 @@ export function proMng(_this) {
           index: "dyeing"
         },
         {
-          menuName: "4.染整载具",
-          index: "proCanvas"
+          menuName: "4.行车监控",
+          index: "proDriving"
         }
         // {
         //   menuName: "2.落布记录",

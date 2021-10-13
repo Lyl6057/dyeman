@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-29 14:14:56
  * @LastEditors: Lyl
- * @LastEditTime: 2021-10-06 15:49:51
+ * @LastEditTime: 2021-10-08 08:13:59
  * @Description:
  */
 export default [
@@ -230,9 +230,9 @@ export default [
     }
   },
   {
-    path: "/proCanvas",
-    name: "染厂canvas",
-    component: resolve => require(["@/view/proMng/canvas/index"], resolve),
+    path: "/proDriving",
+    name: "行车监控",
+    component: resolve => require(["@/view/proMng/driving/index"], resolve),
     meta: {
       keepAlive: true
     }

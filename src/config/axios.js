@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-23 08:03:49
  * @LastEditors: Lyl
- * @LastEditTime: 2021-06-16 19:40:24
+ * @LastEditTime: 2021-10-09 08:13:01
  * @Description:
  */
 import axios from "axios";
@@ -10,6 +10,8 @@ import { Message } from "element-ui";
 
 axios.defaults.timeout = 30000;
 
+// console.log(window.location.origin);
+// let url = "http:" + window.location.origin.split(":")[1] + ":91";
 // 返回其他状态码
 axios.defaults.validateStatus = function(status) {
   return status >= 200 && status <= 500; // 默认的
@@ -52,11 +54,12 @@ axios.interceptors.request.use(config => {
   //     baseUrl = item.split("=")[1];
   //   }
   // });
-  // if (baseUrl == "") {
-  //   baseUrl = process.env.API_HOST;
-  // }
-  // config.url = baseUrl + config.url;
-  config.url = process.env.API_HOST + config.url;
+  if (baseUrl == "") {
+    baseUrl = process.env.API_HOST;
+  }
+  config.url = baseUrl + config.url;
+  // config.url = url + config.url;
+  // console.log(config);
   //请求之前重新拼装url
   // if (config.method === 'post') {
   //   if (config.params) {

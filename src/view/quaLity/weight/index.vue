@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-06-23 16:56:06
+ * @LastEditTime: 2021-10-07 19:53:00
  * @Description: 
 -->
 <template>
@@ -13,9 +13,12 @@
   >
     <view-container title="称重记录">
       <el-row class="btnList">
-        <el-button type="success" @click="save">{{
-          this.$t("public.save")
-        }}</el-button>
+        <el-button
+          type="success"
+          @click="save"
+          :disabled="form.clothState == 3"
+          >{{ this.$t("public.save") }}</el-button
+        >
 
         <el-button type="primary" @click="query">{{
           this.$t("public.query")
@@ -79,7 +82,7 @@
           @selection-change="selectionChange"
           @sort-change="sortChange"
         >
-          <template slot="menu">
+          <template slot="menu" v-if="form.clothState != 3">
             <el-button size="small" type="primary" @click="weighing"
               >称重</el-button
             >

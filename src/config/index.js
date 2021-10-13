@@ -82,6 +82,31 @@ export const webSocket = {
     // _this.websocket.onsend = function () {
 
     // }
+  },
+  setDriving(_this) {
+    if ("WebSocket" in window) {
+      _this.drsocket = new WebSocket("ws://192.168.5.1:92/test-one");
+    } else {
+      _this.$tip.error("该浏览器不支持websocket通讯，请切换浏览器！");
+    }
+    //连接发生错误的回调方法
+    _this.drsocket.onerror = function() {
+      _this.$tip.warning("行车监控服务离线!");
+    };
+    //连接成功建立的回调方法
+    _this.drsocket.onopen = function(event) {
+      _this.$tip.success("行车监控服务连接成功!");
+    };
+    //接收到消息的回调方法
+    _this.drsocket.onmessage = function(event) {};
+    //连接关闭的回调方法
+    _this.drsocket.onclose = function() {
+      _this.drsocket.close();
+      // _this.$tip.warning("连接关闭!");
+    };
+    // _this.websocket.onsend = function () {
+
+    // }
   }
 };
 // 获取下拉字典

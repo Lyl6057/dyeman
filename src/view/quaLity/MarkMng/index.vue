@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-09-27 16:50:38
+ * @LastEditTime: 2021-10-13 09:14:13
  * @Description: 
 -->
 <template>
@@ -152,7 +152,14 @@ export default {
         return;
       }
       this.wLoading = true;
-      this.prsocket.send("shipMark:" + this.detail.markId);
+      if (this.detail.markCount) {
+        for (let i = 0; i < this.detail.markCount; i++) {
+          this.prsocket.send("shipMark:" + this.detail.markId);
+        }
+      } else {
+        this.prsocket.send("shipMark:" + this.detail.markId);
+      }
+
       setTimeout(() => {
         this.wLoading = false;
         this.$tip.success("已发送打印请求!");
