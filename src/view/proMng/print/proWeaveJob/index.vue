@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-09-30 09:34:17
+ * @LastEditTime: 2021-10-15 18:30:02
  * @Description: 
 -->
 <template>
@@ -194,7 +194,7 @@ export default {
         this.crud = res.data.records;
         this.crud.forEach((item, i) => {
           item.custName = item.custCode;
-          item.amount = item.amount.toFixed(2);
+          // item.amount = item.amount.toFixed(2);
           item.index = i + 1;
         });
         if (this.crud.length > 0) {

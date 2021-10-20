@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-10-06 15:10:52
+ * @LastEditTime: 2021-10-15 07:53:55
  * @Description: 
 -->
 <template>
@@ -450,7 +450,11 @@ export default {
       webSocket.setCz(this);
       let _this = this;
       _this.czsocket.onmessage = function (e) {
-        _this.form.eachNumbers = e.data;
+        if (e.data.indexOf(":")) {
+          _this.form.eachNumbers = Number(e.data.replace(/[^\d.]/g, ""));
+        } else {
+          _this.form.eachNumbers = e.data;
+        }
       };
       _this.czsocket.onopen = function (event) {
         setTimeout(() => {

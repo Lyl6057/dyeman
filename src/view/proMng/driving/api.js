@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-10-06 10:07:12
  * @LastEditors: Lyl
- * @LastEditTime: 2021-10-11 18:56:51
+ * @LastEditTime: 2021-10-20 08:25:08
  * @Description:
  */
 import axios from "axios";
@@ -20,6 +20,29 @@ export function get(params) {
     url: "/api/iotCarryMap",
     method: "get",
     params: params
+  });
+}
+
+export function getSensorLog(params) {
+  return axios({
+    url: "/api/iotSensorScanLog",
+    method: "get",
+    params: params
+  });
+}
+
+export function getTask(params) {
+  return axios({
+    url: "/api/iotDispatchTask/relevance",
+    method: "get",
+    params: params
+  });
+}
+
+export function cancelTask(id) {
+  return axios({
+    url: "/api/iotDispatchTask?taseId=" + id,
+    method: "delete"
   });
 }
 

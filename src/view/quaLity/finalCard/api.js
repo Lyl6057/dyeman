@@ -2,10 +2,17 @@
  * @Author: Lyl
  * @Date: 2021-08-07 07:57:55
  * @LastEditors: Lyl
- * @LastEditTime: 2021-09-08 16:11:49
+ * @LastEditTime: 2021-10-16 08:40:53
  * @Description:
  */
 import axios from "axios";
+
+export function getPreview(id) {
+  return axios({
+    url: "/api/proFinalProductCard/cardPdf?cardId=" + id,
+    method: "get"
+  });
+}
 
 // download
 export function download(params) {
@@ -20,6 +27,18 @@ export function download(params) {
 export function upload(params) {
   return axios({
     url: "/api/basePrintTemplate/excelfile",
+    method: "post",
+    data: params,
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded"
+    }
+  });
+}
+
+// 更新
+export function updateUpload(params) {
+  return axios({
+    url: "/api/basePrintTemplate/excelUpdatefile",
     method: "post",
     data: params,
     headers: {

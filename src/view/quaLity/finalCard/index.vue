@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-08-07 07:57:44
  * @LastEditors: Lyl
- * @LastEditTime: 2021-09-16 14:42:42
+ * @LastEditTime: 2021-10-16 15:43:27
  * @Description: 
 -->
 <template>
@@ -13,69 +13,6 @@
       element-loading-text="拼命加载中..."
     >
       <el-tab-pane label="成品码卡" class="queryForm">
-        <!-- <el-row class="btnList"> -->
-        <!-- <el-tooltip
-            class="item"
-            effect="dark"
-            content="cập nhật"
-            placement="top-start"
-          >
-            <el-button
-              type="success"
-              :disabled="!detail.cardId"
-              @click="handleRowDBLClick(detail)"
-              >{{ this.$t("public.update") }}</el-button
-            >
-          </el-tooltip> -->
-
-        <!-- <el-tooltip
-            class="item"
-            effect="dark"
-            content="thêm mới "
-            placement="top-start"
-          >
-            <el-button type="primary" @click="add">{{
-              this.$t("public.add")
-            }}</el-button>
-          </el-tooltip>
-          <el-tooltip
-            class="item"
-            effect="dark"
-            content="xóa"
-            placement="top-start"
-          >
-            <el-button type="danger" :disabled="!detail.cardId" @click="del">{{
-              this.$t("public.del")
-            }}</el-button>
-          </el-tooltip> -->
-        <!-- <el-tooltip
-            class="item"
-            effect="dark"
-            content=" in"
-            placement="top-start"
-          >
-            <el-button
-              type="primary"
-              @click="print"
-              :loading="wLoading"
-              :disabled="!detail.cardId"
-              >打印</el-button
-            >
-          </el-tooltip>
-          <el-tooltip
-            class="item"
-            effect="dark"
-            content="tìm kiếm"
-            placement="top-start"
-          >
-            <el-button type="primary" @click="query">{{
-              this.$t("public.query")
-            }}</el-button>
-          </el-tooltip> -->
-        <!-- <el-button type="warning" @click="close">{{
-          this.$t("public.close")
-        }}</el-button> -->
-        <!-- </el-row> -->
         <el-row>
           <el-col :span="16">
             <el-row class="formBox" style="margin-top: 15px">
@@ -137,47 +74,13 @@
                       <span>缸号: {{ item.vatNo }}</span>
                       <span>匹号: {{ item.pidNo }}</span>
                       <span> 净重: {{ item.netWeight }}</span>
-                      <!-- <span>验布员工号: {{ item.clothChecker }}</span> -->
                     </div>
                   </el-tooltip>
-                  <!-- <el-divider style="margin: 0"></el-divider> -->
                 </div>
               </el-card>
             </view-container>
           </el-col>
         </el-row>
-
-        <!-- <el-row class="crudBox">
-          <avue-crud
-            ref="crud"
-            id="crud"
-            :option="crudOp"
-            :data="crud"
-            :page.sync="page"
-            v-loading="loading"
-            @on-load="query"
-            @row-dblclick="handleRowDBLClick"
-            @current-row-change="cellClick"
-          ></avue-crud>
-        </el-row> -->
-        <!-- <el-dialog
-          id="colorMng_Dlg"
-          :visible.sync="dialogVisible"
-          fullscreen
-          width="100%"
-          append-to-body
-          :close-on-click-modal="false"
-          :close-on-press-escape="false"
-        >
-          <tem-dlg
-            v-if="dialogVisible"
-            ref="tem"
-            :detail="detail"
-            :isAdd="isAdd"
-            @close="dialogVisible = false"
-            @refresh="query"
-          ></tem-dlg>
-        </el-dialog> -->
         <el-dialog
           id="colorMng_Dlg"
           :visible.sync="pdfDlg"
@@ -197,21 +100,30 @@
         </el-dialog>
       </el-tab-pane>
       <el-tab-pane label="打印模板">
-        <print-tem> </print-tem>
+        <print-tem @resetData="resetData"> </print-tem>
       </el-tab-pane>
     </el-tabs>
   </div>
 </template>
 <script>
 import { mainForm, mainCrud } from "./data";
-import { get, add, update, del, print, getBleadye, getRevolve } from "./api";
-import tem from "./temDlg";
+import {
+  get,
+  add,
+  update,
+  del,
+  print,
+  getBleadye,
+  getRevolve,
+  getTem,
+} from "./api";
+// import tem from "./temDlg";
 import { webSocket } from "@/config/index.js";
 import printTem from "./printTem.vue";
 export default {
   name: "",
   components: {
-    temDlg: tem,
+    // temDlg: tem,
     printTem,
   },
   data() {
@@ -239,6 +151,7 @@ export default {
       history: [],
       prsocket: null,
       sheetNum: 1,
+      commonTem: null,
     };
   },
   created() {
@@ -253,8 +166,12 @@ export default {
         this.form.paperTube = 1;
         this.form.widthUnit = "INCH";
         this.form.gramWeightUnit = "g";
-        this.form.basePrintTemplateFk =
-          this.crudOp.column[this.crudOp.column.length - 2].dicData[0].value;
+        getTem({ isDefault: 1 }).then((res) => {
+          if (res.data.length) {
+            this.form.basePrintTemplateFk = res.data[0].tempId;
+            this.commonTem = res.data[0].tempId;
+          }
+        });
       }, 200);
     });
   },
@@ -281,6 +198,7 @@ export default {
         if (res.data.length) {
           // 存在记录
           this.form = res.data[0];
+          this.getTemForCust();
           setTimeout(() => {
             this.wLoading = false;
           }, 200);
@@ -306,7 +224,7 @@ export default {
               this.form.guestComponents = val.fabElements;
               // this.form.netWeight = val.clothWeight;
               this.form.poNo = val.salPoNo;
-              // this.form.pidNo = 1;
+              this.form.pidNo = 1;
               this.form.productNo =
                 val.vatNo + this.$preFixInt(this.form.pidNo, 3);
               // this.form.weightUnit = "KG";
@@ -315,6 +233,7 @@ export default {
               }).then((res) => {
                 this.form.styleNo = res.data[0].styleNo;
               });
+              this.getTemForCust();
             } else {
               this.form.poNo = "";
               this.form.custCode = "";
@@ -337,6 +256,34 @@ export default {
           });
         }
       });
+    },
+    getTemForCust() {
+      getTem({ custCode: this.form.custCode }).then((res) => {
+        if (res.data.length) {
+          if (this.form.poNo) {
+            for (let i = 0; i < res.data.length; i++) {
+              if (res.data[i].salPoNo == this.form.poNo) {
+                this.form.basePrintTemplateFk = res.data[i].tempId;
+                return;
+              }
+              if (
+                i == res.data.length - 1 &&
+                res.data[i].salPoNo != this.form.poNo
+              ) {
+                this.form.basePrintTemplateFk = res.data[0].tempId;
+                return;
+              }
+            }
+          } else {
+            this.form.basePrintTemplateFk = res.data[0].tempId;
+          }
+        } else {
+          this.form.basePrintTemplateFk = this.commonTem;
+        }
+      });
+    },
+    resetData(data) {
+      this.crudOp.column[this.crudOp.column.length - 2].dicData = data;
     },
     preview() {
       this.wLoading = true;

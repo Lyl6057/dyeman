@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-08-18 08:51:58
  * @LastEditors: Lyl
- * @LastEditTime: 2021-09-10 18:07:38
+ * @LastEditTime: 2021-10-16 08:59:34
  * @Description: 
 -->
 <template>
@@ -54,6 +54,8 @@
       >
         <el-button type="primary" @click="down">下载</el-button>
       </el-tooltip>
+      <el-button type="primary" @click="preview">预览</el-button>
+      <el-button type="primary" @click="commonUse">设为通用模板</el-button>
       <el-tooltip
         class="item"
         effect="dark"
@@ -146,6 +148,23 @@
         </el-row>
       </view-container>
     </el-dialog>
+    <el-dialog
+      id="colorMng_Dlg"
+      :visible.sync="pdfDlg"
+      fullscreen
+      width="100%"
+      append-to-body
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+    >
+      <view-container title="打印預覽">
+        <embed
+          id="pdf"
+          style="width: 100vw; height: calc(100vh - 80px)"
+          :src="pdfUrl"
+        />
+      </view-container>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -158,6 +177,10 @@ import {
   print,
   upload,
   download,
+  updateUpload,
+  getPreview,
+  get,
+  update,
 } from "./api";
 export default {
   name: "",
@@ -179,6 +202,8 @@ export default {
       isAdd: false,
       wLoading: false,
       mbfile: null,
+      pdfDlg: false,
+      pdfUrl: "",
     };
   },
   created() {
@@ -203,7 +228,7 @@ export default {
         this.crud.forEach((item, i) => {
           item.index = i + 1;
         });
-
+        this.$emit("resetData", this.crud);
         if (this.crud.length > 0) {
           this.$refs.temCrud.setCurrentRow(this.crud[0]);
         }
@@ -218,21 +243,69 @@ export default {
         if (valid) {
           try {
             let data = JSON.parse(JSON.stringify(this.dlgform));
+            let formData = new FormData();
+            formData.append("file", this.mbfile);
+            formData.append("tempName", this.dlgform.tempName);
+            formData.append("salPoNo", this.dlgform.salPoNo);
+            formData.append("custCode", this.dlgform.custCode);
+            formData.append("tempDescr", this.dlgform.tempDescr);
             if (this.isAdd) {
-              this.uploadMb(done);
-            } else if (data.tempId) {
-              updateTem(data).then((res) => {
-                if (res.data.code == 200) {
-                  this.query();
-                  this.$tip.success(this.$t("public.bccg"));
-                } else {
-                  this.$tip.error(this.$t("public.bcsb"));
-                }
-
-                done();
-                this.dialogVisible = false;
+              formData.append("tempCode", this.dlgform.tempCode);
+              if (this.mbfile != null) {
+                upload(formData).then((res) => {
+                  if (res.data.code == 200) {
+                    this.mbfile = "";
+                    setTimeout(() => {
+                      this.query();
+                      this.dialogVisible = false;
+                      // this.wLoading = false;
+                      done();
+                      this.$tip.success(this.$t("public.bccg"));
+                    }, 200);
+                  } else {
+                    // this.dialogVisible = false;
+                    this.wLoading = false;
+                    // this.query();
+                    done();
+                    this.$tip.error(res.data.msg);
+                  }
+                });
+              } else {
+                this.$tip.warning("请选择要上传的模板");
                 this.wLoading = false;
-              });
+                // this.query();
+                // this.dialogVisible = false;
+                done();
+                // this.$tip.success(this.$t("public.bccg"));
+              }
+              // this.uploadMb(done);
+            } else if (data.tempId) {
+              formData.append("tempId", this.dlgform.tempId);
+              if (this.mbfile) {
+                updateUpload(formData).then((res) => {
+                  if (res.data.code == 200) {
+                    this.query();
+                    this.$tip.success(this.$t("public.bccg"));
+                  } else {
+                    this.$tip.error(this.$t("public.bcsb"));
+                  }
+                  done();
+                  this.dialogVisible = false;
+                  this.wLoading = false;
+                });
+              } else {
+                updateTem(this.dlgform).then((res) => {
+                  if (res.data.code == 200) {
+                    this.query();
+                    this.$tip.success(this.$t("public.bccg"));
+                  } else {
+                    this.$tip.error(this.$t("public.bcsb"));
+                  }
+                  done();
+                  this.dialogVisible = false;
+                  this.wLoading = false;
+                });
+              }
             }
 
             // if (data.tempId) {
@@ -261,40 +334,11 @@ export default {
         }
       });
     },
-    uploadMb(done) {
-      if (this.dlgform.excelName && this.mbfile != null) {
-        let formData = new FormData();
-        formData.append("tempCode", this.dlgform.tempCode);
-        formData.append("file", this.mbfile);
-        upload(formData).then((res) => {
-          if (res.data.code == 200) {
-            this.mbfile = "";
-            setTimeout(() => {
-              this.query();
-              this.dialogVisible = false;
-              // this.wLoading = false;
-              done();
-              this.$tip.success(this.$t("public.bccg"));
-            }, 200);
-          } else {
-            // this.dialogVisible = false;
-            this.wLoading = false;
-            // this.query();
-            done();
-            this.$tip.error(res.data.msg);
-          }
-        });
-      } else {
-        this.$tip.warning("请选择要上传的模板");
-        this.wLoading = false;
-        // this.query();
-        // this.dialogVisible = false;
-        done();
-        // this.$tip.success(this.$t("public.bccg"));
-      }
-    },
+    uploadMb(done) {},
     add() {
       this.dlgform = {};
+      this.dlgform.isDefault = 0;
+      this.mbfile = null;
       this.isAdd = true;
       this.crudOp.column[3].display = true;
       this.dialogVisible = true;
@@ -331,9 +375,11 @@ export default {
         });
     },
     handleRowDBLClick(val) {
+      this.mbfile = null;
       this.isAdd = false;
+
       this.dlgform = val;
-      this.crudOp.column[3].display = false;
+      // this.crudOp.column[3].display = false;
       this.dialogVisible = true;
     },
     cellClick(val) {
@@ -362,6 +408,36 @@ export default {
           this.detail.tempName.split(".")[0]
       );
       window.open(name);
+    },
+    commonUse() {
+      getTem({
+        rows: 10,
+        start: 1,
+        isDefault: true,
+      }).then((res) => {
+        if (res.data.length) {
+          res.data[0].isDefault = false;
+          updateTem(res.data[0]).then((res) => {});
+        }
+        this.detail.isDefault = true;
+        updateTem(this.detail).then((res) => {
+          this.query();
+          this.$tip.success("设置成功!");
+        });
+      });
+    },
+    preview() {
+      get({ vatNo: "XXX" }).then((res) => {
+        res.data[0].basePrintTemplateFk = this.detail.tempId;
+        update(res.data[0]).then((ures) => {
+          this.pdfUrl =
+            process.env.API_HOST +
+            "/api/proFinalProductCard/cardPdf?cardId=" +
+            res.data[0].cardId;
+          this.pdfDlg = true;
+        });
+      });
+      // getPreview(this.detail.cardId).then((res) => {});
     },
   },
 };

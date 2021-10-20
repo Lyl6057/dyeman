@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-08-07 07:58:01
  * @LastEditors: Lyl
- * @LastEditTime: 2021-09-14 17:52:33
+ * @LastEditTime: 2021-10-16 13:47:17
  * @Description:
  */
 
@@ -29,7 +29,7 @@ export function mainForm(_this) {
       },
       {
         label: "订单编号",
-        prop: "poNo",
+        prop: "salPoNo",
         span: 6,
         placeholder: " "
       },
@@ -445,7 +445,11 @@ export function mainCrud(_this) {
         width: 100,
         span: 8,
         type: "select",
-        dicData: getDicT("basePrintTemplate/list", "tempName", "tempId"),
+        props: {
+          label: "tempName",
+          value: "tempId"
+        },
+        dicData: getXDicT("basePrintTemplate/list"),
         placeholder: " ",
         rules: [
           {
@@ -489,6 +493,29 @@ export function temForm(_this) {
         label: "模板名称",
         prop: "tempName",
         span: 6,
+        placeholder: " "
+      },
+      {
+        label: "客戶",
+        prop: "custCode",
+        width: 180,
+        span: 6,
+        placeholder: " ",
+        overHidden: true,
+        type: "select",
+        dicData: cust,
+        props: {
+          value: "custCode",
+          label: "custName"
+        }
+      },
+      {
+        label: "订单编号",
+        prop: "salPoNo",
+        span: 6,
+        width: 150,
+        overHidden: true,
+        // type: "textarea",
         placeholder: " "
       }
     ]
@@ -578,10 +605,54 @@ export function temCrud(_this) {
         //   _this.$refs.input.click();
         // }
       },
+
+      {
+        label: "客戶",
+        prop: "custCode",
+        width: 180,
+        span: 8,
+        placeholder: " ",
+        overHidden: true,
+        type: "select",
+        dicData: cust,
+        props: {
+          value: "custCode",
+          label: "custName"
+        }
+      },
+      {
+        label: "订单编号",
+        prop: "salPoNo",
+        span: 8,
+        width: 150,
+        overHidden: true,
+        // type: "textarea",
+        placeholder: " "
+      },
+      {
+        label: "通用模板",
+        prop: "isDefault",
+        width: 120,
+        span: 8,
+        placeholder: " ",
+        overHidden: true,
+        type: "switch",
+        display: false,
+        dicData: [
+          {
+            label: "否",
+            value: false
+          },
+          {
+            label: "是",
+            value: true
+          }
+        ]
+      },
       {
         label: "模板说明",
         prop: "tempDescr",
-        span: 24,
+        span: 8,
         width: 400,
         overHidden: true,
         // type: "textarea",

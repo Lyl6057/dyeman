@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-10-06 10:29:51
  * @LastEditors: Lyl
- * @LastEditTime: 2021-10-11 18:39:49
+ * @LastEditTime: 2021-10-15 14:40:12
  * @Description:
  */
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
@@ -12,7 +12,7 @@ export function mainCrud(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 500px)",
+    height: "calc(100vh - 490px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
@@ -49,8 +49,8 @@ export function mainCrud(_this) {
         span: 6,
         type: "date",
         align: "center",
-        format: "yyyy-MM-dd mm:hh:ss",
-        valueFormat: "yyyy-MM-dd mm:hh:ss",
+        format: "yyyy-MM-dd hh:mm:ss",
+        valueFormat: "yyyy-MM-dd hh:mm:ss",
         placeholder: " ",
         // sortable: true,
         overHidden: true,
@@ -188,14 +188,19 @@ export function billCrud(_this) {
 let baseAreaZone = getDicT("baseAreaZone", "zoneName", "zoneCode");
 export function taskCrud(_this) {
   return {
-    menu: false,
+    menu: true,
     addBtn: false,
+    cancelBtn: false,
+    editBtn: false,
+    delBtn: false,
+    menuWidth: 80,
     border: true,
+    index: false,
     highlightCurrentRow: true,
-    height: "calc(100vh - 464px)",
+    height: "calc(100vh - 490px)",
     refreshBtn: false,
     columnBtn: false,
-    page: false,
+    page: true,
     // labelPosition: "top",
     labelWidth: 130,
     column: [
@@ -229,34 +234,69 @@ export function taskCrud(_this) {
       //   ]
       // },
       {
+        label: "发送时间",
+        // tip: "开单日期(Ngày lập đơn)",
+        prop: "sendTime",
+        // width: 180,
+        span: 6,
+        type: "date",
+        align: "center",
+        format: "yyyy-MM-dd hh:mm:ss",
+        valueFormat: "yyyy-MM-dd hh:mm:ss",
+        placeholder: " ",
+        // sortable: true,
+        overHidden: true,
+        disabled: true
+      },
+      {
+        label: "响应时间",
+        // tip: "开单日期(Ngày lập đơn)",
+        prop: "receiveTime",
+        // width: 180,
+        span: 6,
+        type: "date",
+        align: "center",
+        format: "yyyy-MM-dd hh:mm:ss",
+        valueFormat: "yyyy-MM-dd hh:mm:ss",
+        placeholder: " ",
+        // sortable: true,
+        overHidden: true,
+        disabled: true
+      },
+      {
         label: "任务状态",
         prop: "taskState",
         overHidden: true,
-        width: 140,
+        // width: 140,
         span: 6,
         type: "select",
         dicData: [
           {
             value: 1,
-            label: "进行中"
+            label: "初始状态"
           },
           {
             value: 2,
-            label: "完成"
+            label: "运输开始"
           },
           {
             value: 3,
-            label: "失败"
+            label: "运输中"
+          },
+          {
+            value: 99,
+            label: "已完成"
           }
         ]
       },
       {
         label: "载具",
-        prop: "storage",
+        prop: "carrierCode",
         overHidden: true,
-        width: 140,
+        // width: 140,
         span: 6,
         type: "select",
+        overHidden: true,
         dicData: getDicT(
           "whsCarriageStorage",
           "storageCode",
@@ -265,18 +305,18 @@ export function taskCrud(_this) {
       },
       {
         label: "起点",
-        prop: "start",
+        prop: "taskStart",
         overHidden: true,
-        width: 140,
+        // width: 140,
         span: 6,
         type: "select",
         dicData: baseAreaZone
       },
       {
         label: "终点",
-        prop: "end",
+        prop: "taskEnd",
         overHidden: true,
-        width: 140,
+        // width: 140,
         span: 6,
         type: "select",
         dicData: baseAreaZone

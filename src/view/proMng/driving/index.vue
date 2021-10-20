@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-10-05 14:00:53
  * @LastEditors: Lyl
- * @LastEditTime: 2021-10-13 13:46:45
+ * @LastEditTime: 2021-10-20 14:59:19
  * @Description: 
 -->
 <template>
@@ -26,7 +26,6 @@
                 :data="crud"
                 :page.sync="page"
                 v-loading="loading"
-                @current-row-change="cellClick"
               ></avue-crud
             ></el-tab-pane>
             <el-tab-pane label="任务管理" name="rw">
@@ -35,7 +34,15 @@
                 id="task"
                 :option="taskOp"
                 :data="task"
-              ></avue-crud>
+                :page.sync="page2"
+                @on-load="initTask"
+                @current-row-change="cellClick"
+                ><template slot="menu">
+                  <el-button size="small" type="text" @click="cancelTask"
+                    >取消</el-button
+                  >
+                </template></avue-crud
+              >
             </el-tab-pane>
           </el-tabs>
         </el-col>
@@ -47,6 +54,7 @@
       </el-row>
     </view-container>
     <div class="suspension_btn" id="suspension_btn" @click="handleClick">
+      <!-- :style="{ right: drawer ? '17.5%' : '5px' }" -->
       <!-- <el-dropdown
         type="primary"
         @command="handleClick"
@@ -56,15 +64,13 @@
       <el-button
         type="primary"
         style="width: 50px; height: 50px; border-radius: 50%"
+        v-if="!drawer"
       >
-        菜单
+        <!-- 菜单 -->
+        <i class="el-icon-menu" style="font-size: 24px"></i>
       </el-button>
-      <!-- <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item command="1">入库</el-dropdown-item>
-          <el-dropdown-item command="2">出库</el-dropdown-item>
-          <el-dropdown-item command="3">移动</el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown> -->
+
+      <i v-else class="el-icon-d-arrow-right"></i>
     </div>
     <el-drawer
       title="菜单"
@@ -137,6 +143,7 @@
           </template>
         </el-step>
         <el-step title="请扫描缸号" v-if="form.start">
+          <!--  :disabled="form.type == 2" -->
           <template slot="description">
             <!-- <el-select
               v-model="form.vatNo"
@@ -148,16 +155,15 @@
             <el-input
               @keyup.enter.native="onSubmit"
               v-model="form.vatNo"
-              :disabled="form.type == 2"
             ></el-input>
           </template>
         </el-step>
         <!-- 入仓才可以指定载具 -->
         <el-step title="请选择载具" v-if="form.start">
+          <!--    :disabled="form.type == 2" -->
           <template slot="description">
             <el-select
               v-model="form.vehicle"
-              :disabled="form.type == 2"
               multiple
               filterable
               allow-create
@@ -175,131 +181,6 @@
           </template>
         </el-step>
       </el-steps>
-      <!-- <el-steps
-        :space="200"
-        :active="active"
-        finish-status="success"
-        direction="vertical"
-        style="margin-left: 3px"
-      >
-        <el-step title="请先选择操作类型">
-          <template slot="description">
-            <el-select v-model="form.type" @change="menuChange">
-              <el-option
-                v-for="item in menuType"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              >
-              </el-option>
-            </el-select>
-            <el-popconfirm title="确定提交任务？" @onConfirm="save">
-              <el-button slot="reference" type="primary" :disabled="!form.type"
-                >提交</el-button
-              >
-            </el-popconfirm>
-          </template>
-        </el-step>
-        <el-step
-          v-if="active >= 1 && form.type != 3"
-          :title="
-            '请先选择' +
-            (form.type == 2 ? '入库入口' : form.type == 1 ? '出库出口' : '起点')
-          "
-        >
-          <template slot="description">
-            <el-select v-model="form.entrance" @change="entranceChange">
-              <el-option
-                v-for="item in form.type == 2 ? rk : ck"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              >
-              </el-option>
-            </el-select> </template
-        ></el-step>
-        <el-step v-if="form.type == 3" title="请先选择起点">
-          <template slot="description">
-            <el-select v-model="form.map1" filterable @change="map2Change">
-              <el-option
-                v-for="item in list"
-                :key="item.nodeId"
-                :label="item.label"
-                :value="item.nodeId"
-                :disabled="!item.nodeUsed"
-              >
-              </el-option>
-            </el-select>
-            <br />
-            从地图上选择
-            <el-switch
-              v-model="check2"
-              active-color="#13ce66"
-              inactive-color="#ccc"
-            >
-            </el-switch></template
-        ></el-step>
-        <el-step
-          :title="'请先选择' + (form.type == 1 ? '起点' : '终点')"
-          v-if="active >= 2"
-        >
-          <template slot="description">
-            <el-select v-model="form.map2" filterable @change="map2Change">
-              <el-option
-                v-for="item in list"
-                :key="item.nodeId"
-                :label="item.label"
-                :value="item.nodeId"
-                :disabled="form.type == 2 ? item.nodeUsed : !item.nodeUsed"
-              >
-              </el-option>
-            </el-select>
-            <br />
-            从地图上选择
-            <el-switch
-              v-model="check3"
-              active-color="#13ce66"
-              inactive-color="#ccc"
-            >
-            </el-switch>
-          </template>
-        </el-step>
-        <el-step title="请选择载具" v-if="form.type == 2 && active >= 3">
-          <template slot="description">
-            <el-select
-              v-model="form.vehicle"
-              filterable
-              allow-create
-              default-first-option
-              @change="vehicleChange"
-            >
-              <el-option
-                v-for="item in storageList"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              >
-              </el-option>
-            </el-select>
-          </template>
-        </el-step>
-        <el-step title="请扫描存放物品" v-if="form.type == 2 && active >= 4">
-          <template slot="description">
-            <el-input
-              v-model="form.vatNo"
-              @keyup.enter.native="onSubmit"
-              style="padding-right: 10%"
-            ></el-input>
-            <br />
-            <span style="color: #409eff">已扫物品:</span>
-            <el-row style="height: 250px; overflow: auto">
-              <el-col v-for="(item, index) in goods" :key="index" :span="12">
-                <span>{{ item.vatNo }}</span>
-              </el-col>
-            </el-row>
-          </template>
-        </el-step>
-      </el-steps> -->
     </el-drawer>
   </div>
 </template>
@@ -317,6 +198,9 @@ import {
   addBill,
   updateMap,
   postTask,
+  getTask,
+  cancelTask,
+  getSensorLog,
 } from "./api.js";
 import { mainCrud, billCrud, taskCrud } from "./data.js";
 import { webSocket } from "@/config/index.js";
@@ -329,6 +213,11 @@ export default {
       history: null,
       Proportion: 50,
       page: {
+        pageSize: 20,
+        currentPage: 1,
+        total: 0,
+      },
+      page2: {
         pageSize: 20,
         currentPage: 1,
         total: 0,
@@ -391,30 +280,15 @@ export default {
       eSwicth: false,
       areaList: [],
       drsocket: null,
+      menuIcon: "",
     };
   },
   mounted() {
     this.getData();
-    let box1 = document.getElementById("suspension_btn");
-    box1.onmousedown = function () {
-      document.onmousemove = function (event) {
-        event = event || window.event;
-        if (event.clientX > 220 && event.clientX < window.innerWidth - 30) {
-          box1.style.left = event.clientX - 25 + "px";
-        }
-        if (event.clientY > 25 && event.clientY < window.innerHeight - 80) {
-          box1.style.top = event.clientY - 25 + "px";
-        }
-      };
-      document.onmouseup = function () {
-        document.onmousemove = null;
-        document.onmouseup = null;
-      };
-    };
     webSocket.setDriving(this);
     let _this = this;
     this.drsocket.onmessage = function (e) {
-      _this.onmessage(e.data);
+      _this.onmessage(JSON.parse(e.data));
     };
   },
   methods: {
@@ -466,6 +340,7 @@ export default {
                       sensorId: sen.data[i].sensorId,
                       zoneId: sen.data[i].zoneId,
                       zoneName: this.areaList[j].zoneName,
+                      lastStoreCode: item.lastStoreCode,
                     });
                     break;
                   }
@@ -497,6 +372,40 @@ export default {
         setTimeout(() => {
           this.wloading = false;
         }, 200);
+      });
+    },
+    initTask() {
+      getTask(
+        Object.assign({
+          rows: this.page2.pageSize,
+          page: this.page2.currentPage,
+          // start: this.page2.pageSize * (this.page2.currentPage - 1) + 1,
+        })
+      ).then((res) => {
+        this.detail = {};
+        this.task = res.data.records;
+        this.task.forEach((item, index) => {
+          item.index = index + 1;
+          item.carrierCode = "";
+          item.taskdetails.forEach((detail, i) => {
+            if (i == item.taskdetails.length - 1) {
+              item.carrierCode += detail.carrierCode;
+            } else {
+              item.carrierCode += detail.carrierCode + ",";
+            }
+          });
+        });
+        if (this.task.length > 0) {
+          this.$refs.task.setCurrentRow(this.task[0]);
+        }
+        // let index = 1;
+        // res.data.records.forEach((item) => {
+
+        // });
+        this.page2.total = res.data.total;
+        // this.task.forEach((item, i) => {
+        //   item.index = i + 1;
+        // });
       });
     },
     init() {
@@ -551,33 +460,83 @@ export default {
       // canvas.onmousewheel = this.onmousewheels;
       canvas.onmousedown = function (e) {
         let box = document.getElementById("content");
-        var w = e.clientX;
-        var h = e.clientY;
+        let startX = e.offsetX;
+        let startY = e.offsetY;
         document.onmousemove = function (e1) {
-          var l = w - e1.clientX;
-          var t = h - e1.clientY;
-          if (l > 0) {
-            box.scrollLeft += 5;
-          } else {
-            box.scrollLeft -= 5;
-          }
-          if (t > 0) {
-            box.scrollTop += 5;
-          } else {
-            box.scrollTop -= 5;
-          }
+          let offsetX = e1.offsetX - startX;
+          let offsetY = e1.offsetY - startY;
+          // PS: 需要注意的是当鼠标向上移动时, 滚动条应该向下移动, 所以这里都是减去的移动距离
+          box.scrollTop = box.scrollTop - offsetY;
+          box.scrollLeft = box.scrollLeft - offsetX;
         };
         canvas.onmouseup = function () {
+          document.onmousemove = null;
+        };
+        canvas.onmouseout = function () {
           document.onmousemove = null;
         };
       };
     },
     onmessage(data) {
       console.log("websocket返回的数据:", data);
-      updateMap(data).then((res) => {
-        this.getData();
+      // 通过返回的logid 查找日志信息
+      getSensorLog({ logId: data.logId }).then((res) => {
+        let vehicle = res.data[0].carrierRfid; // 载具编号
+        let logTime = res.data[0].logTime; // 日志时间
+        //生成日志信息,通过 logTime 判断是否存在记录，避免多个客户端生成重复记录
+        getLog({ useTime: logTime, rows: 10, page: 1 }).then((log) => {
+          if (!log.data.records.length) {
+            // 不存在记录，新增载具日志信息
+            addLog({
+              whsCarriageStorageFk: vehicle,
+              useTime: logTime,
+              businessType: 5,
+              // businessId: this.form.bleadyeJobId,
+              mapNodeId: data.nodeId,
+            });
+            updateStorage({
+              carriageStorageId: vehicle,
+              storageState: data.nodeUsed == "1" ? 2 : 1,
+            }).then((res) => {});
+            data.lastStoreCode = vehicle;
+            updateMap(data).then((res) => {
+              this.getData();
+              this.initTask();
+            });
+          }
+        });
       });
+
       //
+    },
+    cancelTask() {
+      this.$nextTick(() => {
+        setTimeout(() => {
+          if (this.detail.taskState == 99) {
+            this.$tip.warning("该任务已完成,不可删除!");
+            return;
+          }
+          this.$tip
+            .cofirm("是否确定取消选中的任务?", this, {})
+            .then(() => {
+              this.wloading = true;
+              cancelTask(this.detail.taskId).then((res) => {
+                if (res.data.code == 200) {
+                  this.$tip.success("取消成功!");
+                  this.initTask();
+                } else {
+                  this.$tip.error("取消失败!");
+                }
+                setTimeout(() => {
+                  this.wloading = false;
+                }, 200);
+              });
+            })
+            .catch((err) => {
+              // this.$tip.warning(this.$t("public.qxcz"));
+            });
+        }, 200);
+      });
     },
     save() {
       if (!this.form.start) {
@@ -599,18 +558,19 @@ export default {
           return;
         }
       }
-      // this.wloading = true;
-      this.task.push({
-        // taskType: this.form.type,
-        taskState: 1,
-        storage: this.form.vehicle.toString(),
-        start: this.form.start,
-        end: this.form.end,
-        index: this.task.length + 1,
-      }); // 添加任务
+      // // this.wloading = true;
+      // this.task.push({
+      //   // taskType: this.form.type,
+      //   taskState: 1,
+      //   storage: this.form.vehicle.toString(),
+      //   start: this.form.start,
+      //   end: this.form.end,
+      //   index: this.task.length + 1,
+      // }); // 添加任务
       this.sendTask();
     },
     sendTask() {
+      // this.wloading = true;
       let taskdetails = [];
       this.form.vehicle.forEach((item) => {
         taskdetails.push({
@@ -629,32 +589,33 @@ export default {
         {
           receiveTime: null,
           sendTime: null,
-          taskEnd: this.form.start,
+          taskEnd: this.form.end,
           taskId: null,
-          taskStart: this.form.end,
+          taskStart: this.form.start,
           // taskState: 0,
           taskType: "carry",
           taskdetails,
           workpackageCode: this.form.vatNo,
         },
       ];
+      // console.log(this.form);
       postTask(ex).then((res) => {
-        // this.onmessage({
-        //   nodeId: "F4-1-1",
-        //   nodeUsed: 1,
-        // });
+        // if (this.form.type == 1) {
+        //   // 起点为出入口
+        // }else{
+        //   // 起点为暂存区
+        // }
+        if (res.data.CODE == "200") {
+          this.$tip.success("发送成功!");
+          this.initTask();
+        } else {
+          this.$tip.error("发送失败!");
+        }
+        setTimeout(() => {
+          this.wloading = false;
+        }, 200);
         // this.form.vehicle.forEach((item) => {
-        //   addLog({
-        //     whsCarriageStorageFk: item,
-        //     useTime: this.$getNowTime("datetime"),
-        //     businessType: 5,
-        //     businessId: this.form.bleadyeJobId,
-        //     mapNodeId: "F4-1-1",
-        //   });
-        //   updateStorage({
-        //     carriageStorageId: item,
-        //     storageState: 2,
-        //   }).then((res) => {});
+
         // });
       });
     },
@@ -678,19 +639,18 @@ export default {
     cellClick(val) {
       this.detail = val;
       this.detail.list = [];
-
-      getBill({ whsCarriageStorageLogFk: val.storageLogId }).then((res) => {
-        res.data.forEach((item, i) => {
-          item.index = i + 1;
-          this.detail.list.push(item);
-        });
-      });
+      // getBill({ whsCarriageStorageLogFk: val.storageLogId }).then((res) => {
+      //   res.data.forEach((item, i) => {
+      //     item.index = i + 1;
+      //     this.detail.list.push(item);
+      //   });
+      // });
     },
     handleClick() {
       // this.drawerTle = val == "1" ? "入库" : val == "2" ? "出库" : "移动";
-      let dom = document.getElementById("content");
-      dom.style.width = "71%";
-      dom.style.margin = "5px 0";
+      let dom = document.getElementById("proCanvas");
+      dom.style.width = "76%";
+      dom.style.margin = "0";
       this.drawer = !this.drawer;
     },
     startChange(val) {
@@ -796,7 +756,6 @@ export default {
               this.$tip.error("起点和终点不能相同,请重新选择!");
               return;
             }
-            console.log(this.list[i]);
             if (
               this.list[i].nodeUsed == 0 &&
               this.list[i].zoneId.indexOf("IN") == -1 &&
@@ -866,25 +825,25 @@ export default {
             }
             this.drawToolTip(
               `坐标:${this.history.code}`,
-              clickX + 150 > maxW ? clickX - 150 : clickX,
-              clickY + 70 > maxH ? clickY - 40 : clickY + 40
+              clickX + 200 > maxW ? clickX - 260 : clickX,
+              clickY + 70 > maxH ? clickY : clickY + 40
             );
             this.drawToolTip(
               `区域:${this.history.zoneName}`,
-              clickX + 150 > maxW ? clickX - 150 : clickX,
-              clickY + 70 > maxH ? clickY - 10 : clickY + 10
+              clickX + 200 > maxW ? clickX - 260 : clickX,
+              clickY + 70 > maxH ? clickY - 30 : clickY + 10
             );
-            if (this.crud.length && this.history.nodeUsed == 1) {
+            if (this.history.nodeUsed == 1 && this.history.lastStoreCode) {
               this.$nextTick(() => {
                 this.drawToolTip(
-                  `载具:${this.crud[0].$whsCarriageStorageFk}`,
-                  clickX + 150 > maxW ? clickX - 150 : clickX,
-                  clickY + 70 > maxH ? clickY - 70 : clickY + 70
+                  `载具:${this.history.lastStoreCode}`,
+                  clickX + 200 > maxW ? clickX - 260 : clickX,
+                  clickY + 70 > maxH ? clickY + 30 : clickY + 70
                 );
                 if (this.sSwicth && this.drawer) {
-                  this.form.vatNo = this.crud[0].$businessId;
+                  // this.form.vatNo = this.crud[0].$businessId;
                   this.form.vehicle = [];
-                  this.form.vehicle.push(this.crud[0].whsCarriageStorageFk);
+                  this.form.vehicle.push(this.history.lastStoreCode);
                 }
                 this.sSwicth = false;
                 this.eSwicth = false;
@@ -992,9 +951,9 @@ export default {
       );
     },
     drawerCloseBefore() {
-      let dom = document.getElementById("content");
-      dom.style.width = "99%";
-      dom.style.margin = "5px auto";
+      let dom = document.getElementById("proCanvas");
+      dom.style.width = "100%";
+      dom.style.margin = "0";
     },
   },
 };
@@ -1009,6 +968,16 @@ export default {
   -ms-user-select: none;
   user-select: none;
   position: relative;
+  width: 76%;
+
+  .el-table__fixed-body-wrapper {
+    top: 36px !important;
+    height: calc(100vh - 550px) !important;
+  }
+
+  .el-popover {
+    border: none !important;
+  }
 
   .el-tag {
     font-size: 14px;
@@ -1032,7 +1001,7 @@ export default {
   .el-drawer__wrapper {
     position: fixed;
     height: calc(100vh - 55px);
-    width: 25% !important;
+    width: 20% !important;
     top: 0 !important;
     right: 0 !important;
     left: initial !important;
@@ -1058,12 +1027,13 @@ export default {
 
   .suspension_btn {
     position: fixed;
-    bottom: 200px;
+    bottom: 50%;
     height: 50px;
     width: 50px;
-    left: 195px;
-    z-index: 10;
+    right: 2px;
+    z-index: 9999;
     cursor: pointer;
+    font-size: 26px;
 
     .el-dropdown {
       color: #fff;
@@ -1091,10 +1061,10 @@ export default {
   }
 
   #content {
-    width: 71%;
+    width: 100%;
     height: 300px;
     overflow: auto;
-    // margin: 5px auto;
+    margin: 0;
     border: 1px solid #ccc;
   }
 }
