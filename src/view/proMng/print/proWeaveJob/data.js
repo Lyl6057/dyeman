@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-09-18 09:47:26
+ * @LastEditTime: 2021-10-27 08:52:26
  * @Description:
  */
 
@@ -66,6 +66,28 @@ export function mainForm(_this) {
         span: 6,
         placeholder: " ",
         tip: "Lập đơn"
+      },
+      {
+        label: "审核状态",
+        prop: "auditState",
+        span: 6,
+        placeholder: " ",
+        type: "select",
+        dicData: [
+          {
+            value: 0,
+            label: "待审核"
+          },
+          {
+            value: 1,
+            label: "已审核"
+          }
+        ],
+        change: () => {
+          _this.$nextTick(() => {
+            _this.query();
+          });
+        }
       }
       // {
       //   label: _this.$t('whseField.khmc'),
@@ -978,7 +1000,7 @@ export function yarnCrud(_this) {
     height: "calc(100vh - 112px)",
     refreshBtn: false,
     columnBtn: false,
-    page: false,
+    page: true,
     labelWidth: 130,
     column: [
       {

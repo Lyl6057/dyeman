@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-10-06 10:56:38
+ * @LastEditTime: 2021-10-28 08:35:57
  * @Description: 
 -->
 <template>
@@ -74,11 +74,17 @@
           <el-button
             type="primary"
             @click="print"
-            :disabled="!this.form.weaveJobId"
+            :disabled="!this.form.weaveJobId || form.auditState === 0"
             v-if="canSave"
             >打印</el-button
           >
         </el-tooltip>
+        <el-button
+          type="primary"
+          @click="auditHandle(form.auditState ? 0 : 1)"
+          v-if="audit"
+          >{{ form.auditState ? "取消审核" : "审核" }}</el-button
+        >
         <!-- <el-tooltip
           class="item"
           effect="dark"
@@ -113,7 +119,7 @@
       </view-container> -->
     </view-container>
     <!-- <el-tabs v-model="tabs">
-      <el-tab-pane :label="tabs" name="用紗分組">
+      <el-tab-pane :label="tabs" name="用紗明细">
         <el-button @click="saveOther" type="success">{{
           $t("public.save")
         }}</el-button>
@@ -140,7 +146,7 @@
       v-if="visible"
     >
       <el-row>
-        <el-col :span="tabs == '用紗分組' ? 6 : 24">
+        <el-col :span="24">
           <view-container :title="tabs">
             <div class="btnList">
               <el-button
@@ -227,7 +233,7 @@
               ></avue-crud>
             </div> </view-container
         ></el-col>
-        <el-col :span="18" v-if="tabs == '用紗分組'">
+        <!-- <el-col :span="18" v-if="tabs == '用紗明细'">
           <view-container title="用紗明細">
             <div class="btnList">
               <el-tooltip
@@ -268,7 +274,7 @@
               ></avue-crud>
             </div>
           </view-container>
-        </el-col>
+        </el-col> -->
       </el-row>
     </el-dialog>
     <el-dialog
@@ -353,6 +359,7 @@ export default {
     detail: Object,
     isAdd: Boolean,
     copyC: Boolean,
+    audit: Boolean,
   },
   components: {
     preView: preview,
@@ -414,6 +421,7 @@ export default {
           if (this.copyC) {
             this.form = JSON.parse(JSON.stringify(this.detail));
             this.form.weaveJobCode = this.detail.weaveJobCode + "A";
+            this.form.auditState = 0;
           } else {
             this.form.weaveJobCode = res.data.data;
           }
@@ -421,6 +429,7 @@ export default {
           this.form.calicoShap = "1";
           this.form.weaveState = 0;
           this.form.isWorkOut = 0;
+          this.form.auditState = 0;
           this.form.creator = parent.userID;
           this.form.weaveJobId = "";
           this.code = res.data.data;
@@ -457,6 +466,26 @@ export default {
         process.env.API_HOST +
         "/api/proWeaveJob/prinEntityPdf?id=" +
         this.form.weaveJobId;
+    },
+    auditHandle(val) {
+      this.$tip
+        .cofirm(val ? "是否确定通过审核?" : "是否确定取消审核?")
+        .then(() => {
+          this.wLoading = true;
+          update({ weaveJobId: this.form.weaveJobId, auditState: val }).then(
+            (res) => {
+              setTimeout(() => {
+                this.form.auditState = val;
+                this.$emit("refresh");
+                this.$tip.success(this.$t("public.bccg"));
+                this.wLoading = false;
+              }, 200);
+            }
+          );
+        })
+        .catch((err) => {
+          this.$tip.warning(this.$t("public.qxcz"));
+        });
     },
     async getAllYarn() {
       getGroup({
@@ -624,16 +653,18 @@ export default {
         this.func.add = addLong;
         this.func.update = updateLong;
         this.dlgForm.proWeaveJobFk = this.form.weaveJobId;
-      } else if (this.tabs == "用紗分組") {
+      } else if (this.tabs == "用紗明细") {
         this.func.get = getGroup;
-        this.func.del = delGroup;
+        this.func.del = delYarn;
         this.func.add = addGroup;
         this.func.update = updateGroup;
+        this.dlgForm.proWeaveJobFk = this.form.weaveJobId;
+        this.getYarnList();
+        return;
         // this.func.get = getYarn;
         // this.func.del = delYarn;
         // this.func.add = addYarn;
         // this.func.update = updateYarn;
-        this.dlgForm.proWeaveJobFk = this.form.weaveJobId;
       } else if (this.tabs == "洗後規格") {
         this.func.get = getCalico;
         this.func.del = delCalico;
@@ -667,7 +698,7 @@ export default {
             this.crud = res.data.rows;
           } else {
             this.crud = res.data.records;
-            if (this.tabs == "用紗分組") {
+            if (this.tabs == "用紗明细") {
               this.crud.sort((a, b) => {
                 return a.sn - b.sn;
               });
@@ -694,21 +725,19 @@ export default {
       if (this.crud.length == 0) {
         return;
       }
+      if (this.tabs == "用紗明细") {
+        this.saveYarn();
+        return;
+      }
       for (let i = 0; i < this.crud.length; i++) {
         if (this.tabs == "變更紗長" && !this.crud[i].yarnLength) {
           this.$tip.error("紗長不能為空!");
           return;
         }
-        if (this.tabs == "用紗分組") {
-          if (!this.crud[i].groupName || !this.crud[i].changeBatchTime) {
-            this.$tip.error("批次分組名稱/更換時間不能為空!");
+        if (this.tabs == "用紗明细") {
+          if (!this.crud[i].yarnRatio) {
+            this.$tip.error("用纱比例不能為空!");
             return;
-          }
-          for (let j = 0; j < this.crud[i].list.length; j++) {
-            if (!this.crud[i].list[j].yarnRatio) {
-              this.$tip.error("用纱比例不能為空!");
-              return;
-            }
           }
         }
 
@@ -762,18 +791,18 @@ export default {
       });
       Promise.all(promiseArr).then((res) => {
         for (let i = 0; i < this.crud.length; i++) {
-          if (this.crud[i].list && this.crud[i].list.length > 0) {
-            this.crud[i].list.forEach((item) => {
-              item.proWeaveJobGroupFk = this.crud[i].groupId;
-              if (!item.useYarnId) {
-                addYarn(item).then((res) => {
-                  item.useYarnId = res.data.data;
-                });
-              } else {
-                updateYarn(item).then((res) => {});
-              }
-            });
-          }
+          // if (this.crud[i].list && this.crud[i].list.length > 0) {
+          //   this.crud[i].list.forEach((item) => {
+          //     item.proWeaveJobGroupFk = this.crud[i].groupId;
+          //     if (!item.useYarnId) {
+          //       addYarn(item).then((res) => {
+          //         item.useYarnId = res.data.data;
+          //       });
+          //     } else {
+          //       updateYarn(item).then((res) => {});
+          //     }
+          //   });
+          // }
           if (i === this.crud.length - 1) {
             // this.getDetail();
             setTimeout(() => {
@@ -809,6 +838,63 @@ export default {
       //   }
       // });
     },
+    saveYarn() {
+      this.dlgLoading = true;
+      // 判断是否存在分组
+      if (this.form.groupId) {
+        // 存在分组，直接保存
+        for (let i = 0; i < this.crud.length; i++) {
+          if (!this.crud[i].yarnRatio) {
+            this.$tip.error("用纱比例不能為空!");
+            this.dlgLoading = false;
+            return;
+          }
+        }
+        this.crud.forEach((item, i) => {
+          item.proWeaveJobGroupFk = this.form.groupId;
+          item.proWeaveJobFk = this.form.weaveJobId;
+          if (!item.useYarnId) {
+            addYarn(item).then((res) => {
+              item.useYarnId = res.data.data;
+            });
+          } else {
+            updateYarn(item).then((res) => {});
+          }
+          if (i == this.crud.length - 1) {
+            this.$tip.success("保存成功!");
+            this.dlgLoading = false;
+          }
+        });
+      } else {
+        for (let i = 0; i < this.crud.length; i++) {
+          if (!this.crud[i].yarnRatio) {
+            this.$tip.error("用纱比例不能為空!");
+            this.dlgLoading = false;
+            return;
+          }
+        }
+        this.func
+          .add({
+            proWeaveJobFk: this.form.weaveJobId,
+            sn: 1,
+            groupName: "01",
+            changeBatchTime: this.$getNowTime("datetime"),
+          })
+          .then((res) => {
+            this.crud.forEach((item, i) => {
+              item.proWeaveJobGroupFk = res.data.data;
+              item.proWeaveJobFk = this.form.weaveJobId;
+              addYarn(item).then((res1) => {
+                item.useYarnId = res1.data.data;
+              });
+              if (i == this.crud.length - 1) {
+                this.$tip.success("保存成功!");
+                this.dlgLoading = false;
+              }
+            });
+          });
+      }
+    },
     saveDtl() {},
     checkOrder() {
       this.tabs = "選擇訂單";
@@ -816,8 +902,8 @@ export default {
       this.visible = true;
     },
     checkYarn() {
-      this.tabs = "用紗分組";
-      this.crudOp = groupCrudOp(this);
+      this.tabs = "用紗明细";
+      this.crudOp = yarnCrud(this);
       this.visible = true;
     },
     checkCalico() {
@@ -831,10 +917,6 @@ export default {
       this.visible = true;
     },
     add() {
-      if (this.tabs == "用紗分組" && this.crud.length >= 1) {
-        this.$tip.warning("每个织单只允许存在一个用纱分组!");
-        return;
-      }
       this.crud.push({
         index: this.crud.length + 1,
         $cellEdit: true,
@@ -844,6 +926,7 @@ export default {
         userName: parent.userID,
         userId: this.$store.state.userOid,
         recordTime: this.$getNowTime("datetime"),
+        groupId: this.dlgForm.groupId,
       });
       this.$refs.crud.setCurrentRow(this.crud[this.crud.length - 1]);
       // } else {
@@ -856,7 +939,7 @@ export default {
     del() {
       if (
         !this.chooseData.changedId &&
-        !this.chooseData.groupId &&
+        !this.chooseData.useYarnId &&
         !this.chooseData.washedId &&
         !this.chooseData.strainId &&
         !this.chooseData.useId
@@ -882,8 +965,8 @@ export default {
             .del(
               this.tabs === "更改紗長"
                 ? this.chooseData.changedId
-                : this.tabs === "用紗分組"
-                ? this.chooseData.groupId
+                : this.tabs === "用紗明细"
+                ? this.chooseData.useYarnId
                 : this.tabs === "洗後規格"
                 ? this.chooseData.washedId
                 : this.tabs === "機號信息"
@@ -974,36 +1057,47 @@ export default {
       if (!this.chooseData.list) {
         this.chooseData.list = [];
       }
-
-      if (
-        this.tabs == "用紗分組" &&
-        this.chooseData.list.length == 0 &&
-        this.chooseData.groupId
-      ) {
-        this.getYarnList();
-      }
+      // if (
+      //   this.tabs == "用紗明细" &&
+      //   this.chooseData.list.length == 0 &&
+      //   this.chooseData.groupId
+      // ) {
+      //   this.getYarnList();
+      // }
     },
     cellDtlClick(val) {
       this.chooseDtlData = val;
     },
     getYarnList() {
-      getYarn({
-        star: 1,
-        rows: 999,
-        proWeaveJobGroupFk: this.chooseData.groupId,
-      }).then((res) => {
-        let data = res.data.records;
-        data.sort((a, b) => {
-          return a.sn > b.sn ? 1 : -1;
-        });
-        data.forEach((item, i) => {
-          item.$cellEdit = true;
-          // item.sn = i + 1;
-          this.chooseData.list.push(Object.assign(item, { index: i + 1 }));
-        });
-        this.chooseData.list = res.data.records;
-        if (this.chooseData.list.length > 0) {
-          this.$refs.yarnCrud.setCurrentRow(this.chooseData.list[0]);
+      getGroup(
+        Object.assign({
+          rows: this.page.pageSize,
+          start: this.page.currentPage,
+          proWeaveJobFk: this.form.weaveJobId,
+        })
+      ).then((group) => {
+        if (group.data.records.length) {
+          this.form.groupId = group.data.records[0].groupId; // 存在分组的依据
+          getYarn({
+            star: 1,
+            rows: 999,
+            proWeaveJobGroupFk: group.data.records[0].groupId,
+          }).then((res) => {
+            this.crud = res.data.records;
+            this.crud.forEach((item, i) => {
+              item.$cellEdit = true;
+              item.index = i + 1;
+            });
+            this.crud.sort((a, b) => {
+              return a.sn - b.sn;
+            });
+            if (this.crud.length > 0) {
+              this.$refs.crud.setCurrentRow(this.crud[0]);
+            }
+            this.page.total = res.data.total;
+          });
+        } else {
+          this.crud = [];
         }
       });
     },

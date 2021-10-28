@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-10-15 18:30:02
+ * @LastEditTime: 2021-10-27 08:55:05
  * @Description: 
 -->
 <template>
@@ -55,7 +55,11 @@
           content="in"
           placement="top-start"
         >
-          <el-button type="primary" @click="print" :loading="wloading"
+          <el-button
+            type="primary"
+            @click="print"
+            :loading="wloading"
+            :disabled="detail.auditState === 0"
             >打印</el-button
           >
         </el-tooltip>
@@ -180,7 +184,7 @@ export default {
       this.loading = true;
       this.detail = {};
       for (let key in this.form) {
-        if (this.form[key] == "") {
+        if (this.form[key] == "" && key != "auditState") {
           delete this.form[key];
         }
       }
@@ -226,6 +230,10 @@ export default {
         this.$tip.warning("你无权限删除该条数据!");
         return;
       }
+      if (this.detail.auditState) {
+        this.$tip.warning("通过审核的数据不可删除,请联系主管取消审核!");
+        return;
+      }
       this.$tip
         .cofirm(
           this.$t("iaoMng.delTle7") +
@@ -266,6 +274,10 @@ export default {
         return {
           backgroundColor: "#FBD295",
           // color:'#fff'
+        };
+      } else if (row.auditState === 0) {
+        return {
+          backgroundColor: "#F56C6C",
         };
       }
     },

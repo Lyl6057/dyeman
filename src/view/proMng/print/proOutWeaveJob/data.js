@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-09-30 15:05:09
+ * @LastEditTime: 2021-10-27 14:00:27
  * @Description:
  */
 
@@ -213,7 +213,7 @@ export function mainCrud(_this) {
       },
       {
         label: "开单日期",
-        prop: "startDate",
+        prop: "billDate",
         width: 120,
         placeholder: " ",
         span: 6,
@@ -298,14 +298,14 @@ export function mainCrud(_this) {
         //   _this.visible = true
         // }
       },
-      {
-        label: "营销单号",
-        prop: "marketOrder",
-        tip: "Mã số dệt bộ phận Sales",
-        span: 6,
-        width: 200,
-        overHidden: true
-      },
+      // {
+      //   label: "营销单号",
+      //   prop: "marketOrder",
+      //   tip: "Mã số dệt bộ phận Sales",
+      //   span: 6,
+      //   width: 200,
+      //   overHidden: true
+      // },
 
       // {
       //   label: "客戶名稱",
@@ -323,29 +323,29 @@ export function mainCrud(_this) {
       //     });
       //   }
       // },
-      {
-        label: "客戶",
-        prop: "custCode",
-        overHidden: true,
-        disabled: false,
-        tip: "Khách hàng",
-        width: 120,
-        span: 6,
-        type: "select",
+      // {
+      //   label: "客戶",
+      //   prop: "custCode",
+      //   overHidden: true,
+      //   disabled: false,
+      //   tip: "Khách hàng",
+      //   width: 120,
+      //   span: 6,
+      //   type: "select",
 
-        dicData: cust,
-        filterable: true,
-        allowCreate: true,
-        defaultFirstOption: true,
-        placeholder: "请選擇客戶"
-        // rules: [
-        //   {
-        //     required: true,
-        //     message: "请選擇客戶名稱",
-        //     trigger: "blur"
-        //   }
-        // ]
-      },
+      //   dicData: cust,
+      //   filterable: true,
+      //   allowCreate: true,
+      //   defaultFirstOption: true,
+      //   placeholder: "请選擇客戶"
+      //   // rules: [
+      //   //   {
+      //   //     required: true,
+      //   //     message: "请選擇客戶名稱",
+      //   //     trigger: "blur"
+      //   //   }
+      //   // ]
+      // },
 
       // {
       //   label: "開機日期",
@@ -368,15 +368,15 @@ export function mainCrud(_this) {
       //   ]
       // },
 
-      {
-        label: "客户批号",
-        prop: "custPoNo",
-        span: 6,
-        width: 120,
-        placeholder: " ",
-        tip: "Ckhách hàng PO",
-        hide: true
-      },
+      // {
+      //   label: "客户批号",
+      //   prop: "custPoNo",
+      //   span: 6,
+      //   width: 120,
+      //   placeholder: " ",
+      //   tip: "Ckhách hàng PO",
+      //   hide: true
+      // },
       {
         label: "顏色名稱",
         prop: "colorName",
@@ -405,7 +405,15 @@ export function mainCrud(_this) {
         tip: "Số màu"
         // row: true
       },
-
+      {
+        label: "季节",
+        prop: "seasonCode",
+        span: 6,
+        width: 120,
+        placeholder: " ",
+        tip: "Mùa hàng",
+        hide: true
+      },
       // {
       //   label: "纱牌",
       //   prop: "yarnBrand",
@@ -463,24 +471,16 @@ export function mainCrud(_this) {
         tip: "Loại vải "
       },
 
-      {
-        label: "布类代码",
-        prop: "custFabricCode",
-        span: 6,
-        width: 120,
-        placeholder: " ",
-        tip: "Fabric Code",
-        hide: true
-      },
-      {
-        label: "季节",
-        prop: "seasonCode",
-        span: 6,
-        width: 120,
-        placeholder: " ",
-        tip: "Mùa hàng",
-        hide: true
-      },
+      // {
+      //   label: "布类代码",
+      //   prop: "custFabricCode",
+      //   span: 6,
+      //   width: 120,
+      //   placeholder: " ",
+      //   tip: "Fabric Code",
+      //   hide: true
+      // },
+
       {
         label: "纤维成份比例",
         prop: "fiberComp",

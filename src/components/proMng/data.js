@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-05-03 13:03:03
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-21 18:30:27
+ * @LastEditTime: 2021-10-27 11:18:08
  * @Description:
  */
 
@@ -1484,6 +1484,7 @@ export function dyeC(_this) {
         type: "number",
         align: "right",
         placeholder: " ",
+        precision: 0,
         rules: [
           {
             required: true,

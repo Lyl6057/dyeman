@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-06-21 08:00:03
+ * @LastEditTime: 2021-10-27 08:23:20
  * @Description: 
 -->
 <template>
@@ -98,6 +98,7 @@ export default {
         Object.assign(this.form, {
           rows: this.page.pageSize,
           start: this.page.currentPage,
+          auditState: 1,
         })
       ).then((res) => {
         this.crud = res.data.records;

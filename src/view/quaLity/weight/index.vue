@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-10-07 19:53:00
+ * @LastEditTime: 2021-10-26 16:48:15
  * @Description: 
 -->
 <template>
@@ -14,17 +14,17 @@
     <view-container title="称重记录">
       <el-row class="btnList">
         <el-button
-          type="success"
-          @click="save"
-          :disabled="form.clothState == 3"
-          >{{ this.$t("public.save") }}</el-button
+          type="primary"
+          @click="dialogVisible = true"
+          :disabled="!detail.noteId"
+          >{{ this.$t("public.update") }}</el-button
         >
-
-        <el-button type="primary" @click="query">{{
+        <el-button type="primary" @click="query(true)">{{
           this.$t("public.query")
         }}</el-button>
         <el-button type="primary" @click="print">打印</el-button>
         <el-button type="primary" @click="outExcel">导出</el-button>
+
         <el-tooltip
           class="item"
           effect="dark"
@@ -44,29 +44,7 @@
         }}</el-button> -->
       </el-row>
       <el-row class="formBox">
-        <avue-form ref="form" :option="formOp" v-model="form">
-          <!-- <template slot-scope="scope" slot="weaveJobCode">
-            <el-select
-              v-model="form.weaveJobCode"
-              filterable
-              remote
-              reserve-keyword
-              allow-create
-              placeholder=" "
-              :remote-method="remoteMethod"
-              :loading="eloading"
-              clearable
-            >
-              <el-option
-                v-for="item in options"
-                :key="item.weaveJobId"
-                :label="item.weaveJobCode"
-                :value="item.weaveJobCode"
-              >
-              </el-option>
-            </el-select>
-          </template> -->
-        </avue-form>
+        <avue-form ref="form" :option="formOp" v-model="form"> </avue-form>
       </el-row>
       <el-row class="crudBox">
         <avue-crud
@@ -82,14 +60,40 @@
           @selection-change="selectionChange"
           @sort-change="sortChange"
         >
-          <template slot="menu" v-if="form.clothState != 3">
+          <!-- <template slot="menu" v-if="form.clothState != 3">
             <el-button size="small" type="primary" @click="weighing"
               >称重</el-button
             >
-          </template></avue-crud
-        >
+          </template> -->
+        </avue-crud>
       </el-row>
     </view-container>
+    <el-dialog
+      id="colorMng_Dlg"
+      :visible.sync="dialogVisible"
+      width="70%"
+      append-to-body
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+    >
+      <view-container title="修改">
+        <div class="btnList">
+          <el-button
+            type="success"
+            @click="save"
+            :disabled="form.clothState == 3"
+            >{{ this.$t("public.save") }}</el-button
+          >
+          <el-button type="primary" @click="weighing">称重</el-button>
+          <el-button type="warning" @click="dialogVisible = false">{{
+            this.$t("public.close")
+          }}</el-button>
+        </div>
+        <div class="formBox">
+          <avue-form ref="form" :option="dlgOp" v-model="detail"></avue-form>
+        </div>
+      </view-container>
+    </el-dialog>
     <el-dialog
       id="colorMng_Dlg"
       :visible.sync="pdfDlg"
@@ -118,7 +122,7 @@
   </div>
 </template>
 <script>
-import { mainForm, mainCrud } from "./data";
+import { mainForm, mainCrud, dlgForm } from "./data";
 import { webSocket } from "@/config/index.js";
 import { get, add, update, del, getJob, updateNote } from "./api";
 import qs from "qs";
@@ -132,6 +136,7 @@ export default {
         weaveJobFk: "",
         clothState: 0,
       },
+      dlgOp: dlgForm(this),
       crudOp: mainCrud(this),
       crud: [],
       page: {
@@ -161,14 +166,12 @@ export default {
   },
   watch: {},
   methods: {
-    query() {
-      let { prop, order } = this.sort;
+    query(type) {
       this.wLoading = true;
-      // for (let key in this.form) {
-      //   if (!this.form[key]) {
-      //     delete this.form[key];
-      //   }
-      // }
+      if (type) {
+        this.crud = [];
+      }
+      let { prop, order } = this.sort;
       order
         ? (this.form.sort = prop + (order == "descending" ? ",1" : ",0"))
         : delete this.form["sort"];
@@ -179,34 +182,40 @@ export default {
           isPrinted: true,
         })
       ).then((res) => {
+        // this.crud = _.concat(res.data.records, this.crud);
         this.crud = res.data.records;
         // this.crud.sort((a, b) => {
         //   return a.printedTime < b.printedTime ? 1 : -1;
         // });
-        if (this.crud.length > 0) {
-          this.$refs.crud.setCurrentRow(this.crud[0]);
-        }
-        this.crud.forEach((item, i) => {
-          item.index = i + 1;
-          item.eachNumber = Number(item.eachNumber);
-          // item.$cellEdit = true;
-        });
+        // if (this.crud.length > 0) {
+        //   this.$refs.crud.setCurrentRow(this.crud[0]);
+        // }
+        // this.crud.forEach((item, i) => {
+        //   item.index = i + 1;
+        //   item.eachNumber = Number(item.eachNumber);
+        // });
         this.page.total = res.data.total;
-        setTimeout(() => {
-          this.wLoading = false;
-        }, 200);
+        // setTimeout(() => {
+        this.wLoading = false;
+        // }, 200);
       });
     },
     handleRowDBLClick(val) {
       this.detail = val;
       this.checkLabel = val.storeSiteCode;
+      this.dialogVisible = true;
       // this.print();
     },
     setCz() {
       webSocket.setCz(this);
       let _this = this;
       _this.czsocket.onmessage = function (e) {
-        _this.detail.clothWeight = e.data;
+        if (e.data.indexOf(":") != -1) {
+          _this.detail.clothWeight = Number(e.data.split(":")[0]);
+        } else {
+          _this.detail.clothWeight = e.data;
+        }
+
         _this.detail.clothCheckTime = _this.$getNowTime("datetime");
       };
     },
@@ -223,22 +232,16 @@ export default {
     },
     save() {
       this.wLoading = true;
-      let _this = this;
-      this.crud.forEach((item, i) => {
-        if (item.clothWeight > 0 && item.clothState === 0) {
-          item.clothCheckTime = _this.$getNowTime("datetime");
-          item.clothState = 1;
-        }
-        update(item).then((res) => {
-          if (i == this.crud.length - 1) {
-            setTimeout(() => {
-              this.query();
-
-              this.$tip.success(this.$t("public.save"));
-            }, 200);
-          }
-        });
+      // this.crud.forEach((item, i) => {
+      if (this.detail.clothWeight > 0 && this.detail.clothState === 0) {
+        this.detail.clothCheckTime = this.$getNowTime("datetime");
+        this.detail.clothState = 1;
+      }
+      update(this.detail).then((res) => {
+        this.query();
+        this.$tip.success(this.$t("public.bccg"));
       });
+      // });
     },
     syncLoc() {
       this.selectList.forEach((item) => {
@@ -268,17 +271,21 @@ export default {
     },
     sortChange(val) {
       this.sort = val;
+      // this.page.currentPage = 1;
+      // this.crud = [];
+      // this.$nextTick(() => {
       this.query();
+      // });
     },
     cellClick(val) {
       if (this.ctrKey && this.checkLabel) {
         val.storeSiteCode = this.checkLabel;
       }
       this.detail = val;
-      this.oldData.$cellEdit = false;
-      // val.$cellEdit = true;
-      this.$set(val, "$cellEdit", true);
-      this.oldData = val;
+      // this.oldData.$cellEdit = false;
+      // // val.$cellEdit = true;
+      // this.$set(val, "$cellEdit", true);
+      // this.oldData = val;
     },
     remoteMethod(val) {
       if (!val) {
@@ -360,6 +367,20 @@ export default {
       }
     });
     _this.setCz();
+
+    // this.$nextTick(() => {
+    //   setTimeout(() => {
+    //     let _this = this;
+    //     let dom = document.getElementsByClassName("el-table__body-wrapper")[0];
+    //     // console.log(dom);
+    //     dom.addEventListener("scroll", function () {
+    //       if (dom.scrollHeight <= dom.clientHeight + dom.scrollTop) {
+    //         _this.page.currentPage++;
+    //         _this.query();
+    //       }
+    //     });
+    //   }, 200);
+    // });
   },
   beforeDestroy() {},
 };

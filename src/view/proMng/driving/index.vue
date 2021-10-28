@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-10-05 14:00:53
  * @LastEditors: Lyl
- * @LastEditTime: 2021-10-20 14:59:19
+ * @LastEditTime: 2021-10-25 15:21:40
  * @Description: 
 -->
 <template>
@@ -155,7 +155,16 @@
             <el-input
               @keyup.enter.native="onSubmit"
               v-model="form.vatNo"
+              :disabled="vSwicth"
             ></el-input>
+            <el-switch
+              v-model="vSwicth"
+              active-text="空载"
+              inactive-text="满载"
+              active-color="#13ce66"
+              inactive-color="#ccc"
+            >
+            </el-switch>
           </template>
         </el-step>
         <!-- 入仓才可以指定载具 -->
@@ -278,9 +287,9 @@ export default {
       rk: [],
       sSwicth: false,
       eSwicth: false,
+      vSwicth: false,
       areaList: [],
       drsocket: null,
-      menuIcon: "",
     };
   },
   mounted() {
@@ -288,7 +297,10 @@ export default {
     webSocket.setDriving(this);
     let _this = this;
     this.drsocket.onmessage = function (e) {
-      _this.onmessage(JSON.parse(e.data));
+      console.log("websocket返回的数据:", JSON.parse(e.data));
+      _this.getData();
+      _this.initTask();
+      // _this.onmessage(JSON.parse(e.data));
     };
   },
   methods: {
@@ -341,6 +353,7 @@ export default {
                       zoneId: sen.data[i].zoneId,
                       zoneName: this.areaList[j].zoneName,
                       lastStoreCode: item.lastStoreCode,
+                      businessId: item.businessId,
                     });
                     break;
                   }
@@ -357,21 +370,6 @@ export default {
 
           this.init();
         });
-      });
-
-      getStorage({
-        carriageType: "wet",
-        storageState: 1, // 只获取空的载具
-        useState: 1, // 正常
-      }).then((res) => {
-        res.data.forEach((item) => {
-          item.label = item.storageCode;
-          item.value = item.rfid;
-        });
-        this.storageList = res.data;
-        setTimeout(() => {
-          this.wloading = false;
-        }, 200);
       });
     },
     initTask() {
@@ -406,6 +404,20 @@ export default {
         // this.task.forEach((item, i) => {
         //   item.index = i + 1;
         // });
+      });
+      getStorage({
+        carriageType: "wet",
+        storageState: 1, // 只获取空的载具
+        useState: 1, // 正常
+      }).then((res) => {
+        res.data.forEach((item) => {
+          item.label = item.storageCode;
+          item.value = item.rfid;
+        });
+        this.storageList = res.data;
+        setTimeout(() => {
+          this.wloading = false;
+        }, 200);
       });
     },
     init() {
@@ -476,9 +488,13 @@ export default {
           document.onmousemove = null;
         };
       };
+      setTimeout(() => {
+        this.wloading = false;
+      }, 200);
     },
     onmessage(data) {
       console.log("websocket返回的数据:", data);
+      return;
       // 通过返回的logid 查找日志信息
       getSensorLog({ logId: data.logId }).then((res) => {
         let vehicle = res.data[0].carrierRfid; // 载具编号
@@ -549,7 +565,7 @@ export default {
       }
       if (this.form.type == 1) {
         // 入库
-        if (!this.form.vatNo) {
+        if (!this.form.vatNo && !this.vSwicth) {
           this.$tip.error("请输入或扫描缸号!");
           return;
         }
@@ -570,7 +586,7 @@ export default {
       this.sendTask();
     },
     sendTask() {
-      // this.wloading = true;
+      this.wloading = true;
       let taskdetails = [];
       this.form.vehicle.forEach((item) => {
         taskdetails.push({
@@ -595,6 +611,7 @@ export default {
           // taskState: 0,
           taskType: "carry",
           taskdetails,
+          startPoint: this.form.startPoint,
           workpackageCode: this.form.vatNo,
         },
       ];
@@ -649,7 +666,7 @@ export default {
     handleClick() {
       // this.drawerTle = val == "1" ? "入库" : val == "2" ? "出库" : "移动";
       let dom = document.getElementById("proCanvas");
-      dom.style.width = "76%";
+      dom.style.width = "77%";
       dom.style.margin = "0";
       this.drawer = !this.drawer;
     },
@@ -696,68 +713,13 @@ export default {
           (data.y + 0.15) * this.Proportion <= clickY &&
           clickY <= (data.y + 1) * this.Proportion
         ) {
-          // if (this.check3 && this.drawer) {
-          //   if (this.form.type == 2 || this.form.type == 3) {
-          //     if (this.list[i].nodeUsed) {
-          //       this.$tip.error("该坐标已存在载具,请重新选择!");
-          //       return;
-          //     }
-          //     // if (this.list[i].nodeType != "2") {
-          //     //   this.$tip.error("不能把出入口设为终点,请重新选择!");
-          //     //   return;
-          //     // }
-          //     if (this.form.entrance == this.list[i].nodeId) {
-          //       this.$tip.error("入口不能和终点一样,请重新选择!");
-          //       return;
-          //     }
-          //     // 从地图选择坐标
-          //     this.$set(this.form, "map2", this.list[i].nodeId);
-          //     if (this.active == 2 || this.active == 3) {
-          //       this.active++;
-          //     }
-          //     this.check3 = false;
-          //   }
-          //   if (this.form.type == 1) {
-          //     if (!this.list[i].nodeUsed) {
-          //       this.$tip.error("该坐标不存在载具,请重新选择!");
-          //       return;
-          //     }
-          //     // 从地图选择坐标
-          //     this.$set(this.form, "map2", this.list[i].nodeId);
-          //     if (this.active == 2) {
-          //       this.active++;
-          //     }
-          //     this.check3 = false;
-          //   }
-          // }
-          // if (this.check2 && this.drawer && this.form.type == 3) {
-          //   if (!this.list[i].nodeUsed) {
-          //     this.$tip.error("该坐标不存在载具,请重新选择!");
-          //     return;
-          //   }
-          //   if (this.list[i].nodeType != "2") {
-          //     this.$tip.error("不能把出入口设为起点,请重新选择!");
-          //     return;
-          //   }
-          //   // 从地图选择坐标
-          //   this.$set(this.form, "map1", this.list[i].nodeId);
-          //   if (this.active == 1) {
-          //     this.active++;
-          //   }
-          //   this.check2 = false;
-          // }
-
-          // if (this.list[i].nodeType != "2") {
-          //   return;
-          // }
-
           if (this.sSwicth && this.drawer) {
             if (this.list[i].zoneId == this.form.end) {
               this.$tip.error("起点和终点不能相同,请重新选择!");
               return;
             }
             if (
-              this.list[i].nodeUsed == 0 &&
+              !this.list[i].nodeUsed &&
               this.list[i].zoneId.indexOf("IN") == -1 &&
               this.list[i].zoneId.indexOf("OUT") == -1
             ) {
@@ -780,6 +742,7 @@ export default {
               this.active = 1;
             }
             this.$set(this.form, "start", this.list[i].zoneId);
+            this.$set(this.form, "startPoint", this.list[i].value);
             this.startChange(this.list[i].zoneId);
           }
           if (this.eSwicth && this.drawer) {
@@ -801,9 +764,9 @@ export default {
           this.list[i].selected = true;
           this.history = this.list[i];
           this.init();
-          if (this.history.nodeType == 3) {
-            return;
-          }
+          // if (this.history.nodeType == 3) {
+          //   return;
+          // }
           getLog({
             mapNodeId: this.history.nodeId,
             rows: this.page.pageSize,
@@ -826,28 +789,36 @@ export default {
             this.drawToolTip(
               `坐标:${this.history.code}`,
               clickX + 200 > maxW ? clickX - 260 : clickX,
-              clickY + 70 > maxH ? clickY : clickY + 40
+              clickY + 90 > maxH ? clickY : clickY + 40
             );
             this.drawToolTip(
               `区域:${this.history.zoneName}`,
               clickX + 200 > maxW ? clickX - 260 : clickX,
-              clickY + 70 > maxH ? clickY - 30 : clickY + 10
+              clickY + 90 > maxH ? clickY - 30 : clickY + 10
             );
-            if (this.history.nodeUsed == 1 && this.history.lastStoreCode) {
-              this.$nextTick(() => {
+            if (this.history.nodeUsed == 1) {
+              if (this.history.lastStoreCode) {
                 this.drawToolTip(
                   `载具:${this.history.lastStoreCode}`,
                   clickX + 200 > maxW ? clickX - 260 : clickX,
-                  clickY + 70 > maxH ? clickY + 30 : clickY + 70
+                  clickY + 90 > maxH ? clickY + 30 : clickY + 70
                 );
-                if (this.sSwicth && this.drawer) {
-                  // this.form.vatNo = this.crud[0].$businessId;
-                  this.form.vehicle = [];
-                  this.form.vehicle.push(this.history.lastStoreCode);
-                }
-                this.sSwicth = false;
-                this.eSwicth = false;
-              });
+              }
+              if (this.history.businessId) {
+                this.drawToolTip(
+                  `缸号:${this.history.businessId}`,
+                  clickX + 200 > maxW ? clickX - 260 : clickX,
+                  clickY + 90 > maxH ? clickY + 60 : clickY + 100
+                );
+              }
+
+              if (this.sSwicth && this.drawer) {
+                this.form.vatNo = this.history.businessId;
+                this.form.vehicle = [];
+                this.form.vehicle.push(this.history.lastStoreCode);
+              }
+              this.sSwicth = false;
+              this.eSwicth = false;
             } else {
               this.sSwicth = false;
               this.eSwicth = false;
@@ -968,7 +939,7 @@ export default {
   -ms-user-select: none;
   user-select: none;
   position: relative;
-  width: 76%;
+  width: 77%;
 
   .el-table__fixed-body-wrapper {
     top: 36px !important;

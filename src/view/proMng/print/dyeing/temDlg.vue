@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-09-15 16:39:10
+ * @LastEditTime: 2021-10-22 16:40:19
  * @Description: 
 -->
 <template>
@@ -908,6 +908,7 @@ export default {
         } else {
           this.form.workDate = this.$getNowTime();
           this.form.deliveDate = this.$getNowTime();
+          this.form.auditState = 0;
           setTimeout(() => {
             this.wLoading = false;
           }, 200);

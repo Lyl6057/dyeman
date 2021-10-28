@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-31 16:28:00
+ * @LastEditTime: 2021-10-27 18:55:22
  * @Description: 
 -->
 <template>
@@ -239,6 +239,7 @@ export default {
           this.form.proShrinkSafeDry = false;
           this.form.proShrinkThrowDry = false;
           this.form.mustPreshrunk = false;
+          this.form.jobCreator = parent.userID;
           // this.form.sendingSampleQuantity = undefined;
           // this.form.sampleQuantity = undefined;
           // this.form.sampleSize = undefined;
@@ -406,16 +407,20 @@ export default {
           Object.assign(this.dlgForm, {
             rows: this.page.pageSize,
             start: this.page.currentPage,
+            page: this.page.currentPage,
           })
         )
         .then((res) => {
           this.crud = res.data;
           if (this.tabs == "生产工艺") {
+            // this.crud = this.crud.sort((a, b) => {
+            //   return Number(a.itemCode.replace(/[^0-9]/gi, "")) >
+            //     Number(b.itemCode.replace(/[^0-9]/gi, ""))
+            //     ? 1
+            //     : -1;
+            // });
             this.crud = this.crud.sort((a, b) => {
-              return Number(a.itemCode.replace(/[^0-9]/gi, "")) >
-                Number(b.itemCode.replace(/[^0-9]/gi, ""))
-                ? 1
-                : -1;
+              return a.sn > b.sn ? 1 : -1;
             });
           }
           this.crud.forEach((item, i) => {
@@ -689,28 +694,51 @@ export default {
         this.form.fabricName = val.fabName;
         this.form.dryClothWeight = val.gramWeightAfter;
         this.form.fabricCompone = val.fabElements;
-        this.form.proBreadthSide = val.breadthBorder;
+
+        this.form.proBreadthSide =
+          val.breadthBorder.indexOf("(") != -1
+            ? Number(val.breadthBorder.split("(")[0])
+            : val.breadthBorder; //连边幅宽 breadth_border
+        this.form.proBreadthActual =
+          val.breadthActual.indexOf("(") != -1
+            ? Number(val.breadthActual.split("(")[0])
+            : val.breadthActual; //实用幅宽 breadthActual
+        this.form.proWeightBefore =
+          val.gramWeightBefor.indexOf("(") != -1
+            ? Number(val.gramWeightBefor.split("(")[0])
+            : val.gramWeightBefor; //洗前克重 gramWeightBefor
+
+        this.form.proWeightAfter =
+          val.gramWeightAfter.indexOf("(") != -1
+            ? Number(val.gramWeightAfter.split("(")[0])
+            : val.gramWeightAfter; //洗后克重 gramWeightAfter
+
         this.form.calicoBreadth = val.breadthActual;
         this.form.calicoWeight = val.gramWeightBefor;
-        this.form.proWeightAfter = val.gramWeightAfter;
+        // this.form.proWeightAfter = val.gramWeightAfter;
         this.form.proShrinkSafeDry = val.flatDry;
         this.form.proShrinkTwist = val.shrinkNear;
         this.form.proShrinkLoop = val.shrinkRotate;
         this.form.proShrinkHangDry = val.hangDry;
+        this.form.yarnCard = val.yarnCard;
+        this.form.yarnNumber = val.yarnNumber;
+        this.form.yarnCylinderNumber = val.yarnBatchNo;
+        console.log(val);
       } else if (this.choiceTle == "選擇漂染基礎工藝") {
         val.forEach((item, i) => {
           let data = {};
           data = {
-            materialCode: item.paramKey,
-            materialName: item.paramName,
-            useAmount: item.paramDefault,
-            // sn: this.crud.length + 1,
+            itemCode: item.paramKey,
+            itemName: item.paramName,
+            itemSet: item.paramDefault,
+            dataStyle: item.paramValueType,
+            sn: this.crud.length + 1,
             index: this.crud.length + 1,
             $cellEdit: true,
           };
           this.crud.push(data);
         });
-        this.crud = this.$unique(this.crud, "materialName");
+        this.crud = this.$unique(this.crud, "itemCode");
         this.crud.forEach((item, i) => {
           item.sn = i + 1;
           item.index = i + 1;
@@ -763,6 +791,13 @@ export default {
 
 #ldOrderDlg {
   overflow: hidden;
+
+  .el-form-item__label {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
 
   .avue-group__header {
     margin-bottom: 15px !important;

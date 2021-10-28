@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-29 14:14:56
  * @LastEditors: Lyl
- * @LastEditTime: 2021-10-08 08:13:59
+ * @LastEditTime: 2021-10-26 18:02:05
  * @Description:
  */
 export default [
@@ -233,6 +233,14 @@ export default [
     path: "/proDriving",
     name: "行车监控",
     component: resolve => require(["@/view/proMng/driving/index"], resolve),
+    meta: {
+      keepAlive: true
+    }
+  },
+  {
+    path: "/orderReview",
+    name: "工单审核",
+    component: resolve => require(["@/view/proMng/orderReview/index"], resolve),
     meta: {
       keepAlive: true
     }

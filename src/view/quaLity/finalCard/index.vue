@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-08-07 07:57:44
  * @LastEditors: Lyl
- * @LastEditTime: 2021-10-16 15:43:27
+ * @LastEditTime: 2021-10-25 16:54:21
  * @Description: 
 -->
 <template>
@@ -14,7 +14,7 @@
     >
       <el-tab-pane label="成品码卡" class="queryForm">
         <el-row>
-          <el-col :span="16">
+          <el-col :span="18">
             <el-row class="formBox" style="margin-top: 15px">
               <avue-form ref="form" :option="crudOp" v-model="form"></avue-form>
             </el-row>
@@ -44,7 +44,7 @@
               >
             </el-row>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="6">
             <view-container title="历史记录">
               <el-card
                 class="border-card"
@@ -212,14 +212,22 @@ export default {
               this.form.custCode = val.custCode;
               this.form.colorName = val.colorName;
               this.form.colorNo = val.colorCode;
+              this.form.custColorNo = val.colorCode;
               this.form.custBatchNo = val.yarnBatchNo;
               this.form.fabricName = val.fabName;
-              this.form.gramWeight = val.gramWeight;
+              this.form.gramWeight = val.gramWeightBefor;
+              this.form.afterWeightDsp = val.gramWeightAfter;
               this.form.breadth = val.breadth;
-              this.form.realGramWeight = Number(
-                this.form.gramWeight.split("(")[0]
-              );
+
+              this.form.realGramWeight = this.form.gramWeight
+                ? Number(this.form.gramWeight.split("(")[0])
+                : "";
+              this.form.gramWeightValue = this.form.realGramWeight;
+              this.form.afterWeightValue = this.form.gramWeightAfter
+                ? Number(this.form.gramWeightAfter.split("(")[0])
+                : "";
               this.form.clothWidth = Number(this.form.breadth.split("(")[0]);
+              this.form.breadthValue = this.form.clothWidth;
               this.form.fabName = val.fabName;
               this.form.guestComponents = val.fabElements;
               // this.form.netWeight = val.clothWeight;
@@ -573,16 +581,33 @@ export default {
       let _this = this;
       _this.czsocket.onmessage = function (e) {
         if (e.data.indexOf(":") != -1) {
-          _this.form.grossWeight = Number(e.data.split(":")[0]); //;
-          _this.form.weightUnit = e.data.split(":")[1];
+          let data = e.data.split(":");
+          _this.form.weightUnit = data[1];
+          if (_this.form.weightUnit == "KG") {
+            _this.form.grossWeight = Number(data[0]); //;
+            _this.form.grossWeightLbs = _this.form.grossWeight * 2.2046;
+
+            _this.form.netWeight =
+              _this.form.grossWeight -
+              Number(_this.form.paperTube || 0) -
+              Number(_this.form.qcTakeOut);
+
+            _this.form.netWeightLbs = _this.form.netWeight * 2.2046;
+          } else {
+            _this.form.grossWeightLbs = Number(data[0]); //;
+            _this.form.grossWeight = _this.form.grossWeightLbs / 2.2046;
+
+            _this.form.netWeightLbs =
+              _this.form.grossWeightLbs -
+              Number(_this.form.paperTube || 0) -
+              Number(_this.form.qcTakeOut);
+
+            _this.form.netWeight = _this.form.netWeightLbs / 2.2046;
+          }
         } else {
           _this.form.grossWeight = Number(e.data);
         }
-        _this.form.netWeight = Number(
-          _this.form.grossWeight -
-            Number(_this.form.paperTube || 0) -
-            Number(_this.form.qcTakeOut)
-        ).toFixed(2);
+
         _this.codeLength();
       };
       _this.czsocket.onopen = function (event) {

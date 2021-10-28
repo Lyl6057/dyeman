@@ -2,11 +2,10 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-10-07 19:52:41
+ * @LastEditTime: 2021-10-26 16:14:08
  * @Description:
  */
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
-let matUnit = getDIC("bas_matUnit");
 export function mainForm(_this) {
   return {
     submitBtn: false,
@@ -92,6 +91,8 @@ export function mainForm(_this) {
           }
         ],
         change: () => {
+          _this.crud = [];
+          _this.page.currentPage = 1;
           _this.$nextTick(() => {
             _this.query();
           });
@@ -114,7 +115,7 @@ export function mainForm(_this) {
 }
 export function mainCrud(_this) {
   return {
-    menu: true,
+    menu: false,
     addBtn: false,
     cancelBtn: false,
     editBtn: false,
@@ -127,11 +128,13 @@ export function mainCrud(_this) {
     refreshBtn: false,
     columnBtn: false,
     page: true,
+    index: true,
     labelWidth: 100,
     selection: true,
     showSummary: true,
     menuTitle: "trọng lượng",
     excelBtn: true,
+    rowKey: "noteId",
     sumColumnList: [
       {
         label: "毛重",
@@ -141,13 +144,13 @@ export function mainCrud(_this) {
       }
     ],
     column: [
-      {
-        label: "#",
-        prop: "index",
-        width: 50,
-        align: "center",
-        display: false
-      },
+      // {
+      //   label: "#",
+      //   prop: "index",
+      //   width: 50,
+      //   align: "center",
+      //   display: false
+      // },
       {
         label: "織單號(MS đơn sản xuất bp Dệt)",
         prop: "weaveJobCode",
@@ -303,7 +306,7 @@ export function mainCrud(_this) {
         width: 120,
         align: "right",
         span: 6,
-        cell: true,
+        cell: false,
         placeholder: " ",
         type: "number",
         precision: 1,
@@ -331,7 +334,7 @@ export function mainCrud(_this) {
         width: 160,
         align: "right",
         span: 6,
-        cell: true,
+        cell: false,
         placeholder: " ",
         type: "number",
         precision: 1,
@@ -352,7 +355,7 @@ export function mainCrud(_this) {
         prop: "storeLoadCode",
         span: 8,
         placeholder: " ",
-        cell: true,
+        cell: false,
         overHidden: true,
         sortable: true,
         width: 120
@@ -360,7 +363,7 @@ export function mainCrud(_this) {
       {
         label: "存储位置(Vị trí lưu trữ)",
         prop: "storeSiteCode",
-        cell: true,
+        cell: false,
         width: 220,
         placeholder: " ",
         type: "select",
@@ -452,6 +455,134 @@ export function mainCrud(_this) {
         align: "center",
         sortable: true,
         width: 200
+      }
+    ]
+  };
+}
+
+export function dlgForm(_this) {
+  return {
+    submitBtn: false,
+    emptyBtn: false,
+    labelWidth: 120,
+    column: [
+      {
+        label: "織單號",
+        prop: "weaveJobCode",
+        span: 8,
+        placeholder: " "
+        // formslot: true,
+        // slot: true,
+        // type: "select",
+      },
+      {
+        label: "布票編號",
+        prop: "noteCode",
+        span: 8,
+        placeholder: " "
+      },
+
+      // {
+      //   label: "毛重",
+      //   prop: "realWeight",
+      //   width: 120,
+      //   align: "right",
+      //   span: 8,
+      //   cell: false,
+      //   placeholder: " "
+      //   // type: "number",
+      //   // precision: 1
+      // },
+      {
+        label: _this.$t("whseField.zl"),
+        prop: "clothWeight",
+        width: 120,
+        align: "right",
+        span: 8,
+        cell: false,
+        placeholder: " ",
+        type: "number",
+        precision: 1,
+        change: () => {
+          _this.$nextTick(() => {
+            _this.detail.realWeight = Number(
+              Number(_this.detail.clothWeight) + Number(_this.detail.qcTakeOut)
+            ).toFixed(1);
+            if (isNaN(_this.detail.realWeight)) {
+              _this.detail.realWeight = 0;
+            }
+            // if (_this.detail.clothWeight) {
+            //   _this.detail.clothCheckTime = _this.$getNowTime("datetime")
+            //   _this.detail.clothState = 1
+            // } else {
+            //   _this.detail.clothCheckTime = ''
+            //   _this.detail.clothState = 0
+            // }
+          });
+        }
+      },
+      {
+        label: "QC扣减数量",
+        prop: "qcTakeOut",
+        width: 160,
+        align: "right",
+        span: 8,
+        cell: false,
+        placeholder: " ",
+        type: "number",
+        precision: 1,
+        change: () => {
+          _this.$nextTick(() => {
+            _this.detail.realWeight = Number(
+              Number(_this.detail.clothWeight) + Number(_this.detail.qcTakeOut)
+            ).toFixed(1);
+            if (isNaN(_this.detail.realWeight)) {
+              _this.detail.realWeight = 0;
+            }
+          });
+        }
+      },
+
+      {
+        label: "载具编号",
+        prop: "storeLoadCode",
+        span: 8,
+        placeholder: " ",
+        cell: false,
+        overHidden: true,
+        sortable: true,
+        width: 120
+      },
+      {
+        label: "存储位置",
+        prop: "storeSiteCode",
+        cell: false,
+        width: 220,
+        placeholder: " ",
+        span: 8,
+        type: "select",
+        // props: {
+        //   label: "locationCode",
+        //   value: "locationCode"
+        // },
+        filterable: true,
+        allowCreate: true,
+        defaultFirstOption: true,
+        dicData: getDicT("whseLocation", "locationCode", "locationCode")
+      },
+      {
+        label: "备注",
+        prop: "remark",
+        width: 250,
+        span: 16,
+        placeholder: " ",
+        // overHidden: true,
+        cell: true,
+        type: "select",
+        filterable: true,
+        allowCreate: true,
+        defaultFirstOption: true,
+        dicData: getDIC("QC_CLOTH_VISITING_REMOVE")
       }
     ]
   };

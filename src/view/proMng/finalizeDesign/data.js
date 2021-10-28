@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-24 10:26:00
+ * @LastEditTime: 2021-10-27 18:38:21
  * @Description:
  */
 
@@ -482,7 +482,8 @@ export function mainCrud(_this) {
         prop: "jobCreator",
         width: 100,
         placeholder: " ",
-        span: 6
+        span: 6,
+        disabled: true
       },
       {
         label: "审批",
@@ -1035,9 +1036,10 @@ export function gyCrud(_this) {
     column: [
       {
         label: "#",
-        prop: "index",
+        prop: "sn",
         width: 50,
         align: "center",
+        cell: true,
         display: false
       },
       // {

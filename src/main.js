@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-24 08:12:20
  * @LastEditors: Lyl
- * @LastEditTime: 2021-10-05 11:12:51
+ * @LastEditTime: 2021-10-25 09:55:06
  * @Description:
  */
 // The Vue build version to load with the `import` command
@@ -28,6 +28,7 @@ import i18n from "./lang"; // Internationalization
 import Print from "vue-print-nb";
 import vGanttChart from "v-gantt-chart";
 import Directives from "./instruct/index";
+import _ from "lodash";
 // import Fragment from 'vue-fragment'
 // Vue.use(Fragment.Plugin)
 Vue.use(vGanttChart);
@@ -67,6 +68,7 @@ Vue.prototype.$unique = unique;
 Vue.prototype.$sortable = Sortable;
 Vue.prototype.$toTableLow = toTableLow;
 Vue.prototype.$preFixInt = preFixInt;
+Vue.prototype._ = _;
 
 Vue.prototype.$tip = {
   success,

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-17 13:52:53
+ * @LastEditTime: 2021-10-27 15:19:34
  * @Description:
 -->
 <template>
@@ -53,7 +53,11 @@
           content=" in"
           placement="top-start"
         >
-          <el-button type="primary" @click="print" :loading="wloading"
+          <el-button
+            type="primary"
+            @click="print"
+            :loading="wloading"
+            :disabled="detail.auditState != 1"
             >打印</el-button
           >
         </el-tooltip>
@@ -63,10 +67,21 @@
           content="copy"
           placement="top-start"
         >
-          <el-button type="primary" @click="copyEvent" :loading="wloading"
+          <el-button
+            type="primary"
+            :disabled="!detail.runJobId"
+            @click="copyEvent"
+            :loading="wloading"
             >复制</el-button
           >
         </el-tooltip>
+        <!-- <el-button
+          type="primary"
+          @click="audit"
+          :disabled="!selectList.length"
+          :loading="wloading"
+          >审核</el-button
+        > -->
         <el-tooltip
           class="item"
           effect="dark"
@@ -96,6 +111,7 @@
           @on-load="query"
           @row-dblclick="handleRowDBLClick"
           @current-row-change="cellClick"
+          @selection-change="selectionChange"
         ></avue-crud>
       </el-row>
       <el-dialog
@@ -177,6 +193,7 @@ export default {
       pdfDlg: false,
       pdfUrl: "",
       copyC: false,
+      selectList: [],
     };
   },
   watch: {},
@@ -193,6 +210,9 @@ export default {
         Object.assign(this.form, {
           rows: this.page.pageSize,
           start: this.page.currentPage,
+          pages: this.page.currentPage,
+          // runState: "1",
+          // auditState: 1,
         })
       ).then((res) => {
         this.crud = res.data.records;
@@ -219,6 +239,24 @@ export default {
         "/api/proBleadyeRunJob/createBleadyeRunJobPdf?id=" +
         this.detail.runJobId;
     },
+    audit() {
+      this.$tip
+        .cofirm("是否确定通过审核选中的数据?", {})
+        .then(() => {
+          this.selectList.forEach((item, i) => {
+            item.auditState = 1;
+            update(item).then((res) => {
+              if (i == this.selectList.length - 1) {
+                this.$tip.success(this.$t("public.sccg"));
+                this.query();
+              }
+            });
+          });
+        })
+        .catch((err) => {
+          this.$tip.warning(this.$t("public.qxcz"));
+        });
+    },
     copyEvent() {
       this.isAdd = true;
       this.copyC = true;
@@ -232,6 +270,10 @@ export default {
     del() {
       if (parent.userID != this.detail.serviceOperator) {
         this.$tip.warning("当前用户没有权限删除该记录!");
+        return;
+      }
+      if (this.detail.auditState) {
+        this.$tip.warning("通过审核的数据不可删除,请联系主管取消审核!");
         return;
       }
       this.$tip
@@ -266,6 +308,10 @@ export default {
           backgroundColor: "#FBD295",
           // color:'#fff'
         };
+      } else if (row.auditState === 0) {
+        return {
+          backgroundColor: "#F56C6C",
+        };
       }
     },
     handleRowDBLClick(val) {
@@ -276,6 +322,9 @@ export default {
     cellClick(val) {
       this.detail = val;
     },
+    selectionChange(val) {
+      this.selectList = val;
+    },
   },
   created() {},
   mounted() {
@@ -285,6 +334,10 @@ export default {
 };
 </script>
 <style lang='stylus'>
-#name {
+#clothFlyPrint {
+  .avue-crud__tip {
+    display: none !important;
+    height: 0px !important;
+  }
 }
 </style>

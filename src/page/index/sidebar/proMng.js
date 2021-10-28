@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-04-01 13:39:35
  * @LastEditors: Lyl
- * @LastEditTime: 2021-10-08 08:13:47
+ * @LastEditTime: 2021-10-26 18:01:08
  * @Description:
  */
 
@@ -55,6 +55,10 @@ export function proMng(_this) {
         {
           menuName: "6.后整指令单",
           index: "afterArrange"
+        },
+        {
+          menuName: "7.工单审核",
+          index: "orderReview"
         }
       ]
     },

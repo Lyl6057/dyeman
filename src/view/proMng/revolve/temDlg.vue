@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-09-11 08:52:09
+ * @LastEditTime: 2021-10-28 09:15:32
  * @Description:
 -->
 <template>
@@ -30,10 +30,19 @@
           content=" in"
           placement="top-start"
         >
-          <el-button type="primary" @click="print" :disabled="!form.runJobId"
+          <el-button
+            type="primary"
+            @click="print"
+            :disabled="!form.runJobId || form.auditState != 1"
             >打印</el-button
           >
         </el-tooltip>
+        <el-button
+          type="primary"
+          @click="auditHandle(form.auditState ? 0 : 1)"
+          v-if="audit"
+          >{{ form.auditState ? "取消审核" : "审核" }}</el-button
+        >
         <el-tooltip
           class="item"
           effect="dark"
@@ -208,6 +217,7 @@ export default {
     detail: Object,
     isAdd: Boolean,
     copyC: Boolean,
+    audit: Boolean,
   },
   components: {
     choice: choice,
@@ -362,6 +372,26 @@ export default {
         });
       });
     },
+    auditHandle(val) {
+      this.$tip
+        .cofirm(val ? "是否确定通过审核?" : "是否确定取消审核?")
+        .then(() => {
+          this.wLoading = true;
+          update({ runJobId: this.form.runJobId, auditState: val }).then(
+            (res) => {
+              setTimeout(() => {
+                this.form.auditState = val;
+                this.$emit("refresh");
+                this.$tip.success(this.$t("public.bccg"));
+                this.wLoading = false;
+              }, 200);
+            }
+          );
+        })
+        .catch((err) => {
+          this.$tip.warning(this.$t("public.qxcz"));
+        });
+    },
     getData() {
       this.wLoading = true;
       this.form = {};
@@ -375,6 +405,7 @@ export default {
               this.form = JSON.parse(JSON.stringify(this.detail));
               this.form.vatNo += "A";
               this.form.runJobId = "";
+              this.form.auditState = 0;
               Object.keys(this.form).forEach((item) => {
                 if (this.isEmpty(this.form[item])) {
                   delete this.form[item];
@@ -440,6 +471,7 @@ export default {
               this.form.vatIndex = 1;
               this.form.poColorCount = 1;
               this.form.runState = "1";
+              this.form.auditState = 0;
               this.wLoading = false;
             }
             this.form.serviceOperator = parent.userID;
@@ -563,6 +595,7 @@ export default {
     },
     save() {
       this.wLoading = true;
+
       this.$refs.form.validate((valid, done) => {
         if (valid) {
           try {
@@ -783,6 +816,7 @@ export default {
           item.needleDist = item.guage;
           item.salPoNo = item.salPoNo;
           this.form = item;
+          this.form.auditState = 0;
           this.form.yarnCard = "";
           this.form.yarnNumber = "";
           this.form.yarnCylinder = "";

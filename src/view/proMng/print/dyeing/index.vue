@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-09-15 10:11:39
+ * @LastEditTime: 2021-10-27 10:29:53
  * @Description: 
 -->
 <template>
@@ -27,7 +27,7 @@
               >{{ this.$t("public.update") }}</el-button
             >
           </el-tooltip>
-          <el-tooltip
+          <!-- <el-tooltip
             class="item"
             effect="dark"
             content="thêm mới "
@@ -36,7 +36,7 @@
             <el-button type="primary" @click="add({})">{{
               this.$t("public.add")
             }}</el-button>
-          </el-tooltip>
+          </el-tooltip> -->
           <!-- <el-tooltip
             class="item"
             effect="dark"
@@ -204,7 +204,7 @@
             ref="revolveCrud"
             id="revolveCrud"
             :option="revolveCOp"
-            :data="revolve"
+            :data="revolves"
             v-loading="revolveLoading"
             @row-dblclick="revolveDBLClick"
             @current-row-change="revolveCellClick"
@@ -285,12 +285,12 @@ export default {
         })
       ).then((res) => {
         this.crud = res.data.records;
-        this.crud.sort((a, b) => {
-          return a.workDate > b.workDate ? -1 : 1;
-        });
+        // this.crud.sort((a, b) => {
+        //   return a.workDate > b.workDate ? -1 : 1;
+        // });
         this.crud.forEach((item, i) => {
           // item.custName = item.custCode;
-          // item.amount = item.amount.toFixed(2);
+          item.clothWeight = item.clothWeight ? item.clothWeight.toFixed(2) : 0;
           item.index = i + 1;
         });
 
@@ -310,8 +310,11 @@ export default {
         rows: 99999,
         start: 1,
         runState: "1",
+        // auditState: 0,
       }).then((res) => {
-        this.revolves = res.data.records;
+        this.revolves = res.data.records.filter((item) => {
+          return item.auditState == 1;
+        });
         this.revolves.sort((a, b) => {
           return a.workDate > b.workDate ? -1 : 1;
         });
@@ -442,6 +445,9 @@ export default {
 };
 </script>
 <style lang='stylus'>
-#name {
+#clothFlyPrint {
+  .el-tag {
+    display: none !important;
+  }
 }
 </style>
