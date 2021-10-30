@@ -234,6 +234,9 @@ export default {
               item.chemicalName = item.chemicalId;
             }
             item.index = index + 1;
+            item.clothWeight = item.clothWeight
+              ? Number(item.clothWeight.toFixed(2))
+              : 0;
             if (index === this.crud.length - 1) {
               setTimeout(() => {
                 this.loading = false;

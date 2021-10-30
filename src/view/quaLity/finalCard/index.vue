@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-08-07 07:57:44
  * @LastEditors: Lyl
- * @LastEditTime: 2021-10-25 16:54:21
+ * @LastEditTime: 2021-10-30 08:25:34
  * @Description: 
 -->
 <template>
@@ -73,7 +73,7 @@
                     <div class="history">
                       <span>缸号: {{ item.vatNo }}</span>
                       <span>匹号: {{ item.pidNo }}</span>
-                      <span> 净重: {{ item.netWeight }}</span>
+                      <span>净重: {{ item.netWeight }}</span>
                     </div>
                   </el-tooltip>
                 </div>
@@ -647,7 +647,7 @@ export default {
         }
         // gramWeight 单位为 g/m , breadth 单位为 inch 需要 * 2.54 转换成cm / 100 转换成 m
 
-        this.form.yardLength = parseInt((weight / gramWeight) * breadth);
+        this.form.yardLength = Number(weight / gramWeight / breadth).toFixed(2);
       });
     },
   },

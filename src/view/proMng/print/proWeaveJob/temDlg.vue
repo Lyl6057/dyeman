@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-10-28 08:35:57
+ * @LastEditTime: 2021-10-30 15:57:41
  * @Description: 
 -->
 <template>
@@ -178,6 +178,9 @@
                   @click="add"
                   type="primary"
                   v-if="tabs != '選擇訂單'"
+                  :disabled="
+                    !audit && form.auditState == 1 && tabs != '機號信息'
+                  "
                   >{{ $t("public.add") }}</el-button
                 >
               </el-tooltip>
@@ -191,7 +194,10 @@
                   @click="del"
                   type="danger"
                   v-if="tabs != '選擇訂單'"
-                  :disabled="Object.keys(chooseData).length == 0"
+                  :disabled="
+                    Object.keys(chooseData).length == 0 ||
+                    (!audit && form.auditState == 1 && tabs != '機號信息')
+                  "
                   >{{ $t("public.del") }}</el-button
                 >
               </el-tooltip>
@@ -368,7 +374,7 @@ export default {
   data() {
     return {
       wLoading: false,
-      formOp: mainCrud(this),
+      formOp: mainCrud(this, false),
       form: {},
       page: {
         pageSize: 10,
@@ -423,7 +429,7 @@ export default {
             this.form.weaveJobCode = this.detail.weaveJobCode + "A";
             this.form.auditState = 0;
           } else {
-            this.form.weaveJobCode = res.data.data;
+            this.form.weaveJobCode = "WG-" + res.data.data;
           }
           this.form.calicoFabricRequire = "开幅";
           this.form.calicoShap = "1";
@@ -432,6 +438,8 @@ export default {
           this.form.auditState = 0;
           this.form.creator = parent.userID;
           this.form.weaveJobId = "";
+          this.form.breadthUnit = "INCH";
+          this.form.gramWeightUnit = "g/m2";
           this.code = res.data.data;
         });
       } else {
@@ -522,74 +530,20 @@ export default {
         });
       });
     },
-    async out() {
-      this.wLoading = true;
-      try {
-        //获得Excel模板的buffer对象
-        const exlBuf = await JSZipUtils.getBinaryContent(
-          "./static/xlxsTemplate/weave.xlsx"
-        );
-        // Create a template
-        var template = new XlsxTemplate(exlBuf);
-        // Replacements take place on first sheet
-        var sheetNumber = "LIGHT";
-        // Set up some placeholder values matching the placeholders in the template
-        var query = this.form;
-        this.form.calicoFabricRequire == "" ||
-        this.form.calicoFabricRequire == "开幅"
-          ? ((this.form.kf = "☑"), (this.form.yt = "□"))
-          : ((this.form.kf = "□"), (this.form.yt = "☑"));
-
-        getCalico({
-          star: 1,
-          rows: 999,
-          proWeaveJobFk: this.form.weaveJobId,
-        }).then((res) => {
-          let xh = res.data.records[0];
-          let arr = this.yarnlist;
-          arr.forEach((item, i) => {
-            item.index = i + 1;
-          });
-          var values = {
-            //数据需要自己提前准备好
-            query,
-            xh,
-            arr,
-          };
-          template.substitute(sheetNumber, values);
-          // Get binary data.
-          var out = template.generate({ type: "blob" });
-          let _this = this;
-          var fun1 = function () {
-            return new Promise((resolve, reject) => {
-              saveAs(out, "织造生产单-" + _this.form.weaveJobCode + ".xlsx");
-              resolve();
-            });
-          };
-          fun1().then((res) => {
-            setTimeout(() => {
-              this.$tip.success("导出成功!");
-              this.wLoading = false;
-            }, 1000);
-          });
-        });
-      } catch (e) {
-        console.log(e);
-      }
-    },
     save() {
+      console.log(this.form);
+      return;
       this.$refs.form.validate((valid, done) => {
         if (valid) {
           try {
             this.wLoading = true;
             // this.form.amount = Number(this.form.amount).toFixed(2);
-
             for (let key in this.form) {
               if (this.form[key] == "undefined") {
                 this.form[key] = "";
               }
             }
-            // return;
+            this.form.weaveJobCode = this.form.weaveJobCode.replace(/\s/g, "");
             if (this.form.weaveJobId) {
               // update
               this.form.upateTime = this.$getNowTime("datetime");
@@ -1185,7 +1139,8 @@ export default {
   }
 
   .formBox {
-    height: 100vh !important;
+    height: calc(100vh - 70px) !important;
+    overflow: auto;
   }
 
   .el-input-number__decrease, .el-input-number__increase {

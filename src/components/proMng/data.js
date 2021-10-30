@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-05-03 13:03:03
  * @LastEditors: Lyl
- * @LastEditTime: 2021-10-27 11:18:08
+ * @LastEditTime: 2021-10-30 09:26:38
  * @Description:
  */
 
@@ -1309,8 +1309,8 @@ export function dyeF(_this) {
     labelWidth: 150,
     column: [
       {
-        label: "染缸機台號",
-        prop: "dyeMathine",
+        label: "缸號",
+        prop: "vatNo",
         span: 6,
         placeholder: " "
       },
@@ -1348,11 +1348,12 @@ export function dyeF(_this) {
         placeholder: " "
       },
       {
-        label: "缸號",
-        prop: "vatNo",
+        label: "染缸機台號",
+        prop: "dyeMathine",
         span: 6,
         placeholder: " "
       },
+
       {
         label: "值機員",
         prop: "operator",
@@ -1484,7 +1485,7 @@ export function dyeC(_this) {
         type: "number",
         align: "right",
         placeholder: " ",
-        precision: 0,
+        precision: 2,
         rules: [
           {
             required: true,

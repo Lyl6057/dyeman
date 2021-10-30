@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-08-07 07:58:01
  * @LastEditors: Lyl
- * @LastEditTime: 2021-10-25 11:08:02
+ * @LastEditTime: 2021-10-29 19:23:38
  * @Description:
  */
 
@@ -501,7 +501,7 @@ export function mainCrud(_this) {
         span: 6,
         type: "select",
         props: {
-          label: "tempName",
+          label: "tempTitle",
           value: "tempId"
         },
         dicData: getXDicT("basePrintTemplate/list"),
@@ -541,6 +541,12 @@ export function temForm(_this) {
       {
         label: "模板编号",
         prop: "tempCode",
+        span: 6,
+        placeholder: " "
+      },
+      {
+        label: "模板标题",
+        prop: "tempTitle",
         span: 6,
         placeholder: " "
       },
@@ -600,7 +606,7 @@ export function temCrud(_this) {
         label: "模板编号",
         prop: "tempCode",
         span: 6,
-        width: 120,
+        width: 100,
         placeholder: " ",
         rules: [
           {
@@ -611,10 +617,18 @@ export function temCrud(_this) {
         ]
       },
       {
+        label: "模板标题",
+        prop: "tempTitle",
+        span: 6,
+        placeholder: " ",
+        width: 180
+      },
+      {
         label: "模板名称",
         prop: "tempName",
         span: 6,
         width: 300,
+        disabled: true,
         placeholder: " ",
         overHidden: true,
         rules: [
@@ -664,7 +678,7 @@ export function temCrud(_this) {
       {
         label: "客戶",
         prop: "custCode",
-        width: 180,
+        width: 140,
         span: 6,
         placeholder: " ",
         overHidden: true,
@@ -679,7 +693,7 @@ export function temCrud(_this) {
         label: "订单编号",
         prop: "salPoNo",
         span: 6,
-        width: 150,
+        width: 120,
         overHidden: true,
         // type: "textarea",
         placeholder: " "
@@ -687,7 +701,7 @@ export function temCrud(_this) {
       {
         label: "通用模板",
         prop: "isDefault",
-        width: 120,
+        width: 100,
         span: 6,
         placeholder: " ",
         overHidden: true,
@@ -708,7 +722,7 @@ export function temCrud(_this) {
         label: "模板说明",
         prop: "tempDescr",
         span: 6,
-        width: 400,
+        // width: 400,
         overHidden: true,
         // type: "textarea",
         placeholder: " "

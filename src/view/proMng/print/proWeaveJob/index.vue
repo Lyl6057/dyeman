@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-10-27 08:55:05
+ * @LastEditTime: 2021-10-30 14:18:44
  * @Description: 
 -->
 <template>
@@ -119,6 +119,7 @@
           :detail="detail"
           :isAdd="isAdd"
           :copyC="copyC"
+          :audit="false"
           @close="dialogVisible = false"
           @refresh="query"
           v-if="dialogVisible"
@@ -159,7 +160,7 @@ export default {
     return {
       formOp: mainForm(this),
       form: {},
-      crudOp: mainCrud(this),
+      crudOp: mainCrud(this, true),
       crud: [],
       page: {
         pageSize: 20,
@@ -168,7 +169,9 @@ export default {
       },
       loading: false,
       dialogVisible: false,
-      detail: {},
+      detail: {
+        auditState: 0,
+      },
       isAdd: false,
       input: "",
       wloading: false,
@@ -188,6 +191,9 @@ export default {
           delete this.form[key];
         }
       }
+      if (this.form.weaveJobCode && this.form.weaveJobCode.indexOf("%") == -1) {
+        this.form.weaveJobCode = "%" + this.form.weaveJobCode;
+      }
       get(
         Object.assign(this.form, {
           rows: this.page.pageSize,
@@ -197,12 +203,18 @@ export default {
       ).then((res) => {
         this.crud = res.data.records;
         this.crud.forEach((item, i) => {
-          item.custName = item.custCode;
+          // item.custName = item.custCode;
           // item.amount = item.amount.toFixed(2);
           item.index = i + 1;
         });
         if (this.crud.length > 0) {
           this.$refs.crud.setCurrentRow(this.crud[0]);
+        }
+        if (
+          this.form.weaveJobCode &&
+          this.form.weaveJobCode.indexOf("%") != -1
+        ) {
+          this.form.weaveJobCode = this.form.weaveJobCode.split("%")[1];
         }
         this.page.total = res.data.total;
         this.loading = false;

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-10-28 09:15:32
+ * @LastEditTime: 2021-10-30 09:21:17
  * @Description:
 -->
 <template>
@@ -20,9 +20,13 @@
           content="Bảo tồn"
           placement="top-start"
         >
-          <el-button type="success" @click="save" :loading="wLoading">{{
-            $t("public.save")
-          }}</el-button>
+          <el-button
+            type="success"
+            @click="save"
+            :loading="wLoading"
+            :disabled="!audit && form.auditState == 1"
+            >{{ $t("public.save") }}</el-button
+          >
         </el-tooltip>
         <el-tooltip
           class="item"
@@ -595,7 +599,6 @@ export default {
     },
     save() {
       this.wLoading = true;
-
       this.$refs.form.validate((valid, done) => {
         if (valid) {
           try {
@@ -629,6 +632,7 @@ export default {
             data.test = null;
             data.item = null;
             data.poAmountLb = Number((data.poAmountKg * 2.204623).toFixed(2));
+            data.vatNo = data.vatNo.replace(/\s/g, "");
             // data.pidCount = this.form.bf.length || 0;
             if (data.runJobId) {
               // update

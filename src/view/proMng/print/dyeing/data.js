@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-10-22 16:21:35
+ * @LastEditTime: 2021-10-30 09:25:50
  * @Description:
  */
 
@@ -18,11 +18,12 @@ export function mainForm(_this) {
     labelWidth: 150,
     column: [
       {
-        label: "染缸機台號",
-        prop: "dyeMathine",
+        label: "缸號",
+        prop: "vatNo",
         span: 6,
         placeholder: " "
       },
+
       {
         label: "织造生產單號",
         prop: "weaveJobCode",
@@ -57,8 +58,8 @@ export function mainForm(_this) {
         placeholder: " "
       },
       {
-        label: "缸號",
-        prop: "vatNo",
+        label: "染缸機台號",
+        prop: "dyeMathine",
         span: 6,
         placeholder: " "
       },

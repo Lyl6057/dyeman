@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-10-28 08:38:03
+ * @LastEditTime: 2021-10-30 15:55:21
  * @Description:
 -->
 <template>
@@ -238,6 +238,7 @@ export default {
           //   return a.weaveCode > b.weaveCode ? -1 : 1;
           // });
           this.wcrud.forEach((item, i) => {
+            item.custName = item.custCode;
             item.index = i + 1;
           });
           this.wpage.total = res.data.total;
@@ -351,6 +352,14 @@ export default {
 
   .el-tag--mini {
     display: none !important;
+  }
+
+  .avue-crud__menu {
+    height: 35px !important;
+  }
+
+  .avue-dialog .el-drawer__body {
+    overflow: auto;
   }
 }
 </style>

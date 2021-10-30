@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-01 14:06:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-06-18 15:42:32
+ * @LastEditTime: 2021-10-28 10:09:23
  * @Description:
  */
 
@@ -43,7 +43,14 @@ export function getBom(params) {
   });
 }
 
-// 通过排期类型查找工作包
+export function getWeave(params) {
+  return axios({
+    url: "/api/proWeaveJob",
+    method: "get",
+    params: params
+  });
+}
+
 export function get(params) {
   return axios({
     url: "/api/proFinishJob/page",

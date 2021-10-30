@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-10-27 18:55:22
+ * @LastEditTime: 2021-10-29 13:35:08
  * @Description: 
 -->
 <template>
@@ -177,6 +177,7 @@ import {
   delFormula,
   updateFormula,
   getTechargueList,
+  getWeave,
 } from "./api";
 
 export default {
@@ -240,6 +241,7 @@ export default {
           this.form.proShrinkThrowDry = false;
           this.form.mustPreshrunk = false;
           this.form.jobCreator = parent.userID;
+          this.form.finishJobOption = "成品";
           // this.form.sendingSampleQuantity = undefined;
           // this.form.sampleQuantity = undefined;
           // this.form.sampleSize = undefined;
@@ -323,8 +325,9 @@ export default {
                   this.form.finishJobId = res.data.data;
                   this.$emit("refresh");
                   done();
-                  this.addPro();
-                  // this.$tip.success(this.$t("public.bccg"));
+                  this.wLoading = false;
+                  // this.addPro();
+                  this.$tip.success(this.$t("public.bccg"));
                 } else {
                   done();
                   this.wLoading = false;
@@ -723,7 +726,14 @@ export default {
         this.form.yarnCard = val.yarnCard;
         this.form.yarnNumber = val.yarnNumber;
         this.form.yarnCylinderNumber = val.yarnBatchNo;
-        console.log(val);
+        getWeave({ weaveJobCode: val.weaveJobCode }).then((res) => {
+          if (res.data.length) {
+            let data = res.data[0];
+            this.form.tubeDiam = data.cylinderInch;
+            this.form.needleDist = data.guage;
+            this.form.yarnLength = data.yarnLength;
+          }
+        });
       } else if (this.choiceTle == "選擇漂染基礎工藝") {
         val.forEach((item, i) => {
           let data = {};
@@ -732,7 +742,7 @@ export default {
             itemName: item.paramName,
             itemSet: item.paramDefault,
             dataStyle: item.paramValueType,
-            sn: this.crud.length + 1,
+            sn: item.sn,
             index: this.crud.length + 1,
             $cellEdit: true,
           };
@@ -740,7 +750,7 @@ export default {
         });
         this.crud = this.$unique(this.crud, "itemCode");
         this.crud.forEach((item, i) => {
-          item.sn = i + 1;
+          // item.sn = i + 1;
           item.index = i + 1;
         });
         this.$nextTick(() => {

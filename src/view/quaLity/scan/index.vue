@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-10-15 07:53:55
+ * @LastEditTime: 2021-10-30 16:06:11
  * @Description: 
 -->
 <template>
@@ -121,6 +121,13 @@
                 <el-row class="text item">
                   <el-col :span="10">QC扣减数量: {{ crud.qcTakeOut }}</el-col>
                   <el-col :span="14">毛重: {{ crud.realWeight }}</el-col>
+                </el-row>
+                <el-row class="text item">
+                  <el-col :span="8">克重: {{ crud.gramWeight }}</el-col>
+                  <el-col :span="8">门幅: {{ crud.breadth }}</el-col>
+                  <el-col :span="8"
+                    >长度(m): {{ crud.clothLengthValue }}</el-col
+                  >
                 </el-row>
                 <el-row class="text item">
                   <el-col :span="10"

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-10-27 08:32:19
+ * @LastEditTime: 2021-10-30 15:53:28
  * @Description:
  */
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
@@ -90,12 +90,12 @@ export function mainForm(_this) {
 export function mainCrud(_this) {
   return {
     menu: false,
-    addBtn: true,
+    addBtn: false,
+    columnBtn: true,
     border: true,
     highlightCurrentRow: true,
     height: "calc(100vh - 280px)",
     refreshBtn: false,
-    columnBtn: false,
     page: true,
     labelWidth: 130,
     selection: true,
@@ -1109,11 +1109,11 @@ export function mainWCrud(_this) {
   return {
     menu: false,
     addBtn: false,
+    columnBtn: true,
     border: true,
     highlightCurrentRow: true,
     height: "calc(100vh - 280px)",
     refreshBtn: false,
-    columnBtn: false,
     selection: true,
     // labelPosition: 'top',
     page: true,

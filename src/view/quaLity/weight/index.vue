@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-10-26 16:48:15
+ * @LastEditTime: 2021-10-28 11:10:06
  * @Description: 
 -->
 <template>
@@ -13,6 +13,12 @@
   >
     <view-container title="称重记录">
       <el-row class="btnList">
+        <el-button
+          type="success"
+          @click="saveAll"
+          :disabled="form.clothState == 3"
+          >{{ this.$t("public.save") }}</el-button
+        >
         <el-button
           type="primary"
           @click="dialogVisible = true"
@@ -229,6 +235,21 @@ export default {
       // setTimeout(() => {
       //   this.detail.clothWeight = this.weight;
       // }, 200);
+    },
+    saveAll() {
+      this.wLoading = true;
+      this.crud.forEach((item, i) => {
+        if (item.clothWeight > 0 && item.clothState === 0) {
+          item.clothCheckTime = this.$getNowTime("datetime");
+          item.clothState = 1;
+        }
+        update(item).then((res) => {
+          if (i == this.crud.length - 1) {
+            this.query();
+            this.$tip.success(this.$t("public.bccg"));
+          }
+        });
+      });
     },
     save() {
       this.wLoading = true;
