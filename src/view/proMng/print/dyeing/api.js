@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-01 14:06:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-06 16:35:45
+ * @LastEditTime: 2021-11-13 16:32:07
  * @Description:
  */
 
@@ -51,7 +51,6 @@ export function getBom(params) {
   });
 }
 
-// 通过排期类型查找工作包
 export function get(params) {
   return axios({
     url: "/api/proBleadyeJob/page",
@@ -194,7 +193,7 @@ export function getDye(params) {
 }
 
 // 新增
-export function addDye(data) {
+export function addDyes(data) {
   return axios({
     url: "/api/proBleadyeJobVatParam",
     method: "post",

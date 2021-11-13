@@ -40,7 +40,7 @@ export const webSocket = {
     }
     //连接发生错误的回调方法
     _this.czsocket.onerror = function() {
-      _this.$tip.warning("称重服务离线!");
+      _this.$tip.warning("称重服务离线，请打开称重应用!");
     };
     //连接成功建立的回调方法
     _this.czsocket.onopen = function(event) {

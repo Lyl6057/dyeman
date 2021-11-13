@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-10-27 10:29:53
+ * @LastEditTime: 2021-11-03 13:52:52
  * @Description: 
 -->
 <template>
@@ -275,9 +275,9 @@ export default {
           delete this.form[key];
         }
       }
-      if (this.form.vatNo && this.form.vatNo.indexOf("%") == -1) {
-        this.form.vatNo = "%" + this.form.vatNo;
-      }
+      this.form.vatNo = "!^%" + (this.form.vatNo ? this.form.vatNo : "");
+      this.form.weaveJobCode =
+        "%" + (this.form.weaveJobCode ? this.form.weaveJobCode : "");
       get(
         Object.assign(this.form, {
           rows: this.page.pageSize,
@@ -297,8 +297,11 @@ export default {
         if (this.crud.length > 0) {
           this.$refs.crud.setCurrentRow(this.crud[0]);
         }
-        if (this.form.vatNo && this.form.vatNo.indexOf("%") != -1) {
-          this.form.vatNo = this.form.vatNo.split("%")[1];
+        if (this.form.vatNo.indexOf("!^%") != -1) {
+          this.form.vatNo = this.form.vatNo.split("!^%")[1] || "";
+        }
+        if (this.form.weaveJobCode.indexOf("%") != -1) {
+          this.form.weaveJobCode = this.form.weaveJobCode.split("%")[1];
         }
         this.page.total = res.data.total;
         this.loading = false;

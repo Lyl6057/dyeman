@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-10-27 18:38:21
+ * @LastEditTime: 2021-11-09 14:47:58
  * @Description:
  */
 
@@ -467,6 +467,27 @@ export function mainCrud(_this) {
         ]
       },
       {
+        label: "斜度",
+        prop: "skewDegree",
+        width: 120,
+        hide: true,
+        span: 6,
+        type: "number",
+        placeholder: " "
+        // tip: "轧车压力(Áp lực xe)"
+      },
+      {
+        label: "斜度单位",
+        prop: "skewDegreeUnit",
+        width: 120,
+        hide: true,
+        span: 6,
+        type: "select",
+        dicData: getDIC("sal_breadthUnit"),
+        placeholder: " "
+        // tip: "轧车压力(Áp lực xe)"
+      },
+      {
         label: "织厂",
         prop: "weaveFactoryCode",
         tip: "织厂(Xưởng dệt)",
@@ -474,16 +495,18 @@ export function mainCrud(_this) {
         width: 180,
         span: 6,
         disabled: false,
-        placeholder: " "
-      },
-      {
-        label: "开单员",
-        tip: "开单员(Người lập đơn)",
-        prop: "jobCreator",
-        width: 100,
         placeholder: " ",
-        span: 6,
-        disabled: true
+        type: "select",
+        dicData: [
+          {
+            label: "S.POWER",
+            value: "S.POWER"
+          },
+          {
+            label: "Rise Sun",
+            value: "Rise Sun"
+          }
+        ]
       },
       {
         label: "审批",
@@ -494,11 +517,22 @@ export function mainCrud(_this) {
         span: 6
       },
       {
+        label: "开单员",
+        tip: "开单员(Người lập đơn)",
+        prop: "jobCreator",
+        width: 100,
+        placeholder: " ",
+        span: 6,
+        disabled: true
+      },
+
+      {
         label: "列印日期",
         tip: "列印日期(Ngày in)",
         prop: "printDate",
         placeholder: " ",
         width: 160,
+        disabled: true,
         overHidden: true,
         hide: false,
         type: "datetime",
@@ -507,6 +541,15 @@ export function mainCrud(_this) {
         span: 6,
         display: true
       },
+      {
+        label: "备注",
+        // tip: "审批(Xét duyệt)",
+        prop: "remark",
+        width: 100,
+        placeholder: " ",
+        span: 12
+      },
+
       {
         label: "創建日期",
         prop: "createTime",
@@ -1138,15 +1181,56 @@ export function pfCrud(_this) {
         cell: true
       },
       {
+        label: "配方(g/L)",
+        prop: "formulaFactor",
+        width: 120,
+        placeholder: " ",
+        type: "number",
+        // maxRows: 9999,
+        span: 6,
+        cell: true,
+        change: () => {
+          _this.$nextTick(() => {
+            if (_this.chooseData.formulaFactor === 0) {
+              _this.chooseData.waterAmount = 0;
+            } else {
+              _this.chooseData.waterAmount = Number(
+                (
+                  (_this.chooseData.useAmount * 1000) /
+                  _this.chooseData.formulaFactor
+                ).toFixed(1)
+              );
+            }
+          });
+        }
+      },
+      {
         label: "数量",
         prop: "useAmount",
         width: 120,
         type: "number",
         // overHidden: true,
         placeholder: " ",
-        maxRows: 9999,
+        // maxRows: 9999,
         span: 6,
-        cell: true
+        cell: true,
+        change: () => {
+          _this.$nextTick(() => {
+            if (_this.chooseData.formulaFactor === 0) {
+              _this.chooseData.waterAmount = 0;
+            } else {
+              _this.chooseData.waterAmount = Number(
+                (
+                  (_this.chooseData.useAmount * 1000) /
+                  _this.chooseData.formulaFactor
+                ).toFixed(1)
+              );
+            }
+          });
+          //   _this.chooseData.waterAmount = Number(
+          //     (_this.form.jobAmount * _this.chooseData.waterRatio).toFixed(2)
+          //   );
+        }
       },
       {
         label: "浴比",
@@ -1156,15 +1240,15 @@ export function pfCrud(_this) {
         // overHidden: true,
         placeholder: " ",
         minRows: 0,
-        maxRows: 9999,
+        // maxRows: 9999,
         span: 6,
         cell: true,
         change: () => {
-          _this.$nextTick(() => {
-            _this.chooseData.waterAmount = Number(
-              (_this.form.jobAmount * _this.chooseData.waterRatio).toFixed(2)
-            );
-          });
+          // _this.$nextTick(() => {
+          //   _this.chooseData.waterAmount = Number(
+          //     (_this.form.jobAmount * _this.chooseData.waterRatio).toFixed(2)
+          //   );
+          // });
         }
       },
 
@@ -1176,7 +1260,7 @@ export function pfCrud(_this) {
         // overHidden: true,
         placeholder: " ",
         minRows: 0,
-        maxRows: 9999,
+        // maxRows: 9999,
         span: 6,
         cell: true
       },

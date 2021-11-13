@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-10-29 08:32:26
+ * @LastEditTime: 2021-11-13 16:36:10
  * @Description:
 -->
 <template>
@@ -43,9 +43,12 @@
           content="xóa"
           placement="top-start"
         >
-          <el-button type="danger" :disabled="!detail.runJobId" @click="del">{{
-            this.$t("public.del")
-          }}</el-button>
+          <el-button
+            type="danger"
+            :disabled="!selectList.length"
+            @click="del"
+            >{{ this.$t("public.del") }}</el-button
+          >
         </el-tooltip>
         <el-tooltip
           class="item"
@@ -163,7 +166,7 @@
 </template>
 <script>
 import { mainForm, mainCrud } from "./data";
-import { get, add, update, del, print } from "./api";
+import { get, add, update, del, delDye, getDye, print } from "./api";
 import tem from "./temDlg";
 import html2Canvas from "html2canvas";
 import JsPDF from "jspdf";
@@ -202,37 +205,33 @@ export default {
       this.loading = true;
       this.detail = {};
       for (let key in this.form) {
-        if (this.form[key] == "") {
+        if (this.form[key] == "" && key != "auditState") {
           delete this.form[key];
         }
       }
-      if (this.form.vatNo && this.form.vatNo.indexOf("%") == -1) {
-        this.form.vatNo = "%" + this.form.vatNo;
-      }
+      this.form.vatNo = "!^%" + (this.form.vatNo ? this.form.vatNo : "");
+      this.form.weaveJobCode =
+        "%" + (this.form.weaveJobCode ? this.form.weaveJobCode : "");
       get(
         Object.assign(this.form, {
           rows: this.page.pageSize,
           start: this.page.currentPage,
           pages: this.page.currentPage,
-          // runState: "1",
-          // auditState: 1,
         })
       ).then((res) => {
         this.crud = res.data.records;
-        this.crud.sort((a, b) => {
-          return a.workDate > b.workDate ? -1 : 1;
-        });
         this.crud.forEach((item, i) => {
-          // item.custName = item.custCode;
-          // item.amount = item.amount.toFixed(2);
           item.index = i + 1;
         });
 
         if (this.crud.length > 0) {
           this.$refs.crud.setCurrentRow(this.crud[0]);
         }
-        if (this.form.vatNo && this.form.vatNo.indexOf("%") != -1) {
-          this.form.vatNo = this.form.vatNo.split("%")[1];
+        if (this.form.vatNo.indexOf("!^%") != -1) {
+          this.form.vatNo = this.form.vatNo.split("!^%")[1] || "";
+        }
+        if (this.form.weaveJobCode.indexOf("%") != -1) {
+          this.form.weaveJobCode = this.form.weaveJobCode.split("%")[1];
         }
         this.page.total = res.data.total;
         this.loading = false;
@@ -274,35 +273,34 @@ export default {
       this.dialogVisible = true;
     },
     del() {
-      if (parent.userID != this.detail.serviceOperator) {
-        this.$tip.warning("当前用户没有权限删除该记录!");
-        return;
-      }
-      if (this.detail.auditState) {
-        this.$tip.warning("通过审核的数据不可删除,请联系主管取消审核!");
-        return;
-      }
+      // if (parent.userID != this.detail.serviceOperator) {
+      //   this.$tip.warning("当前用户没有权限删除该记录!");
+      //   return;
+      // }
+      // if (this.detail.auditState) {
+      //   this.$tip.warning("通过审核的数据不可删除,请联系主管取消审核!");
+      //   return;
+      // }
       this.$tip
-        .cofirm(
-          this.$t("iaoMng.delTle7") +
-            this.detail.vatNo +
-            this.$t("iaoMng.delTle2"),
-          this,
-          {}
-        )
+        .cofirm("是否确定删除选中的数据?", this, {})
         .then(() => {
-          del(this.detail.runJobId)
-            .then((res) => {
-              if (res.data.code === 200) {
-                this.$tip.success(this.$t("public.sccg"));
-                this.query();
-              } else {
-                this.$tip.error(this.$t("public.scsb"));
-              }
-            })
-            .catch((err) => {
-              this.$tip.error(this.$t("public.scsb"));
+          this.wloading = true;
+          this.selectList.forEach((item, i) => {
+            del(item.runJobId).then((res) => {
+              getDye({ vatNo: item.vatNo }).then((dye) => {
+                if (dye.data.length) {
+                  delDye(dye.data[0].bleadyeJobId).then((delDye) => {});
+                }
+                if (i == this.selectList.length - 1) {
+                  setTimeout(() => {
+                    this.$tip.success("删除成功!");
+                    this.wloading = false;
+                    this.query();
+                  }, 200);
+                }
+              });
             });
+          });
         })
         .catch((err) => {
           this.$tip.warning(this.$t("public.qxcz"));

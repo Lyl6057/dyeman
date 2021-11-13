@@ -2,11 +2,50 @@
  * @Author: Lyl
  * @Date: 2021-02-01 14:06:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-07-13 14:19:02
+ * @LastEditTime: 2021-11-13 16:32:18
  * @Description:
  */
 
 import axios from "axios";
+
+// 查询漂染单
+export function getDye(params) {
+  return axios({
+    url: "/api/proBleadyeJob",
+    method: "get",
+    params: params
+  });
+}
+// 修改
+export function updateDye(data) {
+  return axios({
+    url: "/api/proBleadyeJob",
+    method: "put",
+    params: data
+  });
+}
+export function addDye(data) {
+  return axios({
+    url: "/api/proBleadyeJob",
+    method: "post",
+    params: data
+  });
+}
+
+export function addProject(data) {
+  return axios({
+    url: "/api/proBleadyeJobItem",
+    method: "post",
+    params: data
+  });
+}
+export function addDyeProject(data) {
+  return axios({
+    url: "/api/proBleadyeJobItem",
+    method: "post",
+    params: data
+  });
+}
 
 // 獲取訂單號
 export function getPo(params) {
@@ -77,6 +116,13 @@ export function del(id) {
   });
 }
 
+export function delDye(id) {
+  return axios({
+    url: "/api/proBleadyeJob?bleadyeJobId=" + id,
+    method: "delete"
+  });
+}
+
 // 修改佈飛记录
 export function updateNote(data) {
   return axios({
@@ -141,6 +187,13 @@ export function getTest(params) {
 export function addTest(data) {
   return axios({
     url: "/api/proBleadyeRunJobTest",
+    method: "post",
+    params: data
+  });
+}
+export function addDyeTest(data) {
+  return axios({
+    url: "/api/proBleadyeJobTest",
     method: "post",
     params: data
   });

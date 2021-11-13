@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-31 13:11:53
+ * @LastEditTime: 2021-11-13 14:19:05
  * @Description: 
 -->
 <template>
@@ -144,6 +144,7 @@ export default {
           delete this.form[key];
         }
       }
+      this.form.vatNo = "!^%" + (this.form.vatNo ? this.form.vatNo : "");
       get(
         Object.assign(this.form, {
           rows: this.page.pageSize,
@@ -160,6 +161,9 @@ export default {
             this.$refs.crud.setCurrentRow(this.crud[0]);
           }
           this.page.total = res.data.total;
+          if (this.form.vatNo.indexOf("!^%") != -1) {
+            this.form.vatNo = this.form.vatNo.split("!^%")[1] || "";
+          }
           this.loading = false;
         })
         .catch((e) => {

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-08-18 08:51:58
  * @LastEditors: Lyl
- * @LastEditTime: 2021-10-16 08:59:34
+ * @LastEditTime: 2021-11-02 10:05:53
  * @Description: 
 -->
 <template>
@@ -427,7 +427,7 @@ export default {
       });
     },
     preview() {
-      get({ vatNo: "XXX" }).then((res) => {
+      get().then((res) => {
         res.data[0].basePrintTemplateFk = this.detail.tempId;
         update(res.data[0]).then((ures) => {
           this.pdfUrl =

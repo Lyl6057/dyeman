@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-08-07 07:57:44
  * @LastEditors: Lyl
- * @LastEditTime: 2021-10-30 08:25:34
+ * @LastEditTime: 2021-11-13 15:38:44
  * @Description: 
 -->
 <template>
@@ -16,7 +16,29 @@
         <el-row>
           <el-col :span="18">
             <el-row class="formBox" style="margin-top: 15px">
-              <avue-form ref="form" :option="crudOp" v-model="form"></avue-form>
+              <avue-form ref="form" :option="crudOp" v-model="form">
+                <template slot-scope="scope" slot="vatNo">
+                  <el-select
+                    v-model="form.vatNo"
+                    filterable
+                    remote
+                    reserve-keyword
+                    clearable
+                    default-first-option
+                    placeholder="请输入缸号"
+                    :remote-method="remoteMethod"
+                    :loading="vatLoading"
+                  >
+                    <el-option
+                      v-for="item in options"
+                      :key="item.vatNo"
+                      :label="item.vatNo"
+                      :value="item.vatNo"
+                    >
+                    </el-option>
+                  </el-select>
+                </template>
+              </avue-form>
             </el-row>
             <el-row
               class="btnList"
@@ -115,11 +137,15 @@ import {
   print,
   getBleadye,
   getRevolve,
+  getBleadyeByPage,
   getTem,
+  getWeave,
+  getCheckItem,
 } from "./api";
 // import tem from "./temDlg";
 import { webSocket } from "@/config/index.js";
 import printTem from "./printTem.vue";
+
 export default {
   name: "",
   components: {
@@ -129,7 +155,11 @@ export default {
   data() {
     return {
       formOp: mainForm(this),
-      form: {},
+      form: {
+        realGramWeight: 0,
+        clothWidth: 0,
+        netWeight: 0,
+      },
       crudOp: mainCrud(this),
       crud: [],
       page: {
@@ -152,12 +182,21 @@ export default {
       prsocket: null,
       sheetNum: 1,
       commonTem: null,
+      output: {},
+      options: [],
+      vatLoading: false,
     };
   },
   created() {
     // this.setCz();
   },
   mounted() {
+    getCheckItem().then((res) => {
+      let data = res.data.filter((item) => {
+        return item.checkType != 2;
+      });
+      this.crudOp.column[this.crudOp.column.length - 1].dicData = data;
+    });
     this.$nextTick(() => {
       setTimeout(() => {
         this.form.originPlace = "06";
@@ -182,17 +221,16 @@ export default {
     clearInterval(this.time);
   },
   methods: {
+    remoteMethod(val) {
+      this.vatLoading = true;
+      getBleadyeByPage({ vatNo: "!^%" + val }).then((res) => {
+        this.options = res.data.records;
+        this.vatLoading = false;
+      });
+    },
     query() {
       this.wLoading = true;
       this.detail = {};
-      // for (let key in this.form) {
-      //   if (this.form[key] == "") {
-      //     delete this.form[key];
-      //   }
-      // }
-      // if (this.form.appDate && this.form.appDate.indexOf(" ") < 0) {
-      //   this.form.appDate += " 00:00:00";
-      // }
       // 先查询成品码卡是否存在记录
       get({ vatNo: this.form.vatNo, pidNo: this.form.pidNo }).then((res) => {
         if (res.data.length) {
@@ -212,26 +250,42 @@ export default {
               this.form.custCode = val.custCode;
               this.form.colorName = val.colorName;
               this.form.colorNo = val.colorCode;
-              this.form.custColorNo = val.colorCode;
+
               this.form.custBatchNo = val.yarnBatchNo;
               this.form.fabricName = val.fabName;
-              this.form.gramWeight = val.gramWeightBefor;
-              this.form.afterWeightDsp = val.gramWeightAfter;
-              this.form.breadth = val.breadth;
 
-              this.form.realGramWeight = this.form.gramWeight
+              this.form.breadth = val.breadth;
+              this.form.etNo = val.etSn;
+              // 洗前
+              this.form.gramWeight = val.gramWeightBefor;
+              this.form.gramWeightValue = this.form.gramWeight
                 ? Number(this.form.gramWeight.split("(")[0])
                 : "";
-              this.form.gramWeightValue = this.form.realGramWeight;
+
+              // 洗后
+              this.form.afterWeightDsp = val.gramWeightAfter;
               this.form.afterWeightValue = this.form.gramWeightAfter
                 ? Number(this.form.gramWeightAfter.split("(")[0])
                 : "";
-              this.form.clothWidth = Number(this.form.breadth.split("(")[0]);
+              this.form.realGramWeight =
+                this.form.gramWeightValue || this.form.afterWeightValue || 0;
+
+              this.form.clothWidth =
+                Number(this.form.breadth.split("(")[0]) || 0;
+
+              this.form.sideBreadth = this.form.breadthBorder || "";
+
+              this.form.sideBreadthValue =
+                this.form.sideBreadth.indexOf("(") != -1
+                  ? Number(this.form.breadthBorder.split("(")[0]) || 0
+                  : Number(this.form.breadthBorder || 0);
+
               this.form.breadthValue = this.form.clothWidth;
               this.form.fabName = val.fabName;
               this.form.guestComponents = val.fabElements;
               // this.form.netWeight = val.clothWeight;
               this.form.poNo = val.salPoNo;
+
               this.form.pidNo = 1;
               this.form.productNo =
                 val.vatNo + this.$preFixInt(this.form.pidNo, 3);
@@ -240,7 +294,18 @@ export default {
                 vatNo: this.form.vatNo,
               }).then((res) => {
                 this.form.styleNo = res.data[0].styleNo;
+                this.form.custPoNo = res.data[0].custPoNo;
+                this.form.contractNo = res.data[0].contractNo;
+                this.form.fabricCode = res.data[0].fabricCode;
+                this.form.custColorNo = res.data[0].custColorNo;
+                this.form.factoryColorNo = res.data[0].colorCode;
+                // getWeave({ weaveJobCode: res.data[0].weaveJobCode }).then(
+                //   (weave) => {
+                //     this.form.guestFabId = weave.data[0].custFabricCode;
+                //   }
+                // );
               });
+
               this.getTemForCust();
             } else {
               this.form.poNo = "";
@@ -294,103 +359,82 @@ export default {
       this.crudOp.column[this.crudOp.column.length - 2].dicData = data;
     },
     preview() {
-      this.wLoading = true;
-      this.$refs.form.validate((valid, done) => {
-        if (valid) {
-          try {
-            // 查询是否存在成品码卡记录
-            get({
-              vatNo: this.form.vatNo,
-              pidNo: this.form.pidNo,
-            }).then((res) => {
-              let data = JSON.parse(JSON.stringify(this.form));
-              data.custName = data.$custCode;
-              // data.printCount = this.sheetNum;
-              // data.clothCheckTime = this.$getNowTime("datetime");
-              Object.keys(data).forEach((item) => {
-                if (this.isEmpty(data[item])) {
-                  delete data[item];
-                }
-              });
-              if (res.data.length) {
-                data.cardId = res.data[0].cardId;
-                this.form.cardId = data.cardId;
-                // 存在记录  更新 => 打印
-                update(data).then((upRes) => {
-                  // this.history.unshift(data);
-                  // this.history = this.$unique(this.history, "cardId");
-
-                  this.pdfUrl =
-                    process.env.API_HOST +
-                    "/api/proFinalProductCard/cardPdf?cardId=" +
-                    this.form.cardId;
-                  this.pdfDlg = true;
-                });
-              } else {
-                // 不存在记录 新增 =>打印
-                add(data).then((addRes) => {
-                  this.form.cardId = addRes.data.data;
-                  // this.history.unshift(data);
-                  // this.history = this.$unique(this.history, "cardId");
-                  this.pdfUrl =
-                    process.env.API_HOST +
-                    "/api/proFinalProductCard/cardPdf?cardId=" +
-                    this.form.cardId;
-                  this.pdfDlg = true;
-                });
-              }
-              setTimeout(() => {
-                // this.form.pidNo++;
-                this.wLoading = false;
-                done();
-              }, 200);
-            });
-
-            // if (data.cardId) {
-            //   // update
-            //   data.upateTime = this.$getNowTime("datetime");
-            //   update(data).then((res) => {
-            //     if (res.data.code == 200) {
-            //       setTimeout(() => {
-            //         this.wLoading = false;
-            //         this.$emit("refresh");
-            //         this.$tip.success(this.$t("public.bccg"));
-            //         done();
-            //       }, 200);
-            //     } else {
-            //       this.wLoading = false;
-            //       done();
-            //       this.$tip.error(this.$t("public.bcsb"));
-            //     }
-            //   });
-            // } else {
-            //   // add
-            //   data.createTime = this.$getNowTime("datetime");
-            //   add(data).then((res) => {
-            //     if (res.data.code == 200) {
-            //       this.$tip.success(this.$t("public.bccg"));
-            //       this.wLoading = false;
-            //       this.$emit("refresh");
-            //       this.form.cardId = res.data.data;
-            //       this.detail.cardId = res.data.data;
-            //     } else {
-            //       this.$tip.error(this.$t("public.bcsb"));
-            //       this.wLoading = false;
-            //     }
-            done();
-            //   });
-            // }
-          } catch (error) {
-            console.log(error);
-            this.wLoading = false;
-            this.$tip.error(this.$t("public.bcsb"));
-            done();
-          }
+      if (!this.form.netWeight) {
+        this.$tip.error("成品重量不能为0!");
+        return;
+      }
+      getBleadye({ vatNo: this.form.vatNo }).then((dye) => {
+        if (!dye.data.length) {
+          this.$tip.error("暂无此缸号数据!");
         } else {
-          this.wLoading = false;
-          this.$tip.error("请补充缸号/打印模板信息!");
+          this.wLoading = true;
+          this.$refs.form.validate((valid, done) => {
+            if (valid) {
+              try {
+                // 查询是否存在成品码卡记录
+                get({
+                  vatNo: this.form.vatNo,
+                  pidNo: this.form.pidNo,
+                }).then((res) => {
+                  let data = JSON.parse(JSON.stringify(this.form));
+                  data.custName = data.$custCode;
+                  // data.printCount = this.sheetNum;
+                  data.clothCheckTime = this.$getNowTime("datetime");
+                  Object.keys(data).forEach((item) => {
+                    if (this.isEmpty(data[item])) {
+                      delete data[item];
+                    }
+                  });
+                  if (res.data.length) {
+                    data.cardId = res.data[0].cardId;
+                    this.form.cardId = data.cardId;
+                    // 存在记录  更新 => 打印
+                    update(data).then((upRes) => {
+                      // this.history.unshift(data);
+                      // this.history = this.$unique(this.history, "cardId");
+
+                      this.pdfUrl =
+                        process.env.API_HOST +
+                        "/api/proFinalProductCard/cardPdf?cardId=" +
+                        this.form.cardId;
+                      this.pdfDlg = true;
+                    });
+                  } else {
+                    // 不存在记录 新增 =>打印
+                    add(data).then((addRes) => {
+                      this.form.cardId = addRes.data.data;
+                      // this.history.unshift(data);
+                      // this.history = this.$unique(this.history, "cardId");
+                      this.pdfUrl =
+                        process.env.API_HOST +
+                        "/api/proFinalProductCard/cardPdf?cardId=" +
+                        this.form.cardId;
+                      this.pdfDlg = true;
+                    });
+                  }
+                  setTimeout(() => {
+                    // this.form.pidNo++;
+                    this.wLoading = false;
+                    done();
+                  }, 200);
+                });
+                done();
+                //   });
+                // }
+              } catch (error) {
+                console.log(error);
+                this.wLoading = false;
+                this.$tip.error(this.$t("public.bcsb"));
+                done();
+              }
+            } else {
+              this.wLoading = false;
+              this.$tip.error("请补充码卡信息!");
+            }
+          });
         }
       });
+
       // this.pdfDlg = true;
       // this.pdfUrl =
       //   process.env.API_HOST +
@@ -398,123 +442,122 @@ export default {
       //   this.detail.cardId;
     },
     print() {
-      this.wLoading = true;
-      this.$refs.form.validate((valid, done) => {
-        if (valid) {
-          try {
-            // 查询是否存在成品码卡记录
-            get({
-              vatNo: this.form.vatNo,
-              pidNo: this.form.pidNo,
-            }).then((res) => {
-              let data = JSON.parse(JSON.stringify(this.form));
-              data.custName = data.$custCode;
-              data.printCount = this.sheetNum;
-              data.clothCheckTime = this.$getNowTime("datetime");
-              data.printedTime = this.$getNowTime("datetime");
-              data.clothState = 1;
-              data.isPrinted = true;
-              Object.keys(data).forEach((item) => {
-                if (this.isEmpty(data[item])) {
-                  delete data[item];
-                }
-              });
-              if (res.data.length) {
-                data.cardId = res.data[0].cardId;
-                this.form.cardId = data.cardId;
-                // 存在记录  更新 => 打印
-                update(data).then((upRes) => {
-                  this.history.unshift(data);
-                  this.history = this.$unique(this.history, "cardId");
-                  if (this.sheetNum) {
-                    for (let i = 0; i < this.sheetNum; i++) {
-                      setTimeout(() => {
-                        this.prsocket.send("finishCard:" + data.cardId);
-                      }, 200);
-
-                      if (i == this.sheetNum - 1) {
-                        this.$tip.success("已发送全部打印请求!");
-                      }
-                    }
-                  } else {
-                    this.prsocket.send("finishCard:" + data.cardId);
-                    this.$tip.success("已发送打印请求!");
-                  }
-                });
-              } else {
-                // 不存在记录 新增 =>打印
-                add(data).then((addRes) => {
-                  this.form.cardId = addRes.data.data;
-                  this.history.unshift(data);
-                  this.history = this.$unique(this.history, "cardId");
-                  if (this.sheetNum) {
-                    for (let i = 0; i < this.sheetNum; i++) {
-                      setTimeout(() => {
-                        this.prsocket.send("finishCard:" + this.form.cardId);
-                      }, 200);
-
-                      if (i == this.sheetNum - 1) {
-                        this.$tip.success("已发送全部打印请求!");
-                      }
-                    }
-                  } else {
-                    this.prsocket.send("finishCard:" + this.form.cardId);
-                    this.$tip.success("已发送打印请求!");
-                  }
-                });
-              }
-              setTimeout(() => {
-                this.form.pidNo++;
-                this.wLoading = false;
-                done();
-              }, 200);
-            });
-
-            // if (data.cardId) {
-            //   // update
-            //   data.upateTime = this.$getNowTime("datetime");
-            //   update(data).then((res) => {
-            //     if (res.data.code == 200) {
-            //       setTimeout(() => {
-            //         this.wLoading = false;
-            //         this.$emit("refresh");
-            //         this.$tip.success(this.$t("public.bccg"));
-            //         done();
-            //       }, 200);
-            //     } else {
-            //       this.wLoading = false;
-            //       done();
-            //       this.$tip.error(this.$t("public.bcsb"));
-            //     }
-            //   });
-            // } else {
-            //   // add
-            //   data.createTime = this.$getNowTime("datetime");
-            //   add(data).then((res) => {
-            //     if (res.data.code == 200) {
-            //       this.$tip.success(this.$t("public.bccg"));
-            //       this.wLoading = false;
-            //       this.$emit("refresh");
-            //       this.form.cardId = res.data.data;
-            //       this.detail.cardId = res.data.data;
-            //     } else {
-            //       this.$tip.error(this.$t("public.bcsb"));
-            //       this.wLoading = false;
-            //     }
-            done();
-            //   });
-            // }
-          } catch (error) {
-            console.log(error);
-            this.wLoading = false;
-            this.$tip.error(this.$t("public.bcsb"));
-            done();
-          }
+      if (!this.form.netWeight) {
+        this.$tip.error("成品重量不能为0!");
+        return;
+      }
+      getBleadye({ vatNo: this.form.vatNo }).then((dye) => {
+        if (!dye.data.length) {
+          this.$tip.error("暂无此缸号数据!");
         } else {
-          this.wLoading = false;
-          this.$tip.error("请补充缸号/打印模板信息!");
+          this.wLoading = true;
+          this.$refs.form.validate((valid, done) => {
+            if (valid) {
+              try {
+                // 查询是否存在成品码卡记录
+                get({
+                  vatNo: this.form.vatNo,
+                  pidNo: this.form.pidNo,
+                }).then((res) => {
+                  let data = JSON.parse(JSON.stringify(this.form));
+                  data.custName = data.$custCode;
+                  data.printCount = this.sheetNum;
+                  data.clothCheckTime = this.$getNowTime("datetime");
+                  data.printedTime = this.$getNowTime("datetime");
+                  data.clothState = 1;
+                  data.isPrinted = true;
+                  Object.keys(data).forEach((item) => {
+                    if (this.isEmpty(data[item])) {
+                      delete data[item];
+                    }
+                  });
+                  if (res.data.length) {
+                    data.cardId = res.data[0].cardId;
+                    this.form.cardId = data.cardId;
+                    // 存在记录  更新 => 打印
+                    update(data).then((upRes) => {
+                      this.history.unshift(data);
+                      this.history = this.$unique(this.history, "cardId");
+                      if (this.sheetNum) {
+                        for (let i = 0; i < this.sheetNum; i++) {
+                          setTimeout(() => {
+                            if (data.cardId) {
+                              this.prsocket.send("finishCard:" + data.cardId);
+                            } else {
+                              this.$tip.error("数据错误,请重新查询后进行打印!");
+                              this.wLoading = false;
+                              return;
+                            }
+                            if (i == this.sheetNum - 1) {
+                              this.$tip.success("已发送全部打印请求!");
+                            }
+                          }, 200);
+                        }
+                      } else {
+                        if (data.cardId) {
+                          this.prsocket.send("finishCard:" + data.cardId);
+                          this.$tip.success("已发送打印请求!");
+                        } else {
+                          this.$tip.error("数据错误,请重新查询后进行打印!");
+                        }
+                      }
+                    });
+                  } else {
+                    // 不存在记录 新增 =>打印
+                    data.cardId = "";
+                    data.madeDate = this.$getNowTime("datetime");
+                    add(data).then((addRes) => {
+                      this.form.cardId = addRes.data.data;
+                      this.history.unshift(data);
+                      this.history = this.$unique(this.history, "cardId");
+                      if (this.sheetNum) {
+                        for (let i = 0; i < this.sheetNum; i++) {
+                          setTimeout(() => {
+                            if (data.cardId) {
+                              this.prsocket.send("finishCard:" + data.cardId);
+                            } else {
+                              this.$tip.error("数据错误,请重新查询后进行打印!");
+                              this.wLoading = false;
+                              return;
+                            }
+                            if (i == this.sheetNum - 1) {
+                              this.$tip.success("已发送全部打印请求!");
+                            }
+                          }, 200);
+                        }
+                      } else {
+                        if (data.cardId) {
+                          this.prsocket.send("finishCard:" + data.cardId);
+                        } else {
+                          this.$tip.error("数据错误,请重新查询后进行打印!");
+                        }
+                        this.$tip.success("已发送打印请求!");
+                      }
+                    });
+                  }
+                  setTimeout(() => {
+                    this.form.pidNo++;
+                    this.wLoading = false;
+                    done();
+                  }, 200);
+                });
+                done();
+                //   });
+                // }
+              } catch (error) {
+                console.log(error);
+                this.wLoading = false;
+                this.$tip.error(this.$t("public.bcsb"));
+                done();
+              }
+            } else {
+              this.wLoading = false;
+              this.$tip.error("请补充码卡信息!");
+            }
+          });
         }
       });
+
       // this.pdfDlg = true;
       // this.pdfUrl =
       //   process.env.API_HOST +
@@ -566,7 +609,8 @@ export default {
         obj === "undefined" ||
         typeof obj === "undefined" ||
         obj === null ||
-        obj === ""
+        obj === "" ||
+        obj === NaN
       ) {
         return true;
       } else {
@@ -583,37 +627,51 @@ export default {
         if (e.data.indexOf(":") != -1) {
           let data = e.data.split(":");
           _this.form.weightUnit = data[1];
+          data[0] = Number((parseInt(Number(data[0]) * 10) / 10).toFixed(1));
           if (_this.form.weightUnit == "KG") {
-            _this.form.grossWeight = Number(data[0]); //;
-            _this.form.grossWeightLbs = _this.form.grossWeight * 2.2046;
-
-            _this.form.netWeight =
-              _this.form.grossWeight -
-              Number(_this.form.paperTube || 0) -
-              Number(_this.form.qcTakeOut);
-
+            _this.form.netWeight = Number(data[0]); //;
             _this.form.netWeightLbs = _this.form.netWeight * 2.2046;
+
+            _this.form.grossWeight =
+              _this.form.netWeight +
+              Number(_this.form.paperTube || 0) +
+              Number(_this.form.qcTakeOut || 0);
+            _this.form.grossWeightLbs = _this.form.grossWeight * 2.2046;
           } else {
-            _this.form.grossWeightLbs = Number(data[0]); //;
-            _this.form.grossWeight = _this.form.grossWeightLbs / 2.2046;
-
-            _this.form.netWeightLbs =
-              _this.form.grossWeightLbs -
-              Number(_this.form.paperTube || 0) -
-              Number(_this.form.qcTakeOut);
-
+            _this.form.netWeightLbs = Number(data[0]); //;
             _this.form.netWeight = _this.form.netWeightLbs / 2.2046;
+
+            _this.form.grossWeightLbs =
+              _this.form.netWeightLbs +
+              Number(_this.form.paperTube || 0) +
+              Number(_this.form.qcTakeOut || 0);
+            _this.form.grossWeight = _this.form.grossWeightLbs / 2.2046;
+            // _this.form.grossWeightLbs = Number(data[0]); //;
+            // _this.form.grossWeight = _this.form.grossWeightLbs / 2.2046;
+
+            // _this.form.netWeightLbs =
+            //   _this.form.grossWeightLbs -
+            //   Number(_this.form.paperTube || 0) -
+            //   Number(_this.form.qcTakeOut);
+
+            // _this.form.netWeight = _this.form.netWeightLbs / 2.2046;
           }
         } else {
-          _this.form.grossWeight = Number(e.data);
+          _this.form.netWeight = Number(e.data);
         }
 
-        _this.codeLength();
+        // _this.codeLength();
       };
       _this.czsocket.onopen = function (event) {
         setTimeout(() => {
           _this.time = setInterval(() => {
-            _this.czsocket.send("weight");
+            console.log(_this.czsocket);
+            if (_this.czsocket.readyState == 3) {
+              _this.czsocket = null;
+              _this.setCz();
+            } else {
+              _this.czsocket.send("weight");
+            }
           }, 1000);
         }, 200);
         _this.$tip.success("服务器连接成功!");
@@ -622,33 +680,39 @@ export default {
       _this.prsocket.onmessage = function (e) {};
     },
     codeLength() {
-      if (!this.form.gramWeight || !this.form.breadth || !this.form.netWeight) {
+      if (
+        !this.form.realGramWeight ||
+        !this.form.clothWidth ||
+        !this.form.netWeight ||
+        this.form.realGramWeight == 0
+      ) {
         return;
       }
       let gramWeight, breadth;
-      this.$nextTick(() => {
-        if (this.form.gramWeightUnit == "Kg") {
-          // 默认是 g
-          gramWeight = Number(this.form.realGramWeight);
-        } else {
-          gramWeight = Number(this.form.realGramWeight / 1000);
-        }
+      // this.$nextTick(() => {
+      if (this.form.gramWeightUnit == "Kg") {
+        // 默认是 g
+        gramWeight = Number(this.form.realGramWeight);
+      } else {
+        gramWeight = Number(this.form.realGramWeight / 1000);
+      }
 
-        if (this.form.widthUnit == "INCH") {
-          // 默认是 inch
-          breadth = Number(this.form.clothWidth);
-        } else {
-          breadth = Number(this.form.clothWidth * 2.54);
-        }
+      if (this.form.widthUnit != "INCH") {
+        // 默认是 inch
+        breadth = Number(this.form.clothWidth / 100);
+      } else {
+        breadth = Number((this.form.clothWidth * 2.54) / 100);
+      }
 
-        let weight = this.form.netWeight;
-        if (this.form.weightUnit == "LBS") {
-          weight = weight * 2.20462262;
-        }
-        // gramWeight 单位为 g/m , breadth 单位为 inch 需要 * 2.54 转换成cm / 100 转换成 m
-
-        this.form.yardLength = Number(weight / gramWeight / breadth).toFixed(2);
-      });
+      let weight = this.form.netWeight;
+      // if (this.form.weightUnit == "LBS") {
+      //   weight = weight * 2.20462262;
+      // }
+      // gramWeight 单位为 g/m , breadth 单位为 inch 需要 * 2.54 转换成cm / 100 转换成 m
+      this.form.yardLength = parseInt(
+        Number(weight / gramWeight / breadth) * 1.0936
+      );
+      // });
     },
   },
   beforeRouteEnter(to, form, next) {
@@ -658,7 +722,9 @@ export default {
       document.onkeydown = function (e) {
         let ev = document.all ? window.event : e;
         if (ev.keyCode === 13) {
-          self.query();
+          setTimeout(() => {
+            self.query();
+          }, 200);
         }
       };
     });

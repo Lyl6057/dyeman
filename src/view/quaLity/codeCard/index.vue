@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-09-11 15:18:33
+ * @LastEditTime: 2021-11-13 09:50:43
  * @Description:
 -->
 <template>
@@ -13,13 +13,33 @@
   >
     <view-container title="成品码卡信息">
       <el-row class="btnList">
-        <el-button type="success" @click="save">{{
-          this.$t("public.save")
-        }}</el-button>
+        <el-button
+          type="primary"
+          @click="dialogVisible = true"
+          :disabled="!detail.cardId"
+          >{{ this.$t("public.update") }}</el-button
+        >
         <el-button type="primary" @click="query">{{
           this.$t("public.query")
         }}</el-button>
-        <el-button type="primary" @click="outExcel">导出</el-button>
+        <!-- <el-button type="primary" @click="outExcel1">导出</el-button> -->
+        <!-- <el-button type="primary" @click="outExcel">导出明细表</el-button> -->
+        <el-dropdown
+          split-button
+          type="primary"
+          @click="outExcel(1)"
+          style="margin-left: 10px"
+        >
+          导出明细
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item @click.native="outExcel(1)"
+              >公斤(KG)</el-dropdown-item
+            >
+            <el-dropdown-item @click.native="outExcel(0)"
+              >磅(LBS)</el-dropdown-item
+            >
+          </el-dropdown-menu>
+        </el-dropdown>
       </el-row>
       <el-row class="formBox">
         <avue-form ref="form" :option="formOp" v-model="form"> </avue-form>
@@ -38,18 +58,44 @@
           @selection-change="selectionChange"
         >
           <!--  @sort-change="sortChange" -->
-          <template slot="menu">
+          <!-- <template slot="menu">
             <el-button size="small" type="primary" @click="weighing"
               >称重</el-button
             >
-          </template></avue-crud
-        >
+          </template> -->
+        </avue-crud>
       </el-row>
+      <el-dialog
+        id="colorMng_Dlg"
+        :visible.sync="dialogVisible"
+        width="70%"
+        append-to-body
+        :close-on-click-modal="false"
+        :close-on-press-escape="false"
+      >
+        <view-container title="修改">
+          <div class="btnList">
+            <el-button
+              type="success"
+              @click="save"
+              :disabled="form.clothState == 3"
+              >{{ this.$t("public.save") }}</el-button
+            >
+            <el-button type="primary" @click="weighing">称重</el-button>
+            <el-button type="warning" @click="dialogVisible = false">{{
+              this.$t("public.close")
+            }}</el-button>
+          </div>
+          <div class="formBox">
+            <avue-form ref="form" :option="dlgOp" v-model="detail"></avue-form>
+          </div>
+        </view-container>
+      </el-dialog>
     </view-container>
   </div>
 </template>
 <script>
-import { mainForm, mainCrud } from "./data";
+import { mainForm, mainCrud, dlgForm } from "./data";
 import { webSocket } from "@/config/index.js";
 import {
   get,
@@ -61,8 +107,13 @@ import {
   addInWhse,
   addInDtla,
   addInDtlb,
+  getRevolve,
+  getNotPage,
 } from "./api";
-import { baseCodeSupply, baseCodeSupplyEx } from "@/api/index";
+import { getCheckItem } from "../finalCard/api";
+import XlsxTemplate from "xlsx-template";
+import JSZipUtils from "jszip-utils";
+import saveAs from "file-saver";
 export default {
   name: "",
   components: {},
@@ -72,18 +123,21 @@ export default {
       form: {
         weaveJobFk: "",
         clothState: 1,
+        // productNo: "",
       },
       crudOp: mainCrud(this),
       crud: [],
       page: {
-        pageSize: 20,
+        pageSize: 50,
         pageSizes: [20, 50, 100, 200, 500],
         total: 0,
       },
       loading: false,
       eloading: false,
       dialogVisible: false,
-      detail: {},
+      detail: {
+        weightUnit: "KG",
+      },
       czsocket: "",
       weight: 0,
       changeList: [],
@@ -93,6 +147,9 @@ export default {
       oldData: {},
       sort: {},
       checkSum: 0,
+      output: {},
+      dlgOp: dlgForm(this),
+      weightUnit: "KG",
     };
   },
   watch: {},
@@ -105,9 +162,7 @@ export default {
           delete this.form[key];
         }
       }
-      // order
-      //   ? (this.form.sort = prop + (order == "descending" ? ",1" : ",0"))
-      //   : (this.form.sort = "storeLoadCode,1");
+      this.form.vatNo = "!^%" + (this.form.vatNo ? this.form.vatNo : "");
       get(
         Object.assign(this.form, {
           rows: this.page.pageSize,
@@ -121,13 +176,20 @@ export default {
           this.$refs.crud.setCurrentRow(this.crud[0]);
         }
         this.crud.sort((a, b) => {
-          return a.vatNo > b.vatNo ? -1 : 1;
+          return a.pidNo > b.pidNo ? 1 : -1;
         });
         this.crud.forEach((item, i) => {
           // item.$cellEdit = true;
           item.index = i + 1;
         });
+        if (this.form.vatNo.indexOf("!^%") != -1) {
+          this.form.vatNo = this.form.vatNo.split("!^%")[1] || "";
+        }
         this.page.total = res.data.total;
+        // console.log(this.form);
+        // if (this.form.productNo.indexOf("!^%") != -1) {
+        //   this.form.productNo = this.form.productNo.split("!^%")[0] || "";
+        // }
         setTimeout(() => {
           this.$refs.crud.setCurrentRow(this.crud[0] || {});
           this.wLoading = false;
@@ -136,8 +198,10 @@ export default {
     },
     handleRowDBLClick(val) {
       this.detail = val;
+      this.weightUnit = val.weightUnit;
+      this.dialogVisible = true;
     },
-    outExcel() {
+    outExcel1() {
       this.$refs.crud.rowExcel();
     },
     weighing() {
@@ -153,16 +217,18 @@ export default {
     },
     save() {
       this.wLoading = true;
-      this.crud.forEach((item, i) => {
-        update(item).then((res) => {
-          if (i == this.crud.length - 1) {
-            setTimeout(() => {
-              this.wLoading = false;
-              this.$tip.success(this.$t("public.save"));
-            }, 200);
-          }
-        });
+      // this.crud.forEach((item, i) => {
+      update(this.detail).then((res) => {
+        // if (i == this.crud.length - 1) {
+        setTimeout(() => {
+          this.dialogVisible = false;
+          this.wLoading = false;
+          this.query();
+          this.$tip.success(this.$t("public.save"));
+        }, 200);
+        // }
       });
+      // });
     },
     group(arr, type) {
       var map = {},
@@ -189,27 +255,51 @@ export default {
     },
     cellClick(val) {
       this.detail = val;
-      this.oldData.$cellEdit = false;
+      if (this.detail.weightUnit == "KG") {
+        this.dlgOp.column[4].disabled = false;
+        this.dlgOp.column[7].disabled = true;
+      } else {
+        this.dlgOp.column[4].disabled = true;
+        this.dlgOp.column[7].disabled = false;
+      }
+
+      // this.weightUnit = val.weightUnit;
+      // this.oldData.$cellEdit = false;
       // val.$cellEdit = true;
-      this.$set(val, "$cellEdit", true);
-      this.oldData = val;
-      this.detail = val;
+      // this.$set(val, "$cellEdit", true);
+      // this.oldData = val;
+      // this.detail = val;
     },
     setCz() {
       webSocket.setCz(this);
       let _this = this;
       _this.czsocket.onmessage = function (e) {
         if (e.data.indexOf(":") != -1) {
-          _this.detail.grossWeight = Number(e.data.split(":")[0]); //;
-          _this.detail.weightUnit = e.data.split(":")[1];
+          let data = e.data.split(":");
+          _this.detail.weightUnit = data[1];
+          data[0] = Number((parseInt(Number(data[0]) * 10) / 10).toFixed(1));
+          if (_this.detail.weightUnit == "KG") {
+            _this.detail.netWeight = Number(data[0]); //;
+            // _this.detail.netWeightLbs = _this.detail.netWeight * 2.2046;
+
+            // _this.detail.grossWeight =
+            //   _this.detail.netWeight +
+            //   Number(_this.detail.paperTube || 0) +
+            //   Number(_this.detail.qcTakeOut || 0);
+            // _this.detail.grossWeightLbs = _this.detail.grossWeight * 2.2046;
+          } else {
+            _this.detail.netWeightLbs = Number(data[0]); //;
+            // _this.detail.netWeight = _this.detail.netWeightLbs / 2.2046;
+
+            // _this.detail.grossWeightLbs =
+            //   _this.detail.netWeightLbs +
+            //   Number(_this.detail.paperTube || 0) +
+            //   Number(_this.detail.qcTakeOut || 0);
+            // _this.detail.grossWeight = _this.detail.grossWeightLbs / 2.2046;
+          }
         } else {
-          _this.detail.grossWeight = Number(e.data);
+          _this.detail.netWeight = Number(e.data);
         }
-        _this.detail.netWeight = Number(
-          _this.detail.grossWeight -
-            Number(_this.detail.paperTube || 0) -
-            Number(_this.detail.qcTakeOut || 0)
-        ).toFixed(2);
       };
       _this.czsocket.onopen = function (event) {
         _this.$tip.success("称重应用连接成功!");
@@ -218,23 +308,32 @@ export default {
     calculateWeight() {},
     codeLength() {
       if (
-        !this.detail.gramWeight ||
-        !this.detail.breadth ||
+        !this.detail.realGramWeight ||
+        !this.detail.clothWidth ||
         !this.detail.netWeight
       ) {
         return;
       }
-      this.$nextTick(() => {
-        let gramWeight = Number(this.detail.gramWeight.split("(")[0]) / 1000,
-          breadth = (Number(this.detail.breadth.split("(")[0]) * 2.54) / 100;
-        let weight = this.detail.netWeight;
-        if (this.detail.weightUnit == "LBS") {
-          weight = weight * 2.20462262;
-        }
-        // gramWeight 单位为 g/m , breadth 单位为 inch 需要 * 2.54 转换成cm / 100 转换成 m
+      let gramWeight, breadth;
+      if (this.detail.gramWeightUnit == "Kg") {
+        // 默认是 g
+        gramWeight = Number(this.detail.realGramWeight);
+      } else {
+        gramWeight = Number(this.detail.realGramWeight / 1000);
+      }
 
-        this.detail.yardLength = parseInt((weight / gramWeight) * breadth);
-      });
+      if (this.detail.widthUnit != "INCH") {
+        // 默认是 inch
+        breadth = Number(this.detail.clothWidth / 100);
+      } else {
+        breadth = Number((this.detail.clothWidth * 2.54) / 100);
+      }
+
+      let weight = this.detail.netWeight;
+      // gramWeight 单位为 g/m , breadth 单位为 inch 需要 * 2.54 转换成cm / 100 转换成 m
+      this.detail.yardLength = parseInt(
+        Number(weight / gramWeight / breadth) * 1.0936
+      );
     },
     sortChange(val) {
       this.sort = val;
@@ -262,6 +361,105 @@ export default {
       }
       return sums;
     },
+    async outExcel(type) {
+      if (!this.form.vatNo) {
+        this.$tip.warning("请先输入缸号!");
+        return;
+      }
+      this.wLoading = true;
+      try {
+        //获得Excel模板的buffer对象
+        const exlBuf = await JSZipUtils.getBinaryContent(
+          "./static/xlxsTemplate/finished_warehousing.xlsx"
+        );
+        // Create a template
+        var template = new XlsxTemplate(exlBuf);
+        // Replacements take place on first sheet
+        var sheetNumber = "Sheet1";
+        // 处理数据
+        getRevolve({ vatNo: this.form.vatNo }).then((res) => {
+          if (res.data.length) {
+            this.output = res.data[0];
+            this.output.sumWeight = type
+              ? this.output.clothWeight
+              : (this.output.clothWeight * 2.2046).toFixed(2);
+            this.output.date = this.$getNowTime("date");
+            this.output.type = type;
+            getNotPage({ vatNo: this.form.vatNo }).then((list) => {
+              let data = list.data.sort((a, b) => {
+                return a.pidNo - b.pidNo;
+              });
+              if (!list.data.length) {
+                this.$tip.warning("暂无此缸号数据!");
+                this.wLoading = false;
+                return;
+              }
+              let arr1 = [],
+                arr2 = [],
+                arr3 = [];
+              this.output.unit = type ? "KG" : "LBS";
+              this.output.weightKg = 0;
+              this.output.weightLbs = 0;
+              data.forEach((item, index) => {
+                this.output.weightKg += item.netWeight;
+                this.output.weightLbs += item.netWeightLbs;
+                item.weight = type ? item.netWeight : item.netWeightLbs;
+                if (item.pidNo <= 20) {
+                  arr1.push(item);
+                } else if (item.pidNo <= 40) {
+                  arr2.push(item);
+                } else if (item.pidNo <= 60) {
+                  arr3.push(item);
+                }
+              });
+              this.output.num = data.length;
+              this.output.weightKg = this.output.weightKg.toFixed(2);
+              this.output.weightLbs = this.output.weightLbs.toFixed(2);
+              this.output.loss =
+                (
+                  (this.output.weightKg / this.output.clothWeight - 1) *
+                  100
+                ).toFixed(2) + "%";
+              let values = {
+                output: this.output,
+                arr1,
+                arr2,
+                arr3,
+              };
+              this.$nextTick(() => {
+                template.substitute(sheetNumber, values);
+                // Get binary data.
+                var out = template.generate({ type: "blob" });
+                let _this = this;
+                let outE = function () {
+                  return new Promise((resolve, reject) => {
+                    let xlsxName =
+                      "成品和胚布入仓明细表 " +
+                      _this.output.custCode +
+                      " bảng chi tiết nhập kho";
+                    saveAs(out, xlsxName + ".xlsx");
+                    resolve();
+                  });
+                };
+                outE().then((res) => {
+                  setTimeout(() => {
+                    this.$tip.success("导出成功!");
+                    this.wLoading = false;
+                    // this.getData();
+                  }, 1000);
+                });
+              });
+            });
+          } else {
+            this.wLoading = false;
+            this.$tip.warning("暂无此缸号数据!");
+            return;
+          }
+        });
+      } catch (e) {
+        console.log(e);
+      }
+    },
   },
   updated() {
     this.$nextTick(() => {
@@ -280,6 +478,12 @@ export default {
   created() {},
   mounted() {
     this.setCz();
+    getCheckItem().then((res) => {
+      let data = res.data.filter((item) => {
+        return item.checkType != 2;
+      });
+      this.dlgOp.column[12].dicData = data;
+    });
   },
   beforeDestroy() {},
 };

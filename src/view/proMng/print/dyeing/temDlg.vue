@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-10-22 16:40:19
+ * @LastEditTime: 2021-11-08 09:15:28
  * @Description: 
 -->
 <template>
@@ -594,7 +594,7 @@ import {
   delTest,
   updateTest,
   getDye,
-  addDye,
+  addDyes,
   delDye,
   updateDye,
   getTechargue,
@@ -1220,7 +1220,7 @@ export default {
         // 染缸参数
         this.form.dye.forEach((item) => {
           item.proBleadyeJobFk = this.form.bleadyeJobId;
-          addDye(item).then();
+          addDyes(item).then();
         });
         // 长车
         this.form.wash.forEach((item, i) => {
@@ -1248,7 +1248,7 @@ export default {
                 }).then((res) => {});
               } else if (item.paramType === "dyevat") {
                 // 染缸
-                addDye({
+                addDyes({
                   vatParamCode: item.paramKey,
                   vatParamName: item.paramName,
                   dataStyle: item.paramValueType,
@@ -1306,7 +1306,7 @@ export default {
       } else if (this.tabs == "染缸參數") {
         this.func.get = getDye;
         this.func.del = delDye;
-        this.func.add = addDye;
+        this.func.add = addDyes;
         this.func.update = updateDye;
       } else if (this.tabs == "生產工藝") {
         this.func.get = getTechargue;

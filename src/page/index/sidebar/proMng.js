@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-04-01 13:39:35
  * @LastEditors: Lyl
- * @LastEditTime: 2021-10-26 18:01:08
+ * @LastEditTime: 2021-11-03 16:42:55
  * @Description:
  */
 
@@ -57,7 +57,7 @@ export function proMng(_this) {
           index: "afterArrange"
         },
         {
-          menuName: "7.工单审核",
+          menuName: "7.生产单审核",
           index: "orderReview"
         }
       ]

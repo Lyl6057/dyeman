@@ -6,7 +6,7 @@
       :element-loading-text="$t('public.loading')"
       v-loading="screenLoading"
     >
-      <el-tab-pane :label="data + '手工' + this.$t('iaoMng.rc')" name="tabs1">
+      <el-tab-pane :label="data + this.$t('iaoMng.sgrc')" name="tabs1">
         <div class="btnList">
           <el-button type="primary" @click="add">{{
             this.$t("public.add")
@@ -36,7 +36,7 @@
             type="success"
             :disabled="Object.keys(chooseData).length === 0"
             @click="Audit(chooseData)"
-            >审核</el-button
+            >{{ this.$t("public.audit") }}</el-button
           >
           <el-button type="warning" @click="close">{{
             this.$t("public.close")
@@ -51,7 +51,7 @@
         </div>
         <el-row class="crudBox">
           <el-col :span="24">
-            <view-container :title="data + '入倉資料'">
+            <view-container :title="data + $t('iaoMng.rcmx')">
               <avue-crud
                 ref="crud"
                 :option="everyThing.mainC"

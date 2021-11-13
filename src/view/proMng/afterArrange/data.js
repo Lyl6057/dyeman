@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-24 10:26:16
+ * @LastEditTime: 2021-11-02 19:05:30
  * @Description:
  */
 
@@ -1295,7 +1295,7 @@ export function form5(_this) {
         placeholder: " "
       },
       {
-        label: "下部张力(%)",
+        label: "上部张力(%)",
         tip: "Bộ máy trên Lực căng %",
         prop: "raiseUpStrain",
         span: 6,

@@ -1,7 +1,7 @@
 <template>
   <div id="rc">
     <el-tabs type="border-card" v-model="tabs">
-      <el-tab-pane :label="data.type.split('_')[0] + '出库资料'" name="tabs1">
+      <el-tab-pane :label="data.type.split('_')[0]" name="tabs1">
         <div class="btnList">
           <!-- <el-button type="warning" @click="getData">取消</el-button> -->
           <el-button type="primary" @click="add" v-if="hide != '2'">{{
@@ -30,7 +30,7 @@
             type="success"
             :disabled="Object.keys(chooseData).length === 0"
             @click="Audit(chooseData)"
-            >审核</el-button
+            >{{ this.$t("public.audit") }}</el-button
           >
           <el-button type="warning" @click="close">{{
             this.$t("public.close")

@@ -1,6 +1,6 @@
 <template>
   <div id="rcDetail">
-    <view-container :title="datas + '入倉資料'" v-loading="wloading">
+    <view-container :title="datas + $t('iaoMng.rcmx')" v-loading="wloading">
       <div class="btnList">
         <!-- <el-button type="primary" @click="getDetail">{{this.$t("public.query")}}</el-button> -->
         <!-- <el-button type="primary" @click="add">{{this.$t("public.add")}}</el-button>

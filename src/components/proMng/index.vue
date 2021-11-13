@@ -201,9 +201,7 @@ export default {
           });
         });
       } else {
-        if (this.form.vatNo && this.form.vatNo.indexOf("%") == -1) {
-          this.form.vatNo = "%" + this.form.vatNo;
-        }
+        this.form.vatNo = "!^%" + (this.form.vatNo ? this.form.vatNo : "");
         this.getData(
           Object.assign(this.form, this.choiceQ, {
             rows: this.page.pageSize,
@@ -243,8 +241,8 @@ export default {
               }, 200);
             }
           });
-          if (this.form.vatNo && this.form.vatNo.indexOf("%") != -1) {
-            this.form.vatNo = this.form.vatNo.split("%")[1];
+          if (this.form.vatNo.indexOf("!^%") != -1) {
+            this.form.vatNo = this.form.vatNo.split("!^%")[1] || "";
           }
         });
       }

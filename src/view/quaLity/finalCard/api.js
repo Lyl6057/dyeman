@@ -2,10 +2,18 @@
  * @Author: Lyl
  * @Date: 2021-08-07 07:57:55
  * @LastEditors: Lyl
- * @LastEditTime: 2021-10-16 08:40:53
+ * @LastEditTime: 2021-11-13 10:42:56
  * @Description:
  */
 import axios from "axios";
+
+export function getCheckItem(params) {
+  return axios({
+    url: "/api/qcClothCheckItem",
+    method: "get",
+    params: params
+  });
+}
 
 export function getPreview(id) {
   return axios({
@@ -91,6 +99,13 @@ export function getWeave(params) {
 export function getBleadye(params) {
   return axios({
     url: "/api/proBleadyeJob",
+    method: "get",
+    params: params
+  });
+}
+export function getBleadyeByPage(params) {
+  return axios({
+    url: "/api/proBleadyeJob/page",
     method: "get",
     params: params
   });

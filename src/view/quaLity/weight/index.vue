@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-10-28 11:10:06
+ * @LastEditTime: 2021-11-04 16:44:32
  * @Description: 
 -->
 <template>
@@ -364,6 +364,47 @@ export default {
         });
       }
       return sums;
+    },
+    clothLength() {
+      if (
+        this.detail.gramWeight &&
+        this.detail.breadth &&
+        this.detail.realWeight
+      ) {
+        let gramWeight, breadth;
+
+        this.$nextTick(() => {
+          // if (this.form.gramWeightUnit == "Kg") {
+          // 默认是 g
+          // gramWeight = Number(this.form.realGramWeight);
+          // } else {
+          gramWeight =
+            this.detail.gramWeight.indexOf("(") != -1
+              ? Number(this.detail.gramWeight.split("(")[0]) / 1000
+              : Number(this.detail.gramWeight) / 1000;
+          // }
+
+          // if (this.form.widthUnit == "INCH") {
+          //   // 默认是 inch
+          //   breadth = Number(this.form.clothWidth);
+          // } else {
+          breadth =
+            this.detail.breadth.indexOf("(") != -1
+              ? (Number(this.detail.breadth.split("(")[0]) * 2.54) / 100
+              : (Number(this.detail.breadth) * 2.54) / 100;
+          // }
+
+          let weight = this.detail.realWeight;
+          // if (this.form.weightUnit == "LBS") {
+          //   weight = weight * 2.20462262;
+          // }
+          // gramWeight 单位为 g/m , breadth 单位为 inch 需要 * 2.54 转换成cm / 100 转换成 m
+
+          this.detail.clothLengthValue = Number(
+            (weight / gramWeight / breadth).toFixed(1)
+          );
+        });
+      }
     },
   },
   updated() {

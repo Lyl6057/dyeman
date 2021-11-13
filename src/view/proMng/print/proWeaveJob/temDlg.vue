@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-10-30 15:57:41
+ * @LastEditTime: 2021-11-11 15:05:49
  * @Description: 
 -->
 <template>
@@ -375,7 +375,9 @@ export default {
     return {
       wLoading: false,
       formOp: mainCrud(this, false),
-      form: {},
+      form: {
+        auditState: 0,
+      },
       page: {
         pageSize: 10,
         currentPage: 1,
@@ -531,8 +533,6 @@ export default {
       });
     },
     save() {
-      console.log(this.form);
-      return;
       this.$refs.form.validate((valid, done) => {
         if (valid) {
           try {
@@ -571,7 +571,7 @@ export default {
                 }
                 setTimeout(() => {
                   this.wLoading = false;
-                  this.$emit("refresh");
+
                   done();
                 }, 200);
               });
@@ -590,10 +590,13 @@ export default {
       });
     },
     query() {
+      this.loading = true;
+      this.crud = [];
       if (this.tabs == "選擇訂單") {
         this.func.get = getPo;
       } else if (!this.form.weaveJobId) {
         this.crud = [];
+        this.loading = false;
         return;
       } else if (this.tabs == "機號信息") {
         this.func.get = getMachine;
@@ -614,6 +617,7 @@ export default {
         this.func.update = updateGroup;
         this.dlgForm.proWeaveJobFk = this.form.weaveJobId;
         this.getYarnList();
+
         return;
         // this.func.get = getYarn;
         // this.func.del = delYarn;
@@ -632,7 +636,7 @@ export default {
         this.func.update = updateStrain;
         this.dlgForm.proWeaveJobFk = this.form.weaveJobId;
       }
-      this.loading = true;
+
       this.chooseData = {};
       this.chooseDtlData = {};
       for (let key in this.dlgForm) {
@@ -671,8 +675,9 @@ export default {
             item.index = i + 1;
           });
           this.page.total = res.data.total;
-
-          this.loading = false;
+          setTimeout(() => {
+            this.loading = false;
+          }, 200);
         });
     },
     saveOther() {
@@ -835,6 +840,7 @@ export default {
             changeBatchTime: this.$getNowTime("datetime"),
           })
           .then((res) => {
+            this.form.groupId = res.data.data;
             this.crud.forEach((item, i) => {
               item.proWeaveJobGroupFk = res.data.data;
               item.proWeaveJobFk = this.form.weaveJobId;
@@ -1048,9 +1054,11 @@ export default {
             if (this.crud.length > 0) {
               this.$refs.crud.setCurrentRow(this.crud[0]);
             }
+            this.loading = false;
             this.page.total = res.data.total;
           });
         } else {
+          this.loading = false;
           this.crud = [];
         }
       });
@@ -1115,12 +1123,10 @@ export default {
       this.choiceV = false;
     },
     close() {
-      if (this.refresh) {
+      if (this.isAdd) {
         this.$emit("refresh");
-        this.$emit("close");
-      } else {
-        this.$emit("close");
       }
+      this.$emit("close");
     },
   },
   created() {},
@@ -1132,12 +1138,6 @@ export default {
 </script>
 <style lang='stylus'>
 #proWeaveJob {
-  .avue-group__header {
-    height: 15px;
-    line-height: 15px;
-    margin-bottom: 10px;
-  }
-
   .formBox {
     height: calc(100vh - 70px) !important;
     overflow: auto;

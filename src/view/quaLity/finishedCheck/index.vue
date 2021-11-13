@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-10-26 18:57:14
+ * @LastEditTime: 2021-11-05 09:06:02
  * @Description:
 -->
 <template>
@@ -134,7 +134,7 @@ export default {
           this.$refs.crud.setCurrentRow(this.crud[0]);
         }
         this.crud.sort((a, b) => {
-          return a.vatNo > b.vatNo ? -1 : 1;
+          return a.pidNo > b.pidNo ? 1 : -1;
         });
         this.crud.forEach((item, i) => {
           item.index = i + 1;

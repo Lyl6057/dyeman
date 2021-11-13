@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-10-26 16:14:08
+ * @LastEditTime: 2021-11-10 08:54:19
  * @Description:
  */
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
@@ -349,7 +349,30 @@ export function mainCrud(_this) {
           });
         }
       },
-
+      {
+        label: "米长",
+        prop: "clothLengthValue",
+        span: 8,
+        placeholder: " ",
+        align: "right",
+        cell: false,
+        overHidden: true,
+        // sortable: true,
+        type: "number",
+        width: 100
+      },
+      {
+        label: "产值",
+        prop: "measureWage",
+        span: 8,
+        placeholder: " ",
+        align: "right",
+        cell: false,
+        overHidden: true,
+        // sortable: true,
+        type: "number",
+        width: 100
+      },
       {
         label: "载具编号(Mã lồng thép)",
         prop: "storeLoadCode",
@@ -470,7 +493,8 @@ export function dlgForm(_this) {
         label: "織單號",
         prop: "weaveJobCode",
         span: 8,
-        placeholder: " "
+        placeholder: " ",
+        disabled: true
         // formslot: true,
         // slot: true,
         // type: "select",
@@ -479,20 +503,38 @@ export function dlgForm(_this) {
         label: "布票編號",
         prop: "noteCode",
         span: 8,
-        placeholder: " "
+        placeholder: " ",
+        disabled: true
       },
-
-      // {
-      //   label: "毛重",
-      //   prop: "realWeight",
-      //   width: 120,
-      //   align: "right",
-      //   span: 8,
-      //   cell: false,
-      //   placeholder: " "
-      //   // type: "number",
-      //   // precision: 1
-      // },
+      {
+        label: "米长",
+        prop: "clothLengthValue",
+        span: 8,
+        placeholder: " ",
+        cell: false,
+        overHidden: true,
+        disabled: true,
+        // sortable: true,
+        type: "number",
+        width: 100
+      },
+      {
+        label: "毛重",
+        prop: "realWeight",
+        width: 120,
+        align: "right",
+        span: 8,
+        cell: false,
+        disabled: true,
+        placeholder: " ",
+        change: () => {
+          _this.$nextTick(() => {
+            _this.clothLength();
+          });
+        }
+        // type: "number",
+        // precision: 1
+      },
       {
         label: _this.$t("whseField.zl"),
         prop: "clothWeight",
@@ -574,7 +616,7 @@ export function dlgForm(_this) {
         label: "备注",
         prop: "remark",
         width: 250,
-        span: 16,
+        span: 8,
         placeholder: " ",
         // overHidden: true,
         cell: true,

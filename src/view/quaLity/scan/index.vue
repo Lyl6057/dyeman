@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-10-30 16:06:11
+ * @LastEditTime: 2021-11-06 09:16:33
  * @Description: 
 -->
 <template>
@@ -140,6 +140,9 @@
                   <el-col :span="10">载具编号: {{ crud.storeLoadCode }}</el-col>
                   <el-col :span="14">存储位置: {{ crud.storeSiteCode }}</el-col>
                 </el-row>
+                <el-row class="text item">
+                  <el-col :span="10">产值: {{ crud.measureWage }}</el-col>
+                </el-row>
               </div>
             </el-tab-pane>
             <el-tab-pane name="qc" label="验布项目">
@@ -256,9 +259,11 @@ export default {
   data() {
     return {
       formOp: mainForm(this),
-      form: {},
+      form: {
+        qcTakeOuts: 0,
+      },
       // crudOp: mainCrud(this),
-      crud: {},
+      crud: { qcTakeOuts: 0 },
       page: {
         pageSize: 20,
         currentPage: 1,
@@ -388,7 +393,7 @@ export default {
             this.crud.workNo = this.form.workNos;
           }
           if (this.form.qcTakeOuts) {
-            this.crud.qcTakeOut = this.form.qcTakeOuts;
+            this.crud.qcTakeOut = Number(this.form.qcTakeOuts || 0);
           }
           if (this.form.storeLoadCodes) {
             this.crud.storeLoadCode = this.form.storeLoadCodes;
@@ -396,11 +401,11 @@ export default {
           if (this.form.storeSiteCodes) {
             this.crud.storeSiteCode = this.form.storeSiteCodes;
           }
-          if (this.crud.weaveJobFk) {
-            getWeave({ weaveJobId: this.crud.weaveJobFk }).then((weave) => {
-              this.crud.weaveJobCode = weave.data[0].weaveJobCode;
-            });
-          }
+          // if (this.crud.weaveJobFk) {
+          //   getWeave({ weaveJobId: this.crud.weaveJobFk }).then((weave) => {
+          this.crud.weaveJobCode = this.crud.proName;
+          //   });
+          // }
           if (Object.keys(this.checkQc).length > 0) {
             getQcRecord({
               proClothNoteFk: this.crud.noteId,
@@ -462,6 +467,7 @@ export default {
         } else {
           _this.form.eachNumbers = e.data;
         }
+        // _this.clothLength();
       };
       _this.czsocket.onopen = function (event) {
         setTimeout(() => {
@@ -486,33 +492,75 @@ export default {
       this.crud.clothCheckTime = this.$getNowTime("datetime");
       this.crud.realWeight =
         Number(this.crud.clothWeight) + Number(this.crud.qcTakeOut);
+      if (this.crud.gramWeight && this.crud.breadth && this.crud.realWeight) {
+        let gramWeight, breadth;
+
+        // this.$nextTick(() => {
+        // if (this.form.gramWeightUnit == "Kg") {
+        // 默认是 g
+        // gramWeight = Number(this.form.realGramWeight);
+        // } else {
+        gramWeight =
+          this.crud.gramWeight.indexOf("(") != -1
+            ? Number(this.crud.gramWeight.split("(")[0]) / 1000
+            : Number(this.crud.gramWeight) / 1000;
+        // }
+
+        // if (this.form.widthUnit == "INCH") {
+        //   // 默认是 inch
+        //   breadth = Number(this.form.clothWidth);
+        // } else {
+        breadth =
+          this.crud.breadth.indexOf("(") != -1
+            ? (Number(this.crud.breadth.split("(")[0]) * 2.54) / 100
+            : (Number(this.crud.breadth) * 2.54) / 100;
+        // }
+
+        let weight = this.crud.realWeight;
+        // if (this.form.weightUnit == "LBS") {
+        //   weight = weight * 2.20462262;
+        // }
+        // gramWeight 单位为 g/m , breadth 单位为 inch 需要 * 2.54 转换成cm / 100 转换成 m
+
+        this.crud.clothLengthValue = Number(
+          (weight / gramWeight / breadth).toFixed(1)
+        );
+        // });
+      }
       this.crud.clothState = "1";
-      update(this.crud).then((res) => {
-        if (res.data.code == 200) {
-          setTimeout(() => {
-            this.history.unshift(this.crud);
-            this.history = this.$unique(this.history, "noteId");
-            this.getLoad();
+      this.$nextTick(() => {
+        update(this.crud).then((res) => {
+          if (res.data.code == 200) {
             setTimeout(() => {
-              this.form.noteCode = "";
-            }, 500);
-            for (let key in this.checkQc) {
-              this.checkQc[key] = "";
-            }
-            if (this.history.length >= 30) {
-              this.history.pop();
-            }
-            // this.$nextTick(() => {
-            //   const dom1 = document.getElementById("history");
-            //   dom1.scrollTo(0, dom1.scrollHeight);
-            // });
-            // this.wLoading = false;
-            this.$tip.success(this.$t("public.bccg"));
-          }, 200);
-        } else {
-          this.wLoading = false;
-          this.$tip.success(this.$t("public.bcsb"));
-        }
+              this.history.unshift(this.crud);
+              this.history = this.$unique(this.history, "noteId");
+              this.getLoad();
+              get(this.form).then((res) => {
+                this.crud = res.data[0];
+                // setTimeout(() => {
+                this.form.noteCode = "";
+                this.crud.weaveJobCode = this.crud.proName;
+                // }, 500);
+              });
+
+              for (let key in this.checkQc) {
+                this.checkQc[key] = "";
+              }
+              if (this.history.length >= 30) {
+                this.history.pop();
+              }
+              // this.$nextTick(() => {
+              //   const dom1 = document.getElementById("history");
+              //   dom1.scrollTo(0, dom1.scrollHeight);
+              // });
+              // this.wLoading = false;
+              this.$tip.success(this.$t("public.bccg"));
+            }, 200);
+          } else {
+            this.wLoading = false;
+            this.$tip.success(this.$t("public.bcsb"));
+          }
+        });
       });
     },
     getLoad() {
@@ -546,6 +594,7 @@ export default {
         }
       );
     },
+    clothLength() {},
     check() {
       // console.log(this.qcItem);
       // this.form.qcClothCheckItem = this.qcItem;

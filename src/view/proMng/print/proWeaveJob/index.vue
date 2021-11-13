@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-10-30 14:18:44
+ * @LastEditTime: 2021-11-11 15:38:37
  * @Description: 
 -->
 <template>
@@ -191,9 +191,10 @@ export default {
           delete this.form[key];
         }
       }
-      if (this.form.weaveJobCode && this.form.weaveJobCode.indexOf("%") == -1) {
-        this.form.weaveJobCode = "%" + this.form.weaveJobCode;
-      }
+      // if (this.form.weaveJobCode.indexOf("%") == -1) {
+      this.form.weaveJobCode =
+        "!^%" + (this.form.weaveJobCode ? this.form.weaveJobCode : "");
+      // }
       get(
         Object.assign(this.form, {
           rows: this.page.pageSize,
@@ -210,11 +211,12 @@ export default {
         if (this.crud.length > 0) {
           this.$refs.crud.setCurrentRow(this.crud[0]);
         }
-        if (
-          this.form.weaveJobCode &&
-          this.form.weaveJobCode.indexOf("%") != -1
-        ) {
-          this.form.weaveJobCode = this.form.weaveJobCode.split("%")[1];
+        // console.log(
+        //   this.form.weaveJobCode.indexOf("%"),
+        //   this.form.weaveJobCode.split("%")
+        // );
+        if (this.form.weaveJobCode.indexOf("!^%") != -1) {
+          this.form.weaveJobCode = this.form.weaveJobCode.split("!^%")[1] || "";
         }
         this.page.total = res.data.total;
         this.loading = false;
@@ -234,6 +236,8 @@ export default {
     },
     add() {
       this.isAdd = true;
+      this.detail = {};
+      this.detail.auditState = 0;
       this.copyC = false;
       this.dialogVisible = true;
     },
@@ -299,7 +303,7 @@ export default {
   },
   created() {},
   mounted() {
-    this.query();
+    // this.query();
   },
   beforeDestroy() {},
 };

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-10-30 15:55:21
+ * @LastEditTime: 2021-11-09 18:58:15
  * @Description:
 -->
 <template>
@@ -14,7 +14,7 @@
     <el-tabs v-model="activeName" type="border-card" @tab-click="query">
       <el-tab-pane label="运转单" name="first">
         <el-row class="btnList">
-          <el-button
+          <!-- <el-button
             type="success"
             @click="pass"
             v-if="form.auditState === 0"
@@ -27,7 +27,7 @@
             v-if="form.auditState === 1"
             :disabled="!selectList.length"
             >取消审核</el-button
-          >
+          > -->
           <el-button
             type="primary"
             @click="handleRowDBLClick(detail)"
@@ -150,6 +150,8 @@ export default {
       form: {
         weaveJobFk: "",
         clothState: 1,
+        vatNo: "",
+        weaveJobCode: "",
       },
       wformOp: mainWForm(this),
       wform: {},
@@ -158,12 +160,12 @@ export default {
       crudOp: mainCrud(this),
       crud: [],
       page: {
-        pageSize: 20,
+        pageSize: 50,
         pageSizes: [20, 50, 100, 200, 500],
         total: 0,
       },
       wpage: {
-        pageSize: 20,
+        pageSize: 50,
         pageSizes: [20, 50, 100, 200, 500],
         total: 0,
       },
@@ -190,16 +192,28 @@ export default {
       this.wLoading = true;
       this.detail = {};
       if (this.activeName == "first") {
-        for (let key in this.form) {
-          if (!this.form[key] && key != "auditState") {
-            delete this.form[key];
-          }
+        // for (let key in this.form) {
+        //   if (!this.form[key] && key != "auditState") {
+        //     delete this.form[key];
+        //   }
+        // }
+        if (this.form.vatNo.indexOf("%") == -1) {
+          this.form.vatNo = "!^%" + (this.form.vatNo ? this.form.vatNo : "");
+        }
+        if (this.form.weaveJobCode.indexOf("%") == -1) {
+          this.form.weaveJobCode =
+            "%" + (this.form.weaveJobCode ? this.form.weaveJobCode : "");
+        }
+        if (this.form.salPoNo.indexOf("%") == -1) {
+          this.form.salPoNo =
+            "%" + (this.form.salPoNo ? this.form.salPoNo : "");
         }
         get(
           Object.assign(this.form, {
             rows: this.page.pageSize,
             start: this.page.currentPage,
             isWorkOut: 0,
+            runState: 1,
           })
         ).then((res) => {
           this.crud = res.data.records;
@@ -213,6 +227,15 @@ export default {
             item.index = i + 1;
           });
           this.page.total = res.data.total;
+          if (this.form.vatNo.indexOf("!^%") != -1) {
+            this.form.vatNo = this.form.vatNo.split("!^%").join("");
+          }
+          if (this.form.weaveJobCode.indexOf("%") != -1) {
+            this.form.weaveJobCode = this.form.weaveJobCode.split("%").join("");
+          }
+          if (this.form.salPoNo.indexOf("%") != -1) {
+            this.form.salPoNo = this.form.salPoNo.split("%").join("");
+          }
           setTimeout(() => {
             this.wLoading = false;
           }, 200);
@@ -223,6 +246,8 @@ export default {
             delete this.wform[key];
           }
         }
+        this.wform.weaveJobCode =
+          "!^%" + (this.wform.weaveJobCode ? this.wform.weaveJobCode : "");
         getW(
           Object.assign(this.wform, {
             rows: this.wpage.pageSize,
@@ -242,6 +267,10 @@ export default {
             item.index = i + 1;
           });
           this.wpage.total = res.data.total;
+          if (this.wform.weaveJobCode.indexOf("!^%") != -1) {
+            this.wform.weaveJobCode =
+              this.wform.weaveJobCode.split("!^%")[1] || "";
+          }
           setTimeout(() => {
             this.wLoading = false;
           }, 200);
@@ -260,6 +289,7 @@ export default {
           if (this.activeName == "first") {
             this.selectList.forEach((item, i) => {
               item.auditState = 1;
+              item.modifiDate = this.$getNowTime("datetime");
               update(item).then((res) => {
                 if (i == this.selectList.length - 1) {
                   this.wLoading = false;
@@ -271,6 +301,7 @@ export default {
           } else {
             this.wselectList.forEach((item, i) => {
               item.auditState = 1;
+              item.upateTime = this.$getNowTime("datetime");
               updateW(item).then((res) => {
                 if (i == this.wselectList.length - 1) {
                   this.wLoading = false;
@@ -361,5 +392,9 @@ export default {
   .avue-dialog .el-drawer__body {
     overflow: auto;
   }
+}
+
+.avue-crud__dialog .el-transfer-panel__body {
+  height: 86% !important;
 }
 </style>

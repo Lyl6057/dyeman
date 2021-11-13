@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-10-29 13:35:08
+ * @LastEditTime: 2021-11-05 15:46:25
  * @Description: 
 -->
 <template>
@@ -85,10 +85,7 @@
                 <template slot="itemSet" slot-scope="scope">
                   <div v-if="scope.row.dataStyle === 'string'">
                     <!-- string 类型 -->
-                    <el-input
-                      v-model="scope.row.itemSet"
-                      type="number"
-                    ></el-input>
+                    <el-input v-model="scope.row.itemSet"></el-input>
                   </div>
                   <div v-else style="text-align: center">
                     <!-- boolean 类型 -->
@@ -242,6 +239,7 @@ export default {
           this.form.mustPreshrunk = false;
           this.form.jobCreator = parent.userID;
           this.form.finishJobOption = "成品";
+          this.form.dryClothItems = "抓毛";
           // this.form.sendingSampleQuantity = undefined;
           // this.form.sampleQuantity = undefined;
           // this.form.sampleSize = undefined;
@@ -784,6 +782,12 @@ export default {
         this.$emit("close");
       } else {
         this.$emit("close");
+      }
+    },
+    calculateWater() {
+      if (this.chooseData.formulaFactor && this.chooseData.useAmount) {
+        this.chooseData.waterAmount =
+          this.chooseData.formulaFactor * 1000 * this.chooseData.useAmount;
       }
     },
   },

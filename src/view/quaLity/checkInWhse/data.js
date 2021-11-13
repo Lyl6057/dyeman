@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-24 13:37:30
+ * @LastEditTime: 2021-11-05 08:59:50
  * @Description:
  */
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
@@ -321,7 +321,17 @@ export function mainCrud(_this) {
         type: "number",
         precision: 1
       },
-
+      {
+        label: "米长",
+        prop: "clothLengthValue",
+        span: 8,
+        placeholder: " ",
+        cell: false,
+        overHidden: true,
+        // sortable: true,
+        type: "number",
+        width: 100
+      },
       {
         label: "存储位置(Vị trí lưu trữ)",
         prop: "storeSiteCode",

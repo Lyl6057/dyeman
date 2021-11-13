@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-09-27 10:46:56
+ * @LastEditTime: 2021-11-05 11:10:10
  * @Description:
  */
 
@@ -60,7 +60,7 @@ export function mainForm(_this) {
         tip: "QC扣减数量",
         width: 80,
         // align: "left",
-        // type: "number",
+        type: "number",
         span: 8,
         placeholder: "请输入QC扣减数量"
       },

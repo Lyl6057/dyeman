@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-10-30 15:53:28
+ * @LastEditTime: 2021-11-09 16:28:40
  * @Description:
  */
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
@@ -12,7 +12,7 @@ export function mainForm(_this) {
   return {
     submitBtn: false,
     emptyBtn: false,
-    labelWidth: 150,
+    labelWidth: 120,
     column: [
       {
         label: "审核状态",
@@ -94,7 +94,7 @@ export function mainCrud(_this) {
     columnBtn: true,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 280px)",
+    height: "calc(100vh - 315px)",
     refreshBtn: false,
     page: true,
     labelWidth: 130,
@@ -129,6 +129,7 @@ export function mainCrud(_this) {
         prop: "weaveJobCode",
         tip: "MS sản xuất bp dệt",
         overHidden: true,
+        sortable: true,
         width: 180,
         span: 6,
         disabled: false,
@@ -205,6 +206,7 @@ export function mainCrud(_this) {
         tip: "SỐ P.O",
         prop: "salPoNo",
         width: 180,
+        sortable: true,
         span: 6,
         placeholder: " ",
         // sortable: true,
@@ -257,6 +259,7 @@ export function mainCrud(_this) {
         overHidden: true,
         width: 250,
         span: 12,
+        sortable: true,
         placeholder: " "
         // rules: [{
         //   required: true,
@@ -661,6 +664,34 @@ export function mainCrud(_this) {
         hide: true,
         width: 80,
         placeholder: " "
+      },
+      {
+        label: "创建时间",
+        prop: "createTime",
+        width: 130,
+        span: 6,
+        type: "date",
+        align: "center",
+        format: "yyyy-MM-dd HH:mm:ss",
+        valueFormat: "yyyy-MM-dd HH:mm:ss",
+        display: false,
+        overHidden: true,
+        placeholder: "创建时间",
+        sortable: true
+      },
+      {
+        label: "修改时间",
+        prop: "modifiDate",
+        width: 130,
+        span: 6,
+        type: "date",
+        overHidden: true,
+        align: "center",
+        format: "yyyy-MM-dd HH:mm:ss",
+        valueFormat: "yyyy-MM-dd HH:mm:ss",
+        display: false,
+        placeholder: "修改时间",
+        sortable: true
       }
     ],
     group: [
@@ -1016,7 +1047,7 @@ export function mainWForm(_this) {
   return {
     submitBtn: false,
     emptyBtn: false,
-    labelWidth: 150,
+    labelWidth: 120,
     column: [
       {
         label: "审核状态",
@@ -1112,7 +1143,7 @@ export function mainWCrud(_this) {
     columnBtn: true,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 280px)",
+    height: "calc(100vh - 315px)",
     refreshBtn: false,
     selection: true,
     // labelPosition: 'top',
@@ -1365,6 +1396,7 @@ export function mainWCrud(_this) {
         overHidden: true,
         width: 250,
         span: 12,
+        sortable: true,
         placeholder: "请選擇布類描述",
         rules: [
           {
@@ -1414,6 +1446,34 @@ export function mainWCrud(_this) {
         span: 12,
         hide: true,
         placeholder: " "
+      },
+      {
+        label: "创建时间",
+        prop: "createTime",
+        width: 130,
+        span: 6,
+        type: "date",
+        align: "center",
+        format: "yyyy-MM-dd HH:mm:ss",
+        valueFormat: "yyyy-MM-dd HH:mm:ss",
+        display: false,
+        overHidden: true,
+        placeholder: "创建时间",
+        sortable: true
+      },
+      {
+        label: "修改时间",
+        prop: "upateTime",
+        width: 130,
+        span: 6,
+        type: "date",
+        overHidden: true,
+        align: "center",
+        format: "yyyy-MM-dd HH:mm:ss",
+        valueFormat: "yyyy-MM-dd HH:mm:ss",
+        display: false,
+        placeholder: "修改时间",
+        sortable: true
       }
     ],
     group: [

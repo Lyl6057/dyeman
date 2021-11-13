@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-10-30 09:21:17
+ * @LastEditTime: 2021-11-10 08:00:40
  * @Description:
 -->
 <template>
@@ -187,7 +187,7 @@
 </template>
 <script>
 import choice from "@/components/proMng/index";
-import { getXDicT } from "@/config";
+import { addWash, addDyes, getTechargueList } from "../print/dyeing/api";
 import { mainCrud, dlgForm, dlgCrud, bfOp, testOp, itemOp } from "./data";
 import { timeConversion } from "@/config/util";
 import { baseCodeSupplyEx, baseCodeSupply } from "@/api/index";
@@ -200,6 +200,8 @@ import {
   getPoDtlb,
   getTest,
   addTest,
+  addDyeTest,
+  addDyeProject,
   deltest,
   updateTest,
   getItem,
@@ -214,6 +216,9 @@ import {
   updateInwhse,
   getGroup,
   getYarn,
+  getDye,
+  updateDye,
+  addDye,
 } from "./api";
 export default {
   name: "",
@@ -383,17 +388,115 @@ export default {
           this.wLoading = true;
           update({ runJobId: this.form.runJobId, auditState: val }).then(
             (res) => {
-              setTimeout(() => {
-                this.form.auditState = val;
-                this.$emit("refresh");
-                this.$tip.success(this.$t("public.bccg"));
-                this.wLoading = false;
-              }, 200);
+              if (val) {
+                // 生成漂染单数据
+                let data = JSON.parse(JSON.stringify(this.form));
+                data.proBleadyeRunJobFk = data.runJobId;
+                data.test = "";
+                data.item = "";
+                data.mergVatNo = data.mergVatNo.join("/");
+                data.compLightSource = data.compLightSource.join(",");
+                data.dyeJarCount = Number(data.dyeVatType || 0);
+                Object.keys(data).forEach((item) => {
+                  if (this.isEmpty(data[item])) {
+                    delete data[item];
+                  }
+                });
+                data.poAmountLb = (data.poAmountKg * 2.2046226).toFixed(2);
+                getDye({
+                  vatNo: data.vatNo,
+                }).then((dye) => {
+                  if (dye.data.length) {
+                    data.bleadyeJobId = dye.data[0].bleadyeJobId;
+                    // 存在数据,更新
+                    updateDye(data).then((udye) => {
+                      this.form.auditState = val;
+                      this.$emit("refresh");
+                      this.$tip.success(this.$t("public.bccg"));
+                      this.wLoading = false;
+                    });
+                  } else {
+                    // 不存在数据，新增
+                    addDye(data).then((adye) => {
+                      this.addOtherData(adye.data.data);
+                      // 新增生产项目
+                      getItem({
+                        proBleadyeRunJobFk: data.runJobId,
+                      }).then((pres) => {
+                        pres.data.forEach((item) => {
+                          item.proBleadyeJobFk = adye.data.data;
+                          addDyeProject(item).then((pro) => {});
+                        });
+                      });
+                      // 新增测试要求
+                      getTest({
+                        proBleadyeRunJobFk: data.runJobId,
+                      }).then((pres) => {
+                        pres.data.forEach((item) => {
+                          item.proBleadyeJobFk = adye.data.data;
+                          addDyeTest(item).then((pro) => {});
+                        });
+                      });
+                    });
+                  }
+                });
+              } else {
+                setTimeout(() => {
+                  this.form.auditState = val;
+                  this.$emit("refresh");
+                  this.$tip.success(this.$t("public.bccg"));
+                  this.wLoading = false;
+                }, 200);
+              }
             }
           );
         })
         .catch((err) => {
           this.$tip.warning(this.$t("public.qxcz"));
+        });
+    },
+    addOtherData(dyeId) {
+      getTechargueList()
+        .then((res) => {
+          // 獲取全部基礎工藝
+          let washIndex = 1,
+            dyeIndex = 1,
+            testIndex = 1;
+          res.data.forEach((item, index) => {
+            if (item.paramType === "wash") {
+              // 長車
+              addWash({
+                itemId: item.paramKey,
+                itemName: item.paramName,
+                proBleadyeJobFk: dyeId,
+                sn: washIndex++,
+              }).then((res) => {});
+            } else if (item.paramType === "dyevat") {
+              // 染缸
+              addDyes({
+                vatParamCode: item.paramKey,
+                vatParamName: item.paramName,
+                dataStyle: item.paramValueType,
+                sn: dyeIndex++,
+                proBleadyeJobFk: dyeId,
+              }).then((res) => {});
+            }
+            if (index == res.data.length - 1) {
+              this.form.auditState = val;
+              this.$emit("refresh");
+              this.$tip.success(this.$t("public.bccg"));
+              this.wLoading = false;
+            }
+          });
+          if (!res.data.length) {
+            this.form.auditState = val;
+            this.$emit("refresh");
+            this.$tip.success(this.$t("public.bccg"));
+            this.wLoading = false;
+          }
+        })
+        .catch((e) => {
+          this.wLoading = false;
         });
     },
     getData() {
@@ -636,7 +739,8 @@ export default {
             // data.pidCount = this.form.bf.length || 0;
             if (data.runJobId) {
               // update
-              data.upateTime = this.$getNowTime("datetime");
+              data.modifiDate = this.$getNowTime("datetime");
+              data.jobModifier = this.$store.state.userOid;
               update(data).then((res) => {
                 if (res.data.code == 200) {
                   setTimeout(() => {
@@ -655,6 +759,7 @@ export default {
             } else {
               // add
               data.createTime = this.$getNowTime("datetime");
+              data.jobCreator = this.$store.state.userOid;
               add(data).then((res) => {
                 if (res.data.code == 200) {
                   if (!this.copyC) {
@@ -820,6 +925,8 @@ export default {
           item.needleDist = item.guage;
           item.salPoNo = item.salPoNo;
           this.form = item;
+          this.form.custPoNo = item.custPoNo;
+          this.form.fabricCode = item.custFabricCode;
           this.form.auditState = 0;
           this.form.yarnCard = "";
           this.form.yarnNumber = "";

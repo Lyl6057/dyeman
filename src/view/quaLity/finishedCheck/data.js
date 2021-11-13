@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-09-11 15:27:07
+ * @LastEditTime: 2021-11-05 09:05:32
  * @Description:
  */
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
@@ -42,7 +42,8 @@ export function mainForm(_this) {
         allowCreate: true,
         defaultFirstOption: true,
         type: "select",
-        dicData: cust
+        dicData: cust,
+        tip: "Khách hàng"
       },
       {
         label: "匹號",
@@ -64,7 +65,7 @@ export function mainForm(_this) {
       //   width: 120
       // },
       {
-        label: "胚布状态",
+        label: "成品布状态",
         tip: "Cloth state",
         prop: "clothState",
         span: 6,
@@ -134,9 +135,9 @@ export function mainCrud(_this) {
       // },
 
       {
-        label: "缸号",
+        label: "缸号(Số lô nhuộm)",
         prop: "vatNo",
-        width: 150,
+        width: 170,
         span: 6,
         placeholder: " ",
         disabled: true,
@@ -162,7 +163,7 @@ export function mainCrud(_this) {
         hide: true
       },
       {
-        label: "客戶",
+        label: "客戶(Khách hàng)",
         prop: "custCode",
         width: 150,
         disabled: true,
@@ -182,15 +183,15 @@ export function mainCrud(_this) {
         overHidden: true,
         hide: true
       },
-      {
-        label: "客布代码",
-        // tip: "Số màu",
-        prop: "guestFabId",
-        width: 150,
-        span: 8,
-        overHidden: true,
-        placeholder: " "
-      },
+      // {
+      //   label: "客布代码",
+      //   // tip: "Số màu",
+      //   prop: "guestFabId",
+      //   width: 150,
+      //   span: 8,
+      //   overHidden: true,
+      //   placeholder: " "
+      // },
       // {
       //   label: "成份要求",
       //   // tip: "Tổng cộng(KG)",
@@ -231,30 +232,7 @@ export function mainCrud(_this) {
       },
 
       {
-        label: "克重",
-        // tip: "Tổng cộng(KG)",
-        prop: "gramWeight",
-        width: 100,
-        span: 8,
-        // type: "number",
-        align: "left",
-        placeholder: " ",
-        overHidden: true
-      },
-      {
-        label: "幅宽",
-        // tip: "Tổng cộng(KG)",
-        prop: "breadth",
-        width: 100,
-        span: 8,
-        // type: "number",
-        align: "left",
-        placeholder: " ",
-        overHidden: true
-      },
-
-      {
-        label: "码长",
+        label: "码长(Chiều dài sợi)",
         // tip: "Tổng cộng(KG)",
         prop: "yardLength",
         width: 100,
@@ -275,9 +253,9 @@ export function mainCrud(_this) {
         precision: 0
       },
       {
-        label: "浮重",
+        label: "浮重(Trọng lượng bì KG)",
         prop: "grossWeight",
-        width: 80,
+        width: 120,
         align: "right",
         span: 6,
         cell: false,
@@ -286,9 +264,9 @@ export function mainCrud(_this) {
         // precision: 1
       },
       {
-        label: "纸管重量",
+        label: "纸管重量(Trọng lượng thoi giấy)",
         prop: "paperTube",
-        width: 100,
+        width: 140,
         align: "right",
         span: 6,
         cell: true,
@@ -309,9 +287,9 @@ export function mainCrud(_this) {
         precision: 1
       },
       {
-        label: "净重",
+        label: "净重(trọng lượng tịnh(KG)",
         prop: "netWeight",
-        width: 80,
+        width: 140,
         align: "right",
         span: 6,
         cell: true,
@@ -340,6 +318,28 @@ export function mainCrud(_this) {
           label: "locationCode",
           value: "locationCode"
         }
+      },
+      {
+        label: "克重(Trọng lượng trước giặt)",
+        // tip: "Tổng cộng(KG)",
+        prop: "gramWeight",
+        width: 140,
+        span: 8,
+        // type: "number",
+        align: "left",
+        placeholder: " ",
+        overHidden: true
+      },
+      {
+        label: "幅宽(Khổ rộng vải mộc)",
+        // tip: "Tổng cộng(KG)",
+        prop: "breadth",
+        width: 140,
+        span: 8,
+        // type: "number",
+        align: "left",
+        placeholder: " ",
+        overHidden: true
       },
       // {
       //   label: "單位",

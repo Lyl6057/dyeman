@@ -29,12 +29,12 @@ export function rhl1F(_this) {
         label: _this.$t("whseField.chdh"),
         prop: "purNo",
         span: 6,
-        display: _this.data != "成品布",
+        display: _this.data != _this.$t("whseField.cpb"),
         placeholder: " "
       },
       {
         label: _this.$t("whseField.shdh"),
-        display: _this.data != "成品布",
+        display: _this.data != _this.$t("whseField.cpb"),
         prop: "deliNo",
         span: 6,
         placeholder: " "
@@ -97,13 +97,13 @@ export function rhl2F(_this) {
         prop: "purNo",
         span: 6,
         placeholder: " ",
-        display: _this.datas != "成品布",
+        display: _this.datas != _this.$t("whseField.cpb"),
         disabled: false
       },
       {
         label: _this.$t("whseField.shdh"),
         prop: "deliNo",
-        display: _this.datas != "成品布",
+        display: _this.datas != _this.$t("whseField.cpb"),
         span: 6,
         placeholder: " ",
         disabled: false
@@ -148,7 +148,9 @@ export function rhl1C(_this) {
     border: true,
     highlightCurrentRow: true,
     height:
-      _this.data == "成品布" ? "calc(100vh - 230px)" : "calc(100vh - 278px)",
+      _this.data == _this.$t("whseField.cpb")
+        ? "calc(100vh - 230px)"
+        : "calc(100vh - 278px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
@@ -207,7 +209,7 @@ export function rhl1C(_this) {
         span: 6,
         overHidden: true,
         placeholder: " ",
-        hide: _this.data == "成品布",
+        hide: _this.data == _this.$t("whseField.cpb"),
         width: 140
       },
       {
@@ -216,7 +218,7 @@ export function rhl1C(_this) {
         span: 6,
         placeholder: " ",
         overHidden: true,
-        hide: _this.data == "成品布",
+        hide: _this.data == _this.$t("whseField.cpb"),
         width: 140
       },
       {
@@ -236,7 +238,7 @@ export function rhl1C(_this) {
         dicData: getDIC("whse_finStatus")
       },
       {
-        label: "入仓状态",
+        label: _this.$t("whseField.rczt"),
         prop: "stockState",
         span: 6,
         cell: false,
@@ -829,7 +831,7 @@ export function cpb2C(_this) {
         dicData: getDicT("whseLocation", "locationCode", "locationCode")
       },
       {
-        label: "ET序号",
+        label: _this.$t("whseField.etxh"), //"ET序号",
         prop: "etSn",
         cell: true,
         width: 250,
@@ -921,7 +923,7 @@ export function hgyl2C(_this) {
         width: 120
       },
       {
-        label: "货币类型",
+        label: _this.$t("whseField.hblx"), //"货币类型",
         prop: "currencyType",
         cell: true,
         width: 120,
@@ -1036,7 +1038,7 @@ export function yl2C(_this) {
         width: 120
       },
       {
-        label: "货币类型",
+        label: _this.$t("whseField.hblx"), // "货币类型",
         prop: "currencyType",
         cell: true,
         width: 120,

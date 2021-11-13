@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-01 14:06:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-09-10 10:06:55
+ * @LastEditTime: 2021-11-02 15:06:43
  * @Description:
  */
 
@@ -20,6 +20,14 @@ export function updateNote(data) {
 export function getJob(params) {
   return axios({
     url: "/api/proWeaveJob/page",
+    method: "get",
+    params: params
+  });
+}
+
+export function getNotPage(params) {
+  return axios({
+    url: "/api/proFinalProductCard",
     method: "get",
     params: params
   });
@@ -92,5 +100,13 @@ export function addInDtlb(data) {
     url: "/api/whseCalicoinDtlb/v1.0/save",
     method: "post",
     params: data
+  });
+}
+
+export function getRevolve(params) {
+  return axios({
+    url: "/api/proBleadyeRunJob",
+    method: "get",
+    params: params
   });
 }
