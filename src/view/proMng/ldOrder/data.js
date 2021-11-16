@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-24 10:23:23
+ * @LastEditTime: 2021-11-15 16:21:27
  * @Description:
  */
 
@@ -44,7 +44,11 @@ export function mainForm(_this) {
         tip: "Ngày bắt đầu nhận đơn",
         prop: "startDate",
         span: 6,
-        placeholder: " "
+        placeholder: " ",
+        type: "date",
+        align: "center",
+        format: "yyyy-MM-dd",
+        valueFormat: "yyyy-MM-dd"
       }
     ]
   };

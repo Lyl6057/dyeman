@@ -1,5 +1,89 @@
 import axios from "axios";
 
+export function getLyHgyl(params) {
+  return axios({
+    url: "/api/whseChemical/page",
+    method: "get",
+    params: params
+  });
+}
+export function addLyHgyl(params) {
+  return axios({
+    url: "/api/whseChemical",
+    method: "post",
+    params: params
+  });
+}
+export function updateLyHgyl(params) {
+  return axios({
+    url: "/api/whseChemical",
+    method: "put",
+    params: params
+  });
+}
+export function delLyHgyl(id) {
+  return axios({
+    url: "/api/whseChemical?whseChemicaloid=" + id,
+    method: "delete"
+  });
+}
+
+export function getLyHgylDtla(params) {
+  return axios({
+    url: "/api/whseChemicalDla/page",
+    method: "get",
+    params: params
+  });
+}
+export function addLyHgylDtla(params) {
+  return axios({
+    url: "/api/whseChemicalDla",
+    method: "post",
+    params: params
+  });
+}
+export function updateLyHgylDtla(params) {
+  return axios({
+    url: "/api/whseChemicalDla",
+    method: "put",
+    params: params
+  });
+}
+export function delLyHgylDtla(id) {
+  return axios({
+    url: "/api/whseChemicalDla?whseChemicalDlaoid=" + id,
+    method: "delete"
+  });
+}
+
+export function getLyHgylDtlb(params) {
+  return axios({
+    url: "/api/whseChemicalDlb/page",
+    method: "get",
+    params: params
+  });
+}
+export function addLyHgylDtlb(params) {
+  return axios({
+    url: "/api/whseChemicalDlb",
+    method: "post",
+    params: params
+  });
+}
+export function updateLyHgylDtlb(params) {
+  return axios({
+    url: "/api/whseChemicalDlb",
+    method: "put",
+    params: params
+  });
+}
+export function delLyHgylDtlb(id) {
+  return axios({
+    url: "/api/whseChemicalDlb?whseChemicalDlboid=" + id,
+    method: "delete"
+  });
+}
+
 export function getHgyl(params) {
   return axios({
     url: "/api/whseChemicalOut/page",
@@ -31,6 +115,13 @@ export function delHgyl(id) {
 export function getHgylDtl(params) {
   return axios({
     url: "/api/whseChemicalOutdtl/page",
+    method: "get",
+    params: params
+  });
+}
+export function getHgylDtlList(params) {
+  return axios({
+    url: "/api/whseChemicalOutdtl",
     method: "get",
     params: params
   });

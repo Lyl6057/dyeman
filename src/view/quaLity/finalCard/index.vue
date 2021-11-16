@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-08-07 07:57:44
  * @LastEditors: Lyl
- * @LastEditTime: 2021-11-13 15:38:44
+ * @LastEditTime: 2021-11-15 10:45:24
  * @Description: 
 -->
 <template>
@@ -173,7 +173,7 @@ export default {
       isAdd: false,
       input: "",
       wLoading: false,
-      czsocket: {},
+      // czsocket: {},
       pdfDlg: false,
       pdfUrl: "",
       czsocket: null,
@@ -270,8 +270,9 @@ export default {
               this.form.realGramWeight =
                 this.form.gramWeightValue || this.form.afterWeightValue || 0;
 
-              this.form.clothWidth =
-                Number(this.form.breadth.split("(")[0]) || 0;
+              this.form.clothWidth = this.form.breadth
+                ? Number(this.form.breadth.split("(")[0]) || 0
+                : 0;
 
               this.form.sideBreadth = this.form.breadthBorder || "";
 
@@ -442,6 +443,10 @@ export default {
       //   this.detail.cardId;
     },
     print() {
+      if (this.prsocket.readyState == 3) {
+        this.$tip.error("打印服务离线，请启动服务!");
+        return;
+      }
       if (!this.form.netWeight) {
         this.$tip.error("成品重量不能为0!");
         return;
@@ -621,6 +626,8 @@ export default {
       this.detail = val;
     },
     setCz() {
+      this.czsocket = null;
+      this.prsocket = null;
       webSocket.setCz(this);
       let _this = this;
       _this.czsocket.onmessage = function (e) {
@@ -665,16 +672,25 @@ export default {
       _this.czsocket.onopen = function (event) {
         setTimeout(() => {
           _this.time = setInterval(() => {
-            console.log(_this.czsocket);
-            if (_this.czsocket.readyState == 3) {
-              _this.czsocket = null;
-              _this.setCz();
-            } else {
+            if (_this.czsocket.readyState == 1) {
               _this.czsocket.send("weight");
+            } else {
+              clearInterval(_this.time);
+              _this.czsocket = null;
+              _this.prsocket = null;
+              _this.setCz();
             }
           }, 1000);
         }, 200);
         _this.$tip.success("服务器连接成功!");
+      };
+      _this.czsocket.onerror = function () {
+        _this.$tip.warning("称重服务离线，请打开称重应用!");
+        _this.czsocket = null;
+        _this.prsocket = null;
+        _this.$nextTick(() => {
+          _this.setCz();
+        });
       };
       webSocket.setPrint(this);
       _this.prsocket.onmessage = function (e) {};

@@ -609,7 +609,7 @@ export function rsxkr2C(_this) {
         label: "出货数量",
         prop: "stockQty",
         hide: false,
-        cell: true,
+        cell: false,
         width: 120,
         align: "right",
         type: "number",
@@ -643,7 +643,7 @@ export function rcpb3C(_this) {
     highlightCurrentRow: true,
     height:
       _this.hide === "1" || _this.hide === "2"
-        ? "calc(100vh - 330px)"
+        ? "calc(100vh - 320px)"
         : "calc(100vh - 285px)",
     refreshBtn: false,
     columnBtn: false,
@@ -665,44 +665,16 @@ export function rcpb3C(_this) {
         align: "center"
       },
       {
-        label: "来胚入仓批号资料OID",
-        prop: " whseCalicoinDtlbOid",
-        hide: true
-      },
-      {
         label: _this.$t("whseField.ph"),
         prop: "batchNo",
-        cell: true,
-        width: 180,
+        cell: false,
+        // width: 180,
         hide: _this.hide === "6" ? true : false
       },
       {
-        label: _this.$t("whseField.scdh"),
-        prop: "prodNo",
-        cell: true,
-        width: 180,
-        hide: _this.hide != "6" ? true : false,
-        type: "select",
-        dicData: getDicT(
-          "whseCalicoinDtla/v1.0/list",
-          "prodNo",
-          "whseCalicoinDtlaoid"
-        )
-      },
-      {
-        label: _this.$t("whseField.ph2"),
-        prop: "countingNo",
-        cell: true,
-        width: 80,
-        align: "right"
-        // click: (val) => {
-        //   _this.iptPhChange(_this.choosePhData);
-        // },
-      },
-      {
-        label: _this.$t("whseField.zl"),
+        label: "数量",
         prop: "weight",
-        cell: true,
+        cell: false,
         width: 100,
         align: "right"
         // click: (val) => {
@@ -710,21 +682,12 @@ export function rcpb3C(_this) {
         // },
       },
       {
-        label: _this.$t("whseField.zldw"),
+        label: _this.$t("whseField.dw"),
         prop: "weightUnit",
-        cell: true,
+        cell: false,
         width: 100,
         type: "select",
-        dicData: getDIC("Whse_Transfer_unit")
-        // click: (val) => {
-        //   _this.iptPhChange(_this.choosePhData);
-        // },
-      },
-      {
-        label: _this.$t("whseField.krbph"),
-        prop: "custTicket",
-        cell: true,
-        width: 150
+        dicData: matUnit
         // click: (val) => {
         //   _this.iptPhChange(_this.choosePhData);
         // },

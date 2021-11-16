@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-10-27 14:00:27
+ * @LastEditTime: 2021-11-16 08:26:17
  * @Description:
  */
 
@@ -495,8 +495,8 @@ export function mainCrud(_this) {
     ],
     group: [
       {
-        icon: " ",
-        label: " ",
+        icon: "el-icon-toilet-paper",
+        label: "织厂信息",
         prop: "group1",
         column: [
           {

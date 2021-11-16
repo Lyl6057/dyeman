@@ -170,7 +170,20 @@ import {
   updatePurApp,
 } from "@/api/index";
 import { rsxkr1F, rsxkr1C, rsxkr2C, rsxkr2F } from "./data";
-import { getHgyl, addHgyl, delHgyl, updateHgyl } from "@/api/im/Wk/cc/hgyl";
+import {
+  getHgyl,
+  addHgyl,
+  delHgyl,
+  updateHgyl,
+  getHgylDtlList,
+  addHgylDtl,
+  delHgylDtl,
+  updateHgylDtl,
+  getLyHgylDtlb,
+  addLyHgylDtlb,
+  delLyHgylDtlb,
+  updateLyHgylDtlb,
+} from "@/api/im/Wk/cc/hgyl";
 export default {
   name: "",
   components: {

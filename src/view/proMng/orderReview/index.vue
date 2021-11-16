@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-11-09 18:58:15
+ * @LastEditTime: 2021-11-16 08:23:01
  * @Description:
 -->
 <template>
@@ -208,6 +208,8 @@ export default {
           this.form.salPoNo =
             "%" + (this.form.salPoNo ? this.form.salPoNo : "");
         }
+        this.form.colorCode =
+          "%" + (this.form.colorCode ? this.form.colorCode : "");
         get(
           Object.assign(this.form, {
             rows: this.page.pageSize,
@@ -236,6 +238,10 @@ export default {
           if (this.form.salPoNo.indexOf("%") != -1) {
             this.form.salPoNo = this.form.salPoNo.split("%").join("");
           }
+          if (this.form.colorCode.indexOf("%") != -1) {
+            this.form.colorCode = this.form.colorCode.split("%").join("");
+          }
+
           setTimeout(() => {
             this.wLoading = false;
           }, 200);
@@ -248,6 +254,11 @@ export default {
         }
         this.wform.weaveJobCode =
           "!^%" + (this.wform.weaveJobCode ? this.wform.weaveJobCode : "");
+        this.wform.salPoNo =
+          "%" + (this.wform.salPoNo ? this.wform.salPoNo : "");
+        this.wform.colorCode =
+          "%" + (this.wform.colorCode ? this.wform.colorCode : "");
+
         getW(
           Object.assign(this.wform, {
             rows: this.wpage.pageSize,
@@ -270,6 +281,12 @@ export default {
           if (this.wform.weaveJobCode.indexOf("!^%") != -1) {
             this.wform.weaveJobCode =
               this.wform.weaveJobCode.split("!^%")[1] || "";
+          }
+          if (this.wform.salPoNo.indexOf("%") != -1) {
+            this.wform.salPoNo = this.wform.salPoNo.split("%").join("");
+          }
+          if (this.wform.colorCode.indexOf("%") != -1) {
+            this.wform.colorCode = this.wform.colorCode.split("%").join("");
           }
           setTimeout(() => {
             this.wLoading = false;

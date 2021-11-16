@@ -2,12 +2,12 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-11-09 14:47:58
+ * @LastEditTime: 2021-11-15 19:06:23
  * @Description:
  */
 
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
-
+let cust = getDicT("basCustomer", "custName", "custCode");
 export function mainForm(_this) {
   return {
     submitBtn: false,
@@ -26,9 +26,9 @@ export function mainForm(_this) {
         tip: "Khách hàng",
         prop: "custCode",
         span: 6,
-        placeholder: " "
-        // type: "select",
-        // dicData: cust
+        placeholder: " ",
+        type: "select",
+        dicData: cust
         // dicData: getDicT("basCustomer", "custName", "custCode")
       },
       {
@@ -44,6 +44,10 @@ export function mainForm(_this) {
         tip: "开单日期(Ngày lập đơn)",
         prop: "startJobDate",
         span: 6,
+        type: "date",
+        align: "center",
+        format: "yyyy-MM-dd HH:mm:ss",
+        valueFormat: "yyyy-MM-dd HH:mm:ss",
         placeholder: " "
       }
     ]
@@ -79,8 +83,6 @@ export function dlgForm(_this) {
     ]
   };
 }
-
-let cust = getDicT("basCustomer", "custName", "custCode");
 
 export function mainCrud(_this) {
   return {

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-29 08:52:29
+ * @LastEditTime: 2021-11-15 16:25:47
  * @Description: 
 -->
 <template>
@@ -139,11 +139,13 @@ export default {
     query() {
       this.loading = true;
       this.detail = {};
+
       for (let key in this.form) {
         if (this.form[key] == "") {
           delete this.form[key];
         }
       }
+      this.form.orderNo = "!^%" + (this.form.orderNo ? this.form.orderNo : "");
       get(
         Object.assign(this.form, {
           rows: this.page.pageSize,
@@ -160,6 +162,9 @@ export default {
             this.$refs.crud.setCurrentRow(this.crud[0]);
           }
           this.page.total = res.data.total;
+          if (this.form.orderNo.indexOf("!^%") != -1) {
+            this.form.orderNo = this.form.orderNo.split("!^%")[1] || "";
+          }
           this.loading = false;
         })
         .catch((e) => {

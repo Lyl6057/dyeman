@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-29 08:04:14
+ * @LastEditTime: 2021-11-15 19:04:12
  * @Description: 
 -->
 <template>
@@ -140,9 +140,12 @@ export default {
           delete this.form[key];
         }
       }
-      if (this.form.dyeDate) {
-        this.form.dyeDate += " 00:00:00";
-      }
+
+      this.form.orderNo = "!^%" + (this.form.orderNo ? this.form.orderNo : "");
+      this.form.po = "%" + (this.form.po ? this.form.po : "");
+      // if (this.form.dyeDate && this.form.dyeDate.indexOf(":") == -1) {
+      //   this.form.dyeDate += " 00:00:00";
+      // }
       get(
         Object.assign(this.form, {
           rows: this.page.pageSize,
@@ -158,6 +161,14 @@ export default {
             this.$refs.crud.setCurrentRow(this.crud[0]);
           }
           this.page.total = res.data.total;
+
+          if (this.form.orderNo.indexOf("!^%") != -1) {
+            this.form.orderNo = this.form.orderNo.split("!^%")[1] || "";
+          }
+          if (this.form.po.indexOf("%") != -1) {
+            this.form.po = this.form.po.split("%")[1] || "";
+          }
+
           this.loading = false;
         })
         .catch((e) => {

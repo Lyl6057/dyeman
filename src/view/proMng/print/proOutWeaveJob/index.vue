@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-09-30 14:12:50
+ * @LastEditTime: 2021-11-16 08:23:41
  * @Description: 
 -->
 <template>
@@ -188,6 +188,12 @@ export default {
           delete this.form[key];
         }
       }
+      this.form.weaveJobCode =
+        "!^%" + (this.form.weaveJobCode ? this.form.weaveJobCode : "");
+      this.form.salPoNo = "%" + (this.form.salPoNo ? this.form.salPoNo : "");
+      this.form.colorCode =
+        "%" + (this.form.colorCode ? this.form.colorCode : "");
+
       get(
         Object.assign(this.form, {
           rows: this.page.pageSize,
@@ -205,6 +211,15 @@ export default {
           this.$refs.crud.setCurrentRow(this.crud[0]);
         }
         this.page.total = res.data.total;
+        if (this.form.weaveJobCode.indexOf("!^%") != -1) {
+          this.form.weaveJobCode = this.form.weaveJobCode.split("!^%")[1] || "";
+        }
+        if (this.form.salPoNo.indexOf("%") != -1) {
+          this.form.salPoNo = this.form.salPoNo.split("%").join("");
+        }
+        if (this.form.colorCode.indexOf("%") != -1) {
+          this.form.colorCode = this.form.colorCode.split("%").join("");
+        }
         this.loading = false;
       });
     },

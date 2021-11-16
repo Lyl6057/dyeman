@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-03 11:12:15
+ * @LastEditTime: 2021-11-16 08:31:20
  * @Description: 
 -->
 <template>
@@ -88,6 +88,8 @@ export default {
           delete this.form[key];
         }
       }
+      this.form.poNo = "!^%" + (this.form.poNo ? this.form.poNo : "");
+      this.form.noteCode = "%" + (this.form.noteCode ? this.form.noteCode : "");
       get(
         Object.assign(this.form, {
           rows: this.page.pageSize,
@@ -96,12 +98,18 @@ export default {
       ).then((res) => {
         this.crud = res.data.records;
 
-        this.crud.sort((a, b) => {
-          return a.printedTime < b.printedTime ? 1 : -1;
-        });
+        // this.crud.sort((a, b) => {
+        //   return a.printedTime < b.printedTime ? 1 : -1;
+        // });
         this.crud.forEach((item, i) => {
           item.index = i + 1;
         });
+        if (this.form.poNo.indexOf("!^%") != -1) {
+          this.form.poNo = this.form.poNo.split("!^%")[1] || "";
+        }
+        if (this.form.noteCode.indexOf("%") != -1) {
+          this.form.noteCode = this.form.noteCode.split("%")[1] || "";
+        }
         this.page.total = res.data.total;
         this.loading = false;
       });

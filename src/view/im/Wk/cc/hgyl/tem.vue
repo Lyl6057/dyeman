@@ -3,7 +3,7 @@
     <view-container
       :title="datas.type.split('_')[0] + '资料'"
       v-loading="outloading"
-      element-loading-text="正在生成领料单..."
+      element-loading-text="正在拼命加载..."
       element-loading-spinner="el-icon-loading"
       element-loading-background="rgba(255, 255, 255, 0.8)"
     >
@@ -26,13 +26,7 @@
         <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
       </div>
       <el-row>
-        <el-col
-          :span="
-            hide === '1' || hide === '4' || hide === '3' || hide === '5'
-              ? 24
-              : 12
-          "
-        >
+        <el-col :span="hide === '4' || hide === '3' || hide === '5' ? 24 : 16">
           <view-container :title="datas.type.split('_')[0] + '明细'">
             <div class="btnList" style="margin-bottom: 2px">
               <!-- <el-button type="primary" @click="getDetail">{{this.$t("public.query")}}</el-button> -->
@@ -64,10 +58,7 @@
               @on-load="getDetail"
             ></avue-crud> </view-container
         ></el-col>
-        <el-col
-          :span="12"
-          v-if="hide != '4' && hide != '3' && hide != '5' && hide != '1'"
-        >
+        <el-col :span="8" v-if="hide != '4' && hide != '3' && hide != '5'">
           <view-container :title="datas.type.split('_')[0] + '批号资料'">
             <div class="btnList" style="margin-bottom: 2px">
               <!-- <el-button type="primary" @click="getDetail">{{this.$t("public.query")}}</el-button> -->
@@ -77,11 +68,6 @@
               <el-button type="danger" @click="delPh" v-if="canSave">{{
                 this.$t("public.del")
               }}</el-button>
-              <!-- <el-button type="success" @click="savePh" v-if="!isPlan"
-                >{{this.$t("public.save")}}</el-button
-              > -->
-              <!-- <el-button type="warning" @click="getDetail">取消</el-button>
-        <el-button type="warning" @click="close">{{this.$t("public.close")}}</el-button> -->
             </div>
             <avue-crud
               ref="dlgPhcrud"
@@ -212,8 +198,13 @@ import {
   addHgylDtl,
   delHgylDtl,
   updateHgylDtl,
+  getLyHgylDtlb,
+  addLyHgylDtlb,
+  delLyHgylDtlb,
+  updateLyHgylDtlb,
 } from "@/api/im/Wk/cc/hgyl";
 import proChoice from "@/components/proMng/index";
+import { getLydmx, getHgylStock } from "./api";
 export default {
   props: {
     datas: Object,
@@ -325,6 +316,10 @@ export default {
         this.func.delDetail = delHgylDtl;
         this.func.updateDetail = updateHgylDtl;
         this.func.addDetail = addHgylDtl;
+        this.func.getPhDetail = getLyHgylDtlb;
+        this.func.delPhDetail = delLyHgylDtlb;
+        this.func.updateDtlb = updateLyHgylDtlb;
+        this.func.addDtlb = addLyHgylDtlb;
         // this.mxOp = rsxkr3C(this);
       } else {
         this.func.getDetail = getPbDetalis;
@@ -394,6 +389,7 @@ export default {
           let records = res.data;
           this.page.total = records.total;
           this.mx = records.records;
+
           if (this.mx.length === 0) {
             if (this.hide === "4" || this.hide === "3" || this.hide === "5") {
               this.mxOp.column[3].hide = true;
@@ -406,7 +402,11 @@ export default {
             }
             this.loading = false;
           }
-
+          if (this.hide == "1") {
+            this.mx = this.mx.sort((a, b) => {
+              return a.materialId > b.materialId ? 1 : -1;
+            });
+          }
           this.mx.forEach((item, index) => {
             item.$cellEdit = true;
             item.index = index + 1;
@@ -433,42 +433,48 @@ export default {
             }
 
             if (index === this.mx.length - 1) {
-              setTimeout(() => {
-                this.$nextTick(() => {
+              this.$nextTick(() => {
+                if (this.hide === "1") {
+                  this.$set(this.mxOp.column[3], "hide", true);
+                  // this.$set(this.mxOp.column[5], "hide", true);
+                  this.$set(this.mxOp.column[6], "hide", true);
+                  this.$set(this.mxOp.column[9], "hide", true);
+                }
+                // if (
+                //   this.hide != "4" &&
+                //   this.hide != "3" &&
+                //   this.hide != "5"
+                // ) {
+                // } else {
+                //   this.mxOp.column[3].hide = true;
+                //   // this.$refs.dlgcrud.setCurrentRow(this.chooseData);
+                // }
+                setTimeout(() => {
                   if (this.mx.length > 0) {
                     this.$refs.dlgcrud.setCurrentRow(this.mx[0]);
                   } else {
                     this.$refs.dlgcrud.setCurrentRow();
                   }
 
-                  if (this.hide === "1") {
-                    this.$set(this.mxOp.column[3], "hide", true);
-                    // this.$set(this.mxOp.column[5], "hide", true);
-                    this.$set(this.mxOp.column[6], "hide", true);
-                    this.$set(this.mxOp.column[9], "hide", true);
-                  }
-                  // if (
-                  //   this.hide != "4" &&
-                  //   this.hide != "3" &&
-                  //   this.hide != "5"
-                  // ) {
-                  // } else {
-                  //   this.mxOp.column[3].hide = true;
-                  //   // this.$refs.dlgcrud.setCurrentRow(this.chooseData);
-                  // }
                   this.loading = false;
-                });
-              }, 500);
+                }, 500);
+              });
             }
           });
         });
     },
     getPhDetail(val) {
+      if (this.chooseData.list.length) {
+        this.$refs.dlgPhcrud.setCurrentRow(this.chooseData.list[0]);
+        return;
+      }
       if (
         val === null ||
-        (!val.whseMaterialDlaoid && !val.whseCalicoselloutDtlaoid)
+        (!val.whseMaterialDlaoid &&
+          !val.whseCalicoselloutDtlaoid &&
+          !val.whseChemicalOutdtlId)
       ) {
-        this.rcData = [];
+        this.chooseData.list = [];
         return;
       }
       this.rcloading = true;
@@ -479,18 +485,22 @@ export default {
           start: this.page.currentPage,
           whseMaterialDlaFk: val.whseMaterialDlaoid,
           whseCalicoselloutDtlaFk: val.whseCalicoselloutDtlaoid,
+          whseChemicalDlaFk: val.whseChemicalOutdtlId,
         })
         .then((res) => {
           let records = res.data;
           this.rcPage.total = records.total;
-          this.rcData = records.records;
-          if (this.rcData.length === 0) {
+          this.chooseData.list = records.records;
+          if (this.chooseData.list.length === 0) {
             this.rcloading = false;
           }
-          this.rcData = this.rcData.sort((a, b) => {
-            return b.countingNo - a.countingNo;
+          this.chooseData.list = this.chooseData.list.sort((a, b) => {
+            return b.batchNo - a.batchNo;
           });
-          this.rcData.forEach((item, index) => {
+          if (this.chooseData.list.length) {
+            this.$refs.dlgPhcrud.setCurrentRow(this.chooseData.list[0]);
+          }
+          this.chooseData.list.forEach((item, index) => {
             item.index = index + 1;
             if (this.hide === "6") {
               item.weight = item.woWeights;
@@ -498,11 +508,11 @@ export default {
               item.custTicket = item.ticketNo;
             }
 
-            if (index === this.rcData.length - 1) {
-              this.$nextTick(() => {
-                this.chooseData.list = this.rcData;
-                // this.$set(this.chooseData, "list", this.rcData);
-              });
+            if (index === this.chooseData.list.length - 1) {
+              // this.$nextTick(() => {
+              //   this.chooseData.list = this.rcData;
+              //   // this.$set(this.chooseData, "list", this.rcData);
+              // });
               this.rcOp.showSummary = true;
               this.choosePh = {};
               this.rcloading = false;
@@ -592,6 +602,12 @@ export default {
         this.$tip.error("请先选择明细资料!");
         return;
       }
+      if (this.hide == "1") {
+        this.proChoiceQ.chemicalId = this.chooseData.materialId;
+        this.proChoiceTle = "选择化工原料库存";
+        this.proChoiceV = true;
+        return;
+      }
       if (this.hide === "6") {
         //   this.choiceV = !this.choiceV;
         //   this.choiceField = "woOrderno";
@@ -666,12 +682,33 @@ export default {
             .then((res) => {
               if (res.data.code === 200) {
                 this.$tip.success(this.$t("public.sccg"));
-                this.mx.splice(this.chooseData.index - 1, 1);
-                this.chooseData = {};
-                this.$refs.dlgcrud.setCurrentRow();
-                this.mx.forEach((item, i) => {
-                  item.index = i + 1;
-                });
+                if (this.chooseData.list.length) {
+                  this.chooseData.list.forEach((item, i) => {
+                    this.func
+                      .delPhDetail(item.whseChemicalDlboid)
+                      .then((dtlb) => {
+                        if (i == this.chooseData.list.length - 1) {
+                          this.mx.splice(this.chooseData.index - 1, 1);
+                          this.chooseData = {};
+                          if (this.mx.length) {
+                            this.$refs.dlgcrud.setCurrentRow(this.mx[0]);
+                          }
+                          this.mx.forEach((item, i) => {
+                            item.index = i + 1;
+                          });
+                        }
+                      });
+                  });
+                } else {
+                  this.mx.splice(this.chooseData.index - 1, 1);
+                  this.chooseData = {};
+                  if (this.mx.length) {
+                    this.$refs.dlgcrud.setCurrentRow(this.mx[0]);
+                  }
+                  this.mx.forEach((item, i) => {
+                    item.index = i + 1;
+                  });
+                }
               } else {
                 this.$tip.error(this.$t("public.scsb"));
               }
@@ -692,47 +729,68 @@ export default {
       if (
         !this.choosePh.whseMaterialDlboid &&
         !this.choosePh.whseCalicoselloutDtlboid &&
-        !this.choosePh.whseTransferDtloid
+        !this.choosePh.whseTransferDtloid &&
+        !this.choosePh.whseTransferDtloid &&
+        !this.choosePh.whseChemicalDlboid
       ) {
         this.chooseData.list.splice(this.choosePh.index - 1, 1);
+        this.chooseData.list.forEach((item, i) => {
+          item.index = i + 1;
+        });
         this.$refs.dlgPhcrud.setCurrentRow();
         return;
       }
+
       let tip = "";
       if (this.hide === "6") {
         tip =
           "是否确定删除生产单号为 【 " + this.choosePh.prodNo + " 】的数据？";
       } else {
-        tip =
-          "是否确定删除批号为 【" +
-          this.choosePh.batchNo +
-          " 】, 疋号为 【" +
-          this.choosePh.countingNo +
-          " 】的数据？";
+        tip = "是否确定删除批号为 【" + this.choosePh.batchNo + " 】的数据？";
       }
       this.$tip
         .cofirm(tip, this, {})
         .then(() => {
+          this.outloading = true;
           this.func
             .delPhDetail(
               this.hide === "6"
                 ? this.choosePh.whseCalicoselloutDtlboid
-                : this.choosePh.whseMaterialDlboid
+                : this.choosePh.whseChemicalDlboid
             )
             .then((res) => {
               if (res.data.code === 200) {
-                this.$tip.success(this.$t("public.sccg"));
-                this.rcData.splice(this.choosePh.index - 1, 1);
-                this.getPhDetail(this.chooseData);
+                this.func
+                  .updateDetail({
+                    whseChemicalOutdtlId: this.chooseData.whseChemicalOutdtlId,
+                    stockQty: this.chooseData.stockQty - this.choosePh.weight,
+                  })
+                  .then((res) => {
+                    this.chooseData.stockQty -= this.choosePh.weight;
+
+                    this.chooseData.list.splice(this.choosePh.index - 1, 1);
+                    this.chooseData.list.forEach((item, i) => {
+                      item.index = i + 1;
+                    });
+                    this.choosePh = {};
+                    if (this.chooseData.list.length) {
+                      this.$refs.dlgPhcrud.setCurrentRow();
+                    }
+                    this.$tip.success(this.$t("public.sccg"));
+                    // this.getPhDetail(this.chooseData);
+                  });
               } else {
                 this.$tip.error(this.$t("public.scsb"));
               }
+              this.outloading = false;
             })
             .catch((err) => {
+              this.outloading = false;
               this.$tip.error(this.$t("public.scsb"));
             });
         })
         .catch((err) => {
+          this.outloading = false;
           this.$tip.warning(this.$t("public.qxcz"));
         });
     },
@@ -979,6 +1037,26 @@ export default {
             this.loading = false;
             return;
           }
+
+          if (this.mx[i].list) {
+            this.mx[i].stockQty = 0;
+            for (let j = 0; j < this.mx[i].list.length; j++) {
+              this.mx[i].stockQty += this.mx[i].list[j].weight;
+              if (
+                !this.mx[i].list[j].weight ||
+                !this.mx[i].list[j].weightUnit
+              ) {
+                this.$tip.error("批号数量/单位不能为空!");
+                this.loading = false;
+                return;
+              }
+            }
+          }
+          if (this.mx[i].stockQty > this.mx[i].applyNum) {
+            this.$tip.error("出货数量不能大于领用数量!");
+            this.loading = false;
+            return;
+          }
         }
       }
       if (this.hide === "4" || this.hide === "3" || this.hide === "5") {
@@ -1034,8 +1112,9 @@ export default {
           }
         });
       } else if (this.hide == "1") {
-        this.form.sysCreatedby = this.sysCreatedby;
         if (this.form.whseChemicalOutId) {
+          this.form.sysLastUpd = this.$getNowTime("datetime");
+          this.form.sysLastUpdBy = this.sysCreatedby;
           this.everyThing.updateF(this.form).then((Res) => {
             if (this.mx.length === 0) {
               this.loading = false;
@@ -1043,24 +1122,55 @@ export default {
               return;
             }
             this.mx.forEach((item, i) => {
+              let data = JSON.parse(JSON.stringify(item));
+              data.list = "";
               if (item.whseChemicalOutdtlId) {
                 // 更新
-                this.func.updateDetail(item).then((res) => {});
+                this.func.updateDetail(data).then((res) => {
+                  if (item.list) {
+                    item.list.forEach((dtlb, j) => {
+                      if (dtlb.whseChemicalDlboid) {
+                        this.func.updateDtlb(dtlb).then((bres) => {});
+                      } else {
+                        dtlb.whseChemicalDlaFk = item.whseChemicalOutdtlId;
+                        this.func.addDtlb(dtlb).then((bres) => {
+                          dtlb.whseChemicalDlboid = bres.data.data;
+                        });
+                      }
+                    });
+                  }
+                });
               } else {
                 // 新增
-                item.model = item.$model;
-                item.whseChemicalOutFk = this.form.whseChemicalOutId;
-                this.func.addDetail(item).then((res) => {
+                data.model = data.$model;
+                data.whseChemicalOutFk = this.form.whseChemicalOutId;
+                this.func.addDetail(data).then((res) => {
                   item.whseChemicalOutdtlId = res.data.data;
+                  if (item.list) {
+                    item.list.forEach((dtlb, j) => {
+                      if (dtlb.whseChemicalDlboid) {
+                        this.func.updateDtlb(dtlb).then((bres) => {});
+                      } else {
+                        dtlb.whseChemicalDlaFk = item.whseChemicalOutdtlId;
+                        this.func.addDtlb(dtlb).then((bres) => {
+                          dtlb.whseChemicalDlboid = bres.data.data;
+                        });
+                      }
+                    });
+                  }
                 });
               }
               if (i === this.mx.length - 1) {
-                this.loading = false;
-                this.$tip.success(this.$t("public.bccg"));
+                setTimeout(() => {
+                  this.loading = false;
+                  this.$tip.success(this.$t("public.bccg"));
+                }, 200);
               }
             });
           });
         } else {
+          this.form.sysCreated = this.$getNowTime("datetime");
+          this.form.sysCreatedby = this.sysCreatedby;
           this.everyThing.addF(this.form).then((Res) => {
             updatePurApp(
               Object.assign(this.purApp, {
@@ -1075,15 +1185,42 @@ export default {
               return;
             }
             this.mx.forEach((item, i) => {
-              if (item.whseChemicalOutdtlId) {
+              let data = JSON.parse(JSON.stringify(item));
+              data.list = "";
+              if (data.whseChemicalOutdtlId) {
                 // 更新
-                this.func.updateDetail(item).then((res) => {});
+                this.func.updateDetail(data).then((res) => {
+                  if (item.list) {
+                    item.list.forEach((dtlb, j) => {
+                      if (dtlb.whseChemicalDlboid) {
+                        this.func.updateDtlb(dtlb).then((bres) => {});
+                      } else {
+                        dtlb.whseChemicalDlaFk = item.whseChemicalOutdtlId;
+                        this.func.addDtlb(dtlb).then((bres) => {
+                          dtlb.whseChemicalDlboid = bres.data.data;
+                        });
+                      }
+                    });
+                  }
+                });
               } else {
                 // 新增
-                item.model = item.$model;
-                item.whseChemicalOutFk = this.form.whseChemicalOutId;
-                this.func.addDetail(item).then((res) => {
+                data.model = data.$model;
+                data.whseChemicalOutFk = this.form.whseChemicalOutId;
+                this.func.addDetail(data).then((res) => {
                   item.whseChemicalOutdtlId = res.data.data;
+                  if (item.list) {
+                    item.list.forEach((dtlb, j) => {
+                      if (dtlb.whseChemicalDlboid) {
+                        this.func.updateDtlb(dtlb).then((bres) => {});
+                      } else {
+                        dtlb.whseChemicalDlaFk = item.whseChemicalOutdtlId;
+                        this.func.addDtlb(dtlb).then((bres) => {
+                          dtlb.whseChemicalDlboid = bres.data.data;
+                        });
+                      }
+                    });
+                  }
                 });
               }
               if (i === this.mx.length - 1) {
@@ -1302,9 +1439,70 @@ export default {
           e.index = index + 1;
         });
       } else if (this.choiceTle === this.$t("choicDlg.xzsqlyd")) {
+        this.loading = true;
         this.form.appId = val.applyCode;
         this.form.purApplicationoid = val.purApplicationoid;
         this.purApp = val;
+        let stockList = [];
+        getHgylStock().then((res) => {
+          stockList = res.data;
+          getLydmx({
+            purApplicationFk: this.form.purApplicationoid,
+          }).then((res) => {
+            if (res.data.length) {
+              let val = res.data;
+              val.forEach((item, i) => {
+                item.$cellEdit = true;
+                item.materialId = item.materielCode;
+                item.materialName = item.materielName;
+                item.company = item.company;
+                item.stockUnit = item.company;
+                item.bcColorprison = item.materielCode;
+                item.vitality = item.materielCode;
+                item.bcClass = item.materielCode;
+                item.dangerlevel = item.materielCode;
+                item.bcForce = item.materielCode;
+                item.stockQty = 0;
+                item.list = [];
+                let materStock = stockList.filter((stock) => {
+                  return stock.chemicalId === item.materialId;
+                });
+                let sum = 0;
+                for (let i = 0; i < materStock.length; i++) {
+                  if (sum + materStock[i].stock <= item.applyNum) {
+                    item.list.push(materStock[i]);
+                    sum += materStock[i].stock;
+                  } else if (item.applyNum - sum > 0) {
+                    materStock[i].stock = item.applyNum - sum;
+                    item.list.push(materStock[i]);
+                    break;
+                  }
+                }
+                item.stockQty = item.applyNum;
+                item.list.forEach((item, i) => {
+                  item.weight = item.stock;
+                  item.$cellEdit = true;
+                  item.index = i + 1;
+                });
+              });
+              this.mx = this.mx.concat(val);
+              // this.mx = this.unique(this.mx, "materielCode");
+              this.page.total = this.mx.length;
+              if (this.mx.length) {
+                this.$refs.dlgcrud.setCurrentRow(this.mx[0]);
+              }
+              this.mx.forEach((e, index) => {
+                e.index = index + 1;
+                if (index == this.mx.length - 1) {
+                  setTimeout(() => {
+                    this.loading = false;
+                  }, 200);
+                }
+              });
+            }
+          });
+        });
+
         // this.chooseData.list = this.chooseData.list.concat(val);
         // this.chooseData.list.forEach((e, index) => {
         //   e.index = index + 1;
@@ -1335,10 +1533,10 @@ export default {
           item.bcClass = item.materielCode;
           item.dangerlevel = item.materielCode;
           item.bcForce = item.materielCode;
-          item.stockQty = item.applyNum;
+          item.stockQty = 0;
         });
         this.mx = this.mx.concat(val);
-        // this.mx = this.unique(this.mx, "materielCode");
+        this.mx = this.unique(this.mx, "materialId");
         this.page.total = this.mx.length;
         this.mx.forEach((e, index) => {
           e.index = index + 1;
@@ -1378,7 +1576,7 @@ export default {
         this.proChoiceV = false;
         return;
       }
-      this.loading = true;
+      this.outloading = true;
       if (this.proChoiceTle === "选择化工原料入仓信息") {
         if (this.hide === "1") {
           this.mxOp.column[3].hide = false;
@@ -1421,7 +1619,34 @@ export default {
             }
           });
         });
+      } else if (this.proChoiceTle === "选择化工原料库存") {
+        let sum = 0;
+        this.chooseData.list.forEach((item, i) => {
+          sum += item.weight;
+        });
+        val.forEach((item, i) => {
+          item.weight = item.stock;
+          item.$cellEdit = true;
+        });
+        for (let i = 0; i < val.length; i++) {
+          if (sum + val[i].stock <= this.chooseData.applyNum) {
+            this.chooseData.list.push(val[i]);
+            sum += val[i].stock;
+          } else if (this.chooseData.applyNum - sum > 0) {
+            val[i].weight = this.chooseData.applyNum - sum;
+            this.chooseData.list.push(val[i]);
+            break;
+          }
+        }
+        this.chooseData.stockQty = this.chooseData.applyNum;
+        this.chooseData.list = this.unique(this.chooseData.list, "batchNo");
+        this.chooseData.list.forEach((item, i) => {
+          item.index = i + 1;
+        });
       }
+      setTimeout(() => {
+        this.outloading = false;
+      }, 200);
       this.proChoiceV = false;
     },
     sxclose() {
@@ -1475,7 +1700,7 @@ export default {
   created() {},
   mounted() {
     this.sysCreatedby = this.$store.state.userOid;
-    this.rcOp.height = "calc(100vh - 288px)";
+    // this.rcOp.height = "calc(100vh - 288px)";
     if (this.hide === "3" || this.hide === "4" || this.hide === "5") {
       this.mxOp = rsxkr3C(this);
     }
@@ -1490,10 +1715,28 @@ export default {
     }
     // this.getDetail();
   },
+  updated() {
+    this.$nextTick(() => {
+      if (this.mx.length) {
+        this.$refs["dlgcrud"].doLayout();
+      }
+      if (this.chooseData.list) {
+        this.$refs["dlgPhcrud"].doLayout();
+      }
+    });
+  },
   beforeDestroy() {},
 };
 </script>
 <style lang='stylus'>
+.el-table {
+  overflow: visible !important;
+}
+
+.el-card__body {
+  padding: 20px 20px 50px 20px;
+}
+
 #sxPlanDlg {
   .el-dialog__header {
     padding: 0;

@@ -99,6 +99,9 @@ import {
   cpbInC,
   cpbInF,
   getCpbIn,
+  hgylStockC,
+  hgylStockF,
+  getHgylStock,
 } from "./data";
 
 export default {
@@ -202,6 +205,8 @@ export default {
         });
       } else {
         this.form.vatNo = "!^%" + (this.form.vatNo ? this.form.vatNo : "");
+        this.form.weaveJobCode =
+          "%" + (this.form.weaveJobCode ? this.form.weaveJobCode : "");
         this.getData(
           Object.assign(this.form, this.choiceQ, {
             rows: this.page.pageSize,
@@ -243,6 +248,9 @@ export default {
           });
           if (this.form.vatNo.indexOf("!^%") != -1) {
             this.form.vatNo = this.form.vatNo.split("!^%")[1] || "";
+          }
+          if (this.form.weaveJobCode.indexOf("%") != -1) {
+            this.form.weaveJobCode = this.form.weaveJobCode.split("%")[1] || "";
           }
         });
       }
@@ -291,6 +299,11 @@ export default {
   },
   created() {
     switch (this.choiceTle) {
+      case "选择化工原料库存":
+        this.choiceC = hgylStockC(this);
+        this.choiceF = hgylStockF(this);
+        this.getData = getHgylStock;
+        break;
       case "选择成品布入仓信息":
         this.choiceC = cpbInC(this);
         this.choiceF = cpbInF(this);

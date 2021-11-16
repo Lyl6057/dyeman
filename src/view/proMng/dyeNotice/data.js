@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-24 10:24:50
+ * @LastEditTime: 2021-11-15 19:04:27
  * @Description:
  */
 
@@ -22,6 +22,13 @@ export function mainForm(_this) {
         placeholder: " "
       },
       {
+        label: "订单号",
+        tip: "Số đơn hàng",
+        prop: "po",
+        span: 6,
+        placeholder: " "
+      },
+      {
         label: "客户名称",
         tip: "Khách hàng",
         prop: "custCode",
@@ -31,13 +38,7 @@ export function mainForm(_this) {
         dicData: cust
         // dicData: getDicT("basCustomer", "custName", "custCode")
       },
-      {
-        label: "订单号",
-        tip: "Số đơn hàng",
-        prop: "po",
-        span: 6,
-        placeholder: " "
-      },
+
       {
         label: "染布日期",
         tip: "Ngày bắt đầu nhận đơn",
@@ -46,8 +47,8 @@ export function mainForm(_this) {
         placeholder: " ",
         type: "date",
         align: "center",
-        format: "yyyy-MM-dd",
-        valueFormat: "yyyy-MM-dd"
+        format: "yyyy-MM-dd HH:mm:ss",
+        valueFormat: "yyyy-MM-dd HH:mm:ss"
       }
     ]
   };

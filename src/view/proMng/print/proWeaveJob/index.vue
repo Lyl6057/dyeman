@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-11-11 15:38:37
+ * @LastEditTime: 2021-11-16 08:28:22
  * @Description: 
 -->
 <template>
@@ -191,10 +191,11 @@ export default {
           delete this.form[key];
         }
       }
-      // if (this.form.weaveJobCode.indexOf("%") == -1) {
       this.form.weaveJobCode =
         "!^%" + (this.form.weaveJobCode ? this.form.weaveJobCode : "");
-      // }
+      this.form.salPoNo = "%" + (this.form.salPoNo ? this.form.salPoNo : "");
+      this.form.colorCode =
+        "%" + (this.form.colorCode ? this.form.colorCode : "");
       get(
         Object.assign(this.form, {
           rows: this.page.pageSize,
@@ -217,6 +218,12 @@ export default {
         // );
         if (this.form.weaveJobCode.indexOf("!^%") != -1) {
           this.form.weaveJobCode = this.form.weaveJobCode.split("!^%")[1] || "";
+        }
+        if (this.form.salPoNo.indexOf("%") != -1) {
+          this.form.salPoNo = this.form.salPoNo.split("%")[1] || "";
+        }
+        if (this.form.colorCode.indexOf("%") != -1) {
+          this.form.colorCode = this.form.colorCode.split("%")[1] || "";
         }
         this.page.total = res.data.total;
         this.loading = false;

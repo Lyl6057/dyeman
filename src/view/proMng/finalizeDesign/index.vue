@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-11-13 14:19:05
+ * @LastEditTime: 2021-11-15 19:06:11
  * @Description: 
 -->
 <template>
@@ -145,6 +145,11 @@ export default {
         }
       }
       this.form.vatNo = "!^%" + (this.form.vatNo ? this.form.vatNo : "");
+      this.form.weaveJobCode =
+        "%" + (this.form.weaveJobCode ? this.form.weaveJobCode : "");
+      // if (this.form.startJobDate && this.form.startJobDate.indexOf(":") == -1) {
+      //   this.form.startJobDate += " 00:00:00";
+      // }
       get(
         Object.assign(this.form, {
           rows: this.page.pageSize,
@@ -163,6 +168,9 @@ export default {
           this.page.total = res.data.total;
           if (this.form.vatNo.indexOf("!^%") != -1) {
             this.form.vatNo = this.form.vatNo.split("!^%")[1] || "";
+          }
+          if (this.form.weaveJobCode.indexOf("%") != -1) {
+            this.form.weaveJobCode = this.form.weaveJobCode.split("%")[1] || "";
           }
           this.loading = false;
         })

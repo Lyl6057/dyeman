@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-05-03 13:03:03
  * @LastEditors: Lyl
- * @LastEditTime: 2021-10-30 09:26:38
+ * @LastEditTime: 2021-11-16 11:19:25
  * @Description:
  */
 
@@ -21,6 +21,101 @@ let basPigment = getXDicT("basPigment");
 let basProductivesupplies = getXDicT("basProductivesupplies");
 let basFuel = getXDicT("basFuel");
 
+export function hgylStockF(_this) {
+  return {
+    submitBtn: false,
+    emptyBtn: false,
+    labelWidth: 130,
+    column: [
+      {
+        label: _this.$t("whseField.ph"),
+        prop: "batchNo",
+        cell: false,
+        placeholder: " ",
+        span: 6
+      }
+    ]
+  };
+}
+export function hgylStockC(_this) {
+  return {
+    menu: false,
+    addBtn: false,
+    border: true,
+    highlightCurrentRow: true,
+    height: "calc(100vh - 190px)",
+    refreshBtn: false,
+    columnBtn: false,
+    showOverflowTooltip: true,
+    excelBtn: true,
+    showSummary: true,
+    selection: true,
+    sumColumnList: [
+      {
+        label: " ",
+        name: "stock",
+        type: "sum"
+      }
+    ],
+    page: true,
+    column: [
+      {
+        label: "#",
+        prop: "index",
+        width: 50,
+        align: "center"
+      },
+      // {
+      //   label: "材料种类",
+      //   prop: "kindId",
+      //   width: 100,
+      //   type: "select",
+      //   dicData: kindId
+      // },
+      {
+        label: _this.$t("whseField.clbh"),
+        prop: "chemicalId",
+        width: 140
+      },
+      {
+        label: _this.$t("whseField.clmc"),
+        prop: "chemicalName",
+        type: "select",
+        overHidden: true,
+        width: 400
+      },
+      {
+        label: _this.$t("whseField.ph"),
+        prop: "batchNo",
+        cell: false,
+        width: 180
+      },
+      {
+        label: "库存数量",
+        prop: "stock",
+        cell: false,
+        width: 120,
+        align: "right"
+      },
+      {
+        label: _this.$t("whseField.dw"),
+        prop: "weightUnit",
+        cell: false,
+        width: 80,
+        type: "select",
+        dicData: matUnit
+      }
+    ]
+  };
+}
+
+export function getHgylStock(params) {
+  return axios({
+    url: "/api/viewChemicalStock/page",
+    method: "get",
+    params: params
+  });
+}
 export function cpbInF(_this) {
   return {
     submitBtn: false,
