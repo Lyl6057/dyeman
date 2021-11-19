@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-11-13 09:50:43
+ * @LastEditTime: 2021-11-18 16:43:01
  * @Description:
 -->
 <template>
@@ -22,6 +22,9 @@
         <el-button type="primary" @click="query">{{
           this.$t("public.query")
         }}</el-button>
+        <el-button type="primary" @click="print" :disabled="!selectList.length"
+          >打印</el-button
+        >
         <!-- <el-button type="primary" @click="outExcel1">导出</el-button> -->
         <!-- <el-button type="primary" @click="outExcel">导出明细表</el-button> -->
         <el-dropdown
@@ -150,6 +153,7 @@ export default {
       output: {},
       dlgOp: dlgForm(this),
       weightUnit: "KG",
+      prsocket: null,
     };
   },
   watch: {},
@@ -169,6 +173,7 @@ export default {
           start: this.page.currentPage,
           isPrinted: true,
           clothState: this.form.clothState || 1,
+          cardType: 1,
         })
       ).then((res) => {
         this.crud = res.data.records;
@@ -304,6 +309,8 @@ export default {
       _this.czsocket.onopen = function (event) {
         _this.$tip.success("称重应用连接成功!");
       };
+      webSocket.setPrint(this);
+      _this.prsocket.onmessage = function (e) {};
     },
     calculateWeight() {},
     codeLength() {
@@ -459,6 +466,19 @@ export default {
       } catch (e) {
         console.log(e);
       }
+    },
+    print() {
+      if (this.prsocket.readyState == 3) {
+        this.setCz();
+        // this.$tip.error("打印服务离线，请启动服务!");
+        return;
+      }
+      this.selectList.forEach((item, i) => {
+        this.prsocket.send("finishCard:" + item.cardId);
+        if (i == this.selectList.length - 1) {
+          this.$tip.success("已发送全部打印请求!");
+        }
+      });
     },
   },
   updated() {

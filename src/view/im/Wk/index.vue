@@ -950,9 +950,9 @@ export default {
             },
             {
               click: () => {
-                this.toView("cc_yl", this.$t("iaoMng.sclyhgylcc") + "_1");
+                this.toView("cc_yl", this.$t("iaoMng.sclyylcc") + "_1");
               },
-              title: this.$t("iaoMng.sclyhgylcc"),
+              title: this.$t("iaoMng.sclyylcc"),
               icon: "el-icon-s-claim",
               color: "#409EFF",
               // content: "领用出库看板",

@@ -567,7 +567,7 @@ export function sx2C(_this) {
       {
         label: _this.$t("whseField.ph"),
         prop: "batchNo",
-        cell: false,
+        cell: true,
         width: 120
       },
       {

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-04-01 14:08:13
  * @LastEditors: Lyl
- * @LastEditTime: 2021-10-01 14:29:25
+ * @LastEditTime: 2021-11-18 10:18:01
  * @Description:
  */
 
@@ -88,6 +88,10 @@ export function quality(_this) {
         {
           menuName: "1.唛头打印",
           index: "MarkMng"
+        },
+        {
+          menuName: "2.码卡打印",
+          index: "shipmentCodeCard"
         }
       ]
     }

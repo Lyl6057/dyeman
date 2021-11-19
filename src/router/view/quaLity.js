@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-10 13:20:44
  * @LastEditors: Lyl
- * @LastEditTime: 2021-10-01 14:24:54
+ * @LastEditTime: 2021-11-18 14:40:28
  * @Description:
  */
 export default [
@@ -147,6 +147,15 @@ export default [
     path: "/MarkMng",
     name: "唛头打印",
     component: resolve => require(["@/view/quaLity/MarkMng/index"], resolve),
+    meta: {
+      keepAlive: true
+    }
+  },
+  {
+    path: "/shipmentCodeCard",
+    name: "送板码卡打印",
+    component: resolve =>
+      require(["@/view/quaLity/finalCardGd/index"], resolve),
     meta: {
       keepAlive: true
     }

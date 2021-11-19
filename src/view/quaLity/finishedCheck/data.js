@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-11-05 09:05:32
+ * @LastEditTime: 2021-11-18 16:49:33
  * @Description:
  */
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
@@ -85,9 +85,9 @@ export function mainForm(_this) {
           }
         ],
         change: () => {
-          _this.$nextTick(() => {
-            _this.query();
-          });
+          // _this.$nextTick(() => {
+          //   _this.query();
+          // });
         }
       }
       // {

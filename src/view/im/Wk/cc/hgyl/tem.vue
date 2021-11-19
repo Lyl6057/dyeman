@@ -62,10 +62,10 @@
           <view-container :title="datas.type.split('_')[0] + '批号资料'">
             <div class="btnList" style="margin-bottom: 2px">
               <!-- <el-button type="primary" @click="getDetail">{{this.$t("public.query")}}</el-button> -->
-              <el-button type="primary" @click="addPh" v-if="canSave">{{
+              <el-button type="primary" @click="addPh" v-if="canSave" :disabled="detail.stockState == '1'">{{
                 this.$t("public.add")
               }}</el-button>
-              <el-button type="danger" @click="delPh" v-if="canSave">{{
+              <el-button type="danger" @click="delPh" v-if="canSave" :disabled="detail.stockState == '1'">{{
                 this.$t("public.del")
               }}</el-button>
             </div>
@@ -1467,6 +1467,9 @@ export default {
                 let materStock = stockList.filter((stock) => {
                   return stock.chemicalId === item.materialId;
                 });
+                materStock = materStock.sort((a, b) => {
+                  return a.batchNo > b.batchNo ? 1 : -1;
+                });
                 let sum = 0;
                 for (let i = 0; i < materStock.length; i++) {
                   if (sum + materStock[i].stock <= item.applyNum) {
@@ -1474,11 +1477,12 @@ export default {
                     sum += materStock[i].stock;
                   } else if (item.applyNum - sum > 0) {
                     materStock[i].stock = item.applyNum - sum;
+                    sum += materStock[i].stock;
                     item.list.push(materStock[i]);
                     break;
                   }
                 }
-                item.stockQty = item.applyNum;
+                item.stockQty = sum;
                 item.list.forEach((item, i) => {
                   item.weight = item.stock;
                   item.$cellEdit = true;
@@ -1634,11 +1638,12 @@ export default {
             sum += val[i].stock;
           } else if (this.chooseData.applyNum - sum > 0) {
             val[i].weight = this.chooseData.applyNum - sum;
+            sum += val[i].weight;
             this.chooseData.list.push(val[i]);
             break;
           }
         }
-        this.chooseData.stockQty = this.chooseData.applyNum;
+        this.chooseData.stockQty = sum;
         this.chooseData.list = this.unique(this.chooseData.list, "batchNo");
         this.chooseData.list.forEach((item, i) => {
           item.index = i + 1;

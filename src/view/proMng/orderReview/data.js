@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-11-09 16:28:40
+ * @LastEditTime: 2021-11-18 10:00:14
  * @Description:
  */
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
@@ -197,6 +197,7 @@ export function mainCrud(_this) {
         placeholder: " ",
         filterable: true,
         allowCreate: true,
+        sortable: true,
         defaultFirstOption: true,
         type: "select",
         dicData: cust
@@ -1247,6 +1248,7 @@ export function mainWCrud(_this) {
         prop: "custName",
         overHidden: true,
         width: 200,
+        sortable: true,
         span: 6,
         placeholder: "请選擇客戶名稱",
         type: "select",

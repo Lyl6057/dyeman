@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-23 08:03:49
  * @LastEditors: Lyl
- * @LastEditTime: 2021-11-16 10:17:36
+ * @LastEditTime: 2021-11-18 14:11:53
  * @Description:
  */
 import Vue from "vue";
@@ -16,8 +16,8 @@ import store from "@/store/index";
 // import pro from "@/router/view/pro";
 // import re from '@/router/view/re'
 // import iq from '@/router/view/iq'
-import im from "@/router/view/im";
-// import quaLity from "@/router/view/quaLity";
+// import im from "@/router/view/im";
+import quaLity from "@/router/view/quaLity";
 // import laboratory from "./view/laboratory";
 // import proMng from "./view/proMng";
 // import energy from "./view/energy";
@@ -56,8 +56,8 @@ const router = new Router({
         // ...pro,
         // ...re,
         // ...iq,
-        ...im
-        // ...quaLity
+        // ...im
+        ...quaLity
         // ...laboratory
         // ...proMng
         // ...energy

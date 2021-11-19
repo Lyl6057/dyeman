@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-11-16 08:23:01
+ * @LastEditTime: 2021-11-18 10:36:36
  * @Description:
 -->
 <template>
@@ -264,6 +264,7 @@ export default {
             rows: this.wpage.pageSize,
             start: this.wpage.currentPage,
             isWorkOut: 0,
+            weaveState: 0,
           })
         ).then((res) => {
           this.wcrud = res.data.records;

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-08-07 07:58:01
  * @LastEditors: Lyl
- * @LastEditTime: 2021-11-17 09:30:41
+ * @LastEditTime: 2021-11-18 14:50:35
  * @Description:
  */
 
@@ -388,13 +388,7 @@ export function mainCrud(_this) {
         minRows: 0,
         align: "left",
         placeholder: " ",
-        rules: [
-          {
-            required: true,
-            message: "請输入净重",
-            trigger: "blur"
-          }
-        ],
+
         change: () => {
           _this.$nextTick(() => {
             _this.codeLength();
@@ -424,13 +418,7 @@ export function mainCrud(_this) {
         type: "number",
         precision: 1,
         align: "left",
-        rules: [
-          {
-            required: true,
-            message: "請输入净重",
-            trigger: "blur"
-          }
-        ],
+
         placeholder: " "
       },
       {
@@ -532,14 +520,7 @@ export function mainCrud(_this) {
         width: 100,
         span: 6,
         align: "left",
-        placeholder: " ",
-        rules: [
-          {
-            required: true,
-            message: "請输入载具编号",
-            trigger: "blur"
-          }
-        ]
+        placeholder: " "
       },
       {
         label: "存储位置",
@@ -577,14 +558,7 @@ export function mainCrud(_this) {
           value: "tempId"
         },
         dicData: getXDicT("basePrintTemplate/list"),
-        placeholder: " ",
-        rules: [
-          {
-            required: true,
-            message: "請选择打印模板",
-            trigger: "blur"
-          }
-        ]
+        placeholder: " "
       },
       {
         label: "备注",

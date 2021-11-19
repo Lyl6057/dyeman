@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-08-07 07:57:44
  * @LastEditors: Lyl
- * @LastEditTime: 2021-11-17 19:10:56
+ * @LastEditTime: 2021-11-18 16:41:30
  * @Description: 
 -->
 <template>
@@ -121,9 +121,9 @@
           </view-container>
         </el-dialog>
       </el-tab-pane>
-      <el-tab-pane label="打印模板">
+      <!-- <el-tab-pane label="打印模板">
         <print-tem @resetData="resetData"> </print-tem>
-      </el-tab-pane>
+      </el-tab-pane> -->
     </el-tabs>
   </div>
 </template>
@@ -144,13 +144,13 @@ import {
 } from "./api";
 // import tem from "./temDlg";
 import { webSocket } from "@/config/index.js";
-import printTem from "./printTem.vue";
+// import printTem from "./printTem.vue";
 
 export default {
   name: "",
   components: {
     // temDlg: tem,
-    printTem,
+    // printTem,
   },
   data() {
     return {
@@ -158,7 +158,7 @@ export default {
       form: {
         realGramWeight: 0,
         clothWidth: 0,
-        netWeight: 0,
+        netWeight: 1,
       },
       crudOp: mainCrud(this),
       crud: [],
@@ -202,9 +202,13 @@ export default {
         this.form.originPlace = "06";
         this.form.qcTakeOut = 0;
         this.form.pidNo = 1;
-        this.form.paperTube = 1;
+        this.form.paperTube = 0;
+        this.form.grossWeight = 1;
+        this.form.grossWeightLbs = 1;
+        this.form.netWeightLbs = 1;
         this.form.widthUnit = "INCH";
         this.form.gramWeightUnit = "g";
+        this.form.weightUnit = "KG";
         getTem({ isDefault: 1 }).then((res) => {
           if (res.data.length) {
             this.form.basePrintTemplateFk = res.data[0].tempId;
@@ -376,7 +380,7 @@ export default {
                 get({
                   vatNo: this.form.vatNo,
                   pidNo: this.form.pidNo,
-                  cardType: 1,
+                  cardType: 2,
                 }).then((res) => {
                   let data = JSON.parse(JSON.stringify(this.form));
                   data.custName = data.$custCode;
@@ -403,7 +407,7 @@ export default {
                     });
                   } else {
                     // 不存在记录 新增 =>打印
-                    data.cardType = 1;
+                    data.cardType = 2;
                     add(data).then((addRes) => {
                       this.form.cardId = addRes.data.data;
                       // this.history.unshift(data);
@@ -465,7 +469,7 @@ export default {
                 get({
                   vatNo: this.form.vatNo,
                   pidNo: this.form.pidNo,
-                  cardType: 1,
+                  cardType: 2,
                 }).then((res) => {
                   let data = JSON.parse(JSON.stringify(this.form));
                   data.custName = data.$custCode;
@@ -513,8 +517,8 @@ export default {
                   } else {
                     // 不存在记录 新增 =>打印
                     data.cardId = "";
-                    data.cardType = 1;
                     data.madeDate = this.$getNowTime("datetime");
+                    data.cardType = 2;
                     add(data).then((addRes) => {
                       this.form.cardId = addRes.data.data;
                       this.history.unshift(data);
@@ -547,7 +551,7 @@ export default {
                     });
                   }
                   setTimeout(() => {
-                    this.form.pidNo++;
+                    // this.form.pidNo++;
                     this.wLoading = false;
                     done();
                   }, 200);
@@ -634,70 +638,7 @@ export default {
     setCz() {
       this.czsocket = null;
       this.prsocket = null;
-      webSocket.setCz(this);
       let _this = this;
-      _this.czsocket.onmessage = function (e) {
-        if (e.data.indexOf(":") != -1) {
-          let data = e.data.split(":");
-          _this.form.weightUnit = data[1];
-          data[0] = Number((parseInt(Number(data[0]) * 10) / 10).toFixed(1));
-          if (_this.form.weightUnit == "KG") {
-            _this.form.netWeight = Number(data[0]); //;
-            _this.form.netWeightLbs = _this.form.netWeight * 2.2046;
-
-            _this.form.grossWeight =
-              _this.form.netWeight +
-              Number(_this.form.paperTube || 0) +
-              Number(_this.form.qcTakeOut || 0);
-            _this.form.grossWeightLbs = _this.form.grossWeight * 2.2046;
-          } else {
-            _this.form.netWeightLbs = Number(data[0]); //;
-            _this.form.netWeight = _this.form.netWeightLbs / 2.2046;
-
-            _this.form.grossWeightLbs =
-              _this.form.netWeightLbs +
-              Number(_this.form.paperTube || 0) +
-              Number(_this.form.qcTakeOut || 0);
-            _this.form.grossWeight = _this.form.grossWeightLbs / 2.2046;
-            // _this.form.grossWeightLbs = Number(data[0]); //;
-            // _this.form.grossWeight = _this.form.grossWeightLbs / 2.2046;
-
-            // _this.form.netWeightLbs =
-            //   _this.form.grossWeightLbs -
-            //   Number(_this.form.paperTube || 0) -
-            //   Number(_this.form.qcTakeOut);
-
-            // _this.form.netWeight = _this.form.netWeightLbs / 2.2046;
-          }
-        } else {
-          _this.form.netWeight = Number(e.data);
-        }
-
-        // _this.codeLength();
-      };
-      _this.czsocket.onopen = function (event) {
-        setTimeout(() => {
-          _this.time = setInterval(() => {
-            if (_this.czsocket.readyState == 1) {
-              _this.czsocket.send("weight");
-            } else {
-              clearInterval(_this.time);
-              _this.czsocket = null;
-              _this.prsocket = null;
-              _this.setCz();
-            }
-          }, 1000);
-        }, 200);
-        _this.$tip.success("服务器连接成功!");
-      };
-      _this.czsocket.onerror = function () {
-        _this.$tip.warning("称重服务离线，请打开称重应用!");
-        _this.czsocket = null;
-        _this.prsocket = null;
-        _this.$nextTick(() => {
-          _this.setCz();
-        });
-      };
       webSocket.setPrint(this);
       _this.prsocket.onmessage = function (e) {};
     },

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-11-05 09:06:02
+ * @LastEditTime: 2021-11-18 16:49:53
  * @Description:
 -->
 <template>
@@ -121,12 +121,13 @@ export default {
       // order
       //   ? (this.form.sort = prop + (order == "descending" ? ",1" : ",0"))
       //   : (this.form.sort = "storeLoadCode,1");
-
+      this.form.vatNo = "!^%" + (this.form.vatNo ? this.form.vatNo : "");
       get(
         Object.assign(this.form, {
           rows: this.page.pageSize,
           start: this.page.currentPage,
           isPrinted: 1, // 已打印
+          cardType: 1,
         })
       ).then((res) => {
         this.crud = res.data.records;
@@ -141,6 +142,9 @@ export default {
         });
         this.page.total = res.data.total;
         setTimeout(() => {
+          if (this.form.vatNo.indexOf("!^%") != -1) {
+            this.form.vatNo = this.form.vatNo.split("!^%")[1] || "";
+          }
           this.wLoading = false;
         }, 200);
       });
