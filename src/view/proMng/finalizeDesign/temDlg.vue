@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-11-05 15:46:25
+ * @LastEditTime: 2021-11-30 09:46:31
  * @Description: 
 -->
 <template>
@@ -697,22 +697,44 @@ export default {
         this.form.fabricCompone = val.fabElements;
 
         this.form.proBreadthSide =
-          val.breadthBorder.indexOf("(") != -1
-            ? Number(val.breadthBorder.split("(")[0])
-            : val.breadthBorder; //连边幅宽 breadth_border
+          typeof val.breadthBorder === "number"
+            ? val.breadthBorder
+            : val.breadthBorder
+            ? Number(val.breadthBorder.match(/\d+/g)[0])
+            : 0; //连边幅宽 breadth_border
+
         this.form.proBreadthActual =
-          val.breadthActual.indexOf("(") != -1
-            ? Number(val.breadthActual.split("(")[0])
-            : val.breadthActual; //实用幅宽 breadthActual
+          typeof val.breadthActual === "number"
+            ? val.breadthActual
+            : val.breadthActual
+            ? Number(val.breadthActual.match(/\d+/g)[0])
+            : 0;
+
+        // val.breadthActual.indexOf("(") != -1
+        //   ? Number(val.breadthActual.match(/\d+/g)[0])
+        //   : val.breadthActual; //实用幅宽 breadthActual
+
         this.form.proWeightBefore =
-          val.gramWeightBefor.indexOf("(") != -1
-            ? Number(val.gramWeightBefor.split("(")[0])
-            : val.gramWeightBefor; //洗前克重 gramWeightBefor
+          typeof val.gramWeightBefor === "number"
+            ? val.gramWeightBefor
+            : val.gramWeightBefor
+            ? Number(val.gramWeightBefor.match(/\d+/g)[0])
+            : 0;
+
+        // val.gramWeightBefor.indexOf("(") != -1
+        //   ? Number(val.gramWeightBefor.match(/\d+/g)[0])
+        //   : val.gramWeightBefor; //洗前克重 gramWeightBefor
 
         this.form.proWeightAfter =
-          val.gramWeightAfter.indexOf("(") != -1
-            ? Number(val.gramWeightAfter.split("(")[0])
-            : val.gramWeightAfter; //洗后克重 gramWeightAfter
+          typeof val.gramWeightAfter === "number"
+            ? val.gramWeightAfter
+            : val.gramWeightAfter
+            ? Number(val.gramWeightAfter.match(/\d+/g)[0])
+            : 0;
+
+        // val.gramWeightAfter.indexOf("(") != -1
+        //   ? Number(val.gramWeightAfter.match(/\d+/g)[0])
+        //   : val.gramWeightAfter; //洗后克重 gramWeightAfter
 
         this.form.calicoBreadth = val.breadthActual;
         this.form.calicoWeight = val.gramWeightBefor;

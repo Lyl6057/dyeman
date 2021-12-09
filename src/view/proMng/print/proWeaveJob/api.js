@@ -2,11 +2,47 @@
  * @Author: Lyl
  * @Date: 2021-02-01 14:06:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-07-08 18:05:11
+ * @LastEditTime: 2021-12-01 18:26:46
  * @Description:
  */
 
 import axios from "axios";
+
+// 查询 bom 资料
+export function getBom(params) {
+  return axios({
+    url: "/api/salNewbom",
+    method: "get",
+    params: params
+  });
+}
+
+// 查询 织造资料
+export function getBomDtlb(params) {
+  return axios({
+    url: "/api/salNewbomDtlb",
+    method: "get",
+    params: params
+  });
+}
+
+// 查询 织造规格明细 Sal_NewBom_Dtlb_Specs
+export function getBomDtlbSpecs(params) {
+  return axios({
+    url: "/api/salNewbomDtlbSpecs",
+    method: "get",
+    params: params
+  });
+}
+
+// 查询 营业规格明细 Sal_NewBom_Dtlb_Specs
+export function getBomDtlaSpecs(params) {
+  return axios({
+    url: "/api/salNewbomDtlaSpecs",
+    method: "get",
+    params: params
+  });
+}
 
 // 獲取訂單號
 export function getPo(params) {
@@ -27,7 +63,7 @@ export function getPoDtla(params) {
 }
 
 // 獲取訂單面料资料Sal_bom_fabric
-export function getBom(params) {
+export function getBomFa(params) {
   return axios({
     url: "/api/salBomFabric",
     method: "get",

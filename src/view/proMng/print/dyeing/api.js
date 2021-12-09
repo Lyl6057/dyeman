@@ -2,11 +2,54 @@
  * @Author: Lyl
  * @Date: 2021-02-01 14:06:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-11-13 16:32:07
+ * @LastEditTime: 2021-12-09 10:53:56
  * @Description:
  */
 
 import axios from "axios";
+
+// 獲取合缸明细
+export function getBleadyeJobMerge(params) {
+  return axios({
+    url: "/api/proBleadyeJobMerge",
+    method: "get",
+    params: params
+  });
+}
+// 更新合缸明细
+export function updateBleadyeJobMerge(data) {
+  return axios({
+    url: "/api/proBleadyeJobMerge",
+    method: "put",
+    params: data
+  });
+}
+
+// 新增合缸明细
+export function addBleadyeJobMerge(data) {
+  return axios({
+    url: "/api/proBleadyeJobMerge",
+    method: "post",
+    params: data
+  });
+}
+
+// 刪除
+export function delBleadyeJobMerge(id) {
+  return axios({
+    url: "/api/proBleadyeJobMerge?vatNo=" + id,
+    method: "delete"
+  });
+}
+
+// 獲取运转单
+export function getRunJob(params) {
+  return axios({
+    url: "/api/proBleadyeRunJob/page",
+    method: "get",
+    params: params
+  });
+}
 
 // 獲取基礎工藝
 export function getTechargueList(params) {

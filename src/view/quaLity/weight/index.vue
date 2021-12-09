@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-11-04 16:44:32
+ * @LastEditTime: 2021-11-30 09:55:18
  * @Description: 
 -->
 <template>
@@ -379,9 +379,15 @@ export default {
           // gramWeight = Number(this.form.realGramWeight);
           // } else {
           gramWeight =
-            this.detail.gramWeight.indexOf("(") != -1
-              ? Number(this.detail.gramWeight.split("(")[0]) / 1000
-              : Number(this.detail.gramWeight) / 1000;
+            typeof this.detail.gramWeight === "number"
+              ? Number(this.detail.gramWeight) / 1000
+              : this.detail.gramWeight
+              ? Number(this.detail.gramWeight.match(/\d+/g)[0]) / 1000
+              : 0;
+
+          // this.detail.gramWeight.indexOf("(") != -1
+          //   ? Number(this.detail.gramWeight.match(/\d+/g)[0]) / 1000
+          // : Number(this.detail.gramWeight) / 1000;
           // }
 
           // if (this.form.widthUnit == "INCH") {
@@ -389,9 +395,15 @@ export default {
           //   breadth = Number(this.form.clothWidth);
           // } else {
           breadth =
-            this.detail.breadth.indexOf("(") != -1
-              ? (Number(this.detail.breadth.split("(")[0]) * 2.54) / 100
-              : (Number(this.detail.breadth) * 2.54) / 100;
+            typeof this.detail.breadth === "number"
+              ? (Number(this.detail.breadth) * 2.54) / 100
+              : this.detail.breadth
+              ? (Number(this.detail.breadth.match(/\d+/g)[0]) * 2.54) / 100
+              : 0;
+
+          // this.detail.breadth.indexOf("(") != -1
+          //   ? (Number(this.detail.breadth.match(/\d+/g)[0]) * 2.54) / 100
+          //   : (Number(this.detail.breadth) * 2.54) / 100;
           // }
 
           let weight = this.detail.realWeight;

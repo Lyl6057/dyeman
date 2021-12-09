@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-11-08 09:15:28
+ * @LastEditTime: 2021-12-09 19:25:22
  * @Description: 
 -->
 <template>
@@ -20,7 +20,7 @@
           content="Bảo tồn"
           placement="top-start"
         >
-          <el-button type="success" @click="save" :loading="wLoading">{{
+          <el-button type="success" @click="setMerge" :loading="wLoading">{{
             $t("public.save")
           }}</el-button>
         </el-tooltip>
@@ -134,7 +134,30 @@
       </div>
 
       <div class="formBox">
-        <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
+        <avue-form ref="form" :option="formOp" v-model="form">
+          <template slot-scope="scope" slot="mergVatNo">
+                  <el-select
+                    v-model="form.mergVatNo"
+                    filterable
+                    remote
+                    clearable
+                    default-first-option
+                    placeholder="请输入缸号"
+                    multiple
+                    :remote-method="remoteMethod"
+                    :loading="vatLoading"
+                  >
+                    <el-option
+                      v-for="item in vatOptions"
+                      :key="item.runJobId"
+                      :label="item.vatNo"
+                      :value="`${item.vatNo}:${item.runJobId}`"
+                      :disabled="item.vatNo == form.vatNo"
+                    >
+                    </el-option>
+                  </el-select>
+                </template>
+        </avue-form>
       </div>
     </view-container>
     <el-dialog
@@ -564,6 +587,7 @@
 </template>
 <script>
 import choice from "@/components/proMng/index";
+import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
 import {
   mainCrud,
   dlgForm,
@@ -615,6 +639,11 @@ import {
   delWash,
   getPoDtlb,
   getTechargueList,
+  getRunJob,
+  getBleadyeJobMerge,
+  updateBleadyeJobMerge,
+  addBleadyeJobMerge,
+  delBleadyeJobMerge,
 } from "./api";
 import { getTest as getTestList, getItem } from "../../revolve/api";
 export default {
@@ -638,6 +667,8 @@ export default {
         currentPage: 1,
         total: 0,
       },
+      vatLoading: false,
+      vatOptions: [],
       dlgWidth: "60%",
       codeSupplyNum: 0,
       previewData: {},
@@ -721,6 +752,13 @@ export default {
   },
   watch: {},
   methods: {
+    remoteMethod(val) {
+      this.vatLoading = true;
+      getRunJob({ vatNo: "!^%" + val, rows: 10, start: 1 }).then((res) => {
+        this.vatOptions = res.data.records;
+        this.vatLoading = false;
+      });
+    },
     unitCtr(val) {
       this.$nextTick(() => {
         if (val.label == "g" && val.row.formulaUnit === "KG") {
@@ -921,6 +959,7 @@ export default {
         // }).then((res) => {
         //   this.form = res.data.records[0];
         this.form = this.detail;
+
         Object.keys(this.form).forEach((item) => {
           if (this.isEmpty(this.form[item])) {
             delete this.form[item];
@@ -940,6 +979,7 @@ export default {
 
         setTimeout(() => {
           this.wLoading = false;
+          console.log(this.form);
         }, 200);
         // });
       }
@@ -975,7 +1015,7 @@ export default {
         }, 500);
       });
     },
-    save() {
+    setMerge() {
       this.wLoading = true;
       this.$refs.form.validate((valid, done) => {
         if (valid) {
@@ -992,206 +1032,132 @@ export default {
             // this.form.breadth = Number(this.form.breadth);
             this.form.workDate += " 00:00:00";
             this.form.deliveDate += " 00:00:00";
-            let vat = "";
-            this.form.mergVatNo.forEach((item, i) => {
-              if (i == this.form.mergVatNo.length - 1) {
-                vat += item;
-              } else {
-                vat += item + "/";
-              }
-            });
-            this.form.mergVatNo = vat;
-            if (this.form.bleadyeJobId) {
-              // update
-              this.form.upateTime = this.$getNowTime("datetime");
 
-              if (this.oldW != this.form.clothWeight) {
-                this.$tip
-                  .cofirm(
-                    "检测到重量改变会影响生产工艺参数，是否确定修改重量?",
-                    this,
-                    {}
-                  )
-                  .then(() => {
-                    this.form.mergVatNo = vat;
-                    update(this.form).then((res) => {
-                      if (res.data.code == 200) {
-                        this.oldW = this.form.clothWeight;
-                        getTechargue({
-                          proBleadyeJobFk: this.form.bleadyeJobId,
-                          rows: 999,
-                          start: 1,
-                        }).then((res) => {
-                          if (res.data.records.length > 0) {
-                            res.data.records.forEach((item, i) => {
-                              item.totalWater = Number(
-                                (
-                                  Number(this.form.clothWeight) *
-                                  Number(item.liquorRatio)
-                                ).toFixed(2)
-                              );
-                              item.haltWater =
-                                item.totalWater -
-                                Number(item.shotgunWater) -
-                                Number(item.wetClothWater);
-                              updateTechargue(item).then((tech) => {
-                                getTechItem({
-                                  proBleadyeJobTechargueFk: item.jobTechId,
-                                  star: 1,
-                                  rows: 999,
-                                }).then((resDtl) => {
-                                  resDtl.data.records.forEach((items, j) => {
-                                    if (items.measureType) {
-                                      if (
-                                        items.measureType.indexOf("%") != -1
-                                      ) {
-                                        items.useAmount = Number(
-                                          (
-                                            Number(items.formulaAmount) *
-                                            Number(this.form.clothWeight) *
-                                            0.01
-                                          ).toFixed(2)
-                                        );
-                                      } else if (
-                                        items.measureType.indexOf("g") != -1
-                                      ) {
-                                        items.useAmount =
-                                          items.formulaUnit == "KG"
-                                            ? Number(
-                                                (
-                                                  Number(items.formulaAmount) *
-                                                  Number(item.totalWater) *
-                                                  0.001
-                                                ).toFixed(2)
-                                              )
-                                            : Number(
-                                                (
-                                                  Number(items.formulaAmount) *
-                                                  Number(item.totalWater)
-                                                ).toFixed(2)
-                                              );
+            let arr = JSON.parse(JSON.stringify(this.form.mergVatNo)); // 合染缸号
+            if (arr.length) {
+              getBleadyeJobMerge({
+                proBleadyeJobFk: this.form.bleadyeJobId,
+              }).then((res) => {
+                // 判断 new list length > old list length ?
+                if (arr.length < res.data.length) {
+                  res.data.forEach((item, i) => {
+                    if (i <= arr.length - 1) {
+                      // 更新缸号
+                      item.isBase = i == 0 ? true : false;
+                      if (arr[i].indexOf(":") != -1) {
+                        item.proBleadyeRunJobFk = arr[i].split(":")[1]; // 更新运转单号
+                        item.vatNo = arr[i].split(":")[0];
+                      } else {
+                        item.vatNo = arr[i];
+                      }
+                      updateBleadyeJobMerge(item).then((updateRes) => {});
+                    } else {
+                      // 删除多余的数据
+                      delBleadyeJobMerge(item.mergeVatId).then((delRes) => {});
+                    }
+                    if (i == res.data.length - 1) {
+                      getBleadyeJobMerge({
+                        proBleadyeJobFk: this.form.bleadyeJobId,
+                      }).then((newRes) => {
+                        if (newRes.data.length) {
+                          // 获取本缸重量
+                          getRevolveList({ vatNo: this.form.vatNo }).then(
+                            (revolveRes) => {
+                              if (revolveRes.data.length) {
+                                this.form.clothWeight =
+                                  revolveRes.data[0].dyeClothWeight;
+                              } else {
+                                this.form.clothWeight = 0;
+                              }
+                              newRes.data.forEach((revolveList, j) => {
+                                if (revolveList.vatNo != this.form.vatNo) {
+                                  getRevolveList({
+                                    runJobId: revolveList.proBleadyeRunJobFk,
+                                  }).then((revolveRes1) => {
+                                    if (revolveRes1.data.length) {
+                                      this.form.clothWeight +=
+                                        revolveRes1.data[0].dyeClothWeight;
+                                      if (j == newRes.data.length - 1) {
+                                        this.save(done);
+                                        // update(this.form).then();
                                       }
-                                      updateTechItem(items).then();
-                                    } else {
-                                      updateTechItem(items).then();
                                     }
                                   });
-                                });
+                                } else {
+                                  if (j == newRes.data.length - 1) {
+                                    this.save(done);
+                                  }
+                                }
                               });
-                              if (i == res.data.records.length - 1) {
-                                setTimeout(() => {
-                                  this.wLoading = false;
-                                  this.$emit("refresh");
-                                  this.$tip.success(this.$t("public.bccg"));
-                                  done();
-                                }, 500);
+                            }
+                          );
+                        } else {
+                          // 获取运转单的重量
+                          getRevolveList({ vatNo: this.form.vatNo }).then(
+                            (revolveRes) => {
+                              if (revolveRes.data.length) {
+                                this.form.clothWeight =
+                                  revolveRes.data[0].dyeClothWeight;
+
+                                this.save(done);
                               }
-                            });
-                          } else {
-                            setTimeout(() => {
-                              this.wLoading = false;
-                              this.$emit("refresh");
-                              this.$tip.success(this.$t("public.bccg"));
-                              done();
-                            }, 200);
-                          }
-                        });
-                      } else {
-                        this.wLoading = false;
-                        done();
-                        this.$tip.error(this.$t("public.bcsb"));
-                      }
-                    });
-                    this.form.mergVatNo = this.form.mergVatNo.split("/");
-                  })
-                  .catch((err) => {
-                    this.form.clothWeight = this.oldW;
-                    this.form.mergVatNo = vat;
-                    update(this.form).then((res) => {
-                      if (res.data.code == 200) {
-                        this.oldW = this.form.clothWeight;
-
-                        setTimeout(() => {
-                          this.wLoading = false;
-                          this.$emit("refresh");
-                          this.$tip.success(this.$t("public.bccg"));
-
-                          done();
-                        }, 200);
-                      } else {
-                        this.wLoading = false;
-                        done();
-                        this.$tip.error(this.$t("public.bcsb"));
-                      }
-                    });
-                    this.form.mergVatNo = this.form.mergVatNo.split("/");
+                            }
+                          );
+                        }
+                      });
+                    }
                   });
-              } else {
-                update(this.form).then((res) => {
-                  if (res.data.code == 200) {
-                    this.oldW = this.form.clothWeight;
-                    setTimeout(() => {
-                      this.wLoading = false;
-                      this.$emit("refresh");
-                      this.$tip.success(this.$t("public.bccg"));
-                      done();
-                    }, 200);
-                  } else {
-                    this.wLoading = false;
-                    done();
-                    this.$tip.error(this.$t("public.bcsb"));
-                  }
-                  this.form.mergVatNo = this.form.mergVatNo.split("/");
-                });
-              }
-            } else {
-              // add
-              this.form.createTime = this.$getNowTime("datetime");
-              let data = JSON.parse(JSON.stringify(this.form));
-              data.project = "";
-              data.test = "";
-              data.wash = "";
-              data.dye = "";
-              add(data).then((res) => {
-                if (res.data.code == 200) {
-                  this.oldW = this.form.clothWeight;
-                  this.form.bleadyeJobId = res.data.data;
-                  this.addOtherData();
-                  // getTestList({
-                  //   proBleadyeRunJobFk: val.runJobId,
-                  // }).then((res) => {
-                  //   console.log("test", res);
-                  // });
-                  if (this.revolve.runJobId) {
-                    // 新增生产项目
-                    getItem({
-                      proBleadyeRunJobFk: this.revolve.runJobId,
-                    }).then((pres) => {
-                      pres.data.forEach((item) => {
-                        item.proBleadyeJobFk = res.data.data;
-                        addProject(item).then((pro) => {});
-                      });
-                    });
-                    // 新增测试要求
-                    getTestList({
-                      proBleadyeRunJobFk: this.revolve.runJobId,
-                    }).then((pres) => {
-                      pres.data.forEach((item) => {
-                        item.proBleadyeJobFk = res.data.data;
-                        addTest(item).then((pro) => {});
-                      });
-                    });
-                  }
                 } else {
-                  this.$tip.error(this.$t("public.bcsb"));
-                  this.wLoading = false;
+                  arr.forEach((item, i) => {
+                    if (i <= res.data.length - 1) {
+                      let data = res.data[i];
+                      //  更新数据
+                      // data.isBase = i == 0?true:false
+                      if (item.indexOf(":") != -1) {
+                        data.proBleadyeRunJobFk = item.split(":")[1]; // 更新运转单号
+                        data.vatNo = item.split(":")[0];
+                      } else {
+                        data.vatNo = item;
+                      }
+                      updateBleadyeJobMerge(data).then((updateRes) => {
+                        if (i == arr.length - 1) {
+                          this.saveWeight(done);
+                        }
+                      });
+                    } else {
+                      // 新增数据
+                      let data = {};
+                      data.isBase = i == 0 ? true : false;
+                      data.proBleadyeRunJobFk = item.split(":")[1];
+                      data.proBleadyeJobFk = this.form.bleadyeJobId;
+                      data.vatNo = item.split(":")[0];
+                      addBleadyeJobMerge(data).then((delRes) => {
+                        if (i == arr.length - 1) {
+                          this.saveWeight(done);
+                        }
+                      });
+                    }
+                  });
                 }
-                done();
+              });
+            } else {
+              //  delete merge list
+              getBleadyeJobMerge({
+                proBleadyeJobFk: this.form.bleadyeJobId,
+              }).then((res) => {
+                res.data.forEach((item, i) => {
+                  delBleadyeJobMerge(item.mergeVatId).then((delRes) => {});
+                });
+              });
+              getRevolveList({ vatNo: this.form.vatNo }).then((revolveRes) => {
+                if (revolveRes.data.length) {
+                  this.form.clothWeight = revolveRes.data[0].dyeClothWeight;
+                } else {
+                  this.form.clothWeight = 0;
+                }
+                this.save(done);
               });
             }
-            // if (this.form.mergVatNo) {
-
-            // }
           } catch (error) {
             console.log(error);
             this.wLoading = false;
@@ -1204,6 +1170,262 @@ export default {
           return;
         }
       });
+    },
+    saveWeight(done) {
+      getBleadyeJobMerge({
+        proBleadyeJobFk: this.form.bleadyeJobId,
+      }).then((newRes) => {
+        if (newRes.data.length) {
+          // 获取本缸重量
+          getRevolveList({ vatNo: this.form.vatNo }).then((revolveRes) => {
+            if (revolveRes.data.length) {
+              this.form.clothWeight = revolveRes.data[0].dyeClothWeight;
+            } else {
+              this.form.clothWeight = 0;
+            }
+            newRes.data.forEach((revolveList, j) => {
+              if (revolveList.vatNo != this.form.vatNo) {
+                getRevolveList({
+                  runJobId: revolveList.proBleadyeRunJobFk,
+                }).then((revolveRes1) => {
+                  if (revolveRes1.data.length) {
+                    this.form.clothWeight += revolveRes1.data[0].dyeClothWeight;
+                    if (j == newRes.data.length - 1) {
+                      this.save(done);
+                    }
+                  }
+                });
+              } else {
+                if (i == newRes.data.length - 1) {
+                  this.save(done);
+                }
+              }
+            });
+          });
+        } else {
+          // 获取运转单的重量
+          getRevolveList({ vatNo: this.form.vatNo }).then((revolveRes) => {
+            if (revolveRes.data.length) {
+              this.form.clothWeight = revolveRes.data[0].dyeClothWeight;
+            }
+
+            this.save(done);
+          });
+        }
+      });
+    },
+    save(done) {
+      this.$nextTick(() => {
+        setTimeout(() => {
+          let vat = "";
+          if (this.form.mergVatNo) {
+            this.form.mergVatNo.forEach((item, i) => {
+              if (i == this.form.mergVatNo.length - 1) {
+                vat += item.split(":")[0];
+              } else {
+                vat += item.split(":")[0] + "/";
+              }
+            });
+          }
+          this.form.mergVatNo = vat;
+          if (this.form.bleadyeJobId) {
+            // update
+            this.form.upateTime = this.$getNowTime("datetime");
+
+            if (this.oldW != this.form.clothWeight) {
+              this.$tip
+                .cofirm(
+                  "检测到重量改变会影响生产工艺参数，是否确定修改重量?",
+                  this,
+                  {}
+                )
+                .then(() => {
+                  this.form.mergVatNo = vat;
+                  update(this.form).then((res) => {
+                    if (res.data.code == 200) {
+                      this.oldW = this.form.clothWeight;
+                      getTechargue({
+                        proBleadyeJobFk: this.form.bleadyeJobId,
+                        rows: 999,
+                        start: 1,
+                      }).then((res) => {
+                        if (res.data.records.length > 0) {
+                          res.data.records.forEach((item, i) => {
+                            item.totalWater = Number(
+                              (
+                                Number(this.form.clothWeight) *
+                                Number(item.liquorRatio)
+                              ).toFixed(2)
+                            );
+                            item.haltWater =
+                              item.totalWater -
+                              Number(item.shotgunWater) -
+                              Number(item.wetClothWater);
+                            updateTechargue(item).then((tech) => {
+                              getTechItem({
+                                proBleadyeJobTechargueFk: item.jobTechId,
+                                star: 1,
+                                rows: 999,
+                              }).then((resDtl) => {
+                                resDtl.data.records.forEach((items, j) => {
+                                  if (items.measureType) {
+                                    if (items.measureType.indexOf("%") != -1) {
+                                      items.useAmount = Number(
+                                        (
+                                          Number(items.formulaAmount) *
+                                          Number(this.form.clothWeight) *
+                                          0.01
+                                        ).toFixed(2)
+                                      );
+                                    } else if (
+                                      items.measureType.indexOf("g") != -1
+                                    ) {
+                                      items.useAmount =
+                                        items.formulaUnit == "KG"
+                                          ? Number(
+                                              (
+                                                Number(items.formulaAmount) *
+                                                Number(item.totalWater) *
+                                                0.001
+                                              ).toFixed(2)
+                                            )
+                                          : Number(
+                                              (
+                                                Number(items.formulaAmount) *
+                                                Number(item.totalWater)
+                                              ).toFixed(2)
+                                            );
+                                    }
+                                    updateTechItem(items).then();
+                                  } else {
+                                    updateTechItem(items).then();
+                                  }
+                                });
+                              });
+                            });
+                            if (i == res.data.records.length - 1) {
+                              setTimeout(() => {
+                                this.wLoading = false;
+                                this.$emit("refresh");
+                                this.$tip.success(this.$t("public.bccg"));
+                                done();
+                              }, 500);
+                            }
+                          });
+                        } else {
+                          setTimeout(() => {
+                            this.wLoading = false;
+                            this.$emit("refresh");
+                            this.$tip.success(this.$t("public.bccg"));
+                            done();
+                          }, 200);
+                        }
+                      });
+                    } else {
+                      this.wLoading = false;
+                      done();
+                      this.$tip.error(this.$t("public.bcsb"));
+                    }
+                  });
+                  if (this.form.mergVatNo) {
+                    this.form.mergVatNo = this.form.mergVatNo.split("/");
+                  }
+                })
+                .catch((err) => {
+                  this.form.clothWeight = this.oldW;
+                  this.form.mergVatNo = vat;
+                  update(this.form).then((res) => {
+                    if (res.data.code == 200) {
+                      this.oldW = this.form.clothWeight;
+
+                      setTimeout(() => {
+                        this.wLoading = false;
+                        this.$emit("refresh");
+                        this.$tip.success(this.$t("public.bccg"));
+
+                        done();
+                      }, 200);
+                    } else {
+                      this.wLoading = false;
+                      done();
+                      this.$tip.error(this.$t("public.bcsb"));
+                    }
+                  });
+                  if (this.form.mergVatNo) {
+                    this.form.mergVatNo = this.form.mergVatNo.split("/");
+                  }
+                });
+            } else {
+              update(this.form).then((res) => {
+                if (res.data.code == 200) {
+                  this.oldW = this.form.clothWeight;
+                  setTimeout(() => {
+                    this.wLoading = false;
+                    this.$emit("refresh");
+                    this.$tip.success(this.$t("public.bccg"));
+                    done();
+                  }, 200);
+                } else {
+                  this.wLoading = false;
+                  done();
+                  this.$tip.error(this.$t("public.bcsb"));
+                }
+                if (this.form.mergVatNo) {
+                  this.form.mergVatNo = this.form.mergVatNo.split("/");
+                }
+              });
+            }
+          } else {
+            // add
+            this.form.createTime = this.$getNowTime("datetime");
+            let data = JSON.parse(JSON.stringify(this.form));
+            data.project = "";
+            data.test = "";
+            data.wash = "";
+            data.dye = "";
+            add(data).then((res) => {
+              if (res.data.code == 200) {
+                this.oldW = this.form.clothWeight;
+                this.form.bleadyeJobId = res.data.data;
+                this.addOtherData();
+                // getTestList({
+                //   proBleadyeRunJobFk: val.runJobId,
+                // }).then((res) => {
+                //   console.log("test", res);
+                // });
+                if (this.revolve.runJobId) {
+                  // 新增生产项目
+                  getItem({
+                    proBleadyeRunJobFk: this.revolve.runJobId,
+                  }).then((pres) => {
+                    pres.data.forEach((item) => {
+                      item.proBleadyeJobFk = res.data.data;
+                      addProject(item).then((pro) => {});
+                    });
+                  });
+                  // 新增测试要求
+                  getTestList({
+                    proBleadyeRunJobFk: this.revolve.runJobId,
+                  }).then((pres) => {
+                    pres.data.forEach((item) => {
+                      item.proBleadyeJobFk = res.data.data;
+                      addTest(item).then((pro) => {});
+                    });
+                  });
+                }
+              } else {
+                this.$tip.error(this.$t("public.bcsb"));
+                this.wLoading = false;
+              }
+              done();
+            });
+          }
+        }, 500);
+      });
+
+      // if (this.form.mergVatNo) {
+
+      // }
     },
     addOtherData() {
       if (this.copyCtr) {
@@ -2077,6 +2299,7 @@ export default {
   },
   created() {},
   mounted() {
+    this.vatLoading = true;
     this.getData();
   },
   beforeDestroy() {},

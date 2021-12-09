@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-11-13 16:36:10
+ * @LastEditTime: 2021-12-07 16:49:48
  * @Description:
 -->
 <template>
@@ -115,7 +115,8 @@
           @row-dblclick="handleRowDBLClick"
           @current-row-change="cellClick"
           @selection-change="selectionChange"
-        ></avue-crud>
+        >
+        </avue-crud>
       </el-row>
       <el-dialog
         id="colorMng_Dlg"
@@ -181,6 +182,7 @@ export default {
       form: {},
       crudOp: mainCrud(this),
       crud: [],
+
       page: {
         pageSize: 20,
         currentPage: 1,

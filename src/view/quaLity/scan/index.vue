@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-11-06 09:16:33
+ * @LastEditTime: 2021-11-30 09:54:41
  * @Description: 
 -->
 <template>
@@ -501,9 +501,16 @@ export default {
         // gramWeight = Number(this.form.realGramWeight);
         // } else {
         gramWeight =
-          this.crud.gramWeight.indexOf("(") != -1
-            ? Number(this.crud.gramWeight.split("(")[0]) / 1000
-            : Number(this.crud.gramWeight) / 1000;
+          typeof this.crud.gramWeight === "number"
+            ? Number(this.crud.gramWeight) / 1000
+            : this.crud.gramWeight
+            ? Number(this.crud.gramWeight.match(/\d+/g)[0]) / 1000
+            : 0;
+
+        // this.crud.gramWeight.match(/\d+/g);
+        // this.crud.gramWeight.indexOf("(") != -1
+        //   ? Number(this.crud.gramWeight.match(/\d+/g)[0]) / 1000
+        //   : Number(this.crud.gramWeight) / 1000;
         // }
 
         // if (this.form.widthUnit == "INCH") {
@@ -511,9 +518,14 @@ export default {
         //   breadth = Number(this.form.clothWidth);
         // } else {
         breadth =
-          this.crud.breadth.indexOf("(") != -1
-            ? (Number(this.crud.breadth.split("(")[0]) * 2.54) / 100
-            : (Number(this.crud.breadth) * 2.54) / 100;
+          typeof this.crud.breadth === "number"
+            ? Number(this.crud.breadth) * 0.254
+            : this.crud.breadth
+            ? Number(this.crud.breadth.match(/\d+/g)[0]) * 0.254
+            : 0;
+        // this.crud.breadth.indexOf("(") != -1
+        //   ? (Number(this.crud.breadth.match(/\d+/g)[0]) * 2.54) / 100
+        //   : (Number(this.crud.breadth) * 2.54) / 100;
         // }
 
         let weight = this.crud.realWeight;
@@ -521,7 +533,6 @@ export default {
         //   weight = weight * 2.20462262;
         // }
         // gramWeight 单位为 g/m , breadth 单位为 inch 需要 * 2.54 转换成cm / 100 转换成 m
-
         this.crud.clothLengthValue = Number(
           (weight / gramWeight / breadth).toFixed(1)
         );

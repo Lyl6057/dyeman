@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-11-18 10:00:14
+ * @LastEditTime: 2021-11-29 09:07:33
  * @Description:
  */
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
@@ -99,6 +99,15 @@ export function mainCrud(_this) {
     page: true,
     labelWidth: 130,
     selection: true,
+    showSummary: true,
+    sumColumnList: [
+      {
+        label: "重量",
+        name: "clothWeight",
+        type: "sum",
+        decimals: 1
+      }
+    ],
     column: [
       {
         label: "#",
@@ -186,7 +195,16 @@ export function mainCrud(_this) {
           }
         ]
       },
-
+      {
+        label: "合计数量",
+        tip: "Tổng cộng(KG)",
+        prop: "clothWeight",
+        width: 150,
+        span: 6,
+        type: "number",
+        align: "right",
+        placeholder: " "
+      },
       {
         label: "客戶",
         tip: "Khách hàng",
@@ -313,16 +331,7 @@ export function mainCrud(_this) {
         span: 12,
         hide: true
       },
-      {
-        label: "合计数量",
-        tip: "Tổng cộng(KG)",
-        prop: "clothWeight",
-        width: 100,
-        span: 6,
-        type: "number",
-        align: "right",
-        placeholder: " "
-      },
+
       {
         label: "疋數",
         prop: "pidCount",

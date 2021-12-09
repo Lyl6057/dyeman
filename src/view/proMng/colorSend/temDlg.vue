@@ -220,16 +220,16 @@ export default {
         this.form.factoryColor = val.colorCode;
         this.form.colorName = val.colorName;
         this.form.sideFabWidth = val.breadthBorder
-          ? Number(val.breadthBorder.split("(")[0])
+          ? Number(val.breadthBorder.match(/\d+/g)[0])
           : "";
         this.form.realFabWidth = val.breadthActual
-          ? Number(val.breadthActual.split("(")[0])
+          ? Number(val.breadthActual.match(/\d+/g)[0])
           : "";
         this.form.beforeGramWeight = val.gramWeightBefor
-          ? Number(val.gramWeightBefor.split("(")[0])
+          ? Number(val.gramWeightBefor.match(/\d+/g)[0])
           : "";
         this.form.afterGramWeight = val.gramWeightAfter
-          ? Number(val.gramWeightAfter.split("(")[0])
+          ? Number(val.gramWeightAfter.match(/\d+/g)[0])
           : "";
       } else {
         this.form.colorName = val.colorName;

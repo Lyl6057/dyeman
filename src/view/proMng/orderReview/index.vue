@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-11-18 10:36:36
+ * @LastEditTime: 2021-11-29 09:40:37
  * @Description:
 -->
 <template>
@@ -14,7 +14,7 @@
     <el-tabs v-model="activeName" type="border-card" @tab-click="query">
       <el-tab-pane label="运转单" name="first">
         <el-row class="btnList">
-          <!-- <el-button
+          <el-button
             type="success"
             @click="pass"
             v-if="form.auditState === 0"
@@ -27,7 +27,7 @@
             v-if="form.auditState === 1"
             :disabled="!selectList.length"
             >取消审核</el-button
-          > -->
+          >
           <el-button
             type="primary"
             @click="handleRowDBLClick(detail)"
@@ -133,11 +133,19 @@
 </template>
 <script>
 import { mainForm, mainCrud, mainWForm, mainWCrud } from "./data";
-import { webSocket } from "@/config/index.js";
+import {
+  getDye,
+  updateDye,
+  addDye,
+  getItem,
+  addDyeProject,
+  getTest,
+  addDyeTest,
+} from "../revolve/api";
 import { get, update, getW, updateW } from "./api";
-import { baseCodeSupply, baseCodeSupplyEx } from "@/api/index";
 import revolve from "../revolve/temDlg.vue";
 import weave from "../print/proWeaveJob/temDlg.vue";
+import { addWash, addDyes, getTechargueList } from "../print/dyeing/api";
 export default {
   name: "",
   components: {
@@ -192,11 +200,18 @@ export default {
       this.wLoading = true;
       this.detail = {};
       if (this.activeName == "first") {
-        // for (let key in this.form) {
-        //   if (!this.form[key] && key != "auditState") {
-        //     delete this.form[key];
-        //   }
-        // }
+        for (let key in this.form) {
+          if (
+            !this.form[key] &&
+            key != "auditState" &&
+            key != "vatNo" &&
+            key != "weaveJobCode" &&
+            key != "salPoNo" &&
+            key != "colorCode"
+          ) {
+            delete this.form[key];
+          }
+        }
         if (this.form.vatNo.indexOf("%") == -1) {
           this.form.vatNo = "!^%" + (this.form.vatNo ? this.form.vatNo : "");
         }
@@ -214,7 +229,8 @@ export default {
           Object.assign(this.form, {
             rows: this.page.pageSize,
             start: this.page.currentPage,
-            isWorkOut: 0,
+            pages: this.page.currentPage,
+            // isWorkOut: 0,
             runState: 1,
           })
         ).then((res) => {
@@ -309,6 +325,53 @@ export default {
               item.auditState = 1;
               item.modifiDate = this.$getNowTime("datetime");
               update(item).then((res) => {
+                let data = JSON.parse(JSON.stringify(item));
+                data.proBleadyeRunJobFk = data.runJobId;
+                data.test = "";
+                data.item = "";
+                // data.mergVatNo = data.mergVatNo.join("/");
+                // data.compLightSource = data.compLightSource.join(",");
+                data.dyeJarCount = Number(data.dyeVatType || 0);
+                Object.keys(data).forEach((item) => {
+                  if (this.isEmpty(data[item])) {
+                    delete data[item];
+                  }
+                });
+                data.poAmountLb = (data.poAmountKg * 2.2046226).toFixed(2);
+                getDye({
+                  vatNo: data.vatNo,
+                }).then((dye) => {
+                  if (dye.data.length) {
+                    data.bleadyeJobId = dye.data[0].bleadyeJobId;
+                    // 存在数据,更新
+                    updateDye(data).then((udye) => {
+                      this.form.auditState = 1;
+                    });
+                  } else {
+                    // 不存在数据，新增
+                    addDye(data).then((adye) => {
+                      this.addOtherData(adye.data.data);
+                      // 新增生产项目
+                      getItem({
+                        proBleadyeRunJobFk: data.runJobId,
+                      }).then((pres) => {
+                        pres.data.forEach((item) => {
+                          item.proBleadyeJobFk = adye.data.data;
+                          addDyeProject(item).then((pro) => {});
+                        });
+                      });
+                      // 新增测试要求
+                      getTest({
+                        proBleadyeRunJobFk: data.runJobId,
+                      }).then((pres) => {
+                        pres.data.forEach((item) => {
+                          item.proBleadyeJobFk = adye.data.data;
+                          addDyeTest(item).then((pro) => {});
+                        });
+                      });
+                    });
+                  }
+                });
                 if (i == this.selectList.length - 1) {
                   this.wLoading = false;
                   this.$tip.success("审核成功!");
@@ -367,6 +430,51 @@ export default {
           this.$tip.warning(this.$t("public.qxcz"));
         });
     },
+    isEmpty(obj) {
+      if (
+        obj === "undefined" ||
+        typeof obj === "undefined" ||
+        obj === null ||
+        obj === "" ||
+        obj === 0
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    addOtherData(dyeId) {
+      getTechargueList()
+        .then((res) => {
+          // 獲取全部基礎工藝
+          let washIndex = 1,
+            dyeIndex = 1,
+            testIndex = 1;
+          res.data.forEach((item, index) => {
+            if (item.paramType === "wash") {
+              // 長車
+              addWash({
+                itemId: item.paramKey,
+                itemName: item.paramName,
+                proBleadyeJobFk: dyeId,
+                sn: washIndex++,
+              }).then((res) => {});
+            } else if (item.paramType === "dyevat") {
+              // 染缸
+              addDyes({
+                vatParamCode: item.paramKey,
+                vatParamName: item.paramName,
+                dataStyle: item.paramValueType,
+                sn: dyeIndex++,
+                proBleadyeJobFk: dyeId,
+              }).then((res) => {});
+            }
+          });
+        })
+        .catch((e) => {
+          this.wLoading = false;
+        });
+    },
     cellClick(val) {
       this.detail = val;
     },
@@ -378,7 +486,11 @@ export default {
       }
     },
   },
-  updated() {},
+  updated() {
+    this.$nextTick(() => {
+      this.$refs.crud.doLayout();
+    });
+  },
   created() {
     this.form.auditState = 0;
     this.wform.auditState = 0;
@@ -413,6 +525,6 @@ export default {
 }
 
 .avue-crud__dialog .el-transfer-panel__body {
-  height: 86% !important;
+  height: 80% !important;
 }
 </style>

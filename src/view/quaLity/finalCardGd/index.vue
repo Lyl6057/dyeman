@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-08-07 07:57:44
  * @LastEditors: Lyl
- * @LastEditTime: 2021-11-18 16:41:30
+ * @LastEditTime: 2021-11-30 09:52:38
  * @Description: 
 -->
 <template>
@@ -158,6 +158,7 @@ export default {
       form: {
         realGramWeight: 0,
         clothWidth: 0,
+        sideBreadthValue: 0,
         netWeight: 1,
       },
       crudOp: mainCrud(this),
@@ -263,29 +264,29 @@ export default {
               // 洗前
               this.form.gramWeight = val.gramWeightBefor;
               this.form.gramWeightValue = this.form.gramWeight
-                ? Number(this.form.gramWeight.split("(")[0])
+                ? Number(this.form.gramWeight.match(/\d+/g)[0])
                 : "";
 
               // 洗后
               this.form.afterWeightDsp = val.gramWeightAfter;
               this.form.afterWeightValue = this.form.gramWeightAfter
-                ? Number(this.form.gramWeightAfter.split("(")[0])
+                ? Number(this.form.gramWeightAfter.match(/\d+/g)[0])
                 : "";
               this.form.realGramWeight =
                 this.form.gramWeightValue || this.form.afterWeightValue || 0;
 
-              this.form.clothWidth = this.form.breadth
-                ? Number(this.form.breadth.split("(")[0]) || 0
+              this.form.sideBreadthValue = this.form.breadth
+                ? Number(this.form.breadth.match(/\d+/g)[0]) || 0
                 : 0;
 
               this.form.sideBreadth = this.form.breadthBorder || "";
 
-              this.form.sideBreadthValue =
-                this.form.sideBreadth.indexOf("(") != -1
-                  ? Number(this.form.breadthBorder.split("(")[0]) || 0
-                  : Number(this.form.breadthBorder || 0);
+              // this.form.sideBreadthValue =
+              //   this.form.sideBreadth.indexOf("(") != -1
+              //     ? Number(this.form.breadthBorder.match(/\d+/g)[0]) || 0
+              //     : Number(this.form.breadthBorder || 0);
 
-              this.form.breadthValue = this.form.clothWidth;
+              this.form.breadthValue = this.form.sideBreadthValue;
               this.form.fabName = val.fabName;
               this.form.guestComponents = val.fabElements;
               // this.form.netWeight = val.clothWeight;
@@ -645,7 +646,7 @@ export default {
     codeLength() {
       if (
         !this.form.realGramWeight ||
-        !this.form.clothWidth ||
+        !this.form.actualSideBreadth ||
         !this.form.netWeight ||
         this.form.realGramWeight == 0
       ) {
@@ -662,9 +663,9 @@ export default {
 
       if (this.form.widthUnit != "INCH") {
         // 默认是 inch
-        breadth = Number(this.form.clothWidth / 100);
+        breadth = Number(this.form.actualSideBreadth / 100);
       } else {
-        breadth = Number((this.form.clothWidth * 2.54) / 100);
+        breadth = Number((this.form.actualSideBreadth * 2.54) / 100);
       }
 
       let weight = this.form.netWeight;

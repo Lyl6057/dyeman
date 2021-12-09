@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-11-10 08:00:40
+ * @LastEditTime: 2021-12-08 09:30:48
  * @Description:
 -->
 <template>
@@ -87,7 +87,30 @@
                 :option="formOp"
                 v-model="form"
                 style="margin-top: 5px"
-              ></avue-form>
+              >
+                <template slot-scope="scope" slot="weaveJobCode">
+                  <el-select
+                    v-model="form.weaveJobCode"
+                    filterable
+                    remote
+                    reserve-keyword
+                    clearable
+                    default-first-option
+                    placeholder="请输入织单号"
+                    :remote-method="remoteMethod"
+                    :loading="vatLoading"
+                    @change="codeChange"
+                  >
+                    <el-option
+                      v-for="item in options"
+                      :key="item.weaveJobCode"
+                      :label="item.weaveJobCode"
+                      :value="item.weaveJobCode"
+                    >
+                    </el-option>
+                  </el-select>
+                </template>
+              </avue-form>
               <el-row>
                 <el-col :span="14">
                   <view-container title="测试标准 Yêu cầu kiểm tra">
@@ -219,6 +242,7 @@ import {
   getDye,
   updateDye,
   addDye,
+  getWeave,
 } from "./api";
 export default {
   name: "",
@@ -243,6 +267,7 @@ export default {
         forClothAgainstHair: false,
         packGw: false,
         packNw: false,
+        firstOrOther: "2",
       },
       page: {
         pageSize: 20,
@@ -278,6 +303,8 @@ export default {
       choosebfData: {},
       pdfDlg: false,
       pdfUrl: "",
+      vatLoading: false,
+      options: [],
     };
   },
   watch: {
@@ -287,6 +314,97 @@ export default {
     // },
   },
   methods: {
+    remoteMethod(val) {
+      this.vatLoading = true;
+      getWeave({
+        weaveJobCode: "!^%" + val,
+        rows: 10,
+        start: 1,
+        isWorkOut: 0,
+      }).then((res) => {
+        this.options = res.data.records;
+        this.vatLoading = false;
+        this.$nextTick(() => {
+          if (res.data.records.length == 1) {
+            this.form.weaveJobCode = res.data.records[0].weaveJobCode;
+            setTimeout(() => {
+              this.codeChange();
+            }, 200);
+          }
+        });
+      });
+    },
+    codeChange() {
+      if (!this.form.weaveJobCode) {
+        return;
+      }
+      this.wLoading = true;
+      getWeave({
+        weaveJobCode: this.form.weaveJobCode,
+        isWorkOut: 0,
+        rows: 10,
+        start: 1,
+      }).then((res) => {
+        if (res.data.records.length > 0) {
+          let item = res.data.records[0];
+          item.fabName = item.fabricDesc;
+          item.breadthActual = item.breadth;
+          item.gramWeightBefor = item.gramWeight;
+          item.gramWeightAfter = isNaN(item.gramWeight) ? 0 : item.gramWeight;
+          item.shrinkLenth = item.verticalShrink;
+          item.shrinkWidth = item.horizonShrink;
+          item.clothWeight = isNaN(item.amount) ? 0 : item.amount;
+          item.fabElements = item.fiberComp;
+          item.poAmountKg = item.clothWeight;
+          item.needleDist = item.guage;
+          this.form = item;
+          // this.form.custPoNo = item.custPoNo;
+          this.form.fabricCode = item.custFabricCode;
+          this.form.auditState = 0;
+          this.form.yarnCard = "";
+          this.form.yarnNumber = "";
+          this.form.yarnCylinder = "";
+          // this.form.breadthUnit = this.form.breadth.replace(/[^a-z]+/gi, "");
+          // this.form.breadth = Number(this.form.breadth.replace(/[^0-9]/gi, ""));
+          this.form.bf = [];
+          getGroup({
+            proWeaveJobFk: item.weaveJobId,
+          }).then((res) => {
+            if (res.data.length > 0) {
+              getYarn({ proWeaveJobGroupFk: res.data[0].groupId }).then(
+                (yarn) => {
+                  if (yarn.data.length > 1) {
+                    let yIndex = 1;
+                    yarn.data.forEach((item, i) => {
+                      if (item.yarnBrand) {
+                        this.form.yarnCard +=
+                          yIndex + "." + item.yarnBrand + " ";
+                      }
+                      if (item.yarnBatch) {
+                        this.form.yarnNumber +=
+                          yIndex + "." + item.yarnBatch + " ";
+                      }
+                      if (item.factoryYarnBatch) {
+                        this.form.yarnCylinder +=
+                          yIndex + "." + item.factoryYarnBatch + " ";
+                      }
+                      yIndex++;
+                    });
+                  } else if (yarn.data.length == 1) {
+                    this.form.yarnCard += yarn.data[0].yarnBrand;
+                    this.form.yarnNumber += yarn.data[0].yarnBatch;
+                    this.form.yarnCylinder += yarn.data[0].factoryYarnBatch;
+                  }
+                }
+              );
+            }
+          });
+        }
+        setTimeout(() => {
+          this.wLoading = false;
+        }, 500);
+      });
+    },
     query() {
       get({
         rows: 10,

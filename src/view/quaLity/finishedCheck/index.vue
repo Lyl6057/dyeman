@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-11-18 16:49:53
+ * @LastEditTime: 2021-11-24 16:12:53
  * @Description:
 -->
 <template>
@@ -29,6 +29,9 @@
           this.$t("public.query")
         }}</el-button>
         <el-button type="primary" @click="outExcel">导出</el-button>
+        <el-button type="primary" @click="print" :disabled="!selectList.length"
+          >打印</el-button
+        >
       </el-row>
       <el-row class="formBox">
         <avue-form ref="form" :option="formOp" v-model="form"> </avue-form>
@@ -167,6 +170,19 @@ export default {
         })
         .catch(() => {});
     },
+    print() {
+      if (this.prsocket.readyState == 3) {
+        this.setCz();
+        // this.$tip.error("打印服务离线，请启动服务!");
+        return;
+      }
+      this.selectList.forEach((item, i) => {
+        this.prsocket.send("finishCard:" + item.cardId);
+        if (i == this.selectList.length - 1) {
+          this.$tip.success("已发送全部打印请求!");
+        }
+      });
+    },
     outExcel() {
       this.$refs.crud.rowExcel();
     },
@@ -289,6 +305,11 @@ export default {
       }
       return sums;
     },
+    setCz() {
+      let _this = this;
+      webSocket.setPrint(this);
+      _this.prsocket.onmessage = function (e) {};
+    },
   },
   updated() {
     this.$nextTick(() => {
@@ -296,7 +317,9 @@ export default {
     });
   },
   created() {},
-  mounted() {},
+  mounted() {
+    this.setCz();
+  },
   beforeDestroy() {},
 };
 </script>

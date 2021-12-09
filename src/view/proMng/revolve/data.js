@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-11-13 16:13:08
+ * @LastEditTime: 2021-12-08 16:15:28
  * @Description:
  */
 
@@ -143,6 +143,30 @@ export function mainCrud(_this) {
         align: "center",
         display: false
       },
+
+      {
+        label: "生產單號",
+        prop: "weaveJobCode",
+        tip: "MS sản xuất bp dệt",
+        overHidden: true,
+        width: 180,
+        span: 6,
+        disabled: false,
+        formslot: true,
+        placeholder: "請選擇織造生產單號",
+        rules: [
+          {
+            required: true,
+            message: "请输入生產單號",
+            trigger: "blur"
+          }
+        ]
+
+        // click: () => {
+        //   _this.choiceTle = "选择织造通知单";
+        //   _this.choiceV = true;
+        // }
+      },
       {
         label: "缸號",
         prop: "vatNo",
@@ -159,27 +183,6 @@ export function mainCrud(_this) {
             trigger: "blur"
           }
         ]
-      },
-      {
-        label: "生產單號",
-        prop: "weaveJobCode",
-        tip: "MS sản xuất bp dệt",
-        overHidden: true,
-        width: 180,
-        span: 6,
-        disabled: false,
-        placeholder: "請選擇織造生產單號",
-        rules: [
-          {
-            required: true,
-            message: "请输入生產單號",
-            trigger: "blur"
-          }
-        ],
-        click: () => {
-          _this.choiceTle = "选择织造通知单";
-          _this.choiceV = true;
-        }
       },
       {
         label: "开單日期",
@@ -303,26 +306,7 @@ export function mainCrud(_this) {
         overHidden: true,
         placeholder: " "
       },
-      {
-        label: "批号",
-        prop: "yarnBatchNo",
-        tip: "Mã vải",
-        span: 6,
-        width: 120,
-        placeholder: " ",
-        disabled: false,
-        hide: true
-      },
-      {
-        label: "布类代码",
-        prop: "fabricCode",
-        tip: "Fabric Code",
-        span: 6,
-        width: 120,
-        placeholder: " ",
-        disabled: false,
-        hide: true
-      },
+
       {
         label: "訂單數量(kg)",
         tip: "Số lượng đơn hàng",
@@ -360,6 +344,46 @@ export function mainCrud(_this) {
         placeholder: " "
       },
       {
+        label: "染整数量",
+        prop: "dyeClothWeight",
+        tip: "Số lượng vải mộc",
+        span: 6,
+        width: 120,
+        placeholder: " ",
+        disabled: false,
+        hide: true
+      },
+      {
+        label: "疋數",
+        prop: "pidCount",
+        tip: "Cây",
+        width: 100,
+        span: 6,
+        type: "number",
+        align: "right",
+        placeholder: " "
+      },
+      {
+        label: "布类代码",
+        prop: "fabricCode",
+        tip: "Fabric Code",
+        span: 6,
+        width: 120,
+        placeholder: " ",
+        disabled: false,
+        hide: true
+      },
+      {
+        label: "布匹成份",
+        prop: "fabElements",
+        tip: "Thành phần",
+        placeholder: " ",
+        overHidden: true,
+        width: 250,
+        span: 6,
+        hide: true
+      },
+      {
         label: "布類描述",
         prop: "fabName",
         placeholder: " ",
@@ -374,40 +398,15 @@ export function mainCrud(_this) {
         //   trigger: "blur"
         // }],
       },
-
       {
-        label: "布匹成份",
-        prop: "fabElements",
-        tip: "Thành phần",
-        placeholder: " ",
-        overHidden: true,
-        width: 250,
-        span: 12,
-        hide: true
-      },
-      {
-        label: "织厂",
-        tip: "Xưởng dệt",
-        prop: "weaveFactoryName",
+        label: "批号",
+        prop: "yarnBatchNo",
+        tip: "Mã vải",
         span: 6,
         width: 120,
         placeholder: " ",
         disabled: false,
-        hide: true,
-        filterable: true,
-        allowCreate: true,
-        defaultFirstOption: true,
-        type: "select",
-        dicData: [
-          {
-            label: "S.POWER",
-            value: "S.POWER"
-          },
-          {
-            label: "Rise Sun",
-            value: "Rise Sun"
-          }
-        ]
+        hide: true
       },
 
       {
@@ -469,14 +468,28 @@ export function mainCrud(_this) {
         placeholder: " "
       },
       {
-        label: "疋數",
-        prop: "pidCount",
-        tip: "Cây",
-        width: 100,
+        label: "织厂",
+        tip: "Xưởng dệt",
+        prop: "weaveFactoryName",
         span: 6,
-        type: "number",
-        align: "right",
-        placeholder: " "
+        width: 120,
+        placeholder: " ",
+        disabled: false,
+        hide: true,
+        filterable: true,
+        allowCreate: true,
+        defaultFirstOption: true,
+        type: "select",
+        dicData: [
+          {
+            label: "S.POWER",
+            value: "S.POWER"
+          },
+          {
+            label: "Rise Sun",
+            value: "Rise Sun"
+          }
+        ]
       },
 
       {
@@ -687,7 +700,27 @@ export function mainCrud(_this) {
         width: 80,
         placeholder: " "
       },
-
+      {
+        label: "头缸/缸差",
+        // tip: "state",
+        disabled: false,
+        prop: "firstOrOther",
+        width: 120,
+        type: "switch",
+        dicData: [
+          {
+            label: "头缸",
+            value: "1"
+          },
+          {
+            label: "缸差",
+            value: "2"
+          }
+        ],
+        hide: false,
+        placeholder: " ",
+        span: 6
+      },
       {
         label: "运转单状态",
         tip: "state",
@@ -723,6 +756,8 @@ export function mainCrud(_this) {
         label: "备注",
         prop: "remark",
         tip: "Ghi chú",
+        type: "textarea",
+        minRows: 2,
         span: 24,
         hide: true,
         width: 80,
@@ -756,7 +791,7 @@ export function mainCrud(_this) {
             placeholder: " "
           },
           {
-            label: "洗前(克重)",
+            label: "洗前克重",
             tip: "Trọng lượng Giặt trước",
             prop: "gramWeightBefor",
             width: 120,
@@ -767,7 +802,7 @@ export function mainCrud(_this) {
           },
 
           {
-            label: "成品/洗後(克重)",
+            label: "洗後克重",
             tip: "Trọng lượng Giặt sau",
             prop: "gramWeightAfter",
             width: 120,

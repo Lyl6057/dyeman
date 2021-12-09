@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-11-11 09:41:19
+ * @LastEditTime: 2021-12-08 09:26:49
  * @Description:
  */
 
@@ -556,6 +556,23 @@ export function mainCrud(_this, audit) {
         tip: "Trọng lượng trước giặt"
       },
       // {
+      //   label: "单位",
+      //   prop: "gramWeightUnit",
+      //   labelWidth: 50,
+      //   hide: true,
+      //   disabled: audit
+      //     ? false
+      //     : _this.detail.auditState && !_this.isAdd
+      //     ? true
+      //     : false,
+      //   span: 2,
+      //   type: "select",
+      //   dicData: getDIC("sal_gramUnit"),
+      //   placeholder: " ",
+      //   defaultIndex: 1,
+      //   tip: "Trọng lượng trước giặt"
+      // },
+      // {
       //   label: "+",
       //   prop: "gramWeight+",
       //   labelWidth: 20,
@@ -593,7 +610,7 @@ export function mainCrud(_this, audit) {
 
       // {
       //   label: "单位",
-      //   prop: "gramWeightUnit",
+      //   prop: "kzycdw",
       //   labelWidth: 50,
       //   hide: true,
       //   disabled: audit
@@ -601,9 +618,9 @@ export function mainCrud(_this, audit) {
       //     : _this.detail.auditState && !_this.isAdd
       //     ? true
       //     : false,
-      //   span: 3,
+      //   span: 2,
       //   type: "select",
-      //   dicData: getDIC("sal_gramUnit"),
+      //   dicData: getDIC("Sal_specsUnit"),
       //   placeholder: " ",
       //   defaultIndex: 1,
       //   tip: "Trọng lượng trước giặt"
@@ -624,35 +641,22 @@ export function mainCrud(_this, audit) {
         // type: "number",
         placeholder: " "
       },
-      {
-        label: "橫縮",
-        prop: "horizonShrink",
-        tip: "Co rút ngang",
-        span: 6,
-        hide: true,
-        disabled: audit
-          ? false
-          : _this.detail.auditState && !_this.isAdd
-          ? true
-          : false,
-        width: 80,
-        placeholder: " "
-      },
-      {
-        label: "直縮",
-        prop: "verticalShrink",
-        tip: "Co rút thẳng",
-        width: 80,
-        span: 6,
-        hide: true,
-        disabled: audit
-          ? false
-          : _this.detail.auditState && !_this.isAdd
-          ? true
-          : false,
-        placeholder: " "
-      },
-
+      // {
+      //   label: "单位",
+      //   prop: "breadthUnit",
+      //   labelWidth: 50,
+      //   hide: true,
+      //   disabled: audit
+      //     ? false
+      //     : _this.detail.auditState && !_this.isAdd
+      //     ? true
+      //     : false,
+      //   span: 2,
+      //   type: "select",
+      //   dicData: getDIC("sal_breadthUnit"),
+      //   placeholder: " ",
+      //   tip: "Trọng lượng trước giặt"
+      // },
       // {
       //   label: "+",
       //   prop: "breadth+",
@@ -687,7 +691,7 @@ export function mainCrud(_this, audit) {
       // },
       // {
       //   label: "单位",
-      //   prop: "breadthUnit",
+      //   prop: "breadthAcceptUnit",
       //   labelWidth: 50,
       //   hide: true,
       //   disabled: audit
@@ -695,12 +699,41 @@ export function mainCrud(_this, audit) {
       //     : _this.detail.auditState && !_this.isAdd
       //     ? true
       //     : false,
-      //   span: 3,
+      //   span: 2,
       //   type: "select",
-      //   dicData: getDIC("sal_breadthUnit"),
+      //   dicData: getDIC("Sal_specsUnit"),
       //   placeholder: " ",
       //   tip: "Trọng lượng trước giặt"
       // },
+      {
+        label: "橫縮",
+        prop: "horizonShrink",
+        tip: "Co rút ngang",
+        span: 6,
+        hide: true,
+        disabled: audit
+          ? false
+          : _this.detail.auditState && !_this.isAdd
+          ? true
+          : false,
+        width: 80,
+        placeholder: " "
+      },
+      {
+        label: "直縮",
+        prop: "verticalShrink",
+        tip: "Co rút thẳng",
+        width: 80,
+        span: 6,
+        hide: true,
+        disabled: audit
+          ? false
+          : _this.detail.auditState && !_this.isAdd
+          ? true
+          : false,
+        placeholder: " "
+      },
+
       {
         label: "织单状态",
         tip: "state",

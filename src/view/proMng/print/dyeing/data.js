@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-10-30 09:25:50
+ * @LastEditTime: 2021-12-08 10:53:05
  * @Description:
  */
 
@@ -527,6 +527,7 @@ export function mainCrud(_this) {
         disabled: false,
         type: "select",
         dicData: [],
+        formslot: true,
         multiple: true,
         filterable: true,
         allowCreate: true,

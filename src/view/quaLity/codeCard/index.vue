@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-11-18 16:43:01
+ * @LastEditTime: 2021-12-04 11:18:22
  * @Description:
 -->
 <template>
@@ -33,12 +33,28 @@
           @click="outExcel(1)"
           style="margin-left: 10px"
         >
-          导出明细
+          导出QC明细
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item @click.native="outExcel(1)"
               >公斤(KG)</el-dropdown-item
             >
             <el-dropdown-item @click.native="outExcel(0)"
+              >磅(LBS)</el-dropdown-item
+            >
+          </el-dropdown-menu>
+        </el-dropdown>
+        <el-dropdown
+          split-button
+          type="primary"
+          @click="outQaExcel(1)"
+          style="margin-left: 10px"
+        >
+          导出QA明细
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item @click.native="outQaExcel(1)"
+              >公斤(KG)</el-dropdown-item
+            >
+            <el-dropdown-item @click.native="outQaExcel(0)"
               >磅(LBS)</el-dropdown-item
             >
           </el-dropdown-menu>
@@ -316,12 +332,14 @@ export default {
     codeLength() {
       if (
         !this.detail.realGramWeight ||
-        !this.detail.clothWidth ||
-        !this.detail.netWeight
+        !this.detail.actualSideBreadth ||
+        !this.detail.netWeight ||
+        this.detail.realGramWeight == 0
       ) {
         return;
       }
       let gramWeight, breadth;
+
       if (this.detail.gramWeightUnit == "Kg") {
         // 默认是 g
         gramWeight = Number(this.detail.realGramWeight);
@@ -331,9 +349,9 @@ export default {
 
       if (this.detail.widthUnit != "INCH") {
         // 默认是 inch
-        breadth = Number(this.detail.clothWidth / 100);
+        breadth = Number(this.detail.actualSideBreadth / 100);
       } else {
-        breadth = Number((this.detail.clothWidth * 2.54) / 100);
+        breadth = Number((this.detail.actualSideBreadth * 2.54) / 100);
       }
 
       let weight = this.detail.netWeight;
@@ -392,7 +410,7 @@ export default {
               : (this.output.clothWeight * 2.2046).toFixed(2);
             this.output.date = this.$getNowTime("date");
             this.output.type = type;
-            getNotPage({ vatNo: this.form.vatNo }).then((list) => {
+            getNotPage({ vatNo: this.form.vatNo, cardType: 1 }).then((list) => {
               let data = list.data.sort((a, b) => {
                 return a.pidNo - b.pidNo;
               });
@@ -442,6 +460,158 @@ export default {
                   return new Promise((resolve, reject) => {
                     let xlsxName =
                       "成品和胚布入仓明细表 " +
+                      _this.output.custCode +
+                      " bảng chi tiết nhập kho";
+                    saveAs(out, xlsxName + ".xlsx");
+                    resolve();
+                  });
+                };
+                outE().then((res) => {
+                  setTimeout(() => {
+                    this.$tip.success("导出成功!");
+                    this.wLoading = false;
+                    // this.getData();
+                  }, 1000);
+                });
+              });
+            });
+          } else {
+            this.wLoading = false;
+            this.$tip.warning("暂无此缸号数据!");
+            return;
+          }
+        });
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    async outQaExcel(type) {
+      if (!this.form.vatNo) {
+        this.$tip.warning("请先输入缸号!");
+        return;
+      }
+      this.wLoading = true;
+      try {
+        //获得Excel模板的buffer对象
+        const exlBuf = await JSZipUtils.getBinaryContent(
+          "./static/xlxsTemplate/finished_qa_warehousing.xlsx"
+        );
+        // Create a template
+        var template = new XlsxTemplate(exlBuf);
+        // Replacements take place on first sheet
+        var sheetNumber = "Sheet1";
+        // 处理数据
+        getRevolve({ vatNo: this.form.vatNo }).then((res) => {
+          if (res.data.length) {
+            this.output = res.data[0];
+            this.output.sumWeight = type
+              ? this.output.clothWeight
+              : (this.output.clothWeight * 2.2046).toFixed(2);
+            this.output.date = this.$getNowTime("date");
+            this.output.type = type;
+            getNotPage({ vatNo: this.form.vatNo, cardType: 1 }).then((list) => {
+              let data = list.data.sort((a, b) => {
+                return a.pidNo - b.pidNo;
+              });
+              if (!list.data.length) {
+                this.$tip.warning("暂无此缸号数据!");
+                this.wLoading = false;
+                return;
+              }
+              let arr1 = [],
+                arr2 = [],
+                arr3 = [];
+              this.output.unit = type ? "KG" : "LBS";
+              this.output.weightKg = 0;
+              this.output.weightLbs = 0;
+              this.output.pidSum = data.length;
+              let load1 = "",
+                load2 = "",
+                load3 = "",
+                h1 = "",
+                h2 = "",
+                h3 = "";
+              data.forEach((item, index) => {
+                this.output.weightKg += item.netWeight;
+                this.output.weightLbs += item.netWeightLbs;
+                item.weight = type ? item.netWeight : item.netWeightLbs;
+                if (item.pidNo <= 20) {
+                  if (
+                    item.storeLoadCode &&
+                    load1.indexOf(item.storeLoadCode) == -1
+                  ) {
+                    load1 += item.storeLoadCode + ",";
+                  }
+                  if (
+                    item.storeSiteCode &&
+                    h1.indexOf(item.storeSiteCode) == -1
+                  ) {
+                    h1 += item.storeSiteCode + ",";
+                  }
+                  arr1.push(item);
+                } else if (item.pidNo <= 40) {
+                  if (
+                    item.storeLoadCode &&
+                    load2.indexOf(item.storeLoadCode) == -1
+                  ) {
+                    load2 += item.storeLoadCode + ",";
+                  }
+                  if (
+                    item.storeSiteCode &&
+                    h2.indexOf(item.storeSiteCode) == -1
+                  ) {
+                    h2 += item.storeSiteCode + ",";
+                  }
+                  arr2.push(item);
+                } else if (item.pidNo <= 60) {
+                  if (
+                    item.storeLoadCode &&
+                    load3.indexOf(item.storeLoadCode) == -1
+                  ) {
+                    load3 += item.storeLoadCode + ",";
+                  }
+                  if (
+                    item.storeSiteCode &&
+                    h3.indexOf(item.storeSiteCode) == -1
+                  ) {
+                    h3 += item.storeSiteCode + ",";
+                  }
+                  arr3.push(item);
+                }
+              });
+              this.output.load1 = load1;
+              this.output.load2 = load2;
+              this.output.load3 = load3;
+              this.output.h1 = h1;
+              this.output.h2 = h2;
+              this.output.h3 = h3;
+              this.output.length1 = arr1.length;
+              this.output.length2 = arr2.length;
+              this.output.length3 = arr3.length;
+              this.output.num = data.length;
+              this.output.weightKg = this.output.weightKg.toFixed(2);
+              this.output.weightLbs = this.output.weightLbs.toFixed(2);
+              this.output.loss =
+                (
+                  (this.output.weightKg / this.output.clothWeight - 1) *
+                  100
+                ).toFixed(2) + "%";
+              console.log(this.output);
+              let values = {
+                output: this.output,
+                arr1,
+                arr2,
+                arr3,
+              };
+              this.$nextTick(() => {
+                template.substitute(sheetNumber, values);
+                // Get binary data.
+                var out = template.generate({ type: "blob" });
+                let _this = this;
+                let outE = function () {
+                  return new Promise((resolve, reject) => {
+                    let xlsxName =
+                      "入仓明细表 " +
                       _this.output.custCode +
                       " bảng chi tiết nhập kho";
                     saveAs(out, xlsxName + ".xlsx");

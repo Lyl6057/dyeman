@@ -102,6 +102,9 @@ import {
   hgylStockC,
   hgylStockF,
   getHgylStock,
+  salPoC,
+  salPoF,
+  getSalPo,
 } from "./data";
 
 export default {
@@ -205,6 +208,7 @@ export default {
         });
       } else {
         this.form.vatNo = "!^%" + (this.form.vatNo ? this.form.vatNo : "");
+        this.form.poNo = "!^%" + (this.form.poNo ? this.form.poNo : "");
         this.form.weaveJobCode =
           "%" + (this.form.weaveJobCode ? this.form.weaveJobCode : "");
         this.getData(
@@ -248,6 +252,9 @@ export default {
           });
           if (this.form.vatNo.indexOf("!^%") != -1) {
             this.form.vatNo = this.form.vatNo.split("!^%")[1] || "";
+          }
+          if (this.form.poNo.indexOf("!^%") != -1) {
+            this.form.poNo = this.form.poNo.split("!^%")[1] || "";
           }
           if (this.form.weaveJobCode.indexOf("%") != -1) {
             this.form.weaveJobCode = this.form.weaveJobCode.split("%")[1] || "";
@@ -299,6 +306,11 @@ export default {
   },
   created() {
     switch (this.choiceTle) {
+      case "选择订单资料":
+        this.choiceC = salPoC(this);
+        this.choiceF = salPoF(this);
+        this.getData = getSalPo;
+        break;
       case "选择化工原料库存":
         this.choiceC = hgylStockC(this);
         this.choiceF = hgylStockF(this);

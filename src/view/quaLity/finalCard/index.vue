@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-08-07 07:57:44
  * @LastEditors: Lyl
- * @LastEditTime: 2021-11-17 19:10:56
+ * @LastEditTime: 2021-12-09 18:56:11
  * @Description: 
 -->
 <template>
@@ -15,8 +15,13 @@
       <el-tab-pane label="成品码卡" class="queryForm">
         <el-row>
           <el-col :span="18">
-            <el-row class="formBox" style="margin-top: 15px">
-              <avue-form ref="form" :option="crudOp" v-model="form">
+            <el-row class="formBox">
+              <avue-form
+                ref="form"
+                :option="crudOp"
+                v-model="form"
+                style="height: calc(100vh - 165px); overflow: auto"
+              >
                 <template slot-scope="scope" slot="vatNo">
                   <el-select
                     v-model="form.vatNo"
@@ -156,8 +161,9 @@ export default {
     return {
       formOp: mainForm(this),
       form: {
-        realGramWeight: 0,
-        clothWidth: 0,
+        // realGramWeight: 0,
+        // clothWidth: 0,
+        // sideBreadthValue: 0,
         netWeight: 0,
       },
       crudOp: mainCrud(this),
@@ -191,27 +197,31 @@ export default {
     // this.setCz();
   },
   mounted() {
+    this.wLoading = true;
     getCheckItem().then((res) => {
       let data = res.data.filter((item) => {
         return item.checkType != 2;
       });
-      this.crudOp.column[this.crudOp.column.length - 1].dicData = data;
-    });
-    this.$nextTick(() => {
-      setTimeout(() => {
-        this.form.originPlace = "06";
-        this.form.qcTakeOut = 0;
-        this.form.pidNo = 1;
-        this.form.paperTube = 1;
-        this.form.widthUnit = "INCH";
-        this.form.gramWeightUnit = "g";
-        getTem({ isDefault: 1 }).then((res) => {
-          if (res.data.length) {
-            this.form.basePrintTemplateFk = res.data[0].tempId;
-            this.commonTem = res.data[0].tempId;
-          }
-        });
-      }, 200);
+      this.crudOp.group[1].column[
+        this.crudOp.group[1].column.length - 1
+      ].dicData = data;
+      this.$nextTick(() => {
+        setTimeout(() => {
+          this.form.originPlace = "06";
+          this.form.qcTakeOut = 0;
+          this.form.pidNo = 1;
+          this.form.paperTube = 1;
+          this.form.widthUnit = "INCH";
+          this.form.gramWeightUnit = "g";
+          getTem({ isDefault: 1 }).then((res) => {
+            if (res.data.length) {
+              this.form.basePrintTemplateFk = res.data[0].tempId;
+              this.commonTem = res.data[0].tempId;
+            }
+            this.wLoading = false;
+          });
+        }, 200);
+      });
     });
   },
   beforeDestroy() {
@@ -223,10 +233,12 @@ export default {
   methods: {
     remoteMethod(val) {
       this.vatLoading = true;
-      getBleadyeByPage({ vatNo: "!^%" + val }).then((res) => {
-        this.options = res.data.records;
-        this.vatLoading = false;
-      });
+      getBleadyeByPage({ vatNo: "!^%" + val, rows: 10, start: 1 }).then(
+        (res) => {
+          this.options = res.data.records;
+          this.vatLoading = false;
+        }
+      );
     },
     query() {
       this.wLoading = true;
@@ -244,6 +256,8 @@ export default {
           // 不存在记录
           getBleadye({
             vatNo: this.form.vatNo,
+            // rows: 9999,
+            // start: 1,
           }).then((res) => {
             if (res.data.length > 0) {
               let val = res.data[0];
@@ -254,34 +268,44 @@ export default {
               this.form.custBatchNo = val.yarnBatchNo;
               this.form.fabricName = val.fabName;
 
-              this.form.breadth = val.breadth;
               this.form.etNo = val.etSn;
               // 洗前
               this.form.gramWeight = val.gramWeightBefor;
               this.form.gramWeightValue = this.form.gramWeight
-                ? Number(this.form.gramWeight.split("(")[0])
+                ? Number(this.form.gramWeight.match(/\d+/g)[0])
                 : "";
 
               // 洗后
               this.form.afterWeightDsp = val.gramWeightAfter;
               this.form.afterWeightValue = this.form.gramWeightAfter
-                ? Number(this.form.gramWeightAfter.split("(")[0])
+                ? Number(this.form.gramWeightAfter.match(/\d+/g)[0])
                 : "";
               this.form.realGramWeight =
                 this.form.gramWeightValue || this.form.afterWeightValue || 0;
+              this.form.actualGramWeight = this.form.realGramWeight;
 
-              this.form.clothWidth = this.form.breadth
-                ? Number(this.form.breadth.split("(")[0]) || 0
+              this.form.breadth = val.breadth;
+              this.form.breadthValue = this.form.breadth
+                ? Number(this.form.breadth.match(/\d+/g)[0]) || 0
                 : 0;
-
+              this.form.clothWidth = this.form.breadthValue;
               this.form.sideBreadth = this.form.breadthBorder || "";
-
+              // this.sideBreadthValue = this.form.sideBreadth
               this.form.sideBreadthValue =
-                this.form.sideBreadth.indexOf("(") != -1
-                  ? Number(this.form.breadthBorder.split("(")[0]) || 0
-                  : Number(this.form.breadthBorder || 0);
+                typeof this.form.breadthBorder === "number"
+                  ? Number(this.form.breadthBorder || 0)
+                  : this.form.breadthBorder
+                  ? Number(this.form.breadthBorder.match(/\d+/g)[0])
+                  : 0;
+              if (!this.form.sideBreadthValue) {
+                this.form.sideBreadthValue = this.form.clothWidth + 2;
+              }
+              // this.form.sideBreadth.indexOf("(") != -1
+              //   ? Number(this.form.breadthBorder.match(/\d+/g)[0]) || 0
+              //   : Number(this.form.breadthBorder || 0);
 
-              this.form.breadthValue = this.form.clothWidth;
+              this.form.actualSideBreadth = this.form.breadthValue;
+
               this.form.fabName = val.fabName;
               this.form.guestComponents = val.fabElements;
               // this.form.netWeight = val.clothWeight;
@@ -357,7 +381,9 @@ export default {
       });
     },
     resetData(data) {
-      this.crudOp.column[this.crudOp.column.length - 2].dicData = data;
+      this.crudOp.group[1].column[
+        this.crudOp.group[1].column.length - 1
+      ].dicData = data;
     },
     preview() {
       if (!this.form.netWeight) {
@@ -405,14 +431,16 @@ export default {
                     // 不存在记录 新增 =>打印
                     data.cardType = 1;
                     add(data).then((addRes) => {
-                      this.form.cardId = addRes.data.data;
-                      // this.history.unshift(data);
-                      // this.history = this.$unique(this.history, "cardId");
-                      this.pdfUrl =
-                        process.env.API_HOST +
-                        "/api/proFinalProductCard/cardPdf?cardId=" +
-                        this.form.cardId;
-                      this.pdfDlg = true;
+                      if (addRes.data.code == 200) {
+                        this.form.cardId = addRes.data.data;
+                        // this.history.unshift(data);
+                        // this.history = this.$unique(this.history, "cardId");
+                        this.pdfUrl =
+                          process.env.API_HOST +
+                          "/api/proFinalProductCard/cardPdf?cardId=" +
+                          this.form.cardId;
+                        this.pdfDlg = true;
+                      }
                     });
                   }
                   setTimeout(() => {
@@ -486,6 +514,9 @@ export default {
                     update(data).then((upRes) => {
                       this.history.unshift(data);
                       this.history = this.$unique(this.history, "cardId");
+                      if (this.history.length > 50) {
+                        this.history.splice(0, 1);
+                      }
                       if (this.sheetNum) {
                         for (let i = 0; i < this.sheetNum; i++) {
                           setTimeout(() => {
@@ -516,33 +547,44 @@ export default {
                     data.cardType = 1;
                     data.madeDate = this.$getNowTime("datetime");
                     add(data).then((addRes) => {
-                      this.form.cardId = addRes.data.data;
-                      this.history.unshift(data);
-                      this.history = this.$unique(this.history, "cardId");
-                      if (this.sheetNum) {
-                        for (let i = 0; i < this.sheetNum; i++) {
-                          setTimeout(() => {
-                            if (this.form.cardId) {
-                              this.prsocket.send(
-                                "finishCard:" + this.form.cardId
-                              );
-                            } else {
-                              this.$tip.error("数据错误,请重新查询后进行打印!");
-                              this.wLoading = false;
-                              return;
-                            }
-                            if (i == this.sheetNum - 1) {
-                              this.$tip.success("已发送全部打印请求!");
-                            }
-                          }, 200);
+                      if (addRes.data.code == 200) {
+                        this.form.cardId = addRes.data.data;
+                        this.history.unshift(data);
+                        this.history = this.$unique(this.history, "cardId");
+                        if (this.history.length > 50) {
+                          this.history.splice(0, 1);
+                        }
+                        if (this.sheetNum) {
+                          for (let i = 0; i < this.sheetNum; i++) {
+                            setTimeout(() => {
+                              if (this.form.cardId) {
+                                this.prsocket.send(
+                                  "finishCard:" + this.form.cardId
+                                );
+                              } else {
+                                this.$tip.error(
+                                  "数据错误,请重新查询后进行打印!"
+                                );
+                                this.wLoading = false;
+                                return;
+                              }
+                              if (i == this.sheetNum - 1) {
+                                this.$tip.success("已发送全部打印请求!");
+                              }
+                            }, 200);
+                          }
+                        } else {
+                          if (this.form.cardId) {
+                            this.prsocket.send(
+                              "finishCard:" + this.form.cardId
+                            );
+                          } else {
+                            this.$tip.error("数据错误,请重新查询后进行打印!");
+                          }
+                          this.$tip.success("已发送打印请求!");
                         }
                       } else {
-                        if (this.form.cardId) {
-                          this.prsocket.send("finishCard:" + this.form.cardId);
-                        } else {
-                          this.$tip.error("数据错误,请重新查询后进行打印!");
-                        }
-                        this.$tip.success("已发送打印请求!");
+                        this.$tip.warning("新增数据失败!");
                       }
                     });
                   }
@@ -575,46 +617,6 @@ export default {
       //   "/api/proBleadyeRunJob/createBleadyeRunJobPdf?id=" +
       //   this.detail.cardId;
     },
-    add() {
-      this.isAdd = true;
-      this.dialogVisible = true;
-    },
-    del() {
-      // if (parent.userID != this.detail.serviceOperator) {
-      //   this.$tip.warning("当前用户没有权限删除该记录!");
-      //   return;
-      // }
-      this.$tip
-        .cofirm(
-          this.$t("iaoMng.delTle9") +
-            this.detail.vatNo +
-            this.$t("iaoMng.delTle2"),
-          this,
-          {}
-        )
-        .then(() => {
-          del(this.detail.cardId)
-            .then((res) => {
-              if (res.data.code === 200) {
-                this.$tip.success(this.$t("public.sccg"));
-                this.query();
-              } else {
-                this.$tip.error(this.$t("public.scsb"));
-              }
-            })
-            .catch((err) => {
-              this.$tip.error(this.$t("public.scsb"));
-            });
-        })
-        .catch((err) => {
-          this.$tip.warning(this.$t("public.qxcz"));
-        });
-    },
-    handleRowDBLClick(val) {
-      this.isAdd = false;
-      this.detail = val;
-      this.dialogVisible = true;
-    },
     isEmpty(obj) {
       if (
         obj === "undefined" ||
@@ -627,9 +629,6 @@ export default {
       } else {
         return false;
       }
-    },
-    cellClick(val) {
-      this.detail = val;
     },
     setCz() {
       this.czsocket = null;
@@ -686,7 +685,7 @@ export default {
               _this.prsocket = null;
               _this.setCz();
             }
-          }, 1000);
+          }, 1200);
         }, 200);
         _this.$tip.success("服务器连接成功!");
       };
@@ -704,7 +703,7 @@ export default {
     codeLength() {
       if (
         !this.form.realGramWeight ||
-        !this.form.clothWidth ||
+        !this.form.actualSideBreadth ||
         !this.form.netWeight ||
         this.form.realGramWeight == 0
       ) {
@@ -721,9 +720,9 @@ export default {
 
       if (this.form.widthUnit != "INCH") {
         // 默认是 inch
-        breadth = Number(this.form.clothWidth / 100);
+        breadth = Number(this.form.actualSideBreadth / 100);
       } else {
-        breadth = Number((this.form.clothWidth * 2.54) / 100);
+        breadth = Number((this.form.actualSideBreadth * 2.54) / 100);
       }
 
       let weight = this.form.netWeight;
@@ -761,13 +760,22 @@ export default {
 <style lang="stylus">
 #finalCard {
   .queryForm .avue-form .el-input--mini input {
-    height: 42px !important;
-    line-height: 42px !important;
+    height: 40px !important;
+    line-height: 40px !important;
+  }
+
+  .el-form-item__label {
+    padding: 0 5px 0 0 !important;
+    white-space: nowrap !important;
   }
 
   .queryForm .el-input__inner, .el-form-item__label {
     font-size: 20px !important;
-    line-height: 42px !important;
+    line-height: 40px !important;
+  }
+
+  .queryForm .el-input__inner {
+    font-size: 24px !important;
   }
 
   .queryForm .el-button, .el-button--mini.is-round {

@@ -2,11 +2,20 @@
  * @Author: Lyl
  * @Date: 2021-02-01 14:06:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-11-13 16:32:18
+ * @LastEditTime: 2021-12-07 15:31:00
  * @Description:
  */
 
 import axios from "axios";
+
+// 查询织单
+export function getWeave(params) {
+  return axios({
+    url: "/api/proWeaveJob/page",
+    method: "get",
+    params: params
+  });
+}
 
 // 查询漂染单
 export function getDye(params) {

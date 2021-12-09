@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-05-03 13:03:03
  * @LastEditors: Lyl
- * @LastEditTime: 2021-11-16 11:19:25
+ * @LastEditTime: 2021-12-01 13:56:16
  * @Description:
  */
 
@@ -20,6 +20,145 @@ let basChemical = getXDicT("BasChemicalmatNew");
 let basPigment = getXDicT("basPigment");
 let basProductivesupplies = getXDicT("basProductivesupplies");
 let basFuel = getXDicT("basFuel");
+
+export function salPoF(_this) {
+  return {
+    submitBtn: false,
+    emptyBtn: false,
+    labelWidth: 130,
+    column: [
+      {
+        label: "訂單號",
+        prop: "poNo",
+        width: 150,
+        span: 6,
+        sortable: true
+      },
+      {
+        label: "客户名稱",
+        prop: "custBrandId",
+        overHidden: true,
+        width: 250,
+        span: 6,
+        type: "select",
+        dicData: cust
+      },
+      {
+        label: "订单日期",
+        prop: "poDate",
+        width: 130,
+        type: "date",
+        align: "center",
+        span: 6,
+        sortable: true,
+        format: "yyyy-MM-dd",
+        valueFormat: "yyyy-MM-dd"
+      },
+      {
+        label: "订单类别",
+        prop: "poType",
+        width: 110,
+        span: 6,
+        type: "select",
+        dicData: getDIC("sal_poType")
+      },
+
+      {
+        label: "订单狀態",
+        prop: "poStatus",
+        width: 110,
+        type: "select",
+        span: 6,
+        dicData: getDIC("sal_poStatus")
+      }
+    ]
+  };
+}
+export function salPoC(_this) {
+  return {
+    menu: false,
+    addBtn: false,
+    border: true,
+    highlightCurrentRow: true,
+    height: "calc(100vh - 195px)",
+    refreshBtn: false,
+    columnBtn: false,
+    page: true,
+    labelWidth: 130,
+    rowKey: "sn",
+    tree: true,
+    // childrens: "sdc",
+    // children: "sdc",
+    column: [
+      {
+        label: "#",
+        prop: "index",
+        width: 50,
+        align: "center",
+        display: false
+      },
+      {
+        label: "訂單號",
+        prop: "poNo",
+        width: 150,
+        span: 6,
+        sortable: true,
+        overHidden: true
+      },
+      {
+        label: "客户訂單號",
+        prop: "custPoNo",
+        width: 150,
+        span: 6,
+        overHidden: true,
+        sortable: true
+      },
+
+      {
+        label: "客户名稱",
+        prop: "custBrandId",
+        overHidden: true,
+        width: 150,
+        span: 6,
+        type: "select",
+        dicData: cust
+      },
+      {
+        label: "订单日期",
+        prop: "poDate",
+        width: 130,
+        type: "date",
+        align: "center",
+        sortable: true,
+        format: "yyyy-MM-dd",
+        valueFormat: "yyyy-MM-dd"
+      },
+      {
+        label: "订单类别",
+        prop: "poType",
+        width: 110,
+        type: "select",
+        dicData: getDIC("Sal_newPoType")
+      },
+
+      {
+        label: "订单狀態",
+        prop: "poState",
+        width: 110,
+        type: "select",
+        dicData: getDIC("sal_poStatus")
+      }
+    ]
+  };
+}
+
+export function getSalPo(params) {
+  return axios({
+    url: "/api/salNewpo/pages",
+    method: "get",
+    params: params
+  });
+}
 
 export function hgylStockF(_this) {
   return {

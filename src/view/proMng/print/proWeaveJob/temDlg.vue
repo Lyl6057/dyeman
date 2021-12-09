@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-11-11 15:05:49
+ * @LastEditTime: 2021-12-04 18:48:04
  * @Description: 
 -->
 <template>
@@ -312,7 +312,7 @@
   </div>
 </template>
 <script>
-import choice from "@/components/choice";
+import choice from "@/components/proMng/salPo";
 import {
   mainCrud,
   dlgForm,
@@ -327,7 +327,7 @@ import {
   update,
   getPo,
   getPoDtla,
-  getBom,
+  getBomFa,
   getLong,
   addLong,
   updateLong,
@@ -352,6 +352,10 @@ import {
   addMachine,
   delMachine,
   updateMachine,
+  getBom,
+  getBomDtlb,
+  getBomDtlbSpecs,
+  getBomDtlaSpecs,
 } from "./api";
 import { baseCodeSupplyEx } from "@/api/index";
 import preview from "./preview";
@@ -401,7 +405,7 @@ export default {
       dlgLoading: false,
       dlgChoose: {},
       choiceV: false,
-      choiceTle: this.$t("choicDlg.xzsx"),
+      choiceTle: "选择订单资料",
       choiceTarget: {},
       choiceField: "",
       choiceQ: {},
@@ -482,16 +486,14 @@ export default {
         .cofirm(val ? "是否确定通过审核?" : "是否确定取消审核?")
         .then(() => {
           this.wLoading = true;
-          update({ weaveJobId: this.form.weaveJobId, auditState: val }).then(
-            (res) => {
-              setTimeout(() => {
-                this.form.auditState = val;
-                this.$emit("refresh");
-                this.$tip.success(this.$t("public.bccg"));
-                this.wLoading = false;
-              }, 200);
-            }
-          );
+          this.form.auditState = val;
+          update(this.form).then((res) => {
+            setTimeout(() => {
+              this.$emit("refresh");
+              this.$tip.success(this.$t("public.bccg"));
+              this.wLoading = false;
+            }, 200);
+          });
         })
         .catch((err) => {
           this.$tip.warning(this.$t("public.qxcz"));
@@ -857,9 +859,9 @@ export default {
     },
     saveDtl() {},
     checkOrder() {
-      this.tabs = "選擇訂單";
-      this.crudOp = dlgCrud(this);
-      this.visible = true;
+      this.choiceV = true;
+      // this.crudOp = dlgCrud(this);
+      // this.visible = true;
     },
     checkYarn() {
       this.tabs = "用紗明细";
@@ -1080,7 +1082,7 @@ export default {
             this.form.fabricDesc = poDtla.fabYcount;
             this.form.fallCloth = poDtla.fabBreadth;
             // 获取面料
-            getBom({ salBomFabricoid: poDtla.salBomFabricFk }).then((bom) => {
+            getBomFa({ salBomFabricoid: poDtla.salBomFabricFk }).then((bom) => {
               let bomData = bom.data;
               this.form.gramWeight = bomData.fabWeight;
               this.form.breadth = bomData.fabWeight;
@@ -1106,16 +1108,56 @@ export default {
         this.choiceV = false;
         return;
       }
-      val.forEach((item, i) => {
-        this.chooseData.list.push({
-          yarnCode: item.yarnsId,
-          yarnName: item.yarnsName,
-          yarnBatch: item.batchNo,
-          yarnBrand: item.yarnsCard,
-          unit: "KG",
-          sn: this.chooseData.list.length + 1,
-          $cellEdit: true,
-        });
+      this.form.custPoNo = val.custPoNo;
+      this.form.salPoNo = val.poNo;
+      this.form.productDate = val.poDate;
+      this.form.custCode = val.custBrandId;
+      this.form.colorName = val.custColorName;
+      this.form.colorCode = val.custColorNo;
+
+      this.form.custFabricCode = val.guestFabId;
+      this.form.seasonCode = val.season;
+
+      this.form.fiberComp = val.guestComponents;
+      this.form.fabricDesc = val.fabName;
+      this.form.otherRequire = val.finishingitem;
+      console.log(val);
+      getBom({ bomId: val.bomId }).then((res) => {
+        if (res.data.length) {
+          getBomDtlb({ salNewbomFk: res.data[0].salNewbomoid }).then((dtlb) => {
+            if (dtlb.data.length) {
+              // this.form.
+            } else {
+              getBomDtlaSpecs({
+                salNewbomDtlaFk: val.salNewbomDtlaFk,
+              }).then((dtlaSpecs) => {
+                console.log(dtlaSpecs);
+                if (dtlaSpecs.data.length) {
+                  let data = {};
+                  dtlaSpecs.data.forEach((item, i) => {
+                    data[item.specsType] = item.specsSeq || 0;
+                    data[item.specsType + "+"] = item.tolerancePlus || 0;
+                    data[item.specsType + "-"] = item.toleranceMinus || 0;
+                    data[item.specsType + "unit"] = item.toleranceUnit;
+                  });
+                  this.form.gramWeight = data["weight-XH"];
+                  this.form.gramWeightValue = data["weight-XH"];
+                  this.form.gwMaxValue = data["weight-XH+"];
+                  this.form.gwMinValue = data["weight-XH-"];
+
+                  this.form.breadth = data["width-BZB"];
+                  this.form.breadthValue = data["width-BZB"];
+                  this.form.breadthUpper = data["width-BZB+"];
+                  this.form.breadthLower = data["width-BZB+"];
+                  this.form.breadthUnit = data["width-BZBunit"];
+
+                  this.form.horizonShrink = data["shrink-H"];
+                  this.form.verticalShrink = data["shrink-Z"];
+                }
+              });
+            }
+          });
+        }
       });
       // this.crud.forEach((item, i) => {
       //   item.index = i + 1;

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-11-18 08:10:08
+ * @LastEditTime: 2021-11-26 14:33:40
  * @Description:
  */
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
@@ -400,7 +400,7 @@ export function mainCrud(_this) {
       {
         label: "幅宽(Khổ rộng vải mộc)",
         // tip: "Tổng cộng(KG)",
-        prop: "clothWidth",
+        prop: "actualSideBreadth",
         width: 120,
         cell: true,
         span: 8,
