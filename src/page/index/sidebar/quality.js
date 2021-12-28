@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-04-01 14:08:13
  * @LastEditors: Lyl
- * @LastEditTime: 2021-11-18 10:18:01
+ * @LastEditTime: 2021-12-11 15:08:34
  * @Description:
  */
 
@@ -47,6 +47,10 @@ export function quality(_this) {
         {
           menuName: "3.成品台账",
           index: "finishedCodeCard"
+        },
+        {
+          menuName: "4.QA码卡打印",
+          index: "codeCardQa"
         }
       ]
     },

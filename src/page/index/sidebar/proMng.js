@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-04-01 13:39:35
  * @LastEditors: Lyl
- * @LastEditTime: 2021-11-03 16:42:55
+ * @LastEditTime: 2021-12-20 13:28:08
  * @Description:
  */
 
@@ -195,5 +195,15 @@ export function proMng(_this) {
         // }
       ]
     }
+    // {
+    //   menuName: "测试",
+    //   index: "test",
+    //   children: [
+    //     {
+    //       menuName: "gantt",
+    //       index: "gantt"
+    //     }
+    //   ]
+    // }
   ];
 }

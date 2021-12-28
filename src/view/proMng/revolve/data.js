@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
- * @LastEditors: Lyl
- * @LastEditTime: 2021-12-08 16:15:28
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-12-27 14:38:36
  * @Description:
  */
 
@@ -42,13 +42,16 @@ export function mainForm(_this) {
         dicData: cust
       },
       {
-        label: "发单日期",
+        label: "开单日期",
         prop: "workDate",
         span: 6,
-        placeholder: " "
+        placeholder: " ",
+        type: "datetime",
+        format: "yyyy-MM-dd HH:mm:ss",
+        valueFormat: "yyyy-MM-dd HH:mm:ss",
       },
       {
-        label: "色號",
+        label: "工厂色號",
         prop: "colorCode",
         span: 6,
         placeholder: " "
@@ -123,18 +126,28 @@ let cust = getDicT("basCustomer", "custName", "custCode");
 export function mainCrud(_this) {
   return {
     menu: false,
-    addBtn: true,
+    addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 280px)",
+    height: "calc(100vh - 315px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
     labelWidth: 120,
     selection: true,
+    columnBtn: true,
     selectable: (row, index) => {
       return row.auditState != 1 && row.serviceOperator == parent.userID;
     },
+    showSummary: true,
+    sumColumnList: [
+      {
+        label: "合计:",
+        name: "clothWeight",
+        type: "sum",
+        decimals: 1
+      }
+    ],
     column: [
       {
         label: "#",
@@ -230,6 +243,7 @@ export function mainCrud(_this) {
         tip: "Khách hàng",
         prop: "custCode",
         overHidden: true,
+        sortable: true,
         width: 200,
         span: 6,
         placeholder: " ",
@@ -246,6 +260,7 @@ export function mainCrud(_this) {
         width: 180,
         span: 6,
         placeholder: " ",
+        sortable: true,
         // sortable: true,
         overHidden: true
       },
@@ -256,6 +271,7 @@ export function mainCrud(_this) {
         span: 6,
         hide: true,
         width: 80,
+        sortable: true,
         placeholder: " "
       },
       {
@@ -265,6 +281,7 @@ export function mainCrud(_this) {
         span: 6,
         hide: true,
         width: 80,
+        sortable: true,
         placeholder: " "
       },
 
@@ -284,6 +301,7 @@ export function mainCrud(_this) {
         prop: "colorName",
         placeholder: " ",
         width: 180,
+        sortable: true,
         overHidden: true,
         span: 6,
         placeholder: " "
@@ -293,6 +311,7 @@ export function mainCrud(_this) {
         tip: "Số màu",
         prop: "colorCode",
         width: 150,
+        sortable: true,
         span: 6,
         overHidden: true,
         placeholder: " "
@@ -303,6 +322,7 @@ export function mainCrud(_this) {
         prop: "custColorNo",
         width: 150,
         span: 6,
+        sortable: true,
         overHidden: true,
         placeholder: " "
       },
@@ -320,12 +340,12 @@ export function mainCrud(_this) {
           if (_this.form.poAmountKg) {
             return;
           }
-          _this.$nextTick(() => {
-            _this.form.dyeVatType =
-              Number(_this.form.poAmountKg) / 350 >= 4
-                ? "4"
-                : Math.ceil(Number(_this.form.poAmountKg) / 350) + "";
-          });
+          // _this.$nextTick(() => {
+          //   _this.form.dyeVatType =
+          //     Number(_this.form.poAmountKg) / 350 >= 4
+          //       ? "4"
+          //       : Math.ceil(Number(_this.form.poAmountKg) / 350) + "";
+          // });
         }
         // change: () => {
         //   _this.$nextTick(() => {
@@ -337,6 +357,73 @@ export function mainCrud(_this) {
         label: "合计数量",
         tip: "Tổng cộng(KG)",
         prop: "clothWeight",
+        width: 130,
+        span: 6,
+        type: "number",
+        align: "right",
+        placeholder: " ",
+        rules: [
+          {
+            required: true,
+            message: "请输入合计数量",
+            trigger: "blur"
+          }
+        ],
+        change: val => {
+          if (val.value && _this.form.avgEachWeightKg) {
+            _this.$nextTick(() => {
+              _this.form.pidCount = Number(
+                _this.form.clothWeight / _this.form.avgEachWeightKg
+              ).toFixed(0);
+              _this.form.pidCount =
+                _this.form.pidCount == "0" ? 1 : _this.form.pidCount;
+            });
+          }
+          if (
+            _this.form.dyeVatType &&
+            val.value > Number(_this.form.dyeVatType)
+          ) {
+            _this.$nextTick(() => {
+              _this.form.clothWeight = Number(_this.form.dyeVatType);
+              _this.$tip.error("合计重量不能大于设定生产机种重量!");
+            });
+          }
+        }
+      },
+      {
+        label: "疋重",
+        // tip: "state",
+        disabled: false,
+        prop: "avgEachWeightKg",
+        width: 120,
+        type: "switch",
+        dicData: [
+          {
+            label: "30",
+            value: 30
+          },
+          {
+            label: "58",
+            value: 58
+          }
+        ],
+        hide: false,
+        placeholder: " ",
+        span: 6,
+        change: val => {
+          if (val.value && _this.form.clothWeight) {
+            _this.$nextTick(() => {
+              _this.form.pidCount = Number(
+                _this.form.clothWeight / _this.form.avgEachWeightKg
+              ).toFixed(0);
+            });
+          }
+        }
+      },
+      {
+        label: "疋數",
+        prop: "pidCount",
+        tip: "Cây",
         width: 100,
         span: 6,
         type: "number",
@@ -351,18 +438,16 @@ export function mainCrud(_this) {
         width: 120,
         placeholder: " ",
         disabled: false,
-        hide: true
+        hide: true,
+        rules: [
+          {
+            required: true,
+            message: "请输入染整数量",
+            trigger: "blur"
+          }
+        ]
       },
-      {
-        label: "疋數",
-        prop: "pidCount",
-        tip: "Cây",
-        width: 100,
-        span: 6,
-        type: "number",
-        align: "right",
-        placeholder: " "
-      },
+
       {
         label: "布类代码",
         prop: "fabricCode",
@@ -370,33 +455,9 @@ export function mainCrud(_this) {
         span: 6,
         width: 120,
         placeholder: " ",
+        sortable: true,
         disabled: false,
         hide: true
-      },
-      {
-        label: "布匹成份",
-        prop: "fabElements",
-        tip: "Thành phần",
-        placeholder: " ",
-        overHidden: true,
-        width: 250,
-        span: 6,
-        hide: true
-      },
-      {
-        label: "布類描述",
-        prop: "fabName",
-        placeholder: " ",
-        tip: "Loại vải",
-        overHidden: true,
-        width: 250,
-        span: 12,
-        placeholder: " "
-        // rules: [{
-        //   required: true,
-        //   message: "请選擇布類描述",
-        //   trigger: "blur"
-        // }],
       },
       {
         label: "批号",
@@ -405,6 +466,7 @@ export function mainCrud(_this) {
         span: 6,
         width: 120,
         placeholder: " ",
+        sortable: true,
         disabled: false,
         hide: true
       },
@@ -417,20 +479,9 @@ export function mainCrud(_this) {
         width: 120,
         placeholder: " ",
         disabled: false,
+        sortable: true,
         hide: true
       },
-
-      // {
-      //   label: "訂單數量(磅)",
-      //   prop: "poAmountLb",
-      //   width: 120,
-      //   span: 6,
-      //   type: "number",
-      //   align: "right",
-      //   placeholder: " ",
-      //   hide: true,
-      //   disabled: true,
-      // },
       {
         label: "紗牌",
         prop: "yarnCard",
@@ -451,6 +502,45 @@ export function mainCrud(_this) {
         disabled: false,
         hide: true
       },
+      {
+        label: "布匹成份",
+        prop: "fabElements",
+        tip: "Thành phần",
+        placeholder: " ",
+        overHidden: true,
+        width: 250,
+        span: 12,
+        hide: true
+      },
+
+      {
+        label: "布類描述",
+        prop: "fabName",
+        placeholder: " ",
+        tip: "Loại vải",
+        overHidden: true,
+        width: 250,
+        span: 12,
+        placeholder: " "
+        // rules: [{
+        //   required: true,
+        //   message: "请選擇布類描述",
+        //   trigger: "blur"
+        // }],
+      },
+
+      // {
+      //   label: "訂單數量(磅)",
+      //   prop: "poAmountLb",
+      //   width: 120,
+      //   span: 6,
+      //   type: "number",
+      //   align: "right",
+      //   placeholder: " ",
+      //   hide: true,
+      //   disabled: true,
+      // },
+
       {
         label: "合染缸號",
         tip: "Số bồn nhuộm chung",
@@ -600,24 +690,12 @@ export function mainCrud(_this) {
         width: 80,
         placeholder: " ",
         type: "select",
-        dicData: [
-          {
-            label: "1T",
-            value: "1"
-          },
-          {
-            label: "2T",
-            value: "2"
-          },
-          {
-            label: "3T",
-            value: "3"
-          },
-          {
-            label: "4T",
-            value: "4"
-          }
-        ]
+        dicData: getDicT(
+          "baseEquipmentCategoryList",
+          "categoryName",
+          "setCapacity",
+          { parentId: "dev-12" }
+        )
       },
 
       {
@@ -682,15 +760,15 @@ export function mainCrud(_this) {
         width: 80,
         placeholder: " "
       },
-      {
-        label: "ET序号",
-        prop: "etSn",
-        tip: "ET序号",
-        span: 6,
-        hide: true,
-        width: 80,
-        placeholder: " "
-      },
+      // {
+      //   label: "ET序号",
+      //   prop: "etSn",
+      //   tip: "ET序号",
+      //   span: 6,
+      //   hide: true,
+      //   width: 80,
+      //   placeholder: " "
+      // },
       {
         label: "代码",
         prop: "custStyleCode",
@@ -736,6 +814,10 @@ export function mainCrud(_this) {
           {
             label: "草稿",
             value: "0"
+          },
+          {
+            label: "已打印",
+            value: "3"
           }
         ],
         hide: false,
@@ -750,6 +832,19 @@ export function mainCrud(_this) {
         span: 6,
         disabled: true,
         // hide: true,
+        placeholder: " "
+      },
+      {
+        label: "打印日期",
+        prop: "printDate",
+        span: 6,
+        placeholder: " ",
+        width: 150,
+        overHidden: true,
+        display: false,
+        type: "datetime",
+        format: "yyyy-MM-dd HH:mm:ss",
+        valueFormat: "yyyy-MM-dd HH:mm:ss",
         placeholder: " "
       },
       {
@@ -1118,7 +1213,7 @@ export function bfOp(_this) {
     addBtn: true,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 145px)",
+    height: "calc(100vh - 3.866667rem)",
     refreshBtn: false,
     columnBtn: false,
     page: false,
@@ -1246,7 +1341,7 @@ export function testOp(_this) {
     addBtn: true,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 205px)",
+    height: "calc(100vh - 5.466667rem)",
     refreshBtn: false,
     columnBtn: false,
     page: false,
@@ -1296,7 +1391,7 @@ export function itemOp(_this) {
     addBtn: true,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 205px)",
+    height: "calc(100vh - 5.466667rem)",
     refreshBtn: false,
     columnBtn: false,
     page: false,
@@ -1349,7 +1444,7 @@ export function dlgCrud(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 195px)",
+    height: "calc(100vh - 5.2rem)",
     refreshBtn: false,
     columnBtn: false,
     page: true,

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-06-07 07:56:01
  * @LastEditors: Lyl
- * @LastEditTime: 2021-12-24 08:07:03
+ * @LastEditTime: 2021-12-14 16:41:31
  * @Description:
  */
 
@@ -70,7 +70,6 @@ export function mainCrud(_this) {
             label: "缸號",
             prop: "vatNo",
             tip: "Số lô nhuộm",
-            tipPlacement: "right",
             // type: "select",
             // dicData: getDicT("proBleadyeJob", "vatNo", "vatNo", {}, "vatNo"),
             // filterable: true,
@@ -120,40 +119,34 @@ export function mainCrud(_this) {
           {
             label: "订单编号",
             prop: "poNo",
-            tipPlacement: "right",
             tip: "SỐ P.O",
             overHidden: true,
             placeholder: " ",
-            disabled: true,
             width: 140,
-            readonly: true,
-            span: 6
+            span: 6,
+            disabled: true
           },
           {
             label: "客人订单号",
             prop: "custPoNo",
             tip: "PO khách hàng",
             overHidden: true,
-            tipPlacement: "right",
             placeholder: " ",
-            disabled: true,
             width: 140,
-            readonly: true,
+            disabled: true,
             span: 6
           },
           {
             label: "客戶名称",
             tip: "Khách hàng",
             prop: "custCode",
-            readonly: true,
             overHidden: true,
-            tipPlacement: "right",
             width: 200,
+            disabled: true,
             span: 6,
             placeholder: " ",
             filterable: true,
             allowCreate: true,
-            disabled: true,
             defaultFirstOption: true,
             type: "select",
             dicData: cust,
@@ -166,11 +159,9 @@ export function mainCrud(_this) {
             label: "款号",
             tip: "#STLYLE NO",
             prop: "styleNo",
-            tipPlacement: "right",
             width: 150,
-            span: 6,
-            readonly: true,
             disabled: true,
+            span: 6,
             overHidden: true,
             placeholder: " "
           },
@@ -187,8 +178,6 @@ export function mainCrud(_this) {
           {
             label: "顏色名稱",
             tip: "Màu",
-            readonly: true,
-            tipPlacement: "right",
             prop: "colorName",
             placeholder: " ",
             width: 160,
@@ -200,8 +189,6 @@ export function mainCrud(_this) {
           {
             label: "客色号",
             tip: "Số màu",
-            readonly: true,
-            tipPlacement: "right",
             prop: "custColorNo",
             placeholder: " ",
             width: 160,
@@ -212,9 +199,7 @@ export function mainCrud(_this) {
           },
           {
             label: "工厂色号",
-            readonly: true,
             tip: "Số màu nhà máy",
-            tipPlacement: "right",
             prop: "factoryColorNo",
             placeholder: " ",
             width: 160,
@@ -226,55 +211,54 @@ export function mainCrud(_this) {
           {
             label: "合同号",
             prop: "contractNo",
-            readonly: true,
-            tipPlacement: "right",
             tip: "Số hợp đồng",
             span: 6,
+            disabled: true,
             width: 120,
             placeholder: " ",
-            disabled: true
+            disabled: false
           },
           {
             label: "ET号",
             prop: "etNo",
             tip: "mã ET",
             span: 6,
-            readonly: true,
-            tipPlacement: "right",
             width: 120,
             placeholder: " ",
-            disabled: true
+            disabled: true,
+            disabled: false
           },
           {
             label: "产地",
             prop: "originPlace",
             tip: "xưởng sản xuất",
-            tipPlacement: "right",
             span: 6,
             width: 120,
             placeholder: " ",
             disabled: true,
+            disabled: true,
             type: "select",
             dicData: getDIC("bas_yarnorigin")
+          },
+
+          {
+            label: "布类名称",
+            tip: "Loại vải",
+            prop: "fabName",
+            width: 100,
+            span: 12,
+            disabled: true,
+            placeholder: " "
+          },
+
+          {
+            label: "成份要求",
+            tip: "Thành phần",
+            prop: "guestComponents",
+            width: 100,
+            span: 12,
+            placeholder: " "
           }
-
-          //   {
-          //     label: "布类名称",
-          //     tip: "Loại vải",
-          //     prop: "fabName",
-          //     width: 100,
-          //     span: 12,
-          //     placeholder: " "
-          //   },
-
-          //   {
-          //     label: "成份要求",
-          //     tip: "Thành phần",
-          //     prop: "guestComponents",
-          //     width: 100,
-          //     span: 12,
-          //     placeholder: " "
-          //   }
         ]
       },
       {
@@ -287,11 +271,9 @@ export function mainCrud(_this) {
             tip: "Trọng lượng trước giặt",
             prop: "gramWeight",
             // width: 100,
-            tipPlacement: "right",
             span: 6,
             // type: "number",
             align: "left",
-            disabled: true,
             placeholder: " "
             // change: () => {
             // _this.codeLength();
@@ -299,14 +281,13 @@ export function mainCrud(_this) {
           },
           {
             label: "克重洗后A/W",
-            disabled: true,
             tip: "Trọng lượng sau giặt",
             prop: "afterWeightDsp",
             // width: 100,
-            tipPlacement: "right",
             span: 6,
             // type: "number",
             align: "left",
+            disabled: true,
             placeholder: " "
             // change: () => {
             // _this.codeLength();
@@ -316,33 +297,25 @@ export function mainCrud(_this) {
             label: "幅宽",
             tip: "Khổ rộng vải mộc",
             prop: "breadthValue",
-            tipPlacement: "right",
-            disabled: true,
             width: 100,
+            disabled: true,
             span: 6,
-            type: "number",
+            // type: "number",
             align: "left",
-            placeholder: " ",
-            change: val => {
-              _this.$nextTick(() => {
-                if (_this.form.widthUnit == "INCH") {
-                  _this.form.sideBreadthValue = val.value + 2;
-                } else {
-                  _this.form.sideBreadthValue = val.value + 5;
-                }
-              });
-            }
+            placeholder: " "
+            // change: () => {
+            //   _this.codeLength();
+            // }
           },
           {
             label: "边至边",
             // tip: "Khổ rộng vải mộc",
             prop: "sideBreadthValue",
-            tipPlacement: "right",
-            disabled: true,
             width: 100,
             span: 6,
-            type: "number",
+            // type: "number",
             align: "left",
+            disabled: true,
             placeholder: " "
             // change: () => {
             //   _this.codeLength();
@@ -356,13 +329,12 @@ export function mainCrud(_this) {
         prop: "group2",
         column: [
           {
-            label: "净重(KG)",
+            label: "净重",
             tip: "trọng lượng tịnh(KG)",
-            prop: "netWeight",
+            prop: "weight",
             width: 100,
             span: 6,
             precision: 1,
-            tipPlacement: "right",
             type: "number",
             minRows: 0,
             align: "left",
@@ -380,83 +352,101 @@ export function mainCrud(_this) {
               });
             }
           },
+          // {
+          //   label: "净重(LBS)",
+          //   tip: "trọng lượng tịnh(LBS)",
+          //   prop: "netWeightLbs",
+          //   width: 100,
+          //   span: 6,
+          //   minRows: 0,
+          //   type: "number",
+          //   precision: 1,
+          //   align: "left",
+          //   // rules: [
+          //   //   {
+          //   //     required: true,
+          //   //     message: "請输入净重",
+          //   //     trigger: "blur"
+          //   //   }
+          //   // ],
+          //   placeholder: " "
+          // },
+          // {
+          //   label: "纸筒重量",
+          //   tip: "Trọng lượng thoi giấy",
+          //   prop: "paperTube",
+          //   width: 100,
+          //   span: 6,
+          //   minRows: 0,
+          //   type: "number",
+          //   precision: 1,
+          //   align: "left",
+          //   placeholder: " "
+          // },
+          // {
+          //   label: "QC扣减数",
+          //   tip: "trọng lượng QC cắt giảm",
+          //   prop: "qcTakeOut",
+          //   width: 160,
+          //   align: "right",
+          //   span: 6,
+          //   cell: true,
+          //   placeholder: " ",
+          //   type: "number",
+          //   precision: 1
+          // },
+          // {
+          //   label: "浮重",
+          //   tip: "Trọng lượng bì(KG)",
+          //   prop: "grossWeight",
+          //   width: 100,
+          //   span: 6,
+          //   minRows: 0,
+          //   type: "number",
+          //   precision: 1,
+          //   align: "left",
+          //   placeholder: " "
+          // },
+          // {
+          //   label: "浮重(LBS)",
+          //   tip: "trọng lượng bì(LBS)",
+          //   prop: "grossWeightLbs",
+          //   width: 100,
+          //   span: 6,
+          //   minRows: 0,
+          //   type: "number",
+          //   precision: 1,
+          //   align: "left",
+          //   placeholder: " ",
+          //   change: () => {}
+          // },
           {
-            label: "净重(LBS)",
-            tip: "trọng lượng tịnh(LBS)",
-            prop: "netWeightLbs",
+            label: "重量单位",
+            tip: "đơn vị trọng lượng",
+            prop: "weightUnit",
             width: 100,
-            tipPlacement: "right",
             span: 6,
-            minRows: 0,
-            type: "number",
-            precision: 1,
-            align: "left",
-            // rules: [
-            //   {
-            //     required: true,
-            //     message: "請输入净重",
-            //     trigger: "blur"
-            //   }
-            // ],
-            placeholder: " "
-          },
-          {
-            label: "纸筒重量",
-            tip: "Trọng lượng thoi giấy",
-            prop: "paperTube",
-            tipPlacement: "right",
-            width: 100,
-            span: 6,
-            minRows: 0,
-            type: "number",
-            precision: 1,
-            align: "left",
-            placeholder: " "
-          },
-          {
-            label: "QC扣减数",
-            tip: "trọng lượng QC cắt giảm",
-            prop: "qcTakeOut",
-            tipPlacement: "right",
-            width: 160,
-            align: "right",
-            span: 6,
-            cell: true,
+            type: "select",
+            // dicData: matUnit,
+            dicData: [
+              {
+                label: "公斤",
+                value: "KG"
+              },
+              {
+                label: "磅",
+                value: "LBS"
+              }
+            ],
             placeholder: " ",
-            type: "number",
-            precision: 1
+            change: () => {
+              _this.$nextTick(() => {
+                _this.codeLength();
+              });
+            }
           },
-          {
-            label: "浮重(KG)",
-            tip: "Trọng lượng bì(KG)",
-            prop: "grossWeight",
-            width: 100,
-            tipPlacement: "right",
-            span: 6,
-            minRows: 0,
-            type: "number",
-            precision: 1,
-            align: "left",
-            placeholder: " "
-          },
-          {
-            label: "浮重(LBS)",
-            tip: "trọng lượng bì(LBS)",
-            prop: "grossWeightLbs",
-            tipPlacement: "right",
-            width: 100,
-            span: 6,
-            minRows: 0,
-            type: "number",
-            precision: 1,
-            align: "left",
-            placeholder: " ",
-            change: () => {}
-          },
-
           {
             label: "计码克重",
-            tipPlacement: "right",
             tip: "Trọng lượng thực tế",
             prop: "realGramWeight",
             width: 100,
@@ -494,7 +484,6 @@ export function mainCrud(_this) {
             prop: "actualSideBreadth", //clothWidth
             width: 100,
             span: 6,
-            tipPlacement: "right",
             type: "number",
             align: "left",
             placeholder: " ",
@@ -521,44 +510,10 @@ export function mainCrud(_this) {
           //   align: "left",
           //   placeholder: " "
           // },
-          {
-            label: "重量单位",
-            tip: "đơn vị trọng lượng",
-            prop: "weightUnit",
-            width: 100,
-            span: 6,
-            tipPlacement: "right",
-            type: "select",
-            // dicData: matUnit,
-            dicData: [
-              {
-                label: "公斤",
-                value: "KG"
-              },
-              {
-                label: "磅",
-                value: "LBS"
-              }
-            ],
-            rules: [
-              {
-                required: true,
-                message: "請输入模板编号",
-                trigger: "blur"
-              }
-            ],
-            placeholder: " ",
-            change: () => {
-              _this.$nextTick(() => {
-                _this.codeLength();
-              });
-            }
-          },
+
           {
             label: "幅宽单位",
             tip: "Đơn vị khổ rộng",
-            tipPlacement: "right",
-            tipPlacement: "right",
             prop: "widthUnit",
             width: 100,
             span: 6,
@@ -570,14 +525,7 @@ export function mainCrud(_this) {
               _this.$nextTick(() => {
                 _this.codeLength();
               });
-            },
-            rules: [
-              {
-                required: true,
-                message: "請输入模板编号",
-                trigger: "blur"
-              }
-            ]
+            }
           },
           {
             label: "克重单位",
@@ -586,7 +534,6 @@ export function mainCrud(_this) {
             width: 100,
             span: 6,
             type: "select",
-            tipPlacement: "right",
             // dicData: matUnit,
             dicData: [
               {
@@ -598,15 +545,7 @@ export function mainCrud(_this) {
               //   value: "Kg"
               // }
             ],
-            rules: [
-              {
-                required: true,
-                message: "請输入模板编号",
-                trigger: "blur"
-              }
-            ],
             placeholder: " ",
-            tipPlacement: "right",
             change: () => {
               _this.$nextTick(() => {
                 _this.codeLength();
@@ -638,7 +577,6 @@ export function mainCrud(_this) {
             label: "码长",
             tip: "Chiều dài sợi",
             prop: "yardLength",
-            tipPlacement: "right",
             width: 100,
             span: 6,
             type: "number",
@@ -654,7 +592,6 @@ export function mainCrud(_this) {
             type: "number",
             tip: "Số cây",
             align: "left",
-            tipPlacement: "right",
             minRows: 0,
             placeholder: " ",
             change: () => {
@@ -665,36 +602,33 @@ export function mainCrud(_this) {
             }
           },
 
-          {
-            label: "载具编号",
-            prop: "storeLoadCode",
-            tipPlacement: "right",
-            tip: "Mã lồng thép",
-            width: 100,
-            span: 6,
-            align: "left",
-            placeholder: " ",
-            rules: [
-              {
-                required: true,
-                message: "請输入载具编号",
-                trigger: "blur"
-              }
-            ]
-          },
+          // {
+          //   label: "载具编号",
+          //   prop: "storeLoadCode",
+          //   tip: "Mã lồng thép",
+          //   width: 100,
+          //   span: 6,
+          //   align: "left",
+          //   placeholder: " ",
+          //   rules: [
+          //     {
+          //       required: true,
+          //       message: "請输入载具编号",
+          //       trigger: "blur"
+          //     }
+          //   ]
+          // },
           {
             label: "存储位置",
             prop: "storeSiteCode",
             tip: "Vị trí lưu trữ",
             width: 100,
-            tipPlacement: "right",
             span: 6,
             placeholder: " ",
             type: "select",
             filterable: true,
             allowCreate: true,
             defaultFirstOption: true,
-            tipPlacement: "right",
             dicData: getDicT("whseLocation", "locationCode", "locationCode")
           },
           {
@@ -703,16 +637,8 @@ export function mainCrud(_this) {
             tip: "Số thẻ người kiểm tra",
             span: 6,
             placeholder: " ",
-            tipPlacement: "right",
             width: 160,
             sortable: true,
-            rules: [
-              {
-                required: true,
-                message: "請输入验布工号",
-                trigger: "blur"
-              }
-            ],
             overHidden: true
           },
           {
@@ -720,7 +646,6 @@ export function mainCrud(_this) {
             // tip: "Tổng cộng(KG)",
             prop: "basePrintTemplateFk",
             tip: "In mẫu",
-            tipPlacement: "right",
             width: 100,
             span: 12,
             type: "select",
@@ -744,7 +669,6 @@ export function mainCrud(_this) {
             label: "备注",
             prop: "remark",
             width: 250,
-            tipPlacement: "right",
             tip: "ghi chú",
             span: 12,
             placeholder: " ",

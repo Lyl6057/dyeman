@@ -1,12 +1,21 @@
 /*
  * @Author: Lyl
  * @Date: 2021-02-01 14:06:25
- * @LastEditors: Lyl
- * @LastEditTime: 2021-11-02 15:06:43
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-12-25 13:24:55
  * @Description:
  */
 
 import axios from "axios";
+
+// 查询码卡历史记录
+export function getCodeHistory(params) {
+  return axios({
+    url: "/api/proFinalProductCardHis",
+    method: "get",
+    params: params
+  });
+}
 
 // 修改佈飛记录
 export function updateNote(data) {

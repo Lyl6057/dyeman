@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
- * @LastEditors: Lyl
- * @LastEditTime: 2021-12-04 11:18:22
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-12-25 13:36:30
  * @Description:
 -->
 <template>
@@ -92,29 +92,56 @@
         :close-on-click-modal="false"
         :close-on-press-escape="false"
       >
-        <view-container title="修改">
-          <div class="btnList">
-            <el-button
-              type="success"
-              @click="save"
-              :disabled="form.clothState == 3"
-              >{{ this.$t("public.save") }}</el-button
-            >
-            <el-button type="primary" @click="weighing">称重</el-button>
-            <el-button type="warning" @click="dialogVisible = false">{{
-              this.$t("public.close")
-            }}</el-button>
-          </div>
-          <div class="formBox">
-            <avue-form ref="form" :option="dlgOp" v-model="detail"></avue-form>
-          </div>
-        </view-container>
+        <el-tabs type="border-card" v-model="tabs">
+          <el-tab-pane label="修改" name="update">
+            <div class="btnList">
+              <el-button
+                type="success"
+                @click="save"
+                :disabled="form.clothState == 3"
+                >{{ this.$t("public.save") }}</el-button
+              >
+              <el-button type="primary" @click="weighing">称重</el-button>
+              <el-button type="warning" @click="dialogVisible = false">{{
+                this.$t("public.close")
+              }}</el-button>
+            </div>
+            <div class="formBox">
+              <avue-form
+                ref="form"
+                :option="dlgOp"
+                v-model="detail"
+              ></avue-form>
+            </div>
+          </el-tab-pane>
+          <el-tab-pane label="历史记录" name="history">
+            <div class="btnList">
+              <el-button type="primary" @click="recover">恢复</el-button>
+              <el-button type="warning" @click="dialogVisible = false">{{
+                this.$t("public.close")
+              }}</el-button>
+            </div>
+            <div class="formBox">
+              <avue-crud
+                ref="dlgCrud"
+                :option="historyOp"
+                :data="history"
+                @current-row-change="historyCellClick"
+                v-loading="loading"
+                @selection-change="selectionChange"
+              />
+            </div>
+          </el-tab-pane>
+        </el-tabs>
+        <!-- <view-container title="修改">
+          
+        </view-container> -->
       </el-dialog>
     </view-container>
   </div>
 </template>
 <script>
-import { mainForm, mainCrud, dlgForm } from "./data";
+import { mainForm, mainCrud, dlgForm, dlgCrud } from "./data";
 import { webSocket } from "@/config/index.js";
 import {
   get,
@@ -128,6 +155,7 @@ import {
   addInDtlb,
   getRevolve,
   getNotPage,
+  getCodeHistory,
 } from "./api";
 import { getCheckItem } from "../finalCard/api";
 import XlsxTemplate from "xlsx-template";
@@ -147,7 +175,12 @@ export default {
       crudOp: mainCrud(this),
       crud: [],
       page: {
-        pageSize: 50,
+        pageSize: 100,
+        pageSizes: [20, 50, 100, 200, 500],
+        total: 0,
+      },
+      historyPage: {
+        pageSize: 20,
         pageSizes: [20, 50, 100, 200, 500],
         total: 0,
       },
@@ -168,8 +201,12 @@ export default {
       checkSum: 0,
       output: {},
       dlgOp: dlgForm(this),
+      historyOp: dlgCrud(this),
+      history: [],
       weightUnit: "KG",
       prsocket: null,
+      tabs: "update",
+      historyCheck: {},
     };
   },
   watch: {},
@@ -237,19 +274,53 @@ export default {
       // }, 200);
     },
     save() {
+      if (!this.detail.netWeight || !this.detail.netWeightLbs) {
+        this.$tip.error("重量不能为0!");
+        this.wLoading = false;
+        return;
+      }
       this.wLoading = true;
-      // this.crud.forEach((item, i) => {
       update(this.detail).then((res) => {
-        // if (i == this.crud.length - 1) {
-        setTimeout(() => {
-          this.dialogVisible = false;
+        if (res.data.code == 200) {
+          setTimeout(() => {
+            this.dialogVisible = false;
+            this.wLoading = false;
+            this.query();
+            this.$tip.success(this.$t("public.bccg"));
+          }, 200);
+        } else {
           this.wLoading = false;
-          this.query();
-          this.$tip.success(this.$t("public.save"));
-        }, 200);
-        // }
+          this.$tip.error(res.data.msg);
+        }
       });
       // });
+    },
+    recover() {
+      this.$tip.cofirm("是否确定恢复到选中的数据?").then(() => {
+        this.loading = true;
+        this.detail.grossWeight = this.historyCheck.grossWeight;
+        this.detail.grossWeightLbs = this.historyCheck.grossWeightLbs;
+        this.detail.netWeight = this.historyCheck.netWeight;
+        this.detail.netWeightLbs = this.historyCheck.netWeightLbs;
+        this.detail.realGramWeight = this.historyCheck.realGramWeight;
+        this.detail.actualSideBreadth = this.historyCheck.actualSideBreadth;
+        this.detail.yardLength = this.historyCheck.yardLength;
+        this.detail.clothChecker = this.historyCheck.clothChecker;
+        update(this.detail).then((res) => {
+          if (res.data.code == 200) {
+            setTimeout(() => {
+              this.dialogVisible = false;
+              this.loading = false;
+              this.query();
+              this.$tip.success(this.$t("public.bccg"));
+              
+            }, 200);
+          } else {
+            this.wLoading = false;
+            this.$tip.error(res.data.msg);
+          }
+        });
+      });
     },
     group(arr, type) {
       var map = {},
@@ -283,13 +354,20 @@ export default {
         this.dlgOp.column[4].disabled = true;
         this.dlgOp.column[7].disabled = false;
       }
-
-      // this.weightUnit = val.weightUnit;
-      // this.oldData.$cellEdit = false;
-      // val.$cellEdit = true;
-      // this.$set(val, "$cellEdit", true);
-      // this.oldData = val;
-      // this.detail = val;
+      getCodeHistory({
+        productCardFk: this.detail.cardId,
+        // rows: this.historyPage.pageSize,
+        // start: this.historyPage.currentPage,
+        // pages: this.historyPage.currentPage,
+      }).then((res) => {
+        this.history = res.data.sort((a, b) => {
+          return a.clothCheckTime > b.clothCheckTime ? -1 : 1;
+        });
+        // this.historyPage.total = res.data.total;
+      });
+    },
+    historyCellClick(val) {
+      this.historyCheck = val;
     },
     setCz() {
       webSocket.setCz(this);
@@ -425,18 +503,104 @@ export default {
               this.output.unit = type ? "KG" : "LBS";
               this.output.weightKg = 0;
               this.output.weightLbs = 0;
-              data.forEach((item, index) => {
+              data = this.$unique(data, "pidNo");
+              // const lineNum = Math.ceil(
+              //   Number(data[data.length - 1].pidNo) / 3
+              // ); // 行数
+              const lineNum = 20;
+              for (let i = 0; i < lineNum * 3; i++) {
+                for (let j = 0; j <= data.length - 1; j++) {
+                  data[j].weight = type
+                    ? data[j].netWeight
+                    : data[j].netWeightLbs;
+
+                  if (i == data[j].pidNo - 1 && i < lineNum) {
+                    // if (
+                    //   data[j].storeLoadCode &&
+                    //   load1.indexOf(data[j].storeLoadCode) == -1
+                    // ) {
+                    //   load1 += data[j].storeLoadCode + ",";
+                    // }
+                    // if (
+                    //   data[j].storeSiteCode &&
+                    //   h1.indexOf(data[j].storeSiteCode) == -1
+                    // ) {
+                    //   h1 += data[j].storeSiteCode + ",";
+                    // }
+                    arr1[i] = data[j];
+                    break;
+                  } else if (i == data[j].pidNo - 1 && i < lineNum * 2) {
+                    // if (
+                    //   data[j].storeLoadCode &&
+                    //   load2.indexOf(data[j].storeLoadCode) == -1
+                    // ) {
+                    //   load2 += data[j].storeLoadCode + ",";
+                    // }
+                    // if (
+                    //   data[j].storeSiteCode &&
+                    //   h2.indexOf(data[j].storeSiteCode) == -1
+                    // ) {
+                    //   h2 += data[j].storeSiteCode + ",";
+                    // }
+                    arr2[i - lineNum] = data[j];
+                    break;
+                  } else if (i == data[j].pidNo - 1 && i < lineNum * 3) {
+                    // if (
+                    //   data[j].storeLoadCode &&
+                    //   load3.indexOf(data[j].storeLoadCode) == -1
+                    // ) {
+                    //   load3 += data[j].storeLoadCode + ",";
+                    // }
+                    // if (
+                    //   data[j].storeSiteCode &&
+                    //   h3.indexOf(data[j].storeSiteCode) == -1
+                    // ) {
+                    //   h3 += data[j].storeSiteCode + ",";
+                    // }
+                    arr3[i - lineNum * 2] = data[j];
+                    break;
+                  }
+
+                  if (j == data.length - 1) {
+                    // 没有找到索引对应的数据，空数据
+                    if (i < lineNum) {
+                      arr1[i] = {
+                        pidNo: i + 1,
+                        weight: "",
+                        yardLength: "",
+                      };
+                    } else if (i < lineNum * 2) {
+                      arr2[i - lineNum] = {
+                        pidNo: i + 1,
+                        weight: "",
+                        yardLength: "",
+                      };
+                    } else {
+                      arr3[i - lineNum * 2] = {
+                        pidNo: i + 1,
+                        weight: "",
+                        yardLength: "",
+                      };
+                    }
+                  }
+                }
+              }
+              data.forEach((item) => {
                 this.output.weightKg += item.netWeight;
                 this.output.weightLbs += item.netWeightLbs;
-                item.weight = type ? item.netWeight : item.netWeightLbs;
-                if (item.pidNo <= 20) {
-                  arr1.push(item);
-                } else if (item.pidNo <= 40) {
-                  arr2.push(item);
-                } else if (item.pidNo <= 60) {
-                  arr3.push(item);
-                }
               });
+              // data.forEach((item, index) => {
+              //   this.output.weightKg += item.netWeight;
+              //   this.output.weightLbs += item.netWeightLbs;
+              //   item.weight = type ? item.netWeight : item.netWeightLbs;
+              //   if (item.pidNo <= 20) {
+              //     arr1.push(item);
+              //   } else if (item.pidNo <= 40) {
+              //     arr2.push(item);
+              //   } else if (item.pidNo <= 60) {
+              //     arr3.push(item);
+              //   }
+              // });
               this.output.num = data.length;
               this.output.weightKg = this.output.weightKg.toFixed(2);
               this.output.weightLbs = this.output.weightLbs.toFixed(2);
@@ -490,7 +654,7 @@ export default {
         this.$tip.warning("请先输入缸号!");
         return;
       }
-      this.wLoading = true;
+      // this.wLoading = true;
       try {
         //获得Excel模板的buffer对象
         const exlBuf = await JSZipUtils.getBinaryContent(
@@ -524,70 +688,210 @@ export default {
               this.output.unit = type ? "KG" : "LBS";
               this.output.weightKg = 0;
               this.output.weightLbs = 0;
+              this.output.lengthSum = 0;
               this.output.pidSum = data.length;
+              this.output.length1 = 0;
+              this.output.length2 = 0;
+              this.output.length3 = 0;
               let load1 = "",
                 load2 = "",
                 load3 = "",
                 h1 = "",
                 h2 = "",
                 h3 = "";
-              data.forEach((item, index) => {
+              data = this.$unique(data, "pidNo");
+              // const lineNum = Math.ceil(
+              //   Number(data[data.length - 1].pidNo) / 3
+              // ); // 行数
+              const lineNum = 20;
+              for (let i = 0; i < lineNum * 3; i++) {
+                for (let j = 0; j <= data.length - 1; j++) {
+                  data[j].weight = type
+                    ? data[j].netWeight
+                    : data[j].netWeightLbs;
+                  if (i == data[j].pidNo - 1 && i < lineNum) {
+                    if (
+                      data[j].storeLoadCode &&
+                      load1.indexOf(data[j].storeLoadCode) == -1
+                    ) {
+                      load1 += data[j].storeLoadCode + ",";
+                    }
+                    if (
+                      data[j].storeSiteCode &&
+                      h1.indexOf(data[j].storeSiteCode) == -1
+                    ) {
+                      h1 += data[j].storeSiteCode + ",";
+                    }
+                    arr1[i] = data[j];
+                    this.output.length1++;
+                    break;
+                  } else if (i == data[j].pidNo - 1 && i < lineNum * 2) {
+                    if (
+                      data[j].storeLoadCode &&
+                      load2.indexOf(data[j].storeLoadCode) == -1
+                    ) {
+                      load2 += data[j].storeLoadCode + ",";
+                    }
+                    if (
+                      data[j].storeSiteCode &&
+                      h2.indexOf(data[j].storeSiteCode) == -1
+                    ) {
+                      h2 += data[j].storeSiteCode + ",";
+                    }
+                    arr2[i - lineNum] = data[j];
+                    this.output.length2++;
+                    break;
+                  } else if (i == data[j].pidNo - 1 && i < lineNum * 3) {
+                    if (
+                      data[j].storeLoadCode &&
+                      load3.indexOf(data[j].storeLoadCode) == -1
+                    ) {
+                      load3 += data[j].storeLoadCode + ",";
+                    }
+                    if (
+                      data[j].storeSiteCode &&
+                      h3.indexOf(data[j].storeSiteCode) == -1
+                    ) {
+                      h3 += data[j].storeSiteCode + ",";
+                    }
+                    arr3[i - lineNum * 2] = data[j];
+                    this.output.length3++;
+                    break;
+                  }
+
+                  if (j == data.length - 1) {
+                    // 没有找到索引对应的数据，空数据
+                    if (i < lineNum) {
+                      arr1[i] = {
+                        pidNo: i + 1,
+                        weight: "",
+                        yardLength: "",
+                      };
+                    } else if (i < lineNum * 2) {
+                      arr2[i - lineNum] = {
+                        pidNo: i + 1,
+                        weight: "",
+                        yardLength: "",
+                      };
+                    } else {
+                      arr3[i - lineNum * 2] = {
+                        pidNo: i + 1,
+                        weight: "",
+                        yardLength: "",
+                      };
+                    }
+                  }
+                }
+              }
+              data.forEach((item) => {
                 this.output.weightKg += item.netWeight;
                 this.output.weightLbs += item.netWeightLbs;
-                item.weight = type ? item.netWeight : item.netWeightLbs;
-                if (item.pidNo <= 20) {
-                  if (
-                    item.storeLoadCode &&
-                    load1.indexOf(item.storeLoadCode) == -1
-                  ) {
-                    load1 += item.storeLoadCode + ",";
-                  }
-                  if (
-                    item.storeSiteCode &&
-                    h1.indexOf(item.storeSiteCode) == -1
-                  ) {
-                    h1 += item.storeSiteCode + ",";
-                  }
-                  arr1.push(item);
-                } else if (item.pidNo <= 40) {
-                  if (
-                    item.storeLoadCode &&
-                    load2.indexOf(item.storeLoadCode) == -1
-                  ) {
-                    load2 += item.storeLoadCode + ",";
-                  }
-                  if (
-                    item.storeSiteCode &&
-                    h2.indexOf(item.storeSiteCode) == -1
-                  ) {
-                    h2 += item.storeSiteCode + ",";
-                  }
-                  arr2.push(item);
-                } else if (item.pidNo <= 60) {
-                  if (
-                    item.storeLoadCode &&
-                    load3.indexOf(item.storeLoadCode) == -1
-                  ) {
-                    load3 += item.storeLoadCode + ",";
-                  }
-                  if (
-                    item.storeSiteCode &&
-                    h3.indexOf(item.storeSiteCode) == -1
-                  ) {
-                    h3 += item.storeSiteCode + ",";
-                  }
-                  arr3.push(item);
-                }
+                this.output.lengthSum += item.yardLength;
               });
-              this.output.load1 = load1;
-              this.output.load2 = load2;
-              this.output.load3 = load3;
-              this.output.h1 = h1;
-              this.output.h2 = h2;
-              this.output.h3 = h3;
-              this.output.length1 = arr1.length;
-              this.output.length2 = arr2.length;
-              this.output.length3 = arr3.length;
+              // data.forEach((item, index) => {
+              //   this.output.weightKg += item.netWeight;
+              //   this.output.weightLbs += item.netWeightLbs;
+              //   this.output.lengthSum += item.yardLength;
+              //   item.weight = type ? item.netWeight : item.netWeightLbs;
+              //   // for (let i = 1; i <= 60; i++) {
+              //   //   if (item.pidNo == i && i <= 20) {
+              //   //     if (
+              //   //       item.storeLoadCode &&
+              //   //       load1.indexOf(item.storeLoadCode) == -1
+              //   //     ) {
+              //   //       load1 += item.storeLoadCode + ",";
+              //   //     }
+              //   //     if (
+              //   //       item.storeSiteCode &&
+              //   //       h1.indexOf(item.storeSiteCode) == -1
+              //   //     ) {
+              //   //       h1 += item.storeSiteCode + ",";
+              //   //     }
+              //   //     arr1.push(item);
+              //   //     break;
+              //   //   } else if (item.pidNo == i && i <= 40) {
+              //   //     if (
+              //   //       item.storeLoadCode &&
+              //   //       load2.indexOf(item.storeLoadCode) == -1
+              //   //     ) {
+              //   //       load2 += item.storeLoadCode + ",";
+              //   //     }
+              //   //     if (
+              //   //       item.storeSiteCode &&
+              //   //       h2.indexOf(item.storeSiteCode) == -1
+              //   //     ) {
+              //   //       h2 += item.storeSiteCode + ",";
+              //   //     }
+              //   //     arr2.push(item);
+              //   //     break;
+              //   //   } else if (item.pidNo == i && i <= 60) {
+              //   //     if (
+              //   //       item.storeLoadCode &&
+              //   //       load3.indexOf(item.storeLoadCode) == -1
+              //   //     ) {
+              //   //       load3 += item.storeLoadCode + ",";
+              //   //     }
+              //   //     if (
+              //   //       item.storeSiteCode &&
+              //   //       h3.indexOf(item.storeSiteCode) == -1
+              //   //     ) {
+              //   //       h3 += item.storeSiteCode + ",";
+              //   //     }
+              //   //     arr3.push(item);
+              //   //     break;
+              //   //   }
+              //   // }
+              //   if (item.pidNo <= 20) {
+              //     if (
+              //       item.storeLoadCode &&
+              //       load1.indexOf(item.storeLoadCode) == -1
+              //     ) {
+              //       load1 += item.storeLoadCode + ",";
+              //     }
+              //     if (
+              //       item.storeSiteCode &&
+              //       h1.indexOf(item.storeSiteCode) == -1
+              //     ) {
+              //       h1 += item.storeSiteCode + ",";
+              //     }
+              //     // arr1.push(item);
+              //   } else if (item.pidNo <= 40) {
+              //     if (
+              //       item.storeLoadCode &&
+              //       load2.indexOf(item.storeLoadCode) == -1
+              //     ) {
+              //       load2 += item.storeLoadCode + ",";
+              //     }
+              //     if (
+              //       item.storeSiteCode &&
+              //       h2.indexOf(item.storeSiteCode) == -1
+              //     ) {
+              //       h2 += item.storeSiteCode + ",";
+              //     }
+              //     // arr2.push(item);
+              //   } else if (item.pidNo <= 60) {
+              //     if (
+              //       item.storeLoadCode &&
+              //       load3.indexOf(item.storeLoadCode) == -1
+              //     ) {
+              //       load3 += item.storeLoadCode + ",";
+              //     }
+              //     if (
+              //       item.storeSiteCode &&
+              //       h3.indexOf(item.storeSiteCode) == -1
+              //     ) {
+              //       h3 += item.storeSiteCode + ",";
+              //     }
+              //     // arr3.push(item);
+              //   }
+              // });
+              this.output.load1 = load1.substr(0, load1.length - 1);
+              this.output.load2 = load2.substr(0, load2.length - 1);
+              this.output.load3 = load3.substr(0, load3.length - 1);
+              this.output.h1 = h1.substr(0, h1.length - 1);
+              this.output.h2 = h2.substr(0, h2.length - 1);
+              this.output.h3 = h3.substr(0, h3.length - 1);
+
               this.output.num = data.length;
               this.output.weightKg = this.output.weightKg.toFixed(2);
               this.output.weightLbs = this.output.weightLbs.toFixed(2);
@@ -596,7 +900,6 @@ export default {
                   (this.output.weightKg / this.output.clothWeight - 1) *
                   100
                 ).toFixed(2) + "%";
-              console.log(this.output);
               let values = {
                 output: this.output,
                 arr1,

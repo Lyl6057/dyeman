@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-01 14:06:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-12-09 10:53:56
+ * @LastEditTime: 2021-12-11 18:18:53
  * @Description:
  */
 
@@ -45,7 +45,7 @@ export function delBleadyeJobMerge(id) {
 // 獲取运转单
 export function getRunJob(params) {
   return axios({
-    url: "/api/proBleadyeRunJob/page",
+    url: "/api/proBleadyeJobMerge/NotRef",
     method: "get",
     params: params
   });

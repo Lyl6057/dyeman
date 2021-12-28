@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
- * @LastEditors: Lyl
- * @LastEditTime: 2021-08-03 10:50:17
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-12-28 08:55:28
  * @Description:
 -->
 <template>
@@ -119,9 +119,13 @@ export default {
           delete this.form[key];
         }
       }
-      order
-        ? (this.form.sort = prop + (order == "descending" ? ",1" : ",0"))
-        : (this.form.sort = "storeLoadCode,1");
+      // order
+      //   ? (this.form.sort = prop + (order == "descending" ? ",1" : ",0"))
+      //   : (this.form.sort = "storeLoadCode,1");
+      this.form.storeLoadCode = "%" + (this.form.storeLoadCode ? this.form.storeLoadCode : "");
+      this.form.weaveJobCode = "%" + (this.form.weaveJobCode ? this.form.weaveJobCode : "");
+      this.form.clothCheckTime = "%" + (this.form.clothCheckTime ? this.form.clothCheckTime : "");
+      this.form.noteCode = "!^%" + (this.form.noteCode ? this.form.noteCode : "");
       get(
         Object.assign(this.form, {
           rows: this.page.pageSize,
@@ -139,6 +143,18 @@ export default {
           item.eachNumber = Number(item.eachNumber);
         });
         this.page.total = res.data.total;
+         if (this.form.storeLoadCode.indexOf("%") != -1) {
+          this.form.storeLoadCode = this.form.storeLoadCode.split("%")[1] || "";
+        }
+        if (this.form.clothCheckTime.indexOf("%") != -1) {
+          this.form.clothCheckTime = this.form.clothCheckTime.split("%")[1] || "";
+        }
+        if (this.form.weaveJobCode.indexOf("%") != -1) {
+          this.form.weaveJobCode = this.form.weaveJobCode.split("%")[1] || "";
+        }
+        if (this.form.noteCode.indexOf("!^%") != -1) {
+          this.form.noteCode = this.form.noteCode.split("!^%")[1] || "";
+        }
         setTimeout(() => {
           this.wLoading = false;
         }, 200);
@@ -295,21 +311,21 @@ export default {
             sums[index] = "選中重量：" + num.toFixed(1);
             this.checkSum = num.toFixed(1);
           }
-          if (index == 9) {
+          if (index == 10) {
             let num = 0;
             this.crud.forEach((item) => {
               num += Number(item.realWeight);
             });
             sums[index] = "毛重：" + num.toFixed(1);
           }
-          if (index == 10) {
+          if (index == 11) {
             let num = 0;
             this.crud.forEach((item) => {
               num += Number(item.clothWeight);
             });
             sums[index] = "重量：" + num.toFixed(1);
           }
-          if (index == 11) {
+          if (index == 12) {
             let num = 0;
             this.crud.forEach((item) => {
               num += Number(item.qcTakeOut);

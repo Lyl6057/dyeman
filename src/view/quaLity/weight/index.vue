@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
- * @LastEditors: Lyl
- * @LastEditTime: 2021-11-30 09:55:18
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-12-28 08:40:10
  * @Description: 
 -->
 <template>
@@ -178,9 +178,15 @@ export default {
         this.crud = [];
       }
       let { prop, order } = this.sort;
-      order
-        ? (this.form.sort = prop + (order == "descending" ? ",1" : ",0"))
-        : delete this.form["sort"];
+      // order
+      //   ? (this.form.sort = prop + (order == "descending" ? ",1" : ",0"))
+      //   : delete this.form["sort"];
+      
+      this.form.noteCode = "!^%" + (this.form.noteCode ? this.form.noteCode : "");
+      this.form.poNo = "%" + (this.form.poNo ? this.form.poNo : "");
+      this.form.clothCheckTime = "%" + (this.form.clothCheckTime ? this.form.clothCheckTime : "");
+      this.form.storeLoadCode = "%" + (this.form.storeLoadCode ? this.form.storeLoadCode : "");
+      this.form.weaveJobCode = "%" + (this.form.weaveJobCode ? this.form.weaveJobCode : "");
       get(
         Object.assign(this.form, {
           rows: this.page.pageSize,
@@ -200,11 +206,30 @@ export default {
         //   item.index = i + 1;
         //   item.eachNumber = Number(item.eachNumber);
         // });
+        if (this.form.storeLoadCode.indexOf("%") != -1) {
+          this.form.storeLoadCode = this.form.storeLoadCode.split("%")[1] || "";
+        }
+        if (this.form.poNo.indexOf("%") != -1) {
+          this.form.poNo = this.form.poNo.split("%")[1] || "";
+        }
+         if (this.form.clothCheckTime.indexOf("%") != -1) {
+          this.form.clothCheckTime = this.form.clothCheckTime.split("%")[1] || "";
+        }
+        if (this.form.weaveJobCode.indexOf("%") != -1) {
+          this.form.weaveJobCode = this.form.weaveJobCode.split("%")[1] || "";
+        }
+        if (this.form.noteCode.indexOf("!^%") != -1) {
+          this.form.noteCode = this.form.noteCode.split("!^%")[1] || "";
+        }
         this.page.total = res.data.total;
         // setTimeout(() => {
         this.wLoading = false;
         // }, 200);
-      });
+      }).catch((e) =>{
+        setTimeout(() => {
+           this.wLoading = false;
+        }, 500);
+      })
     },
     handleRowDBLClick(val) {
       this.detail = val;
@@ -340,21 +365,21 @@ export default {
             });
             sums[index] = "選中重量：" + num.toFixed(1);
           }
-          if (index == 10) {
+          if (index == 11) {
             let num = 0;
             this.crud.forEach((item) => {
               num += Number(item.realWeight);
             });
             sums[index] = "毛重：" + num.toFixed(1);
           }
-          if (index == 11) {
+          if (index == 12) {
             let num = 0;
             this.crud.forEach((item) => {
               num += Number(item.clothWeight);
             });
             sums[index] = "重量：" + num.toFixed(1);
           }
-          if (index == 12) {
+          if (index == 13) {
             let num = 0;
             this.crud.forEach((item) => {
               num += Number(item.qcTakeOut);

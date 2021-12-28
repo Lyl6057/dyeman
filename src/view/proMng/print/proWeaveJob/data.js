@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-12-08 09:26:49
+ * @LastEditTime: 2021-12-10 09:25:19
  * @Description:
  */
 
@@ -1268,7 +1268,7 @@ export function yarnCrud(_this, audit) {
         width: 80,
         align: "center",
         display: false,
-        cell: audit ? false : _this.detail.auditState ? false : true,
+        cell: true, //audit ? false : _this.detail.auditState ? false : true,
         placeholder: " "
       },
       {
@@ -1276,7 +1276,7 @@ export function yarnCrud(_this, audit) {
         prop: "yarnCode",
         width: 120,
         span: 6,
-        cell: audit ? false : _this.detail.auditState ? false : true
+        cell: true // audit ? false : _this.detail.auditState ? false : true
       },
       {
         label: "纱线名称",
@@ -1284,7 +1284,7 @@ export function yarnCrud(_this, audit) {
         width: 300,
         // overHidden: true,
         span: 6,
-        cell: audit ? false : _this.detail.auditState ? false : true
+        cell: true //audit ? false : _this.detail.auditState ? false : true
       },
       {
         label: "实测纱支",
@@ -1292,7 +1292,7 @@ export function yarnCrud(_this, audit) {
         width: 120,
         // overHidden: true,
         span: 6,
-        cell: audit ? false : _this.detail.auditState ? false : true
+        cell: true //audit ? false : _this.detail.auditState ? false : true
       },
       {
         label: "用纱比例",
@@ -1300,7 +1300,7 @@ export function yarnCrud(_this, audit) {
         width: 100,
         span: 6,
         type: "number",
-        cell: audit ? false : _this.detail.auditState ? false : true,
+        cell: true, // audit ? false : _this.detail.auditState ? false : true,
         placeholder: " "
       },
       {
@@ -1317,7 +1317,7 @@ export function yarnCrud(_this, audit) {
         prop: "yarnBrand",
         width: 150,
         span: 6,
-        cell: audit ? false : _this.detail.auditState ? false : true,
+        cell: true, // audit ? false : _this.detail.auditState ? false : true,
         type: "select",
         dicData: getDIC("bas_yarnBrand"),
         filterable: true,
@@ -1348,14 +1348,14 @@ export function yarnCrud(_this, audit) {
         width: 120,
         span: 6,
         align: "right",
-        cell: audit ? false : _this.detail.auditState ? false : true,
+        cell: true, // audit ? false : _this.detail.auditState ? false : true,
         placeholder: " "
       },
       {
         label: "输送张力",
         prop: "lineTension",
         width: 120,
-        cell: audit ? false : _this.detail.auditState ? false : true,
+        cell: true, //audit ? false : _this.detail.auditState ? false : true,
         align: "right",
         span: 6,
         placeholder: " "
@@ -1367,14 +1367,14 @@ export function yarnCrud(_this, audit) {
         align: "right",
         span: 6,
         placeholder: " ",
-        cell: audit ? false : _this.detail.auditState ? false : true
+        cell: true //audit ? false : _this.detail.auditState ? false : true
       },
       {
         label: "单位",
         prop: "unit",
         width: 100,
         span: 6,
-        cell: audit ? false : _this.detail.auditState ? false : true,
+        cell: true, // audit ? false : _this.detail.auditState ? false : true,
         placeholder: " ",
         type: "select",
         dicData: getDIC("bas_matUnit")

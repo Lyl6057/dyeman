@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-11-03 13:52:52
+ * @LastEditTime: 2021-12-11 18:43:29
  * @Description: 
 -->
 <template>
@@ -278,6 +278,7 @@ export default {
       this.form.vatNo = "!^%" + (this.form.vatNo ? this.form.vatNo : "");
       this.form.weaveJobCode =
         "%" + (this.form.weaveJobCode ? this.form.weaveJobCode : "");
+      this.form.salPoNo = "%" + (this.form.salPoNo ? this.form.salPoNo : "");
       get(
         Object.assign(this.form, {
           rows: this.page.pageSize,
@@ -302,6 +303,9 @@ export default {
         }
         if (this.form.weaveJobCode.indexOf("%") != -1) {
           this.form.weaveJobCode = this.form.weaveJobCode.split("%")[1];
+        }
+        if (this.form.salPoNo.indexOf("%") != -1) {
+          this.form.salPoNo = this.form.salPoNo.split("%")[1];
         }
         this.page.total = res.data.total;
         this.loading = false;

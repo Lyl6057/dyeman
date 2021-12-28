@@ -174,13 +174,14 @@
                 content="thêm mới "
                 placement="top-start"
               >
+              <!--  :disabled="
+                    !audit && form.auditState == 1 && tabs != '機號信息'
+                  " -->
                 <el-button
                   @click="add"
                   type="primary"
                   v-if="tabs != '選擇訂單'"
-                  :disabled="
-                    !audit && form.auditState == 1 && tabs != '機號信息'
-                  "
+                 
                   >{{ $t("public.add") }}</el-button
                 >
               </el-tooltip>
@@ -190,14 +191,16 @@
                 content="xóa"
                 placement="top-start"
               >
+
+              <!--  :disabled="
+                    Object.keys(chooseData).length == 0 ||
+                    (!audit && form.auditState == 1 && tabs != '機號信息')
+                  " -->
                 <el-button
                   @click="del"
                   type="danger"
                   v-if="tabs != '選擇訂單'"
-                  :disabled="
-                    Object.keys(chooseData).length == 0 ||
-                    (!audit && form.auditState == 1 && tabs != '機號信息')
-                  "
+                 
                   >{{ $t("public.del") }}</el-button
                 >
               </el-tooltip>

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-12-09 19:25:22
+ * @LastEditTime: 2021-12-21 16:49:24
  * @Description: 
 -->
 <template>
@@ -754,8 +754,8 @@ export default {
   methods: {
     remoteMethod(val) {
       this.vatLoading = true;
-      getRunJob({ vatNo: "!^%" + val, rows: 10, start: 1 }).then((res) => {
-        this.vatOptions = res.data.records;
+      getRunJob({ vatNo: val }).then((res) => {
+        this.vatOptions = res.data;
         this.vatLoading = false;
       });
     },
@@ -926,7 +926,7 @@ export default {
             if (!(val.mergVatNo instanceof Array) && val.mergVatNo) {
               val.mergVatNo = val.mergVatNo.split("/");
             }
-            val.dyeJarCount = Number(val.dyeVatType);
+            // val.dyeJarCount = Number(val.dyeVatType);
             // if (!(val.compLightSource instanceof Array) && val.compLightSource) {
             //   val.compLightSource = val.compLightSource.split(",");
             // }
@@ -968,7 +968,7 @@ export default {
         if (!(this.form.mergVatNo instanceof Array) && this.form.mergVatNo) {
           this.form.mergVatNo = this.form.mergVatNo.split("/");
         }
-        this.oldW = JSON.parse(JSON.stringify(this.form.clothWeight));
+        this.oldW = Number(this.form.clothWeight || 0);
 
         // // 获取工艺列表
         // getTechargue({
@@ -979,7 +979,6 @@ export default {
 
         setTimeout(() => {
           this.wLoading = false;
-          console.log(this.form);
         }, 200);
         // });
       }
@@ -1035,109 +1034,77 @@ export default {
 
             let arr = JSON.parse(JSON.stringify(this.form.mergVatNo)); // 合染缸号
             if (arr.length) {
-              getBleadyeJobMerge({
-                proBleadyeJobFk: this.form.bleadyeJobId,
-              }).then((res) => {
-                // 判断 new list length > old list length ?
-                if (arr.length < res.data.length) {
-                  res.data.forEach((item, i) => {
-                    if (i <= arr.length - 1) {
-                      // 更新缸号
-                      item.isBase = i == 0 ? true : false;
-                      if (arr[i].indexOf(":") != -1) {
-                        item.proBleadyeRunJobFk = arr[i].split(":")[1]; // 更新运转单号
-                        item.vatNo = arr[i].split(":")[0];
-                      } else {
-                        item.vatNo = arr[i];
-                      }
-                      updateBleadyeJobMerge(item).then((updateRes) => {});
-                    } else {
-                      // 删除多余的数据
-                      delBleadyeJobMerge(item.mergeVatId).then((delRes) => {});
-                    }
-                    if (i == res.data.length - 1) {
-                      getBleadyeJobMerge({
-                        proBleadyeJobFk: this.form.bleadyeJobId,
-                      }).then((newRes) => {
-                        if (newRes.data.length) {
-                          // 获取本缸重量
-                          getRevolveList({ vatNo: this.form.vatNo }).then(
-                            (revolveRes) => {
-                              if (revolveRes.data.length) {
-                                this.form.clothWeight =
-                                  revolveRes.data[0].dyeClothWeight;
-                              } else {
-                                this.form.clothWeight = 0;
-                              }
-                              newRes.data.forEach((revolveList, j) => {
-                                if (revolveList.vatNo != this.form.vatNo) {
-                                  getRevolveList({
-                                    runJobId: revolveList.proBleadyeRunJobFk,
-                                  }).then((revolveRes1) => {
-                                    if (revolveRes1.data.length) {
-                                      this.form.clothWeight +=
-                                        revolveRes1.data[0].dyeClothWeight;
-                                      if (j == newRes.data.length - 1) {
-                                        this.save(done);
-                                        // update(this.form).then();
-                                      }
-                                    }
-                                  });
-                                } else {
-                                  if (j == newRes.data.length - 1) {
-                                    this.save(done);
-                                  }
-                                }
-                              });
-                            }
-                          );
-                        } else {
-                          // 获取运转单的重量
-                          getRevolveList({ vatNo: this.form.vatNo }).then(
-                            (revolveRes) => {
-                              if (revolveRes.data.length) {
-                                this.form.clothWeight =
-                                  revolveRes.data[0].dyeClothWeight;
+              getRevolveList({ vatNo: this.form.vatNo }).then((revolveRes) => {
+                if (revolveRes.data.length) {
+                  arr.unshift(
+                    `${this.form.vatNo}:${revolveRes.data[0].runJobId}`
+                  );
+                  // console.log(arr.length);
+                  getBleadyeJobMerge({
+                    proBleadyeJobFk: this.form.bleadyeJobId,
+                  }).then((res) => {
+                    // 判断 new list length > old list length ?
+                    if (arr.length < res.data.length) {
+                      res.data.forEach((item, i) => {
+                        if (i <= arr.length - 1) {
+                          // 更新缸号
 
-                                this.save(done);
-                              }
+                          if (arr[i].indexOf(":") != -1) {
+                            item.proBleadyeRunJobFk = arr[i].split(":")[1]; // 更新运转单号
+                            item.vatNo = arr[i].split(":")[0];
+                          } else {
+                            item.vatNo = arr[i];
+                          }
+                          item.isBase = item.vatNo == this.form.vatNo ? 1 : 0;
+                          updateBleadyeJobMerge(item).then((updateRes) => {
+                            if (i == res.data.length - 1) {
+                              this.saveWeight(done);
                             }
-                          );
+                          });
+                        } else {
+                          // 删除多余的数据
+                          delBleadyeJobMerge(item.mergeVatId).then((delRes) => {
+                            if (i == res.data.length - 1) {
+                              this.saveWeight(done);
+                            }
+                          });
+                        }
+                      });
+                    } else {
+                      arr.forEach((item, i) => {
+                        if (i <= res.data.length - 1) {
+                          let data = res.data[i];
+                          //  更新数据
+
+                          if (item.indexOf(":") != -1) {
+                            data.proBleadyeRunJobFk = item.split(":")[1]; // 更新运转单号
+                            data.vatNo = item.split(":")[0];
+                          } else {
+                            data.vatNo = item;
+                          }
+                          data.isBase = data.vatNo == this.form.vatNo ? 1 : 0;
+                          updateBleadyeJobMerge(data).then((updateRes) => {
+                            if (i == arr.length - 1) {
+                              this.saveWeight(done);
+                            }
+                          });
+                        } else {
+                          // 新增数据
+                          let data = {};
+                          data.proBleadyeRunJobFk = item.split(":")[1];
+                          data.proBleadyeJobFk = this.form.bleadyeJobId;
+                          data.vatNo = item.split(":")[0];
+                          data.isBase = data.vatNo == this.form.vatNo ? 1 : 0;
+                          addBleadyeJobMerge(data).then((delRes) => {
+                            if (i == arr.length - 1) {
+                              this.saveWeight(done);
+                            }
+                          });
                         }
                       });
                     }
                   });
                 } else {
-                  arr.forEach((item, i) => {
-                    if (i <= res.data.length - 1) {
-                      let data = res.data[i];
-                      //  更新数据
-                      // data.isBase = i == 0?true:false
-                      if (item.indexOf(":") != -1) {
-                        data.proBleadyeRunJobFk = item.split(":")[1]; // 更新运转单号
-                        data.vatNo = item.split(":")[0];
-                      } else {
-                        data.vatNo = item;
-                      }
-                      updateBleadyeJobMerge(data).then((updateRes) => {
-                        if (i == arr.length - 1) {
-                          this.saveWeight(done);
-                        }
-                      });
-                    } else {
-                      // 新增数据
-                      let data = {};
-                      data.isBase = i == 0 ? true : false;
-                      data.proBleadyeRunJobFk = item.split(":")[1];
-                      data.proBleadyeJobFk = this.form.bleadyeJobId;
-                      data.vatNo = item.split(":")[0];
-                      addBleadyeJobMerge(data).then((delRes) => {
-                        if (i == arr.length - 1) {
-                          this.saveWeight(done);
-                        }
-                      });
-                    }
-                  });
                 }
               });
             } else {
@@ -1151,7 +1118,7 @@ export default {
               });
               getRevolveList({ vatNo: this.form.vatNo }).then((revolveRes) => {
                 if (revolveRes.data.length) {
-                  this.form.clothWeight = revolveRes.data[0].dyeClothWeight;
+                  this.form.clothWeight = revolveRes.data[0].clothWeight || 0;
                 } else {
                   this.form.clothWeight = 0;
                 }
@@ -1179,7 +1146,7 @@ export default {
           // 获取本缸重量
           getRevolveList({ vatNo: this.form.vatNo }).then((revolveRes) => {
             if (revolveRes.data.length) {
-              this.form.clothWeight = revolveRes.data[0].dyeClothWeight;
+              this.form.clothWeight = revolveRes.data[0].clothWeight || 0;
             } else {
               this.form.clothWeight = 0;
             }
@@ -1189,14 +1156,15 @@ export default {
                   runJobId: revolveList.proBleadyeRunJobFk,
                 }).then((revolveRes1) => {
                   if (revolveRes1.data.length) {
-                    this.form.clothWeight += revolveRes1.data[0].dyeClothWeight;
+                    this.form.clothWeight +=
+                      revolveRes1.data[0].clothWeight || 0;
                     if (j == newRes.data.length - 1) {
                       this.save(done);
                     }
                   }
                 });
               } else {
-                if (i == newRes.data.length - 1) {
+                if (j == newRes.data.length - 1) {
                   this.save(done);
                 }
               }
@@ -1206,7 +1174,7 @@ export default {
           // 获取运转单的重量
           getRevolveList({ vatNo: this.form.vatNo }).then((revolveRes) => {
             if (revolveRes.data.length) {
-              this.form.clothWeight = revolveRes.data[0].dyeClothWeight;
+              this.form.clothWeight = revolveRes.data[0].clothWeight || 0;
             }
 
             this.save(done);
@@ -1420,6 +1388,7 @@ export default {
               done();
             });
           }
+          this.remoteMethod("");
         }, 500);
       });
 
@@ -2140,7 +2109,7 @@ export default {
         if (!(val.mergVatNo instanceof Array) && val.mergVatNo) {
           val.mergVatNo = val.mergVatNo.split("/");
         }
-        val.dyeJarCount = Number(val.dyeVatType);
+        // val.dyeJarCount = Number(val.dyeVatType);
         // if (!(val.compLightSource instanceof Array) && val.compLightSource) {
         //   val.compLightSource = val.compLightSource.split(",");
         // }
@@ -2301,6 +2270,7 @@ export default {
   mounted() {
     this.vatLoading = true;
     this.getData();
+    this.remoteMethod("");
   },
   beforeDestroy() {},
 };

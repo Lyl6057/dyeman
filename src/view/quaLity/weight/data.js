@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
- * @LastEditors: Lyl
- * @LastEditTime: 2021-11-10 08:54:19
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-12-27 10:32:44
  * @Description:
  */
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
@@ -122,7 +122,6 @@ export function mainCrud(_this) {
     delBtn: false,
     menuWidth: 80,
     border: true,
-    index: false,
     highlightCurrentRow: true,
     height: "calc(100vh - 280px)",
     refreshBtn: false,
@@ -161,6 +160,14 @@ export function mainCrud(_this) {
         overHidden: true
       },
       {
+        label: "验布记录",
+        prop: "perching",
+        width: 250,
+        placeholder: " ",
+        overHidden: true,
+
+      },
+      {
         label: "訂單號(Số đơn hàng)",
         prop: "poNo",
         width: 150,
@@ -194,7 +201,6 @@ export function mainCrud(_this) {
         disabled: true,
         placeholder: " ",
         span: 6,
-        width: 100,
         width: 200,
         overHidden: true,
         hide: false
@@ -457,6 +463,7 @@ export function mainCrud(_this) {
         defaultFirstOption: true,
         dicData: getDIC("QC_CLOTH_VISITING_REMOVE")
       },
+     
       {
         label: "打印时间(thời gian in)",
         prop: "printedTime",

@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
- * @LastEditors: Lyl
- * @LastEditTime: 2021-11-26 14:33:40
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-12-25 14:21:01
  * @Description:
  */
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
@@ -180,7 +180,6 @@ export function mainCrud(_this) {
         placeholder: " ",
         span: 6,
         width: 100,
-        width: 200,
         overHidden: true,
         hide: true
       },
@@ -251,7 +250,6 @@ export function mainCrud(_this) {
         type: "number",
         align: "right",
         // precision: 1,
-        minRows: 0,
         minRows: 0,
         placeholder: " "
       },
@@ -776,6 +774,186 @@ export function dlgForm(_this) {
           value: "itemName"
         },
         dicData: [] //getDIC("QC_CLOTH_VISITING_REMOVE")
+      }
+    ]
+  };
+}
+
+export function dlgCrud(_this) {
+  return {
+    menu: false,
+    addBtn: false,
+    cancelBtn: false,
+    editBtn: false,
+    delBtn: false,
+    menuWidth: 80,
+    border: true,
+    index: true,
+    highlightCurrentRow: true,
+    height: "calc(100vh - 280px)",
+    refreshBtn: false,
+    columnBtn: false,
+    page: false,
+    labelWidth: 100,
+    selection: false,
+    showSummary: false,
+    // sumColumnList: [],
+    column: [
+      {
+        label: "浮重(Trọng lượng bì KG)",
+        prop: "grossWeight",
+        width: 120,
+        align: "right",
+        span: 6,
+        cell: false,
+        type: "number",
+        minRows: 0,
+        precision: 1,
+        placeholder: " "
+        // change: () => {}
+        // type: "number",
+        // precision: 1
+      },
+      {
+        label: "浮重(trọng lượng bì LBS)",
+        tip: "trọng lượng bì(LBS)",
+        prop: "grossWeightLbs",
+        width: 120,
+        span: 8,
+        minRows: 0,
+        type: "number",
+        precision: 1,
+        align: "right",
+        placeholder: " ",
+        disabled: true
+      },
+      {
+        label: "净重(trọng lượng tịnh KG)",
+        prop: "netWeight",
+        width: 150,
+        align: "right",
+        span: 6,
+        cell: true,
+        placeholder: " ",
+        type: "number",
+        minRows: 0,
+        precision: 1
+      },
+      {
+        label: "净重(trọng lượng tịnh LBS)",
+        tip: "trọng lượng tịnh(LBS)",
+        prop: "netWeightLbs",
+        width: 120,
+        span: 8,
+        minRows: 0,
+        type: "number",
+        precision: 1,
+        align: "left",
+        placeholder: " "
+      },
+      // {
+      //   label: "纸管重量(Trọng lượng thoi giấy)",
+      //   prop: "paperTube",
+      //   width: 180,
+      //   align: "right",
+      //   minRows: 0,
+      //   span: 6,
+      //   cell: true,
+      //   placeholder: " ",
+      //   type: "number",
+      //   precision: 1
+      // },
+
+      // {
+      //   label: "QC扣减数量(Số lượng QC cắt giảm)",
+      //   prop: "qcTakeOut",
+      //   width: 160,
+      //   align: "right",
+      //   span: 6,
+      //   cell: true,
+      //   placeholder: " ",
+      //   type: "number",
+      //   minRows: 0,
+      //   precision: 1
+      // },
+      // {
+      //   label: "载具编号(Mã lồng thép)",
+      //   prop: "storeLoadCode",
+      //   span: 8,
+      //   placeholder: " ",
+      //   cell: true,
+      //   overHidden: true,
+      //   sortable: true,
+      //   width: 160
+      // },
+      // {
+      //   label: "存储位置(Vị trí lưu trữ)",
+      //   prop: "storeSiteCode",
+      //   cell: true,
+      //   width: 220,
+      //   placeholder: " ",
+      //   type: "select",
+      //   filterable: true,
+      //   allowCreate: true,
+      //   defaultFirstOption: true,
+      //   dicData: getDicT("whseLocation", "locationCode", "locationCode")
+      // },
+
+      {
+        label: "克重(Trọng lượng trước giặt)",
+        // tip: "Tổng cộng(KG)",
+        prop: "realGramWeight",
+        width: 130,
+        span: 8,
+        cell: true,
+        // type: "number",
+        align: "left",
+        placeholder: " ",
+        overHidden: true
+      },
+      {
+        label: "幅宽(Khổ rộng vải mộc)",
+        // tip: "Tổng cộng(KG)",
+        prop: "actualSideBreadth",
+        width: 120,
+        cell: true,
+        span: 8,
+        // type: "number",
+        align: "left",
+        placeholder: " ",
+        overHidden: true
+      },
+      {
+        label: "码长(Chiều dài sợi)",
+        // tip: "Tổng cộng(KG)",
+        prop: "yardLength",
+        width: 100,
+        span: 8,
+        type: "number",
+        align: "right",
+        // precision: 1,
+        minRows: 0,
+        placeholder: " "
+      },
+      {
+        label: "验布员工号(Số thẻ người đứng máy)",
+        prop: "clothChecker",
+        span: 8,
+        placeholder: " ",
+        width: 180,
+        sortable: true,
+        overHidden: true
+      },
+      {
+        label: "验布时间",
+        prop: "clothCheckTime",
+        type: "date",
+        format: "yyyy-MM-dd HH:mm:ss",
+        valueFormat: "yyyy-MM-dd HH:mm:ss",
+        span: 6,
+        align: "center",
+        // sortable: true,
+        width: 200
       }
     ]
   };

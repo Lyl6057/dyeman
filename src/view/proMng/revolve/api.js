@@ -2,11 +2,19 @@
  * @Author: Lyl
  * @Date: 2021-02-01 14:06:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-12-07 15:31:00
+ * @LastEditTime: 2021-12-15 14:03:52
  * @Description:
  */
 
 import axios from "axios";
+
+// 查询织单
+export function getCodeValue(code) {
+  return axios({
+    url: "/api/baseEquipmentCategoryList?parentId=dev-12&categoryCode=" + code,
+    method: "get"
+  });
+}
 
 // 查询织单
 export function getWeave(params) {

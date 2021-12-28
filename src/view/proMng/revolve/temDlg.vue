@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
- * @LastEditors: Lyl
- * @LastEditTime: 2021-12-08 09:30:48
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-12-27 14:46:39
  * @Description:
 -->
 <template>
@@ -23,8 +23,11 @@
           <el-button
             type="success"
             @click="save"
+            v-if="!audit"
             :loading="wLoading"
-            :disabled="!audit && form.auditState == 1"
+            :disabled="
+              form.auditState == 1 && (form.runState == 1 || form.runState == 3)
+            "
             >{{ $t("public.save") }}</el-button
           >
         </el-tooltip>
@@ -37,14 +40,16 @@
           <el-button
             type="primary"
             @click="print"
-            :disabled="!form.runJobId || form.auditState != 1"
+            :disabled="
+              !form.runJobId || form.auditState != 1 || form.runState == 0
+            "
             >打印</el-button
           >
         </el-tooltip>
         <el-button
+          v-if="audit"
           type="primary"
           @click="auditHandle(form.auditState ? 0 : 1)"
-          v-if="audit"
           >{{ form.auditState ? "取消审核" : "审核" }}</el-button
         >
         <el-tooltip
@@ -188,6 +193,7 @@
       append-to-body
       :close-on-click-modal="false"
       :close-on-press-escape="false"
+      @close="pdfClose"
     >
       <view-container title="打印預覽">
         <embed
@@ -268,6 +274,7 @@ export default {
         packGw: false,
         packNw: false,
         firstOrOther: "2",
+        avgEachWeightKg: 58,
       },
       page: {
         pageSize: 20,
@@ -347,25 +354,66 @@ export default {
       }).then((res) => {
         if (res.data.records.length > 0) {
           let item = res.data.records[0];
-          item.fabName = item.fabricDesc;
-          item.breadthActual = item.breadth;
-          item.gramWeightBefor = item.gramWeight;
-          item.gramWeightAfter = isNaN(item.gramWeight) ? 0 : item.gramWeight;
-          item.shrinkLenth = item.verticalShrink;
-          item.shrinkWidth = item.horizonShrink;
-          item.clothWeight = isNaN(item.amount) ? 0 : item.amount;
-          item.fabElements = item.fiberComp;
-          item.poAmountKg = item.clothWeight;
-          item.needleDist = item.guage;
-          this.form = item;
-          // this.form.custPoNo = item.custPoNo;
+          this.form.salPoNo = this.form.salPoNo
+            ? this.form.salPoNo
+            : item.salPoNo;
+          this.form.custPoNo = this.form.custPoNo
+            ? this.form.custPoNo
+            : item.custPoNo;
+          this.form.contractNo = this.form.contractNo
+            ? this.form.contractNo
+            : item.contractNo;
+          this.form.colorName = this.form.colorName
+            ? this.form.colorName
+            : item.colorName;
+          this.form.colorCode = this.form.colorCode
+            ? this.form.colorCode
+            : item.colorCode;
+          this.form.custColorNo = this.form.custColorNo
+            ? this.form.custColorNo
+            : item.custColorNo;
+          this.form.colorCode = this.form.colorCode
+            ? this.form.colorCode
+            : item.colorCode;
+
+          this.form.clothWeight =
+            this.form.clothWeight && this.form.clothWeight != "undefined"
+              ? this.form.clothWeight
+              : isNaN(item.amount)
+              ? 0
+              : 100;
+          this.form.poAmountKg =
+            this.form.poAmountKg && this.form.poAmountKg != "undefined"
+              ? this.form.poAmountKg
+              : this.form.clothWeight;
+          this.form.fabName = item.fabricDesc;
+          this.form.breadthActual = item.breadth;
+          this.form.gramWeightBefor = item.gramWeight;
+          this.form.gramWeightAfter = isNaN(item.gramWeight)
+            ? 0
+            : item.gramWeight;
+
+          this.form.shrinkLenth = item.verticalShrink;
+          this.form.shrinkWidth = item.horizonShrink;
+          // this.form.clothWeight = isNaN(item.amount) ? 0 : item.amount;
+          this.form.fabElements = item.fiberComp;
+          // this.form.poAmountKg = this.form.clothWeight;
+          this.form.needleDist = item.guage;
           this.form.fabricCode = item.custFabricCode;
+
+          this.form.yarnLength = item.yarnLength;
+          this.form.breadth = item.breadth;
+          this.form.gramWeight = item.gramWeight;
+          this.form.yarnBatchNo = item.yarnBatchNo;
+          this.form.custCode = item.custCode;
+
           this.form.auditState = 0;
           this.form.yarnCard = "";
           this.form.yarnNumber = "";
           this.form.yarnCylinder = "";
           // this.form.breadthUnit = this.form.breadth.replace(/[^a-z]+/gi, "");
           // this.form.breadth = Number(this.form.breadth.replace(/[^0-9]/gi, ""));
+
           this.form.bf = [];
           getGroup({
             proWeaveJobFk: item.weaveJobId,
@@ -504,70 +552,100 @@ export default {
         .cofirm(val ? "是否确定通过审核?" : "是否确定取消审核?")
         .then(() => {
           this.wLoading = true;
-          update({ runJobId: this.form.runJobId, auditState: val }).then(
-            (res) => {
-              if (val) {
-                // 生成漂染单数据
-                let data = JSON.parse(JSON.stringify(this.form));
-                data.proBleadyeRunJobFk = data.runJobId;
-                data.test = "";
-                data.item = "";
-                data.mergVatNo = data.mergVatNo.join("/");
-                data.compLightSource = data.compLightSource.join(",");
-                data.dyeJarCount = Number(data.dyeVatType || 0);
-                Object.keys(data).forEach((item) => {
-                  if (this.isEmpty(data[item])) {
-                    delete data[item];
-                  }
-                });
-                data.poAmountLb = (data.poAmountKg * 2.2046226).toFixed(2);
-                getDye({
-                  vatNo: data.vatNo,
-                }).then((dye) => {
-                  if (dye.data.length) {
-                    data.bleadyeJobId = dye.data[0].bleadyeJobId;
-                    // 存在数据,更新
-                    updateDye(data).then((udye) => {
-                      this.form.auditState = val;
-                      this.$emit("refresh");
-                      this.$tip.success(this.$t("public.bccg"));
-                      this.wLoading = false;
-                    });
-                  } else {
-                    // 不存在数据，新增
-                    addDye(data).then((adye) => {
-                      this.addOtherData(adye.data.data);
-                      // 新增生产项目
-                      getItem({
-                        proBleadyeRunJobFk: data.runJobId,
-                      }).then((pres) => {
-                        pres.data.forEach((item) => {
-                          item.proBleadyeJobFk = adye.data.data;
-                          addDyeProject(item).then((pro) => {});
-                        });
-                      });
-                      // 新增测试要求
-                      getTest({
-                        proBleadyeRunJobFk: data.runJobId,
-                      }).then((pres) => {
-                        pres.data.forEach((item) => {
-                          item.proBleadyeJobFk = adye.data.data;
-                          addDyeTest(item).then((pro) => {});
-                        });
-                      });
-                    });
-                  }
-                });
-              } else {
-                setTimeout(() => {
-                  this.form.auditState = val;
-                  this.$emit("refresh");
-                  this.$tip.success(this.$t("public.bccg"));
-                  this.wLoading = false;
-                }, 200);
+          // this.form.runState = val ? this.form.runState : "1";
+          let mainData = {};
+          if (val) {
+            mainData = JSON.parse(JSON.stringify(this.form));
+            mainData.auditState = val;
+            mainData.runState = val ? mainData.runState : "1";
+            mainData.bf = null;
+            mainData.test = "";
+            mainData.item = "";
+            mainData.mergVatNo = mainData.mergVatNo.join("/");
+            mainData.compLightSource = mainData.compLightSource.join(",");  
+                              mainData.workDate += " 00:00:00";
+          
+         
+              mainData.deliveDate += " 00:00:00";
+            Object.keys(mainData).forEach((item) => {
+              if (this.isEmpty(mainData[item])) {
+                delete mainData[item];
               }
+            });
+          } else {
+            mainData = {
+              runJobId: this.form.runJobId,
+              auditState: val,
+              runState: val ? this.form.runState : "1",
+            };
+          }
+          update(mainData).then((res) => {
+            if (val) {
+              // 生成漂染单数据
+              let data = JSON.parse(JSON.stringify(this.form));
+              data.proBleadyeRunJobFk = data.runJobId;
+              data.test = "";
+              data.item = "";
+              data.mergVatNo = data.mergVatNo.join("/");
+              data.compLightSource = data.compLightSource.join(",");
+              data.dyeJarCount = Number(data.dyeVatType || 0);
+              Object.keys(data).forEach((item) => {
+                if (this.isEmpty(data[item])) {
+                  delete data[item];
+                }
+              });
+                  data.workDate += " 00:00:00";
+          
+         
+              data.deliveDate += " 00:00:00";
+              data.poAmountLb = (data.poAmountKg * 2.2046226).toFixed(2);
+              // data.clothWeight = data.dyeClothWeight;
+              getDye({
+                vatNo: data.vatNo,
+              }).then((dye) => {
+                if (dye.data.length) {
+                  data.bleadyeJobId = dye.data[0].bleadyeJobId;
+                  // 存在数据,更新
+                  updateDye(data).then((udye) => {
+                    this.form.auditState = val;
+                    this.$emit("refresh");
+                    this.$tip.success(this.$t("public.bccg"));
+                    this.wLoading = false;
+                  });
+                } else {
+                  // 不存在数据，新增
+                  addDye(data).then((adye) => {
+                    this.addOtherData(adye.data.data);
+                    // 新增生产项目
+                    getItem({
+                      proBleadyeRunJobFk: data.runJobId,
+                    }).then((pres) => {
+                      pres.data.forEach((item) => {
+                        item.proBleadyeJobFk = adye.data.data;
+                        addDyeProject(item).then((pro) => {});
+                      });
+                    });
+                    // 新增测试要求
+                    getTest({
+                      proBleadyeRunJobFk: data.runJobId,
+                    }).then((pres) => {
+                      pres.data.forEach((item) => {
+                        item.proBleadyeJobFk = adye.data.data;
+                        addDyeTest(item).then((pro) => {});
+                      });
+                    });
+                  });
+                }
+              });
+            } else {
+              setTimeout(() => {
+                this.form.auditState = val;
+                this.$emit("refresh");
+                this.$tip.success(this.$t("public.bccg"));
+                this.wLoading = false;
+              }, 200);
             }
-          );
+          });
         })
         .catch((err) => {
           this.$tip.warning(this.$t("public.qxcz"));
@@ -600,14 +678,14 @@ export default {
               }).then((res) => {});
             }
             if (index == res.data.length - 1) {
-              this.form.auditState = val;
+              this.form.auditState = 1;
               this.$emit("refresh");
               this.$tip.success(this.$t("public.bccg"));
               this.wLoading = false;
             }
           });
           if (!res.data.length) {
-            this.form.auditState = val;
+            this.form.auditState = 1;
             this.$emit("refresh");
             this.$tip.success(this.$t("public.bccg"));
             this.wLoading = false;
@@ -829,8 +907,15 @@ export default {
               }
             });
             let data = JSON.parse(JSON.stringify(this.form));
+            if (data.clothWeight > data.dyeVatType) {
+              this.$tip.error("合计重量不能大于设定生产机种重量!");
+              this.wLoading = false;
+              done();
+              return;
+            }
             data.workDate = timeConversion(this.form.workDate);
             data.deliveDate = timeConversion(this.form.deliveDate);
+
             let vat = "";
             data.mergVatNo.forEach((item, i) => {
               if (i == data.mergVatNo.length - 1) {
@@ -871,7 +956,7 @@ export default {
                 } else {
                   this.wLoading = false;
                   done();
-                  this.$tip.error(this.$t("public.bcsb"));
+                  this.$tip.error(this.$tip.error(res.data.msg));
                 }
               });
             } else {
@@ -891,7 +976,7 @@ export default {
                   this.detail.runJobId = res.data.data;
                   this.saveTest();
                 } else {
-                  this.$tip.error(this.$t("public.bcsb"));
+                  this.$tip.error(res.data.msg);
                   this.wLoading = false;
                 }
                 done();
@@ -1169,6 +1254,39 @@ export default {
         process.env.API_HOST +
         "/api/proBleadyeRunJob/createBleadyeRunJobPdf?id=" +
         this.form.runJobId;
+    },
+    pdfClose() {
+      if (this.form.runState == "1") {
+        this.$tip
+          .cofirm(
+            "是否更新打印状态(có cập nhật trạng thái in mới không)?",
+            this,
+            {}
+          )
+          .then(() => {
+            // this.form.printDate = this.$getNowTime("datetime");
+            // this.form.modifiDate = this.form.printDate;
+            // this.form.runState = "3";
+            update({
+              printDate: this.$getNowTime("datetime"),
+              modifiDate: this.$getNowTime("datetime"),
+              runState: "3",
+              runJobId: this.form.runJobId,
+            }).then((res) => {
+              if (res.data.code == 200) {
+                this.$tip.success("保存成功!");
+                this.$emit("refresh");
+                this.pdfDlg = false;
+              } else {
+                this.pdfDlg = false;
+                this.$tip.error(res.data.msg);
+              }
+            });
+          })
+          .catch(() => {
+            this.pdfDlg = false;
+          });
+      }
     },
     close() {
       if (this.refresh) {

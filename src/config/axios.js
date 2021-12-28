@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-01-23 08:03:49
- * @LastEditors: Lyl
- * @LastEditTime: 2021-12-08 10:19:04
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-12-28 09:09:17
  * @Description:
  */
 import axios from "axios";
@@ -72,10 +72,10 @@ axios.interceptors.request.use(config => {
   //   }
   // }
   // headers中配置serialize为true开启序列化
-  if (config.method === "post" && config.headers.serialize) {
-    config.data = serialize(config.data);
-    delete config.data.serialize;
-  }
+  // if (config.method === "post" && config.headers.serialize) {
+  //   config.data = serialize(config.data);
+  //   delete config.data.serialize;
+  // }
 
   return config;
 }),

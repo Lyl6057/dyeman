@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
- * @LastEditors: Lyl
- * @LastEditTime: 2021-09-15 16:51:54
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-12-27 18:58:28
  * @Description: 
 -->
 <template>
@@ -437,6 +437,9 @@ export default {
                   addBf(item)
                     .then((res) => {
                       // item.noteId = res.data.data;
+                      if (res.data.code != 200) {
+                        this.$tip.err(res.data.msg);
+                      }
                     })
                     .catch((err) => {
                       this.$tip.warning("生成失败!");
@@ -510,6 +513,7 @@ export default {
         });
         if (this.listType == "3") {
           this.allData = res.data.records;
+         
           if (this.options.length <= 1) {
             this.group(this.allData, "machineCode");
           }

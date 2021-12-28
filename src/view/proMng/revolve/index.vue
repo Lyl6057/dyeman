@@ -2,11 +2,11 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-12-07 16:49:48
+ * @LastEditTime: 2021-12-20 16:19:18
  * @Description:
 -->
 <template>
-  <div id="clothFlyPrint">
+  <div id="runJob">
     <view-container
       title="染整生产运转单"
       v-loading="wloading"
@@ -134,6 +134,7 @@
           :isAdd="isAdd"
           :copyC="copyC"
           @close="dialogVisible = false"
+          @print="print"
           @refresh="query"
         ></tem-dlg>
       </el-dialog>
@@ -145,6 +146,7 @@
         append-to-body
         :close-on-click-modal="false"
         :close-on-press-escape="false"
+        @close="pdfClose"
       >
         <view-container title="打印預覽">
           <!-- <div class="btnList">
@@ -179,7 +181,10 @@ export default {
   data() {
     return {
       formOp: mainForm(this),
-      form: {},
+      form: {
+        salPoNo: "",
+        colorCode: "",
+      },
       crudOp: mainCrud(this),
       crud: [],
 
@@ -214,6 +219,12 @@ export default {
       this.form.vatNo = "!^%" + (this.form.vatNo ? this.form.vatNo : "");
       this.form.weaveJobCode =
         "%" + (this.form.weaveJobCode ? this.form.weaveJobCode : "");
+
+      this.form.salPoNo = "%" + (this.form.salPoNo ? this.form.salPoNo : "");
+
+      // this.form.colorCode =
+      //   "%" + (this.form.colorCode ? this.form.colorCode : "");
+
       get(
         Object.assign(this.form, {
           rows: this.page.pageSize,
@@ -235,6 +246,12 @@ export default {
         if (this.form.weaveJobCode.indexOf("%") != -1) {
           this.form.weaveJobCode = this.form.weaveJobCode.split("%")[1];
         }
+        if (this.form.salPoNo.indexOf("%") != -1) {
+          this.form.salPoNo = this.form.salPoNo.split("%").join("");
+        }
+        // if (this.form.colorCode.indexOf("%") != -1) {
+        //   this.form.colorCode = this.form.colorCode.split("%").join("");
+        // }
         this.page.total = res.data.total;
         this.loading = false;
       });
@@ -331,6 +348,37 @@ export default {
     selectionChange(val) {
       this.selectList = val;
     },
+    pdfClose() {
+      if (this.detail.runState == "1") {
+        this.$tip
+          .cofirm(
+            "是否更新打印状态(có cập nhật trạng thái in mới không)?",
+            this,
+            {}
+          )
+          .then(() => {
+            this.detail.printDate = this.$getNowTime("datetime");
+            this.detail.modifiDate = this.detail.printDate;
+            this.detail.runState = "3";
+            update(this.detail).then((res) => {
+              if (res.data.code == 200) {
+                this.$tip.success("保存成功!");
+                this.pdfDlg = false;
+              } else {
+                this.$tip.error(res.data.msg);
+              }
+            });
+          })
+          .catch(() => {
+            this.pdfDlg = false;
+          });
+      }
+    },
+  },
+  updated() {
+    this.$nextTick(() => {
+      this.$refs.crud.doLayout();
+    });
   },
   created() {},
   mounted() {
@@ -340,10 +388,14 @@ export default {
 };
 </script>
 <style lang='stylus'>
-#clothFlyPrint {
+#runJob {
   .avue-crud__tip {
     display: none !important;
     height: 0px !important;
+  }
+
+  .avue-crud__menu {
+    height: 35px !important;
   }
 }
 </style>

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-29 14:14:56
  * @LastEditors: Lyl
- * @LastEditTime: 2021-10-26 18:02:05
+ * @LastEditTime: 2021-12-17 16:09:58
  * @Description:
  */
 export default [
@@ -18,6 +18,14 @@ export default [
     component: resolve => require(["@/view/proMng/ProWorkflow/index"], resolve),
     meta: {
       keepAlive: true
+    }
+  },
+  {
+    path: "/gantt",
+    name: "gantt",
+    component: resolve => require(["@/view/proMng/gantt/index"], resolve),
+    meta: {
+      keepAlive: false
     }
   },
   {

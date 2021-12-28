@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
- * @LastEditors: Lyl
- * @LastEditTime: 2021-11-29 09:07:33
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-12-25 15:52:48
  * @Description:
  */
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
@@ -255,13 +255,14 @@ export function mainCrud(_this) {
         tip: "Màu",
         prop: "colorName",
         placeholder: " ",
+        sortable: true,
         width: 180,
         overHidden: true,
         span: 6,
-        placeholder: " "
       },
       {
         label: "色號",
+        sortable: true,
         tip: "Số màu",
         prop: "colorCode",
         width: 150,
@@ -279,7 +280,6 @@ export function mainCrud(_this) {
         width: 250,
         span: 12,
         sortable: true,
-        placeholder: " "
         // rules: [{
         //   required: true,
         //   message: "请選擇布類描述",
@@ -570,12 +570,14 @@ export function mainCrud(_this) {
         label: "开单员",
         tip: "开单员",
         prop: "serviceOperator",
-        width: 80,
+        width: 100,
         span: 6,
         disabled: true,
+        sortable: true,
         // hide: true,
         placeholder: " "
       },
+
       // {
       //   label: "审核",
       //   // tip:"Nhận hàng yêu cầu",
@@ -702,6 +704,18 @@ export function mainCrud(_this) {
         display: false,
         placeholder: "修改时间",
         sortable: true
+      },
+      {
+        label: "打印日期",
+        prop: "printDate",
+        span: 6,
+        placeholder: " ",
+        width: 150,
+        overHidden: true,
+        display: false,
+        type: "datetime",
+        format: "yyyy-MM-dd HH:mm:ss",
+        valueFormat: "yyyy-MM-dd HH:mm:ss",
       }
     ],
     group: [
@@ -1227,7 +1241,6 @@ export function mainWCrud(_this) {
         label: "成品交期",
         prop: "productDate",
         width: 120,
-        placeholder: " ",
         span: 6,
         type: "date",
         tip: "Kỳ hạn thành phẩm",
@@ -1403,7 +1416,6 @@ export function mainWCrud(_this) {
       {
         label: "布類描述",
         prop: "fabricDesc",
-        placeholder: " ",
         overHidden: true,
         width: 250,
         span: 12,
@@ -1421,7 +1433,6 @@ export function mainWCrud(_this) {
       {
         label: "顏色名稱",
         prop: "colorName",
-        placeholder: " ",
         tip: "Màu sắc",
         width: 180,
         overHidden: true,
@@ -1434,7 +1445,6 @@ export function mainWCrud(_this) {
             trigger: "blur"
           }
         ],
-        overHidden: true
       },
       {
         label: "色號",
@@ -1456,7 +1466,6 @@ export function mainWCrud(_this) {
         tip: "Tỷ lệ sơ sợi",
         span: 12,
         hide: true,
-        placeholder: " "
       },
       {
         label: "创建时间",

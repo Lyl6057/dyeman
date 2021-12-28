@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-11-29 09:40:37
+ * @LastEditTime: 2021-12-20 19:01:45
  * @Description:
 -->
 <template>
@@ -52,6 +52,7 @@
             @row-dblclick="handleRowDBLClick"
             @current-row-change="cellClick"
             @selection-change="selectionChange"
+            :row-style="rowStyle"
           ></avue-crud>
         </el-row>
         <el-dialog
@@ -219,19 +220,21 @@ export default {
           this.form.weaveJobCode =
             "%" + (this.form.weaveJobCode ? this.form.weaveJobCode : "");
         }
-        if (this.form.salPoNo.indexOf("%") == -1) {
+        if (this.form.salPoNo && this.form.salPoNo.indexOf("%") == -1) {
           this.form.salPoNo =
             "%" + (this.form.salPoNo ? this.form.salPoNo : "");
         }
-        this.form.colorCode =
-          "%" + (this.form.colorCode ? this.form.colorCode : "");
+        if (this.form.colorCode && this.form.colorCode.indexOf("%") == -1) {
+          this.form.colorCode =
+            "%" + (this.form.colorCode ? this.form.colorCode : "");
+        }
         get(
           Object.assign(this.form, {
             rows: this.page.pageSize,
             start: this.page.currentPage,
             pages: this.page.currentPage,
             // isWorkOut: 0,
-            runState: 1,
+            // runState: 1,
           })
         ).then((res) => {
           this.crud = res.data.records;
@@ -324,6 +327,7 @@ export default {
             this.selectList.forEach((item, i) => {
               item.auditState = 1;
               item.modifiDate = this.$getNowTime("datetime");
+              // item.runState = "1"
               update(item).then((res) => {
                 let data = JSON.parse(JSON.stringify(item));
                 data.proBleadyeRunJobFk = data.runJobId;
@@ -337,6 +341,7 @@ export default {
                     delete data[item];
                   }
                 });
+                // data.clothWeight = data.dyeClothWeight;
                 data.poAmountLb = (data.poAmountKg * 2.2046226).toFixed(2);
                 getDye({
                   vatNo: data.vatNo,
@@ -405,6 +410,7 @@ export default {
           if (this.activeName == "first") {
             this.selectList.forEach((item, i) => {
               item.auditState = 0;
+              item.runState = "1"; // 恢复未打印状态
               update(item).then((res) => {
                 if (i == this.selectList.length - 1) {
                   this.wLoading = false;
@@ -429,6 +435,14 @@ export default {
         .catch((err) => {
           this.$tip.warning(this.$t("public.qxcz"));
         });
+    },
+    rowStyle({ row, column, rowIndex }) {
+      if (row.runState == "0") {
+        return {
+          backgroundColor: "#FBD295",
+          // color:'#fff'
+        };
+      }
     },
     isEmpty(obj) {
       if (

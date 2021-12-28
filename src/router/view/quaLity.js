@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-10 13:20:44
  * @LastEditors: Lyl
- * @LastEditTime: 2021-11-18 14:40:28
+ * @LastEditTime: 2021-12-11 15:08:31
  * @Description:
  */
 export default [
@@ -139,6 +139,14 @@ export default [
     path: "/finalCard",
     name: "成品码卡",
     component: resolve => require(["@/view/quaLity/finalCard/index"], resolve),
+    meta: {
+      keepAlive: true
+    }
+  },
+  {
+    path: "/codeCardQa",
+    name: "QA成品码卡打印",
+    component: resolve => require(["@/view/quaLity/codeCardQa/index"], resolve),
     meta: {
       keepAlive: true
     }

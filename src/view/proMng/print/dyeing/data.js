@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-12-08 10:53:05
+ * @LastEditTime: 2021-12-15 15:24:00
  * @Description:
  */
 
@@ -230,7 +230,7 @@ export function mainCrud(_this) {
         tip: "Số lô nhuộm",
         width: 140,
         span: 6,
-        disabled: false,
+        disabled: true,
         placeholder: "請選擇缸號",
         sortable: true,
         rules: [
@@ -239,14 +239,14 @@ export function mainCrud(_this) {
             message: "請選擇缸號",
             trigger: "blur"
           }
-        ],
-        click: () => {
-          if (!_this.copyCtr) {
-            _this.choiceTle = "选择染整运转单";
-            _this.choiceQ.runState = "1";
-            _this.choiceV = true;
-          }
-        }
+        ]
+        // click: () => {
+        //   if (!_this.copyCtr) {
+        //     _this.choiceTle = "选择染整运转单";
+        //     _this.choiceQ.runState = "1";
+        //     _this.choiceV = true;
+        //   }
+        // }
       },
       {
         label: "發單日期",
@@ -260,6 +260,7 @@ export function mainCrud(_this) {
         valueFormat: "yyyy-MM-dd",
         placeholder: "请選擇發單日期",
         sortable: true,
+        disabled: true,
         rules: [
           {
             required: true,
@@ -280,6 +281,7 @@ export function mainCrud(_this) {
         valueFormat: "yyyy-MM-dd",
         placeholder: "请選擇交货日期",
         sortable: true,
+        disabled: true,
         rules: [
           {
             required: true,
@@ -295,8 +297,17 @@ export function mainCrud(_this) {
         overHidden: true,
         width: 100,
         span: 6,
-        disabled: false,
+        disabled: true,
         placeholder: " ",
+        type: "number",
+        align: "right"
+        // type: "select",
+        // dicData: getDicT(
+        //   "baseEquipmentCategoryList",
+        //   "categoryName",
+        //   "categoryCode",
+        //   { parentId: "dev-12" }
+        // )
         // rules: [
         //   {
         //     required: true,
@@ -304,14 +315,13 @@ export function mainCrud(_this) {
         //     trigger: "blur"
         //   }
         // ],
-        type: "number",
-        align: "right"
       },
       {
         label: "重量",
         tip: "Trọng lượng",
         prop: "clothWeight",
         width: 100,
+        disabled: true,
         span: 6,
         type: "number",
         disabled: true,
@@ -326,12 +336,12 @@ export function mainCrud(_this) {
           }
         ],
         change: () => {
-          _this.$nextTick(() => {
-            _this.form.dyeJarCount =
-              Number(_this.form.clothWeight) / 350 >= 4
-                ? 4
-                : Math.ceil(Number(_this.form.clothWeight) / 350);
-          });
+          // _this.$nextTick(() => {
+          //   _this.form.dyeJarCount =
+          //     Number(_this.form.clothWeight) / 350 >= 4
+          //       ? 4
+          //       : Math.ceil(Number(_this.form.clothWeight) / 350);
+          // });
         }
       },
 
@@ -341,8 +351,8 @@ export function mainCrud(_this) {
         prop: "address",
         overHidden: true,
         width: 180,
+        disabled: true,
         span: 12,
-        disabled: false,
         placeholder: " "
       },
       {
@@ -353,6 +363,7 @@ export function mainCrud(_this) {
         width: 180,
         span: 6,
         disabled: false,
+        disabled: true,
         placeholder: " ",
         rules: [
           {
@@ -370,6 +381,7 @@ export function mainCrud(_this) {
         span: 6,
         type: "number",
         align: "right",
+        disabled: true,
         placeholder: " "
       },
       {
@@ -380,6 +392,7 @@ export function mainCrud(_this) {
         width: 200,
         span: 6,
         placeholder: " ",
+        disabled: true,
         type: "select",
         dicData: cust
         // change: () => {
@@ -394,6 +407,7 @@ export function mainCrud(_this) {
         label: "訂單編號",
         tip: "Mã số đơn hàng",
         prop: "salPoNo",
+        disabled: true,
         width: 180,
         span: 6,
         placeholder: " ",
@@ -409,6 +423,7 @@ export function mainCrud(_this) {
         span: 6,
         type: "number",
         align: "right",
+        disabled: true,
         placeholder: " ",
         change: () => {
           _this.$nextTick(() => {
@@ -444,6 +459,7 @@ export function mainCrud(_this) {
         overHidden: true,
         width: 250,
         span: 12,
+        disabled: true,
         placeholder: " "
         // rules: [{
         //   required: true,
@@ -459,6 +475,7 @@ export function mainCrud(_this) {
         placeholder: " ",
         overHidden: true,
         width: 250,
+        disabled: true,
         span: 6
       },
 
@@ -468,8 +485,9 @@ export function mainCrud(_this) {
         prop: "yarnBatchNo",
         span: 6,
         width: 120,
+
         placeholder: " ",
-        disabled: false,
+        disabled: true,
         hide: true
       },
       {
@@ -479,7 +497,7 @@ export function mainCrud(_this) {
         span: 6,
         width: 120,
         placeholder: " ",
-        disabled: false,
+        disabled: true,
         hide: true
       },
       {
@@ -489,7 +507,7 @@ export function mainCrud(_this) {
         span: 6,
         width: 120,
         placeholder: " ",
-        disabled: false,
+        disabled: true,
         hide: true
       },
 
@@ -501,6 +519,7 @@ export function mainCrud(_this) {
         width: 180,
         overHidden: true,
         span: 6,
+        disabled: true,
         placeholder: " "
         // rules: [{
         //   required: true,
@@ -515,6 +534,7 @@ export function mainCrud(_this) {
         width: 150,
         span: 6,
         overHidden: true,
+        disabled: true,
         placeholder: " "
       },
       {
@@ -524,7 +544,7 @@ export function mainCrud(_this) {
         overHidden: true,
         width: 180,
         span: 12,
-        disabled: false,
+        disabled: true,
         type: "select",
         dicData: [],
         formslot: true,
@@ -542,6 +562,7 @@ export function mainCrud(_this) {
         width: 90,
         hide: true,
         span: 6,
+        disabled: true,
         // type: "number",
         placeholder: " "
       },
@@ -564,6 +585,7 @@ export function mainCrud(_this) {
         span: 6,
         hide: true,
         placeholder: " ",
+        disabled: true,
         width: 80
         // tyep: "number"
       },
@@ -587,6 +609,7 @@ export function mainCrud(_this) {
         hide: true,
         placeholder: " ",
         width: 80,
+        disabled: true,
         type: "number"
       },
       // {
@@ -605,6 +628,7 @@ export function mainCrud(_this) {
         tip: "kính thoi",
         span: 6,
         hide: true,
+        disabled: true,
         placeholder: " ",
         width: 80,
         type: "number"
@@ -626,6 +650,7 @@ export function mainCrud(_this) {
         prop: "gramWeight",
         tip: "Trọng lượng vải mộc",
         width: 120,
+        disabled: true,
         hide: true,
         span: 6,
         // type: "number",
@@ -636,6 +661,7 @@ export function mainCrud(_this) {
         label: "顏色數量",
         prop: "poColorCount",
         tip: "Số lượng màu",
+        disabled: true,
         width: 120,
         span: 6,
         type: "number",
@@ -645,6 +671,7 @@ export function mainCrud(_this) {
       {
         label: "訂單總缸數",
         prop: "poVatCount",
+        disabled: true,
         tip: "TC ? Bồn",
         width: 120,
         span: 6,
@@ -657,6 +684,7 @@ export function mainCrud(_this) {
         prop: "vatIndex",
         tip: "Thứ ? Bồn",
         width: 120,
+        disabled: true,
         span: 6,
         type: "number",
         align: "right",
@@ -670,6 +698,7 @@ export function mainCrud(_this) {
         width: 120,
         hide: true,
         placeholder: " ",
+        disabled: true,
         span: 6
       },
       {
@@ -680,6 +709,7 @@ export function mainCrud(_this) {
         hide: true,
         placeholder: " ",
         span: 6,
+        disabled: true,
         multiple: true,
         type: "select",
         dicData: getDIC("sal_colorLights")
@@ -691,22 +721,24 @@ export function mainCrud(_this) {
         tip: "Quy cách tham khảo",
         width: 120,
         hide: true,
+        disabled: true,
         placeholder: " ",
         span: 12
       },
-      {
-        label: "ET序号",
-        prop: "etSn",
-        tip: "ET序号",
-        width: 120,
-        hide: true,
-        placeholder: " ",
-        span: 6
-      },
+      // {
+      //   label: "ET序号",
+      //   prop: "etSn",
+      //   tip: "ET序号",
+      //   width: 120,
+      //   hide: true,
+      //   placeholder: " ",
+      //   span: 6
+      // },
       {
         label: "稱料員",
         prop: "mateStockMan",
         tip: "Thợ cân",
+        disabled: true,
         width: 80,
         span: 6,
         hide: true,
@@ -759,6 +791,7 @@ export function mainCrud(_this) {
             width: 90,
             hide: true,
             span: 6,
+            disabled: true,
             // type: "number",
             placeholder: " "
           },
@@ -768,6 +801,7 @@ export function mainCrud(_this) {
             prop: "breadthBorder",
             width: 90,
             hide: true,
+            disabled: true,
             span: 6,
             // type: "number",
             placeholder: " "
@@ -779,6 +813,7 @@ export function mainCrud(_this) {
             width: 120,
             hide: true,
             span: 6,
+            disabled: true,
             // type: "number",
             placeholder: " "
           },
@@ -789,6 +824,7 @@ export function mainCrud(_this) {
             tip: "Trọng lượng Giặt sau",
             hide: true,
             span: 6,
+            disabled: true,
             // type: "number",
             placeholder: " "
           },
@@ -799,7 +835,8 @@ export function mainCrud(_this) {
             span: 6,
             hide: true,
             width: 80,
-            placeholder: " "
+            placeholder: " ",
+            disabled: true
             // type: "number"
           },
           {
@@ -808,6 +845,7 @@ export function mainCrud(_this) {
             prop: "shrinkWidth",
             span: 6,
             hide: true,
+            disabled: true,
             width: 80,
             placeholder: " "
             // type: "number"
@@ -819,6 +857,7 @@ export function mainCrud(_this) {
             tip: "Độ méo",
             span: 6,
             hide: true,
+            disabled: true,
             width: 80,
             placeholder: " ",
             type: "number"
@@ -830,6 +869,7 @@ export function mainCrud(_this) {
             span: 6,
             hide: true,
             width: 80,
+            disabled: true,
             placeholder: " ",
             type: "number"
           },
@@ -840,6 +880,7 @@ export function mainCrud(_this) {
             tip: "Treo khô",
             span: 6,
             hide: true,
+            disabled: true,
             width: 80,
             placeholder: " ",
             type: "switch",
@@ -862,6 +903,7 @@ export function mainCrud(_this) {
             hide: true,
             width: 80,
             placeholder: " ",
+            disabled: true,
             type: "switch",
             dicData: [
               {
@@ -880,6 +922,7 @@ export function mainCrud(_this) {
             tip: "Vắt khô",
             span: 6,
             hide: true,
+            disabled: true,
             width: 80,
             placeholder: " "
           }
@@ -1514,27 +1557,27 @@ export function techargueCrud(_this) {
             if (isNaN(_this.chooseData.haltWater)) {
               _this.chooseData.haltWater = 0;
             }
-            if (
-              _this.form.dyeJarCount == 1 &&
-              _this.chooseData.haltWater < 125
-            ) {
-              _this.chooseData.haltWater = 125;
-            } else if (
-              _this.form.dyeJarCount == 2 &&
-              _this.chooseData.haltWater < 600
-            ) {
-              _this.chooseData.haltWater = 600;
-            } else if (
-              _this.form.dyeJarCount == 3 &&
-              _this.chooseData.haltWater < 400
-            ) {
-              _this.chooseData.haltWater = 850;
-            } else if (
-              _this.form.dyeJarCount == 4 &&
-              _this.chooseData.haltWater < 400
-            ) {
-              _this.chooseData.haltWater = 1000;
-            }
+            // if (
+            //   _this.form.dyeJarCount == 1 &&
+            //   _this.chooseData.haltWater < 125
+            // ) {
+            //   _this.chooseData.haltWater = 125;
+            // } else if (
+            //   _this.form.dyeJarCount == 2 &&
+            //   _this.chooseData.haltWater < 600
+            // ) {
+            //   _this.chooseData.haltWater = 600;
+            // } else if (
+            //   _this.form.dyeJarCount == 3 &&
+            //   _this.chooseData.haltWater < 400
+            // ) {
+            //   _this.chooseData.haltWater = 850;
+            // } else if (
+            //   _this.form.dyeJarCount == 4 &&
+            //   _this.chooseData.haltWater < 400
+            // ) {
+            //   _this.chooseData.haltWater = 1000;
+            // }
           });
         }
       }

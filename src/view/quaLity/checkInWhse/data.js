@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
- * @LastEditors: Lyl
- * @LastEditTime: 2021-11-05 08:59:50
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-12-27 16:34:49
  * @Description:
  */
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
@@ -158,6 +158,14 @@ export function mainCrud(_this) {
         placeholder: " ",
         disabled: true,
         overHidden: true
+      },
+      {
+        label: "验布记录",
+        prop: "perching",
+        width: 250,
+        placeholder: " ",
+        overHidden: true,
+
       },
       // {
       //   label: "訂單號(Số đơn hàng)",

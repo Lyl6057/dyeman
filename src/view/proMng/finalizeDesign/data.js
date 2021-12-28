@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-11-15 19:06:23
+ * @LastEditTime: 2021-12-24 15:28:06
  * @Description:
  */
 
@@ -309,7 +309,7 @@ export function mainCrud(_this) {
         // }],
       },
       {
-        label: "成品/干布",
+        label: "定型类型",
         tip: "成品/干布(thành phẩm/vải khô)",
         prop: "finishJobOption",
         width: 120,
@@ -325,6 +325,10 @@ export function mainCrud(_this) {
           {
             value: "干布",
             label: "干布"
+          },
+          {
+            value: "预定",
+            label: "预定"
           }
         ]
       },
