@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-01 14:06:25
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-12-27 08:20:19
+ * @LastEditTime: 2021-12-29 13:26:27
  * @Description:
  */
 
@@ -27,9 +27,9 @@ export function getJob(params) {
 }
 
 // 獲取打印記錄
-export function get(params) {
+export function get(params,r_clothCheckTime_r) {
   return axios({
-    url: '/api/proClothNote/pages',
+    url: '/api/proClothNote/pages?r_clothCheckTime_r=' + r_clothCheckTime_r,
     method: 'get',
     params: params
   })

@@ -37,7 +37,7 @@
               : datas === this.$t('iaoMng.hgyl')
               ? 15
               : datas === '成品布' || datas === this.$t('iaoMng.yl')
-              ? 24
+              ? 15
               : 15
           "
         >
@@ -220,6 +220,7 @@
           :span="9"
           v-if="
             datas === this.$t('iaoMng.hgyl') ||
+            datas === this.$t('iaoMng.yl') ||
             datas === this.$t('choicDlg.wj') ||
             datas === this.$t('choicDlg.xz') ||
             datas === this.$t('choicDlg.scfl') ||
@@ -480,6 +481,7 @@ export default {
         });
     },
     getPh() {
+      console.log(this.chooseData);
       if (this.isAdd) {
         if (this.chooseData.list) {
           if (this.chooseData.list.length != 0) {
@@ -1052,11 +1054,14 @@ export default {
                   item.energyDtloid = this.mx[i].energyDtloid;
                   item.whseOfficeDtlFk = this.mx[i].whseAccessoriesDtloid;
                   item.whseAccessoriesDtloid = this.mx[i].whseAccessoriesDtloid;
+                  // item.whseDyesainDtlaFk = this.mx[i].whseAccessoriesDtloid;
+                
                   if (
                     this.datas === this.$t("iaoMng.hgyl") ||
                     this.datas === this.$t("choicDlg.wj") ||
                     this.datas === this.$t("choicDlg.xz") ||
                     this.datas === this.$t("choicDlg.scfl") ||
+                    this.datas === this.$t("iaoMng.yl") ||
                     this.datas === this.$t("choicDlg.rl")
                   ) {
                     if (
@@ -1065,7 +1070,9 @@ export default {
                       !item.whseAccessoriesDtlaoid &&
                       !item.whseEnergyDtlaId
                     ) {
+                     console.log(item)
                       this.everyThing.addPh(item).then((res) => {
+                        
                         item.whseChemicalinDtlboid = res.data.data;
                         item.whseDyesainDtlboid = res.data.data;
                         item.whseAccessoriesDtlaoid = res.data.data;
@@ -1226,7 +1233,8 @@ export default {
                     this.datas === this.$t("choicDlg.wj") ||
                     this.datas === this.$t("choicDlg.xz") ||
                     this.datas === this.$t("choicDlg.scfl") ||
-                    this.datas === this.$t("choicDlg.rl")
+                    this.datas === this.$t("choicDlg.rl")||
+                    this.datas === this.$t("iaoMng.yl") 
                   ) {
                     if (
                       !item.whseChemicalinDtlboid &&

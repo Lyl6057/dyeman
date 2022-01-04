@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-06-08 16:50:31
- * @LastEditors: Lyl
- * @LastEditTime: 2021-06-09 15:48:24
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2022-01-03 16:22:22
  * @Description: 
 -->
 <template>
@@ -12,11 +12,13 @@
       title="仓库载具"
       :formOp="mainForm(this)"
       :crudOp="mainCrud(this)"
+      :canPrint="true"
       :api="api"
       :apiParams="{
         sort: 'storageCode',
         delTle: 'storageCode',
         save: 'carriageStorageId',
+        printId: 'storageCode',
       }"
       sortObj="storageCode"
       :addParams="{

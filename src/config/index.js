@@ -83,6 +83,27 @@ export const webSocket = {
 
     // }
   },
+  setClient(_this){
+    if ("WebSocket" in window) {
+      _this.spowerClient = new WebSocket("ws://127.0.0.1:44001/data");
+    } else {
+      _this.$tip.error("该浏览器不支持websocket通讯，请切换浏览器！");
+    }
+    //连接发生错误的回调方法
+    // _this.prsocket.onerror = function() {
+    //   // _this.$tip.error("打印应用连接失败，请检查是否启动!");
+    //   _this.$tip.warning("打印服务离线!");
+    // };
+    //连接成功建立的回调方法
+    _this.spowerClient.onopen = function(event) {
+      _this.$tip.success("S.POWER客户端连接成功!");
+    };
+    //接收到消息的回调方法
+    _this.spowerClient.onmessage = function(event) {};
+    //连接关闭的回调方法
+    _this.spowerClient.onclose = function() {
+    };
+  },
   setDriving(_this) {
     if ("WebSocket" in window) {
       _this.drsocket = new WebSocket("ws://192.168.5.1:92/test-one");

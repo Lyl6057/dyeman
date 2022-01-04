@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-12-28 08:40:10
+ * @LastEditTime: 2022-01-04 18:34:59
  * @Description: 
 -->
 <template>
@@ -181,18 +181,29 @@ export default {
       // order
       //   ? (this.form.sort = prop + (order == "descending" ? ",1" : ",0"))
       //   : delete this.form["sort"];
-      
-      this.form.noteCode = "!^%" + (this.form.noteCode ? this.form.noteCode : "");
+      let r_clothCheckTime_r = ''
+      if( this.form.clothCheckTime &&this.form.clothCheckTime.length){
+        // this.form.clothCheckTime.forEach((item) =>{
+        r_clothCheckTime_r = `!%5E%5B${this.form.clothCheckTime[0]} 07:30:00~${this.form.clothCheckTime[1]} 07:30:00%5D`
+      // })
+      }
+      // else{
+      //   r_clothCheckTime_r = '!%5E'
+      // }
+      this.form.noteCode = "%" + (this.form.noteCode ? this.form.noteCode : "");
       this.form.poNo = "%" + (this.form.poNo ? this.form.poNo : "");
-      this.form.clothCheckTime = "%" + (this.form.clothCheckTime ? this.form.clothCheckTime : "");
-      this.form.storeLoadCode = "%" + (this.form.storeLoadCode ? this.form.storeLoadCode : "");
+      // this.form.clothCheckTime = "%" + (this.form.clothCheckTime ? this.form.clothCheckTime : "");
+      // this.form.storeLoadCode = "%" + (this.form.storeLoadCode ? this.form.storeLoadCode : "");
       this.form.weaveJobCode = "%" + (this.form.weaveJobCode ? this.form.weaveJobCode : "");
+       let data = JSON.parse(JSON.stringify(this.form)) 
+      data.clothCheckTime = null
       get(
-        Object.assign(this.form, {
+        Object.assign(data, {
           rows: this.page.pageSize,
           start: this.page.currentPage,
           isPrinted: true,
-        })
+        }),
+        r_clothCheckTime_r
       ).then((res) => {
         // this.crud = _.concat(res.data.records, this.crud);
         this.crud = res.data.records;
@@ -206,20 +217,20 @@ export default {
         //   item.index = i + 1;
         //   item.eachNumber = Number(item.eachNumber);
         // });
-        if (this.form.storeLoadCode.indexOf("%") != -1) {
-          this.form.storeLoadCode = this.form.storeLoadCode.split("%")[1] || "";
-        }
+        // if (this.form.storeLoadCode.indexOf("%") != -1) {
+        //   this.form.storeLoadCode = this.form.storeLoadCode.split("%")[1] || "";
+        // }
         if (this.form.poNo.indexOf("%") != -1) {
           this.form.poNo = this.form.poNo.split("%")[1] || "";
         }
-         if (this.form.clothCheckTime.indexOf("%") != -1) {
-          this.form.clothCheckTime = this.form.clothCheckTime.split("%")[1] || "";
-        }
+        //  if (this.form.clothCheckTime.indexOf("%") != -1) {
+        //   this.form.clothCheckTime = this.form.clothCheckTime.split("%")[1] || "";
+        // }
         if (this.form.weaveJobCode.indexOf("%") != -1) {
           this.form.weaveJobCode = this.form.weaveJobCode.split("%")[1] || "";
         }
-        if (this.form.noteCode.indexOf("!^%") != -1) {
-          this.form.noteCode = this.form.noteCode.split("!^%")[1] || "";
+        if (this.form.noteCode.indexOf("%") != -1) {
+          this.form.noteCode = this.form.noteCode.split("%")[1] || "";
         }
         this.page.total = res.data.total;
         // setTimeout(() => {
@@ -246,7 +257,6 @@ export default {
         } else {
           _this.detail.clothWeight = e.data;
         }
-
         _this.detail.clothCheckTime = _this.$getNowTime("datetime");
       };
     },

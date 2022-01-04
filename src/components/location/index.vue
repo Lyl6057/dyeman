@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-02-24 08:12:20
- * @LastEditors: Lyl
- * @LastEditTime: 2021-07-30 18:46:48
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2022-01-03 15:43:55
  * @Description: 
 -->
 <template>
@@ -207,10 +207,10 @@ export default {
         e.index = index + 1;
       });
       this.$refs.crud.setCurrentRow(this.inData.loc[index]); // 選擇最後一條數據
-      for (var key in val) {
+      for (let key in val) {
         delete val[key];
       }
-      for (var key in this.choiceQ) {
+      for (let key in this.choiceQ) {
         delete this.choiceQ[key];
       }
       this.choiceV = false;

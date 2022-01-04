@@ -1,11 +1,11 @@
 /*
  * @Author: Lyl
  * @Date: 2021-02-24 08:12:20
- * @LastEditors: Lyl
- * @LastEditTime: 2021-07-30 18:47:30
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2022-01-04 09:49:02
  * @Description:
  */
-import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
+import { getDIC, getDicT, getXDicT, postDicT,getDicNS } from "@/config";
 import axios from "axios";
 export function loc1C(_this) {
   return {
@@ -45,7 +45,12 @@ export function loc1C(_this) {
         filterable: true,
         allowCreate: true,
         defaultFirstOption: true,
-        dicData: getDicT("whseLocation", "locationCode", "locationCode"),
+        dicData: getDicNS("whseLocation?warehouseType=" + (
+        _this.type== _this.$t("iaoMng.sx")?"0":
+        _this.type== _this.$t("iaoMng.pb")?"1":
+        _this.type== _this.$t("iaoMng.hgyl")?"3":
+        _this.type== _this.$t("iaoMng.scfl")?"5":"4") ,
+         "locationCode", "locationCode"),
         width: 180
       },
       {

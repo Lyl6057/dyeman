@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-23 08:03:49
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-12-28 09:09:11
+ * @LastEditTime: 2022-01-04 15:59:43
  * @Description:
  */
 import Vue from "vue";
@@ -16,10 +16,10 @@ import store from "@/store/index";
 // import pro from "@/router/view/pro";
 // import re from '@/router/view/re'
 // import iq from '@/router/view/iq'
-// import im from "@/router/view/im";
-// import quaLity from "@/router/view/quaLity";
+// import whseMng from "@/router/view/im";
+import quaLity from "@/router/view/quaLity";
 // import laboratory from "./view/laboratory";
-import proMng from "./view/proMng";
+// import proMng from "./view/proMng";
 // import energy from "./view/energy";
 Vue.use(Router);
 const originalPush = Router.prototype.push;
@@ -56,10 +56,10 @@ const router = new Router({
         // ...pro,
         // ...re,
         // ...iq,
-        // ...im
-        // ...quaLity
+        // ...whseMng
+        ...quaLity
         // ...laboratory
-        ...proMng
+        // ...proMng
         // ...energy
       ]
     },

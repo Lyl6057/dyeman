@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
- * @LastEditors: Lyl
- * @LastEditTime: 2021-11-30 09:46:31
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-12-30 20:31:45
  * @Description: 
 -->
 <template>
@@ -693,7 +693,10 @@ export default {
         // this.form.dyeAfterBreadth = val.breadth;
         // this.form.dyeAfterWeight = val.gramWeight;
         this.form.fabricName = val.fabName;
-        this.form.dryClothWeight = val.gramWeightAfter;
+        if(val.gramWeightAfter){
+           this.form.dryClothWeight =Number(val.gramWeightAfter.match(/\d+/g)[0]) // val.gramWeightAfter;
+        }
+       
         this.form.fabricCompone = val.fabElements;
 
         this.form.proBreadthSide =

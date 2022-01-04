@@ -1,4 +1,4 @@
-import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
+import { getDIC, getDicT, getXDicT, postDicT,getDicNS } from "@/config";
 let unit = getDIC("bas_matUnit"); // 單位
 let basChemicalmat = getXDicT("BasChemicalmatNew"); // 化工原料
 let basPigment = getXDicT("basPigment"); // 颜料
@@ -509,7 +509,7 @@ export function sx2C(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 312px)",
+    height: "calc(100vh - 311px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
@@ -696,9 +696,8 @@ export function pb2C(_this) {
       {
         label: _this.$t("whseField.scdh"),
         prop: "prodNo",
-        cell: false,
-        width: 200,
         cell: true,
+        width: 200,
         placeholder: _this.$t("whseField.qxzscdh") //"請選擇生產單號",
       },
 
@@ -716,7 +715,8 @@ export function pb2C(_this) {
         filterable: true,
         allowCreate: true,
         defaultFirstOption: true,
-        dicData: getDicT("whseLocation", "locationCode", "locationCode"),
+        dicData: getDicNS("whseLocation?warehouseType=1","locationCode", "locationCode"),
+        // dicData: getDicT("whseLocation", "locationCode", "locationCode"),
         width: 180
       },
       {
@@ -808,7 +808,6 @@ export function cpb2C(_this) {
         cell: true,
         width: 100,
         type: "select",
-        type: "select",
         dicData: getDIC("bas_matUnit")
       },
       {
@@ -828,7 +827,8 @@ export function cpb2C(_this) {
         filterable: true,
         allowCreate: true,
         defaultFirstOption: true,
-        dicData: getDicT("whseLocation", "locationCode", "locationCode")
+        dicData: getDicNS("whseLocation?warehouseType=2","locationCode", "locationCode"),
+        // dicData: getDicT("whseLocation", "locationCode", "locationCode")
       },
       {
         label: _this.$t("whseField.etxh"), //"ET序号",
@@ -1290,7 +1290,12 @@ export function wjxz3C(_this) {
         filterable: true,
         allowCreate: true,
         defaultFirstOption: true,
-        dicData: getDicT("whseLocation", "locationCode", "locationCode")
+        dicData: getDicNS("whseLocation?warehouseType=" + (  
+        _this.datas === _this.$t("choicDlg.scfl")?"5":
+        _this.datas === _this.$t("choicDlg.wj")?"6":"7" )
+        ,"locationCode", "locationCode"),
+      
+        // dicData: getDicT("whseLocation", "locationCode", "locationCode")
       },
       {
         label: _this.$t("whseField.xs"),

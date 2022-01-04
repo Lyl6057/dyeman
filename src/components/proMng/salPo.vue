@@ -10,6 +10,7 @@
       :close-on-click-modal="false"
       :before-close="closeBefore"
       v-if="choiceV"
+      :element-loading-text="$t('public.loading')"
       v-loading="loading"
     >
       <!-- <view-container :title="choiceTle"> -->
@@ -37,14 +38,18 @@
               <el-tabs type="border-card" v-model="tab">
                 <el-tab-pane name="tab1" label="订单号" v-loading="loading">
                   <avue-tree
+                    ref="tree"
                     style="
                       padding: 5px;
                       height: calc(100vh - 260px) !important;
                       overflow: auto;
                     "
                     :option="treeOption"
+                    node-key="sn"
                     :data="crud"
+                    :highlight-current="true"
                     @node-click="nodeClick"
+                   
                   ></avue-tree>
                 </el-tab-pane> </el-tabs
             ></el-col>
@@ -89,16 +94,7 @@ export default {
   data() {
     return {
       treeData: [
-        {
-          value: 0,
-          label: "一级部门",
-          children: [
-            {
-              value: 1,
-              label: "一级部门1",
-            },
-          ],
-        },
+       
       ],
       treeOption: {
         defaultExpandAll: true,
@@ -381,7 +377,7 @@ export default {
           delete this.form[key];
         }
       }
-      for (var key in this.choiceQ) {
+      for (let key in this.choiceQ) {
         if (this.choiceQ[key] === "") {
           delete this.choiceQ[key];
         }
@@ -415,10 +411,16 @@ export default {
             : 0;
           if (index === this.crud.length - 1) {
             setTimeout(() => {
+              this.$refs.tree.setCurrentNode(this.crud[0]);//获取已经设置的资源后渲染
+              this.nodeClick(this.crud[0])
               this.loading = false;
             }, 200);
           }
         });
+        
+        if(!this.crud.length){
+          this.loading = false;
+        }
         if (this.form.vatNo.indexOf("!^%") != -1) {
           this.form.vatNo = this.form.vatNo.split("!^%")[1] || "";
         }
@@ -509,6 +511,10 @@ export default {
         break;
     }
     this.query();
+    this.$nextTick(() => {
+        // tree 元素的ref   value 绑定的node-key
+        this.$refs.tree.setCurrentKey(0);
+    });
   },
   mounted() {},
   updated() {

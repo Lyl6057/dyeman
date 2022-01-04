@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-12-28 08:55:28
+ * @LastEditTime: 2022-01-04 16:00:53
  * @Description:
 -->
 <template>
@@ -119,20 +119,28 @@ export default {
           delete this.form[key];
         }
       }
+      let r_clothCheckTime_r = ''
+      if( this.form.clothCheckTime &&this.form.clothCheckTime.length){
+        // this.form.clothCheckTime.forEach((item) =>{
+       r_clothCheckTime_r = `!%5E%5b${this.form.clothCheckTime[0]} 07:30:00~${this.form.clothCheckTime[1]} 07:30:00%5d`
+      // })
+      }
       // order
       //   ? (this.form.sort = prop + (order == "descending" ? ",1" : ",0"))
       //   : (this.form.sort = "storeLoadCode,1");
-      this.form.storeLoadCode = "%" + (this.form.storeLoadCode ? this.form.storeLoadCode : "");
+      // this.form.storeLoadCode = "%" + (this.form.storeLoadCode ? this.form.storeLoadCode : "");
       this.form.weaveJobCode = "%" + (this.form.weaveJobCode ? this.form.weaveJobCode : "");
-      this.form.clothCheckTime = "%" + (this.form.clothCheckTime ? this.form.clothCheckTime : "");
-      this.form.noteCode = "!^%" + (this.form.noteCode ? this.form.noteCode : "");
+      // this.form.clothCheckTime = "%" + (this.form.clothCheckTime ? this.form.clothCheckTime : "");
+      this.form.noteCode = "%" + (this.form.noteCode ? this.form.noteCode : "");
+      let data = JSON.parse(JSON.stringify(this.form)) 
+      data.clothCheckTime = null
       get(
-        Object.assign(this.form, {
+        Object.assign( data, {
           rows: this.page.pageSize,
           start: this.page.currentPage,
           isPrinted: true,
           clothState: this.form.clothState || 1,
-        })
+        }),r_clothCheckTime_r
       ).then((res) => {
         this.crud = res.data.records;
         if (this.crud.length > 0) {
@@ -143,17 +151,17 @@ export default {
           item.eachNumber = Number(item.eachNumber);
         });
         this.page.total = res.data.total;
-         if (this.form.storeLoadCode.indexOf("%") != -1) {
-          this.form.storeLoadCode = this.form.storeLoadCode.split("%")[1] || "";
-        }
-        if (this.form.clothCheckTime.indexOf("%") != -1) {
-          this.form.clothCheckTime = this.form.clothCheckTime.split("%")[1] || "";
-        }
+        //  if (this.form.storeLoadCode.indexOf("%") != -1) {
+        //   this.form.storeLoadCode = this.form.storeLoadCode.split("%")[1] || "";
+        // }
+        // if (this.form.clothCheckTime.indexOf("%") != -1) {
+        //   this.form.clothCheckTime = this.form.clothCheckTime.split("%")[1] || "";
+        // }
         if (this.form.weaveJobCode.indexOf("%") != -1) {
           this.form.weaveJobCode = this.form.weaveJobCode.split("%")[1] || "";
         }
-        if (this.form.noteCode.indexOf("!^%") != -1) {
-          this.form.noteCode = this.form.noteCode.split("!^%")[1] || "";
+        if (this.form.noteCode.indexOf("%") != -1) {
+          this.form.noteCode = this.form.noteCode.split("%")[1] || "";
         }
         setTimeout(() => {
           this.wLoading = false;
@@ -349,6 +357,7 @@ export default {
 </script>
 <style lang='stylus'>
 #clothFlyWeight {
+  
   .el-table {
     overflow: visible !important;
   }

@@ -1,4 +1,4 @@
-import { getDIC, getDicT } from "@/config/index";
+import { getDIC, getDicT, getDicNS } from "@/config/index";
 export function rsxkr1F(_this) {
   return {
     submitBtn: false,
@@ -396,7 +396,8 @@ export function rsxkr2C(_this) {
         filterable: true,
         allowCreate: true,
         defaultFirstOption: true,
-        dicData: getDicT("whseLocation", "locationCode", "locationCode")
+        // dicData: getDicT("whseLocation", "locationCode", "locationCode")
+        dicData: getDicNS("whseLocation?warehouseType=2","locationCode", "locationCode"),
       },
       {
         label: "ET序号",

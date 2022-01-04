@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-04-23 09:03:31
- * @LastEditors: Lyl
- * @LastEditTime: 2021-08-24 11:09:49
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2022-01-04 14:10:50
  * @Description:
  */
 
@@ -23,17 +23,17 @@ export function mainForm(_this) {
         span: 6
       },
       {
-        label: "布笼/托盘",
+        label: "载具类型",
         prop: "carriageType",
         type: "select",
         dicData: [
           {
-            label: "布笼",
-            value: "1"
+            label: "胶桶",
+            value: "wet"
           },
           {
-            label: "托盘",
-            value: "2"
+            label: "布笼",
+            value: "dry"
           }
         ],
         width: 120,
@@ -97,7 +97,17 @@ export function mainForm(_this) {
         overHidden: true,
         placeholder: " ",
         span: 6
-      }
+      },
+      {
+        label: "打印次数",
+        prop: "printCount",
+        align: "right",
+        type: "number",
+        width: 100,
+        placeholder: " ",
+        disabled:true,
+        span: 6
+      },
     ]
   };
 }
@@ -121,14 +131,15 @@ export function mainCrud(_this) {
         width: 50,
         align: "center",
         display: false,
-        fixed: false
+        fixed:true
       },
       {
         label: "载具编号",
         prop: "storageCode",
-        width: 180,
+        width: 120,
         overHidden: true,
         sortable: true,
+        fixed:true,
         span: 6,
         rules: [
           {
@@ -139,24 +150,24 @@ export function mainCrud(_this) {
         ]
       },
       {
-        label: "布笼/托盘",
+        label: "载具类型",
         prop: "carriageType",
         type: "select",
         dicData: [
           {
-            label: "布笼",
-            value: "1"
+            label: "胶桶",
+            value: "wet"
           },
           {
-            label: "托盘",
-            value: "2"
+            label: "布笼",
+            value: "dry"
           }
         ],
         span: 6,
         rules: [
           {
             required: true,
-            message: "布笼/托盘",
+            message: "载具类型",
             trigger: "blur"
           }
         ],
@@ -170,11 +181,11 @@ export function mainCrud(_this) {
         dicData: [
           {
             label: "空置",
-            value: "0"
+            value: 0
           },
           {
             label: "装满",
-            value: "1"
+            value: 1
           }
         ],
         width: 100,
@@ -234,13 +245,13 @@ export function mainCrud(_this) {
         placeholder: " ",
         span: 6
       },
+      
       {
         label: "入库时间",
         prop: "inTime",
         disabled: false,
         overHidden: true,
         width: 170,
-        overHidden: true,
         span: 6,
         placeholder: " ",
         sortable: true,
@@ -249,8 +260,6 @@ export function mainCrud(_this) {
         format: "yyyy-MM-dd HH:mm:ss",
         valueFormat: "yyyy-MM-dd HH:mm:ss",
         cell: true,
-        placeholder: " ",
-        span: 6
       },
       {
         label: "出库时间",
@@ -258,7 +267,6 @@ export function mainCrud(_this) {
         disabled: false,
         overHidden: true,
         width: 170,
-        overHidden: true,
         span: 6,
         placeholder: " ",
         sortable: true,
@@ -267,37 +275,66 @@ export function mainCrud(_this) {
         format: "yyyy-MM-dd HH:mm:ss",
         valueFormat: "yyyy-MM-dd HH:mm:ss",
         cell: true,
-        placeholder: " ",
-        span: 6
       },
 
       {
         label: "条码信息",
         prop: "barInform",
-        width: 220,
+        width: 120,
         overHidden: true,
-
         placeholder: " ",
         span: 6
       },
       {
         label: "二维码信息",
         prop: "qrInform",
-        width: 220,
+        width: 120,
         overHidden: true,
-
         placeholder: " ",
         span: 6
       },
       {
         label: "rfid标签",
         prop: "rfid",
-        width: 220,
+        width: 120,
         overHidden: true,
-
         placeholder: " ",
         span: 6
-      }
+      },
+      {
+        label: "打印次数",
+        prop: "printCount",
+        align: "right",
+        type: "number",
+        width: 100,
+        placeholder: " ",
+        disabled:true,
+        span: 6
+      },
+      {
+        label: "打印人",
+        prop: "printer",
+        overHidden: true,
+        placeholder: " ",
+        disabled:true,
+        span: 6,
+        
+      },
+      {
+        label: "打印时间",
+        prop: "printTime",
+        disabled:true,
+        overHidden: true,
+        width: 170,
+        span: 6,
+        placeholder: " ",
+        sortable: true,
+        type: "datetime",
+        align: "center",
+        format: "yyyy-MM-dd HH:mm:ss",
+        valueFormat: "yyyy-MM-dd HH:mm:ss",
+        cell: true,
+      },
     ]
   };
 }
@@ -442,7 +479,6 @@ export function mainCrud1(_this) {
         disabled: false,
         overHidden: true,
         width: 120,
-        overHidden: true,
         span: 6,
         placeholder: "请選擇日期",
         sortable: true,
@@ -591,7 +627,6 @@ export function bfCrud(_this) {
         disabled: true,
         placeholder: " ",
         span: 6,
-        width: 100,
         width: 300,
         overHidden: true
       },

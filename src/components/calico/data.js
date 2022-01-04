@@ -1,11 +1,11 @@
 /*
  * @Author: Lyl
  * @Date: 2021-02-24 08:12:20
- * @LastEditors: Lyl
- * @LastEditTime: 2021-07-30 16:28:01
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2022-01-04 16:07:22
  * @Description:
  */
-import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
+import { getDIC,getDicNS } from "@/config";
 import axios from "axios";
 
 export function creatForm(_this) {
@@ -148,14 +148,18 @@ export function loc1C(_this) {
         prop: "locationCode",
         cell: true,
         width: 160,
-
+        filterable: true,
+        allowCreate: true,
+        defaultFirstOption: true,
+        type:"select",
+        dicData: getDicNS("whseLocation?warehouseType=1","locationCode", "locationCode"),
         hide: !_this.loc,
 
-        click: () => {
-          // if (_this.popup) {
-          _this.choiceV = true;
-          // }
-        }
+        // click: () => {
+        //   // if (_this.popup) {
+        //   _this.choiceV = true;
+        //   // }
+        // }
       }
     ]
   };

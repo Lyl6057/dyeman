@@ -26,6 +26,7 @@ export default {
     save: "save",
     audit: "audit",
     close: "close",
+    print:"print",
     sc: "generate",
     lsh: "serial number",
     loading: "under load...",

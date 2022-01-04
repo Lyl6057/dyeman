@@ -1,4 +1,4 @@
-import { getDIC, getDicT, postDicT } from '@/config/index'
+import { getDIC, getDicT, postDicT,getDicNS } from '@/config/index'
 
 export function rcpb1F(_this) {
   return {
@@ -645,13 +645,18 @@ export function rcpb2C(_this) {
         cell: true,
         hide: _this.hide === '6' || _this.hide === '7' ? false : true,
         width: 180,
-        click: () => {
-          _this.dlgWidth = "100%"
-          _this.choiceV = !_this.choiceV
-          _this.choiceField = "locationCode";
-          _this.choiceTarget = _this.chooseData;
-          _this.choiceTle = _this.$t("choicDlg.xzhw");
-        }
+        filterable: true,
+        allowCreate: true,
+        defaultFirstOption: true,
+        type:"select",
+        dicData: getDicNS("whseLocation?warehouseType=1","locationCode", "locationCode"),
+        // click: () => {
+        //   _this.dlgWidth = "100%"
+        //   _this.choiceV = !_this.choiceV
+        //   _this.choiceField = "locationCode";
+        //   _this.choiceTarget = _this.chooseData;
+        //   _this.choiceTle = _this.$t("choicDlg.xzhw");
+        // }
       },
 
       // {

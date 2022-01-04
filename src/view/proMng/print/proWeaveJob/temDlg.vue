@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
- * @LastEditors: Lyl
- * @LastEditTime: 2021-12-04 18:48:04
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-12-30 13:34:13
  * @Description: 
 -->
 <template>
@@ -174,14 +174,13 @@
                 content="thêm mới "
                 placement="top-start"
               >
-              <!--  :disabled="
+                <!--  :disabled="
                     !audit && form.auditState == 1 && tabs != '機號信息'
                   " -->
                 <el-button
                   @click="add"
                   type="primary"
                   v-if="tabs != '選擇訂單'"
-                 
                   >{{ $t("public.add") }}</el-button
                 >
               </el-tooltip>
@@ -191,8 +190,7 @@
                 content="xóa"
                 placement="top-start"
               >
-
-              <!--  :disabled="
+                <!--  :disabled="
                     Object.keys(chooseData).length == 0 ||
                     (!audit && form.auditState == 1 && tabs != '機號信息')
                   " -->
@@ -200,7 +198,6 @@
                   @click="del"
                   type="danger"
                   v-if="tabs != '選擇訂單'"
-                 
                   >{{ $t("public.del") }}</el-button
                 >
               </el-tooltip>
@@ -360,7 +357,7 @@ import {
   getBomDtlbSpecs,
   getBomDtlaSpecs,
 } from "./api";
-import { baseCodeSupplyEx } from "@/api/index";
+import { baseCodeSupplyEx , baseCodeSupply} from "@/api/index";
 import preview from "./preview";
 import XlsxTemplate from "xlsx-template";
 import JSZipUtils from "jszip-utils";
@@ -437,9 +434,12 @@ export default {
             this.form = JSON.parse(JSON.stringify(this.detail));
             this.form.weaveJobCode = this.detail.weaveJobCode + "A";
             this.form.auditState = 0;
-          } else {
-            this.form.weaveJobCode = "WG-" + res.data.data;
+         
           }
+          //  else {
+          //   this.form.weaveJobCode = "WG-" + res.data.data;
+          // }
+          this.form.weaveJobCode = "WG-" + res.data.data;
           this.form.calicoFabricRequire = "开幅";
           this.form.calicoShap = "1";
           this.form.weaveState = 0;
@@ -448,7 +448,9 @@ export default {
           this.form.creator = parent.userID;
           this.form.weaveJobId = "";
           this.form.breadthUnit = "INCH";
-          this.form.gramWeightUnit = "g/m2";
+          this.form.gramWeightUnit = "G/M2";
+          this.form.breadthAcceptUnit =' %'
+          this.form.gmAcceptUnit =' %'
           this.code = res.data.data;
         });
       } else {
@@ -549,6 +551,23 @@ export default {
               }
             }
             this.form.weaveJobCode = this.form.weaveJobCode.replace(/\s/g, "");
+            // if(this.form.gramWeightValue){
+            this.form.gramWeight = this.form.gramWeightValue
+            if(this.form.gramWeight&& (this.form.gwMaxValue || this.form.gwMinValue )){
+              if(this.form.gwMaxValue == this.form.gwMinValue){
+                this.form.gramWeight = this.form.gramWeight + '(' + (this.form.gwMaxValue? "±" + this.form.gwMaxValue:'') + this.form.gmAcceptUnit + ')'
+              }else{
+                this.form.gramWeight = this.form.gramWeight + '(' + (this.form.gwMaxValue? "+" + this.form.gwMaxValue:'') + (this.form.gwMinValue? "-" + this.form.gwMinValue:'')+this.form.gmAcceptUnit + ')'
+              }
+            }
+            this.form.breadth = this.form.breadthValue
+            if(this.form.breadth&& (this.form.breadthUpper || this.form.breadthLower )){
+              if(this.form.breadthUpper == this.form.breadthLower){
+                this.form.breadth = this.form.breadth + '(' + (this.form.breadthUpper? "±" + this.form.breadthUpper:'') + this.form.breadthAcceptUnit + ')'
+              }else{
+                this.form.breadth = this.form.breadth + '(' + (this.form.breadthUpper? "+" + this.form.breadthUpper:'') + (this.form.breadthLower? "-" + this.form.breadthLower:'')+this.form.breadthAcceptUnit + ')'
+              }
+            }
             if (this.form.weaveJobId) {
               // update
               this.form.upateTime = this.$getNowTime("datetime");
@@ -566,6 +585,7 @@ export default {
               });
             } else {
               // add
+              baseCodeSupply({ code: "proWeaveJob" }).then((res) => {})
               this.form.createTime = this.$getNowTime("datetime");
               add(this.form).then((res) => {
                 if (res.data.code == 200) {
@@ -1111,6 +1131,7 @@ export default {
         this.choiceV = false;
         return;
       }
+      this.wLoading = true
       this.form.custPoNo = val.custPoNo;
       this.form.salPoNo = val.poNo;
       this.form.productDate = val.poDate;
@@ -1124,48 +1145,61 @@ export default {
       this.form.fiberComp = val.guestComponents;
       this.form.fabricDesc = val.fabName;
       this.form.otherRequire = val.finishingitem;
-      console.log(val);
       getBom({ bomId: val.bomId }).then((res) => {
         if (res.data.length) {
-          getBomDtlb({ salNewbomFk: res.data[0].salNewbomoid }).then((dtlb) => {
+          getBomDtlb( { salNewbomFk: res.data[0].salNewbomoid }).then((dtlb) => {
             if (dtlb.data.length) {
-              // this.form.
+              getBomDtlbSpecs({
+                salNewbomDtlbFk: val.salNewbomDtlbFk,
+              }).then((dtlbSpecs) => {
+                this.setSpecs(dtlbSpecs.data)
+              });
             } else {
               getBomDtlaSpecs({
                 salNewbomDtlaFk: val.salNewbomDtlaFk,
               }).then((dtlaSpecs) => {
-                console.log(dtlaSpecs);
-                if (dtlaSpecs.data.length) {
-                  let data = {};
-                  dtlaSpecs.data.forEach((item, i) => {
-                    data[item.specsType] = item.specsSeq || 0;
-                    data[item.specsType + "+"] = item.tolerancePlus || 0;
-                    data[item.specsType + "-"] = item.toleranceMinus || 0;
-                    data[item.specsType + "unit"] = item.toleranceUnit;
-                  });
-                  this.form.gramWeight = data["weight-XH"];
-                  this.form.gramWeightValue = data["weight-XH"];
-                  this.form.gwMaxValue = data["weight-XH+"];
-                  this.form.gwMinValue = data["weight-XH-"];
-
-                  this.form.breadth = data["width-BZB"];
-                  this.form.breadthValue = data["width-BZB"];
-                  this.form.breadthUpper = data["width-BZB+"];
-                  this.form.breadthLower = data["width-BZB+"];
-                  this.form.breadthUnit = data["width-BZBunit"];
-
-                  this.form.horizonShrink = data["shrink-H"];
-                  this.form.verticalShrink = data["shrink-Z"];
-                }
+                 this.setSpecs(dtlaSpecs.data)
               });
             }
           });
+        }else{
+          this.wLoading = false
         }
       });
-      // this.crud.forEach((item, i) => {
-      //   item.index = i + 1;
-      // });
       this.choiceV = false;
+    },
+    setSpecs(list) {
+      if(!list.length){
+          this.wLoading = false
+      }
+      let data = {};
+      list.forEach((item, i) => {
+        data[item.specsType] = item.specsSeq || 0;
+        data[item.specsType + "+"] = item.tolerancePlus || 0;
+        data[item.specsType + "-"] = item.toleranceMinus || 0;
+        data[item.specsType + "unit"] = item.specsUnit;
+        data[item.specsType + "ycunit"] = item.toleranceUnit;
+      });
+      this.form.gramWeightValue = data["weight-XQ"];
+      this.form.gwMaxValue = data["weight-XQ+"];
+      this.form.gwMinValue = data["weight-XQ-"];
+      this.form.gramWeightUnit = data["weight-XQunit"];
+      this.form.gmAcceptUnit = data["weight-XQycunit"]
+      
+      this.form.breadthValue = data["width-SJ"];
+      this.form.breadthUpper = data["width-SJ+"];
+      this.form.breadthLower = data["width-SJ+"];
+      this.form.breadthUnit = data["width-SJunit"];
+      this.form.breadthAcceptUnit = data["width-SJycunit"];
+      if(data["shrink-H"] && data["shrink-H+"]){
+        this.form.horizonShrink = `${data["shrink-H"]}±${data["shrink-H+"]}`
+      }
+       if(data["shrink-Z"] && data["shrink-Z+"]){
+        this.form.verticalShrink = `${data["shrink-Z"]}±${data["shrink-Z+"]}`
+      }
+      setTimeout(() => {
+          this.wLoading = false
+      }, 200);
     },
     close() {
       if (this.isAdd) {

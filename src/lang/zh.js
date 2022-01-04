@@ -22,6 +22,7 @@ export default {
     choose: "選擇",
     save: "保存",
     close: "關閉",
+    print:"打印",
     sc: "生成",
     lsh: "流水號",
     loading: "拼命加載中...",
@@ -32,7 +33,8 @@ export default {
     qxcz: "取消操作!",
     bccg: "保存成功!",
     bcsb: "保存失敗!",
-    qxxzmx: "請先選擇明顯!"
+    qxxzmx: "請先選擇明顯!",
+    
   },
   whseMng: {
     // 倉位管理
@@ -480,7 +482,8 @@ export default {
     mlly: "面料來源",
     rslb: "染色類別",
     sfsr: "是否雙染",
-    slsl: "申領數量"
+    slsl: "申領數量",
+
   },
   ProWorkflowInfo: {
     // LD

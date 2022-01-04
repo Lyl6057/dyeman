@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-12-27 16:34:49
+ * @LastEditTime: 2021-12-29 13:28:10
  * @Description:
  */
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
@@ -91,15 +91,16 @@ export function mainForm(_this) {
         }
       },
       {
-        label: "验布时间",
+        label: "验布开始时间",
         prop: "clothCheckTime",
-        type: "date",
+        type: "datetimerange",
         format: "yyyy-MM-dd",
         valueFormat: "yyyy-MM-dd",
-        span: 6,
+        span: 12,
         tip: "thời gian in",
         placeholder: " ",
         align: "center",
+     
         width: 180
       }
     ]
@@ -201,7 +202,6 @@ export function mainCrud(_this) {
         disabled: true,
         placeholder: " ",
         span: 6,
-        width: 100,
         width: 200,
         overHidden: true,
         hide: true
@@ -429,7 +429,7 @@ export function mainCrud(_this) {
         valueFormat: "yyyy-MM-dd HH:mm:ss",
         span: 6,
         align: "center",
-        // sortable: true,
+        sortable: true,
         width: 200
       }
     ]

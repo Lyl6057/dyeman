@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
- * @LastEditors: Lyl
- * @LastEditTime: 2021-12-10 09:25:19
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-12-30 15:08:14
  * @Description:
  */
 
@@ -182,7 +182,7 @@ export function mainCrud(_this, audit) {
         prop: "salPoNo",
         width: 180,
         span: 6,
-        placeholder: "请输入訂單編號",
+        placeholder: " ",
         sortable: true,
         disabled: audit
           ? false
@@ -230,7 +230,6 @@ export function mainCrud(_this, audit) {
         label: "成品交期",
         prop: "productDate",
         width: 120,
-        placeholder: " ",
         disabled: audit
           ? false
           : _this.detail.auditState && !_this.isAdd
@@ -263,7 +262,8 @@ export function mainCrud(_this, audit) {
           : _this.detail.auditState && !_this.isAdd
           ? true
           : false,
-        overHidden: true
+        overHidden: true,
+        placeholder:" "
       },
       {
         label: "客人訂單編號",
@@ -291,7 +291,7 @@ export function mainCrud(_this, audit) {
           ? true
           : false,
         span: 6,
-        placeholder: "请選擇客戶名稱",
+        placeholder: " ",
         type: "select",
         dicData: cust,
         tip: "Khách hàng",
@@ -352,7 +352,6 @@ export function mainCrud(_this, audit) {
       {
         label: "顏色名稱",
         prop: "colorName",
-        placeholder: " ",
         disabled: audit
           ? false
           : _this.detail.auditState && !_this.isAdd
@@ -360,7 +359,6 @@ export function mainCrud(_this, audit) {
           : false,
         tip: "Màu sắc",
         width: 180,
-        overHidden: true,
         span: 6,
         placeholder: "请選擇顏色名稱",
         rules: [
@@ -449,7 +447,7 @@ export function mainCrud(_this, audit) {
         label: "合同数量",
         prop: "contractAmount",
         width: 100,
-        placeholder: "请输入合同数量",
+        placeholder: " ",
         span: 6,
         type: "number",
         disabled: audit
@@ -469,7 +467,7 @@ export function mainCrud(_this, audit) {
           : _this.detail.auditState && !_this.isAdd
           ? true
           : false,
-        placeholder: "请输入織胚數量",
+        placeholder: " ",
         span: 6,
         // rules: [
         //   {
@@ -497,13 +495,12 @@ export function mainCrud(_this, audit) {
           ? true
           : false,
         hide: true,
-        placeholder: " "
       },
       {
         label: "纱线数量",
         prop: "yarnAmount",
         width: 100,
-        placeholder: "请输入纱线数量",
+        placeholder: " ",
         span: 6,
         type: "number",
         align: "left",
@@ -518,7 +515,6 @@ export function mainCrud(_this, audit) {
       {
         label: "布類描述",
         prop: "fabricDesc",
-        placeholder: " ",
         overHidden: true,
         disabled: audit
           ? false
@@ -540,7 +536,7 @@ export function mainCrud(_this, audit) {
 
       {
         label: "克重",
-        prop: "gramWeight",
+        prop: "gramWeightValue",
         width: 120,
         minRows: 0,
         hide: true,
@@ -549,85 +545,90 @@ export function mainCrud(_this, audit) {
           : _this.detail.auditState && !_this.isAdd
           ? true
           : false,
-        span: 6,
+        span: 4,
         // type: "number",
         // minRows: 0,
         placeholder: " ",
         tip: "Trọng lượng trước giặt"
       },
-      // {
-      //   label: "单位",
-      //   prop: "gramWeightUnit",
-      //   labelWidth: 50,
-      //   hide: true,
-      //   disabled: audit
-      //     ? false
-      //     : _this.detail.auditState && !_this.isAdd
-      //     ? true
-      //     : false,
-      //   span: 2,
-      //   type: "select",
-      //   dicData: getDIC("sal_gramUnit"),
-      //   placeholder: " ",
-      //   defaultIndex: 1,
-      //   tip: "Trọng lượng trước giặt"
-      // },
-      // {
-      //   label: "+",
-      //   prop: "gramWeight+",
-      //   labelWidth: 20,
-      //   minRows: 0,
-      //   hide: true,
-      //   disabled: audit
-      //     ? false
-      //     : _this.detail.auditState && !_this.isAdd
-      //     ? true
-      //     : false,
-      //   span: 2,
-      //   type: "number",
-      //   minRows: 0,
-      //   placeholder: " ",
-      //   tip: "Trọng lượng trước giặt"
-      // },
-      // {
-      //   label: "-",
-      //   prop: "gramWeight-",
-      //   labelWidth: 20,
-      //   hide: true,
-      //   minRows: 0,
-      //   type: "number",
-      //   minRows: 0,
-      //   disabled: audit
-      //     ? false
-      //     : _this.detail.auditState && !_this.isAdd
-      //     ? true
-      //     : false,
-      //   span: 2,
-      //   // type: "number",
-      //   placeholder: " ",
-      //   tip: "Trọng lượng trước giặt"
-      // },
+      {
+        label: "单位",
+        prop: "gramWeightUnit",
+        labelWidth: 50,
+        clearable:false,
+        hide: true,
+        disabled: audit
+          ? false
+          : _this.detail.auditState && !_this.isAdd
+          ? true
+          : false,
+        span: 2,
+        type: "select",
+        dicData: getDIC("sal_gramUnit"),
+        placeholder: " ",
+        defaultIndex: 1,
+        tip: "Trọng lượng trước giặt"
+      },
+      {
+        label: "+",
+        prop: "gwMaxValue",
+        labelWidth: 20,
+        minRows: 0,
+        hide: true,
+        disabled: audit
+          ? false
+          : _this.detail.auditState && !_this.isAdd
+          ? true
+          : false,
+        span: 2,
+        type: "number",
+        placeholder: " ",
+        tip: "Trọng lượng trước giặt"
+      },
+      {
+        label: "-",
+        prop: "gwMinValue",
+        labelWidth: 20,
+        hide: true,
+        minRows: 0,
+        type: "number",
+        disabled: audit
+          ? false
+          : _this.detail.auditState && !_this.isAdd
+          ? true
+          : false,
+        span: 2,
+        // type: "number",
+        placeholder: " ",
+        tip: "Trọng lượng trước giặt"
+      },
 
-      // {
-      //   label: "单位",
-      //   prop: "kzycdw",
-      //   labelWidth: 50,
-      //   hide: true,
-      //   disabled: audit
-      //     ? false
-      //     : _this.detail.auditState && !_this.isAdd
-      //     ? true
-      //     : false,
-      //   span: 2,
-      //   type: "select",
-      //   dicData: getDIC("Sal_specsUnit"),
-      //   placeholder: " ",
-      //   defaultIndex: 1,
-      //   tip: "Trọng lượng trước giặt"
-      // },
+      {
+        label: "单位",
+        prop: "gmAcceptUnit",
+        labelWidth: 50,
+        hide: true,
+        // clearable:false,
+        disabled: audit
+          ? false
+          : _this.detail.auditState && !_this.isAdd
+          ? true
+          : false,
+        span: 2,
+        type: "select",
+        dicData: [
+          {
+            label:"%",
+            value:"%"
+          }
+        ],
+        placeholder: " ",
+        defaultIndex: 1,
+        tip: "Trọng lượng trước giặt"
+      },
       {
         label: "門幅",
-        prop: "breadth",
+        prop: "breadthValue",
         disabled: audit
           ? false
           : _this.detail.auditState && !_this.isAdd
@@ -637,74 +638,80 @@ export function mainCrud(_this, audit) {
         width: 90,
         // minRows: 0,
         hide: true,
-        span: 6,
+        span: 4,
         // type: "number",
         placeholder: " "
       },
-      // {
-      //   label: "单位",
-      //   prop: "breadthUnit",
-      //   labelWidth: 50,
-      //   hide: true,
-      //   disabled: audit
-      //     ? false
-      //     : _this.detail.auditState && !_this.isAdd
-      //     ? true
-      //     : false,
-      //   span: 2,
-      //   type: "select",
-      //   dicData: getDIC("sal_breadthUnit"),
-      //   placeholder: " ",
-      //   tip: "Trọng lượng trước giặt"
-      // },
-      // {
-      //   label: "+",
-      //   prop: "breadth+",
-      //   labelWidth: 20,
-      //   hide: true,
-      //   minRows: 0,
-      //   disabled: audit
-      //     ? false
-      //     : _this.detail.auditState && !_this.isAdd
-      //     ? true
-      //     : false,
-      //   span: 2,
-      //   // type: "number",
-      //   placeholder: " ",
-      //   tip: "Trọng lượng trước giặt"
-      // },
-      // {
-      //   label: "-",
-      //   prop: "breadth-",
-      //   labelWidth: 20,
-      //   hide: true,
-      //   minRows: 0,
-      //   disabled: audit
-      //     ? false
-      //     : _this.detail.auditState && !_this.isAdd
-      //     ? true
-      //     : false,
-      //   span: 2,
-      //   // type: "number",
-      //   placeholder: " ",
-      //   tip: "Trọng lượng trước giặt"
-      // },
-      // {
-      //   label: "单位",
-      //   prop: "breadthAcceptUnit",
-      //   labelWidth: 50,
-      //   hide: true,
-      //   disabled: audit
-      //     ? false
-      //     : _this.detail.auditState && !_this.isAdd
-      //     ? true
-      //     : false,
-      //   span: 2,
-      //   type: "select",
-      //   dicData: getDIC("Sal_specsUnit"),
-      //   placeholder: " ",
-      //   tip: "Trọng lượng trước giặt"
-      // },
+      {
+        label: "单位",
+        prop: "breadthUnit",
+        labelWidth: 50,
+        hide: true,
+        disabled: audit
+          ? false
+          : _this.detail.auditState && !_this.isAdd
+          ? true
+          : false,
+        span: 2,
+        clearable:false,
+        type: "select",
+        dicData: getDIC("sal_breadthUnit"),
+        placeholder: " ",
+        tip: "Trọng lượng trước giặt"
+      },
+      {
+        label: "+",
+        prop: "breadthUpper",
+        labelWidth: 20,
+        hide: true,
+        minRows: 0,
+        disabled: audit
+          ? false
+          : _this.detail.auditState && !_this.isAdd
+          ? true
+          : false,
+        span: 2,
+        type: "number",
+        placeholder: " ",
+        tip: "Trọng lượng trước giặt"
+      },
+      {
+        label: "-",
+        prop: "breadthLower",
+        labelWidth: 20,
+        hide: true,
+        minRows: 0,
+        disabled: audit
+          ? false
+          : _this.detail.auditState && !_this.isAdd
+          ? true
+          : false,
+        span: 2,
+        type: "number",
+        placeholder: " ",
+        tip: "Trọng lượng trước giặt"
+      },
+      {
+        label: "单位",
+        prop: "breadthAcceptUnit",
+        labelWidth: 50,
+        hide: true,
+        disabled: audit
+          ? false
+          : _this.detail.auditState && !_this.isAdd
+          ? true
+          : false,
+        span: 2,
+        type: "select",
+        dicData: [
+          {
+            label:"%",
+            value:"%"
+          }
+        ],
+        placeholder: " ",
+        tip: "Trọng lượng trước giặt"
+      },
       {
         label: "橫縮",
         prop: "horizonShrink",

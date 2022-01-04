@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-08-07 07:57:44
- * @LastEditors: Lyl
- * @LastEditTime: 2021-12-24 15:09:00
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2022-01-04 18:39:19
  * @Description: 
 -->
 <template>
@@ -22,7 +22,7 @@
                 v-model="form"
                 style="height: calc(100vh - 165px); overflow: auto"
               >
-                <template slot-scope="scope" slot="vatNo">
+                <template  slot="vatNo">
                   <el-select
                     v-model="form.vatNo"
                     filterable
@@ -204,6 +204,7 @@ export default {
       options: [],
       vatLoading: false,
       dlgCtr: true,
+      spowerClient:null
     };
   },
   created() {
@@ -666,7 +667,7 @@ export default {
         typeof obj === "undefined" ||
         obj === null ||
         obj === "" ||
-        obj === NaN
+        isNaN(obj)
       ) {
         return true;
       } else {
@@ -748,6 +749,10 @@ export default {
       };
       webSocket.setPrint(this);
       _this.prsocket.onmessage = function (e) {};
+      webSocket.setClient(this);
+      _this.spowerClient.onmessage = function (e) {
+        console.log(e);
+      };
     },
     codeLength() {
       if (

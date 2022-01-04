@@ -804,6 +804,7 @@ export default {
       }
       this.locLoding = true;
       this.loc.forEach((item, i) => {
+        item.warehouseType = this.form.warehouseType
         if (!item.locationCode) {
           if (this.shelvesType === "1") {
             item.locationCode = `${this.form.warehouseId}-${

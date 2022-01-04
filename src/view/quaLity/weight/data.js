@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-12-27 10:32:44
+ * @LastEditTime: 2021-12-29 13:25:28
  * @Description:
  */
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
@@ -43,15 +43,15 @@ export function mainForm(_this) {
         placeholder: " ",
         tip: "Mã máy"
       },
-      {
-        label: "匹號",
-        prop: "eachNumber",
-        width: 80,
-        align: "right",
-        span: 6,
-        placeholder: " ",
-        tip: "Số cây vải"
-      },
+      // {
+      //   label: "匹號",
+      //   prop: "eachNumber",
+      //   width: 80,
+      //   align: "right",
+      //   span: 6,
+      //   placeholder: " ",
+      //   tip: "Số cây vải"
+      // },
       {
         label: "载具编号",
         tip: "Mã lồng thép",
@@ -101,14 +101,15 @@ export function mainForm(_this) {
       {
         label: "验布时间",
         prop: "clothCheckTime",
-        type: "date",
+        type: "datetimerange",
         format: "yyyy-MM-dd",
         valueFormat: "yyyy-MM-dd",
-        span: 6,
+        span: 12,
         tip: "thời gian in",
         placeholder: " ",
         align: "center",
-        width: 180
+        width: 180,
+        sortable:true,
       }
     ]
   };
