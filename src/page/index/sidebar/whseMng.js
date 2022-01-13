@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-04-01 13:39:35
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-16 13:27:28
+ * @LastEditTime: 2022-01-12 15:38:00
  * @Description:
  */
 
@@ -86,6 +86,13 @@ export function whseMng(_this) {
       //     index: "/whseVehicle"
       //   },
       // ]
+    },
+    {
+      menuName: "五.出入库看板", // '仓库管理',
+      index: "whseInOutKB",
+      icon: "el-icon-s-order",
+      name: "whseInOutKB"
+      
     }
   ];
 }

@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-03-10 13:20:44
- * @LastEditors: Lyl
- * @LastEditTime: 2021-12-11 15:08:31
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2022-01-05 19:20:03
  * @Description:
  */
 export default [
@@ -11,6 +11,14 @@ export default [
     path: "/",
     name: "主页",
     redirect: "/scanWeight"
+  },
+  {
+    path: "/noteCode",
+    name: "布票打印",
+    component: resolve => require(["@/view/quaLity/noteCode/index"], resolve),
+    meta: {
+      keepAlive: true
+    }
   },
   {
     path: "/weight",

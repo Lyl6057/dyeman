@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-01 14:06:25
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-12-29 13:26:27
+ * @LastEditTime: 2022-01-08 16:37:43
  * @Description:
  */
 
@@ -23,6 +23,14 @@ export function getJob(params) {
     url: '/api/proWeaveJob/page',
     method: 'get',
     params: params
+  })
+}
+
+// 獲取织单已生产重量
+export function getNowWeight(weaveJobCode) {
+  return axios({
+    url: '/api/proWeaveJobSumOutput/yieldSum?weaveJobCode=' + weaveJobCode,
+    method: 'get'
   })
 }
 

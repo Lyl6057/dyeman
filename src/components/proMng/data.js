@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-05-03 13:03:03
  * @LastEditors: Lyl
- * @LastEditTime: 2021-12-01 13:56:16
+ * @LastEditTime: 2022-01-10 19:09:50
  * @Description:
  */
 
@@ -20,6 +20,94 @@ let basChemical = getXDicT("BasChemicalmatNew");
 let basPigment = getXDicT("basPigment");
 let basProductivesupplies = getXDicT("basProductivesupplies");
 let basFuel = getXDicT("basFuel");
+
+export function getBaseStep(params) {
+  return axios({
+    url: "/api/baseWorkStepList",
+    method: "get",
+    params: params
+  });
+}
+export function baseStepF(_this) {
+  return {
+    submitBtn: false,
+    emptyBtn: false,
+    labelWidth: 150,
+    column: [
+      {
+        label: "编号",
+        prop: "stepCode",
+        span: 6,
+        placeholder: " ",
+    
+      },
+      {
+        label: "名称",
+        prop: "stepName",
+        span: 6,
+        placeholder: " ",
+        
+      }
+    ]
+  };
+}
+
+export function baseStepC(_this) {
+  return {
+    menu: false,
+    addBtn: false,
+    border: true,
+    highlightCurrentRow: true,
+    height: "calc(100vh - 162px)",
+    refreshBtn: false,
+    columnBtn: false,
+    page: false,
+    labelWidth: 130,
+    // tree: true,
+    selection: true,
+    // rowKey: "stepId",
+    column: [
+      // {
+      //   label: "#",
+      //   prop: "sn",
+      //   width: 50,
+      //   align: "center",
+      //   display: false
+      // },
+      {
+        label: "编号",
+        prop: "stepCode",
+        span: 6,
+        width: 120,
+        placeholder: " "
+      },
+      {
+        label: "名称",
+        prop: "stepName",
+        span: 6,
+        width: 550,
+        placeholder: " ",
+        overHidden: true
+      },
+      {
+        label: "描述信息",
+        prop: "stepDescribe",
+        span: 6,
+        width: 350,
+        placeholder: " ",
+        overHidden: true
+      },
+      {
+        label: "标准公式",
+        prop: "standardFormula",
+        span: 6,
+        width: 350,
+        placeholder: " ",
+        overHidden: true
+      },
+    ]
+  };
+}
 
 export function salPoF(_this) {
   return {
@@ -151,7 +239,6 @@ export function salPoC(_this) {
     ]
   };
 }
-
 export function getSalPo(params) {
   return axios({
     url: "/api/salNewpo/pages",
@@ -3484,6 +3571,7 @@ export function TechItemC(_this) {
     ]
   };
 }
+
 
 export function getWorkStep(params) {
   return axios({

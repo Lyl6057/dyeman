@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-08-07 07:57:44
- * @LastEditors: Lyl
- * @LastEditTime: 2021-12-23 10:30:24
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2022-01-10 09:47:33
  * @Description: 
 -->
 <template>
@@ -422,6 +422,7 @@ export default {
                   } else {
                     // 不存在记录 新增 =>打印
                     data.cardType = 2;
+                    data.productNo = data.vatNo + this.$preFixInt(data.pidNo, 3)
                     add(data).then((addRes) => {
                       this.form.cardId = addRes.data.data;
                       // this.history.unshift(data);
@@ -533,6 +534,7 @@ export default {
                     data.cardId = "";
                     data.madeDate = this.$getNowTime("datetime");
                     data.cardType = 2;
+                    data.productNo = data.vatNo + this.$preFixInt(data.pidNo, 3)
                     add(data).then((addRes) => {
                       this.form.cardId = addRes.data.data;
                       this.history.unshift(data);

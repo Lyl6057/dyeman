@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-12-30 13:34:13
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-01-10 15:19:45
  * @Description: 
 -->
 <template>
@@ -112,7 +112,11 @@
       </div>
 
       <div class="formBox">
-        <avue-form ref="form" :option="formOp" v-model="form"> </avue-form>
+        <avue-form ref="form" :option="formOp" v-model="form">
+          <template slot="gramWeightUnit">
+            <div>g/m²</div>
+          </template>
+        </avue-form>
       </div>
       <!-- <view-container title="打印预览(仅供参考)">
         <pre-view ref="preview" :detail="previewData"></pre-view>
@@ -356,8 +360,9 @@ import {
   getBomDtlb,
   getBomDtlbSpecs,
   getBomDtlaSpecs,
+  getNoteSum,
 } from "./api";
-import { baseCodeSupplyEx , baseCodeSupply} from "@/api/index";
+import { baseCodeSupplyEx, baseCodeSupply } from "@/api/index";
 import preview from "./preview";
 import XlsxTemplate from "xlsx-template";
 import JSZipUtils from "jszip-utils";
@@ -369,6 +374,7 @@ export default {
     detail: Object,
     isAdd: Boolean,
     copyC: Boolean,
+    splitW: Boolean,
     audit: Boolean,
   },
   components: {
@@ -429,30 +435,57 @@ export default {
   methods: {
     getData() {
       if (this.isAdd) {
-        baseCodeSupplyEx({ code: "proWeaveJob" }).then((res) => {
-          if (this.copyC) {
-            this.form = JSON.parse(JSON.stringify(this.detail));
-            this.form.weaveJobCode = this.detail.weaveJobCode + "A";
-            this.form.auditState = 0;
-         
-          }
-          //  else {
-          //   this.form.weaveJobCode = "WG-" + res.data.data;
-          // }
-          this.form.weaveJobCode = "WG-" + res.data.data;
-          this.form.calicoFabricRequire = "开幅";
-          this.form.calicoShap = "1";
+        this.wLoading = true;
+        if (this.splitW) {
+          this.form = JSON.parse(JSON.stringify(this.detail));
+          getNoteSum({ weaveJobCode: this.detail.weaveJobCode }).then((res) => {
+            if (res.data) {
+              // realWeight 毛重 clothWeight 净重
+              if (this.detail.amount > res.data.clothWeight) {
+                this.form.amount = Number(
+                  (this.detail.amount - res.data.clothWeight).toFixed(0)
+                );
+              } else {
+                this.form.amount = 0;
+                this.canSave = false;
+                this.$tip.warning("该织单号织胚数量已完成,不可进行拆单操作!");
+              }
+            } else {
+              this.form.amount = Number((this.detail.amount / 2).toFixed(0));
+            }
+          });
+          this.form.weaveJobId = "";
           this.form.weaveState = 0;
           this.form.isWorkOut = 0;
           this.form.auditState = 0;
           this.form.creator = parent.userID;
-          this.form.weaveJobId = "";
-          this.form.breadthUnit = "INCH";
-          this.form.gramWeightUnit = "G/M2";
-          this.form.breadthAcceptUnit =' %'
-          this.form.gmAcceptUnit =' %'
-          this.code = res.data.data;
-        });
+          this.form.weaveJobCode = this.detail.weaveJobCode + "A";
+        } else {
+          baseCodeSupplyEx({ code: "proWeaveJob" }).then((res) => {
+            if (this.copyC) {
+              this.form = JSON.parse(JSON.stringify(this.detail));
+              // this.form.weaveJobCode = this.detail.weaveJobCode + "A";
+              this.form.auditState = 0;
+            } else {
+              this.form.calicoFabricRequire = "开幅";
+              this.form.calicoShap = "1";
+              this.form.breadthUnit = "INCH";
+              this.form.gramWeightUnit = "G/M2";
+              this.form.breadthAcceptUnit = " %";
+              this.form.gmAcceptUnit = " %";
+              this.code = res.data.data;
+            }
+            this.form.weaveJobId = "";
+            this.form.weaveJobCode = "WG-" + res.data.data;
+            this.form.weaveState = 0;
+            this.form.isWorkOut = 0;
+            this.form.auditState = 0;
+            this.form.creator = parent.userID;
+          });
+        }
+        setTimeout(() => {
+          this.wLoading = false;
+        }, 500);
       } else {
         this.wLoading = true;
         this.form = this.detail;
@@ -552,20 +585,54 @@ export default {
             }
             this.form.weaveJobCode = this.form.weaveJobCode.replace(/\s/g, "");
             // if(this.form.gramWeightValue){
-            this.form.gramWeight = this.form.gramWeightValue
-            if(this.form.gramWeight&& (this.form.gwMaxValue || this.form.gwMinValue )){
-              if(this.form.gwMaxValue == this.form.gwMinValue){
-                this.form.gramWeight = this.form.gramWeight + '(' + (this.form.gwMaxValue? "±" + this.form.gwMaxValue:'') + this.form.gmAcceptUnit + ')'
-              }else{
-                this.form.gramWeight = this.form.gramWeight + '(' + (this.form.gwMaxValue? "+" + this.form.gwMaxValue:'') + (this.form.gwMinValue? "-" + this.form.gwMinValue:'')+this.form.gmAcceptUnit + ')'
+            this.form.gramWeight = this.form.gramWeightValue;
+            if (
+              this.form.gramWeight &&
+              (this.form.gwMaxValue || this.form.gwMinValue)
+            ) {
+              if (this.form.gwMaxValue == this.form.gwMinValue) {
+                this.form.gramWeight =
+                  this.form.gramWeight +
+                  "(" +
+                  (this.form.gwMaxValue ? "±" + this.form.gwMaxValue : "±0") +
+                  (this.form.gmAcceptUnit || "") +
+                  ")";
+              } else {
+                this.form.gramWeight =
+                  this.form.gramWeight +
+                  "(" +
+                  (this.form.gwMaxValue ? "+" + this.form.gwMaxValue : "+0") +
+                  (this.form.gwMinValue ? "-" + this.form.gwMinValue : "-0") +
+                  (this.form.gmAcceptUnit || "") +
+                  ")";
               }
             }
-            this.form.breadth = this.form.breadthValue
-            if(this.form.breadth&& (this.form.breadthUpper || this.form.breadthLower )){
-              if(this.form.breadthUpper == this.form.breadthLower){
-                this.form.breadth = this.form.breadth + '(' + (this.form.breadthUpper? "±" + this.form.breadthUpper:'') + this.form.breadthAcceptUnit + ')'
-              }else{
-                this.form.breadth = this.form.breadth + '(' + (this.form.breadthUpper? "+" + this.form.breadthUpper:'') + (this.form.breadthLower? "-" + this.form.breadthLower:'')+this.form.breadthAcceptUnit + ')'
+            this.form.breadth = this.form.breadthValue;
+            if (
+              this.form.breadth &&
+              (this.form.breadthUpper || this.form.breadthLower)
+            ) {
+              if (this.form.breadthUpper == this.form.breadthLower) {
+                this.form.breadth =
+                  this.form.breadth +
+                  "(" +
+                  (this.form.breadthUpper
+                    ? "±" + this.form.breadthUpper
+                    : "±0") +
+                  (this.form.breadthAcceptUnit || "") +
+                  ")";
+              } else {
+                this.form.breadth =
+                  this.form.breadth +
+                  "(" +
+                  (this.form.breadthUpper
+                    ? "+" + this.form.breadthUpper
+                    : "+0") +
+                  (this.form.breadthLower
+                    ? "-" + this.form.breadthLower
+                    : "-0") +
+                  (this.form.breadthAcceptUnit || "") +
+                  ")";
               }
             }
             if (this.form.weaveJobId) {
@@ -585,18 +652,41 @@ export default {
               });
             } else {
               // add
-              baseCodeSupply({ code: "proWeaveJob" }).then((res) => {})
               this.form.createTime = this.$getNowTime("datetime");
               add(this.form).then((res) => {
                 if (res.data.code == 200) {
                   this.form.weaveJobId = res.data.data;
-                  this.$tip.success(this.$t("public.bccg"));
+                  if (this.splitW) {
+                    this.detail.amount = this.detail.amount - this.form.amount;
+                    update(this.detail).then((res) => {
+                      this.$tip.success(this.$t("public.bccg"));
+                    });
+                    getYarn({
+                      rows: 20,
+                      start: 1,
+                      proWeaveJobFk: this.detail.weaveJobId,
+                    }).then((yarn) => {
+                      if (yarn.data.records.length) {
+                        addGroup({ proWeaveJobFk: this.form.weaveJobId }).then(
+                          (group) => {
+                            yarn.data.records.forEach((item) => {
+                              item.proWeaveJobFk = this.form.weaveJobId;
+                              item.proWeaveJobGroupFk = group.data.data;
+                              addYarn(item).then();
+                            });
+                          }
+                        );
+                      }
+                    });
+                  } else {
+                    baseCodeSupply({ code: "proWeaveJob" }).then((res) => {});
+                    this.$tip.success(this.$t("public.bccg"));
+                  }
                 } else {
                   this.$tip.error(this.$t("public.bcsb"));
                 }
                 setTimeout(() => {
                   this.wLoading = false;
-
                   done();
                 }, 200);
               });
@@ -718,12 +808,12 @@ export default {
           this.$tip.error("紗長不能為空!");
           return;
         }
-        if (this.tabs == "用紗明细") {
-          if (!this.crud[i].yarnRatio) {
-            this.$tip.error("用纱比例不能為空!");
-            return;
-          }
-        }
+        // if (this.tabs == "用紗明细") {
+        //   if (!this.crud[i].yarnRatio) {
+        //     this.$tip.error("用纱比例不能為空!");
+        //     return;
+        //   }
+        // }
 
         if (this.tabs == "洗後規格" && !this.crud[i].weight) {
           this.$tip.error("重量不能為空!");
@@ -827,13 +917,13 @@ export default {
       // 判断是否存在分组
       if (this.form.groupId) {
         // 存在分组，直接保存
-        for (let i = 0; i < this.crud.length; i++) {
-          if (!this.crud[i].yarnRatio) {
-            this.$tip.error("用纱比例不能為空!");
-            this.dlgLoading = false;
-            return;
-          }
-        }
+        // for (let i = 0; i < this.crud.length; i++) {
+        //   if (!this.crud[i].yarnRatio) {
+        //     this.$tip.error("用纱比例不能為空!");
+        //     this.dlgLoading = false;
+        //     return;
+        //   }
+        // }
         this.crud.forEach((item, i) => {
           item.proWeaveJobGroupFk = this.form.groupId;
           item.proWeaveJobFk = this.form.weaveJobId;
@@ -850,13 +940,13 @@ export default {
           }
         });
       } else {
-        for (let i = 0; i < this.crud.length; i++) {
-          if (!this.crud[i].yarnRatio) {
-            this.$tip.error("用纱比例不能為空!");
-            this.dlgLoading = false;
-            return;
-          }
-        }
+        // for (let i = 0; i < this.crud.length; i++) {
+        //   if (!this.crud[i].yarnRatio) {
+        //     this.$tip.error("用纱比例不能為空!");
+        //     this.dlgLoading = false;
+        //     return;
+        //   }
+        // }
         this.func
           .add({
             proWeaveJobFk: this.form.weaveJobId,
@@ -1131,7 +1221,7 @@ export default {
         this.choiceV = false;
         return;
       }
-      this.wLoading = true
+      this.wLoading = true;
       this.form.custPoNo = val.custPoNo;
       this.form.salPoNo = val.poNo;
       this.form.productDate = val.poDate;
@@ -1147,30 +1237,30 @@ export default {
       this.form.otherRequire = val.finishingitem;
       getBom({ bomId: val.bomId }).then((res) => {
         if (res.data.length) {
-          getBomDtlb( { salNewbomFk: res.data[0].salNewbomoid }).then((dtlb) => {
+          getBomDtlb({ salNewbomFk: res.data[0].salNewbomoid }).then((dtlb) => {
             if (dtlb.data.length) {
               getBomDtlbSpecs({
                 salNewbomDtlbFk: val.salNewbomDtlbFk,
               }).then((dtlbSpecs) => {
-                this.setSpecs(dtlbSpecs.data)
+                this.setSpecs(dtlbSpecs.data);
               });
             } else {
               getBomDtlaSpecs({
                 salNewbomDtlaFk: val.salNewbomDtlaFk,
               }).then((dtlaSpecs) => {
-                 this.setSpecs(dtlaSpecs.data)
+                this.setSpecs(dtlaSpecs.data);
               });
             }
           });
-        }else{
-          this.wLoading = false
+        } else {
+          this.wLoading = false;
         }
       });
       this.choiceV = false;
     },
     setSpecs(list) {
-      if(!list.length){
-          this.wLoading = false
+      if (!list.length) {
+        this.wLoading = false;
       }
       let data = {};
       list.forEach((item, i) => {
@@ -1184,21 +1274,21 @@ export default {
       this.form.gwMaxValue = data["weight-XQ+"];
       this.form.gwMinValue = data["weight-XQ-"];
       this.form.gramWeightUnit = data["weight-XQunit"];
-      this.form.gmAcceptUnit = data["weight-XQycunit"]
-      
+      this.form.gmAcceptUnit = data["weight-XQycunit"];
+
       this.form.breadthValue = data["width-SJ"];
       this.form.breadthUpper = data["width-SJ+"];
       this.form.breadthLower = data["width-SJ+"];
       this.form.breadthUnit = data["width-SJunit"];
       this.form.breadthAcceptUnit = data["width-SJycunit"];
-      if(data["shrink-H"] && data["shrink-H+"]){
-        this.form.horizonShrink = `${data["shrink-H"]}±${data["shrink-H+"]}`
+      if (data["shrink-H"] && data["shrink-H+"]) {
+        this.form.horizonShrink = `${data["shrink-H"]}±${data["shrink-H+"]}`;
       }
-       if(data["shrink-Z"] && data["shrink-Z+"]){
-        this.form.verticalShrink = `${data["shrink-Z"]}±${data["shrink-Z+"]}`
+      if (data["shrink-Z"] && data["shrink-Z+"]) {
+        this.form.verticalShrink = `${data["shrink-Z"]}±${data["shrink-Z+"]}`;
       }
       setTimeout(() => {
-          this.wLoading = false
+        this.wLoading = false;
       }, 200);
     },
     close() {
@@ -1216,63 +1306,40 @@ export default {
 };
 </script>
 <style lang='stylus'>
-#proWeaveJob {
-  .formBox {
-    height: calc(100vh - 70px) !important;
-    overflow: auto;
-  }
-
-  .el-input-number__decrease, .el-input-number__increase {
-    display: none;
-  }
-
-  .el-input-number .el-input__inner {
-    text-align: left !important;
-  }
-
-  .el-input-number.is-controls-right .el-input__inner {
-    padding-left: 5px !important;
-  }
-}
-
-#colorMng_Dlg {
-  .is-fullscreen {
-    overflow: hidden !important;
-  }
-
-  .el-dialog__header {
-    padding: 0 !important;
-  }
-
-  .el-dialog__headerbtn {
-    top: 3px;
-    font-size: 18px;
-    font-weight: bold;
-    z-index: 9;
-  }
-
-  .el-dialog__headerbtn .el-dialog__close, #sxrcDlg .el-dialog__headerbtn .el-dialog__close, #wkDlg .el-dialog__headerbtn .el-dialog__close {
-    color: #000;
-    font-size: 24px;
-  }
-
-  .el-tag--mini {
-    height: 24px;
-    padding: 0 5px;
-    line-height: 24px;
-    font-size: 14px;
-  }
-
-  .el-select .el-tag__close.el-icon-close {
-    right: -5px;
-    height: 18px;
-    width: 18px;
-    line-height: 18px;
-  }
-
-  .avue-form .el-input--mini input {
-    height: 35px !important;
-    line-height: 35px;
-  }
-}
+#proWeaveJob
+  .formBox
+    height calc(100vh - 70px) !important
+    overflow auto
+  .el-input-number__decrease, .el-input-number__increase
+    display none
+  .el-input-number .el-input__inner
+    text-align left !important
+  .el-input-number.is-controls-right .el-input__inner
+    padding-left 5px !important
+#colorMng_Dlg
+  .is-fullscreen
+    overflow hidden !important
+  .el-dialog__header
+    padding 0 !important
+  .el-dialog__headerbtn
+    top 3px
+    font-size 18px
+    font-weight bold
+    z-index 9
+  .el-dialog__headerbtn .el-dialog__close, #sxrcDlg .el-dialog__headerbtn .el-dialog__close, #wkDlg .el-dialog__headerbtn .el-dialog__close
+    color #000
+    font-size 24px
+  .el-tag--mini
+    height 24px
+    padding 0 5px
+    line-height 24px
+    font-size 14px
+  .el-select .el-tag__close.el-icon-close
+    right -5px
+    height 18px
+    width 18px
+    line-height 18px
+  .avue-form .el-input--mini input
+    height 35px !important
+    line-height 35px
 </style>

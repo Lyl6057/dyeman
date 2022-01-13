@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-02-24 08:12:20
- * @LastEditors: Lyl
- * @LastEditTime: 2021-08-23 15:56:05
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2022-01-05 18:59:15
  * @Description:
  */
 import Vue from "vue";
@@ -24,10 +24,14 @@ const store = new VueX.Store({
     ldRecipeData: [],
     userOid: "",
     lang: "1",
-    tagView: []
+    tagView: [],
+    spowerClient:null
   },
   getters: {
     //实时监听state值的变化
+    getSpowerClient(state) {
+      return state.spowerClient;
+    },
     getActive(state) {
       return state.isActive;
     },
@@ -42,6 +46,9 @@ const store = new VueX.Store({
     }
   },
   mutations: {
+    SET_SPOWERCLIENT(state, value){
+      state.spowerClient = value
+    },
     setUser(state, value) {
       state.userOid = value;
     },
@@ -98,6 +105,9 @@ const store = new VueX.Store({
     }
   },
   actions: {
+    setSpowerClient(context, value){
+      context.commit("SET_SPOWERCLIENT", value)
+    },
     setUsers(context, value) {
       context.commit("setUser", value);
     },

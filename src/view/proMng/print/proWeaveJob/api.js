@@ -1,12 +1,21 @@
 /*
  * @Author: Lyl
  * @Date: 2021-02-01 14:06:25
- * @LastEditors: Lyl
- * @LastEditTime: 2021-12-01 18:26:46
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2022-01-07 09:54:18
  * @Description:
  */
 
 import axios from "axios";
+
+// 查询 织单布票已生产总重量
+export function getNoteSum(params) {
+  return axios({
+    url: "/api/proWeaveJobSumOutput/yieldSum",
+    method: "get",
+    params:params
+  });
+}
 
 // 查询 bom 资料
 export function getBom(params) {

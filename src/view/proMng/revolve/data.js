@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-12-27 14:38:36
+ * @LastEditTime: 2022-01-08 18:58:59
  * @Description:
  */
 
@@ -396,6 +396,7 @@ export function mainCrud(_this) {
         disabled: false,
         prop: "avgEachWeightKg",
         width: 120,
+        labelWidth:60,
         type: "switch",
         dicData: [
           {
@@ -409,7 +410,7 @@ export function mainCrud(_this) {
         ],
         hide: false,
         placeholder: " ",
-        span: 6,
+        span: 4,
         change: val => {
           if (val.value && _this.form.clothWeight) {
             _this.$nextTick(() => {
@@ -421,11 +422,32 @@ export function mainCrud(_this) {
         }
       },
       {
+        label: "重量单位",
+        prop: "wmUnit",
+        tip: "unit",
+        labelWidth:90,
+        width: 80,
+        span: 5,
+        placeholder: " ",
+        type: "switch",
+        dicData: [
+          {
+            label: "KG",
+            value: 'KG'
+          },
+          {
+            label: "LBS",
+            value: "LBS"
+          }
+        ],
+      },
+      {
         label: "疋數",
         prop: "pidCount",
         tip: "Cây",
+        labelWidth:50,
         width: 100,
-        span: 6,
+        span: 3,
         type: "number",
         align: "right",
         placeholder: " "
@@ -521,7 +543,6 @@ export function mainCrud(_this) {
         overHidden: true,
         width: 250,
         span: 12,
-        placeholder: " "
         // rules: [{
         //   required: true,
         //   message: "请選擇布類描述",

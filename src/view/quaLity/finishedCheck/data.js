@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
- * @LastEditors: Lyl
- * @LastEditTime: 2021-11-18 16:49:33
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2022-01-06 16:59:23
  * @Description:
  */
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
@@ -89,6 +89,26 @@ export function mainForm(_this) {
           //   _this.query();
           // });
         }
+      },
+      {
+        label: "验布员工号",
+        prop: "clothChecker",
+        span: 6,
+        placeholder: " ",
+        width: 180,
+        overHidden: true
+      },
+      {
+        label: "验布时间",
+        prop: "clothCheckTime",
+        type: "datetimerange",
+        format: "yyyy-MM-dd",
+        valueFormat: "yyyy-MM-dd",
+        span: 12,
+        tip: "thời gian in",
+        placeholder: " ",
+        align: "center",
+        width: 180
       }
       // {
       //   label: "验布时间",
@@ -178,7 +198,6 @@ export function mainCrud(_this) {
         disabled: true,
         placeholder: " ",
         span: 6,
-        width: 100,
         width: 200,
         overHidden: true,
         hide: true

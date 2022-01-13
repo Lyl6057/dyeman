@@ -13,6 +13,14 @@ export default [
       keepAlive: true
     }
   },
+  {
+    path: "/whseInOutKB",
+    name: "出入库看板",
+    component: resolve => require(["@/view/im/whseInOutKB/index"], resolve),
+    meta: {
+      keepAlive: true
+    }
+  },
   //库存管理
   // {
   //   path: "/imHo",

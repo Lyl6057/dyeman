@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-02-01 14:06:25
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-12-25 13:24:55
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-01-13 10:02:16
  * @Description:
  */
 
@@ -43,9 +43,10 @@ export function getNotPage(params) {
 }
 
 // 獲取打印記錄
-export function get(params) {
+export function get(params, r_clothCheckTime_r) {
   return axios({
-    url: "/api/proFinalProductCard/page",
+    url:
+      "/api/proFinalProductCard/page?r_clothCheckTime_r=" + r_clothCheckTime_r,
     method: "get",
     params: params
   });

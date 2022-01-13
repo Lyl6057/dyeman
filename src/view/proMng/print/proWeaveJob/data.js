@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-12-30 15:08:14
+ * @LastEditTime: 2022-01-06 10:05:27
  * @Description:
  */
 
@@ -556,6 +556,7 @@ export function mainCrud(_this, audit) {
         prop: "gramWeightUnit",
         labelWidth: 50,
         clearable:false,
+        formslot:true,
         hide: true,
         disabled: audit
           ? false
@@ -886,7 +887,6 @@ export function mainCrud(_this, audit) {
             placeholder: " ",
             hide: true,
             span: 12,
-            placeholder: " "
           },
           {
             label: "針寸數",
@@ -1018,7 +1018,6 @@ export function mainCrud(_this, audit) {
             tip: "Khổ vải trên giá vải",
             placeholder: " ",
             hide: true,
-            placeholder: " ",
             span: 6
           },
           {
@@ -1061,7 +1060,6 @@ export function mainCrud(_this, audit) {
             tip: "Thông số đĩa dây Cu-roa",
             prop: "transPlate",
             hide: true,
-            placeholder: " ",
             placeholder: " ",
             span: 12
           },

@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-02-24 08:12:20
- * @LastEditors: Lyl
- * @LastEditTime: 2021-10-04 13:29:04
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2022-01-05 19:10:31
  * @Description: 
 -->
 <template>
@@ -31,15 +31,20 @@
 </template>
 <script>
 import { mapActions } from "vuex";
+import { webSocket } from "@/config/index.js";
 import axios from "axios";
 // import { getUcmlUser } from "@/const/whse.js";
 export default {
   name: "App",
   data() {
-    return {};
+    return {
+      spowerClient:null
+    };
   },
   mounted() {
     // parent.userID
+    webSocket.setClient(this);
+    this.setSpowerClient(this.spowerClient)
     axios({
       url: "/api/ucmlUser",
       method: "get",
@@ -63,7 +68,8 @@ export default {
     // window.sessionStorage.setItem("tagView", "[]");
   },
   methods: {
-    ...mapActions(["setUsers", "setLangs"]),
+    ...mapActions(["setUsers", "setLangs","setSpowerClient"]),
+      
   },
 };
 </script>

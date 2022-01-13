@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
- * @LastEditors: Lyl
- * @LastEditTime: 2021-11-16 08:28:22
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2022-01-07 16:09:08
  * @Description: 
 -->
 <template>
@@ -76,6 +76,16 @@
         <el-tooltip
           class="item"
           effect="dark"
+          content="拆单"
+          placement="top-start"
+        >
+          <el-button type="primary" @click="splitWeave" :loading="wloading"
+            >拆单</el-button
+          >
+        </el-tooltip>
+        <el-tooltip
+          class="item"
+          effect="dark"
           content="tìm kiếm"
           placement="top-start"
         >
@@ -119,6 +129,7 @@
           :detail="detail"
           :isAdd="isAdd"
           :copyC="copyC"
+          :splitW="splitW"
           :audit="false"
           @close="dialogVisible = false"
           @refresh="query"
@@ -179,6 +190,7 @@ export default {
       pdfDlg: false,
       pdfUrl: "",
       copyC: false,
+      splitW:false
     };
   },
   watch: {},
@@ -239,6 +251,7 @@ export default {
     copyEvent() {
       this.isAdd = true;
       this.copyC = true;
+      this.splitW = false
       this.dialogVisible = true;
     },
     add() {
@@ -272,7 +285,7 @@ export default {
                 this.$tip.success(this.$t("public.sccg"));
                 this.query();
               } else {
-                this.$tip.error(this.$t("public.scsb"));
+                this.$tip.error(res.data.msg);
               }
             })
             .catch((err) => {
@@ -307,6 +320,12 @@ export default {
     close() {
       document.getElementsByClassName("el-dialog__headerbtn")[0].click();
     },
+    splitWeave(){
+      this.isAdd = true;
+      this.splitW = true;
+      this.copyC = false
+      this.dialogVisible = true;
+    }
   },
   created() {},
   mounted() {

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-01-04 16:00:53
+ * @LastEditTime: 2022-01-08 16:56:50
  * @Description:
 -->
 <template>
@@ -29,6 +29,7 @@
           this.$t("public.query")
         }}</el-button>
         <el-button type="primary" @click="outExcel">导出</el-button>
+        <span v-if="crud.length && weightSum > 0" style="float: right;margin-right:10px">【 {{crud[0].weaveJobCode}} 】 总重量: {{ weightSum }} KG</span>
       </el-row>
       <el-row class="formBox">
         <avue-form ref="form" :option="formOp" v-model="form"> </avue-form>
@@ -75,6 +76,7 @@ import {
   addInDtla,
   addInDtlb,
 } from "./api";
+import { getNowWeight } from '../weight/api'
 import { baseCodeSupply, baseCodeSupplyEx } from "@/api/index";
 import qs from "qs";
 export default {
@@ -107,6 +109,7 @@ export default {
       oldData: {},
       sort: {},
       checkSum: 0,
+      weightSum:0
     };
   },
   watch: {},
@@ -121,9 +124,9 @@ export default {
       }
       let r_clothCheckTime_r = ''
       if( this.form.clothCheckTime &&this.form.clothCheckTime.length){
-        // this.form.clothCheckTime.forEach((item) =>{
-       r_clothCheckTime_r = `!%5E%5b${this.form.clothCheckTime[0]} 07:30:00~${this.form.clothCheckTime[1]} 07:30:00%5d`
-      // })
+        r_clothCheckTime_r = `!%5E%5b${this.form.clothCheckTime[0]} 07:30:00~${this.form.clothCheckTime[1]} 07:30:00%5d`
+      }else{
+        r_clothCheckTime_r = '!%5E'
       }
       // order
       //   ? (this.form.sort = prop + (order == "descending" ? ",1" : ",0"))
@@ -144,7 +147,20 @@ export default {
       ).then((res) => {
         this.crud = res.data.records;
         if (this.crud.length > 0) {
+            getNowWeight(this.crud[0].weaveJobCode).then(res =>{
+              this.$nextTick(() =>{
+                if(res.data){
+                  this.weightSum = res.data.clothWeight
+                }else{
+                  this.weightSum = 0
+                }
+              })
+            })
           this.$refs.crud.setCurrentRow(this.crud[0]);
+        }else{
+           this.$nextTick(() =>{
+            this.weightSum = 0
+           })
         }
         this.crud.forEach((item, i) => {
           item.index = i + 1;

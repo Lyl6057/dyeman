@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-08-07 07:57:44
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-01-04 18:39:19
+ * @LastEditTime: 2022-01-10 09:46:10
  * @Description: 
 -->
 <template>
@@ -261,7 +261,6 @@ export default {
       this.form.custPoNo = "";
       this.form.custCode = "";
       this.form.styleNo = "";
-
       this.form.colorName = "";
       this.form.custColorNo = "";
       this.form.factoryColorNo = "";
@@ -459,6 +458,7 @@ export default {
                   } else {
                     // 不存在记录 新增 =>打印
                     data.cardType = 1;
+                    data.productNo = data.vatNo + this.$preFixInt(data.pidNo, 3)
                     add(data).then((addRes) => {
                       if (addRes.data.code == 200) {
                         this.form.cardId = addRes.data.data;
@@ -590,6 +590,7 @@ export default {
                     data.cardId = "";
                     data.cardType = 1;
                     data.madeDate = this.$getNowTime("datetime");
+                    data.productNo = data.vatNo + this.$preFixInt(data.pidNo, 3)
                     add(data).then((addRes) => {
                       if (addRes.data.code == 200) {
                         this.form.cardId = addRes.data.data;
@@ -667,7 +668,7 @@ export default {
         typeof obj === "undefined" ||
         obj === null ||
         obj === "" ||
-        isNaN(obj)
+        obj === NaN
       ) {
         return true;
       } else {
@@ -751,7 +752,10 @@ export default {
       _this.prsocket.onmessage = function (e) {};
       webSocket.setClient(this);
       _this.spowerClient.onmessage = function (e) {
-        console.log(e);
+        if(e.data.indexOf("scan") != -1 ){
+          console.log( e.data.split("scan="));
+          _this.form.storeLoadCode = e.data.split("scan=")[1]
+        }
       };
     },
     codeLength() {
@@ -799,11 +803,16 @@ export default {
   },
   beforeRouteEnter(to, form, next) {
     next((vm) => {
-      vm.setCz();
       let self = vm;
+      self.setCz();
+      // vm.spowerClient = vm.$store.state.spowerClient
+      // vm.spowerClient.onmessage = function (e){
+      //   console.log(e);
+      // }
+
       document.onkeydown = function (e) {
         let ev = document.all ? window.event : e;
-        if (ev.keyCode === 13) {
+        if (ev.keyCode === 13 && self.form.vatNo) {
           setTimeout(() => {
             self.query();
           }, 200);

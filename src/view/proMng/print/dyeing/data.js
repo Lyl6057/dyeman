@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-12-15 15:24:00
+ * @LastEditTime: 2022-01-12 15:19:09
  * @Description:
  */
 
@@ -10,12 +10,13 @@ import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
 
 const unit = getDIC("sal_breadthUnit");
 let matUnit = getDIC("bas_matUnit");
+let cust = getDicT("basCustomer", "custName", "custCode");
 
 export function mainForm(_this) {
   return {
     submitBtn: false,
     emptyBtn: false,
-    labelWidth: 150,
+    labelWidth: 120,
     column: [
       {
         label: "缸號",
@@ -77,6 +78,44 @@ export function mainForm(_this) {
       //   type: "select",
       //   // dicData: getDicT("basCustomer", "custName", "custCode")
       // },
+    ]
+  };
+}
+
+export function mainEasyForm(_this) {
+  return {
+    submitBtn: false,
+    emptyBtn: false,
+    labelWidth: 150,
+    column: [
+      {
+        label: "缸號",
+        prop: "vatNo",
+        span: 6,
+        placeholder: " "
+      },
+
+      {
+        label: "织造生產單號",
+        prop: "weaveJobCode",
+        span: 6,
+        placeholder: " "
+      },
+      {
+        label: "訂單編號",
+        prop: "salPoNo",
+        span: 6,
+        placeholder: " "
+        // dicData: getDicT("basCustomer", "custName", "custCode")
+      },
+      {
+        label: "客戶名稱",
+        prop: "custCode",
+        span: 6,
+        placeholder: " ",
+        type: "select",
+        dicData: cust
+      },
     ]
   };
 }
@@ -181,7 +220,7 @@ export function dlgForm(_this) {
   };
 }
 
-let cust = getDicT("basCustomer", "custName", "custCode");
+
 export function mainCrud(_this) {
   return {
     menu: false,
@@ -1360,6 +1399,7 @@ export function techargueCrud(_this) {
         prop: "bleadyeName",
         width: 180,
         cell: true,
+        overHidden:true,
         span: 6,
         props: {
           label: "bleadyeName",

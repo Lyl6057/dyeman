@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-12-25 14:21:01
+ * @LastEditTime: 2022-01-06 16:35:39
  * @Description:
  */
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
@@ -63,6 +63,26 @@ export function mainForm(_this) {
         cell: true,
         overHidden: true,
         width: 120
+      },
+      {
+        label: "验布员工号",
+        prop: "clothChecker",
+        span: 6,
+        placeholder: " ",
+        width: 180,
+        overHidden: true
+      },
+      {
+        label: "验布时间",
+        prop: "clothCheckTime",
+        type: "datetimerange",
+        format: "yyyy-MM-dd",
+        valueFormat: "yyyy-MM-dd",
+        span: 12,
+        tip: "thời gian in",
+        placeholder: " ",
+        align: "center",
+        width: 180
       }
       // {
       //   label: "胚布状态",
@@ -116,7 +136,7 @@ export function mainCrud(_this) {
     border: true,
     index: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 240px)",
+    height: "calc(100vh - 280px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,

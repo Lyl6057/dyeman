@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-02-01 14:06:25
- * @LastEditors: Lyl
- * @LastEditTime: 2021-09-11 15:47:00
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2022-01-06 16:43:44
  * @Description:
  */
 
@@ -26,9 +26,9 @@ export function getJob(params) {
 }
 
 // 獲取打印記錄
-export function get(params) {
+export function get(params,r_clothCheckTime_r) {
   return axios({
-    url: "/api/proFinalProductCard/page",
+    url: "/api/proFinalProductCard/page?r_clothCheckTime_r=" + r_clothCheckTime_r,
     method: "get",
     params: params
   });

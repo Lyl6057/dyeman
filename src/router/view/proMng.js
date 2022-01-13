@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-29 14:14:56
  * @LastEditors: Lyl
- * @LastEditTime: 2021-12-17 16:09:58
+ * @LastEditTime: 2022-01-10 13:18:09
  * @Description:
  */
 export default [
@@ -50,7 +50,7 @@ export default [
   {
     path: "/proSalSchedule",
     name: "生产排期",
-    component: resolve => require(["@/view/pro/plan/order/index"], resolve),
+    component: resolve => require(["@/view/proMng/orderSchedule/index"], resolve),
     meta: {
       keepAlive: true
     }

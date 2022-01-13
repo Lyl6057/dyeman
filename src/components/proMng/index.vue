@@ -54,6 +54,9 @@
 </template>
 <script>
 import {
+  getBaseStep,
+  baseStepC,
+  baseStepF,
   weaveJobC,
   weaveJobF,
   getWeaveJob,
@@ -209,6 +212,8 @@ export default {
       } else {
         this.form.vatNo = "!^%" + (this.form.vatNo ? this.form.vatNo : "");
         this.form.poNo = "!^%" + (this.form.poNo ? this.form.poNo : "");
+        // this.form.stepCode =
+        //   "!^%" + (this.form.stepCode ? this.form.stepCode : "");
         this.form.weaveJobCode =
           "%" + (this.form.weaveJobCode ? this.form.weaveJobCode : "");
         this.getData(
@@ -219,7 +224,7 @@ export default {
         ).then((Res) => {
           let records = Res.data;
           this.page.total = records.total;
-          this.crud = records.records;
+          this.crud = records.records || records.rows;
           if (this.crud.length === 0) {
             this.loading = false;
           }
@@ -259,6 +264,9 @@ export default {
           if (this.form.weaveJobCode.indexOf("%") != -1) {
             this.form.weaveJobCode = this.form.weaveJobCode.split("%")[1] || "";
           }
+          // if (this.form.stepCode.indexOf("!^%") != -1) {
+          //   this.form.stepCode = this.form.stepCode.split("!^%")[1] || "";
+          // }
         });
       }
     },
@@ -392,7 +400,11 @@ export default {
         this.choiceF = WorkStepF(this);
         this.getData = getWorkStep;
         break;
-
+      case "选择生产工序":
+        this.choiceC = baseStepC(this);
+        this.choiceF = baseStepF(this);
+        this.getData = getBaseStep;
+        break;
       default:
         break;
     }
@@ -408,35 +420,23 @@ export default {
 };
 </script>
 <style lang='stylus'>
-#choiceDlg {
-  .el-radio, .el-radio--medium.is-bordered .el-radio__label, .el-radio__label {
-    font-size: 16px;
-    height: 30px;
-  }
-
-  .el-dialog__body {
-    padding: 0 !important;
-  }
-
-  .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item {
-    margin-bottom: 10px;
-  }
-
-  .el-dialog__header {
-    padding: 0px;
-  }
-
-  .el-dialog__headerbtn {
-    top: 5px;
-    color: #000;
-    font-size: 22px;
-    z-index: 999;
-  }
-
-  .formBox {
-    margin-bottom: 0px;
-  }
-
+#choiceDlg
+  .el-radio, .el-radio--medium.is-bordered .el-radio__label, .el-radio__label
+    font-size 16px
+    height 30px
+  .el-dialog__body
+    padding 0 !important
+  .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item
+    margin-bottom 10px
+  .el-dialog__header
+    padding 0px
+  .el-dialog__headerbtn
+    top 5px
+    color #000
+    font-size 22px
+    z-index 999
+  .formBox
+    margin-bottom 0px
   // .el-button--mini, .el-button--small {
   // font-size: 16px;
   // }
@@ -444,23 +444,15 @@ export default {
   // .el-button--mini, .el-button--mini.is-round {
   // padding: 5px 10px;
   // }
-  .avue-crud__menu {
-    min-height: 0 !important;
-    height: 0 !important;
-  }
-
-  .el-tabs__item {
-    font-size: 18px;
-    line-height: 30px;
-    height: 30px;
-  }
-
-  .el-tag--mini {
-    display: none;
-  }
-
-  .el-dialog.is-fullscreen {
-    overflow: hidden !important;
-  }
-}
+  .avue-crud__menu
+    min-height 0 !important
+    height 0 !important
+  .el-tabs__item
+    font-size 18px
+    line-height 30px
+    height 30px
+  .el-tag--mini
+    display none
+  .el-dialog.is-fullscreen
+    overflow hidden !important
 </style>

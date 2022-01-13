@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-04-01 14:08:13
- * @LastEditors: Lyl
- * @LastEditTime: 2021-12-11 15:08:34
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2022-01-05 19:19:29
  * @Description:
  */
 
@@ -28,6 +28,10 @@ export function quality(_this) {
         {
           menuName: "4.QC验布",
           index: "clothQc"
+        },
+        {
+          menuName: "5.布票打印",
+          index: "noteCode"
         }
       ]
     },

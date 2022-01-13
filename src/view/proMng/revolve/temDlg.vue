@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-12-27 14:46:39
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-01-13 15:02:11
  * @Description:
 -->
 <template>
@@ -562,11 +562,10 @@ export default {
             mainData.test = "";
             mainData.item = "";
             mainData.mergVatNo = mainData.mergVatNo.join("/");
-            mainData.compLightSource = mainData.compLightSource.join(",");  
-                              mainData.workDate += " 00:00:00";
-          
-         
-              mainData.deliveDate += " 00:00:00";
+            mainData.compLightSource = mainData.compLightSource.join(",");
+            mainData.workDate += " 00:00:00";
+
+            mainData.deliveDate += " 00:00:00";
             Object.keys(mainData).forEach((item) => {
               if (this.isEmpty(mainData[item])) {
                 delete mainData[item];
@@ -594,9 +593,8 @@ export default {
                   delete data[item];
                 }
               });
-                  data.workDate += " 00:00:00";
-          
-         
+              data.workDate += " 00:00:00";
+
               data.deliveDate += " 00:00:00";
               data.poAmountLb = (data.poAmountKg * 2.2046226).toFixed(2);
               // data.clothWeight = data.dyeClothWeight;
@@ -777,6 +775,7 @@ export default {
               this.form.auditState = 0;
               this.wLoading = false;
             }
+            this.form.wmUnit = "KG";
             this.form.serviceOperator = parent.userID;
           });
         }, 200);
@@ -1323,86 +1322,57 @@ export default {
 };
 </script>
 <style lang='stylus'>
-.el-tag--mini {
-  height: 28px !important;
+.el-tag--mini
+  height 28px !important
   // padding: 0 5px;
-  line-height: 28px !important;
-  font-size: 14px;
-}
-
+  line-height 28px !important
+  font-size 14px
 // .el-table__fixed-body-wrapper {
 // top: 60px !important;
 // }
-#revolve {
-  .avue-group__header {
-    margin-bottom: 10px;
-    height: 30px;
-  }
-
-  .el-input-number__decrease, .el-input-number__increase {
-    display: none;
-  }
-
-  .avue-form__row {
-    padding: 0 !important;
-  }
-
-  .formBox {
+#revolve
+  .el-radio__label
+    font-size 16px
+  .avue-group__header
+    margin-bottom 10px
+    height 30px
+  .el-input-number__decrease, .el-input-number__increase
+    display none
+  .avue-form__row
+    padding 0 !important
+  .formBox
     // height: 100vh !important;
     // overflow: auto;
-  }
-
-  .el-input-number__decrease, .el-input-number__increase {
-    display: none;
-  }
-
-  .el-input-number .el-input__inner {
-    text-align: left !important;
-  }
-
-  .el-input-number.is-controls-right .el-input__inner {
-    padding-left: 5px !important;
-  }
-}
-
-#colorMng_Dlg {
-  .is-fullscreen {
-    overflow: hidden !important;
-  }
-
-  .el-dialog__header {
-    padding: 0 !important;
-  }
-
-  .el-dialog__headerbtn {
-    top: 3px;
-    font-size: 18px;
-    font-weight: bold;
-    z-index: 9;
-  }
-
-  .el-dialog__headerbtn .el-dialog__close, #sxrcDlg .el-dialog__headerbtn .el-dialog__close, #wkDlg .el-dialog__headerbtn .el-dialog__close {
-    color: #000;
-    font-size: 24px;
-  }
-
-  .el-tag--mini {
-    height: 24px;
-    padding: 0 5px;
-    line-height: 24px;
-    font-size: 14px;
-  }
-
-  .el-select .el-tag__close.el-icon-close {
-    right: -5px;
-    height: 18px;
-    width: 18px;
-    line-height: 18px;
-  }
-
-  .avue-form .el-input--mini input {
-    height: 35px !important;
-    line-height: 35px;
-  }
-}
+  .el-input-number__decrease, .el-input-number__increase
+    display none
+  .el-input-number .el-input__inner
+    text-align left !important
+  .el-input-number.is-controls-right .el-input__inner
+    padding-left 5px !important
+#colorMng_Dlg
+  .is-fullscreen
+    overflow hidden !important
+  .el-dialog__header
+    padding 0 !important
+  .el-dialog__headerbtn
+    top 3px
+    font-size 18px
+    font-weight bold
+    z-index 9
+  .el-dialog__headerbtn .el-dialog__close, #sxrcDlg .el-dialog__headerbtn .el-dialog__close, #wkDlg .el-dialog__headerbtn .el-dialog__close
+    color #000
+    font-size 24px
+  .el-tag--mini
+    height 24px
+    padding 0 5px
+    line-height 24px
+    font-size 14px
+  .el-select .el-tag__close.el-icon-close
+    right -5px
+    height 18px
+    width 18px
+    line-height 18px
+  .avue-form .el-input--mini input
+    height 35px !important
+    line-height 35px
 </style>

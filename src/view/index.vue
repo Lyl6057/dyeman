@@ -1,3 +1,11 @@
+<!--
+ * @Author: your name
+ * @Date: 2021-03-10 13:20:44
+ * @LastEditTime: 2022-01-05 18:59:50
+ * @LastEditors: your name
+ * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ * @FilePath: \iot.vue\src\view\index.vue
+-->
 <template>
   <div class="home">
     <!-- <basicContainer> -->
@@ -11,6 +19,7 @@
 </template>
 
 <script>
+
 export default {
   data() {
     return {
@@ -61,6 +70,7 @@ export default {
       },
     };
   },
+ 
 };
 </script>
 

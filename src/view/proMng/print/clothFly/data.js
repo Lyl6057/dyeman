@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
- * @LastEditors: Lyl
- * @LastEditTime: 2021-08-24 10:52:29
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2022-01-06 08:58:15
  * @Description:
  */
 
@@ -107,7 +107,6 @@ export function mainCrud(_this) {
         overHidden: true,
         disabled: true,
         width: 100,
-        overHidden: true,
         span: 6,
         placeholder: "请選擇客戶編號"
         // type: "select",
@@ -152,7 +151,6 @@ export function mainCrud(_this) {
       {
         label: "顏色名稱",
         prop: "colorName",
-        placeholder: " ",
         disabled: true,
         width: 180,
         span: 6,
@@ -170,7 +168,6 @@ export function mainCrud(_this) {
       {
         label: "布類描述",
         prop: "fabricDesc",
-        placeholder: " ",
         overHidden: true,
         disabled: true,
         width: 250,
@@ -547,7 +544,6 @@ export function bfCrud(_this) {
         disabled: true,
         placeholder: " ",
         span: 6,
-        width: 100,
         width: 300,
         overHidden: true
       },
@@ -672,7 +668,6 @@ export function bfCrud(_this) {
         overHidden: true,
         width: 80,
         align: "right",
-        overHidden: true,
         span: 6,
         rules: [
           {

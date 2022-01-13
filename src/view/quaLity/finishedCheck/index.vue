@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-11-24 16:12:53
+ * @LastEditTime: 2022-01-13 15:47:56
  * @Description:
 -->
 <template>
@@ -124,14 +124,25 @@ export default {
       // order
       //   ? (this.form.sort = prop + (order == "descending" ? ",1" : ",0"))
       //   : (this.form.sort = "storeLoadCode,1");
-      this.form.vatNo = "!^%" + (this.form.vatNo ? this.form.vatNo : "");
+      let r_clothCheckTime_r = "";
+      if (this.form.clothCheckTime && this.form.clothCheckTime.length) {
+        r_clothCheckTime_r = `!%5E%5b${this.form.clothCheckTime[0]} 07:30:00~${this.form.clothCheckTime[1]} 07:30:00%5d`;
+      } else {
+        r_clothCheckTime_r = "!%5E";
+      }
+      this.form.vatNo = "%" + (this.form.vatNo ? this.form.vatNo : "");
+      this.form.clothChecker =
+        "%" + (this.form.clothChecker ? this.form.clothChecker : "");
+      let data = JSON.parse(JSON.stringify(this.form));
+      data.clothCheckTime = null;
       get(
-        Object.assign(this.form, {
+        Object.assign(data, {
           rows: this.page.pageSize,
           start: this.page.currentPage,
           isPrinted: 1, // 已打印
           cardType: 1,
-        })
+        }),
+        r_clothCheckTime_r
       ).then((res) => {
         this.crud = res.data.records;
         if (this.crud.length > 0) {
@@ -145,8 +156,11 @@ export default {
         });
         this.page.total = res.data.total;
         setTimeout(() => {
-          if (this.form.vatNo.indexOf("!^%") != -1) {
-            this.form.vatNo = this.form.vatNo.split("!^%")[1] || "";
+          if (this.form.vatNo.indexOf("%") != -1) {
+            this.form.vatNo = this.form.vatNo.split("%")[1] || "";
+          }
+          if (this.form.clothChecker.indexOf("%") != -1) {
+            this.form.clothChecker = this.form.clothChecker.split("%")[1] || "";
           }
           this.wLoading = false;
         }, 200);
@@ -198,7 +212,7 @@ export default {
           finStatus: 0,
         };
         addInWhse(data).then((inwhse) => {
-          // baseCodeSupply({ code: "whse_in" }).then((res) => {});
+          baseCodeSupply({ code: "whse_in" }).then((res) => {});
           const inwhseId = inwhse.data.data;
           baseCodeSupplyEx({ code: "cpb_in_whse" }).then((pbIn) => {
             this.selectList.forEach((item, i) => {
@@ -215,7 +229,7 @@ export default {
                 this.$tip.success("审核入仓成功!");
               }
             });
-            baseCodeSupply({ code: "pb_in_whse" }).then((res) => {});
+            baseCodeSupply({ code: "cpb_in_whse" }).then((res) => {});
           });
         });
       });
@@ -324,13 +338,9 @@ export default {
 };
 </script>
 <style lang='stylus'>
-#clothFlyWeight {
-  .el-table {
-    overflow: visible !important;
-  }
-
-  .el-tag--mini {
-    display: none !important;
-  }
-}
+#clothFlyWeight
+  .el-table
+    overflow visible !important
+  .el-tag--mini
+    display none !important
 </style>

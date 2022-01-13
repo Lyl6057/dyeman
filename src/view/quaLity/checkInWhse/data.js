@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-12-29 13:28:10
+ * @LastEditTime: 2022-01-06 16:34:23
  * @Description:
  */
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
@@ -91,7 +91,7 @@ export function mainForm(_this) {
         }
       },
       {
-        label: "验布开始时间",
+        label: "验布时间",
         prop: "clothCheckTime",
         type: "datetimerange",
         format: "yyyy-MM-dd",
@@ -100,7 +100,6 @@ export function mainForm(_this) {
         tip: "thời gian in",
         placeholder: " ",
         align: "center",
-     
         width: 180
       }
     ]

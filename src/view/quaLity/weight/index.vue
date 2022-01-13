@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-01-04 18:34:59
+ * @LastEditTime: 2022-01-08 16:55:26
  * @Description: 
 -->
 <template>
@@ -44,6 +44,7 @@
             >同步储存位置</el-button
           >
         </el-tooltip>
+        <span v-if="crud.length && weightSum > 0" style="float: right;margin-right:10px">【 {{crud[0].weaveJobCode}} 】 总重量: {{ weightSum }} KG</span>
 
         <!-- <el-button type="warning" @click="close">{{
           this.$t("public.close")
@@ -130,7 +131,7 @@
 <script>
 import { mainForm, mainCrud, dlgForm } from "./data";
 import { webSocket } from "@/config/index.js";
-import { get, add, update, del, getJob, updateNote } from "./api";
+import { get, add, update, del, getJob, updateNote, getNowWeight} from "./api";
 import qs from "qs";
 export default {
   name: "",
@@ -168,6 +169,7 @@ export default {
       ctrKey: false,
       checkLabel: "",
       sort: {},
+      weightSum:0
     };
   },
   watch: {},
@@ -187,9 +189,9 @@ export default {
         r_clothCheckTime_r = `!%5E%5B${this.form.clothCheckTime[0]} 07:30:00~${this.form.clothCheckTime[1]} 07:30:00%5D`
       // })
       }
-      // else{
-      //   r_clothCheckTime_r = '!%5E'
-      // }
+      else{
+        r_clothCheckTime_r = '!%5E'
+      }
       this.form.noteCode = "%" + (this.form.noteCode ? this.form.noteCode : "");
       this.form.poNo = "%" + (this.form.poNo ? this.form.poNo : "");
       // this.form.clothCheckTime = "%" + (this.form.clothCheckTime ? this.form.clothCheckTime : "");
@@ -205,8 +207,24 @@ export default {
         }),
         r_clothCheckTime_r
       ).then((res) => {
+        
         // this.crud = _.concat(res.data.records, this.crud);
         this.crud = res.data.records;
+        if (this.crud.length) {
+            getNowWeight(this.crud[0].weaveJobCode).then(res =>{
+              this.$nextTick(() =>{
+                if(res.data){
+                  this.weightSum = res.data.clothWeight
+                }else{
+                  this.weightSum = 0
+                }
+              })
+            })
+          }else{
+            this.$nextTick(() =>{
+              this.weightSum = 0
+            })
+          }
         // this.crud.sort((a, b) => {
         //   return a.printedTime < b.printedTime ? 1 : -1;
         // });
@@ -233,13 +251,11 @@ export default {
           this.form.noteCode = this.form.noteCode.split("%")[1] || "";
         }
         this.page.total = res.data.total;
-        // setTimeout(() => {
-        this.wLoading = false;
-        // }, 200);
-      }).catch((e) =>{
         setTimeout(() => {
-           this.wLoading = false;
+        this.wLoading = false;
         }, 500);
+      }).catch((e) =>{
+           this.wLoading = false;
       })
     },
     handleRowDBLClick(val) {

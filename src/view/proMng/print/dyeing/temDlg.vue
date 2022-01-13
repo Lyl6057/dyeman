@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-12-21 16:49:24
+ * @LastEditTime: 2022-01-12 11:21:44
  * @Description: 
 -->
 <template>
@@ -220,6 +220,7 @@
                   >打印</el-button
                 >
               </el-tooltip>
+                <el-button @click="copyGy" type="primary" v-if="tabs == '生產工藝'">复制工艺</el-button>
               <el-tooltip
                 class="item"
                 effect="dark"
@@ -230,6 +231,7 @@
                   $t("public.close")
                 }}</el-button>
               </el-tooltip>
+            
               <span style="margin-left: 10px" v-if="tabs == '生產工藝'">
                 自动计算</span
               >
@@ -558,6 +560,12 @@
       @close="choiceV = false"
       v-if="choiceV"
     ></choice>
+    <select-process
+      :choiceV="choiceP"
+      @choiceData="choiceData"
+      @close="choiceP = false"
+      v-if="choiceP"
+    ></select-process>
     <el-dialog
       id="colorMng_Dlg"
       :visible.sync="pdfDlg"
@@ -646,6 +654,7 @@ import {
   delBleadyeJobMerge,
 } from "./api";
 import { getTest as getTestList, getItem } from "../../revolve/api";
+import SelectProcess from "./selectProcess.vue";
 export default {
   name: "",
   props: {
@@ -656,6 +665,7 @@ export default {
   },
   components: {
     choice: choice,
+    SelectProcess,
   },
   data() {
     return {
@@ -668,6 +678,7 @@ export default {
         total: 0,
       },
       vatLoading: false,
+      choiceP: false,
       vatOptions: [],
       dlgWidth: "60%",
       codeSupplyNum: 0,
@@ -1888,6 +1899,10 @@ export default {
           this.$tip.warning(this.$t("public.qxcz"));
         });
     },
+    copyGy() {
+      this.choiceTle = "选择染整工单";
+      this.choiceP = true;
+    },
     handleRowDBLClick(val) {
       this.chooseData = val;
       this.check();
@@ -1897,6 +1912,9 @@ export default {
       this.chooseData = val;
       if (!this.chooseData.list) {
         this.chooseData.list = [];
+      }
+      if (this.chooseData.list.length) {
+        this.$refs.yarnCrud.setCurrentRow(this.chooseData.list[0]);
       }
       if (
         this.tabs == "生產工藝" &&
@@ -1978,6 +1996,7 @@ export default {
     choiceData(val) {
       if (Object.keys(val).length == 0) {
         this.choiceV = false;
+        this.choiceP = false;
         return;
       }
       if (this.choiceTle == "选择漂染工藝") {
@@ -2061,8 +2080,7 @@ export default {
             this.dlgLoading = false;
           }, 200);
         });
-      }
-      if (this.choiceTle == "選擇工藝材料") {
+      } else if (this.choiceTle == "選擇工藝材料") {
         if (!val.length) {
           return;
         }
@@ -2101,8 +2119,7 @@ export default {
           this.chooseData.list[this.chooseData.list.length - 1]
         );
         this.dlgLoading = false;
-      }
-      if (this.choiceTle == "选择染整运转单") {
+      } else if (this.choiceTle == "选择染整运转单") {
         // val.shrinkLenth = isNaN(val.verticalShrink) ? 0 : val.verticalShrink;
         // val.shrinkWidth = isNaN(val.horizonShrink) ? 0 : val.horizonShrink;
         // val.clothWeight = isNaN(val.amount) ? 0 : val.amount;
@@ -2124,8 +2141,7 @@ export default {
         // this.form.breadth = Number(this.form.breadth.replace(/[^0-9]/gi, ""));
 
         // this.getOther();
-      }
-      if (this.choiceTle == "選擇生产项目") {
+      } else if (this.choiceTle == "選擇生产项目") {
         val.forEach((item, i) => {
           this.crud.push({
             jobItemName: item.stepName,
@@ -2135,8 +2151,7 @@ export default {
               this.crud.length > 0 ? this.crud[this.crud.length - 1].sn + 1 : 1,
           });
         });
-      }
-      if (this.choiceTle == "選擇漂染基礎工藝") {
+      } else if (this.choiceTle == "選擇漂染基礎工藝") {
         val.forEach((item, i) => {
           let data = {};
           if (this.tabs == "染缸參數") {
@@ -2178,8 +2193,122 @@ export default {
           }
           this.crud.push(data);
         });
+      } else {
+        this.dlgLoading = true;
+        getTechargue({ proBleadyeJobFk: val.bleadyeJobId }).then((res) => {
+          let data = res.data.records;
+          data = data.sort((a, b) => {
+            return a.sn > b.sn ? 1 : -1;
+          });
+          data.forEach((item, i) => {
+            item.$cellEdit = true;
+            item.sn = this.crud.length + i + 1;
+            item.index = item.sn;
+            item.bleadyeName = item.proBleadyeTechCodeFk;
+            item.totalWater = Number(
+              Number(this.vatWeight) * Number(item.liquorRatio).toFixed(0)
+            );
+            item.haltWater = Number(
+              Number(item.totalWater) -
+                Number(item.wetClothWater) * 0.01 * this.vatWeight -
+                Number(item.shotgunWater)
+            ).toFixed(0);
+
+            item.totalWater = item.totalWater.toFixed(0);
+            getTechItem({
+              proBleadyeJobTechargueFk: item.jobTechId,
+              star: 1,
+              rows: 999,
+            }).then((tech) => {
+              item.list = tech.data.records.sort((a, b) => {
+                return a.sn > b.sn ? 1 : -1;
+              });
+              item.jobTechId = "";
+              item.list.forEach((techItem, j) => {
+                techItem.index = i + 1;
+                techItem.techItemId = "";
+                techItem.$cellEdit = true;
+                if (this.mathCtr && techItem.measureType) {
+                  if (
+                    techItem.measureType.indexOf("g") == -1 &&
+                    techItem.measureType.indexOf("G") == -1
+                  ) {
+                    if (techItem.formulaUnit == "KG") {
+                      techItem.useAmount = Number(
+                        (
+                          Number(this.form.clothWeight) *
+                          Number(techItem.formulaAmount) *
+                          0.01
+                        ).toFixed(2)
+                      );
+                    } else {
+                      techItem.useAmount = Number(
+                        (
+                          Number(this.form.clothWeight) *
+                          Number(techItem.formulaAmount) *
+                          10
+                        ).toFixed(2)
+                      );
+                    }
+                  } else {
+                    if (techItem.formulaUnit == "KG") {
+                      techItem.useAmount = Number(
+                        Number(
+                          techItem.formulaAmount * item.totalWater * 0.001
+                        ).toFixed(2)
+                      );
+                    } else {
+                      techItem.useAmount = Number(
+                        Number(
+                          techItem.formulaAmount * item.totalWater
+                        ).toFixed(2)
+                      );
+                    }
+                  }
+                }
+                isNaN(techItem.useAmount) ? (techItem.useAmount = 0) : "";
+                if (i == data.length - 1 && j == item.list.length - 1) {
+                  this.$nextTick(() => {
+                    // data.forEach((items, i) => {
+                    //   this.crud.push(items);
+                    // });
+                    this.crud = this.crud.concat(data);
+
+                    this.page.total = this.crud.length;
+                    setTimeout(() => {
+                      this.$refs.crud.setCurrentRow(this.crud[0]);
+                      this.dlgLoading = false;
+                    }, 200);
+                  });
+                }
+              });
+              if (!item.list.length && i == data.length - 1) {
+                this.$nextTick(() => {
+                  data.forEach((items, i) => {
+                    this.crud.push(items);
+                  });
+                  this.$refs.crud.setCurrentRow(this.crud[0]);
+                  this.dlgLoading = false;
+                  this.page.total = this.crud.length;
+                });
+              }
+            });
+          });
+          if (!data.length) {
+            this.dlgLoading = false;
+          }
+          /* 
+          // setTimeout(() => {
+          //   // this.$nextTick(() => {
+          //   // this.crud = this.crud.concat(data);
+          //   // if (this.crud.length > 0) {
+          //   // }
+          //   // });
+          // }, 500); */
+        });
       }
       this.choiceV = false;
+      this.choiceP = false;
     },
     printGy() {
       if (this.printList.length) {
@@ -2276,103 +2405,68 @@ export default {
 };
 </script>
 <style lang='stylus'>
-.el-tag--mini {
-  height: 28px !important;
+.el-tag--mini
+  height 28px !important
   // padding: 0 5px;
-  line-height: 28px !important;
-  font-size: 14px;
-}
-
-.scope-input {
-  height: 28px;
-  line-height: 28px;
-  -webkit-appearance: none;
-  background-color: #FFF;
-  background-image: none;
-  border-radius: 4px;
-  border: 1px solid #DCDFE6;
-  box-sizing: border-box;
-  color: #606266;
-  display: inline-block;
-  font-size: inherit;
-  outline: 0;
-  padding: 0 5px !important;
-  width: 100%;
-}
-
-.avue-crud__tip {
-  display: none !important;
-}
-
-#dyeing {
-  .el-input-number__decrease, .el-input-number__increase {
-    display: none;
-  }
-
-  .avue-group__header {
-    margin-bottom: 10px;
-    height: 30px;
-  }
-
-  .avue-form__row {
-    padding: 0 !important;
-  }
-
-  .formBox {
-    height: 100vh !important;
-  }
-
-  .el-input-number__decrease, .el-input-number__increase {
-    display: none;
-  }
-
-  .el-input-number .el-input__inner {
-    text-align: left !important;
-  }
-
-  .el-input-number.is-controls-right .el-input__inner {
-    padding-left: 5px !important;
-  }
-}
-
-#colorMng_Dlg {
-  .is-fullscreen {
-    overflow: hidden !important;
-  }
-
-  .el-dialog__header {
-    padding: 0 !important;
-  }
-
-  .el-dialog__headerbtn {
-    top: 3px;
-    font-size: 18px;
-    font-weight: bold;
-    z-index: 9;
-  }
-
-  .el-dialog__headerbtn .el-dialog__close, #sxrcDlg .el-dialog__headerbtn .el-dialog__close, #wkDlg .el-dialog__headerbtn .el-dialog__close {
-    color: #000;
-    font-size: 24px;
-  }
-
-  .el-tag--mini {
-    height: 24px;
-    padding: 0 5px;
-    line-height: 24px;
-    font-size: 14px;
-  }
-
-  .el-select .el-tag__close.el-icon-close {
-    right: -5px;
-    height: 18px;
-    width: 18px;
-    line-height: 18px;
-  }
-
-  .avue-form .el-input--mini input {
-    height: 35px !important;
-    line-height: 35px;
-  }
-}
+  line-height 28px !important
+  font-size 14px
+.scope-input
+  height 28px
+  line-height 28px
+  -webkit-appearance none
+  background-color #FFF
+  background-image none
+  border-radius 4px
+  border 1px solid #DCDFE6
+  box-sizing border-box
+  color #606266
+  display inline-block
+  font-size inherit
+  outline 0
+  padding 0 5px !important
+  width 100%
+.avue-crud__tip
+  display none !important
+#dyeing
+  .el-input-number__decrease, .el-input-number__increase
+    display none
+  .avue-group__header
+    margin-bottom 10px
+    height 30px
+  .avue-form__row
+    padding 0 !important
+  .formBox
+    height 100vh !important
+  .el-input-number__decrease, .el-input-number__increase
+    display none
+  .el-input-number .el-input__inner
+    text-align left !important
+  .el-input-number.is-controls-right .el-input__inner
+    padding-left 5px !important
+#colorMng_Dlg
+  .is-fullscreen
+    overflow hidden !important
+  .el-dialog__header
+    padding 0 !important
+  .el-dialog__headerbtn
+    top 3px
+    font-size 18px
+    font-weight bold
+    z-index 9
+  .el-dialog__headerbtn .el-dialog__close, #sxrcDlg .el-dialog__headerbtn .el-dialog__close, #wkDlg .el-dialog__headerbtn .el-dialog__close
+    color #000
+    font-size 24px
+  .el-tag--mini
+    height 24px
+    padding 0 5px
+    line-height 24px
+    font-size 14px
+  .el-select .el-tag__close.el-icon-close
+    right -5px
+    height 18px
+    width 18px
+    line-height 18px
+  .avue-form .el-input--mini input
+    height 35px !important
+    line-height 35px
 </style>

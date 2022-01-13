@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-06-07 07:56:01
- * @LastEditors: Lyl
- * @LastEditTime: 2021-12-24 08:07:03
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2022-01-05 09:03:57
  * @Description:
  */
 
@@ -195,7 +195,6 @@ export function mainCrud(_this) {
             overHidden: true,
             span: 6,
             disabled: true,
-            placeholder: " "
           },
           {
             label: "客色号",
@@ -208,7 +207,6 @@ export function mainCrud(_this) {
             overHidden: true,
             span: 6,
             disabled: true,
-            placeholder: " "
           },
           {
             label: "工厂色号",
@@ -221,7 +219,6 @@ export function mainCrud(_this) {
             disabled: true,
             overHidden: true,
             span: 6,
-            placeholder: " "
           },
           {
             label: "合同号",
@@ -558,7 +555,6 @@ export function mainCrud(_this) {
             label: "幅宽单位",
             tip: "Đơn vị khổ rộng",
             tipPlacement: "right",
-            tipPlacement: "right",
             prop: "widthUnit",
             width: 100,
             span: 6,
@@ -606,7 +602,6 @@ export function mainCrud(_this) {
               }
             ],
             placeholder: " ",
-            tipPlacement: "right",
             change: () => {
               _this.$nextTick(() => {
                 _this.codeLength();
@@ -694,7 +689,6 @@ export function mainCrud(_this) {
             filterable: true,
             allowCreate: true,
             defaultFirstOption: true,
-            tipPlacement: "right",
             dicData: getDicT("whseLocation", "locationCode", "locationCode")
           },
           {
