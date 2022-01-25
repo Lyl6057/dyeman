@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-08-07 07:57:55
  * @LastEditors: Lyl
- * @LastEditTime: 2021-11-13 10:42:56
+ * @LastEditTime: 2022-01-17 09:49:41
  * @Description:
  */
 import axios from "axios";
@@ -114,6 +114,13 @@ export function getBleadyeByPage(params) {
 export function getRevolve(params) {
   return axios({
     url: "/api/proBleadyeRunJob",
+    method: "get",
+    params: params
+  });
+}
+export function getRevolvePage(params) {
+  return axios({
+    url: "/api/proBleadyeRunJob/page",
     method: "get",
     params: params
   });

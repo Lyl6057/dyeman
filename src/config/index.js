@@ -3,8 +3,8 @@ import store from "@/store/index";
 export const webSocket = {
   setWebSoket(_this) {
     if ("WebSocket" in window) {
-      _this.websocket = new WebSocket("ws://10.0.168.201:91/test");
-      // _this.websocket = new WebSocket('ws://112.91.115.70:91/test');
+      // _this.websocket = new WebSocket("ws://192.168.5.1:91/test");
+      _this.websocket = new WebSocket("ws://192.168.5.1:92/broadcast");
     } else {
       alert("该浏览器不支持websocket通讯，请切换浏览器！");
     }
@@ -83,7 +83,7 @@ export const webSocket = {
 
     // }
   },
-  setClient(_this){
+  setClient(_this) {
     if ("WebSocket" in window) {
       _this.spowerClient = new WebSocket("ws://127.0.0.1:44001/data");
     } else {
@@ -101,8 +101,7 @@ export const webSocket = {
     //接收到消息的回调方法
     _this.spowerClient.onmessage = function(event) {};
     //连接关闭的回调方法
-    _this.spowerClient.onclose = function() {
-    };
+    _this.spowerClient.onclose = function() {};
   },
   setDriving(_this) {
     if ("WebSocket" in window) {

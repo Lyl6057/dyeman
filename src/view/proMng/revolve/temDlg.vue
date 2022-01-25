@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-01-13 15:02:11
+ * @LastEditTime: 2022-01-21 08:06:21
  * @Description:
 -->
 <template>
@@ -554,30 +554,29 @@ export default {
           this.wLoading = true;
           // this.form.runState = val ? this.form.runState : "1";
           let mainData = {};
-          if (val) {
-            mainData = JSON.parse(JSON.stringify(this.form));
-            mainData.auditState = val;
-            mainData.runState = val ? mainData.runState : "1";
-            mainData.bf = null;
-            mainData.test = "";
-            mainData.item = "";
-            mainData.mergVatNo = mainData.mergVatNo.join("/");
-            mainData.compLightSource = mainData.compLightSource.join(",");
-            mainData.workDate += " 00:00:00";
-
-            mainData.deliveDate += " 00:00:00";
-            Object.keys(mainData).forEach((item) => {
-              if (this.isEmpty(mainData[item])) {
-                delete mainData[item];
-              }
-            });
-          } else {
-            mainData = {
-              runJobId: this.form.runJobId,
-              auditState: val,
-              runState: val ? this.form.runState : "1",
-            };
-          }
+          // if (val) {
+          mainData = JSON.parse(JSON.stringify(this.form));
+          mainData.auditState = val;
+          mainData.runState = val ? mainData.runState : "1";
+          mainData.bf = null;
+          mainData.test = "";
+          mainData.item = "";
+          mainData.mergVatNo = mainData.mergVatNo.join("/");
+          mainData.compLightSource = mainData.compLightSource.join(",");
+          mainData.workDate += " 00:00:00";
+          mainData.deliveDate += " 00:00:00";
+          Object.keys(mainData).forEach((item) => {
+            if (this.isEmpty(mainData[item])) {
+              delete mainData[item];
+            }
+          });
+          // } else {
+          //   mainData = {
+          //     runJobId: this.form.runJobId,
+          //     auditState: val,
+          //     runState: val ? this.form.runState : "1",
+          //   };
+          // }
           update(mainData).then((res) => {
             if (val) {
               // 生成漂染单数据
@@ -707,6 +706,7 @@ export default {
               this.form.vatNo += "A";
               this.form.runJobId = "";
               this.form.auditState = 0;
+
               Object.keys(this.form).forEach((item) => {
                 if (this.isEmpty(this.form[item])) {
                   delete this.form[item];
@@ -771,12 +771,13 @@ export default {
               this.form.poVatCount = 1;
               this.form.vatIndex = 1;
               this.form.poColorCount = 1;
-              this.form.runState = "1";
+              // this.form.runState = "1";
               this.form.auditState = 0;
               this.wLoading = false;
             }
             this.form.wmUnit = "KG";
             this.form.serviceOperator = parent.userID;
+            this.form.runState = "1";
           });
         }, 200);
       } else {

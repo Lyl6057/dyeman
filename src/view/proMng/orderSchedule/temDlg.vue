@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-01-10 19:25:32
+ * @LastEditTime: 2022-01-21 10:55:12
  * @Description: 
 -->
 <template>
@@ -31,7 +31,7 @@
               placeholder="请输入生产单号"
               :remote-method="remoteMethod"
               :loading="searchLoading"
-              @change="getNoteiceData(form.$noticeId)"
+              @change="getNoteiceData"
             >
               <el-option
                 v-for="item in options"
@@ -48,13 +48,13 @@
         title="生产排期明细"
         :element-loading-text="$t('public.loading')"
         v-loading="wLoading"
-        style="width: 99%; margin: 0 auto"
+        style="width: 99%; margin: 2px auto"
       >
         <div class="btnList">
-          <el-button type="primary" @click="add">{{
+          <el-button type="primary" @click="add" :disabled="!form.salSchId">{{
             $t("public.add")
           }}</el-button>
-          <el-button type="danger" @click="del">{{
+          <el-button type="danger" @click="del" :disabled="!form.salSchId">{{
             this.$t("public.del")
           }}</el-button>
         </div>
@@ -66,7 +66,6 @@
             :data="crud"
             :page.sync="page"
             v-loading="loading"
-            @on-load="query"
             @row-dblclick="handleRowDBLClick"
             @current-row-change="cellClick"
           ></avue-crud>
@@ -88,8 +87,18 @@
 <script>
 import choice from "@/components/proMng/index";
 import { mainCrud, detailCrud } from "./data";
-import { add, update, getWeaveByPage, getRunByPage } from "./api";
-
+import { getDicT } from "@/config";
+import {
+  add,
+  update,
+  getWeaveByPage,
+  getRunByPage,
+  addDetail,
+  updateDetail,
+  getDetail,
+  delDetail,
+  getPackage,
+} from "./api";
 export default {
   name: "",
   props: {
@@ -132,24 +141,41 @@ export default {
       group: [],
       chooseDtlData: {},
       searchLoading: false,
+      workPackageList: [],
     };
   },
   watch: {},
   methods: {
     getData() {
-      if (this.isAdd) {
-        setTimeout(() => {
+      this.wLoading = true;
+      getPackage().then((res) => {
+        this.workPackageList = res.data;
+        if (this.isAdd) {
           this.form.schState = 1; // 初始状态 => 开始执行
           this.form.salSchType = 98; // 默认为织造排期
-        }, 100);
-      } else {
-        this.wLoading = true;
-        this.form = this.detail;
-        this.form.noticeId = this.form.noticeType;
-        setTimeout(() => {
-          this.wLoading = false;
-        }, 500);
-      }
+          setTimeout(() => {
+            this.wLoading = false;
+          }, 200);
+        } else {
+          this.wLoading = true;
+          this.form = this.detail;
+          this.form.noticeId = this.form.noticeType;
+          this.getDetailList();
+        }
+      });
+    },
+    getDetailList() {
+      getDetail({
+        salSchId: this.form.salSchId,
+      }).then((res) => {
+        this.crud = res.data.sort((a, b) => {
+          return a.shcSn > b.shcSn ? -1 : 1;
+        });
+        if (this.crud.length > 0) {
+          this.$refs.crud.setCurrentRow(this.crud[0]);
+        }
+        this.wLoading = false;
+      });
     },
     save() {
       this.$refs.form.validate((valid, done) => {
@@ -163,13 +189,14 @@ export default {
             }
             this.form.schStart = this.form.schStart + " 00:00:00";
             this.form.schEnd = this.form.schEnd + " 00:00:00";
-            this.form.noticeType = this.form.$noticeId;
+            // this.form.noticeType = this.form.$noticeId;
             if (this.form.salSchId) {
               // update
               this.form.upateTime = this.$getNowTime("datetime");
               update(this.form).then((res) => {
                 if (res.data.code == 200) {
-                  this.$tip.success(this.$t("public.bccg"));
+                  this.saveDetail();
+                  // this.$tip.success(this.$t("public.bccg"));
                 } else {
                   this.$tip.error(res.data.msg);
                 }
@@ -186,15 +213,15 @@ export default {
               add(this.form).then((res) => {
                 if (res.data.code == 200) {
                   this.form.schId = res.data.data;
-                  this.$tip.success(this.$t("public.bccg"));
+                  this.form.salSchId = res.data.data;
+                  this.saveDetail();
+                  this.$emit("refresh");
+                  // this.$tip.success(this.$t("public.bccg"));
                 } else {
                   this.$tip.error(res.data.msg);
-                }
-                setTimeout(() => {
                   this.wLoading = false;
-                  this.$emit("refresh");
-                  done();
-                }, 200);
+                }
+                done();
               });
             }
           } catch (error) {
@@ -210,6 +237,27 @@ export default {
         }
       });
     },
+    saveDetail() {
+      if (this.crud.length) {
+        this.crud.forEach((item, i) => {
+          if (item.detailId) {
+            updateDetail(item).then((res) => {});
+          } else {
+            item.salSchId = this.form.salSchId;
+            addDetail(item).then((res) => {});
+          }
+          if (i == this.crud.length - 1) {
+            setTimeout(() => {
+              this.$tip.success(this.$t("public.bccg"));
+              this.getDetailList();
+            }, 200);
+          }
+        });
+      } else {
+        this.$tip.success(this.$t("public.bccg"));
+        this.getDetailList();
+      }
+    },
     add() {
       if (this.form.salSchType == 98) {
         this.choiceQ.pareantId = "2A88BB439A7E4B4EBB899E0D2E10742F";
@@ -217,14 +265,39 @@ export default {
         this.choiceQ.pareantId = "0D315AE933AE43C1B6963B6E84989827";
         // this.choiceQ.pareantId = "0D315AE933AE43C1B6963B6E84989827";
       }
-      console.log(this.choiceQ);
       this.choiceV = true;
       // this.crud.push({
       //   $cellEdit: true,
       //   schSn: this.crud.length + 1,
       // });
     },
-    del() {},
+    del() {
+      this.$tip
+        .cofirm(
+          "是否删除工序为【 " +
+            this.chooseData.workName +
+            this.$t("iaoMng.delTle2"),
+          this,
+          {}
+        )
+        .then(() => {
+          delDetail(this.chooseData.detailId)
+            .then((res) => {
+              if (res.data.code === 200) {
+                this.$tip.success(this.$t("public.sccg"));
+                this.getData();
+              } else {
+                this.$tip.error(this.$t("public.scsb"));
+              }
+            })
+            .catch((err) => {
+              this.$tip.error(this.$t("public.scsb"));
+            });
+        })
+        .catch((err) => {
+          this.$tip.warning(this.$t("public.qxcz"));
+        });
+    },
     choiceData(val) {
       val.map((item, i) => {
         item.workName = item.stepName;
@@ -234,50 +307,62 @@ export default {
         item.$cellEdit = true;
       });
       this.crud = this.crud.concat(val);
+      console.log(this.crud);
+      this.crud = this.$unique(this.crud, "stepCode");
       this.choiceV = false;
     },
     getNoteiceData() {
       this.$nextTick(() => {
-        let val = this.form.$noticeId;
+        let val = this.form.noticeId;
         if (!val) return;
         if (this.form.salSchType == 98) {
           getWeaveByPage({
             rows: 1,
             start: 1,
-            weaveJobCode: val,
+            weaveJobId: val,
           }).then((res) => {
             if (res.data.records.length) {
               let data = res.data.records[0];
               this.form.schStart = data.startDate;
-              this.form.endStart = data.calicoDate;
+              this.form.schEnd = data.calicoDate;
               this.form.proAmount = data.amount;
               this.form.proUnit = "KG";
               this.form.colorCode = data.colorCode;
               this.form.colorName = data.colorName;
+              this.form.noticeType = data.weaveJobCode;
             }
           });
         } else if (this.form.salSchType == 99) {
           getRunByPage({
             rows: 1,
             start: 1,
-            vatNo: val,
+            runJobId: val,
           }).then((res) => {
             if (res.data.records.length) {
               let data = res.data.records[0];
               this.form.schStart = data.workDate;
-              this.form.endStart = data.deliveDate;
+              this.form.schEnd = data.deliveDate;
               this.form.proAmount = data.clothWeight;
               this.form.proUnit = data.wmUnit;
               this.form.colorCode = data.colorCode;
               this.form.colorName = data.colorName;
+              this.form.noticeType = data.vatNo;
             }
           });
         }
       });
     },
     typeChange() {
+      // this.form.workPackageId = "";
+      // this.form.noticeId = "";
       this.options = [];
       this.remoteMethod("");
+
+      this.formOp.column[13].dicData = this.workPackageList.filter((item) => {
+        return this.form.salSchType == 98
+          ? item.packageType == "weave"
+          : item.packageType == "dye";
+      });
     },
     remoteMethod(val) {
       this.searchLoading = true;
@@ -316,7 +401,10 @@ export default {
     },
     query() {},
     handleRowDBLClick(val) {},
-    cellClick(val) {},
+    cellClick(val) {
+      val.$cellEdit = true;
+      this.chooseData = val;
+    },
     close() {
       if (this.refresh) {
         this.$emit("refresh");
@@ -349,7 +437,7 @@ export default {
   // line-height: 20px;
   // }
   .formBox
-    height 9.2rem !important
+    // height calc(100vh - 610px) !important
   .el-input-number__decrease, .el-input-number__increase
     display none
   .el-input-number .el-input__inner

@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-08-07 07:57:44
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-01-10 09:47:33
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-01-17 09:34:36
  * @Description: 
 -->
 <template>
@@ -142,6 +142,7 @@ import {
   getBleadye,
   getRevolve,
   getBleadyeByPage,
+  getRevolvePage,
   getTem,
   getWeave,
   getCheckItem,
@@ -239,7 +240,7 @@ export default {
     },
     remoteMethod(val) {
       this.vatLoading = true;
-      getBleadyeByPage({ vatNo: "!^%" + val }).then((res) => {
+      getRevolvePage({ vatNo: "!^%" + val }).then((res) => {
         this.options = res.data.records;
         this.vatLoading = false;
       });
@@ -422,7 +423,8 @@ export default {
                   } else {
                     // 不存在记录 新增 =>打印
                     data.cardType = 2;
-                    data.productNo = data.vatNo + this.$preFixInt(data.pidNo, 3)
+                    data.productNo =
+                      data.vatNo + this.$preFixInt(data.pidNo, 3);
                     add(data).then((addRes) => {
                       this.form.cardId = addRes.data.data;
                       // this.history.unshift(data);
@@ -534,7 +536,8 @@ export default {
                     data.cardId = "";
                     data.madeDate = this.$getNowTime("datetime");
                     data.cardType = 2;
-                    data.productNo = data.vatNo + this.$preFixInt(data.pidNo, 3)
+                    data.productNo =
+                      data.vatNo + this.$preFixInt(data.pidNo, 3);
                     add(data).then((addRes) => {
                       this.form.cardId = addRes.data.data;
                       this.history.unshift(data);
@@ -716,37 +719,27 @@ export default {
 };
 </script>
 <style lang="stylus">
-#finalCard {
-  .queryForm .avue-form .el-input--mini input {
-    height: 42px !important;
-    line-height: 42px !important;
-  }
-
-  .queryForm .el-input__inner, .el-form-item__label {
-    font-size: 20px !important;
-    line-height: 42px !important;
-  }
-
-  .queryForm .el-button, .el-button--mini.is-round {
-    padding: 8px 12px 8px 12px !important;
-    font-size: 20px !important;
-    margin-left: 20px;
-  }
-
-  .historyText {
-    font-size: 22px;
-    text-align: left;
+#finalCard
+  .queryForm .avue-form .el-input--mini input
+    height 42px !important
+    line-height 42px !important
+  .queryForm .el-input__inner, .el-form-item__label
+    font-size 20px !important
+    line-height 42px !important
+  .queryForm .el-button, .el-button--mini.is-round
+    padding 8px 12px 8px 12px !important
+    font-size 20px !important
+    margin-left 20px
+  .historyText
+    font-size 22px
+    text-align left
     // text-indent: 1em;
-    margin-left: 10px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    height: 46px;
-    line-height: 46px;
-  }
-
-  .item {
+    margin-left 10px
+    overflow hidden
+    text-overflow ellipsis
+    white-space nowrap
+    height 46px
+    line-height 46px
+  .item
     // margin-bottom: 18px;
-  }
-}
 </style>

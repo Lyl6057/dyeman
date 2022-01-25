@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-06-08 17:50:06
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-01-04 08:09:33
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-01-20 08:05:01
  * @Description: 
 -->
 <template>
@@ -44,7 +44,6 @@
           @change="numberChange"
           style="width: 70px; margin: 0 5px"
         ></el-input>
-               
       </div>
       <div class="formBox">
         <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
@@ -122,12 +121,14 @@ export default {
     sortObj: String,
     apiParams: Object,
     pdfUrl: String,
-    canPrint: Boolean
+    canPrint: Boolean,
   },
   data() {
     return {
       wLoading: false,
-      form: {},
+      form: {
+        printCount: 0,
+      },
       crud: [],
       page: {
         pageSize: 20,
@@ -139,9 +140,9 @@ export default {
       visibleDlg: false,
       dlgForm: {},
       dLoading: false,
-      pdfDlg:false,
-      prsocket:null,
-      sheetNum:1
+      pdfDlg: false,
+      prsocket: null,
+      sheetNum: 1,
     };
   },
   watch: {},
@@ -153,7 +154,9 @@ export default {
           delete this.form[key];
         }
       }
-      this.form[this.apiParams.sort] = "!^%" + (this.form[this.apiParams.sort] ? this.form[this.apiParams.sort] : "");
+      this.form[this.apiParams.sort] =
+        "!^%" +
+        (this.form[this.apiParams.sort] ? this.form[this.apiParams.sort] : "");
       this.api
         .get(
           Object.assign(this.form, {
@@ -172,7 +175,8 @@ export default {
             this.$refs.crud.setCurrentRow(this.crud[0]);
           }
           if (this.form[this.apiParams.sort].indexOf("!^%") != -1) {
-            this.form[this.apiParams.sort] = this.form[this.apiParams.sort].split("!^%")[1] || "";
+            this.form[this.apiParams.sort] =
+              this.form[this.apiParams.sort].split("!^%")[1] || "";
           }
           setTimeout(() => {
             this.wLoading = false;
@@ -256,23 +260,26 @@ export default {
           this.$tip.warning(this.$t("public.qxcz"));
         });
     },
-    print(){
-      this.wLoading = true
+    print() {
+      this.wLoading = true;
       if (this.prsocket.readyState == 3 || this.prsocket.readyState == 0) {
-        this.setPrint()
+        this.setPrint();
         return;
       }
       if (this.chooseData[this.apiParams.save]) {
         for (let i = 0; i < this.sheetNum; i++) {
-           this.prsocket.send(`${this.apiParams.printId}:` + this.chooseData[this.apiParams.save]);
-           if(i == this.sheetNum - 1){
-             this.$tip.success("已全部发送打印请求!");
-           }
+          this.prsocket.send(
+            `${this.apiParams.printId}:` + this.chooseData[this.apiParams.save]
+          );
+          if (i == this.sheetNum - 1) {
+            this.$tip.success("已全部发送打印请求!");
+          }
         }
-        this.chooseData.printCount = Number( this.chooseData.printCount) +  Number(this.sheetNum)
+        this.chooseData.printCount =
+          Number(this.chooseData.printCount) + Number(this.sheetNum);
         this.chooseData.printTime = this.$getNowTime("datetime");
-        this.chooseData.printer = parent.userID
-        let data = JSON.parse(JSON.stringify(this.chooseData))
+        this.chooseData.printer = parent.userID;
+        let data = JSON.parse(JSON.stringify(this.chooseData));
         this.api
           .update(data)
           .then((res) => {
@@ -286,10 +293,10 @@ export default {
             this.$tip.error(e);
           });
       } else {
-        this.wLoading = false
+        this.wLoading = false;
         this.$tip.error("请选择需要打印的载具!");
       }
-   
+
       // this.pdfDlg = true;
       // this.pdfUrl =
       //   process.env.API_HOST +
@@ -303,28 +310,23 @@ export default {
         this.sheetNum = 1;
       }
     },
-    setPrint(){
+    setPrint() {
       this.prsocket = null;
       webSocket.setPrint(this);
       this.prsocket.onmessage = function (e) {};
-      this.wLoading = false
-      this.prsocket.onerror = function(e) {
-         alert("称重服务离线，请打开称重应用!")
-      } 
-      
-    }
+      this.wLoading = false;
+      this.prsocket.onerror = function (e) {
+        alert("称重服务离线，请打开称重应用!");
+      };
+    },
   },
   created() {
-     if(this.canPrint){
-        this.setPrint()
-     }
-
+    if (this.canPrint) {
+      this.setPrint();
+    }
   },
   mounted() {},
   beforeDestroy() {},
 };
 </script>
-<style lang='stylus'>
-#com-normal {
-}
-</style>
+<style lang='stylus'></style>

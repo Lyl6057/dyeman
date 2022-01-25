@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-11-30 09:54:41
+ * @LastEditTime: 2022-01-17 16:48:26
  * @Description: 
 -->
 <template>
@@ -253,6 +253,8 @@ import {
   getQcRecord,
   addQcRecord,
   updateQcRecord,
+  getStorageLog,
+  addStorageLog,
 } from "./api";
 export default {
   name: "",
@@ -342,6 +344,7 @@ export default {
         },
       ],
       clothSum: 0,
+      spowerClient: null,
     };
   },
   watch: {},
@@ -477,6 +480,20 @@ export default {
         }, 200);
         _this.$tip.success("服务器连接成功!");
       };
+      webSocket.setClient(this);
+      _this.spowerClient.onmessage = function (e) {
+        if (e.data.indexOf("scan") != -1) {
+          _this.$nextTick(() => {
+            let scanData = e.data.split("scan=")[1];
+            if (scanData.length > 8) {
+              _this.form.noteCode = scanData;
+            } else {
+              _this.form.storeLoadCodes = scanData;
+              _this.getLoad();
+            }
+          });
+        }
+      };
     },
     weighing() {
       if (this.czsocket.readyState == 3) {
@@ -542,6 +559,8 @@ export default {
       this.$nextTick(() => {
         update(this.crud).then((res) => {
           if (res.data.code == 200) {
+            // 查询是否存在载具使用日志记录
+            this.getLog();
             setTimeout(() => {
               this.history.unshift(this.crud);
               this.history = this.$unique(this.history, "noteId");
@@ -604,6 +623,25 @@ export default {
           }
         }
       );
+    },
+    getLog() {
+      getStorageLog({
+        useType: 2,
+        whsCarriageStorageFk: this.crud.storeLoadCode,
+        businessType: 1,
+        businessId: this.crud.proName,
+      }).then((res) => {
+        if (!res.data.length) {
+          // 不存在记录，新增记录
+          addStorageLog({
+            businessId: this.crud.proName,
+            businessType: 1,
+            useType: 2,
+            whsCarriageStorageFk: this.crud.storeLoadCode,
+            useTime: this.$getNowTime("datetime"),
+          }).then((addStoge) => {});
+        }
+      });
     },
     clothLength() {},
     check() {
@@ -738,12 +776,27 @@ export default {
     let self = this;
     document.onkeydown = function (e) {
       let ev = document.all ? window.event : e;
-      if (ev.keyCode === 13 && self.type === "bf") {
+      if (ev.keyCode === 13 && self.type === "bf" && self.form.noteCode) {
         self.query();
-      } else if (ev.keyCode === 13 && self.type === "zj") {
-        self.getLoad();
       }
+      // else if (ev.keyCode === 13 && self.type === "zj") {
+      //   self.getLoad();
+      // }
     };
+  },
+  beforeRouteEnter(to, form, next) {
+    next((vm) => {
+      let self = vm;
+      document.onkeydown = function (e) {
+        let ev = document.all ? window.event : e;
+        if (ev.keyCode === 13 && self.type === "bf" && self.form.noteCode) {
+          self.query();
+        }
+        //  else if (ev.keyCode === 13 && self.type === "zj") {
+        //   self.getLoad();
+        // }
+      };
+    });
   },
   beforeDestroy() {
     clearInterval(this.time);
@@ -754,112 +807,72 @@ export default {
 };
 </script>
 <style lang='stylus'>
-.el-tooltip__popper {
-  font-size: 18px !important;
-}
-
-.el-tag {
-  font-size: 16px !important;
-}
-
-.el-radio__label {
-  font-size: 17px;
-}
-
-#qcItemDlg {
-  .avue-group__header, .el-collapse-item__header {
-    margin-bottom: 0px;
-    height: 35px;
-    line-height: 35px;
-    background: #eee;
-    font-size: 24px;
-  }
-
-  .avue-group .el-collapse-item__arrow {
-    margin-top: 0;
-  }
-}
-
+.el-tooltip__popper
+  font-size 18px !important
+.el-tag
+  font-size 16px !important
+.el-radio__label
+  font-size 17px
+#qcItemDlg
+  .avue-group__header, .el-collapse-item__header
+    margin-bottom 0px
+    height 35px
+    line-height 35px
+    background #eee
+    font-size 24px
+  .avue-group .el-collapse-item__arrow
+    margin-top 0
 // .qc-check-item .el-checkbox {
 // width: 25%;
 // margin: 3px 0;
 // overflow: hidden;
 // }
-#clothFlyScan {
-  .history {
+#clothFlyScan
+  .history
     // display: flex;
     // flex-direction: row;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    font-size: 18px;
-    text-align: left;
-    text-indent: 5px;
-
-    span {
-      margin: 5px;
-    }
-  }
-
-  .el-checkbox-group {
-    text-align: left;
-  }
-
-  .el-divider--horizontal {
-    margin: 0;
-  }
-
-  .formBox .el-form-item__label, .formBox .el-input__inner {
-    font-size: 22px !important;
-    line-height: 50px !important;
-  }
-
-  .el-tabs__item, .el-button {
-    font-size: 18px !important;
-  }
-
-  .formBox .avue-form .el-input--mini input {
-    height: 58px;
-    line-height: 58px;
-  }
-
-  .el-card__header {
-    padding: 8px 20px !important;
-  }
-
-  .btnBox {
-    .el-button {
-      margin: 0 20px;
+    overflow hidden
+    text-overflow ellipsis
+    white-space nowrap
+    font-size 18px
+    text-align left
+    text-indent 5px
+    span
+      margin 5px
+  .el-checkbox-group
+    text-align left
+  .el-divider--horizontal
+    margin 0
+  .formBox .el-form-item__label, .formBox .el-input__inner
+    font-size 22px !important
+    line-height 50px !important
+  .el-tabs__item, .el-button
+    font-size 18px !important
+  .formBox .avue-form .el-input--mini input
+    height 58px
+    line-height 58px
+  .el-card__header
+    padding 8px 20px !important
+  .btnBox
+    .el-button
+      margin 0 20px
       // width: 20%;
-    }
-  }
-
-  .crudBox {
-    height: 100vh;
-  }
-
-  .text {
-    font-size: 22px;
-    text-align: left;
-    text-indent: 1em;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .item {
+  .crudBox
+    height 100vh
+  .text
+    font-size 22px
+    text-align left
+    text-indent 1em
+    overflow hidden
+    text-overflow ellipsis
+    white-space nowrap
+  .item
     // margin-bottom: 18px;
-    height: 46px;
-    line-height: 46px;
-  }
-
-  .clearfix:before, .clearfix:after {
-    display: table;
-    content: '';
-  }
-
-  .clearfix:after {
-    clear: both;
-  }
-}
+    height 46px
+    line-height 46px
+  .clearfix:before, .clearfix:after
+    display table
+    content ''
+  .clearfix:after
+    clear both
 </style>

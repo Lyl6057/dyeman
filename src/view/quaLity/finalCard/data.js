@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-06-07 07:56:01
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-01-05 09:03:57
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-01-17 20:37:54
  * @Description:
  */
 
@@ -194,7 +194,7 @@ export function mainCrud(_this) {
             width: 160,
             overHidden: true,
             span: 6,
-            disabled: true,
+            disabled: true
           },
           {
             label: "客色号",
@@ -206,7 +206,7 @@ export function mainCrud(_this) {
             width: 160,
             overHidden: true,
             span: 6,
-            disabled: true,
+            disabled: true
           },
           {
             label: "工厂色号",
@@ -218,7 +218,7 @@ export function mainCrud(_this) {
             width: 160,
             disabled: true,
             overHidden: true,
-            span: 6,
+            span: 6
           },
           {
             label: "合同号",
@@ -668,6 +668,13 @@ export function mainCrud(_this) {
             width: 100,
             span: 6,
             align: "left",
+            // type: "select",
+            // filterable: true,
+            // dicData: getDicT(
+            //   "whsCarriageStorage",
+            //   "storageCode",
+            //   "carriageStorageId"
+            // ),
             placeholder: " ",
             rules: [
               {

@@ -252,6 +252,37 @@ export function delCpbDetali(id) {
     method: "delete"
   });
 }
+
+export function getCpbDtlb(params) {
+  return axios({
+    url: "/api/whseFinishedclothcargopackDtl",
+    method: "get",
+    params: params
+  });
+}
+export function addCpbDtlb(params) {
+  return axios({
+    url: "/api/whseFinishedclothcargopackDtl",
+    method: "post",
+    params: params
+  });
+}
+export function updateCpbDtlb(params) {
+  return axios({
+    url: "/api/whseFinishedclothcargopackDtl",
+    method: "put",
+    params: params
+  });
+}
+
+export function delCpbDtlb(id) {
+  return axios({
+    url:
+      "/api/whseFinishedclothcargopackDtl?whseFinishedclothcargopackDtloid=" +
+      id,
+    method: "delete"
+  });
+}
 // 化工原料
 export function getRhl(params) {
   return axios({

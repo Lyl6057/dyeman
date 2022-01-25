@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-08-07 07:57:44
  * @LastEditors: Lyl
- * @LastEditTime: 2022-01-13 08:22:06
+ * @LastEditTime: 2022-01-17 10:37:49
  * @Description: 
 -->
 <template>
@@ -147,6 +147,7 @@ import {
   getBleadye,
   getRevolve,
   getBleadyeByPage,
+  getRevolvePage,
   getTem,
   getWeave,
   getCheckItem,
@@ -246,12 +247,10 @@ export default {
     },
     remoteMethod(val) {
       this.vatLoading = true;
-      getBleadyeByPage({ vatNo: "!^%" + val, rows: 10, start: 1 }).then(
-        (res) => {
-          this.options = res.data.records;
-          this.vatLoading = false;
-        }
-      );
+      getRevolvePage({ vatNo: "!^%" + val, rows: 10, start: 1 }).then((res) => {
+        this.options = res.data.records;
+        this.vatLoading = false;
+      });
     },
     query() {
       this.wLoading = true;

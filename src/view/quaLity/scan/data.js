@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-11-05 11:10:10
+ * @LastEditTime: 2022-01-17 20:37:41
  * @Description:
  */
 
@@ -50,6 +50,13 @@ export function mainForm(_this) {
         tip: "载具编号",
         span: 8,
         placeholder: "请输入载具编号",
+        // type: "select",
+        // filterable: true,
+        // dicData: getDicT(
+        //   "whsCarriageStorage",
+        //   "storageCode",
+        //   "carriageStorageId"
+        // ),
         click: () => {
           _this.type = "zj";
         }

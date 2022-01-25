@@ -108,6 +108,9 @@ import {
   salPoC,
   salPoF,
   getSalPo,
+  getBaseStepPackage,
+  baseStepPackageF,
+  baseStepPackageC,
 } from "./data";
 
 export default {
@@ -314,6 +317,11 @@ export default {
   },
   created() {
     switch (this.choiceTle) {
+      case "选择生产工作包":
+        this.choiceC = baseStepPackageC(this);
+        this.choiceF = baseStepPackageF(this);
+        this.getData = getBaseStepPackage;
+        break;
       case "选择订单资料":
         this.choiceC = salPoC(this);
         this.choiceF = salPoF(this);

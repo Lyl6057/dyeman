@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-05-03 13:03:03
  * @LastEditors: Lyl
- * @LastEditTime: 2022-01-10 19:09:50
+ * @LastEditTime: 2022-01-20 13:12:17
  * @Description:
  */
 
@@ -21,6 +21,128 @@ let basPigment = getXDicT("basPigment");
 let basProductivesupplies = getXDicT("basProductivesupplies");
 let basFuel = getXDicT("basFuel");
 
+export function getBaseStepPackage(params) {
+  return axios({
+    url: "/api/baseWorkPackage/page",
+    method: "get",
+    params: params
+  });
+}
+export function baseStepPackageF(_this) {
+  return {
+    submitBtn: false,
+    emptyBtn: false,
+    labelWidth: 120,
+    column: [
+      {
+        label: "包编号",
+        prop: "packageCode",
+        span: 6,
+        placeholder: " "
+      },
+      {
+        label: "包名称",
+        prop: "packageName",
+        span: 6,
+        placeholder: " "
+      },
+      {
+        label: "工作包类型",
+        prop: "packageType",
+        span: 6,
+        placeholder: " ",
+        type: "select",
+        dicData: [
+          {
+            label: "染整",
+            value: "dye"
+          },
+          {
+            label: "织造",
+            value: "weave"
+          },
+          {
+            label: "印花",
+            value: "printing"
+          }
+        ]
+      }
+    ]
+  };
+}
+
+export function baseStepPackageC(_this) {
+  return {
+    menu: false,
+    addBtn: false,
+    border: true,
+    highlightCurrentRow: true,
+    height: "calc(100vh - 162px)",
+    refreshBtn: false,
+    columnBtn: false,
+    page: false,
+    labelWidth: 130,
+    // tree: true,
+    selection: true,
+    // rowKey: "stepId",
+    column: [
+      // {
+      //   label: "#",
+      //   prop: "sn",
+      //   width: 50,
+      //   align: "center",
+      //   display: false
+      // },
+      {
+        label: "包编号",
+        prop: "packageCode",
+        span: 6,
+        width: 120,
+        placeholder: " "
+      },
+      {
+        label: "包名称",
+        prop: "packageName",
+        span: 6,
+        width: 140,
+        placeholder: " ",
+        overHidden: true
+      },
+      {
+        label: "工作包类型",
+        prop: "packageType",
+        span: 6,
+        width: 120,
+        placeholder: " ",
+        overHidden: true,
+        type: "select",
+        dicData: [
+          {
+            label: "染整",
+            value: "dye"
+          },
+          {
+            label: "织造",
+            value: "weave"
+          },
+          {
+            label: "印花",
+            value: "printing"
+          }
+        ]
+      },
+      {
+        label: "包描述",
+        prop: "packageDesc",
+        span: 6,
+        width: 350,
+        placeholder: " ",
+        overHidden: true
+      }
+    ]
+  };
+}
+
 export function getBaseStep(params) {
   return axios({
     url: "/api/baseWorkStepList",
@@ -38,15 +160,13 @@ export function baseStepF(_this) {
         label: "编号",
         prop: "stepCode",
         span: 6,
-        placeholder: " ",
-    
+        placeholder: " "
       },
       {
         label: "名称",
         prop: "stepName",
         span: 6,
-        placeholder: " ",
-        
+        placeholder: " "
       }
     ]
   };
@@ -104,7 +224,7 @@ export function baseStepC(_this) {
         width: 350,
         placeholder: " ",
         overHidden: true
-      },
+      }
     ]
   };
 }
@@ -3571,7 +3691,6 @@ export function TechItemC(_this) {
     ]
   };
 }
-
 
 export function getWorkStep(params) {
   return axios({

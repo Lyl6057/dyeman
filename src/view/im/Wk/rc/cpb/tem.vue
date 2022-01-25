@@ -13,7 +13,7 @@
         <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
       </div>
       <el-row class="crudBox">
-        <el-col :span="24">
+        <el-col :span="12">
           <view-container :title="datas.type.split('_')[0] + $t('iaoMng.rcmx')">
             <div class="btnList">
               <el-button type="primary" @click="add">{{
@@ -60,6 +60,27 @@
             </div>
           </view-container></el-col
         >
+        <el-col :span="12">
+          <view-container :title="datas.type.split('_')[0] + '货物包'">
+            <div class="btnList">
+              <el-button type="primary" @click="addPh">{{
+                this.$t("public.add")
+              }}</el-button>
+              <el-button type="danger" @click="delPh">{{
+                this.$t("public.del")
+              }}</el-button>
+            </div>
+            <div class="crudBox">
+              <avue-crud
+                ref="crud"
+                :option="crudOp"
+                v-loading="loading"
+                :data="chooseData.list"
+                @current-row-change="cellPhClick"
+              ></avue-crud>
+            </div>
+          </view-container>
+        </el-col>
       </el-row>
       <choice
         :choiceV="choiceV"
@@ -74,7 +95,7 @@
   </div>
 </template>
 <script>
-import { rsxkr2C, rsxkr2F } from "./data";
+import { rsxkr2C, rsxkr2F, rsxkr3C } from "./data";
 import choice from "@/components/choice";
 import {
   addCpb,
@@ -83,6 +104,10 @@ import {
   addCpbDetali,
   updateCpbDetali,
   delCpbDetali,
+  getCpbDtlb,
+  addCpbDtlb,
+  updateCpbDtlb,
+  delCpbDtlb,
 } from "@/api/im/Wk/rc";
 import { baseCodeSupply, baseCodeSupplyEx } from "@/api/index";
 import { getDicTs, getDicT, getXDicT, postDicT } from "@/config";
@@ -114,6 +139,7 @@ export default {
       formOp: rsxkr2F(this),
       mxOp: rsxkr2C(this),
       mx: [],
+      crudOp: rsxkr3C(this),
       count: [],
       ctLoading: false,
       form: {},
@@ -133,6 +159,8 @@ export default {
         // addLoc: addPbPhDetali,
         // updateLoc: updatePbPhDetali,
       },
+      oldPhData: {},
+      choosePhData: {},
     };
   },
   watch: {},
@@ -150,6 +178,7 @@ export default {
         return;
       }
       this.loading = true;
+      this.mxOp.showSummary = false;
       // this.oldData = {};
       this.changeList = [];
       this.mx = [];
@@ -172,12 +201,16 @@ export default {
           item.index = index + 1;
           // item.weiUnit = item.weightUnit;
           // item.custId = this.detail.custName;
-          setTimeout(() => {
-            this.$refs.dlgcrud.setCurrentRow(this.mx[0]);
-            this.mxOp.showSummary = true;
-            this.loading = false;
-          }, 200);
         });
+        setTimeout(() => {
+          if (this.mx.length) {
+            this.$nextTick(() => {
+              this.$refs.dlgcrud.setCurrentRow(this.mx[0]);
+            });
+          }
+          this.mxOp.showSummary = true;
+          this.loading = false;
+        }, 200);
       });
     },
     add() {
@@ -246,10 +279,7 @@ export default {
           this.chooseData.calicoId +
           this.$t("iaoMng.delTle2");
       } else {
-        tle =
-          this.$t("iaoMng.delTle9") +
-          this.chooseData.batchNo +
-          this.$t("iaoMng.delTle2");
+        tle = `是否确认删除载具编号为【${this.chooseData.storeLoadCode}】的数据?`;
       }
       this.$tip
         .cofirm(tle, this, {})
@@ -273,6 +303,69 @@ export default {
           this.$tip.warning(this.$t("public.qxcz"));
         });
     },
+    addPh() {
+      if (Object.keys(this.chooseData).length === 0) {
+        this.$tip.error("请选择要新增的入仓明细");
+        return;
+      }
+      this.chooseData.list.push({
+        index: this.chooseData.list.length + 1,
+        weightUnit: this.chooseData.list.length
+          ? this.chooseData.list[this.chooseData.list.length - 1].weightUnit
+          : "KG",
+      });
+      this.$refs.crud.setCurrentRow(
+        this.chooseData.list[this.chooseData.list.length - 1]
+      );
+    },
+    delPh() {
+      // if (Object.keys(this.choosePhData).length === 0) {
+      //   this.$tip.error(this.$t("public.delTle"));
+      //   return;
+      // }
+      // console.log(this.choosePhData);
+      if (!this.choosePhData.indtlId) {
+        this.chooseData.list.splice(this.choosePhData.index - 1, 1);
+        this.choosePhData = {};
+        this.chooseData.list.forEach((item, i) => {
+          item.index = i + 1;
+        });
+        if (this.chooseData.list.length > 0) {
+          this.$refs.crud.setCurrentRow(this.chooseData.list[0]);
+        }
+        return;
+      }
+      this.$tip
+        .cofirm(
+          `是否确认删除成品编号为【${this.choosePhData.productNo}】的数据?`,
+          this,
+          {}
+        )
+        .then(() => {
+          delCpbDtlb(this.choosePhData.indtlId)
+            .then((res) => {
+              if (res.data.code === 200) {
+                this.$tip.success(this.$t("public.sccg"));
+                this.chooseData.list.splice(this.choosePhData.index - 1, 1);
+                this.choosePhData = {};
+                this.chooseData.list.forEach((item, i) => {
+                  item.index = i + 1;
+                });
+                if (this.chooseData.list.length > 0) {
+                  this.$refs.crud.setCurrentRow(this.chooseData.list[0]);
+                }
+              } else {
+                this.$tip.error(this.$t("public.scsb"));
+              }
+            })
+            .catch((err) => {
+              this.$tip.error(this.$t("public.scsb"));
+            });
+        })
+        .catch((err) => {
+          this.$tip.warning(this.$t("public.qxcz"));
+        });
+    },
     cellClick(val) {
       // if (val.etList) {
       //   this.mxOp.column[7].dicData = val.etList;
@@ -283,6 +376,48 @@ export default {
       this.$set(val, "$cellEdit", true);
       this.oldData = val;
       this.chooseData = val;
+      if (!this.chooseData.list) {
+        this.chooseData.list = [];
+      } else {
+        this.$refs.crud.setCurrentRow(this.chooseData.list[0]);
+      }
+      if (
+        !this.chooseData.list.length &&
+        this.chooseData.whseFinishedclothinDtloid
+      ) {
+        this.getPh();
+      }
+    },
+    cellPhClick(val) {
+      this.oldPhData.$cellEdit = false;
+      this.$set(val, "$cellEdit", true);
+      this.oldPhData = val;
+      this.choosePhData = val;
+    },
+    getPh() {
+      this.loading = true;
+      this.crudOp.showSummary = false;
+      getCpbDtlb({
+        productDtlFk: this.chooseData.whseFinishedclothinDtloid,
+      }).then((res) => {
+        // this.chooseData.list = [];
+        let data = res.data.sort((a, b) => {
+          return a.productNo > b.productNo ? 1 : -1;
+        });
+        data.forEach((item, i) => {
+          item.index = i + 1;
+          if (i == data.length - 1) {
+            this.crudOp.showSummary = true;
+            this.chooseData.list = data;
+            this.loading = false;
+          }
+        });
+        if (!data.length) {
+          this.crudOp.showSummary = true;
+          this.chooseData.list = [];
+          this.loading = false;
+        }
+      });
     },
     save() {
       if (this.hide === "1" && this.form.yinId === "") {
@@ -294,30 +429,29 @@ export default {
         return;
       }
       for (let i = 0; i < this.mx.length; i++) {
-        if (!this.mx[i].batchNo) {
-          this.$tip.error(this.$t("iaoMng.saveTle12"));
-          return;
-        }
-        if (!this.mx[i].weight || !this.mx[i].weightUnit) {
-          this.$tip.error(this.$t("iaoMng.saveTle6"));
-          return;
-        }
-        if (!this.mx[i].countingNo) {
-          this.$tip.error(this.$t("iaoMng.saveTle10"));
-          return;
-        }
-        // if (this.mx[i].loc) {
-        //   for (let j = 0; j < this.mx[i].loc.length; j++) {
-        //     if (!this.mx[i].loc[j].weight || !this.mx[i].loc[j].weightUnit) {
-        //       this.$tip.error("入仓批號重量不能为空!");
-        //       return;
-        //     }
-        //     if (!this.mx[i].loc[j].batchNo) {
-        //       this.$tip.error("入仓批號不能为空!");
-        //       return;
-        //     }
-        //   }
+        // if (!this.mx[i].batchNo) {
+        //   this.$tip.error(this.$t("iaoMng.saveTle12"));
+        //   return;
         // }
+        // if (!this.mx[i].weight || !this.mx[i].weightUnit) {
+        //   this.$tip.error(this.$t("iaoMng.saveTle6"));
+        //   return;
+        // }
+        // if (!this.mx[i].countingNo) {
+        //   this.$tip.error(this.$t("iaoMng.saveTle10"));
+        //   return;
+        // }
+        if (this.mx[i].list) {
+          for (let j = 0; j < this.mx[i].list.length; j++) {
+            if (!this.mx[i].list[j].weight || !this.mx[i].list[j].weightUnit) {
+              this.$tip.error("成品布重量不能为空!");
+              return;
+            } else if (!this.mx[i].list[j].productNo) {
+              this.$tip.error("成品编号不能为空!");
+              return;
+            }
+          }
+        }
         // if (this.hide === "6" && !this.mx[i].countingNo) {
         //   this.$tip.error("入仓疋数不能为空!");
         //   return;
@@ -338,11 +472,14 @@ export default {
           let addDtla = (item, i) => {
             return new Promise((resolve, reject) => {
               let data = JSON.parse(JSON.stringify(item));
-              data.loc = [];
+              data.loc = "";
+              data.list = "";
+              data.countingNo = item.list.length || 0;
               // this.mx.forEach((item, i) => {
               //   console.log(data);
               if (item.whseFinishedclothinDtloid) {
                 // 更新
+
                 updateCpbDetali(data).then((res) => {
                   resolve();
                 });
@@ -361,24 +498,24 @@ export default {
             return addDtla(item, i);
           });
           Promise.all(promiseArr).then((res) => {
-            // for (let i = 0; i < this.mx.length; i++) {
-            // if (this.mx[i].loc && this.mx[i].loc.length > 0) {
-            //   this.mx[i].loc.forEach((item) => {
-            //     item.whseCalicoinDtlaFk = this.mx[i].whseCalicoinDtlaoid;
-            //     if (!item.whseCalicoinDtlboid) {
-            //       this.everyThing.addLoc(item).then((res) => {
-            //         item.whseCalicoinDtlboid = res.data.data;
-            //       });
-            //     } else {
-            //       this.everyThing.updateLoc(item).then((res) => {});
-            //     }
-            //   });
-            // }
-            // if (i === this.mx.length - 1) {
-            this.loading = false;
-            this.$tip.success(this.$t("public.bccg"));
-            // }
-            // }
+            for (let i = 0; i < this.mx.length; i++) {
+              if (this.mx[i].list && this.mx[i].list.length > 0) {
+                this.mx[i].list.forEach((item) => {
+                  item.productDtlFk = this.mx[i].whseFinishedclothinDtloid;
+                  if (!item.indtlId) {
+                    addCpbDtlb(item).then((res) => {
+                      item.whseCalicoinDtlboid = res.data.data;
+                    });
+                  } else {
+                    updateCpbDtlb(item).then((res) => {});
+                  }
+                });
+              }
+              if (i === this.mx.length - 1) {
+                this.loading = false;
+                this.$tip.success(this.$t("public.bccg"));
+              }
+            }
           });
         });
       } else {
@@ -393,7 +530,9 @@ export default {
           let addDtla = (item, i) => {
             return new Promise((resolve, reject) => {
               let data = JSON.parse(JSON.stringify(item));
-              data.loc = [];
+              data.loc = "";
+              data.list = "";
+              data.countingNo = item.list.length || 0;
               if (item.whseFinishedclothinDtloid) {
                 // 更新
                 updateCpbDetali(data).then((res) => {
@@ -413,24 +552,24 @@ export default {
             return addDtla(item, i);
           });
           Promise.all(promiseArr).then((res) => {
-            // for (let i = 0; i < this.mx.length; i++) {
-            //   if (this.mx[i].loc && this.mx[i].loc.length > 0) {
-            //     this.mx[i].loc.forEach((item) => {
-            //       item.whseCalicoinDtlaFk = this.mx[i].whseCalicoinDtlaoid;
-            //       if (!item.whseCalicoinDtlboid) {
-            //         this.everyThing.addLoc(item).then((res) => {
-            //           item.whseCalicoinDtlboid = res.data.data;
-            //         });
-            //       } else {
-            //         this.everyThing.updateLoc(item).then((res) => {});
-            //       }
-            //     });
-            //   }
-            // if (i === this.mx.length - 1) {
-            this.loading = false;
-            this.$tip.success(this.$t("public.bccg"));
-            // }
-            // }
+            for (let i = 0; i < this.mx.length; i++) {
+              if (this.mx[i].list && this.mx[i].list.length > 0) {
+                this.mx[i].list.forEach((item) => {
+                  item.productDtlFk = this.mx[i].whseFinishedclothinDtloid;
+                  if (!item.indtlId) {
+                    addCpbDtlb(item).then((res) => {
+                      item.whseCalicoinDtlboid = res.data.data;
+                    });
+                  } else {
+                    updateCpbDtlb(item).then((res) => {});
+                  }
+                });
+              }
+              if (i === this.mx.length - 1) {
+                this.loading = false;
+                this.$tip.success(this.$t("public.bccg"));
+              }
+            }
           });
         });
       }
@@ -605,10 +744,9 @@ export default {
 };
 </script>
 <style lang='stylus'>
-#rcDetail {
+#rcDetail
   // .el-input.is-disabled .el-input__inner {
   // color: #606266;
   // background-color: #fff;
   // }
-}
 </style>

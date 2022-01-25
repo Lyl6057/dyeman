@@ -2,11 +2,29 @@
  * @Author: Lyl
  * @Date: 2021-02-01 14:06:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-09-21 10:59:44
+ * @LastEditTime: 2022-01-15 16:37:27
  * @Description:
  */
 
 import axios from "axios";
+
+// 查询载具使用记录
+export function getStorageLog(params) {
+  return axios({
+    url: "/api/whsCarriageStorageLog",
+    method: "get",
+    params: params
+  });
+}
+
+// 新增载具记录
+export function addStorageLog(params) {
+  return axios({
+    url: "/api/whsCarriageStorageLog",
+    method: "post",
+    params: params
+  });
+}
 
 // 查布记录
 export function getQcRecord(params) {

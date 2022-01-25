@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-01-12 15:39:08
  * @LastEditors: Lyl
- * @LastEditTime: 2022-01-13 16:47:08
+ * @LastEditTime: 2022-01-25 18:30:22
  * @FilePath: \iot.vue\src\view\im\whseInOutKB\index.vue
  * @Description: 
 -->
@@ -12,37 +12,76 @@
     :element-loading-text="$t('public.loading')"
     v-loading="wLoading"
   >
-    <view-container title="出入库看板">
-      <el-row class="btnList">
-        <el-button type="success" @click="submit" :disabled="!selectList.length"
-          >提交</el-button
-        >
-        <el-button type="primary" @click="query">{{
-          this.$t("public.query")
-        }}</el-button>
-      </el-row>
-      <el-row class="formBox">
-        <avue-form ref="form" :option="formOp" v-model="form"> </avue-form>
-      </el-row>
-      <view-container title="布笼物品信息">
-        <el-row class="crudBox" style="margin-top: 5px">
-          <avue-crud
-            ref="crud"
-            :option="crudOp"
-            :data="crud"
-            v-loading="loading"
-            @row-dblclick="handleRowDBLClick"
-            @current-row-change="cellClick"
-            @selection-change="selectionChange"
-          ></avue-crud>
+    <el-tabs v-model="tabs" type="border-card">
+      <el-tab-pane label="出入库看板" name="kanban">
+        <el-row class="btnList">
+          <el-button type="success" @click="sendTask">发送任务</el-button>
+          <el-button
+            type="success"
+            @click="submit"
+            :disabled="!selectList.length"
+            >提交</el-button
+          >
+          <el-button type="primary" @click="query">{{
+            this.$t("public.query")
+          }}</el-button>
+          <el-button
+            type="primary"
+            @click="updateStore"
+            :disabled="!this.selectList.length"
+            >修改载具</el-button
+          >
+          <el-input v-model="storageCode" style="width: 100px" />
         </el-row>
-      </view-container>
-    </view-container>
+        <el-row class="formBox">
+          <avue-form ref="form" :option="formOp" v-model="form"> </avue-form>
+        </el-row>
+        <view-container title="布笼物品信息">
+          <el-row class="crudBox" style="margin-top: 5px">
+            <avue-crud
+              ref="crud"
+              :option="crudOp"
+              :data="crud"
+              v-loading="loading"
+              @selection-change="selectionChange"
+            ></avue-crud>
+          </el-row> </view-container
+      ></el-tab-pane>
+      <el-tab-pane label="任务管理" name="task">
+        <el-row class="btnList">
+          <el-button type="primary" @click="queryTask">{{
+            this.$t("public.query")
+          }}</el-button>
+          <el-button type="primary" @click="finishTask(taskChoose)"
+            >模拟完成任务</el-button
+          >
+          <span style="color: #000">货位码:</span>
+          <el-input v-model="taskChoose.storageCode" style="width: 100px" />
+        </el-row>
+        <el-row class="formBox">
+          <avue-form ref="form" :option="taskFormOp" v-model="taskForm">
+          </avue-form>
+        </el-row>
+        <view-container title="布笼物品信息">
+          <el-row class="crudBox" style="margin-top: 5px">
+            <avue-crud
+              ref="task"
+              :option="taskCrudOp"
+              :page.sync="page"
+              :data="task"
+              v-loading="loading"
+              @on-load="queryTask"
+              @current-row-change="cellClick"
+            ></avue-crud>
+          </el-row>
+        </view-container>
+      </el-tab-pane>
+    </el-tabs>
   </div>
 </template>
 
 <script>
-import { formOp, finishedCrud, clothCrud } from "./data";
+import { formOp, finishedCrud, clothCrud, taskForm, taskCrud } from "./data";
 import { baseCodeSupply, baseCodeSupplyEx } from "@/api/index";
 import {
   getInCloth,
@@ -51,7 +90,9 @@ import {
   getOutFinished,
   updateNote,
   updateFinished,
+  getInWhse,
   addInWhse,
+  updateInWhse,
   addInDtla,
   addInDtlb,
   addOutWhse,
@@ -62,6 +103,23 @@ import {
   addOutFinishedWhse,
   addOutFinishedDtla,
   addOutFinishedDtlb,
+  getTask,
+  addTask,
+  updateTask,
+  getInFinishedWhse,
+  getFinalStock,
+  addInFinishedDtlb,
+  getOutFinishedWhse,
+  updateOutFinishedWhse,
+  sendTask,
+  getTaskList,
+  getStorageLog,
+  updateStorageLog,
+  getInDtla,
+  updateInDtla,
+  updateFinishedWhse,
+  getInFinishedDtla,
+  updateFinishedDtla,
 } from "./api";
 import { webSocket } from "@/config/index.js";
 export default {
@@ -71,9 +129,14 @@ export default {
     return {
       form: {
         type: 1,
-        goodsType: 1,
-        exit: "in1",
-        storageState: 0,
+        goodsType: 2,
+        exit: "C",
+        storageState: 1,
+      },
+      page: {
+        pageSize: 20,
+        currentPage: 1,
+        total: 0,
       },
       formOp: formOp(this),
       crudOp: finishedCrud(this),
@@ -89,36 +152,80 @@ export default {
       selectList: [],
       options: [],
       oldData: {},
+      storageCode: "",
       sort: {},
       inExit: [
         {
-          label: "入口1",
-          value: "in1",
+          label: "A出入库口(7001扫码)",
+          value: "A",
         },
         {
-          label: "入口2",
-          value: "in2",
+          label: "B出入库口",
+          value: "B",
         },
         {
-          label: "入口3",
-          value: "in3",
+          label: "C出入库口(7002扫码)",
+          value: "C",
+        },
+        {
+          label: "D出入库口(7003扫码)",
+          value: "D",
+        },
+        {
+          label: "D1空笼暂存口",
+          value: "D1",
+        },
+        {
+          label: "F出入库口",
+          value: "F",
+        },
+        {
+          label: "G出入库口(7004扫码)",
+          value: "G",
         },
       ],
       outExit: [
         {
-          label: "出口1",
-          value: "out1",
+          label: "A出入库口(7001扫码)",
+          value: "A",
         },
         {
-          label: "出口2",
-          value: "out2",
+          label: "B出入库口",
+          value: "B",
         },
         {
-          label: "出口3",
-          value: "out3",
+          label: "C出入库口(7002扫码)",
+          value: "C",
+        },
+        {
+          label: "D出入库口(7003扫码)",
+          value: "D",
+        },
+        {
+          label: "D1空笼暂存口",
+          value: "D1",
+        },
+        {
+          label: "E出库口",
+          value: "E",
+        },
+        {
+          label: "F出入库口",
+          value: "F",
+        },
+        {
+          label: "G出入库口(7004扫码)",
+          value: "G",
         },
       ],
+      taskFormOp: taskForm(this),
+      taskForm: {},
+      taskCrudOp: taskCrud(this),
+      task: [],
       spowerClient: null,
+      websocket: null,
+      tabs: "kanban",
+      taskChoose: {},
     };
   },
   watch: {},
@@ -138,43 +245,345 @@ export default {
         _this.form.weightUnit = Number(data.split(":")[1]);
       }
     };
+    webSocket.setWebSoket(_this);
+    _this.websocket.onmessage = function (data) {
+      // console.log("websocketResult:", data);
+      let webResult = JSON.parse(data.data);
+      _this.finishTask(webResult);
+    };
+    // webSocket.setClient(this);
+    // _this.spowerClient.onmessage = function (e) {
+    //   if (e.data.indexOf("scan") != -1) {
+    //     _this.$nextTick(() => {
+    //       if (e.data.split("scan=")[1].indexOf("DF") != -1) {
+    //         _this.form.vatNo = e.data.split("scan=")[1];
+    //       } else {
+    //         _this.form.storeLoadCode = e.data.split("scan=")[1];
+    //       }
+    //     });
+    //   }
+    // };
   },
   mounted() {},
   methods: {
     query() {
+      if (!this.form.storeLoadCode && this.form.type == 1) {
+        this.$tip.error("载具编号不能为空!");
+        return;
+      }
+      // if (!this.form.vatNo && !this.form.proName && this.form.type == 2) {
+      //   this.$tip.error("单号不能为空!");
+      //   return;
+      // }
       this.wLoading = true;
       if (this.form.goodsType == 1) {
+        this.form.clothState = this.form.type;
+        for (let key in this.form) {
+          if (!this.form[key]) {
+            delete this.form[key];
+          }
+        }
         // 胚布入仓
-        getInCloth({
-          storeLoadCode: this.form.storeLoadCode,
-          clothState: this.form.type,
-        }).then((res) => {
-          this.crud = res.data.sort((a, b) => {
-            return a.noteCode > b.noteCode ? 1 : -1;
+        getInCloth(this.form).then((res) => {
+          this.crud = res.data;
+          this.$set(this.form, "storageState", this.crud.length ? 0 : 1);
+          this.$nextTick(() => {
+            this.crud.forEach((item, i) => {
+              item.index = i + 1;
+
+              this.$refs.crud.toggleRowSelection(item, true);
+            });
           });
-          this.crud.forEach((item, i) => {
-            item.index = i + 1;
-          });
-          this.form.storageState = this.crud.length ? 1 : 0;
+
           this.wLoading = false;
         });
       } else {
-        //成品布入仓
-        getInFinished({
-          storeLoadCode: this.form.storeLoadCode,
-          clothState: this.form.type,
-          cardType: 1,
-        }).then((res) => {
-          this.crud = res.data.sort((a, b) => {
-            return a.productNo > b.productNo ? 1 : -1;
+        this.form.clothState = this.form.type;
+        for (let key in this.form) {
+          if (!this.form[key]) {
+            delete this.form[key];
+          }
+        }
+        if (this.form.type == 1) {
+          //成品布入仓
+          getInFinished(this.form).then((res) => {
+            this.crud = res.data.sort((a, b) => {
+              return a.productNo > b.productNo ? 1 : -1;
+            });
+            // this.form.storageState = this.crud.length ? 0 : 1;
+            this.$set(this.form, "storageState", this.crud.length ? 0 : 1);
+            this.$nextTick(() => {
+              this.crud.forEach((item, i) => {
+                item.index = i + 1;
+                this.$refs.crud.toggleRowSelection(item, true);
+              });
+
+              // alert(this.form.storageState);
+            });
+            setTimeout(() => {
+              this.wLoading = false;
+            }, 500);
           });
-          this.crud.forEach((item, i) => {
-            item.index = i + 1;
+        } else {
+          //成品布出仓
+          this.form.vatNo = this.form.vatNo
+            ? (this.form.vatNo = "%" + this.form.vatNo)
+            : "";
+          getFinalStock(this.form).then((res) => {
+            this.crud = res.data.sort((a, b) => {
+              return a.productNo > b.productNo ? 1 : -1;
+            });
+            this.$set(this.form, "storageState", this.crud.length ? 0 : 1);
+            this.$nextTick(() => {
+              this.crud.forEach((item, i) => {
+                item.index = i + 1;
+                item.netWeight = item.weight;
+                item.storeSiteCode = item.locationCode;
+                this.$refs.crud.toggleRowSelection(item, true);
+              });
+            });
+            if (this.form.vatNo.indexOf("%") != -1) {
+              this.form.vatNo = this.form.vatNo.split("%")[1];
+            }
+            setTimeout(() => {
+              this.wLoading = false;
+            }, 500);
           });
-          this.form.storageState = this.crud.length ? 1 : 0;
-          this.wLoading = false;
-        });
+        }
       }
+    },
+    queryTask() {
+      this.wLoading = true;
+      for (let key in this.taskForm) {
+        if (this.taskForm[key] == "") {
+          delete this.taskForm[key];
+        }
+      }
+      this.taskForm.barCode = this.taskForm.barCode
+        ? (this.taskForm.barCode = "%" + this.taskForm.barCode)
+        : "";
+      getTask(
+        Object.assign(this.taskForm, {
+          rows: this.page.pageSize,
+          start: this.page.currentPage,
+          page: this.page.currentPage,
+        })
+      ).then((res) => {
+        this.task = res.data.records;
+        this.page.total = res.data.total;
+        if (this.task.length) {
+          this.$refs.task.setCurrentRow(this.task[0]);
+        }
+        if (this.taskForm.barCode && this.taskForm.barCode.indexOf("%") != -1) {
+          this.taskForm.barCode = this.taskForm.barCode.split("%")[1];
+        }
+        this.wLoading = false;
+      });
+    },
+    updateStore() {
+      if (!this.selectList.length) {
+        return;
+      }
+      if (!this.storageCode) {
+        this.$tip.error("请输入要修改的载具编号!");
+        return;
+      }
+      this.$tip
+        .cofirm(`是否确定修改选中数据的载具编号？`, this, {})
+        .then(() => {
+          this.wLoading = true;
+          if (this.form.goodsType == 2) {
+            // 成品布
+            this.selectList.forEach((item, i) => {
+              item.storeLoadCode = this.storageCode;
+              updateFinished(item).then((res) => {
+                if (i == this.selectList.length - 1) {
+                  this.query();
+                  // this.wLoading = false
+                }
+              });
+            });
+          } else {
+            // 胚布
+            this.selectList.forEach((item, i) => {
+              item.storeLoadCode = this.storageCode;
+              updateNote(item).then((res) => {
+                if (i == this.selectList.length - 1) {
+                  // this.wLoading = false
+                  this.query();
+                }
+              });
+            });
+          }
+        });
+    },
+    finishTask(webResult) {
+      // console.log("webResult:", webResult);
+      // if (!this.storageCode) {
+      //   this.$tip.error("货位码不能为空！");
+      //   return;
+      // }
+      // if (this.taskChoose.finishStatus) {
+      //   this.$tip.warning("任务已完成！");
+      //   return;
+      // }
+      // this.$tip.cofirm(`是否确定完成选中的任务?`, this, {}).then(() => {
+      this.wLoading = true;
+      getTaskList({ orderId: webResult.orderId }).then((taskInfo) => {
+        console.log("任务信息", taskInfo);
+        if (taskInfo.data.length) {
+          //  有任务信息
+          let data = taskInfo.data[0];
+          // if (data.finishStatus == 0) {
+          //   this.$tip.success("任务已完成!");
+          //   return;
+          // }
+          // this.storageCode = "TEST01";
+          // data.finishStatus = 1;
+          // updateTask(data);
+          // ).then((res) => {
+          //   if (res.data.code == 200) {
+          // 模拟完成任务回调
+          // 1.修改胚布状态
+          if (data.type == 1) {
+            getInCloth({
+              clothState: data.orderType + 3, // 4入仓中 5出仓中
+              storeLoadCode: data.barCode,
+            }).then((note) => {
+              if (note.data.length) {
+                note.data.forEach((item, i) => {
+                  item.clothState = data.orderType + 1; // 2 入仓， 3 出仓
+                  item.storeSiteCode = data.storageCode;
+                  updateNote(item).then((res) => {
+                    if (i == note.data.length - 1) {
+                      // 生成入仓记录
+                      this.setClothWhse(data.orderType, note.data);
+                    }
+                  });
+                });
+              } else {
+                this.$tip.error("暂无该载具信息");
+                this.wLoading = false;
+              }
+            });
+          } else {
+            getInFinished({
+              clothState: data.orderType + 3, // 4入仓中 5出仓中
+              storeLoadCode: data.barCode,
+            }).then((note) => {
+              // console.log("note",note.data);
+              if (note.data.length) {
+                note.data.forEach((item, i) => {
+                  item.clothState = data.orderType + 1; // 2 入仓， 3 出仓
+                  item.storeSiteCode = data.storageCode;
+                  updateFinished(item).then((res) => {
+                    if (i == note.data.length - 1) {
+                      if (data.orderType == 2) {
+                        // 修改出仓表
+                        getOutFinishedWhse({
+                          stockState: 2,
+                          spNo: data.barCode,
+                        }).then((res) => {
+                          if (res.data.length) {
+                            updateOutFinishedWhse({
+                              whseFinclothselloutoid:
+                                res.data[0].whseFinclothselloutoid,
+                              stockState: 0,
+                              spNo: "",
+                            }).then((res) => {
+                              this.wLoading = false;
+                              this.$tip.success(
+                                `载具${data.storageCode}${
+                                  data.orderType == 1 ? "入仓" : "出仓"
+                                }任务已完成!`
+                              );
+                              return;
+                            });
+                          } else {
+                            this.wLoading = false;
+                            this.$tip.success(
+                              `载具${data.storageCode}${
+                                data.orderType == 1 ? "入仓" : "出仓"
+                              }任务已完成!`
+                            );
+                          }
+                        });
+                      } else {
+                        // 修改入仓表
+                        getInFinishedWhse({
+                          stockState: 2,
+                          remarks: data.barCode,
+                        }).then((res) => {
+                          if (res.data.length) {
+                            updateFinishedWhse({
+                              whseFinishedclothinoid:
+                                res.data[0].whseFinishedclothinoid,
+                              stockState: 0,
+                              remarks: "",
+                            }).then((updateRes) => {
+                              // 修改出仓明细表
+                              getInFinishedDtla({
+                                whseFinishedclothinFk:
+                                  res.data[0].whseFinishedclothinoid,
+                              }).then((dtla) => {
+                                if (dtla.data.length) {
+                                  dtla.data.forEach((item, i) => {
+                                    item.locationCode = data.storageCode;
+                                    updateFinishedDtla(item).then(
+                                      (updateDtla) => {
+                                        if (i == dtla.data.length - 1) {
+                                          this.wLoading = false;
+                                          this.$tip.success(
+                                            `载具${data.barCode}${
+                                              data.orderType == 1
+                                                ? "入仓"
+                                                : "出仓"
+                                            }任务已完成!`
+                                          );
+                                        }
+                                      }
+                                    );
+                                  });
+                                } else {
+                                  this.wLoading = false;
+                                  this.$tip.success(
+                                    `载具${data.barCode}${
+                                      data.orderType == 1 ? "入仓" : "出仓"
+                                    }任务已完成!`
+                                  );
+                                }
+                              });
+
+                              // return;
+                            });
+                          }
+                        });
+                        // 生成入仓记录
+                        // this.setFinishedWhse(data, note.data);
+                      }
+                    }
+                  });
+                });
+              } else {
+                this.$tip.success(
+                  `载具${data.storageCode}${
+                    data.type == 1 ? "入仓" : "出仓"
+                  }任务已完成!`
+                );
+                this.wLoading = false;
+              }
+            });
+          }
+          // } else {
+          // }
+          // });
+        } else {
+          // 无任务信息
+          this.$tip.error("无该任务信息!");
+          this.wLoading = false;
+        }
+      });
+      // });
     },
     submit() {
       this.$tip
@@ -187,30 +596,236 @@ export default {
         )
         .then(() => {
           this.wLoading = true;
-          if (this.form.goodsType == 1) {
-            this.selectList.forEach((item, i) => {
-              item.clothState = this.form.type + 1;
-              updateNote(item).then((res) => {
-                if (i == this.selectList.length - 1) {
-                  this.setClothWhse();
+          if (this.form.type == 2) {
+            let list = this.group(this.selectList, "storeLoadCode");
+            list.forEach((item, i) => {
+              addTask({
+                barCode: item.storeLoadCode,
+                createTime: this.$getNowTime("datetime"),
+                entrance: this.form.exit, // 入库口
+                isEmpty: this.form.storageState, // 是否为空
+                orderType: this.form.type, // 出库/入库
+                type: this.form.goodsType, // 物料类别
+                finishStatus: -1,
+                storageCode: item.data[0].storeSiteCode,
+              }).then((res) => {
+                if (res.data.code == 200) {
+                  this.successAfter(item.data);
+                } else {
+                  this.$tip.error("提交任务失败," + res.data.msg + "!");
+                  if (i == list.length - 1) {
+                    this.wLoading = false;
+                  }
                 }
               });
+              if (!list.length) {
+                addTask({
+                  barCode: this.form.storeLoadCode,
+                  createTime: this.$getNowTime("datetime"),
+                  entrance: this.form.exit, // 入库口
+                  isEmpty: this.form.storageState, // 是否为空
+                  orderType: this.form.type, // 出库/入库
+                  type: this.form.goodsType, // 物料类别
+                  finishStatus: -1,
+                  // storageCode: item.data[0].storeSiteCode,
+                }).then((res) => {
+                  if (res.data.code == 200) {
+                    this.wLoading = false;
+                    this.$tip.success("任务提交成功!");
+                    // this.successAfter(item.data);
+                  } else {
+                    this.$tip.error("提交任务失败," + res.data.msg + "!");
+                    if (i == list.length - 1) {
+                      this.wLoading = false;
+                    }
+                  }
+                });
+              }
             });
           } else {
-            this.selectList.forEach((item, i) => {
-              item.clothState = this.form.type + 1;
-              updateFinished(item).then((res) => {
-                if (i == this.selectList.length - 1) {
-                  this.setFinishedWhse();
-                }
-              });
+            addTask({
+              barCode:
+                this.form.storeLoadCode || this.selectList[0].storeLoadCode,
+              createTime: this.$getNowTime("datetime"),
+              entrance: this.form.exit, // 入库口
+              isEmpty: this.form.storageState, // 是否为空
+              orderType: this.form.type, // 出库/入库
+              type: this.form.goodsType, // 物料类别
+              finishStatus: -1,
+              // storageCode: this.selectList[0].storeSiteCode,
+            }).then((res) => {
+              if (res.data.code == 200) {
+                this.successAfter(this.selectList);
+              } else {
+                this.wLoading = false;
+                this.$tip.error("提交任务失败," + res.data.msg + "!");
+              }
             });
           }
         })
         .catch(() => {});
     },
-    setClothWhse() {
-      if (this.form.type == 1) {
+    sendTask() {
+      if (!this.form.storeLoadCode && this.form.type == 1) {
+        this.$tip.error("载具编号不能为空!");
+        return;
+      }
+      this.$tip
+        .cofirm(
+          `是否确定提交选中的${
+            this.form.goodsType == 1 ? "胚布" : "成品布"
+          }, 生成${this.form.type == 1 ? "入" : "出"}库记录？`,
+          this,
+          {}
+        )
+        .then(() => {
+          this.wLoading = true;
+          if (this.form.type == 2) {
+            let list = this.group(this.selectList, "storeLoadCode");
+            list.forEach((item, i) => {
+              sendTask({
+                barCode: item.storeLoadCode,
+                createTime: this.$getNowTime("datetime"),
+                entrance: this.form.exit, // 入库口
+                isEmpty: this.form.storageState, // 是否为空
+                orderType: this.form.type, // 出库/入库
+                type: this.form.goodsType, // 物料类别
+                // finishStatus: 0,
+                storageCode: item.data[0].storeSiteCode,
+              }).then((res) => {
+                if (res.data.code == 0) {
+                  this.successAfter(item.data);
+                } else {
+                  this.$tip.error("提交任务失败," + res.data.message + "!");
+                  if (i == list.length - 1) {
+                    this.wLoading = false;
+                  }
+                }
+              });
+            });
+            if (!list.list) {
+              this.$tip.success("任务提交成功!");
+              this.queryTask();
+            }
+          } else {
+            sendTask({
+              barCode: this.form.storeLoadCode,
+              createTime: this.$getNowTime("datetime"),
+              entrance: this.form.exit, // 入库口
+              isEmpty: this.form.storageState, // 是否为空
+              orderType: this.form.type, // 出库/入库
+              type: this.form.goodsType, // 物料类别
+              finishStatus: 0,
+              // storageCode: this.selectList[0].storeSiteCode,
+            }).then((res) => {
+              if (res.data.code == "0") {
+                this.successAfter();
+              } else {
+                this.wLoading = false;
+                this.$tip.error("提交任务失败," + res.data.message + "!");
+              }
+            });
+          }
+        })
+        .catch(() => {});
+    },
+    successAfter(outList) {
+      if (this.form.goodsType == 1) {
+        this.selectList.forEach((item, i) => {
+          item.clothState = this.form.type == 1 ? 4 : 5; // 4 入仓中， 5 出仓中
+          updateNote(item).then((res) => {
+            if (i == this.selectList.length - 1) {
+              // this.setClothWhse();
+              this.$tip.success("任务提交成功!");
+              this.query();
+              this.queryTask();
+            }
+          });
+        });
+      } else {
+        if (this.form.type == 2) {
+          outList.forEach((item, i) => {
+            // item.clothState = this.form.type == 1 ? 4 : 5;
+            getInFinished({
+              cardId: item.productId,
+              productNo: item.productNo,
+              cardType: 1,
+              clothState: 2,
+            }).then((res) => {
+              if (res.data.length) {
+                let data = res.data[0];
+                data.clothState = this.form.type == 1 ? 4 : 5;
+                updateFinished(data).then((res) => {
+                  if (i == outList.length - 1) {
+                    // if (this.form.type == 2) {
+                    setTimeout(() => {
+                      this.setFinishedWhse(this.form.type, outList);
+                    }, 200);
+                    // } else {
+                    //   this.$nextTick(() => {
+                    //     this.$tip.success("任务提交成功!");
+                    //     this.query();
+                    //     this.queryTask();
+                    //   });
+                    // }
+                  }
+                });
+              } else {
+                if (i == outList.length - 1) {
+                  this.$tip.success("任务提交成功!");
+                  this.query();
+                  this.queryTask();
+                }
+              }
+            });
+            if (!outList.length) {
+              this.$tip.success("任务提交成功!");
+              this.query();
+              this.queryTask();
+            }
+          });
+        } else {
+          this.selectList.forEach((item, i) => {
+            // item.clothState = this.form.type == 1 ? 4 : 5;
+            getInFinished({
+              cardId: item.cardId,
+              // productNo: item.productNo,
+              // vatNo: item.vatNo,
+              clothState: item.clothState,
+            }).then((res) => {
+              if (res.data.length) {
+                let data = res.data[0];
+                data.clothState = this.form.type == 1 ? 4 : 5;
+                updateFinished(data).then((res) => {
+                  if (i == this.selectList.length - 1) {
+                    setTimeout(() => {
+                      this.setFinishedWhse(
+                        { orderType: this.form.type },
+                        this.selectList
+                      );
+                    }, 200);
+                    // if (this.form.type == 2) {
+
+                    // } else {
+                    //   this.$tip.success("任务提交成功!");
+                    //   this.query();
+                    //   this.queryTask();
+                    // }
+                  }
+                });
+              }
+            });
+          });
+          if (!this.selectList.length) {
+            this.$tip.success("任务提交成功!");
+            this.query();
+            this.queryTask();
+          }
+        }
+      }
+    },
+    setClothWhse(type, noteList) {
+      if (type == 1) {
         // 生成入库信息
         baseCodeSupplyEx({ code: "whse_in" }).then((res) => {
           let data = {
@@ -219,9 +834,10 @@ export default {
             yinDate: this.$getNowTime("date"),
             yinType: 6,
             yinStatus: 0,
+            finStatus: 0,
             sysCreatedby: this.$store.state.userOid,
           };
-          let list = this.group(this.selectList, "proName");
+          let list = this.group(noteList, "proName");
           addInWhse(data).then((inwhse) => {
             baseCodeSupply({ code: "whse_in" }).then((res) => {});
             const inwhseId = inwhse.data.data;
@@ -232,8 +848,9 @@ export default {
                   weight: Number(item.weight.toFixed(1)),
                   countingNo: item.data.length,
                   whseCalicoinFk: inwhseId,
-                  fabticket: this.selectList[0].storeLoadCode,
+                  fabticket: this.taskChoose.barCode,
                   batchNo: pbIn.data.data,
+                  locationCode: this.taskChoose.storageCode,
                 }).then((dtla) => {
                   const dtlaId = dtla.data.data;
                   item.data.forEach((dtlb, b) => {
@@ -241,13 +858,14 @@ export default {
                       custTicket: dtlb.noteCode,
                       batchNo: pbIn.data.data,
                       countingNo: dtlb.eachNumber,
-                      locationCode: dtlb.storeSiteCode,
+                      // locationCode: dtlb.storeSiteCode,
+                      locationCode: this.taskChoose.storageCode,
                       weight: dtlb.clothWeight,
                       weightUnit: "KG",
                       whseCalicoinDtlaFk: dtlaId,
                     }).then((dtlb) => {});
                     if (b == item.data.length - 1 && i == list.length - 1) {
-                      this.query();
+                      this.queryTask();
                       this.$tip.success("入库成功!");
                     }
                   });
@@ -268,7 +886,7 @@ export default {
             yinStatus: 0,
             sysCreatedby: this.$store.state.userOid,
           };
-          let list = this.group(this.selectList, "proName");
+          let list = this.group(noteList, "proName");
           addOutWhse(data).then((inwhse) => {
             baseCodeSupply({ code: "whse_out" }).then((res) => {});
             const outwhseId = inwhse.data.data;
@@ -279,7 +897,7 @@ export default {
                   weight: Number(item.weight.toFixed(1)),
                   countingNo: item.data.length,
                   whseMaterialFk: outwhseId,
-                  fabticket: this.selectList[0].storeLoadCode,
+                  fabticket: this.taskChoose.barCode,
                   batchNo: pbIn.data.data,
                 }).then((dtla) => {
                   const dtlaId = dtla.data.data;
@@ -294,7 +912,7 @@ export default {
                       whseMaterialDlaFk: dtlaId,
                     }).then((dtlb) => {});
                     if (b == item.data.length - 1 && i == list.length - 1) {
-                      this.query();
+                      this.queryTask();
                       this.$tip.success("出库成功!");
                     }
                   });
@@ -306,9 +924,62 @@ export default {
         });
       }
     },
-    setFinishedWhse() {
-      if (this.form.type == 1) {
-        // 生成入库信息
+    setFinishedWhse(data, noteList) {
+      if (data.orderType == 1) {
+        baseCodeSupplyEx({ code: "whse_in" }).then((res) => {
+          let inData = {
+            yinId: res.data.data,
+            sysCreated: this.$getNowTime("datetime"),
+            yinDate: this.$getNowTime("datetime"),
+            yinType: 1,
+            yinStatus: 0,
+            sysCreatedby: this.$store.state.userOid,
+            finStatus: 0,
+            stockState: 2,
+            remarks: noteList[0].storeLoadCode,
+          };
+          let list = this.group(noteList, "vatNo");
+          addInFinishedWhse(inData).then((inwhse) => {
+            baseCodeSupply({ code: "whse_in" }).then((res) => {});
+            const inwhseId = inwhse.data.data;
+            baseCodeSupplyEx({ code: "cpb_in_whse" }).then((pbIn) => {
+              list.forEach((item, i) => {
+                addInFinishedDtla({
+                  vatNo: item.vatNo,
+                  pidCount: item.data.length,
+                  weightUnit: item.data[0].weightUnit,
+                  whseFinishedclothinFk: inwhseId,
+                  // locationCode: data.storageCode,
+                  storeLoadCode: noteList[0].storeLoadCode,
+                  fabticket: item.productNo,
+                  sumWeight: Number(item.weight.toFixed(1)),
+                }).then((dtla) => {
+                  const dtlaId = dtla.data.data;
+                  item.data.forEach((dtlb, b) => {
+                    addInFinishedDtlb({
+                      pidNo: dtlb.pidNo,
+                      productDtlFk: dtlaId,
+                      productNo: dtlb.productNo,
+                      weight: dtlb.netWeight,
+                      weightUnit: dtlb.weightUnit,
+                      productId: dtlb.cardId,
+                      vatNo: dtlb.vatNo,
+                    }).then((dtlb) => {});
+                    if (b == item.data.length - 1 && i == list.length - 1) {
+                      this.$tip.success("任务提交成功!");
+                      this.$nextTick(() => {
+                        this.query();
+                        this.queryTask();
+                      });
+                    }
+                  });
+                });
+              });
+              baseCodeSupply({ code: "cpb_in_whse" }).then((res) => {});
+            });
+          });
+        });
+        /*  // 生成入库信息
         baseCodeSupplyEx({ code: "whse_in" }).then((res) => {
           let data = {
             yinId: res.data.data,
@@ -318,49 +989,69 @@ export default {
             yinStatus: 0,
             sysCreatedby: this.$store.state.userOid,
             finStatus: 0,
+            // stockState: 2, // 待确认，等任务完成 => 0
+            // registerNo: this.form.storeLoadCode,
           };
           addInFinishedWhse(data).then((inwhse) => {
             baseCodeSupply({ code: "whse_in" }).then((res) => {});
             const inwhseId = inwhse.data.data;
             baseCodeSupplyEx({ code: "cpb_in_whse" }).then((pbIn) => {
-              this.selectList.forEach((item, i) => {
+              noteList.forEach((item, i) => {
                 addInFinishedDtla({
                   batchNo: item.vatNo,
                   weight: item.netWeight,
                   countingNo: item.pidNo,
                   weightUnit: item.weightUnit,
                   whseFinishedclothinFk: inwhseId,
-                  locationCode: item.storeSiteCode,
+                  locationCode: this.taskChoose.storageCode,
+                  storeLoadCode: this.taskChoose.barCode,
                   fabticket: item.productNo,
                 }).then((dtla) => {});
-                if (i == this.selectList.length - 1) {
-                  this.query();
+                if (i == noteList.length - 1) {
+                  this.queryTask();
                   this.$tip.success("成品布入仓成功!");
                 }
               });
               baseCodeSupply({ code: "cpb_in_whse" }).then((res) => {});
             });
           });
-        });
+        }); */
       } else {
+        // 删除载具使用日志
+        getStorageLog({
+          businessId: noteList[0].vatNo,
+          businessType: 2,
+          useType: 2,
+          whsCarriageStorageFk: noteList[0].storeLoadCode,
+        }).then((res) => {
+          if (res.data.length) {
+            updateStorageLog({
+              storageLogId: res.data[0].storageLogId,
+              deleteFlag: true,
+              deleteTime: this.$getNowTime("datetime"),
+            }).then((updateRes) => {});
+          }
+        });
         // 生成出库信息
-        baseCodeSupplyEx({ code: "whse_out" }).then((res) => {
+        baseCodeSupply({ code: "whse_out" }).then((res) => {
           let data = {
             woOutno: res.data.data,
+            spNo: noteList[0].storeLoadCode,
             sysCreated: this.$getNowTime("datetime"),
             woDate: this.$getNowTime("date"),
             retType: 1,
             yinStatus: 0,
             sysCreatedby: this.$store.state.userOid,
+            stockState: 2, // 待确认，即入仓中/出仓中
           };
-          let list = this.group(this.selectList, "poNo");
+          let list = this.group(noteList, "storeLoadCode");
           addOutFinishedWhse(data).then((inwhse) => {
-            baseCodeSupply({ code: "whse_out" }).then((res) => {});
+            // baseCodeSupply({ code: "whse_out" }).then((res) => {});
             const outwhseId = inwhse.data.data;
             baseCodeSupplyEx({ code: "cpb_out_whse" }).then((pbIn) => {
               list.forEach((item, i) => {
                 addOutFinishedDtla({
-                  woOrderno: item.poNo,
+                  woOrderno: item.storeLoadCode,
                   whseFinclothselloutFk: outwhseId,
                   woMatname: item.fabName,
                 }).then((dtla) => {
@@ -368,17 +1059,24 @@ export default {
                   item.data.forEach((dtlb, b) => {
                     addOutFinishedDtlb({
                       prodNo: dtlb.vatNo,
+                      ticketNo: dtlb.productNo,
                       batchNo: pbIn.data.data,
                       countingNo: dtlb.pidNo,
-                      locationCode: dtlb.storeSiteCode,
-                      ticketNo: dtlb.productNo,
-                      woWeights: dtlb.netWeight,
+                      locationCode: dtlb.locationCode,
+                      productNo: dtlb.productNo,
+                      woWeights: dtlb.stockQty,
                       woUnit: dtlb.weightUnit,
                       whseFinclothselloutDtlaFk: dtlaId,
                     }).then((dtlb) => {});
                     if (b == item.data.length - 1 && i == list.length - 1) {
-                      this.query();
-                      this.$tip.success("出库成功!");
+                      this.$tip.success("任务提交成功!");
+                      this.$nextTick(() => {
+                        this.query();
+                        this.queryTask();
+                      });
+
+                      // this.queryTask();
+                      // this.$tip.success("出库成功!");
                     }
                   });
                 });
@@ -394,13 +1092,19 @@ export default {
       if (val == 1) {
         this.$nextTick(() => {
           this.crudOp = clothCrud(this);
+          this.formOp.column[6].display = true;
+          this.formOp.column[7].display = false;
         });
       } else {
         this.crudOp = finishedCrud(this);
+        this.formOp.column[7].display = true;
+        this.formOp.column[6].display = false;
       }
     },
     handleRowDBLClick(val) {},
-    cellClick(val) {},
+    cellClick(val) {
+      this.taskChoose = val;
+    },
     summaryMethod() {},
     selectionChange(val) {
       this.selectList = val;
@@ -414,7 +1118,7 @@ export default {
           dest.push({
             [type]: ai[type],
             data: [ai],
-            weight: ai.clothWeight,
+            weight: ai.clothWeight || ai.netWeight,
           });
           map[ai[type]] = ai;
         } else {
@@ -422,7 +1126,7 @@ export default {
             var dj = dest[j];
             if (dj[type] == ai[type]) {
               dj.data.push(ai);
-              dj.weight += ai.clothWeight;
+              dj.weight += ai.clothWeight || ai.netWeight;
               break;
             }
           }

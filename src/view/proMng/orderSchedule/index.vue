@@ -2,83 +2,91 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-01-10 18:56:13
+ * @LastEditTime: 2022-01-14 15:33:30
  * @Description: 
 -->
 <template>
   <div id="ldOrder">
-    <view-container
-      title="生产排期"
+    <el-tabs
+      v-model="tabs"
+      type="border-card"
       v-loading="wloading"
       element-loading-text="拼命加载中..."
     >
-      <el-row class="btnList">
-        <el-button
-          type="success"
-          :disabled="!detail.ldNoticeId"
-          @click="handleRowDBLClick(detail)"
-          >{{ this.$t("public.update") }}</el-button
-        >
-        <el-button type="primary" @click="add">{{
-          this.$t("public.add")
-        }}</el-button>
-        <el-button type="danger" :disabled="!detail.salSchId" @click="del">{{
-          this.$t("public.del")
-        }}</el-button>
-        <el-button type="primary" @click="query">{{
-          this.$t("public.query")
-        }}</el-button>
+      <el-tab-pane name="main" label="生产排期">
+        <el-row class="btnList">
+          <el-button
+            type="success"
+            :disabled="!detail.ldNoticeId"
+            @click="handleRowDBLClick(detail)"
+            >{{ this.$t("public.update") }}</el-button
+          >
+          <el-button type="primary" @click="add">{{
+            this.$t("public.add")
+          }}</el-button>
+          <el-button type="danger" :disabled="!detail.salSchId" @click="del">{{
+            this.$t("public.del")
+          }}</el-button>
+          <el-button type="primary" @click="query">{{
+            this.$t("public.query")
+          }}</el-button>
 
-        <!-- <el-button type="warning" @click="close">{{
+          <!-- <el-button type="warning" @click="close">{{
           this.$t("public.close")
         }}</el-button> -->
-      </el-row>
-      <el-row class="formBox">
-        <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
-      </el-row>
-      <el-row class="crudBox">
-        <avue-crud
-          ref="crud"
-          id="crud"
-          :option="crudOp"
-          :data="crud"
-          :page.sync="page"
-          v-loading="loading"
-          @on-load="query"
-          @row-dblclick="handleRowDBLClick"
-          @current-row-change="cellClick"
-        ></avue-crud>
-      </el-row>
-      <el-dialog
-        id="colorMng_Dlg"
-        :visible.sync="dialogVisible"
-        fullscreen
-        width="100%"
-        append-to-body
-        :close-on-click-modal="false"
-        :close-on-press-escape="false"
+        </el-row>
+        <el-row class="formBox">
+          <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
+        </el-row>
+        <el-row class="crudBox">
+          <avue-crud
+            ref="crud"
+            id="crud"
+            :option="crudOp"
+            :data="crud"
+            :page.sync="page"
+            v-loading="loading"
+            @on-load="query"
+            @row-dblclick="handleRowDBLClick"
+            @current-row-change="cellClick"
+          ></avue-crud>
+        </el-row>
+      </el-tab-pane>
+      <el-tab-pane name="viewer" label="生产排期图">
+        <viewer />
+      </el-tab-pane>
+    </el-tabs>
+    <el-dialog
+      id="colorMng_Dlg"
+      :visible.sync="dialogVisible"
+      fullscreen
+      width="100%"
+      append-to-body
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+      v-if="dialogVisible"
+    >
+      <tem-dlg
+        ref="tem"
+        :detail="detail"
+        :isAdd="isAdd"
+        @close="dialogVisible = false"
+        @refresh="query"
         v-if="dialogVisible"
-      >
-        <tem-dlg
-          ref="tem"
-          :detail="detail"
-          :isAdd="isAdd"
-          @close="dialogVisible = false"
-          @refresh="query"
-          v-if="dialogVisible"
-        ></tem-dlg>
-      </el-dialog>
-    </view-container>
+      ></tem-dlg>
+    </el-dialog>
   </div>
 </template>
 <script>
 import { mainForm, mainCrud } from "./data";
 import tem from "./temDlg";
-import { get, add, update, del, print } from "./api";
+import { get, add, update, del } from "./api";
+import viewer from "./viewer.vue";
 export default {
   name: "",
   components: {
     temDlg: tem,
+    viewer,
   },
   data() {
     return {
@@ -100,6 +108,7 @@ export default {
       czsocket: {},
       pdfDlg: false,
       pdfUrl: "",
+      tabs: "main",
     };
   },
   watch: {},

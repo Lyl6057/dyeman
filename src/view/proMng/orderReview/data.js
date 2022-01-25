@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-12-25 15:52:48
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-01-21 08:04:12
  * @Description:
  */
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
@@ -258,7 +258,7 @@ export function mainCrud(_this) {
         sortable: true,
         width: 180,
         overHidden: true,
-        span: 6,
+        span: 6
       },
       {
         label: "色號",
@@ -279,7 +279,7 @@ export function mainCrud(_this) {
         overHidden: true,
         width: 250,
         span: 12,
-        sortable: true,
+        sortable: true
         // rules: [{
         //   required: true,
         //   message: "请選擇布類描述",
@@ -662,6 +662,10 @@ export function mainCrud(_this) {
           {
             label: "草稿",
             value: "0"
+          },
+          {
+            label: "已打印",
+            value: "3"
           }
         ],
         hide: false,
@@ -715,7 +719,7 @@ export function mainCrud(_this) {
         display: false,
         type: "datetime",
         format: "yyyy-MM-dd HH:mm:ss",
-        valueFormat: "yyyy-MM-dd HH:mm:ss",
+        valueFormat: "yyyy-MM-dd HH:mm:ss"
       }
     ],
     group: [
@@ -1444,7 +1448,7 @@ export function mainWCrud(_this) {
             message: "请選擇顏色名稱",
             trigger: "blur"
           }
-        ],
+        ]
       },
       {
         label: "色號",
@@ -1465,7 +1469,7 @@ export function mainWCrud(_this) {
         width: 250,
         tip: "Tỷ lệ sơ sợi",
         span: 12,
-        hide: true,
+        hide: true
       },
       {
         label: "创建时间",

@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-08-07 07:57:44
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-01-10 09:46:10
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-01-17 16:30:16
  * @Description: 
 -->
 <template>
@@ -22,7 +22,7 @@
                 v-model="form"
                 style="height: calc(100vh - 165px); overflow: auto"
               >
-                <template  slot="vatNo">
+                <template slot="vatNo">
                   <el-select
                     v-model="form.vatNo"
                     filterable
@@ -33,6 +33,7 @@
                     placeholder="请输入缸号"
                     :remote-method="remoteMethod"
                     :loading="vatLoading"
+                    @change="query"
                   >
                     <el-option
                       v-for="item in options"
@@ -155,6 +156,7 @@ import {
   getBleadye,
   getRevolve,
   getBleadyeByPage,
+  getRevolvePage,
   getTem,
   getWeave,
   getCheckItem,
@@ -162,7 +164,7 @@ import {
 // import tem from "./temDlg";
 import { webSocket } from "@/config/index.js";
 import printTem from "./printTem.vue";
-
+import { addStorageLog, getStorageLog } from "../scan/api";
 export default {
   name: "",
   components: {
@@ -204,7 +206,7 @@ export default {
       options: [],
       vatLoading: false,
       dlgCtr: true,
-      spowerClient:null
+      spowerClient: null,
     };
   },
   created() {
@@ -247,14 +249,15 @@ export default {
   methods: {
     remoteMethod(val) {
       this.vatLoading = true;
-      getBleadyeByPage({ vatNo: "!^%" + val, rows: 10, start: 1 }).then(
-        (res) => {
-          this.options = res.data.records;
-          this.vatLoading = false;
-        }
-      );
+      getRevolvePage({ vatNo: "!^%" + val, rows: 10, start: 1 }).then((res) => {
+        this.options = res.data.records;
+        this.vatLoading = false;
+      });
     },
     query() {
+      if (!this.form.vatNo) {
+        return;
+      }
       this.wLoading = true;
       this.detail = {};
       this.form.poNo = "";
@@ -458,7 +461,8 @@ export default {
                   } else {
                     // 不存在记录 新增 =>打印
                     data.cardType = 1;
-                    data.productNo = data.vatNo + this.$preFixInt(data.pidNo, 3)
+                    data.productNo =
+                      data.vatNo + this.$preFixInt(data.pidNo, 3);
                     add(data).then((addRes) => {
                       if (addRes.data.code == 200) {
                         this.form.cardId = addRes.data.data;
@@ -590,9 +594,11 @@ export default {
                     data.cardId = "";
                     data.cardType = 1;
                     data.madeDate = this.$getNowTime("datetime");
-                    data.productNo = data.vatNo + this.$preFixInt(data.pidNo, 3)
+                    data.productNo =
+                      data.vatNo + this.$preFixInt(data.pidNo, 3);
                     add(data).then((addRes) => {
                       if (addRes.data.code == 200) {
+                        this.getLog();
                         this.form.cardId = addRes.data.data;
                         this.history.unshift(data);
                         this.history = this.$unique(this.history, "cardId");
@@ -661,6 +667,25 @@ export default {
       //   process.env.API_HOST +
       //   "/api/proBleadyeRunJob/createBleadyeRunJobPdf?id=" +
       //   this.detail.cardId;
+    },
+    getLog() {
+      getStorageLog({
+        useType: 2,
+        whsCarriageStorageFk: this.form.storeLoadCode,
+        businessType: 2,
+        businessId: this.form.vatNo,
+      }).then((res) => {
+        if (!res.data.length) {
+          // 不存在记录，新增记录
+          addStorageLog({
+            businessId: this.form.vatNo,
+            businessType: 2,
+            useType: 2,
+            whsCarriageStorageFk: this.form.storeLoadCode,
+            useTime: this.$getNowTime("datetime"),
+          }).then((addStoge) => {});
+        }
+      });
     },
     isEmpty(obj) {
       if (
@@ -752,9 +777,14 @@ export default {
       _this.prsocket.onmessage = function (e) {};
       webSocket.setClient(this);
       _this.spowerClient.onmessage = function (e) {
-        if(e.data.indexOf("scan") != -1 ){
-          console.log( e.data.split("scan="));
-          _this.form.storeLoadCode = e.data.split("scan=")[1]
+        if (e.data.indexOf("scan") != -1) {
+          _this.$nextTick(() => {
+            if (e.data.split("scan=")[1].indexOf("DF") != -1) {
+              _this.form.vatNo = e.data.split("scan=")[1];
+            } else {
+              _this.form.storeLoadCode = e.data.split("scan=")[1];
+            }
+          });
         }
       };
     },
@@ -812,6 +842,7 @@ export default {
 
       document.onkeydown = function (e) {
         let ev = document.all ? window.event : e;
+
         if (ev.keyCode === 13 && self.form.vatNo) {
           setTimeout(() => {
             self.query();
@@ -828,46 +859,32 @@ export default {
 };
 </script>
 <style lang="stylus">
-#finalCard {
-  .queryForm .avue-form .el-input--mini input {
-    height: 40px !important;
-    line-height: 40px !important;
-  }
-
-  .el-form-item__label {
-    padding: 0 5px 0 0 !important;
-    white-space: nowrap !important;
-  }
-
-  .queryForm .el-input__inner, .el-form-item__label {
-    font-size: 20px !important;
-    line-height: 40px !important;
-  }
-
-  .queryForm .el-input__inner {
-    font-size: 24px !important;
-  }
-
-  .queryForm .el-button, .el-button--mini.is-round {
-    padding: 8px 12px 8px 12px !important;
-    font-size: 20px !important;
-    margin-left: 20px;
-  }
-
-  .historyText {
-    font-size: 22px;
-    text-align: left;
+#finalCard
+  .queryForm .avue-form .el-input--mini input
+    height 40px !important
+    line-height 40px !important
+  .el-form-item__label
+    padding 0 5px 0 0 !important
+    white-space nowrap !important
+  .queryForm .el-input__inner, .el-form-item__label
+    font-size 20px !important
+    line-height 40px !important
+  .queryForm .el-input__inner
+    font-size 24px !important
+  .queryForm .el-button, .el-button--mini.is-round
+    padding 8px 12px 8px 12px !important
+    font-size 20px !important
+    margin-left 20px
+  .historyText
+    font-size 22px
+    text-align left
     // text-indent: 1em;
-    margin-left: 10px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    height: 46px;
-    line-height: 46px;
-  }
-
-  .item {
+    margin-left 10px
+    overflow hidden
+    text-overflow ellipsis
+    white-space nowrap
+    height 46px
+    line-height 46px
+  .item
     // margin-bottom: 18px;
-  }
-}
 </style>

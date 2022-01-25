@@ -242,6 +242,14 @@ export function rsxkr1C(_this) {
         dicData: getDIC("whse_finStatus")
       },
       {
+        label: "入仓状态",
+        prop: "stockState",
+        cell: true,
+        width: 135,
+        type: "select",
+        dicData: getDIC("whse_outStatus")
+      },
+      {
         label: _this.$t("energy.bz"),
         prop: "remarks",
         cell: true,
@@ -309,6 +317,143 @@ export function rsxkr2C(_this) {
     sumColumnList: [
       {
         label: " ",
+        name: "sumWeight",
+        type: "sum"
+      }
+      // {
+      //   label: " ",
+      //   name: "countingNo",
+      //   type: "sum"
+      // }
+    ],
+    column: [
+      {
+        prop: "index",
+        label: "#",
+        width: 50,
+        align: "center"
+      },
+      {
+        label: "Whse_FinishedclothIn_dtlOID",
+        prop: "whseFinishedclothinDtloid",
+        hide: true
+      },
+      // {
+      //   label: _this.$t("whseField.gh"),
+      //   prop: "batchNo",
+      //   cell: _this.hide === "2" || _this.hide === "1" ? true : false,
+      //   width: 230,
+      //   slot: true,
+      //   type: "select",
+      //   filterable: true,
+      //   allowCreate: true,
+      //   defaultFirstOption: true,
+      //   change: val => {
+      //     // if (!_this.chooseData.etSn) {
+      //     //   _this.getEt();
+      //     // }
+      //   }
+      // dicData: resolveData
+      // click: () => {
+      //   if (_this.hide != 2) {
+      //     _this.choiceV = !_this.choiceV;
+      //     _this.choiceField = "batchNo";
+      //     // _this.choiceQ.purType = '5'
+      //     _this.oldData = _this.chooseData
+      //     _this.choiceTarget = _this.oldData;
+      //     _this.choiceTle = "成品布貨物包";
+      //   }
+
+      // },
+      // },
+      // {
+      //   label: _this.$t("whseField.bph"),
+      //   prop: "fabticket",
+      //   cell: true,
+      //   width: 230,
+      // },
+      {
+        label: "载具编号",
+        prop: "storeLoadCode",
+        cell: true,
+        width: 120
+      },
+      {
+        label: _this.$t("whseField.hwm"),
+        prop: "locationCode",
+        cell: true,
+        width: 180,
+        type: "select",
+        filterable: true,
+        allowCreate: true,
+        defaultFirstOption: true,
+        // dicData: getDicT("whseLocation", "locationCode", "locationCode")
+        dicData: getDicNS(
+          "whseLocation?warehouseType=2",
+          "locationCode",
+          "locationCode"
+        )
+      },
+      {
+        label: _this.$t("whseField.zl"),
+        prop: "sumWeight",
+        cell: true,
+        width: 120,
+        align: "right"
+      },
+      {
+        label: _this.$t("whseField.dw"),
+        prop: "weightUnit",
+        cell: true,
+        width: 100,
+        type: "select",
+
+        dicData: getDIC("bas_matUnit")
+      },
+
+      // {
+      //   label: "ET序号",
+      //   prop: "etSn",
+      //   cell: true,
+      //   width: 250,
+      //   overHideen: true
+      //   // type: "select",
+      //   // filterable: true,
+      //   // allowCreate: true,
+      //   // defaultFirstOption: true,
+      //   // dicData: []
+      //   // click: () => {
+      //   //   _this.dlgWidth = "100%";
+      //   //   _this.choiceV = !_this.choiceV;
+      //   //   _this.choiceField = "locationCode";
+      //   //   _this.choiceTarget = _this.chooseData;
+      //   //   _this.choiceTle = _this.$t("choicDlg.xzhw");
+      //   // }
+      // },
+      {
+        label: "成品布入仓",
+        prop: "whseFinishedclothinFk",
+        hide: true,
+        width: 100
+      }
+    ]
+  };
+}
+
+export function rsxkr3C(_this) {
+  return {
+    menu: false,
+    addBtn: false,
+    border: true,
+    highlightCurrentRow: true,
+    height: _this.hide === "2" ? "calc(100vh - 312px)" : "calc(100vh - 231px)",
+    refreshBtn: false,
+    columnBtn: false,
+    page: false,
+    showSummary: true,
+    sumColumnList: [
+      {
+        label: " ",
         name: "weight",
         type: "sum"
       },
@@ -326,51 +471,18 @@ export function rsxkr2C(_this) {
         align: "center"
       },
       {
-        label: "Whse_FinishedclothIn_dtlOID",
-        prop: "whseFinishedclothinDtloid",
-        hide: true
-      },
-      {
-        label: _this.$t("whseField.gh"),
-        prop: "batchNo",
-        cell: _this.hide === "2" || _this.hide === "1" ? true : false,
-        width: 230,
-        slot: true,
-        type: "select",
-        filterable: true,
-        allowCreate: true,
-        defaultFirstOption: true,
-        change: val => {
-          // if (!_this.chooseData.etSn) {
-          //   _this.getEt();
-          // }
-        }
-        // dicData: resolveData
-        // click: () => {
-        //   if (_this.hide != 2) {
-        //     _this.choiceV = !_this.choiceV;
-        //     _this.choiceField = "batchNo";
-        //     // _this.choiceQ.purType = '5'
-        //     _this.oldData = _this.chooseData
-        //     _this.choiceTarget = _this.oldData;
-        //     _this.choiceTle = "成品布貨物包";
-        //   }
-
-        // },
+        label: "成品编号",
+        prop: "productNo",
+        cell: true,
+        width: 230
       },
       // {
-      //   label: _this.$t("whseField.bph"),
-      //   prop: "fabticket",
+      //   label: _this.$t("whseField.ph2"),
+      //   prop: "pidNo",
       //   cell: true,
-      //   width: 230,
+      //   width: 120,
+      //   align: "right"
       // },
-      {
-        label: _this.$t("whseField.ph2"),
-        prop: "countingNo",
-        cell: true,
-        width: 120,
-        align: "right"
-      },
       {
         label: _this.$t("whseField.zl"),
         prop: "weight",
@@ -386,43 +498,6 @@ export function rsxkr2C(_this) {
         type: "select",
 
         dicData: getDIC("bas_matUnit")
-      },
-      {
-        label: _this.$t("whseField.hwm"),
-        prop: "locationCode",
-        cell: true,
-        width: 180,
-        type: "select",
-        filterable: true,
-        allowCreate: true,
-        defaultFirstOption: true,
-        // dicData: getDicT("whseLocation", "locationCode", "locationCode")
-        dicData: getDicNS("whseLocation?warehouseType=2","locationCode", "locationCode"),
-      },
-      {
-        label: "ET序号",
-        prop: "etSn",
-        cell: true,
-        width: 250,
-        overHideen: true
-        // type: "select",
-        // filterable: true,
-        // allowCreate: true,
-        // defaultFirstOption: true,
-        // dicData: []
-        // click: () => {
-        //   _this.dlgWidth = "100%";
-        //   _this.choiceV = !_this.choiceV;
-        //   _this.choiceField = "locationCode";
-        //   _this.choiceTarget = _this.chooseData;
-        //   _this.choiceTle = _this.$t("choicDlg.xzhw");
-        // }
-      },
-      {
-        label: "成品布入仓",
-        prop: "whseFinishedclothinFk",
-        hide: true,
-        width: 100
       }
     ]
   };

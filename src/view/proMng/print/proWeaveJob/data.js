@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-01-06 10:05:27
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-01-15 07:51:47
  * @Description:
  */
 
@@ -263,7 +263,7 @@ export function mainCrud(_this, audit) {
           ? true
           : false,
         overHidden: true,
-        placeholder:" "
+        placeholder: " "
       },
       {
         label: "客人訂單編號",
@@ -494,7 +494,7 @@ export function mainCrud(_this, audit) {
           : _this.detail.auditState && !_this.isAdd
           ? true
           : false,
-        hide: true,
+        hide: true
       },
       {
         label: "纱线数量",
@@ -555,8 +555,8 @@ export function mainCrud(_this, audit) {
         label: "单位",
         prop: "gramWeightUnit",
         labelWidth: 50,
-        clearable:false,
-        formslot:true,
+        clearable: false,
+        formslot: true,
         hide: true,
         disabled: audit
           ? false
@@ -619,8 +619,8 @@ export function mainCrud(_this, audit) {
         type: "select",
         dicData: [
           {
-            label:"%",
-            value:"%"
+            label: "%",
+            value: "%"
           }
         ],
         placeholder: " ",
@@ -654,7 +654,7 @@ export function mainCrud(_this, audit) {
           ? true
           : false,
         span: 2,
-        clearable:false,
+        clearable: false,
         type: "select",
         dicData: getDIC("sal_breadthUnit"),
         placeholder: " ",
@@ -706,8 +706,8 @@ export function mainCrud(_this, audit) {
         type: "select",
         dicData: [
           {
-            label:"%",
-            value:"%"
+            label: "%",
+            value: "%"
           }
         ],
         placeholder: " ",
@@ -886,7 +886,7 @@ export function mainCrud(_this, audit) {
             tip: "Yêu cầu khác",
             placeholder: " ",
             hide: true,
-            span: 12,
+            span: 12
           },
           {
             label: "針寸數",
@@ -1316,7 +1316,6 @@ export function yarnCrud(_this, audit) {
         cell: true,
         placeholder: " "
       },
-
       {
         label: "纱牌",
         prop: "yarnBrand",

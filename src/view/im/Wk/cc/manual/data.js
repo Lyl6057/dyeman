@@ -294,7 +294,14 @@ export function rhl1C(_this) {
         width: 120,
         align: "center"
       },
-
+      {
+        label: "出仓状态",
+        prop: "stockState",
+        cell: false,
+        width: 100,
+        type: "select",
+        dicData: getDIC("whse_outStatus")
+      },
       {
         label: _this.$t("whseField.czy"), //"操作员",
         prop: "sysCreatedby",
@@ -710,21 +717,27 @@ export function cpb2C(_this) {
       //   cell: true,
       //   width: 140
       // },
+      // {
+      //   label: "成品布名称",
+      //   prop: "woMatname",
+      //   cell: true,
+      //   slot: true,
+      //   overHidden: true,
+      //   type: "select",
+      //   dicData: getDicT("basCalico", "clothName", "calicoId")
+      // },
       {
-        label: "成品布名称",
-        prop: "woMatname",
-        cell: true,
-        slot: true,
-        overHidden: true,
-        type: "select",
-        dicData: getDicT("basCalico", "clothName", "calicoId")
-      },
-      {
-        label: "订单号",
+        label: "载具编号",
         prop: "woOrderno",
         cell: true,
         width: 140
       }
+      // {
+      //   label: "货位码",
+      //   prop: "woMatname",
+      //   cell: true,
+      //   width: 140
+      // }
     ]
   };
 }
@@ -760,8 +773,8 @@ export function cpb3C(_this) {
         align: "center"
       },
       {
-        label: _this.$t("whseField.gh"),
-        prop: "prodNo",
+        label: "成品编号",
+        prop: "ticketNo",
         cell: false,
         width: 180
       },

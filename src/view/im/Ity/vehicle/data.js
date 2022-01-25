@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-04-23 09:03:31
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-01-04 14:10:50
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-01-20 08:02:29
  * @Description:
  */
 
@@ -105,9 +105,9 @@ export function mainForm(_this) {
         type: "number",
         width: 100,
         placeholder: " ",
-        disabled:true,
+        disabled: false,
         span: 6
-      },
+      }
     ]
   };
 }
@@ -131,7 +131,7 @@ export function mainCrud(_this) {
         width: 50,
         align: "center",
         display: false,
-        fixed:true
+        fixed: true
       },
       {
         label: "载具编号",
@@ -139,7 +139,7 @@ export function mainCrud(_this) {
         width: 120,
         overHidden: true,
         sortable: true,
-        fixed:true,
+        fixed: true,
         span: 6,
         rules: [
           {
@@ -245,7 +245,7 @@ export function mainCrud(_this) {
         placeholder: " ",
         span: 6
       },
-      
+
       {
         label: "入库时间",
         prop: "inTime",
@@ -259,7 +259,7 @@ export function mainCrud(_this) {
         align: "center",
         format: "yyyy-MM-dd HH:mm:ss",
         valueFormat: "yyyy-MM-dd HH:mm:ss",
-        cell: true,
+        cell: true
       },
       {
         label: "出库时间",
@@ -274,7 +274,7 @@ export function mainCrud(_this) {
         align: "center",
         format: "yyyy-MM-dd HH:mm:ss",
         valueFormat: "yyyy-MM-dd HH:mm:ss",
-        cell: true,
+        cell: true
       },
 
       {
@@ -308,7 +308,7 @@ export function mainCrud(_this) {
         type: "number",
         width: 100,
         placeholder: " ",
-        disabled:true,
+        disabled: true,
         span: 6
       },
       {
@@ -316,14 +316,13 @@ export function mainCrud(_this) {
         prop: "printer",
         overHidden: true,
         placeholder: " ",
-        disabled:true,
-        span: 6,
-        
+        disabled: true,
+        span: 6
       },
       {
         label: "打印时间",
         prop: "printTime",
-        disabled:true,
+        disabled: true,
         overHidden: true,
         width: 170,
         span: 6,
@@ -333,8 +332,8 @@ export function mainCrud(_this) {
         align: "center",
         format: "yyyy-MM-dd HH:mm:ss",
         valueFormat: "yyyy-MM-dd HH:mm:ss",
-        cell: true,
-      },
+        cell: true
+      }
     ]
   };
 }
