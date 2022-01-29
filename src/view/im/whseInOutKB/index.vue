@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-01-12 15:39:08
  * @LastEditors: Lyl
- * @LastEditTime: 2022-01-25 18:30:22
+ * @LastEditTime: 2022-01-28 15:51:09
  * @FilePath: \iot.vue\src\view\im\whseInOutKB\index.vue
  * @Description: 
 -->
@@ -15,20 +15,15 @@
     <el-tabs v-model="tabs" type="border-card">
       <el-tab-pane label="出入库看板" name="kanban">
         <el-row class="btnList">
-          <el-button type="success" @click="sendTask">发送任务</el-button>
-          <el-button
-            type="success"
-            @click="submit"
-            :disabled="!selectList.length"
-            >提交</el-button
-          >
+          <el-button type="success" @click="sendTask">提交任务</el-button>
+          <!-- <el-button type="success" @click="submit">提交</el-button> -->
           <el-button type="primary" @click="query">{{
             this.$t("public.query")
           }}</el-button>
           <el-button
             type="primary"
             @click="updateStore"
-            :disabled="!this.selectList.length"
+            :disabled="!this.selectList.length && form.type == 2"
             >修改载具</el-button
           >
           <el-input v-model="storageCode" style="width: 100px" />
@@ -45,18 +40,20 @@
               v-loading="loading"
               @selection-change="selectionChange"
             ></avue-crud>
-          </el-row> </view-container
-      ></el-tab-pane>
+            <!--   :summary-method="summaryMethod"     :cell-style="cellStyle"  -->
+          </el-row>
+        </view-container></el-tab-pane
+      >
       <el-tab-pane label="任务管理" name="task">
         <el-row class="btnList">
           <el-button type="primary" @click="queryTask">{{
             this.$t("public.query")
           }}</el-button>
-          <el-button type="primary" @click="finishTask(taskChoose)"
+          <!-- <el-button type="primary" @click="finishTask(taskChoose)"
             >模拟完成任务</el-button
           >
           <span style="color: #000">货位码:</span>
-          <el-input v-model="taskChoose.storageCode" style="width: 100px" />
+          <el-input v-model="taskChoose.storageCode" style="width: 100px" /> -->
         </el-row>
         <el-row class="formBox">
           <avue-form ref="form" :option="taskFormOp" v-model="taskForm">
@@ -248,21 +245,15 @@ export default {
     webSocket.setWebSoket(_this);
     _this.websocket.onmessage = function (data) {
       // console.log("websocketResult:", data);
-      let webResult = JSON.parse(data.data);
-      _this.finishTask(webResult);
+      // let webResult = JSON.parse(data.data);
+      // _this.$tip.success(
+      //   `载具${data.storageCode}${
+      //     data.orderType == 1 ? "入仓" : "出仓"
+      //   }任务已完成!`
+      // );
+      // _this.finishTask(webResult);
+      _this.queryTask();
     };
-    // webSocket.setClient(this);
-    // _this.spowerClient.onmessage = function (e) {
-    //   if (e.data.indexOf("scan") != -1) {
-    //     _this.$nextTick(() => {
-    //       if (e.data.split("scan=")[1].indexOf("DF") != -1) {
-    //         _this.form.vatNo = e.data.split("scan=")[1];
-    //       } else {
-    //         _this.form.storeLoadCode = e.data.split("scan=")[1];
-    //       }
-    //     });
-    //   }
-    // };
   },
   mounted() {},
   methods: {
@@ -290,11 +281,9 @@ export default {
           this.$nextTick(() => {
             this.crud.forEach((item, i) => {
               item.index = i + 1;
-
               this.$refs.crud.toggleRowSelection(item, true);
             });
           });
-
           this.wLoading = false;
         });
       } else {
@@ -329,25 +318,100 @@ export default {
           this.form.vatNo = this.form.vatNo
             ? (this.form.vatNo = "%" + this.form.vatNo)
             : "";
-          getFinalStock(this.form).then((res) => {
-            this.crud = res.data.sort((a, b) => {
-              return a.productNo > b.productNo ? 1 : -1;
-            });
-            this.$set(this.form, "storageState", this.crud.length ? 0 : 1);
-            this.$nextTick(() => {
-              this.crud.forEach((item, i) => {
-                item.index = i + 1;
-                item.netWeight = item.weight;
-                item.storeSiteCode = item.locationCode;
-                this.$refs.crud.toggleRowSelection(item, true);
-              });
-            });
-            if (this.form.vatNo.indexOf("%") != -1) {
-              this.form.vatNo = this.form.vatNo.split("%")[1];
-            }
-            setTimeout(() => {
+          getFinalStock({ vatNo: this.form.vatNo }).then((res) => {
+            if (!res.data.length) {
+              this.$tip.warning("暂无数据!");
+              if (this.form.vatNo.indexOf("%") != -1) {
+                this.form.vatNo = this.form.vatNo.split("%")[1];
+              }
+              this.crud = [];
               this.wLoading = false;
-            }, 500);
+              return;
+            }
+            if (this.form.vatNo) {
+              this.crud = [];
+              let data = this.group(res.data, "storeLoadCode");
+              this.formOp.column[6].dicData = [];
+              this.form.storeLoadCode = "";
+              data.forEach((item, i) => {
+                this.formOp.column[6].dicData.push({
+                  value: item.storeLoadCode,
+                  label: item.storeLoadCode,
+                });
+                getFinalStock({ storeLoadCode: item.storeLoadCode }).then(
+                  (loadRes) => {
+                    let vatList = loadRes.data;
+                    vatList = this.group(vatList, "vatNo");
+                    let vatData = [];
+                    vatList.forEach((vat, j) => {
+                      vat.data = vat.data.sort((a, b) => {
+                        return a.pidNo > b.pidNo ? 1 : -1;
+                      });
+                      let sumWeight = 0;
+                      vat.data.forEach((jk, k) => {
+                        jk.id = `${i + 1}-${j + 1}-${k + 1}`;
+                        jk.index = k + 1;
+                        // if (jk.weightUnit == "KG") {
+                        //   jk.netWeight = jk.weight;
+                        // } else {
+                        //   jk.netWeightLbs = jk.weight;
+                        // }
+                        jk.netWeight = jk.weight;
+                        sumWeight += jk.weight;
+                      });
+
+                      vatData.push({
+                        vatNo: vat.vatNo,
+                        children: vat.data,
+                        id: `${i + 1}-${j + 1}`,
+                        index: j + 1,
+                        netWeight: Number(sumWeight.toFixed(1)),
+                        weightUnit: vat.data[0].weightUnit,
+                      });
+                    });
+                    this.crud.push({
+                      storeLoadCode: item.storeLoadCode,
+                      id: i + 1,
+                      children: vatData,
+                      index: i + 1,
+                    });
+                  }
+                );
+              });
+              setTimeout(() => {
+                this.form.storeLoadCode =
+                  this.formOp.column[6].dicData[0].value;
+                this.$set(this.form, "storageState", this.crud.length ? 0 : 1);
+                if (this.form.vatNo.indexOf("%") != -1) {
+                  this.form.vatNo = this.form.vatNo.split("%")[1];
+                }
+                this.wLoading = false;
+              }, 200);
+            } else {
+              this.crud = res.data.sort((a, b) => {
+                return a.productNo > b.productNo ? 1 : -1;
+              });
+              this.$set(this.form, "storageState", this.crud.length ? 0 : 1);
+              this.$nextTick(() => {
+                this.crud.forEach((item, i) => {
+                  item.index = i + 1;
+                  item.netWeight = item.weight;
+                  item.storeSiteCode = item.locationCode;
+                  // if (item.weightUnit == "KG") {
+                  //   item.netWeight = item.weight;
+                  // } else {
+                  //   item.netWeightLbs = item.weight;
+                  // }
+                  this.$refs.crud.toggleRowSelection(item, true);
+                });
+              });
+              if (this.form.vatNo.indexOf("%") != -1) {
+                this.form.vatNo = this.form.vatNo.split("%")[1];
+              }
+              setTimeout(() => {
+                this.wLoading = false;
+              }, 500);
+            }
           });
         }
       }
@@ -534,7 +598,7 @@ export default {
                                         if (i == dtla.data.length - 1) {
                                           this.wLoading = false;
                                           this.$tip.success(
-                                            `载具${data.barCode}${
+                                            `载具${data.storageCode}${
                                               data.orderType == 1
                                                 ? "入仓"
                                                 : "出仓"
@@ -547,7 +611,7 @@ export default {
                                 } else {
                                   this.wLoading = false;
                                   this.$tip.success(
-                                    `载具${data.barCode}${
+                                    `载具${data.storageCode}${
                                       data.orderType == 1 ? "入仓" : "出仓"
                                     }任务已完成!`
                                   );
@@ -666,7 +730,7 @@ export default {
         .catch(() => {});
     },
     sendTask() {
-      if (!this.form.storeLoadCode && this.form.type == 1) {
+      if (!this.form.storeLoadCode) {
         this.$tip.error("载具编号不能为空!");
         return;
       }
@@ -681,32 +745,36 @@ export default {
         .then(() => {
           this.wLoading = true;
           if (this.form.type == 2) {
-            let list = this.group(this.selectList, "storeLoadCode");
-            list.forEach((item, i) => {
-              sendTask({
-                barCode: item.storeLoadCode,
-                createTime: this.$getNowTime("datetime"),
-                entrance: this.form.exit, // 入库口
-                isEmpty: this.form.storageState, // 是否为空
-                orderType: this.form.type, // 出库/入库
-                type: this.form.goodsType, // 物料类别
-                // finishStatus: 0,
-                storageCode: item.data[0].storeSiteCode,
-              }).then((res) => {
-                if (res.data.code == 0) {
-                  this.successAfter(item.data);
-                } else {
-                  this.$tip.error("提交任务失败," + res.data.message + "!");
-                  if (i == list.length - 1) {
-                    this.wLoading = false;
+            getFinalStock({ storeLoadCode: this.form.storeLoadCode }).then(
+              (res) => {
+                // let list = this.group(this.selectList, "storeLoadCode");
+                // list.forEach((item, i) => {
+                sendTask({
+                  barCode: this.form.storeLoadCode,
+                  createTime: this.$getNowTime("datetime"),
+                  entrance: this.form.exit, // 入库口
+                  isEmpty: this.form.storageState, // 是否为空
+                  orderType: this.form.type, // 出库/入库
+                  type: this.form.goodsType, // 物料类别
+                  // finishStatus: 0,
+                  storageCode: res.data[0].storeSiteCode,
+                }).then((sendRes) => {
+                  if (sendRes.data.code == 0) {
+                    this.$tip.success("任务提交成功!");
+                    this.query();
+                    this.queryTask();
+                    // this.successAfter(res.data);
+                  } else {
+                    this.$tip.error("任务提交失败," + res.data.message + "!");
                   }
-                }
-              });
-            });
-            if (!list.list) {
-              this.$tip.success("任务提交成功!");
-              this.queryTask();
-            }
+                });
+              }
+            );
+            // });
+            // if (!list.list) {
+            //   this.$tip.success("任务提交成功!");
+            //   this.queryTask();
+            // }
           } else {
             sendTask({
               barCode: this.form.storeLoadCode,
@@ -718,8 +786,11 @@ export default {
               finishStatus: 0,
               // storageCode: this.selectList[0].storeSiteCode,
             }).then((res) => {
-              if (res.data.code == "0") {
-                this.successAfter();
+              if (res.data.code == 0) {
+                this.$tip.success("任务提交成功!");
+                this.query();
+                this.queryTask();
+                // this.successAfter();
               } else {
                 this.wLoading = false;
                 this.$tip.error("提交任务失败," + res.data.message + "!");
@@ -757,17 +828,9 @@ export default {
                 data.clothState = this.form.type == 1 ? 4 : 5;
                 updateFinished(data).then((res) => {
                   if (i == outList.length - 1) {
-                    // if (this.form.type == 2) {
                     setTimeout(() => {
                       this.setFinishedWhse(this.form.type, outList);
-                    }, 200);
-                    // } else {
-                    //   this.$nextTick(() => {
-                    //     this.$tip.success("任务提交成功!");
-                    //     this.query();
-                    //     this.queryTask();
-                    //   });
-                    // }
+                    }, 500);
                   }
                 });
               } else {
@@ -785,35 +848,33 @@ export default {
             }
           });
         } else {
-          this.selectList.forEach((item, i) => {
-            // item.clothState = this.form.type == 1 ? 4 : 5;
-            getInFinished({
-              cardId: item.cardId,
-              // productNo: item.productNo,
-              // vatNo: item.vatNo,
-              clothState: item.clothState,
-            }).then((res) => {
-              if (res.data.length) {
-                let data = res.data[0];
-                data.clothState = this.form.type == 1 ? 4 : 5;
-                updateFinished(data).then((res) => {
-                  if (i == this.selectList.length - 1) {
-                    setTimeout(() => {
-                      this.setFinishedWhse(
-                        { orderType: this.form.type },
-                        this.selectList
-                      );
-                    }, 200);
-                    // if (this.form.type == 2) {
-
-                    // } else {
-                    //   this.$tip.success("任务提交成功!");
-                    //   this.query();
-                    //   this.queryTask();
-                    // }
-                  }
-                });
-              }
+          getInFinished({
+            clothState: this.form.type,
+            storeLoadCode: this.form.storeLoadCode,
+          }).then((cardList) => {
+            // 查询载具库存
+            cardList.data.forEach((item, i) => {
+              // this.selectList.forEach((item, i) => {
+              // item.clothState = this.form.type == 1 ? 4 : 5;
+              // getInFinished({
+              //   cardId: item.cardId,
+              //   clothState: item.clothState,
+              // }).then((res) => {
+              // if (res.data.length) {
+              // let data = res.data[0];
+              item.clothState = this.form.type == 1 ? 4 : 5;
+              updateFinished(item).then((res) => {
+                if (i == cardList.data.length - 1) {
+                  setTimeout(() => {
+                    this.setFinishedWhse(
+                      { orderType: this.form.type },
+                      cardList.data
+                    );
+                  }, 200);
+                }
+              });
+              // }
+              // });
             });
           });
           if (!this.selectList.length) {
@@ -952,7 +1013,10 @@ export default {
                   // locationCode: data.storageCode,
                   storeLoadCode: noteList[0].storeLoadCode,
                   fabticket: item.productNo,
-                  sumWeight: Number(item.weight.toFixed(1)),
+                  sumWeight:
+                    item.data[0].weightUnit == "KG"
+                      ? Number(item.weight.toFixed(1))
+                      : Number(item.weightLbs.toFixed(1)),
                 }).then((dtla) => {
                   const dtlaId = dtla.data.data;
                   item.data.forEach((dtlb, b) => {
@@ -960,7 +1024,10 @@ export default {
                       pidNo: dtlb.pidNo,
                       productDtlFk: dtlaId,
                       productNo: dtlb.productNo,
-                      weight: dtlb.netWeight,
+                      weight:
+                        dtlb.weightUnit == "KG"
+                          ? dtlb.netWeight
+                          : dtlb.netWeightLbs,
                       weightUnit: dtlb.weightUnit,
                       productId: dtlb.cardId,
                       vatNo: dtlb.vatNo,
@@ -968,8 +1035,10 @@ export default {
                     if (b == item.data.length - 1 && i == list.length - 1) {
                       this.$tip.success("任务提交成功!");
                       this.$nextTick(() => {
-                        this.query();
-                        this.queryTask();
+                        setTimeout(() => {
+                          this.query();
+                          this.queryTask();
+                        }, 500);
                       });
                     }
                   });
@@ -1018,20 +1087,20 @@ export default {
         }); */
       } else {
         // 删除载具使用日志
-        getStorageLog({
-          businessId: noteList[0].vatNo,
-          businessType: 2,
-          useType: 2,
-          whsCarriageStorageFk: noteList[0].storeLoadCode,
-        }).then((res) => {
-          if (res.data.length) {
-            updateStorageLog({
-              storageLogId: res.data[0].storageLogId,
-              deleteFlag: true,
-              deleteTime: this.$getNowTime("datetime"),
-            }).then((updateRes) => {});
-          }
-        });
+        // getStorageLog({
+        //   businessId: noteList[0].vatNo,
+        //   businessType: 2,
+        //   useType: 2,
+        //   whsCarriageStorageFk: noteList[0].storeLoadCode,
+        // }).then((res) => {
+        //   if (res.data.length) {
+        //     updateStorageLog({
+        //       storageLogId: res.data[0].storageLogId,
+        //       deleteFlag: true,
+        //       deleteTime: this.$getNowTime("datetime"),
+        //     }).then((updateRes) => {});
+        //   }
+        // });
         // 生成出库信息
         baseCodeSupply({ code: "whse_out" }).then((res) => {
           let data = {
@@ -1071,8 +1140,10 @@ export default {
                     if (b == item.data.length - 1 && i == list.length - 1) {
                       this.$tip.success("任务提交成功!");
                       this.$nextTick(() => {
-                        this.query();
-                        this.queryTask();
+                        setTimeout(() => {
+                          this.query();
+                          this.queryTask();
+                        });
                       });
 
                       // this.queryTask();
@@ -1088,24 +1159,64 @@ export default {
       }
     },
     changeGoodsType(val) {
-      this.crud = [];
-      if (val == 1) {
-        this.$nextTick(() => {
+      this.$nextTick(() => {
+        this.crud = [];
+        if (val == 1) {
           this.crudOp = clothCrud(this);
-          this.formOp.column[6].display = true;
-          this.formOp.column[7].display = false;
-        });
-      } else {
-        this.crudOp = finishedCrud(this);
-        this.formOp.column[7].display = true;
-        this.formOp.column[6].display = false;
-      }
+          this.formOp.column[4].display = this.form.type == 1 ? false : true;
+          this.formOp.column[5].display = false;
+        } else {
+          this.crudOp = finishedCrud(this);
+          this.formOp.column[5].display = this.form.type == 1 ? false : true;
+          this.formOp.column[4].display = false;
+        }
+      });
     },
     handleRowDBLClick(val) {},
     cellClick(val) {
       this.taskChoose = val;
     },
-    summaryMethod() {},
+    cellStyle({ row, column, rowIndex, columnIndex }) {},
+    summaryMethod({ columns, data }) {
+      const sums = [];
+      if (columns.length > 0 && this.form.type == 2) {
+        columns.forEach((column, index) => {
+          if (index == 0) {
+            sums[index] = "合計";
+          }
+          if (index == 2) {
+            let num = 0;
+            this.selectList.forEach((item) => {
+              num += Number(item.clothWeight);
+            });
+            sums[index] = "選中重量：" + num.toFixed(1);
+            this.checkSum = num.toFixed(1);
+          }
+          if (index == 10) {
+            let num = 0;
+            this.crud.forEach((item) => {
+              num += Number(item.realWeight);
+            });
+            sums[index] = "毛重：" + num.toFixed(1);
+          }
+          if (index == 11) {
+            let num = 0;
+            this.crud.forEach((item) => {
+              num += Number(item.clothWeight);
+            });
+            sums[index] = "重量：" + num.toFixed(1);
+          }
+          if (index == 12) {
+            let num = 0;
+            this.crud.forEach((item) => {
+              num += Number(item.qcTakeOut);
+            });
+            sums[index] = "扣减：" + num.toFixed(1);
+          }
+        });
+      }
+      return sums;
+    },
     selectionChange(val) {
       this.selectList = val;
     },
@@ -1119,6 +1230,7 @@ export default {
             [type]: ai[type],
             data: [ai],
             weight: ai.clothWeight || ai.netWeight,
+            weightLbs: ai.clothWeight || ai.netWeightLbs,
           });
           map[ai[type]] = ai;
         } else {
@@ -1127,6 +1239,7 @@ export default {
             if (dj[type] == ai[type]) {
               dj.data.push(ai);
               dj.weight += ai.clothWeight || ai.netWeight;
+              dj.weightLbs += ai.clothWeight || ai.netWeightLbs;
               break;
             }
           }
@@ -1149,6 +1262,6 @@ export default {
   color #fff
   // background-color rgb(2, 26, 60)
   // border 2px solid #fff
-.el-tag--mini
+.avue-crud .el-tag--mini
   display none !important
 </style>

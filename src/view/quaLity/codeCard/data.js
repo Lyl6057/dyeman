@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-01-06 16:35:39
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-01-27 14:03:56
  * @Description:
  */
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
@@ -819,6 +819,16 @@ export function dlgCrud(_this) {
     showSummary: false,
     // sumColumnList: [],
     column: [
+      {
+        label: "缸号(Số lô nhuộm)",
+        prop: "vatNo",
+        width: 180,
+        span: 6,
+        placeholder: " ",
+        disabled: true,
+        overHidden: true,
+        sortable: true
+      },
       {
         label: "浮重(Trọng lượng bì KG)",
         prop: "grossWeight",

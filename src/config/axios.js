@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-23 08:03:49
  * @LastEditors: Lyl
- * @LastEditTime: 2022-01-22 16:33:55
+ * @LastEditTime: 2022-01-28 15:39:22
  * @Description:
  */
 import axios from "axios";
@@ -34,7 +34,10 @@ axios.defaults.headers = {
   DS: db
 };
 // let baseUrl = "http:" + window.location.origin.split(":")[1] + ":91";
-let baseUrl = process.env.API_HOST;
+let baseUrl =
+  window.location.origin.split(":")[1].indexOf("localhost") != -1
+    ? process.env.API_HOST
+    : "http:" + window.location.origin.split(":")[1] + ":91";
 // document.cookie.split(";").forEach((item) => {
 //   if (item.includes("apiUrl")) {
 //     baseUrl = item.split("=")[1];

@@ -2,11 +2,12 @@
  * @Author: Lyl
  * @Date: 2022-01-12 15:46:05
  * @LastEditors: Lyl
- * @LastEditTime: 2022-01-25 15:49:28
+ * @LastEditTime: 2022-01-27 09:50:30
  * @FilePath: \iot.vue\src\view\im\whseInOutKB\data.js
  * @Description:
  */
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
+let matUnit = getDIC("bas_matUnit");
 const inExit = [
   {
     label: "A出入库口(7001扫码)",
@@ -102,10 +103,18 @@ export function formOp(_this) {
           if (val.value == 1) {
             _this.formOp.column[2].dicData = inExit;
             _this.form.exit = inExit[0].value;
+            _this.formOp.column[4].display = false;
+            _this.formOp.column[5].display = false;
+            _this.formOp.column[6].type = "";
             // _this.formOp.column[5].display = false;
             _this.crud = [];
           } else {
             _this.formOp.column[2].dicData = outExit;
+            _this.formOp.column[4].display =
+              _this.form.goodsType == 1 ? true : false;
+            _this.formOp.column[5].display =
+              _this.form.goodsType == 1 ? false : true;
+            _this.formOp.column[6].type = "select";
             // _this.form.exit = outExit[0].value;
             _this.form.exit = "C";
             // _this.formOp.column[5].display = true;
@@ -171,25 +180,6 @@ export function formOp(_this) {
         ]
       },
       {
-        label: "载具编号",
-        prop: "storeLoadCode",
-        span: 6,
-        placeholder: " ",
-        width: 125,
-        sortable: true,
-        overHidden: true
-      },
-      {
-        label: "货位码",
-        prop: "storeSiteCode",
-        display: false,
-        span: 6,
-        placeholder: " ",
-        width: 125,
-        sortable: true,
-        overHidden: true
-      },
-      {
         label: "織單號",
         prop: "proName",
         display: false,
@@ -209,14 +199,40 @@ export function formOp(_this) {
         overHidden: true
       },
       {
-        label: "入仓员工号",
-        prop: "clothChecker",
+        label: "载具编号",
+        prop: "storeLoadCode",
+        span: 6,
+        filterable: true,
+        // multiple: true,
+        allowCreate: true,
+        defaultFirstOption: true,
+        // type: "select",
+        placeholder: " ",
+        width: 125,
+        sortable: true,
+        dicData: [],
+        overHidden: true
+      },
+      {
+        label: "货位码",
+        prop: "storeSiteCode",
+        display: false,
         span: 6,
         placeholder: " ",
         width: 125,
         sortable: true,
         overHidden: true
       }
+
+      // {
+      //   label: "入仓员工号",
+      //   prop: "clothChecker",
+      //   span: 6,
+      //   placeholder: " ",
+      //   width: 125,
+      //   sortable: true,
+      //   overHidden: true
+      // }
     ]
   };
 }
@@ -230,20 +246,24 @@ export function finishedCrud(_this) {
     delBtn: false,
     menuWidth: 80,
     border: true,
-    index: true,
+    index: false,
     highlightCurrentRow: true,
     height: "calc(100vh - 285px)",
     refreshBtn: false,
     columnBtn: false,
     page: false,
     labelWidth: 100,
-    selection: true,
+    selection: false,
     menuTitle: "称重",
-    showSummary: true,
+    rowKey: "id",
+    tree: true,
+    defaultExpandAll: true,
+    expandLevel: 2,
+    showSummary: false,
     sumColumnList: [
       {
         label: " ",
-        name: "storeLoadCode",
+        name: "productNo",
         type: "count"
       },
       {
@@ -254,13 +274,13 @@ export function finishedCrud(_this) {
       }
     ],
     column: [
-      // {
-      //   label: "#",
-      //   prop: "index",
-      //   width: 50,
-      //   align: "center",
-      //   display: false
-      // },
+      {
+        label: "#",
+        prop: "index",
+        width: 80,
+        align: "left",
+        display: false
+      },
       {
         label: "载具编号",
         prop: "storeLoadCode",
@@ -325,7 +345,7 @@ export function finishedCrud(_this) {
         placeholder: " "
       },
       {
-        label: "净重(KG)",
+        label: "净重",
         prop: "netWeight",
         width: 100,
         align: "right",
@@ -335,6 +355,16 @@ export function finishedCrud(_this) {
         type: "number",
         minRows: 0,
         precision: 1
+      },
+      {
+        label: "單位",
+        prop: "weightUnit",
+        width: 80,
+        display: false,
+        placeholder: " ",
+        span: 6,
+        type: "select",
+        dicData: matUnit
       },
       // {
       //   label: "浮重(KG)",
@@ -374,7 +404,7 @@ export function finishedCrud(_this) {
       //   minRows: 0,
       //   type: "number",
       //   precision: 1,
-      //   align: "left",
+      //   align: "right",
       //   placeholder: " "
       // },
       // {
@@ -518,16 +548,6 @@ export function finishedCrud(_this) {
         overHidden: true
       },
 
-      // {
-      //   label: "單位",
-      //   prop: "weightUnit",
-      //   width: 80,
-      //   display: false,
-      //   placeholder: " ",
-      //   span: 6,
-      //   type: "select",
-      //   dicData: matUnit
-      // },
       // {
       //   label: "長度",
       //   prop: "clothLength",

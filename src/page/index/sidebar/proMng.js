@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-04-01 13:39:35
  * @LastEditors: Lyl
- * @LastEditTime: 2022-01-20 08:10:40
+ * @LastEditTime: 2022-01-28 11:11:46
  * @Description:
  */
 
@@ -59,6 +59,10 @@ export function proMng(_this) {
         {
           menuName: "7.生产单审核",
           index: "orderReview"
+        },
+        {
+          menuName: "8.收单管理",
+          index: "dptReciveLog"
         }
       ]
     },
@@ -119,10 +123,7 @@ export function proMng(_this) {
           menuName: "4.行车监控",
           index: "proDriving"
         }
-        // {
-        //   menuName: "2.落布记录",
-        //   index: "染单生产"
-        // },
+
         // {
         //   menuName: "3.布飞打印",
         //   index: "/proSalSchedule"

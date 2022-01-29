@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-29 14:14:56
  * @LastEditors: Lyl
- * @LastEditTime: 2022-01-10 13:18:09
+ * @LastEditTime: 2022-01-28 10:56:19
  * @Description:
  */
 export default [
@@ -11,6 +11,15 @@ export default [
     path: "/",
     name: "主页",
     redirect: "/ProWorkflowInfo"
+  },
+  {
+    path: "/dptReciveLog",
+    name: "收单管理",
+    component: resolve =>
+      require(["@/view/proMng/dptReciveLog/index"], resolve),
+    meta: {
+      keepAlive: true
+    }
   },
   {
     path: "/ProWorkflowInfo",
@@ -50,7 +59,8 @@ export default [
   {
     path: "/proSalSchedule",
     name: "生产排期",
-    component: resolve => require(["@/view/proMng/orderSchedule/index"], resolve),
+    component: resolve =>
+      require(["@/view/proMng/orderSchedule/index"], resolve),
     meta: {
       keepAlive: true
     }
