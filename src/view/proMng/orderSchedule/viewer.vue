@@ -1,319 +1,420 @@
 <template>
   <div id="proOrder">
-    <view-container title="订单查询">
-      <div class="main">
-        <div class="box">
-          <div class="header">
-            <div class="dateBox" v-for="(date, i) of dateList" :key="i">
-              <div class="dateTle">
-                {{ date.ym }}
-              </div>
-              <div class="dayBox">
-                <div
-                  v-for="day of date.list"
-                  :key="day.d"
-                  :style="{ width: dayW + 'px' }"
-                  class="day"
-                >
-                  <div class="dayTle">{{ day.d }}</div>
-                </div>
+    <!-- <view-container title="订单查询"> -->
+    <div class="main">
+      <div class="box">
+        <div class="header">
+          <div class="dateBox" v-for="(date, i) of dateList" :key="i">
+            <div class="dateTle">
+              {{ date.ym }}
+            </div>
+            <div class="dayBox">
+              <div
+                v-for="day of date.list"
+                :key="day.d"
+                :style="{ width: dayW + 'px' }"
+                class="day"
+              >
+                <div class="dayTle">{{ day.d }}</div>
               </div>
             </div>
           </div>
-          <div
-            class="contentBox"
-            :style="{ width: dateLength.length * dayW + 25 + 'px' }"
-          >
-            <!-- border -->
-            <div class="content">
-              <!--   v-for="i of 24"
+        </div>
+        <div
+          class="contentBox"
+          :style="{ width: dateLength.length * dayW + 25 + 'px' }"
+        >
+          <!-- border -->
+          <div class="content">
+            <!--   v-for="i of 24"
               :key="i" -->
-              <div class="dayLine" v-for="(date, i) of dateList" :key="i">
-                <div class="lineBox">
-                  <div
-                    v-for="day of date.list"
-                    :key="day.d"
-                    :style="{
-                      width: dayW - 1 + 'px',
-                      'border-right': lineCtr ? '1px dashed #ccc' : 'none',
-                      height: order.length * 8 * ganttH * 1.5 + 'px',
-                    }"
-                    class="lineD"
-                  ></div>
-                </div>
-              </div>
-
-              <!-- 甘特图-->
-            </div>
-            <div
-              v-drap="{ x: 'box', y: 'contentBox' }"
-              class="ganttBox"
-              :style="{
-                width: dateLength.length * dayW + 'px',
-                height: (order.length + 1) * ganttH * 1.5 + 'px',
-              }"
-            >
-              <!--  -->
-              <div
-                class="gantt"
-                v-for="(gt, gi) of gant"
-                :key="gi"
-                :style="{ 'margin-top': ganttH / 2 + 'px' }"
-              >
+            <div class="dayLine" v-for="(date, i) of dateList" :key="i">
+              <div class="lineBox">
                 <div
-                  class="lv1"
+                  v-for="day of date.list"
+                  :key="day.d"
                   :style="{
-                    width: (gt.lg * dayW) / 24 + 'px',
-
-                    'margin-left': (gt.ml * dayW) / 24 + 'px',
-
-                    'font-size':
-                      ganttH / 2.2 > 20 ? '20px' : ganttH / 2.2 + 'px',
-
-                    'box-shadow': gt.choose
-                      ? '0 0 5px rgba(81, 203, 238, 1)'
-                      : 'none',
+                    width: dayW + 'px',
+                    'border-right': lineCtr ? '1px dashed #ccc' : 'none',
+                    height: order.length * 8 * ganttH * 1.5 + 'px',
                   }"
-                  @click="choose(gt)"
+                  class="lineD"
+                ></div>
+              </div>
+            </div>
+
+            <!-- 甘特图-->
+          </div>
+          <div
+            v-drap="{ x: 'box', y: 'contentBox' }"
+            class="ganttBox"
+            :style="{
+              width: dateLength.length * dayW + 'px',
+              height: (order.length + 1) * ganttH * 1.5 + 'px',
+            }"
+          >
+            <!--  -->
+            <div
+              class="gantt"
+              v-for="(gt, gi) of gant"
+              :key="gi"
+              :style="{ 'margin-top': ganttH / 2 + 'px' }"
+            >
+              <div
+                class="lv1"
+                :style="{
+                  width: (gt.lg * (dayW + 1)) / 24 + 'px',
+
+                  'margin-left': (gt.ml * (dayW + 1)) / 24 + 'px',
+
+                  'font-size': ganttH / 2.2 > 20 ? '20px' : ganttH / 2.2 + 'px',
+
+                  'box-shadow': gt.choose
+                    ? '0 0 5px rgba(81, 203, 238, 1)'
+                    : 'none',
+                }"
+                @click="choose(gt)"
+              >
+                <!--   @dblclick="showDetali(gt)" -->
+                <div
+                  class="iconList"
+                  :style="{
+                    height: ganttH + 'px',
+                    'line-height': ganttH + 'px',
+                  }"
                 >
-                  <!--   @dblclick="showDetali(gt)" -->
-                  <div
-                    class="iconList"
+                  <i
+                    title="展开"
+                    :class="gt.icon"
                     :style="{
-                      height: ganttH + 'px',
                       'line-height': ganttH + 'px',
+                      'font-size':
+                        ganttH / 1.5 > 26 ? '26px' : ganttH / 1.5 + 'px',
                     }"
-                  >
-                    <i
-                      title="展开"
-                      :class="gt.icon"
-                      :style="{
-                        'line-height': ganttH + 'px',
-                        'font-size':
-                          ganttH / 1.5 > 26 ? '26px' : ganttH / 1.5 + 'px',
-                      }"
-                      @click="showDetali(gt)"
-                    ></i>
-                    <el-popover
-                      placement="left-start"
-                      width="260"
-                      trigger="click"
-                    >
-                      <div
-                        class="proOrderDlg"
-                        v-loading="loading"
-                        :style="{
-                          'font-size':
-                            ganttH / 2.2 > 20 ? '20px' : ganttH / 2.2 + 'px',
-                        }"
-                      >
-                        <div>名称: {{ dlgData.schName }}</div>
-                        <el-divider></el-divider>
-                        <div>客色号: {{ dlgData.colorCode }}</div>
-                        <el-divider></el-divider>
-                        <div>重量: {{ dlgData.weight + dlgData.proUnit }}</div>
-                        <el-divider></el-divider>
-                        <div>开始日期: {{ dlgData.schStart }}</div>
-                        <el-divider></el-divider>
-                        <div>结束日期: {{ dlgData.schEnd }}</div>
-                        <el-divider></el-divider>
-                        <div v-for="(dt, j) of gt.detail" :key="j">
-                          {{
-                            dt.stepCode + ":  " + dt.workAmount + dt.workUnit
-                          }}
-                          <el-divider
-                            v-if="j != gt.detail.length - 1"
-                          ></el-divider>
-                        </div>
-                      </div>
-                      <div slot="reference">
-                        <i
-                          title="详细信息"
-                          style="margin-left: 5px"
-                          class="el-icon-s-order"
-                          :style="{
-                            'line-height': ganttH + 'px',
-                            'font-size':
-                              ganttH / 1.5 > 26 ? '26px' : ganttH / 1.5 + 'px',
-                          }"
-                          @click="showDlg(gt)"
-                        ></i>
-                      </div>
-                    </el-popover>
-                  </div>
-                  <div
-                    class="schedule"
-                    :style="{
-                      width:
-                        (((gt.lg * gt.item.actualWeight) / gt.item.weight) *
-                          dayW) /
-                          24 +
-                        'px',
-                      height: ganttH + 'px',
-                      'line-height': ganttH + 'px',
-                    }"
+                    @click="showDetali(gt)"
+                  ></i>
+                  <el-popover
+                    placement="left-start"
+                    width="260"
+                    trigger="click"
                   >
                     <div
-                      :title="
-                        gt.item.schName +
-                        ', 共' +
-                        gt.item.weight +
-                        gt.item.proUnit +
-                        ', 完成' +
-                        ((gt.item.actualWeight / gt.item.weight) * 100).toFixed(
-                          2
-                        ) +
-                        '%'
-                      "
-                      style="min-width: 80px; text-align: center"
-                      :style="{ width: (gt.lg * dayW) / 24 + 'px' }"
+                      class="proOrderDlg"
+                      v-loading="loading"
+                      :style="{
+                        'font-size':
+                          ganttH / 2.2 > 20 ? '20px' : ganttH / 2.2 + 'px',
+                      }"
                     >
-                      <!--  .schName +
+                      <div>名称: {{ dlgData.schName }}</div>
+                      <el-divider></el-divider>
+                      <div>客色号: {{ dlgData.colorCode }}</div>
+                      <el-divider></el-divider>
+                      <div>重量: {{ dlgData.weight + dlgData.proUnit }}</div>
+                      <el-divider></el-divider>
+                      <div>开始日期: {{ dlgData.schStart }}</div>
+                      <el-divider></el-divider>
+                      <div>结束日期: {{ dlgData.schEnd }}</div>
+                      <el-divider></el-divider>
+                      <div v-for="(dt, j) of gt.detail" :key="j">
+                        {{ dt.stepCode + ":  " + dt.workAmount + dt.workUnit }}
+                        <el-divider
+                          v-if="j != gt.detail.length - 1"
+                        ></el-divider>
+                      </div>
+                    </div>
+                    <div slot="reference">
+                      <i
+                        title="详细信息"
+                        style="margin-left: 5px"
+                        class="el-icon-s-order"
+                        :style="{
+                          'line-height': ganttH + 'px',
+                          'font-size':
+                            ganttH / 1.5 > 26 ? '26px' : ganttH / 1.5 + 'px',
+                        }"
+                        @click="showDlg(gt)"
+                      ></i>
+                    </div>
+                  </el-popover>
+                </div>
+                <div
+                  class="schedule"
+                  :style="{
+                    width:
+                      (((gt.lg * gt.item.actualWeight) / gt.item.weight) *
+                        dayW) /
+                        24 +
+                      'px',
+                    height: ganttH + 'px',
+                    'line-height': ganttH + 'px',
+                  }"
+                >
+                  <div
+                    :title="
+                      gt.item.schName +
+                      ', 共' +
+                      gt.item.weight +
+                      gt.item.proUnit +
+                      ', 完成' +
+                      ((gt.item.actualWeight / gt.item.weight) * 100).toFixed(
+                        2
+                      ) +
+                      '%'
+                    "
+                    style="min-width: 80px; text-align: center"
+                    :style="{ width: (gt.lg * dayW) / 24 + 'px' }"
+                  >
+                    <!--  .schName +
                         ", 共" +
                         gt.item.weight +
                         gt.item.proUnit +
                         ", 完成" +
                           (gt.item.actualWeight / gt.item.weight * 100).toFixed(2) +
                         "%", -->
-                      {{ gt.item.schName }}
-                    </div>
+                    {{ gt.item.schName }}
                   </div>
-                  <span
-                    :title="gt.label"
-                    class="gtLabel"
+                </div>
+                <!-- <span
+                  :title="gt.label"
+                  class="gtLabel"
+                  :style="{
+                    'font-size':
+                      ganttH / 2.2 > 20 ? '20px' : ganttH / 2.2 + 'px',
+                    'line-height': ganttH + 'px',
+                    left: (gt.lg * dayW) / 24 + 'px',
+                  }"
+                >
+                  {{ gt.label }}
+                </span> -->
+                <!--   @dblclick.stop="showWorker(gt)" -->
+                <el-collapse-transition>
+                  <div
+                    class="detailBox"
+                    v-show="gt.show"
                     :style="{
-                      'font-size':
-                        ganttH / 2.2 > 20 ? '20px' : ganttH / 2.2 + 'px',
-                      'line-height': ganttH + 'px',
-                      left: (gt.lg * dayW) / 24 + 'px',
+                      width: (gt.lg * (dayW + 1)) / 24 - 2 + 'px',
+                      'margin-top': ganttH + 'px',
+                      'box-shadow': gt.choose
+                        ? '0 0 10px rgba(81, 203, 238, 1)'
+                        : 'none',
                     }"
                   >
-                    {{ gt.label }}
-                  </span>
-                  <!--   @dblclick.stop="showWorker(gt)" -->
-                  <el-collapse-transition>
+                    <!--    height: ganttH + 'px',                    'margin-left': (gt.ml * dayW) / 24 + 5 + 'px', -->
                     <div
-                      class="detailBox"
-                      v-show="gt.show"
-                      :style="{
-                        width: (gt.lg * dayW) / 24 - 2 + 'px',
-                        'margin-top': ganttH + 'px',
-                        'box-shadow': gt.choose
-                          ? '0 0 10px rgba(81, 203, 238, 1)'
-                          : 'none',
-                      }"
+                      class="detail"
+                      v-for="(detail, j) of gt.detail"
+                      :key="j"
                     >
-                      <!--    height: ganttH + 'px',                    'margin-left': (gt.ml * dayW) / 24 + 5 + 'px', -->
                       <div
-                        class="detail"
-                        v-for="(detail, j) of gt.detail"
-                        :key="j"
+                        class="detailGantt"
+                        :title="detail.finishProportion * 100 + '%'"
+                        :style="{
+                          width: detail.finishProportion * 100 + '%',
+                          height: ganttH + 'px',
+                          'line-height': ganttH + 'px',
+                          'font-size':
+                            ganttH / 2.2 > 20 ? '20px' : ganttH / 2.2 + 'px',
+                        }"
                       >
+                        <div>
+                          <span class="lv2-icon">
+                            <i
+                              title="展开"
+                              :class="detail.icon"
+                              :style="{
+                                'line-height': ganttH + 'px',
+                                'font-size':
+                                  ganttH / 1.5 > 26
+                                    ? '26px'
+                                    : ganttH / 1.5 + 'px',
+                              }"
+                              @click="showLv2Detali(detail)"
+                            ></i>
+                          </span>
+
+                          <div class="lv2Label">
+                            <span
+                              :title="
+                                detail.workName +
+                                ', 共' +
+                                detail.workAmount +
+                                detail.workUnit +
+                                ', 完成' +
+                                detail.finishProportion * 100 +
+                                '% '
+                              "
+                              >{{
+                                detail.workName +
+                                ", 共" +
+                                detail.workAmount +
+                                detail.workUnit +
+                                ", 完成" +
+                                detail.finishProportion * 100 +
+                                "% "
+                              }}</span
+                            >
+                          </div>
+                        </div>
                         <div
-                          class="detailGantt"
-                          :title="detail.finishProportion * 100 + '%'"
+                          :title="
+                            detail.workName +
+                            ' , ' +
+                            detail.workAmount +
+                            detail.workUnit +
+                            '' +
+                            '  完成:' +
+                            detail.finishProportion * 100 +
+                            '%'
+                          "
+                          class="detailLabel"
                           :style="{
-                            width: detail.finishProportion * 100 + '%',
-                            height: ganttH + 'px',
+                            left: (gt.lg * dayW) / 24 + 20 + 'px',
                             'line-height': ganttH + 'px',
                             'font-size':
                               ganttH / 2.2 > 20 ? '20px' : ganttH / 2.2 + 'px',
                           }"
                         >
-                          <div>
-                            <span class="lv2-icon">
-                              <i
-                                title="展开"
-                                :class="detail.icon"
-                                :style="{
-                                  'line-height': ganttH + 'px',
-                                  'font-size':
-                                    ganttH / 1.5 > 26
-                                      ? '26px'
-                                      : ganttH / 1.5 + 'px',
-                                }"
-                                @click="showLv2Detali(detail)"
-                              ></i>
-                            </span>
-
-                            <div class="lv2Label">
-                              <span
+                          {{
+                            detail.workName +
+                            " , " +
+                            detail.workAmount +
+                            detail.workUnit +
+                            "  完成:" +
+                            detail.finishProportion * 100 +
+                            "%"
+                          }}
+                        </div>
+                      </div>
+                      <el-collapse-transition>
+                        <div class="lv3Box">
+                          <div
+                            class="lv2Box"
+                            :style="{
+                              height: Math.ceil(ganttH * 0.7) + 'px',
+                              'line-height': Math.ceil(ganttH * 0.7) + 'px',
+                            }"
+                            style="background: #67c23a"
+                          >
+                            <div
+                              class="lv3Type"
+                              title="缸號"
+                              :style="{
+                                height: Math.ceil(ganttH * 0.7) + 1 + 'px',
+                              }"
+                            >
+                              {{ detail.stepCode }}
+                            </div>
+                            <div
+                              class="lv2Task"
+                              v-for="lv2Task of detail.taskList"
+                              :key="lv2Task.workName"
+                              :style="{
+                                width:
+                                  'calc(100% /' + detail.taskList.length + ')',
+                              }"
+                            >
+                              <div
+                                class="lv2TaskLabel"
                                 :title="
-                                  detail.workName +
+                                  lv2Task.workName +
                                   ', 共' +
-                                  detail.workAmount +
-                                  detail.workUnit +
-                                  ', 完成' +
-                                  detail.finishProportion * 100 +
-                                  '% '
+                                  lv2Task.exampleUseTime.toFixed(2) +
+                                  'h'
                                 "
-                                >{{
-                                  detail.workName +
-                                  ", 共" +
-                                  detail.workAmount +
-                                  detail.workUnit +
-                                  ", 完成" +
-                                  detail.finishProportion * 100 +
-                                  "% "
-                                }}</span
                               >
+                                {{ lv2Task.workName }}
+                                <span style="font-size: 13px">{{
+                                  "共" + lv2Task.exampleUseTime.toFixed(2) + "h"
+                                }}</span>
+                                <!-- <br />
+                              {{ Math.floor(lv2Task.finishProportion * 100) + "%" }} -->
+                              </div>
+                              <!-- <div
+                              style="background: #67c23a; height: 100%"
+                              :style="{ width: lv2Task.finishProportion * 100 + '%' }"
+                            ></div> -->
                             </div>
                           </div>
                           <div
-                            :title="
-                              detail.workName +
-                              ' , ' +
-                              detail.workAmount +
-                              detail.workUnit +
-                              '' +
-                              '  完成:' +
-                              detail.finishProportion * 100 +
-                              '%'
-                            "
-                            class="detailLabel"
+                            class="lv2Box"
                             :style="{
-                              left: (gt.lg * dayW) / 24 + 20 + 'px',
-                              'line-height': ganttH + 'px',
-                              'font-size':
-                                ganttH / 2.2 > 20
-                                  ? '20px'
-                                  : ganttH / 2.2 + 'px',
+                              height: Math.ceil(ganttH * 0.7) + 'px',
+                              'line-height': Math.ceil(ganttH * 0.7) + 'px',
                             }"
                           >
-                            {{
-                              detail.workName +
-                              " , " +
-                              detail.workAmount +
-                              detail.workUnit +
-                              "  完成:" +
-                              detail.finishProportion * 100 +
-                              "%"
-                            }}
-                          </div>
-                        </div>
-                        <el-collapse-transition>
-                          <div class="lv3Box">
+                            <div class="lv3Type" title="综合">綜合</div>
                             <div
-                              class="lv2Box"
+                              class="lv2Task"
+                              v-for="lv2Task of detail.zhList"
+                              :key="lv2Task.oid"
                               :style="{
-                                height: Math.ceil(ganttH * 0.7) + 'px',
-                                'line-height': Math.ceil(ganttH * 0.7) + 'px',
+                                width:
+                                  'calc(100% /' + detail.zhList.length + ')',
                               }"
-                              style="background: #67c23a"
+                              :title="
+                                (lv2Task.finishProportion * 100).toFixed(2) +
+                                '%' +
+                                lv2Task.exampleUseTime.toFixed(2) +
+                                'h'
+                              "
                             >
-                              <div
-                                class="lv3Type"
-                                title="缸號"
-                                :style="{
-                                  height: Math.ceil(ganttH * 0.7) + 1 + 'px',
-                                }"
-                              >
-                                {{ detail.stepCode }}
+                              <div class="lv2TaskLabel">
+                                {{
+                                  lv2Task.finishProportion * 100 +
+                                  "% " +
+                                  lv2Task.exampleUseTime.toFixed(2) +
+                                  "h"
+                                }}
                               </div>
                               <div
-                                class="lv2Task"
-                                v-for="lv2Task of detail.taskList"
-                                :key="lv2Task.workName"
+                                style="background: #67c23a; height: 100%"
+                                :style="{
+                                  width: lv2Task.finishProportion * 100 + '%',
+                                }"
+                              ></div>
+                            </div>
+                            <span
+                              class="lv3Label"
+                              :style="{
+                                'font-size':
+                                  ganttH / 2.2 > 20
+                                    ? '20px'
+                                    : ganttH / 2.2 + 'px',
+                              }"
+                              >{{
+                                "綜合, 完成" +
+                                detail.finishProportion * 100 +
+                                "%"
+                              }}</span
+                            >
+                          </div>
+                          <div
+                            class="lv3Jd"
+                            :style="{
+                              height: Math.ceil(ganttH * 0.7) + 'px',
+                              'line-height': Math.ceil(ganttH * 0.7) + 'px',
+                            }"
+                            v-for="(
+                              gx, gxIndex
+                            ) of detail.proSalScheduleDetailEx"
+                            :key="gx.detailId"
+                          >
+                            <div
+                              class="lv3length"
+                              :style="{
+                                height: Math.ceil(ganttH * 0.7) + 'px',
+                              }"
+                            >
+                              <div class="lv3Type" :title="gx.stepCode">
+                                {{ gx.stepCode }}
+                              </div>
+                              <!-- 'border-left':
+                                  task.finishProportion === 0 ? '1px solid #fff' : 'none', -->
+                              <div
+                                class="gxBox"
+                                v-for="task of gx.taskList"
+                                :key="task.stepId"
                                 :style="{
                                   width:
                                     'calc(100% /' +
@@ -321,204 +422,94 @@
                                     ')',
                                 }"
                               >
+                                <!--  'border-left':
+                                    task.finishProportion > 0 ? '1px solid #fff' : 'none', -->
                                 <div
-                                  class="lv2TaskLabel"
-                                  :title="
-                                    lv2Task.workName +
-                                    ', 共' +
-                                    lv2Task.exampleUseTime.toFixed(2) +
-                                    'h'
-                                  "
-                                >
-                                  {{ lv2Task.workName }}
-                                  <span style="font-size: 13px">{{
-                                    "共" +
-                                    lv2Task.exampleUseTime.toFixed(2) +
-                                    "h"
-                                  }}</span>
-                                  <!-- <br />
-                              {{ Math.floor(lv2Task.finishProportion * 100) + "%" }} -->
-                                </div>
-                                <!-- <div
-                              style="background: #67c23a; height: 100%"
-                              :style="{ width: lv2Task.finishProportion * 100 + '%' }"
-                            ></div> -->
-                              </div>
-                            </div>
-                            <div
-                              class="lv2Box"
-                              :style="{
-                                height: Math.ceil(ganttH * 0.7) + 'px',
-                                'line-height': Math.ceil(ganttH * 0.7) + 'px',
-                              }"
-                            >
-                              <div class="lv3Type" title="综合">綜合</div>
-                              <div
-                                class="lv2Task"
-                                v-for="lv2Task of detail.zhList"
-                                :key="lv2Task.oid"
-                                :style="{
-                                  width:
-                                    'calc(100% /' + detail.zhList.length + ')',
-                                }"
-                                :title="
-                                  (lv2Task.finishProportion * 100).toFixed(2) +
-                                  '%' +
-                                  lv2Task.exampleUseTime.toFixed(2) +
-                                  'h'
-                                "
-                              >
-                                <div class="lv2TaskLabel">
-                                  {{
-                                    lv2Task.finishProportion * 100 +
-                                    "% " +
-                                    lv2Task.exampleUseTime.toFixed(2) +
-                                    "h"
-                                  }}
-                                </div>
-                                <div
-                                  style="background: #67c23a; height: 100%"
-                                  :style="{
-                                    width: lv2Task.finishProportion * 100 + '%',
-                                  }"
-                                ></div>
-                              </div>
-                              <span
-                                class="lv3Label"
-                                :style="{
-                                  'font-size':
-                                    ganttH / 2.2 > 20
-                                      ? '20px'
-                                      : ganttH / 2.2 + 'px',
-                                }"
-                                >{{
-                                  "綜合, 完成" +
-                                  detail.finishProportion * 100 +
-                                  "%"
-                                }}</span
-                              >
-                            </div>
-                            <div
-                              class="lv3Jd"
-                              :style="{
-                                height: Math.ceil(ganttH * 0.7) + 'px',
-                                'line-height': Math.ceil(ganttH * 0.7) + 'px',
-                              }"
-                              v-for="(
-                                gx, gxIndex
-                              ) of detail.proSalScheduleDetailEx"
-                              :key="gx.detailId"
-                            >
-                              <div
-                                class="lv3length"
-                                :style="{
-                                  height: Math.ceil(ganttH * 0.7) + 'px',
-                                }"
-                              >
-                                <div class="lv3Type" :title="gx.stepCode">
-                                  {{ gx.stepCode }}
-                                </div>
-                                <!-- 'border-left':
-                                  task.finishProportion === 0 ? '1px solid #fff' : 'none', -->
-                                <div
-                                  class="gxBox"
-                                  v-for="task of gx.taskList"
-                                  :key="task.stepId"
+                                  class="taskBox"
                                   :style="{
                                     width:
-                                      'calc(100% /' +
-                                      detail.taskList.length +
-                                      ')',
+                                      task.workName === '无'
+                                        ? '0px'
+                                        : task.finishProportion * 100 + '%',
+                                    'line-height':
+                                      Math.ceil(ganttH * 0.7) + 'px',
                                   }"
+                                  :title="
+                                    task.workName +
+                                    (
+                                      (task.exampleUseTime / 60) *
+                                      task.finishProportion
+                                    ).toFixed(2) +
+                                    'h,' +
+                                    task.finishProportion * 100 +
+                                    '%'
+                                  "
                                 >
-                                  <!--  'border-left':
-                                    task.finishProportion > 0 ? '1px solid #fff' : 'none', -->
-                                  <div
-                                    class="taskBox"
-                                    :style="{
-                                      width:
-                                        task.workName === '无'
-                                          ? '0px'
-                                          : task.finishProportion * 100 + '%',
-                                      'line-height':
-                                        Math.ceil(ganttH * 0.7) + 'px',
-                                    }"
-                                    :title="
-                                      task.workName +
-                                      (
-                                        (task.exampleUseTime / 60) *
-                                        task.finishProportion
-                                      ).toFixed(2) +
-                                      'h,' +
-                                      task.finishProportion * 100 +
-                                      '%'
-                                    "
-                                  >
-                                    <span class="taskTle">
-                                      <!-- {{ task.name }} <br /> -->
-                                      {{
-                                        task.workName === "无"
-                                          ? ""
-                                          : task.finishProportion * 100 + "%"
-                                      }}
-                                      <span
-                                        v-if="task.workName != '无'"
-                                        style="font-size: 13px"
-                                        >{{
-                                          (
-                                            (task.exampleUseTime / 60) *
-                                            task.finishProportion
-                                          ).toFixed(2) + "h"
-                                        }}</span
-                                      >
-                                    </span>
-                                  </div>
+                                  <span class="taskTle">
+                                    <!-- {{ task.name }} <br /> -->
+                                    {{
+                                      task.workName === "无"
+                                        ? ""
+                                        : task.finishProportion * 100 + "%"
+                                    }}
+                                    <span
+                                      v-if="task.workName != '无'"
+                                      style="font-size: 13px"
+                                      >{{
+                                        (
+                                          (task.exampleUseTime / 60) *
+                                          task.finishProportion
+                                        ).toFixed(2) + "h"
+                                      }}</span
+                                    >
+                                  </span>
                                 </div>
                               </div>
-
-                              <span
-                                class="lv3Label"
-                                :style="{
-                                  'line-height': ganttH + 'px',
-                                  height: ganttH + 'px',
-                                  top: (gxIndex + 2) * ganttH * 0.75 + 'px',
-                                }"
-                              >
-                                {{
-                                  "缸號: " +
-                                  gx.stepCode +
-                                  ", 完成" +
-                                  gx.finishProportion * 100 +
-                                  "%"
-                                }}
-                              </span>
                             </div>
+
+                            <span
+                              class="lv3Label"
+                              :style="{
+                                'line-height': ganttH + 'px',
+                                height: ganttH + 'px',
+                                top: (gxIndex + 2) * ganttH * 0.75 + 'px',
+                              }"
+                            >
+                              {{
+                                "缸號: " +
+                                gx.stepCode +
+                                ", 完成" +
+                                gx.finishProportion * 100 +
+                                "%"
+                              }}
+                            </span>
                           </div>
-                        </el-collapse-transition>
-                      </div>
+                        </div>
+                      </el-collapse-transition>
                     </div>
-                  </el-collapse-transition>
-                </div>
+                  </div>
+                </el-collapse-transition>
               </div>
             </div>
           </div>
         </div>
-        <el-row class="otherBox">
-          <el-dialog
-            :visible.sync="workerDlg"
-            fullscreen
-            append-to-body
-            id="proOrder"
-          >
-            <worker
-              tle="订单工序查询"
-              :order="orderData"
-              @close="workerDlg = false"
-            />
-          </el-dialog>
-        </el-row>
       </div>
-    </view-container>
+      <el-row class="otherBox">
+        <el-dialog
+          :visible.sync="workerDlg"
+          fullscreen
+          append-to-body
+          id="proOrder"
+        >
+          <worker
+            tle="订单工序查询"
+            :order="orderData"
+            @close="workerDlg = false"
+          />
+        </el-dialog>
+      </el-row>
+    </div>
+    <!-- </view-container> -->
   </div>
 </template>
 <script>
@@ -552,6 +543,7 @@ export default {
       // 计算时间轴
       getschANDschetail().then((res) => {
         this.order = res.data;
+        console.log("order", this.order);
         let timeList = [];
         timeList.push(getExtreme(this.order, "schStart", "schEnd"));
         let date = {
@@ -795,8 +787,7 @@ export default {
         .dayBox
           display flex
           flex-direction row
-          .day
-          .dayTle
+          .day, .dayTle
             border-right 1px solid #000
             border-bottom 1px solid #000
       .contentBox

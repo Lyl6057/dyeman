@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-01-21 10:55:12
+ * @LastEditTime: 2022-02-09 10:40:18
  * @Description: 
 -->
 <template>
@@ -57,6 +57,12 @@
           <el-button type="danger" @click="del" :disabled="!form.salSchId">{{
             this.$t("public.del")
           }}</el-button>
+          <el-button
+            type="primary"
+            @click="resetDetailList"
+            :disabled="!crud.length"
+            >计算时间</el-button
+          >
         </div>
         <el-row class="crudBox">
           <avue-crud
@@ -87,7 +93,7 @@
 <script>
 import choice from "@/components/proMng/index";
 import { mainCrud, detailCrud } from "./data";
-import { getDicT } from "@/config";
+import { timeConversion } from "@/config/util.js";
 import {
   add,
   update,
@@ -142,6 +148,9 @@ export default {
       chooseDtlData: {},
       searchLoading: false,
       workPackageList: [],
+      calculateData: {
+        speed: 50, // 暂时给个默认值
+      },
     };
   },
   watch: {},
@@ -160,16 +169,70 @@ export default {
           this.wLoading = true;
           this.form = this.detail;
           this.form.noticeId = this.form.noticeType;
+          this.getCalculateData(this.form.noticeId);
           this.getDetailList();
         }
       });
+    },
+    getCalculateData(val) {
+      if (!val) return;
+      if (this.form.salSchType == 98) {
+        getWeaveByPage({
+          rows: 1,
+          start: 1,
+          weaveJobCode: val,
+        }).then((res) => {
+          if (res.data.records.length) {
+            let data = res.data.records[0];
+            this.calculateData.gramWeight =
+              parseInt(data.gramWeight || 0) / 1000;
+            this.calculateData.breadth = parseInt(data.breadth || 0) * 0.0254;
+            this.calculateData.weight = data.clothWeight;
+          }
+        });
+      } else {
+        getRunByPage({
+          rows: 1,
+          start: 1,
+          vatNo: val,
+        }).then((res) => {
+          if (res.data.records.length) {
+            let data = res.data.records[0];
+            this.calculateData.gramWeight =
+              parseInt(data.gramWeight || 0) / 1000;
+            this.calculateData.breadth = parseInt(data.breadth || 0) * 0.0254;
+            this.calculateData.weight = data.clothWeight;
+          }
+        });
+      }
+    },
+    calculatingTime(arr) {
+      arr.sort((a, b) => {
+        return a.schSn > b.schSn ? 1 : -1;
+      });
+      arr.forEach((item, i) => {
+        if (i == 0) {
+          item.planStart = this.form.schStart;
+          let data = new Date(item.planStart);
+          item.planEnd = timeConversion(
+            data.valueOf() + item.exampleUseTime * 1000 * 60
+          );
+        } else {
+          item.planStart = arr[i - 1].planEnd;
+          let data = new Date(item.planStart);
+          item.planEnd = timeConversion(
+            data.valueOf() + item.exampleUseTime * 1000 * 60
+          );
+        }
+      });
+      return arr;
     },
     getDetailList() {
       getDetail({
         salSchId: this.form.salSchId,
       }).then((res) => {
         this.crud = res.data.sort((a, b) => {
-          return a.shcSn > b.shcSn ? -1 : 1;
+          return a.schSn > b.schSn ? 1 : -1;
         });
         if (this.crud.length > 0) {
           this.$refs.crud.setCurrentRow(this.crud[0]);
@@ -187,8 +250,13 @@ export default {
                 this.form[key] = "";
               }
             }
-            this.form.schStart = this.form.schStart + " 00:00:00";
-            this.form.schEnd = this.form.schEnd + " 00:00:00";
+            if (this.form.schStart.indexOf(" ") == -1) {
+              this.form.schStart = this.form.schStart + " 00:00:00";
+            }
+            if (this.form.schEnd.indexOf(" ") == -1) {
+              this.form.schEnd = this.form.schEnd + " 00:00:00";
+            }
+
             // this.form.noticeType = this.form.$noticeId;
             if (this.form.salSchId) {
               // update
@@ -237,21 +305,28 @@ export default {
         }
       });
     },
+    resetDetailList() {
+      if (!this.crud.length) return;
+      this.crud = this.calculatingTime(this.crud);
+    },
     saveDetail() {
       if (this.crud.length) {
-        this.crud.forEach((item, i) => {
-          if (item.detailId) {
-            updateDetail(item).then((res) => {});
-          } else {
-            item.salSchId = this.form.salSchId;
-            addDetail(item).then((res) => {});
-          }
-          if (i == this.crud.length - 1) {
-            setTimeout(() => {
-              this.$tip.success(this.$t("public.bccg"));
-              this.getDetailList();
-            }, 200);
-          }
+        // this.crud = this.calculatingTime(this.crud);
+        this.$nextTick(() => {
+          this.crud.forEach((item, i) => {
+            if (item.detailId) {
+              updateDetail(item).then((res) => {});
+            } else {
+              item.salSchId = this.form.salSchId;
+              addDetail(item).then((res) => {});
+            }
+            if (i == this.crud.length - 1) {
+              setTimeout(() => {
+                this.$tip.success(this.$t("public.bccg"));
+                this.getDetailList();
+              }, 200);
+            }
+          });
         });
       } else {
         this.$tip.success(this.$t("public.bccg"));
@@ -299,21 +374,60 @@ export default {
         });
     },
     choiceData(val) {
-      val.map((item, i) => {
-        item.workName = item.stepName;
-        item.schSn = this.crud.length + i + 1;
-        item.workCode = item.stepCode;
-        item.colorName = this.form.colorName;
-        item.$cellEdit = true;
-      });
-      this.crud = this.crud.concat(val);
-      console.log(this.crud);
-      this.crud = this.$unique(this.crud, "stepCode");
       this.choiceV = false;
+      this.wLoading = true;
+      try {
+        val.forEach((item, i) => {
+          item.workName = item.stepName;
+          item.schSn = this.crud.length + i + 1;
+          item.workCode = item.stepCode;
+          item.colorName = this.form.colorName;
+          item.workAmount = this.form.proAmount;
+
+          // item.$cellEdit = true;
+          if (item.standardFormula) {
+            item.standardFormula = item.standardFormula.replace(
+              /gramWeight/,
+              this.calculateData.gramWeight
+            );
+            item.standardFormula = item.standardFormula.replace(
+              /breadth/,
+              this.calculateData.breadth
+            );
+            item.standardFormula = item.standardFormula.replace(
+              /speed/,
+              this.calculateData.speed
+            );
+            item.standardFormula = item.standardFormula.replace(
+              /weight/,
+              item.proAmount || this.calculateData.weight
+            );
+            item.exampleUseTime = eval(item.standardFormula).toFixed(1);
+          } else {
+            item.exampleUseTime = 120;
+          }
+          if (item.broadFormula) {
+            item.broadTime = (item.exampleUseTime * item.broadFormula).toFixed(
+              1
+            );
+          }
+          this.crud.splice(this.chooseData.$index + 1 || i, 0, item);
+        });
+        this.crud.forEach((item, i) => {
+          item.schSn = i + 1;
+        });
+        this.crud = this.calculatingTime(this.$unique(this.crud, "stepCode"));
+        this.wLoading = false;
+        this.choiceV = false;
+      } catch (error) {
+        this.$tip.error(error);
+        this.wLoading = false;
+      }
     },
     getNoteiceData() {
       this.$nextTick(() => {
         let val = this.form.noticeId;
+        console.log(val, this.form.salSchType);
         if (!val) return;
         if (this.form.salSchType == 98) {
           getWeaveByPage({
@@ -330,6 +444,7 @@ export default {
               this.form.colorCode = data.colorCode;
               this.form.colorName = data.colorName;
               this.form.noticeType = data.weaveJobCode;
+              console.log(res.data.records[0]);
             }
           });
         } else if (this.form.salSchType == 99) {
@@ -347,6 +462,7 @@ export default {
               this.form.colorCode = data.colorCode;
               this.form.colorName = data.colorName;
               this.form.noticeType = data.vatNo;
+              console.log(res.data.records[0]);
             }
           });
         }

@@ -236,7 +236,11 @@ export default {
               return a.bleadyeCode > b.bleadyeCode ? 1 : -1;
             });
           }
-
+          if (this.choiceTle == "选择生产工序") {
+            this.crud = this.crud.sort((a, b) => {
+              return a.stepSn > b.stepSn ? 1 : -1;
+            });
+          }
           this.crud.forEach((item, index) => {
             if (
               this.choiceTle == "选择生产辅料入仓信息" ||

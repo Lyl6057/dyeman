@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-01-28 11:12:16
+ * @LastEditTime: 2022-02-07 16:36:42
  * @Description:
  */
 
@@ -65,6 +65,7 @@ export function dlgForm(_this) {
         placeholder: " ",
         type: "select",
         filterable: true,
+        formslot: true,
         dicData: vatList,
         rules: [
           {
@@ -79,9 +80,9 @@ export function dlgForm(_this) {
         prop: "acceptStaff",
         span: 8,
         placeholder: " ",
-        type: "select",
-        disabled: true,
-        dicData: postDicT("ucmlUserList", "employeename", "ucmlUseroid")
+        // type: "select",
+        disabled: true
+        // dicData: postDicT("ucmlUserList", "employeename", "ucmlUseroid")
       },
       {
         label: "接收日期",

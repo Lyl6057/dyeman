@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-24 14:15:12
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-27 08:54:20
+ * @LastEditTime: 2022-02-09 13:57:24
  * @Description: 
 -->
 <template>
@@ -37,9 +37,16 @@
   </div>
 </template>
 <script>
-import { getRhl, getRll, getRhlList, getRllList } from "./api";
+import {
+  getRhl,
+  getRll,
+  getRhlList,
+  getRllList,
+  getCpb,
+  getCpbList,
+} from "./api";
 import { getDIC, getDicT, getXDicT } from "@/config/index";
-import { formOp, crudOp, formTemOp } from "./data";
+import { formOp, crudOp, formTemOp, finishedCrud } from "./data";
 import XlsxTemplate from "xlsx-template";
 import JSZipUtils from "jszip-utils";
 import saveAs from "file-saver";
@@ -84,16 +91,23 @@ export default {
         case "RHL":
           this.getFun = getRhl;
           this.getList = getRhlList;
+          this.crudOp = crudOp(this);
           break;
         case "RLL":
           this.getFun = getRll;
           this.getList = getRllList;
+          this.crudOp = crudOp(this);
+          break;
+        case "CPB":
+          this.getFun = getCpb;
+          this.getList = getCpbList;
+          this.crudOp = finishedCrud(this);
+          this.form.productNo = "!^"; // 成品编号升序
           break;
         default:
           this.crud = [];
           this.loading = false;
           return;
-          break;
       }
       this.getFun(
         Object.assign(this.form, {
@@ -210,27 +224,27 @@ export default {
           .then(() => {
             this.chooseData.openingQty = 0;
             this.chooseData.oldpooccupyqty = 0;
-            update(this.chooseData).then((res) => {
-              if (res.data.code === 200) {
-                updateStock({
-                  materialId: this.form.materialId,
-                  unitId: this.form.unitId,
-                }).then((Rres) => {
-                  del(this.chooseData.whseMaterialopeningoid)
-                    .then((delRes) => {
-                      if (delRes.data.code === 200) {
-                        this.$tip.success(this.$t("public.sccg"));
-                        this.getData();
-                      } else {
-                        this.$tip.error(this.$t("public.scsb"));
-                      }
-                    })
-                    .catch((err) => {
-                      this.$tip.error(this.$t("public.scsb"));
-                    });
-                });
-              }
-            });
+            // update(this.chooseData).then((res) => {
+            //   if (res.data.code === 200) {
+            //     updateStock({
+            //       materialId: this.form.materialId,
+            //       unitId: this.form.unitId,
+            //     }).then((Rres) => {
+            //       del(this.chooseData.whseMaterialopeningoid)
+            //         .then((delRes) => {
+            //           if (delRes.data.code === 200) {
+            //             this.$tip.success(this.$t("public.sccg"));
+            //             this.getData();
+            //           } else {
+            //             this.$tip.error(this.$t("public.scsb"));
+            //           }
+            //         })
+            //         .catch((err) => {
+            //           this.$tip.error(this.$t("public.scsb"));
+            //         });
+            //     });
+            //   }
+            // });
           })
           .catch((err) => {
             this.$tip.warning(this.$t("public.qxcz"));
@@ -260,13 +274,11 @@ export default {
 };
 </script>
 <style lang='stylus'>
-#ityInventory {
-  .el-dialog {
-    margin-top: 0 !important;
-    height: 100%;
-    margin: 0 !important;
+#ityInventory
+  .el-dialog
+    margin-top 0 !important
+    height 100%
+    margin 0 !important
     // background-color: rgb(2, 26, 60);
-    overflow: hidden !important;
-  }
-}
+    overflow hidden !important
 </style>

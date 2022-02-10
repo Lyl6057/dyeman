@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-01-28 10:47:14
+ * @LastEditTime: 2022-02-07 18:32:31
  * @Description: 
 -->
 <template>
@@ -37,7 +37,29 @@
         <!-- <el-button type="primary" @click="checkOrder">选择订单号</el-button> -->
       </div>
       <div class="formBox">
-        <avue-form ref="form" :option="formOp" v-model="form"> </avue-form>
+        <avue-form ref="form" :option="formOp" v-model="form">
+          <template slot-scope="scope" slot="runJobFk">
+            <el-select
+              v-model="form.runJobFk"
+              filterable
+              remote
+              reserve-keyword
+              clearable
+              default-first-option
+              placeholder="请输入缸号"
+              :remote-method="remoteMethod"
+              :loading="vatLoading"
+            >
+              <el-option
+                v-for="item in options"
+                :key="item.runJobId"
+                :label="item.vatNo"
+                :value="item.runJobId"
+              >
+              </el-option>
+            </el-select>
+          </template>
+        </avue-form>
       </div>
     </view-container>
   </div>
@@ -45,18 +67,7 @@
 <script>
 import choice from "@/components/proMng/index";
 import { mainCrud, dlgForm, dlgCrud } from "./data";
-import {
-  get,
-  add,
-  del,
-  update,
-  getDtl,
-  addDtl,
-  updateDtl,
-  delDtl,
-  upload,
-  getImg,
-} from "./api";
+import { add, getRunJobByPage } from "./api";
 export default {
   name: "techCodeTem",
   props: {
@@ -78,10 +89,28 @@ export default {
       },
       dlgWidth: "60%",
       loading: false,
+      vatLoading: false,
+      options: [],
     };
   },
   watch: {},
   methods: {
+    remoteMethod(val) {
+      this.vatLoading = true;
+      getRunJobByPage({
+        vatNo: "!^%" + val,
+        rows: 10,
+        start: 1,
+      }).then((res) => {
+        this.options = res.data.records;
+        this.vatLoading = false;
+        this.$nextTick(() => {
+          if (res.data.records.length == 1) {
+            this.form.runJobFk = res.data.records[0].runJobId;
+          }
+        });
+      });
+    },
     getData() {
       this.form = this.detail;
       // this.form.acceptStaff = this.$store.state.userOid;
@@ -157,6 +186,7 @@ export default {
     //   .getElementsByClassName("el-upload el-upload--text")[0]
     //   .getElementsByTagName("span")[0].innerHTML = "选择图片";
     this.getData();
+    this.remoteMethod("");
   },
   beforeDestroy() {},
 };

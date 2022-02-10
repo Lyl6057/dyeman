@@ -757,342 +757,251 @@ export default {
 };
 </script>
 <style lang='stylus'>
-.el-divider--horizontal {
-  margin: 2px 0 !important;
-}
-
-#proOrder {
-  width: 100%;
-  padding: 0;
-  margin: 0;
-
-  .main {
-    width: calc(100vw - 15px);
-
-    .box {
-      border: 1px solid #000;
-      height: calc(100vh - 128px);
-      margin: 5px;
-      overflow-y: hidden;
-      overflow-x: auto;
-      font-weight: 500;
-      font-size: 16px;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
-      user-select: none;
-
+.el-divider--horizontal
+  margin 2px 0 !important
+#proOrder
+  width 100%
+  padding 0
+  margin 0
+  .main
+    width calc(100vw - 15px)
+    .box
+      border 1px solid #000
+      height calc(100vh - 128px)
+      margin 5px
+      overflow-y hidden
+      overflow-x auto
+      font-weight 500
+      font-size 16px
+      -webkit-user-select none
+      -moz-user-select none
+      -ms-user-select none
+      user-select none
       // height: 100%;
-      .header {
-        width: 100%;
+      .header
+        width 100%
         // height: 25px;
-        line-height: 25px;
-        display: flex;
-        flex-direction: row;
-        text-align: center;
-        font-size: 16px;
-        font-weight: 600;
-
-        .dateBox {
-          height: 100%;
-        }
-
-        .dateTle {
-          border-right: 1px solid #000;
-          border-bottom: 1px solid #000;
-        }
-
-        .dayBox {
-          display: flex;
-          flex-direction: row;
-
-          .day {
-          }
-
-          .dayTle {
-            border-right: 1px solid #000;
-            border-bottom: 1px solid #000;
-          }
-        }
-      }
-
-      .contentBox {
-        width: 100%;
-        height: calc(100vh - 112px);
-        overflow: auto;
-        overflow-x: hidden;
-        position: relative;
-
-        .content {
-          display: flex;
-          flex-direction: row;
-
-          .lineBox {
-            display: flex;
-            flex-direction: row;
-          }
-
-          .lineD {
+        line-height 25px
+        display flex
+        flex-direction row
+        text-align center
+        font-size 16px
+        font-weight 600
+        .dateBox
+          height 100%
+        .dateTle
+          border-right 1px solid #000
+          border-bottom 1px solid #000
+        .dayBox
+          display flex
+          flex-direction row
+          .day
+          .dayTle
+            border-right 1px solid #000
+            border-bottom 1px solid #000
+      .contentBox
+        width 100%
+        height calc(100vh - 112px)
+        overflow auto
+        overflow-x hidden
+        position relative
+        .content
+          display flex
+          flex-direction row
+          .lineBox
+            display flex
+            flex-direction row
+          .lineD
             // border-right: 1px solid #000;
-            min-height: calc(100vh - 152px);
-          }
-
-          .lineD:last-child {
-            border-right: 1px solid #000 !important;
-          }
-
-          .dayLine {
+            min-height calc(100vh - 152px)
+          .lineD:last-child
+            border-right 1px solid #000 !important
+          .dayLine
             // border-right: 1px solid #000;
-          }
-        }
-      }
-
-      .ganttBox {
-        position: absolute;
-        top: 0;
-        left: 0;
-        min-height: calc(100vh - 152px);
-        padding-bottom: 0px;
-
+      .ganttBox
+        position absolute
+        top 0
+        left 0
+        min-height calc(100vh - 152px)
+        padding-bottom 0px
         // background: yellow;
-        .gantt {
-          display: flex;
-          flex-direction: row;
-
-          .lv1 {
-            background: #c5ddeb;
+        .gantt
+          display flex
+          flex-direction row
+          .lv1
+            background #c5ddeb
             // background: #c5ddeb;
-            font-weight: 700;
-            display: flex;
-            flex-direction: row;
-            position: relative;
-            cursor: pointer;
-
-            i {
-              position: relative;
-              cursor: pointer;
-              z-index: 2;
-            }
-
-            .iconList {
+            font-weight 700
+            display flex
+            flex-direction row
+            position relative
+            cursor pointer
+            i
+              position relative
+              cursor pointer
+              z-index 2
+            .iconList
               // position: absolute;
-              float: left;
-              width: 80px;
-              display: flex;
-            }
-          }
-
-          .gtLabel {
-            position: absolute;
-            margin-left: 10px;
-            font-weight: 700;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-          }
-
-          .schedule {
-            position: absolute;
-            left: 0;
-            top: 0;
-            background: #67c23a;
-            z-index: 1;
-            text-align: left;
-          }
-
-          .detailBox {
+              float left
+              width 80px
+              display flex
+          .gtLabel
+            position absolute
+            margin-left 10px
+            font-weight 700
+            overflow hidden
+            text-overflow ellipsis
+            white-space nowrap
+          .schedule
+            position absolute
+            left 0
+            top 0
+            background #67c23a
+            z-index 1
+            text-align left
+          .detailBox
             // position: absolute;
             // left: 0;
             // top: 0;
-            z-index: 1;
-            transition: 0.2s;
-            text-align: center;
-            border-left: 1px dashed #000;
-            border-bottom: 1px dashed #000;
-            padding-bottom: 10px !important;
-            margin-left: -79px;
-            background: #fff;
-
-            .detail {
+            z-index 1
+            transition 0.2s
+            text-align center
+            border-left 1px dashed #000
+            border-bottom 1px dashed #000
+            padding-bottom 10px !important
+            margin-left -79px
+            background #fff
+            .detail
               // width: 99%;
               // margin-left: 10px;
-              background: #c5ddeb;
-              margin-top: 5px;
-              margin-left: 10px;
-              position: relative;
-              box-sizing: border-box;
-
+              background #c5ddeb
+              margin-top 5px
+              margin-left 10px
+              position relative
+              box-sizing border-box
               // display: flex;
               // flex-direction: row;
-              .lv3Box {
-                transition: 0.2s;
-                background: #fff;
-                padding-top: 5px !important;
+              .lv3Box
+                transition 0.2s
+                background #fff
+                padding-top 5px !important
                 // border-left: 1px dashed #000;
                 // border-bottom: 1px dashed #000;
-                position: relative;
-
+                position relative
                 // margin-left: 10px;
-                .lv3Jd {
-                  border-bottom: 1px solid #fff;
-                }
-
-                .lv3Label {
-                  position: absolute;
-                  width: 300px;
-                  text-align: left;
-                  left: calc(100% + 50px);
-                  top: 0;
-                }
-
-                .lv3length {
-                  display: flex;
-                  flex-direction: row;
+                .lv3Jd
+                  border-bottom 1px solid #fff
+                .lv3Label
+                  position absolute
+                  width 300px
+                  text-align left
+                  left calc(100% + 50px)
+                  top 0
+                .lv3length
+                  display flex
+                  flex-direction row
                   // border: 1px solid #000;
-                  border-left: none;
-                }
-
-                .gxBox {
-                  height: 100%;
-                  font-size: 14px;
-                  overflow: hidden;
-                  text-overflow: ellipsis;
-                  white-space: nowrap;
-                  background: #c5ddeb;
-                  position: relative;
-                }
-
+                  border-left none
+                .gxBox
+                  height 100%
+                  font-size 14px
+                  overflow hidden
+                  text-overflow ellipsis
+                  white-space nowrap
+                  background #c5ddeb
+                  position relative
                 // .gxBox:first-child {
                 // border-left: none;
                 // }
-                .taskTle {
+                .taskTle
                   // font-size: 1px;
-                  position: absolute;
-                  top: 0;
-                  left: 0;
-                  width: 100%;
-                  overflow: hidden;
-                  text-overflow: ellipsis;
-                  white-space: nowrap;
-                }
-
-                .taskBox {
-                  height: 100%;
-                  background: #67c23a;
-                  border-left: 1px solid #fff;
-                }
-              }
-            }
-
-            .lv3Type {
-              overflow: hidden;
-              text-overflow: ellipsis;
-              white-space: nowrap;
-              width: 88px;
-              background: #fff;
-              font-size: 14px;
-              height: 101%;
-            }
-
-            .detailGantt {
-              background: #67c23a;
-              font-weight: 700;
-              overflow: hidden;
-              text-overflow: ellipsis;
-              white-space: nowrap;
-
-              .gx {
-                height: 100%;
-                width: 50px;
-                color: #fff;
+                  position absolute
+                  top 0
+                  left 0
+                  width 100%
+                  overflow hidden
+                  text-overflow ellipsis
+                  white-space nowrap
+                .taskBox
+                  height 100%
+                  background #67c23a
+                  border-left 1px solid #fff
+            .lv3Type
+              overflow hidden
+              text-overflow ellipsis
+              white-space nowrap
+              width 88px
+              background #fff
+              font-size 14px
+              height 101%
+            .detailGantt
+              background #67c23a
+              font-weight 700
+              overflow hidden
+              text-overflow ellipsis
+              white-space nowrap
+              .gx
+                height 100%
+                width 50px
+                color #fff
                 // background: #000;
-              }
-
-              .lv2-icon {
-                position: absolute;
-                left: 0;
-              }
-
-              .lv2Label {
-                text-align: left;
-                position: absolute;
-                min-width: 80px;
-                width: 100%;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
-
-                span {
-                  margin-left: 40%;
-                }
-              }
-            }
-
-            .lv2Box {
-              display: flex;
-              flex-direction: row;
-              font-size: 14px;
+              .lv2-icon
+                position absolute
+                left 0
+              .lv2Label
+                text-align left
+                position absolute
+                min-width 80px
+                width 100%
+                overflow hidden
+                text-overflow ellipsis
+                white-space nowrap
+                span
+                  margin-left 40%
+            .lv2Box
+              display flex
+              flex-direction row
+              font-size 14px
               // border-top: 1px solid #000;
-              border-bottom: 1px solid #fff;
-              background: #c5ddeb;
-              position: relative;
-
-              .lv2Task {
+              border-bottom 1px solid #fff
+              background #c5ddeb
+              position relative
+              .lv2Task
                 // margin-left: 1px;
-                position: relative;
-              }
-
+                position relative
               // .lv2Task:first-child {
               // border-left: none;
               // }
-              .lv2TaskLabel {
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 100%;
-                text-align: center;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
-                border-left: 1px solid #fff;
-              }
-            }
-
-            .detailLabel {
-              position: absolute;
-              z-index: 1;
+              .lv2TaskLabel
+                position absolute
+                left 0
+                top 0
+                width 100%
+                text-align center
+                overflow hidden
+                text-overflow ellipsis
+                white-space nowrap
+                border-left 1px solid #fff
+            .detailLabel
+              position absolute
+              z-index 1
               // left: -10px;
-              top: 0;
-              min-width: 200px;
-              width: 100%;
-              text-align: left;
-              font-weight: 700;
-              overflow: hidden;
-              text-overflow: ellipsis;
-              white-space: nowrap;
-            }
-          }
-        }
-      }
-    }
-  }
-
+              top 0
+              min-width 200px
+              width 100%
+              text-align left
+              font-weight 700
+              overflow hidden
+              text-overflow ellipsis
+              white-space nowrap
   // 弹窗
-  .el-dialog__header {
-    display: none;
-  }
-
-  .el-dialog__headerbtn {
-    font-size: 22px;
-    top: 5px;
-  }
-}
-
-.proOrderDlg {
-  font-weight: 500;
-}
-
-.el-popover {
-  border: 1px solid #000 !important;
-}
+  .el-dialog__header
+    display none
+  .el-dialog__headerbtn
+    font-size 22px
+    top 5px
+.proOrderDlg
+  font-weight 500
+.el-popover
+  border 1px solid #000 !important
 </style>

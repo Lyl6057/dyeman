@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-01-12 15:39:08
  * @LastEditors: Lyl
- * @LastEditTime: 2022-01-28 15:51:09
+ * @LastEditTime: 2022-02-10 09:10:19
  * @FilePath: \iot.vue\src\view\im\whseInOutKB\index.vue
  * @Description: 
 -->
@@ -36,11 +36,12 @@
             <avue-crud
               ref="crud"
               :option="crudOp"
+              :page.sync="mainPage"
               :data="crud"
               v-loading="loading"
-              @selection-change="selectionChange"
+              @on-load="query"
             ></avue-crud>
-            <!--   :summary-method="summaryMethod"     :cell-style="cellStyle"  -->
+            <!--   :summary-method="summaryMethod"     :cell-style="cellStyle"    :expandRowKeys="idArr"  -->
           </el-row>
         </view-container></el-tab-pane
       >
@@ -135,8 +136,13 @@ export default {
         currentPage: 1,
         total: 0,
       },
+      mainPage: {
+        pageSize: 50,
+        currentPage: 1,
+        total: 0,
+      },
       formOp: formOp(this),
-      crudOp: finishedCrud(this),
+      crudOp: clothCrud(this),
       crud: [],
       loading: false,
       eloading: false,
@@ -223,6 +229,7 @@ export default {
       websocket: null,
       tabs: "kanban",
       taskChoose: {},
+      idArr: [],
     };
   },
   watch: {},
@@ -262,6 +269,10 @@ export default {
         this.$tip.error("载具编号不能为空!");
         return;
       }
+      if (!this.form.storeLoadCode && !this.form.vatNo && this.form.type == 2) {
+        this.$tip.error("请输入缸号或者载具编号!");
+        return;
+      }
       // if (!this.form.vatNo && !this.form.proName && this.form.type == 2) {
       //   this.$tip.error("单号不能为空!");
       //   return;
@@ -275,14 +286,18 @@ export default {
           }
         }
         // 胚布入仓
-        getInCloth(this.form).then((res) => {
-          this.crud = res.data;
+        getInCloth({
+          storeLoadCode: this.form.storeLoadCode,
+          page: this.mainPage.currentPage,
+          rows: this.mainPage.pageSize,
+          start: this.mainPage.currentPage,
+        }).then((res) => {
+          this.crud = res.data.records;
+          this.mainPage.total = res.data.total;
           this.$set(this.form, "storageState", this.crud.length ? 0 : 1);
-          this.$nextTick(() => {
-            this.crud.forEach((item, i) => {
-              item.index = i + 1;
-              this.$refs.crud.toggleRowSelection(item, true);
-            });
+          this.crud.forEach((item, i) => {
+            item.index = i + 1;
+            // this.$refs.crud.toggleRowSelection(item, true);
           });
           this.wLoading = false;
         });
@@ -295,19 +310,21 @@ export default {
         }
         if (this.form.type == 1) {
           //成品布入仓
-          getInFinished(this.form).then((res) => {
-            this.crud = res.data.sort((a, b) => {
+          getInFinished({
+            storeCode: this.form.storeLoadCode,
+            page: this.mainPage.currentPage,
+            rows: this.mainPage.pageSize,
+            start: this.mainPage.currentPage,
+          }).then((res) => {
+            this.crud = res.data.records.sort((a, b) => {
               return a.productNo > b.productNo ? 1 : -1;
             });
+            this.mainPage.total = res.data.total;
             // this.form.storageState = this.crud.length ? 0 : 1;
             this.$set(this.form, "storageState", this.crud.length ? 0 : 1);
-            this.$nextTick(() => {
-              this.crud.forEach((item, i) => {
-                item.index = i + 1;
-                this.$refs.crud.toggleRowSelection(item, true);
-              });
-
-              // alert(this.form.storageState);
+            this.crud.forEach((item, i) => {
+              item.index = i + 1;
+              // this.$refs.crud.toggleRowSelection(item, true);
             });
             setTimeout(() => {
               this.wLoading = false;
@@ -318,7 +335,7 @@ export default {
           this.form.vatNo = this.form.vatNo
             ? (this.form.vatNo = "%" + this.form.vatNo)
             : "";
-          getFinalStock({ vatNo: this.form.vatNo }).then((res) => {
+          getFinalStock(this.form).then((res) => {
             if (!res.data.length) {
               this.$tip.warning("暂无数据!");
               if (this.form.vatNo.indexOf("%") != -1) {
@@ -331,13 +348,13 @@ export default {
             if (this.form.vatNo) {
               this.crud = [];
               let data = this.group(res.data, "storeLoadCode");
-              this.formOp.column[6].dicData = [];
-              this.form.storeLoadCode = "";
+              // this.formOp.column[6].dicData = [];
+              // this.form.storeLoadCode = "";
               data.forEach((item, i) => {
-                this.formOp.column[6].dicData.push({
-                  value: item.storeLoadCode,
-                  label: item.storeLoadCode,
-                });
+                // this.formOp.column[6].dicData.push({
+                //   value: item.storeLoadCode,
+                //   label: item.storeLoadCode,
+                // });
                 getFinalStock({ storeLoadCode: item.storeLoadCode }).then(
                   (loadRes) => {
                     let vatList = loadRes.data;
@@ -367,7 +384,9 @@ export default {
                         index: j + 1,
                         netWeight: Number(sumWeight.toFixed(1)),
                         weightUnit: vat.data[0].weightUnit,
+                        pidNo: vat.data.length,
                       });
+                      // this.idArr.push(`${i + 1}-${j + 1}`);
                     });
                     this.crud.push({
                       storeLoadCode: item.storeLoadCode,
@@ -379,8 +398,12 @@ export default {
                 );
               });
               setTimeout(() => {
-                this.form.storeLoadCode =
-                  this.formOp.column[6].dicData[0].value;
+                this.crud = this.crud.sort((a, b) => {
+                  return a.index > b.index ? 1 : -1;
+                });
+
+                // this.form.storeLoadCode =
+                //   this.formOp.column[6].dicData[0].value;
                 this.$set(this.form, "storageState", this.crud.length ? 0 : 1);
                 if (this.form.vatNo.indexOf("%") != -1) {
                   this.form.vatNo = this.form.vatNo.split("%")[1];
@@ -676,7 +699,7 @@ export default {
                 if (res.data.code == 200) {
                   this.successAfter(item.data);
                 } else {
-                  this.$tip.error("提交任务失败," + res.data.msg + "!");
+                  this.$tip.error("提交任务失败," + res.data.message + "!");
                   if (i == list.length - 1) {
                     this.wLoading = false;
                   }
@@ -745,31 +768,31 @@ export default {
         .then(() => {
           this.wLoading = true;
           if (this.form.type == 2) {
-            getFinalStock({ storeLoadCode: this.form.storeLoadCode }).then(
-              (res) => {
-                // let list = this.group(this.selectList, "storeLoadCode");
-                // list.forEach((item, i) => {
-                sendTask({
-                  barCode: this.form.storeLoadCode,
-                  createTime: this.$getNowTime("datetime"),
-                  entrance: this.form.exit, // 入库口
-                  isEmpty: this.form.storageState, // 是否为空
-                  orderType: this.form.type, // 出库/入库
-                  type: this.form.goodsType, // 物料类别
-                  // finishStatus: 0,
-                  storageCode: res.data[0].storeSiteCode,
-                }).then((sendRes) => {
-                  if (sendRes.data.code == 0) {
-                    this.$tip.success("任务提交成功!");
-                    this.query();
-                    this.queryTask();
-                    // this.successAfter(res.data);
-                  } else {
-                    this.$tip.error("任务提交失败," + res.data.message + "!");
-                  }
-                });
+            // getFinalStock({ storeLoadCode: this.form.storeLoadCode }).then(
+            //   (res) => {
+            // let list = this.group(this.selectList, "storeLoadCode");
+            // list.forEach((item, i) => {
+            sendTask({
+              barCode: this.form.storeLoadCode,
+              createTime: this.$getNowTime("datetime"),
+              entrance: this.form.exit, // 入库口
+              isEmpty: this.form.storageState, // 是否为空
+              orderType: this.form.type, // 出库/入库
+              type: this.form.goodsType, // 物料类别
+              // finishStatus: 0,
+              storageCode: this.form.storeLoadCode,
+            }).then((sendRes) => {
+              if (sendRes.data.code == 0) {
+                this.$tip.success("任务提交成功!");
+                this.query();
+                this.queryTask();
+                // this.successAfter(res.data);
+              } else {
+                this.$tip.error("任务提交失败," + sendRes.data.message + "!");
+                this.wLoading = false;
               }
-            );
+              // });
+            });
             // });
             // if (!list.list) {
             //   this.$tip.success("任务提交成功!");
@@ -1159,18 +1182,20 @@ export default {
       }
     },
     changeGoodsType(val) {
-      this.$nextTick(() => {
-        this.crud = [];
-        if (val == 1) {
-          this.crudOp = clothCrud(this);
-          this.formOp.column[4].display = this.form.type == 1 ? false : true;
-          this.formOp.column[5].display = false;
-        } else {
-          this.crudOp = finishedCrud(this);
-          this.formOp.column[5].display = this.form.type == 1 ? false : true;
-          this.formOp.column[4].display = false;
-        }
-      });
+      // this.$nextTick(() => {
+      console.log(val);
+      this.crud = [];
+      if (val == 1) {
+        this.crudOp = clothCrud(this);
+        // this.formOp.column[4].display = this.form.type == 1 ? false : true;
+        // this.formOp.column[5].display = false;
+      } else {
+        this.crudOp = finishedCrud(this);
+        // finishedCrud(this);
+        // this.formOp.column[5].display = this.form.type == 1 ? false : true;
+        // this.formOp.column[4].display = false;
+      }
+      // });
     },
     handleRowDBLClick(val) {},
     cellClick(val) {

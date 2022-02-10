@@ -550,227 +550,162 @@ export default {
 </script>
 
 <style lang="stylus">
-#yxGantt {
-  padding: 0;
-  margin: 0 0.5em;
-
-  .avue-crud, .avue-form {
-    border: none;
-    width: 99% !important;
-    margin: 0 auto;
-  }
-
-  .el-input__inner {
-    border: none;
-  }
-
-  .el-input__prefix {
-    display: none;
-  }
-
-  .el-input--prefix .el-input__inner {
-    padding-left: 5px;
-  }
-
-  .el-input--suffix .el-input__inner {
-    padding-right: 5px;
-  }
-
-  .el-table .cell {
-    padding-left: 10px;
-    padding-right: 10px;
-  }
-
-  .bigBox {
+#yxGantt
+  padding 0
+  margin 0 0.5em
+  .avue-crud, .avue-form
+    border none
+    width 99% !important
+    margin 0 auto
+  .el-input__inner
+    border none
+  .el-input__prefix
+    display none
+  .el-input--prefix .el-input__inner
+    padding-left 5px
+  .el-input--suffix .el-input__inner
+    padding-right 5px
+  .el-table .cell
+    padding-left 10px
+    padding-right 10px
+  .bigBox
     // border-left: 1px solid rgb(232, 234, 236);
     // border-right: 1px solid rgb(232, 234, 236);
-    overflow: auto;
-    overflow-y: hidden;
-    border-bottom: 1px solid #e8eaec;
-
-    .content {
-      border-left: 1px solid #e8eaec;
-      border-right: 1px solid #e8eaec;
-      width: 99.5%;
-    }
-  }
-
-  .bigBox::-webkit-scrollbar {
+    overflow auto
+    overflow-y hidden
+    border-bottom 1px solid #e8eaec
+    .content
+      border-left 1px solid #e8eaec
+      border-right 1px solid #e8eaec
+      width 99.5%
+  .bigBox::-webkit-scrollbar
     // display: none;
-  }
-
-  .ganttBox {
-    border: 1px solid rgb(232, 234, 236);
+  .ganttBox
+    border 1px solid rgb(232, 234, 236)
     // border-right: none;
     // border-left: none;
     // border-bottom: none;
-    overflow: hidden;
-    background-color: #fff;
-    width: 100%;
-
-    .grid {
-      width: 100%;
-      position: absolute;
-      top: 0;
-      overflow: auto;
-      z-index: 1;
-
+    overflow hidden
+    background-color #fff
+    width 100%
+    .grid
+      width 100%
+      position absolute
+      top 0
+      overflow auto
+      z-index 1
       // float: left;
-      .test {
-        float: left;
-        height: 100%;
-      }
-
-      .gridDiv {
+      .test
+        float left
+        height 100%
+      .gridDiv
         // width: 48px;
-        height: 100%;
-        border-right: 1px solid rgb(232, 234, 236);
-        float: left;
-      }
-    }
-
-    .grid::-webkit-scrollbar {
-      display: none;
-    }
-  }
-
+        height 100%
+        border-right 1px solid rgb(232, 234, 236)
+        float left
+    .grid::-webkit-scrollbar
+      display none
   // 表头
-  .gtTle {
-    height: 47px;
+  .gtTle
+    height 47px
     // background: #000;
-    border: 1px solid rgb(232, 234, 236);
+    border 1px solid rgb(232, 234, 236)
     // border-top: none;
-    margin-left: -1px;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    position: absolute;
-    background-color: #F7F7F7;
-    overflow-x: auto;
-    overflow-y: hidden;
-    z-index: 99;
-  }
-
-  .gtTle::-webkit-scrollbar {
-    display: none;
-  }
-
-  .gtDate:first-child {
-    margin-left: 1px;
-  }
-
-  .gtDate {
+    margin-left -1px
+    -webkit-user-select none
+    -moz-user-select none
+    -ms-user-select none
+    user-select none
+    position absolute
+    background-color #F7F7F7
+    overflow-x auto
+    overflow-y hidden
+    z-index 99
+  .gtTle::-webkit-scrollbar
+    display none
+  .gtDate:first-child
+    margin-left 1px
+  .gtDate
     // width: 48px;
-    height: 47px;
+    height 47px
     // line-height: 47px;
-    float: left;
-
-    .day {
+    float left
+    .day
       // width: 48px;
-      line-height: 28px;
-      float: left;
-      border-right: 1px solid rgb(232, 234, 236);
-    }
-
-    .year {
-      height: 20px;
-      line-height: 20px;
-      border-bottom: 1px solid rgb(232, 234, 236);
-      border-right: 1px solid rgb(232, 234, 236);
-    }
-  }
-
-  .gtDate:last-child {
+      line-height 28px
+      float left
+      border-right 1px solid rgb(232, 234, 236)
+    .year
+      height 20px
+      line-height 20px
+      border-bottom 1px solid rgb(232, 234, 236)
+      border-right 1px solid rgb(232, 234, 236)
+  .gtDate:last-child
     // border-right: none;
-  }
-
-  .gtDetil {
-    height: 47px;
-    border-top: 1px rgb(232, 234, 236) solid;
-    position: relative;
-  }
-
-  .ganttDiv {
+  .gtDetil
+    height 47px
+    border-top 1px rgb(232, 234, 236) solid
+    position relative
+  .ganttDiv
     // background-color: #409EFF;
-    margin-top: 11px;
-    height: 24px;
-    float: left;
+    margin-top 11px
+    height 24px
+    float left
     // overflow: hidden;
-    cursor: pointer;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    font-size: 16px;
-    color: #fff;
-    position: relative;
-    z-index: 9;
-
-    .end {
-      float: right;
-      margin-right: 0.5em;
-    }
-
-    .project {
-      text-align: center;
-    }
-
-    .expect {
-      height: 12px;
-      background: #00e500;
-      margin-top: 6px;
-      z-index: 9;
-    }
-
-    .last {
-      height: 5px;
-      background: red;
-      margin-top: 10px;
-      position: absolute;
-      top: 0px;
-    }
-  }
-
-  .detali {
+    cursor pointer
+    -webkit-user-select none
+    -moz-user-select none
+    -ms-user-select none
+    user-select none
+    font-size 16px
+    color #fff
+    position relative
+    z-index 9
+    .end
+      float right
+      margin-right 0.5em
+    .project
+      text-align center
+    .expect
+      height 12px
+      background #00e500
+      margin-top 6px
+      z-index 9
+    .last
+      height 5px
+      background red
+      margin-top 10px
+      position absolute
+      top 0px
+  .detali
     // text-align: right;
-    font-size: 14px;
-    float: left;
+    font-size 14px
+    float left
     // width: 300px;
-    margin-left: 15px;
-    height: 24px;
-    line-height: 20px;
-    text-indent: 1em;
-    margin-top: 0px;
-    z-index: 99;
-    position: absolute;
-    left: 5px;
-  }
-
-  .ganttDiv:hover {
-    opacity: 0.8;
-  }
-
-  .gtDetil:last-child {
-    height: 45px;
-    border-right: 1px rgb(232, 234, 236) solid;
-  }
-
-  .el-table tr {
-    height: 47px;
-  }
-
-  .colorIcon {
-    height: 30px;
-    width: 30px;
+    margin-left 15px
+    height 24px
+    line-height 20px
+    text-indent 1em
+    margin-top 0px
+    z-index 99
+    position absolute
+    left 5px
+  .ganttDiv:hover
+    opacity 0.8
+  .gtDetil:last-child
+    height 45px
+    border-right 1px rgb(232, 234, 236) solid
+  .el-table tr
+    height 47px
+  .colorIcon
+    height 30px
+    width 30px
     // background: #409EFF;
     // color: #409EFF;
-    margin-right: 10px;
-    cursor: pointer;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-  }
-}
+    margin-right 10px
+    cursor pointer
+    -webkit-user-select none
+    -moz-user-select none
+    -ms-user-select none
+    user-select none
 </style>

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-01-13 09:53:53
  * @LastEditors: Lyl
- * @LastEditTime: 2022-01-25 13:25:09
+ * @LastEditTime: 2022-02-09 16:35:09
  * @FilePath: \iot.vue\src\view\im\whseInOutKB\api.js
  * @Description:
  */
@@ -83,7 +83,7 @@ export function getTask(params) {
 // 查询布票称重记录 state = 1 已称重 2 已入仓
 export function getInCloth(params) {
   return axios({
-    url: "/api/proClothNote",
+    url: "/api/proClothNote/page",
     method: "get",
     params: params
   });
@@ -101,7 +101,7 @@ export function updateNote(data) {
 // 查询成品布码卡称重记录 state = 1 已称重 2 已入仓
 export function getInFinished(params) {
   return axios({
-    url: "/api/proFinalProductCard",
+    url: "/api/proFinalProductCard/last",
     method: "get",
     params: params
   });

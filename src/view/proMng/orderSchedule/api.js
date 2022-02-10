@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-01 14:06:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-01-20 18:24:54
+ * @LastEditTime: 2022-02-08 13:36:12
  * @Description:
  */
 
@@ -82,8 +82,8 @@ export function del(id) {
 // 查询明细
 export function getDetail(params) {
   return axios({
-    url: "/api/proSalScheduleDetailList",
-    method: "post",
+    url: "/api/proSalScheduleDetail",
+    method: "get",
     params: params
   });
 }
@@ -92,7 +92,7 @@ export function getDetail(params) {
 export function addDetail(data) {
   return axios({
     url: "/api/proSalScheduleDetail",
-    method: "put",
+    method: "post",
     params: data
   });
 }
@@ -101,7 +101,7 @@ export function addDetail(data) {
 export function updateDetail(data) {
   return axios({
     url: "/api/proSalScheduleDetail",
-    method: "post",
+    method: "put",
     params: data
   });
 }

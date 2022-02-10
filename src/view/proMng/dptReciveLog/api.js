@@ -2,11 +2,19 @@
  * @Author: Lyl
  * @Date: 2021-02-01 14:06:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-01-28 10:50:00
+ * @LastEditTime: 2022-02-07 16:38:39
  * @Description:
  */
 
 import axios from "axios";
+
+export function getRunJobByPage(params) {
+  return axios({
+    url: "/api/proBleadyeRunJob/page",
+    method: "get",
+    params: params
+  });
+}
 
 export function getRunJob(params) {
   return axios({

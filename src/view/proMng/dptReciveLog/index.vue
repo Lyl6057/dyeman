@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-01-28 10:56:05
+ * @LastEditTime: 2022-02-07 18:36:47
  * @Description: 
 -->
 <template>
@@ -356,12 +356,15 @@ export default {
           getRunJob({
             vatNo: scanData,
           }).then((res) => {
-            if (res.data.length) {
-              _this.detail.runJobFk = res.data[0].runJobId;
-            } else {
-              _this.$tip.error("暂无该缸号信息!");
-            }
             _this.dialogVisible = true;
+            setTimeout(() => {
+              if (res.data.length) {
+                _this.$refs.tem.remoteMethod(res.data[0].vatNo);
+                // _this.detail.runJobFk = res.data[0].runJobId;
+              } else {
+                _this.$tip.error("暂无该缸号信息!");
+              }
+            }, 200);
           });
         });
       }
