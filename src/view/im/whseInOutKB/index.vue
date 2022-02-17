@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-01-12 15:39:08
  * @LastEditors: Lyl
- * @LastEditTime: 2022-02-10 09:10:19
+ * @LastEditTime: 2022-02-11 13:33:44
  * @FilePath: \iot.vue\src\view\im\whseInOutKB\index.vue
  * @Description: 
 -->
@@ -311,7 +311,7 @@ export default {
         if (this.form.type == 1) {
           //成品布入仓
           getInFinished({
-            storeCode: this.form.storeLoadCode,
+            storeLoadCode: this.form.storeLoadCode,
             page: this.mainPage.currentPage,
             rows: this.mainPage.pageSize,
             start: this.mainPage.currentPage,

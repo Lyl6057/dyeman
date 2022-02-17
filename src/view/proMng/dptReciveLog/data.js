@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-02-07 16:36:42
+ * @LastEditTime: 2022-02-16 11:01:04
  * @Description:
  */
 
@@ -10,7 +10,7 @@ import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
 let cust = getDicT("basCustomer", "custName", "custCode");
 const vatList = getDicT("proBleadyeRunJob", "vatNo", "runJobId");
 
-export function mainForm(_this) {
+export function mainForm() {
   return {
     submitBtn: false,
     emptyBtn: false,
@@ -46,6 +46,22 @@ export function mainForm(_this) {
   };
 }
 
+export function weaveForm() {
+  return {
+    submitBtn: false,
+    emptyBtn: false,
+    labelWidth: 150,
+    column: [
+      {
+        label: "织单号",
+        prop: "weaveJobCode",
+        span: 6,
+        placeholder: " "
+      }
+    ]
+  };
+}
+
 export function dlgForm(_this) {
   return {
     menu: false,
@@ -64,6 +80,7 @@ export function dlgForm(_this) {
         span: 8,
         placeholder: " ",
         type: "select",
+        display: _this.tabs == "rd" ? true : false,
         filterable: true,
         formslot: true,
         dicData: vatList,
@@ -74,6 +91,15 @@ export function dlgForm(_this) {
             trigger: "blur"
           }
         ]
+      },
+      {
+        label: "织单号",
+        display: _this.tabs == "zd" ? true : false,
+        prop: "weaveJobId",
+        type: "select",
+        span: 8,
+        placeholder: " ",
+        formslot: true
       },
       {
         label: "接收人",
@@ -109,7 +135,7 @@ export function dlgForm(_this) {
         span: 8,
         placeholder: " ",
         type: "select",
-        dicData: getDicT("proDptworkProcess", "dptName", "dptCode"),
+        dicData: getDicT("proDptworkProcess", "dptName", "dptCode", {}, "sn"),
         rules: [
           {
             required: true,
@@ -354,6 +380,300 @@ export function dlgCrud(_this) {
         overHidden: true,
         span: 16,
         placeholder: " "
+      }
+    ]
+  };
+}
+
+export function weavecrud(_this) {
+  return {
+    menu: false,
+    addBtn: false,
+    border: true,
+    highlightCurrentRow: true,
+    height: "calc(100vh - 265px)",
+    refreshBtn: false,
+    columnBtn: false,
+    // labelPosition: 'top',
+    page: true,
+    labelWidth: 120,
+    column: [
+      {
+        label: "#",
+        prop: "index",
+        width: 50,
+        align: "center",
+        display: false
+      },
+      {
+        label: "生產單號",
+        prop: "weaveJobCode",
+        overHidden: true,
+        width: 180,
+        span: 6,
+        tip: "MS đơn sản xuất bp Dệt",
+        sortable: true,
+        rules: [
+          {
+            required: true,
+            message: "请输入生產單號",
+            trigger: "blur"
+          }
+        ]
+      },
+      {
+        label: "訂單編號",
+        prop: "salPoNo",
+        width: 180,
+        span: 6,
+        placeholder: " ",
+        sortable: true,
+
+        overHidden: true
+        // rules: [
+        //   {
+        //     required: true,
+        //     message: "请選擇訂單編號",
+        //     trigger: "blur"
+        //   }
+        // ]
+        // click: () => {
+        //   _this.visible = true
+        // }
+      },
+      {
+        label: "齐胚期",
+        prop: "calicoDate",
+        width: 130,
+        span: 6,
+        type: "date",
+
+        align: "center",
+        format: "yyyy-MM-dd",
+        valueFormat: "yyyy-MM-dd",
+        placeholder: "请選擇出胚布日期",
+        sortable: true,
+        rules: [
+          {
+            required: true,
+            message: "请選擇出胚布日期",
+            trigger: "blur"
+          }
+        ],
+        tip: "Kỳ hạn vải mộc"
+      },
+      {
+        label: "成品交期",
+        prop: "productDate",
+        width: 120,
+
+        span: 6,
+        type: "date",
+        tip: "Kỳ hạn thành phẩm",
+        align: "center",
+        format: "yyyy-MM-dd",
+        valueFormat: "yyyy-MM-dd",
+        placeholder: "请選擇成品期",
+        sortable: true,
+        rules: [
+          {
+            required: true,
+            message: "请選擇成品期",
+            trigger: "blur"
+          }
+        ]
+      },
+      {
+        label: "营销单号",
+        prop: "marketOrder",
+        tip: "Mã số dệt bộ phận Sales",
+        span: 6,
+        width: 200,
+
+        overHidden: true,
+        placeholder: " "
+      },
+      {
+        label: "客人訂單編號",
+        prop: "custPoNo",
+        span: 6,
+
+        width: 120,
+        placeholder: " ",
+        tip: "Ckhách hàng PO",
+        hide: true
+      },
+
+      {
+        label: "客戶名稱",
+        prop: "custCode",
+        overHidden: true,
+        width: 200,
+
+        span: 6,
+        placeholder: " ",
+        type: "select",
+        dicData: cust,
+        tip: "Khách hàng",
+        filterable: true,
+        change: () => {
+          // _this.$nextTick(() => {
+          //   _this.form.custCode = _this.form.custName;
+          // });
+        }
+      },
+      // {
+      //   label: "客戶編號",
+      //   prop: "custCode",
+      //   overHidden: true,
+      //   tip: "Khách hàng",
+      //   disabled: audit
+      //     ? false
+      //     : _this.detail.auditState && !_this.isAdd
+      //     ? true
+      //     : false,
+      //   width: 120,
+      //   span: 6,
+      //   placeholder: "请選擇客戶名稱",
+      //   rules: [
+      //     {
+      //       required: true,
+      //       message: "请選擇客戶名稱",
+      //       trigger: "blur"
+      //     }
+      //   ]
+      // },
+
+      {
+        label: "開機日期",
+        prop: "startDate",
+        width: 120,
+        type: "date",
+        align: "center",
+        tip: "Sắp xếp ngày dệt",
+        format: "yyyy-MM-dd",
+        valueFormat: "yyyy-MM-dd",
+
+        placeholder: "请選擇開機日期",
+        sortable: true,
+        span: 6,
+        rules: [
+          {
+            required: true,
+            message: "请選擇開機日期",
+            trigger: "blur"
+          }
+        ]
+      },
+      {
+        label: "顏色名稱",
+        prop: "colorName",
+
+        tip: "Màu sắc",
+        width: 180,
+        span: 6,
+        placeholder: "请選擇顏色名稱",
+        rules: [
+          {
+            required: true,
+            message: "请選擇顏色名稱",
+            trigger: "blur"
+          }
+        ],
+        overHidden: true
+      },
+      {
+        label: "色號",
+        prop: "colorCode",
+        placeholder: " ",
+        width: 150,
+        span: 6,
+
+        overHidden: true,
+        tip: "Số màu"
+        // row: true
+      },
+
+      {
+        label: "布类代码",
+        prop: "custFabricCode",
+        span: 6,
+        width: 120,
+        placeholder: " ",
+        tip: "Fabric Code",
+
+        hide: true
+      },
+      {
+        label: "季节",
+        prop: "seasonCode",
+        span: 6,
+        width: 120,
+        placeholder: " ",
+        tip: "Mùa hàng",
+
+        hide: true
+        // row: true
+      },
+
+      {
+        label: "合同数量",
+        prop: "contractAmount",
+        width: 100,
+        placeholder: " ",
+        span: 6,
+        type: "number",
+
+        align: "left",
+        tip: "Số lượng của hợp đồng"
+      },
+      {
+        label: "織胚數量",
+        prop: "amount",
+        width: 100,
+
+        placeholder: " ",
+        span: 6,
+        // rules: [
+        //   {
+        //     required: true,
+        //     message: "请输入織胚數量",
+        //     trigger: "blur"
+        //   }
+        // ],
+        type: "number",
+        align: "left",
+        tip: "Số lượng vải mộc"
+      },
+
+      {
+        label: "纱线数量",
+        prop: "yarnAmount",
+        width: 100,
+        placeholder: " ",
+        span: 6,
+        type: "number",
+        align: "left",
+
+        tip: " Số lượng sợi "
+      },
+
+      {
+        label: "布類描述",
+        prop: "fabricDesc",
+        overHidden: true,
+
+        width: 250,
+        span: 18,
+        placeholder: "请選擇布類描述",
+        rules: [
+          {
+            required: true,
+            message: "请選擇布類描述",
+            trigger: "blur"
+          }
+        ],
+        tip: "Loại vải "
       }
     ]
   };

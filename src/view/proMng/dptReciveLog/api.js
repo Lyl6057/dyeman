@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-01 14:06:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-02-07 16:38:39
+ * @LastEditTime: 2022-02-12 15:07:24
  * @Description:
  */
 
@@ -53,6 +53,14 @@ export function getLog(params) {
 export function get(params) {
   return axios({
     url: "/api/proBleadyeRunJob/recive",
+    method: "get",
+    params: params
+  });
+}
+
+export function getWeave(params) {
+  return axios({
+    url: "/api/proWeaveJob/page",
     method: "get",
     params: params
   });

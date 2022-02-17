@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-02-07 18:32:31
+ * @LastEditTime: 2022-02-12 15:19:27
  * @Description: 
 -->
 <template>
@@ -59,6 +59,27 @@
               </el-option>
             </el-select>
           </template>
+          <template slot-scope="scope" slot="weaveJobId">
+            <el-select
+              v-model="form.weaveJobId"
+              filterable
+              remote
+              reserve-keyword
+              clearable
+              default-first-option
+              placeholder="请输入织单号"
+              :remote-method="remoteMethod"
+              :loading="vatLoading"
+            >
+              <el-option
+                v-for="item in options"
+                :key="item.weaveJobId"
+                :label="item.weaveJobCode"
+                :value="item.weaveJobId"
+              >
+              </el-option>
+            </el-select>
+          </template>
         </avue-form>
       </div>
     </view-container>
@@ -67,12 +88,13 @@
 <script>
 import choice from "@/components/proMng/index";
 import { mainCrud, dlgForm, dlgCrud } from "./data";
-import { add, getRunJobByPage } from "./api";
+import { add, getRunJobByPage, getWeave } from "./api";
 export default {
   name: "techCodeTem",
   props: {
     detail: Object,
     isAdd: Boolean,
+    tabs: String,
   },
   components: {
     choice: choice,
@@ -97,19 +119,37 @@ export default {
   methods: {
     remoteMethod(val) {
       this.vatLoading = true;
-      getRunJobByPage({
-        vatNo: "!^%" + val,
-        rows: 10,
-        start: 1,
-      }).then((res) => {
-        this.options = res.data.records;
-        this.vatLoading = false;
-        this.$nextTick(() => {
-          if (res.data.records.length == 1) {
-            this.form.runJobFk = res.data.records[0].runJobId;
-          }
+      if (this.tabs == "rd") {
+        getRunJobByPage({
+          vatNo: "!^%" + val,
+          rows: 10,
+          start: 1,
+          page: 1,
+        }).then((res) => {
+          this.options = res.data.records;
+          this.vatLoading = false;
+          this.$nextTick(() => {
+            if (res.data.records.length == 1) {
+              this.form.runJobFk = res.data.records[0].runJobId;
+            }
+          });
         });
-      });
+      } else {
+        getWeave({
+          weaveJobCode: "!^%" + val,
+          rows: 10,
+          start: 1,
+          page: 1,
+        }).then((res) => {
+          this.options = res.data.records;
+          this.vatLoading = false;
+          this.$nextTick(() => {
+            if (res.data.records.length == 1) {
+              this.form.weaveJobId = res.data.records[0].weaveJobId;
+            }
+          });
+        });
+      }
     },
     getData() {
       this.form = this.detail;
@@ -123,12 +163,14 @@ export default {
         if (valid) {
           try {
             this.wLoading = true;
-            // update
-            this.form.vatNo = this.form.$runJobFk;
+            if (this.tabs == "rd") {
+              this.form.vatNo = this.form.$runJobFk;
+            } else {
+              this.form.runJobFk = this.form.weaveJobId;
+            }
             add(this.form).then((res) => {
               if (res.data.code == 200) {
                 this.wLoading = false;
-
                 this.$tip.success(this.$t("public.bccg"));
                 this.$emit("refresh");
                 this.$emit("close");

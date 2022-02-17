@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-01-10 15:19:45
+ * @LastEditTime: 2022-02-14 09:23:29
  * @Description: 
 -->
 <template>
@@ -361,6 +361,7 @@ import {
   getBomDtlbSpecs,
   getBomDtlaSpecs,
   getNoteSum,
+  get,
 } from "./api";
 import { baseCodeSupplyEx, baseCodeSupply } from "@/api/index";
 import preview from "./preview";
@@ -459,7 +460,11 @@ export default {
           this.form.isWorkOut = 0;
           this.form.auditState = 0;
           this.form.creator = parent.userID;
-          this.form.weaveJobCode = this.detail.weaveJobCode + "A";
+          get({ weaveJobCode: "!^%" + this.form.weaveJobCode }).then((res) => {
+            this.form.weaveJobCode =
+              this.detail.weaveJobCode +
+              String.fromCharCode(res.data.records.length + 64);
+          });
         } else {
           baseCodeSupplyEx({ code: "proWeaveJob" }).then((res) => {
             if (this.copyC) {
@@ -677,6 +682,7 @@ export default {
                           }
                         );
                       }
+                      this.$tip.success(this.$t("public.bccg"));
                     });
                   } else {
                     baseCodeSupply({ code: "proWeaveJob" }).then((res) => {});

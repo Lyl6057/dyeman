@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-12-20 19:01:45
+ * @LastEditTime: 2022-02-16 10:14:39
  * @Description:
 -->
 <template>
@@ -47,13 +47,15 @@
             :option="crudOp"
             :data="crud"
             :page.sync="page"
+            :row-style="rowStyle"
             v-loading="loading"
             @on-load="query"
             @row-dblclick="handleRowDBLClick"
             @current-row-change="cellClick"
+            @sort-change="sortChange"
             @selection-change="selectionChange"
-            :row-style="rowStyle"
           ></avue-crud>
+          <!--    @sort-change="sortChange" -->
         </el-row>
         <el-dialog
           id="colorMng_Dlg"
@@ -126,6 +128,7 @@
             @row-dblclick="handleRowDBLClick"
             @current-row-change="cellClick"
             @selection-change="selectionChange"
+            @sort-change="sortChange"
           ></avue-crud>
         </el-row>
       </el-tab-pane>
@@ -198,9 +201,13 @@ export default {
   watch: {},
   methods: {
     query() {
+      let val = this.sort;
       this.wLoading = true;
       this.detail = {};
       if (this.activeName == "first") {
+        if (val && val.prop == "modifiDate") {
+          val.prop = "r_modifiDate_r";
+        }
         for (let key in this.form) {
           if (
             !this.form[key] &&
@@ -214,7 +221,7 @@ export default {
           }
         }
         if (this.form.vatNo.indexOf("%") == -1) {
-          this.form.vatNo = "!^%" + (this.form.vatNo ? this.form.vatNo : "");
+          this.form.vatNo = "%" + (this.form.vatNo ? this.form.vatNo : "");
         }
         if (this.form.weaveJobCode.indexOf("%") == -1) {
           this.form.weaveJobCode =
@@ -228,6 +235,12 @@ export default {
           this.form.colorCode =
             "%" + (this.form.colorCode ? this.form.colorCode : "");
         }
+        if (val) {
+          this.form[val.prop] =
+            (val.order == "descending" ? "!^" : "^^") +
+            (this.form[val.prop] ? this.form[val.prop] : "");
+        }
+
         get(
           Object.assign(this.form, {
             rows: this.page.pageSize,
@@ -248,8 +261,8 @@ export default {
             item.index = i + 1;
           });
           this.page.total = res.data.total;
-          if (this.form.vatNo.indexOf("!^%") != -1) {
-            this.form.vatNo = this.form.vatNo.split("!^%").join("");
+          if (this.form.vatNo.indexOf("%") != -1) {
+            this.form.vatNo = this.form.vatNo.split("%").join("");
           }
           if (this.form.weaveJobCode.indexOf("%") != -1) {
             this.form.weaveJobCode = this.form.weaveJobCode.split("%").join("");
@@ -260,24 +273,37 @@ export default {
           if (this.form.colorCode.indexOf("%") != -1) {
             this.form.colorCode = this.form.colorCode.split("%").join("");
           }
-
+          if (val) {
+            this.form[val.prop] = this.form[val.prop].replace(
+              /[&|\\*^%$ #@!]/g,
+              ""
+            );
+          }
           setTimeout(() => {
             this.wLoading = false;
           }, 200);
         });
       } else {
+        if (val && val.prop == "upateTime") {
+          val.prop = "r_upateTime_r";
+        }
         for (let key in this.wform) {
           if (!this.wform[key] && key != "auditState") {
             delete this.wform[key];
           }
         }
         this.wform.weaveJobCode =
-          "!^%" + (this.wform.weaveJobCode ? this.wform.weaveJobCode : "");
+          "%" + (this.wform.weaveJobCode ? this.wform.weaveJobCode : "");
         this.wform.salPoNo =
           "%" + (this.wform.salPoNo ? this.wform.salPoNo : "");
         this.wform.colorCode =
           "%" + (this.wform.colorCode ? this.wform.colorCode : "");
 
+        if (val) {
+          this.wform[val.prop] =
+            (val.order == "descending" ? "!^" : "^^") +
+            (this.wform[val.prop] ? this.wform[val.prop] : "");
+        }
         getW(
           Object.assign(this.wform, {
             rows: this.wpage.pageSize,
@@ -298,15 +324,21 @@ export default {
             item.index = i + 1;
           });
           this.wpage.total = res.data.total;
-          if (this.wform.weaveJobCode.indexOf("!^%") != -1) {
+          if (this.wform.weaveJobCode.indexOf("%") != -1) {
             this.wform.weaveJobCode =
-              this.wform.weaveJobCode.split("!^%")[1] || "";
+              this.wform.weaveJobCode.split("%")[1] || "";
           }
           if (this.wform.salPoNo.indexOf("%") != -1) {
             this.wform.salPoNo = this.wform.salPoNo.split("%").join("");
           }
           if (this.wform.colorCode.indexOf("%") != -1) {
             this.wform.colorCode = this.wform.colorCode.split("%").join("");
+          }
+          if (val) {
+            this.wform[val.prop] = this.wform[val.prop].replace(
+              /[&|\\*^%$ #@!]/g,
+              ""
+            );
           }
           setTimeout(() => {
             this.wLoading = false;
@@ -492,6 +524,20 @@ export default {
     cellClick(val) {
       this.detail = val;
     },
+    sortChange(val) {
+      if (
+        val.order &&
+        (val.prop == "modifiDate" ||
+          val.prop == "vatNo" ||
+          val.prop == "upateTime" ||
+          val.prop == "weaveJobCode")
+      ) {
+        this.sort = val;
+        this.query();
+      } else {
+        this.sort = {};
+      }
+    },
     selectionChange(list) {
       if (this.activeName == "first") {
         this.selectList = list;
@@ -520,25 +566,15 @@ export default {
 };
 </script>
 <style lang='stylus'>
-#clothFlyWeight {
-  .el-table {
-    overflow: visible !important;
-  }
-
-  .el-tag--mini {
-    display: none !important;
-  }
-
-  .avue-crud__menu {
-    height: 35px !important;
-  }
-
-  .avue-dialog .el-drawer__body {
-    overflow: auto;
-  }
-}
-
-.avue-crud__dialog .el-transfer-panel__body {
-  height: 80% !important;
-}
+#clothFlyWeight
+  .el-table
+    overflow visible !important
+  .el-tag--mini
+    display none !important
+  .avue-crud__menu
+    height 35px !important
+  .avue-dialog .el-drawer__body
+    overflow auto
+.avue-crud__dialog .el-transfer-panel__body
+  height 80% !important
 </style>

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-01-13 09:53:53
  * @LastEditors: Lyl
- * @LastEditTime: 2022-02-09 16:35:09
+ * @LastEditTime: 2022-02-10 15:26:07
  * @FilePath: \iot.vue\src\view\im\whseInOutKB\api.js
  * @Description:
  */
@@ -101,7 +101,7 @@ export function updateNote(data) {
 // 查询成品布码卡称重记录 state = 1 已称重 2 已入仓
 export function getInFinished(params) {
   return axios({
-    url: "/api/proFinalProductCard/last",
+    url: "/api/proFinalProductCard/page",
     method: "get",
     params: params
   });

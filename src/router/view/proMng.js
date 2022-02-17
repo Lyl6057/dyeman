@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-29 14:14:56
  * @LastEditors: Lyl
- * @LastEditTime: 2022-01-28 10:56:19
+ * @LastEditTime: 2022-02-15 15:00:05
  * @Description:
  */
 export default [
@@ -18,7 +18,7 @@ export default [
     component: resolve =>
       require(["@/view/proMng/dptReciveLog/index"], resolve),
     meta: {
-      keepAlive: true
+      keepAlive: false
     }
   },
   {

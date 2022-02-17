@@ -2,188 +2,174 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-02-07 18:36:47
+ * @LastEditTime: 2022-02-12 16:45:03
  * @Description: 
 -->
 <template>
   <div id="dptReciveLog">
-    <view-container
-      title="收单管理"
+    <el-tabs
+      v-model="tabs"
+      type="border-card"
       v-loading="wloading"
       element-loading-text="拼命加载中..."
+      @tab-click="tabChange"
     >
-      <el-row class="btnList">
-        <!-- <el-tooltip
-          class="item"
-          effect="dark"
-          content="cập nhật"
-          placement="top-start"
-        >
-          <el-button
-            type="success"
-            :disabled="!detail.bleadyeCodeId"
-            @click="handleRowDBLClick(detail)"
-            >{{ this.$t("public.update") }}</el-button
+      <el-tab-pane name="rd" label="染单管理">
+        <el-row class="btnList">
+          <el-tooltip
+            class="item"
+            effect="dark"
+            content="thêm mới "
+            placement="top-start"
           >
-        </el-tooltip> -->
-        <el-tooltip
-          class="item"
-          effect="dark"
-          content="thêm mới "
-          placement="top-start"
-        >
-          <el-button type="primary" @click="add">{{
-            this.$t("public.add")
-          }}</el-button>
-        </el-tooltip>
-        <!-- <el-tooltip
-          class="item"
-          effect="dark"
-          content="xóa"
-          placement="top-start"
-        >
-          <el-button
-            type="danger"
-            :disabled="!detail.bleadyeCodeId"
-            @click="del"
-            >{{ this.$t("public.del") }}</el-button
+            <el-button type="primary" @click="add">{{
+              this.$t("public.add")
+            }}</el-button>
+          </el-tooltip>
+          <el-tooltip
+            class="item"
+            effect="dark"
+            content="tìm kiếm"
+            placement="top-start"
           >
-        </el-tooltip> -->
-        <el-tooltip
-          class="item"
-          effect="dark"
-          content="tìm kiếm"
-          placement="top-start"
-        >
-          <el-button type="primary" @click="query">{{
-            this.$t("public.query")
-          }}</el-button>
-        </el-tooltip>
-
-        <!-- <el-button type="warning" @click="close">{{
-          this.$t("public.close")
-        }}</el-button> -->
-      </el-row>
-      <el-row class="formBox">
-        <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
-      </el-row>
-      <el-row class="crudBox">
-        <el-col :span="12">
-          <view-container
-            title="已存在收单缸号"
-            v-loading="sloading"
-            element-loading-text="拼命加载中..."
-          >
-            <avue-crud
-              ref="crud"
-              id="crud"
-              :option="crudOp"
-              :data="crud"
-              :page.sync="page"
-              v-loading="loading"
-              @on-load="query"
-              @row-dblclick="handleRowDBLClick"
-              @current-row-change="cellClick"
-            >
-            </avue-crud>
-          </view-container>
-        </el-col>
-        <el-col :span="12">
-          <view-container
-            title="收单日志"
-            v-loading="sloading"
-            element-loading-text="拼命加载中..."
-          >
-            <avue-crud
-              ref="jdCrud"
-              id="jdCrud"
-              :option="jdOp"
-              :data="jd"
+            <el-button type="primary" @click="query">{{
+              this.$t("public.query")
+            }}</el-button>
+          </el-tooltip>
+        </el-row>
+        <el-row class="formBox">
+          <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
+        </el-row>
+        <el-row class="crudBox">
+          <el-col :span="12">
+            <view-container
+              title="缸号信息"
               v-loading="sloading"
+              element-loading-text="拼命加载中..."
             >
-            </avue-crud>
-            <!-- <el-timeline
-              style="
-                margin-top: 10px;
-                height: calc(100vh - 239px);
-                overflow: auto;
-                text-align: left;
-                word-wrap: break-word;
-                word-break: normal;
-              "
-            >
-              <el-timeline-item
-                v-for="(activity, index) in activities"
-                :key="index"
-                :icon="activity.icon"
-                :type="activity.type"
-                :color="activity.color"
-                :size="activity.size"
+              <avue-crud
+                ref="crud"
+                id="crud"
+                :option="crudOp"
+                :data="crud"
+                :page.sync="page"
+                v-loading="loading"
+                @on-load="query"
+                @row-dblclick="handleRowDBLClick"
+                @current-row-change="cellClick"
               >
-                <span
-                  style="
-                    font-size: 18px;
-                    font-weight: 600;
-                    margin: 2px 0;
-                    color: #409eff;
-                  "
-                  >{{ activity.content }}</span
-                >
-                <br />
-                <span style="line-height: 25px">
-                  {{ activity.acceptStaff }} 提交于 {{ activity.timestamp }}
-                </span>
-                <br />
-
-                <span style="font-size: 15px; color: #606266">{{
-                  activity.desc
-                }}</span>
-              </el-timeline-item>
-            </el-timeline> -->
-            <!-- <el-timeline
-              style="
-                margin-top: 10px;
-                height: calc(100vh - 236px);
-                overflow: auto;
-              "
+              </avue-crud>
+            </view-container>
+          </el-col>
+          <el-col :span="12">
+            <view-container
+              title="收单日志"
+              v-loading="sloading"
+              element-loading-text="拼命加载中..."
             >
-              <el-timeline-item
-                v-for="(item, index) in activities"
-                :key="index"
-                :timestamp="item.timestamp"
-                placement="top"
+              <avue-crud
+                ref="jdCrud"
+                id="jdCrud"
+                :option="jdOp"
+                :data="jd"
+                v-loading="sloading"
               >
-                <h4>{{ item.dptName }}</h4>
-                <p>{{ item.acceptStaff }} 提交于 {{ item.timestamp }}</p>
-              </el-timeline-item>
-            </el-timeline> -->
-          </view-container>
-        </el-col>
-      </el-row>
-      <el-dialog
-        id="colorMng_Dlg"
-        :visible.sync="dialogVisible"
-        width="70%"
-        append-to-body
-        :close-on-click-modal="false"
-        :close-on-press-escape="false"
-      >
-        <tem-dlg
-          v-if="dialogVisible"
-          ref="tem"
-          :detail="detail"
-          :isAdd="isAdd"
-          @close="dialogVisible = false"
-          @refresh="query"
-        ></tem-dlg>
-      </el-dialog>
-    </view-container>
+              </avue-crud>
+            </view-container>
+          </el-col>
+        </el-row>
+      </el-tab-pane>
+      <el-tab-pane name="zd" label="织单管理">
+        <el-row class="btnList">
+          <el-tooltip
+            class="item"
+            effect="dark"
+            content="thêm mới "
+            placement="top-start"
+          >
+            <el-button type="primary" @click="add">{{
+              this.$t("public.add")
+            }}</el-button>
+          </el-tooltip>
+          <el-tooltip
+            class="item"
+            effect="dark"
+            content="tìm kiếm"
+            placement="top-start"
+          >
+            <el-button type="primary" @click="query">{{
+              this.$t("public.query")
+            }}</el-button>
+          </el-tooltip>
+        </el-row>
+        <el-row class="formBox">
+          <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
+        </el-row>
+        <el-row class="crudBox">
+          <el-col :span="12">
+            <view-container
+              title="织单信息"
+              v-loading="sloading"
+              element-loading-text="拼命加载中..."
+            >
+              <avue-crud
+                ref="crud"
+                id="crud"
+                :option="weaveCrudOp"
+                :data="crud"
+                :page.sync="page"
+                v-loading="loading"
+                @on-load="query"
+                @row-dblclick="handleRowDBLClick"
+                @current-row-change="cellClick"
+              >
+              </avue-crud>
+            </view-container>
+          </el-col>
+          <el-col :span="12">
+            <view-container
+              title="收单日志"
+              v-loading="sloading"
+              element-loading-text="拼命加载中..."
+            >
+              <avue-crud
+                ref="jdCrud"
+                id="jdCrud"
+                :option="jdOp"
+                :data="jd"
+                v-loading="sloading"
+              >
+              </avue-crud>
+            </view-container>
+          </el-col>
+        </el-row>
+      </el-tab-pane>
+    </el-tabs>
+    <el-dialog
+      id="colorMng_Dlg"
+      :visible.sync="dialogVisible"
+      width="70%"
+      append-to-body
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+    >
+      <tem-dlg
+        v-if="dialogVisible"
+        ref="tem"
+        :detail="detail"
+        :isAdd="isAdd"
+        :tabs="tabs"
+        @close="dialogVisible = false"
+        @refresh="query"
+      ></tem-dlg>
+    </el-dialog>
   </div>
 </template>
 <script>
-import { mainForm, mainCrud, dlgCrud } from "./data";
+import { mainForm, mainCrud, dlgCrud, weavecrud, weaveForm } from "./data";
 import {
   get,
+  getWeave,
   add,
   update,
   del,
@@ -222,6 +208,9 @@ export default {
       activities: [],
       sloading: false,
       spowerClient: null,
+      weaveCrudOp: weavecrud(this),
+      weaveCrud: [],
+      tabs: "rd",
     };
   },
   watch: {},
@@ -234,13 +223,13 @@ export default {
           delete this.form[key];
         }
       }
-      // this.form.bleadyeCode =
-      //   "!^%" + (this.form.bleadyeCode ? this.form.bleadyeCode : "");
-      // this.form.bleadyeName =
-      //   "%" + (this.form.bleadyeName ? this.form.bleadyeName : "");
-      get(
+      this.form.weaveJobCode =
+        "!^%" + (this.form.weaveJobCode ? this.form.weaveJobCode : "");
+      let func = this.tabs == "rd" ? get : getWeave;
+      func(
         Object.assign(this.form, {
           rows: this.page.pageSize,
+          page: this.page.currentPage,
           start: this.page.currentPage,
         })
       ).then((res) => {
@@ -254,14 +243,24 @@ export default {
         if (this.crud.length > 0) {
           this.$refs.crud.setCurrentRow(this.crud[0]);
         }
-        // if (this.form.bleadyeCode.indexOf("!^%") != -1) {
-        //   this.form.bleadyeCode = this.form.bleadyeCode.split("!^%")[1] || "";
-        // }
-        // if (this.form.bleadyeName.indexOf("%") != -1) {
-        //   this.form.bleadyeName = this.form.bleadyeName.split("%")[1] || "";
-        // }
+        if (this.form.weaveJobCode.indexOf("!^%") != -1) {
+          this.form.weaveJobCode = this.form.weaveJobCode.split("!^%")[1] || "";
+        }
+        console.log(this.form.weaveJobCode);
         this.page.total = res.data.total;
-        this.loading = false;
+        setTimeout(() => {
+          this.loading = false;
+        }, 200);
+      });
+    },
+    tabChange() {
+      if (this.tabs == "rd") {
+        this.formOp = mainForm();
+      } else {
+        this.formOp = weaveForm();
+      }
+      this.$nextTick(() => {
+        this.query();
       });
     },
     print() {
@@ -338,7 +337,7 @@ export default {
     cellClick(val) {
       this.sloading = true;
       getLog({
-        runJobId: val.runJobId,
+        runJobId: val.runJobId || val.weaveJobId,
       }).then((res) => {
         this.jd = res.data;
         this.sloading = false;
@@ -353,19 +352,38 @@ export default {
       if (e.data.indexOf("scan") != -1) {
         _this.$nextTick(() => {
           let scanData = e.data.split("scan=")[1];
-          getRunJob({
-            vatNo: scanData,
-          }).then((res) => {
-            _this.dialogVisible = true;
-            setTimeout(() => {
-              if (res.data.length) {
-                _this.$refs.tem.remoteMethod(res.data[0].vatNo);
-                // _this.detail.runJobFk = res.data[0].runJobId;
-              } else {
-                _this.$tip.error("暂无该缸号信息!");
-              }
-            }, 200);
-          });
+          if (scanData.indexOf("WG") != -1) {
+            _this.tabs = "zd";
+            getWeave({
+              weaveJobCode: scanData,
+            }).then((res) => {
+              _this.dialogVisible = true;
+              setTimeout(() => {
+                if (res.data.records.length) {
+                  _this.$refs.tem.remoteMethod(
+                    res.data.records[0].weaveJobCode
+                  );
+                } else {
+                  _this.$tip.error("暂无该织单信息!");
+                }
+              }, 200);
+            });
+          } else {
+            _this.tabs = "rd";
+            getRunJob({
+              vatNo: scanData,
+            }).then((res) => {
+              _this.dialogVisible = true;
+              setTimeout(() => {
+                if (res.data.length) {
+                  _this.$refs.tem.remoteMethod(res.data[0].vatNo);
+                  // _this.detail.runJobFk = res.data[0].runJobId;
+                } else {
+                  _this.$tip.error("暂无该缸号信息!");
+                }
+              }, 200);
+            });
+          }
         });
       }
     };

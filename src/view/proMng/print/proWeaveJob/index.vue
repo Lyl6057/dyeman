@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-01-07 16:09:08
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-02-14 13:11:33
  * @Description: 
 -->
 <template>
@@ -190,7 +190,7 @@ export default {
       pdfDlg: false,
       pdfUrl: "",
       copyC: false,
-      splitW:false
+      splitW: false,
     };
   },
   watch: {},
@@ -217,17 +217,11 @@ export default {
       ).then((res) => {
         this.crud = res.data.records;
         this.crud.forEach((item, i) => {
-          // item.custName = item.custCode;
-          // item.amount = item.amount.toFixed(2);
           item.index = i + 1;
         });
         if (this.crud.length > 0) {
           this.$refs.crud.setCurrentRow(this.crud[0]);
         }
-        // console.log(
-        //   this.form.weaveJobCode.indexOf("%"),
-        //   this.form.weaveJobCode.split("%")
-        // );
         if (this.form.weaveJobCode.indexOf("!^%") != -1) {
           this.form.weaveJobCode = this.form.weaveJobCode.split("!^%")[1] || "";
         }
@@ -251,11 +245,12 @@ export default {
     copyEvent() {
       this.isAdd = true;
       this.copyC = true;
-      this.splitW = false
+      this.splitW = false;
       this.dialogVisible = true;
     },
     add() {
       this.isAdd = true;
+      this.splitW = false;
       this.detail = {};
       this.detail.auditState = 0;
       this.copyC = false;
@@ -320,12 +315,12 @@ export default {
     close() {
       document.getElementsByClassName("el-dialog__headerbtn")[0].click();
     },
-    splitWeave(){
+    splitWeave() {
       this.isAdd = true;
       this.splitW = true;
-      this.copyC = false
+      this.copyC = false;
       this.dialogVisible = true;
-    }
+    },
   },
   created() {},
   mounted() {
@@ -334,7 +329,4 @@ export default {
   beforeDestroy() {},
 };
 </script>
-<style lang='stylus'>
-#name {
-}
-</style>
+<style lang='stylus'></style>

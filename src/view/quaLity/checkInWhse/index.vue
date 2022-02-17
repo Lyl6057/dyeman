@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-01-08 16:56:50
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-02-15 16:08:19
  * @Description:
 -->
 <template>
@@ -29,7 +29,19 @@
           this.$t("public.query")
         }}</el-button>
         <el-button type="primary" @click="outExcel">导出</el-button>
-        <span v-if="crud.length && weightSum > 0" style="float: right;margin-right:10px">【 {{crud[0].weaveJobCode}} 】 总重量: {{ weightSum }} KG</span>
+        <span
+          v-if="crud.length && weightSum > 0"
+          style="float: right; margin-right: 10px"
+          >【 {{ crud[0].weaveJobCode }} 】织胚数量:{{ crud[0].amount }},
+          已织重量: {{ weightSum }}, 剩余重量:
+          {{
+            (crud[0].amount - weightSum > 0
+              ? crud[0].amount - weightSum
+              : 0
+            ).toFixed(1)
+          }}
+          KG</span
+        >
       </el-row>
       <el-row class="formBox">
         <avue-form ref="form" :option="formOp" v-model="form"> </avue-form>
@@ -76,7 +88,7 @@ import {
   addInDtla,
   addInDtlb,
 } from "./api";
-import { getNowWeight } from '../weight/api'
+import { getNowWeight } from "../weight/api";
 import { baseCodeSupply, baseCodeSupplyEx } from "@/api/index";
 import qs from "qs";
 export default {
@@ -109,7 +121,7 @@ export default {
       oldData: {},
       sort: {},
       checkSum: 0,
-      weightSum:0
+      weightSum: 0,
     };
   },
   watch: {},
@@ -122,45 +134,58 @@ export default {
           delete this.form[key];
         }
       }
-      let r_clothCheckTime_r = ''
-      if( this.form.clothCheckTime &&this.form.clothCheckTime.length){
-        r_clothCheckTime_r = `!%5E%5b${this.form.clothCheckTime[0]} 07:30:00~${this.form.clothCheckTime[1]} 07:30:00%5d`
-      }else{
-        r_clothCheckTime_r = '!%5E'
+      let r_clothCheckTime_r = "";
+      if (this.form.clothCheckTime && this.form.clothCheckTime.length) {
+        r_clothCheckTime_r = `!%5E%5b${this.form.clothCheckTime[0]} 07:30:00~${this.form.clothCheckTime[1]} 07:30:00%5d`;
+      } else {
+        r_clothCheckTime_r = "!%5E";
       }
       // order
       //   ? (this.form.sort = prop + (order == "descending" ? ",1" : ",0"))
       //   : (this.form.sort = "storeLoadCode,1");
       // this.form.storeLoadCode = "%" + (this.form.storeLoadCode ? this.form.storeLoadCode : "");
-      this.form.weaveJobCode = "%" + (this.form.weaveJobCode ? this.form.weaveJobCode : "");
+      this.form.weaveJobCode =
+        "%" + (this.form.weaveJobCode ? this.form.weaveJobCode : "");
       // this.form.clothCheckTime = "%" + (this.form.clothCheckTime ? this.form.clothCheckTime : "");
       this.form.noteCode = "%" + (this.form.noteCode ? this.form.noteCode : "");
-      let data = JSON.parse(JSON.stringify(this.form)) 
-      data.clothCheckTime = null
+      let data = JSON.parse(JSON.stringify(this.form));
+      data.clothCheckTime = null;
       get(
-        Object.assign( data, {
+        Object.assign(data, {
           rows: this.page.pageSize,
           start: this.page.currentPage,
           isPrinted: true,
           clothState: this.form.clothState || 1,
-        }),r_clothCheckTime_r
+        }),
+        r_clothCheckTime_r
       ).then((res) => {
         this.crud = res.data.records;
         if (this.crud.length > 0) {
-            getNowWeight(this.crud[0].weaveJobCode).then(res =>{
-              this.$nextTick(() =>{
-                if(res.data){
-                  this.weightSum = res.data.clothWeight
-                }else{
-                  this.weightSum = 0
-                }
-              })
-            })
+          getNowWeight(this.crud[0].weaveJobCode).then((res) => {
+            this.$nextTick(() => {
+              if (res.data) {
+                this.weightSum = res.data.clothWeight;
+              } else {
+                this.weightSum = 0;
+              }
+            });
+          });
+          getJob({
+            weaveJobId: this.crud[0].weaveJobFk,
+          }).then((weaveRes) => {
+            if (weaveRes.data.records.length) {
+              this.$set(
+                this.crud[0],
+                "amount",
+                weaveRes.data.records[0].amount
+              );
+            }
+          });
           this.$refs.crud.setCurrentRow(this.crud[0]);
-        }else{
-           this.$nextTick(() =>{
-            this.weightSum = 0
-           })
+        } else {
+          this.$nextTick(() => {
+            this.weightSum = 0;
+          });
         }
         this.crud.forEach((item, i) => {
           item.index = i + 1;
@@ -179,9 +204,11 @@ export default {
         if (this.form.noteCode.indexOf("%") != -1) {
           this.form.noteCode = this.form.noteCode.split("%")[1] || "";
         }
-        setTimeout(() => {
-          this.wLoading = false;
-        }, 200);
+        this.$nextTick(() => {
+          setTimeout(() => {
+            this.wLoading = false;
+          }, 500);
+        });
       });
     },
     handleRowDBLClick(val) {
@@ -372,14 +399,9 @@ export default {
 };
 </script>
 <style lang='stylus'>
-#clothFlyWeight {
-  
-  .el-table {
-    overflow: visible !important;
-  }
-
-  .el-tag--mini {
-    display: none !important;
-  }
-}
+#clothFlyWeight
+  .el-table
+    overflow visible !important
+  .el-tag--mini
+    display none !important
 </style>
