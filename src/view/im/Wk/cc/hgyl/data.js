@@ -1,7 +1,7 @@
 import { getDIC, getDicT, postDicT, getXDicT } from "@/config/index";
 let matUnit = getDIC("bas_matUnit");
 let rlData = getXDicT("BasChemicalmatNew");
-let user = postDicT("ucmlUserList", "employeename", "ucmlUseroid");
+let user = postDicT("ucmlUser", "employeename", "ucmlUseroid");
 export function rsxkr1F(_this) {
   return {
     submitBtn: false,

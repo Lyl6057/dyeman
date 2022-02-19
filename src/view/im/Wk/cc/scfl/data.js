@@ -42,7 +42,7 @@ export function rsxkr1F(_this) {
         placeholder: " "
         // type: "select",
         // dicData:
-        //   postDicT('ucmlUserList', 'employeename', 'ucmlUseroid')
+        //   postDicT('ucmlUser', 'employeename', 'ucmlUseroid')
       }
     ]
   };
@@ -310,7 +310,7 @@ export function rsxkr1C(_this) {
         cell: true,
         width: 140,
         type: "select",
-        dicData: postDicT("ucmlUserList", "employeename", "ucmlUseroid")
+        dicData: postDicT("ucmlUser", "employeename", "ucmlUseroid")
         // hide: _this.hide === '6' || _this.hide === '1' ? false : true
       }
     ]

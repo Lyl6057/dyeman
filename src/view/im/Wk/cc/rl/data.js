@@ -2,7 +2,7 @@ import { getDIC, getDicT, postDicT, getXDicT, getDbDicT } from "@/config";
 
 let matUnit = getDIC("bas_matUnit");
 let rlData = getXDicT("basFuel");
-let user = postDicT("ucmlUserList", "employeename", "ucmlUseroid");
+let user = postDicT("ucmlUser", "employeename", "ucmlUseroid");
 export function rsxkr1F(_this) {
   return {
     submitBtn: false,

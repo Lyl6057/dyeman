@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-02-12 15:19:27
+ * @LastEditTime: 2022-02-18 10:29:45
  * @Description: 
 -->
 <template>
@@ -156,7 +156,7 @@ export default {
       // this.form.acceptStaff = this.$store.state.userOid;
       this.form.acceptStaff = parent.userID;
       this.form.acceptDate = this.$getNowTime("datetime");
-      this.form.dptworkProcessFk = "sk";
+      this.form.dptworkProcessFk = this.detail.dpt || "";
     },
     save() {
       this.$refs.form.validate((valid, done) => {

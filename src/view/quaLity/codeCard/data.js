@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-01-27 14:03:56
+ * @LastEditTime: 2022-02-19 16:32:48
  * @Description:
  */
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
@@ -83,33 +83,39 @@ export function mainForm(_this) {
         placeholder: " ",
         align: "center",
         width: 180
+      },
+      {
+        label: "成品布状态",
+        tip: "Cloth state",
+        prop: "clothState",
+        span: 6,
+        placeholder: " ",
+        cell: true,
+        overHidden: true,
+        width: 120,
+        type: "select",
+        dicData: [
+          {
+            label: "已称重装笼(Cân nặng)",
+            value: 1
+          },
+          {
+            label: "已入仓(Vào nhà kho)",
+            value: 2
+          },
+          {
+            label: "已出仓(hết hàng)",
+            value: 3
+          }
+        ],
+        change: () => {
+          _this.$nextTick(() => {
+            if (_this.wLoading == false) {
+              _this.query();
+            }
+          });
+        }
       }
-      // {
-      //   label: "胚布状态",
-      //   tip: "Cloth state",
-      //   prop: "clothState",
-      //   span: 6,
-      //   placeholder: " ",
-      //   cell: true,
-      //   overHidden: true,
-      //   width: 120,
-      //   type: "select",
-      //   dicData: [
-      //     {
-      //       label: "已称重装笼(Cân nặng)",
-      //       value: 1
-      //     },
-      //     {
-      //       label: "已入仓(Vào nhà kho)",
-      //       value: 2
-      //     }
-      //   ],
-      //   change: () => {
-      //     _this.$nextTick(() => {
-      //       _this.query();
-      //     });
-      //   }
-      // },
       // {
       //   label: "验布时间",
       //   prop: "clothCheckTime",

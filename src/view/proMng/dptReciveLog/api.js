@@ -2,11 +2,27 @@
  * @Author: Lyl
  * @Date: 2021-02-01 14:06:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-02-12 15:07:24
+ * @LastEditTime: 2022-02-18 09:03:28
  * @Description:
  */
 
 import axios from "axios";
+
+export function getDptWorkProcess(params) {
+  return axios({
+    url: "/api/proDptworkProcess",
+    method: "get",
+    params: params
+  });
+}
+
+export function getLoginOrg(params) {
+  return axios({
+    url: "/api/loginOrg",
+    method: "get",
+    params: params
+  });
+}
 
 export function getRunJobByPage(params) {
   return axios({

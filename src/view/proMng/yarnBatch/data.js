@@ -783,7 +783,7 @@ export function mainCrud(_this) {
         ]
         // type: "select",
         // dicData:
-        //   postDicT('ucmlUserList', 'employeename', 'ucmlUseroid')
+        //   postDicT('ucmlUser', 'employeename', 'ucmlUseroid')
       }
     ]
   };

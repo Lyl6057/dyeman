@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-01-06 18:40:48
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-02-19 16:32:18
  * @Description:
 -->
 <template>
@@ -219,16 +219,17 @@ export default {
           delete this.form[key];
         }
       }
-      let r_clothCheckTime_r = ''
-      if( this.form.clothCheckTime &&this.form.clothCheckTime.length){
-        r_clothCheckTime_r = `!%5E%5b${this.form.clothCheckTime[0]} 07:30:00~${this.form.clothCheckTime[1]} 07:30:00%5d`
-      }else{
-        r_clothCheckTime_r = '!%5E'
+      let r_clothCheckTime_r = "";
+      if (this.form.clothCheckTime && this.form.clothCheckTime.length) {
+        r_clothCheckTime_r = `!%5E%5b${this.form.clothCheckTime[0]} 07:30:00~${this.form.clothCheckTime[1]} 07:30:00%5d`;
+      } else {
+        r_clothCheckTime_r = "!%5E";
       }
       this.form.vatNo = "%" + (this.form.vatNo ? this.form.vatNo : "");
-      this.form.clothChecker = "%" + (this.form.clothChecker ? this.form.clothChecker : "");
-      let data = JSON.parse(JSON.stringify(this.form)) 
-      data.clothCheckTime = null
+      this.form.clothChecker =
+        "%" + (this.form.clothChecker ? this.form.clothChecker : "");
+      let data = JSON.parse(JSON.stringify(this.form));
+      data.clothCheckTime = null;
       get(
         Object.assign(data, {
           rows: this.page.pageSize,
@@ -236,7 +237,8 @@ export default {
           isPrinted: true,
           clothState: this.form.clothState || 1,
           cardType: 1,
-        }),r_clothCheckTime_r
+        }),
+        r_clothCheckTime_r
       ).then((res) => {
         this.crud = res.data.records;
         if (this.crud.length > 0) {
@@ -253,8 +255,8 @@ export default {
           this.form.vatNo = this.form.vatNo.split("%")[1] || "";
         }
         if (this.form.clothChecker.indexOf("%") != -1) {
-            this.form.clothChecker = this.form.clothChecker.split("%")[1] || "";
-          }
+          this.form.clothChecker = this.form.clothChecker.split("%")[1] || "";
+        }
         this.page.total = res.data.total;
         // console.log(this.form);
         // if (this.form.productNo.indexOf("!^%") != -1) {
@@ -325,7 +327,6 @@ export default {
               this.loading = false;
               this.query();
               this.$tip.success(this.$t("public.bccg"));
-              
             }, 200);
           } else {
             this.wLoading = false;
@@ -994,13 +995,9 @@ export default {
 };
 </script>
 <style lang='stylus'>
-#clothFlyWeight {
-  .el-table {
-    overflow: visible !important;
-  }
-
-  .el-tag--mini {
-    display: none !important;
-  }
-}
+#clothFlyWeight
+  .el-table
+    overflow visible !important
+  .el-tag--mini
+    display none !important
 </style>

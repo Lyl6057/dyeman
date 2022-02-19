@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-04-01 14:08:13
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-01-05 19:19:29
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-02-18 14:21:05
  * @Description:
  */
 
@@ -55,6 +55,10 @@ export function quality(_this) {
         {
           menuName: "4.QA码卡打印",
           index: "codeCardQa"
+        },
+        {
+          menuName: "5.QC验布",
+          index: "finishedQc"
         }
       ]
     },

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-08-07 07:58:01
  * @LastEditors: Lyl
- * @LastEditTime: 2021-11-18 14:50:35
+ * @LastEditTime: 2022-02-18 14:26:41
  * @Description:
  */
 
@@ -180,8 +180,7 @@ export function mainCrud(_this) {
         placeholder: " ",
         width: 180,
         overHidden: true,
-        span: 6,
-        placeholder: " "
+        span: 6
       },
       {
         label: "客色号",
@@ -190,8 +189,7 @@ export function mainCrud(_this) {
         placeholder: " ",
         width: 180,
         overHidden: true,
-        span: 6,
-        placeholder: " "
+        span: 6
       },
       {
         label: "工厂色号",
@@ -200,8 +198,7 @@ export function mainCrud(_this) {
         placeholder: " ",
         width: 180,
         overHidden: true,
-        span: 6,
-        placeholder: " "
+        span: 6
       },
       {
         label: "布类名称",

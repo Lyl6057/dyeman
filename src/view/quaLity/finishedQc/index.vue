@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-02-18 16:34:49
+ * @LastEditTime: 2022-02-19 09:46:40
  * @Description:
 -->
 <template>
@@ -139,7 +139,7 @@ export default {
       changeList: [],
       wLoading: false,
       selectList: [],
-      options: [],
+      // options: [],
       oldData: {},
       sort: {},
       checkSum: 0,
@@ -215,9 +215,17 @@ export default {
           delete this.form[key];
         }
       }
-      order
-        ? (this.form.sort = prop + (order == "descending" ? ",1" : ",0"))
-        : (this.form.sort = "storeLoadCode,1");
+      // let r_clothCheckTime_r = "";
+      // if (this.form.clothCheckTime && this.form.clothCheckTime.length) {
+      //   r_clothCheckTime_r = `!%5E%5b${this.form.clothCheckTime[0]} 07:30:00~${this.form.clothCheckTime[1]} 07:30:00%5d`;
+      // } else {
+      //   r_clothCheckTime_r = "!%5E";
+      // }
+      this.form.vatNo = "%" + (this.form.vatNo ? this.form.vatNo : "");
+      this.form.productNo =
+        "!^%" + (this.form.productNo ? this.form.productNo : "");
+      this.form.storeLoadCode =
+        "%" + (this.form.storeLoadCode ? this.form.storeLoadCode : "");
       get(
         Object.assign(this.form, {
           rows: this.page.pageSize,
@@ -236,6 +244,16 @@ export default {
         });
         this.page.total = res.data.total;
         setTimeout(() => {
+          if (this.form.vatNo.indexOf("%") != -1) {
+            this.form.vatNo = this.form.vatNo.split("%")[1] || "";
+          }
+          if (this.form.productNo.indexOf("!^%") != -1) {
+            this.form.productNo = this.form.productNo.split("!^%")[1] || "";
+          }
+          if (this.form.storeLoadCode.indexOf("%") != -1) {
+            this.form.storeLoadCode =
+              this.form.storeLoadCode.split("%")[1] || "";
+          }
           this.wLoading = false;
         }, 200);
       });
@@ -245,11 +263,12 @@ export default {
     },
     cellClick(val) {
       this.detail = val;
-      this.getQcItem(val);
+      this.getQcItem(this.detail);
     },
     getQcItem(val) {
+      this.wLoading = true;
       // this.existed = [];
-      getQcRecord({ proClothNoteFk: val.noteId }).then((res) => {
+      getQcRecord({ proClothNoteFk: val.cardId }).then((res) => {
         this.checkForm.column = [];
         if (res.data.length) {
           let record = res.data[0];
@@ -275,7 +294,15 @@ export default {
           this.$nextTick(() => {
             this.checkQc = record;
           });
+        } else {
+          Object.keys(this.checkQc).forEach((key) => {
+            this.checkQc[key] = "";
+          });
+          // this.checkQc = {};
         }
+        setTimeout(() => {
+          this.wLoading = false;
+        }, 200);
       });
     },
     openCheck() {
@@ -319,7 +346,7 @@ export default {
                   : this.checkQc[key];
             }
           }
-          this.checkQc.proClothNoteFk = this.detail.noteId;
+          this.checkQc.proClothNoteFk = this.detail.cardId;
           this.checkQc.checkDate = this.$getNowTime("datetime");
           addQcRecord(this.checkQc).then((res) => {});
         }
@@ -330,19 +357,13 @@ export default {
       }
     },
     check() {
-      // console.log(this.qcItem);
-      // this.form.qcClothCheckItem = this.qcItem;
-      // this.form.qcClothCheckItem = "";
       this.checkForm.column = [];
-      // if (this.existed.indexOf("remark") == -1) {
+      this.checkQc = {};
       this.checkForm.column.push({
         label: "备注",
         prop: "remark",
         span: 24,
       });
-      // this.checkQc = {};
-      // this.existed.push("remark");
-      // }
       for (let key in this.qcItem) {
         let props = key.split("-");
         if (
@@ -350,8 +371,6 @@ export default {
           key.indexOf("$") == -1 &&
           key.indexOf("-all") == -1
         ) {
-          // this.form.qcClothCheckItem +=
-          //   key.split("-")[0] + ":" + this.qcItem[key] + ";";
           this.checkForm.column.push({
             label: props[0],
             prop: props[1],
@@ -359,8 +378,6 @@ export default {
             type: props[2] == "1" ? "input" : "checkbox",
             dicData: props[2] == "1" ? [] : this.dicArr,
           });
-          // this.existed.push(key.split("-")[1]);
-          // this.checkQc[key.split("-")[1]] = this.qcItem[key];
         } else if (key.indexOf("$") == -1) {
           this.checkQc[props[1]] = "";
         }

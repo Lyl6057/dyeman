@@ -97,8 +97,8 @@ export default {
           this.crud.forEach((item, index) => {
             item.index = index + 1;
             item.check = false;
-            item.purNo = item.poNo;
-            item.batNo = item.batchNo;
+            // item.purNo = item.poNo;
+            // item.batNo = item.batchNo;
             item.$cellEdit = true;
             if (index === this.crud.length - 1) {
               setTimeout(() => {
@@ -198,13 +198,9 @@ export default {
 };
 </script>
 <style lang='stylus'>
-#deliOutPlan {
-  .el-input.is-disabled .el-input__inner {
-    color: #606266;
-  }
-
-  .el-tag--mini {
-    display: none;
-  }
-}
+#deliOutPlan
+  .el-input.is-disabled .el-input__inner
+    color #606266
+  .el-tag--mini
+    display none
 </style>

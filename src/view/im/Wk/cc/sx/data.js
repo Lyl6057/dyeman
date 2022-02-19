@@ -186,7 +186,7 @@ export function rsxkr1C(_this) {
         cell: true,
         width: 100,
         type: "select",
-        dicData: postDicT("ucmlUserList", "employeename", "ucmlUseroid")
+        dicData: postDicT("ucmlUser", "employeename", "ucmlUseroid")
       }
     ]
   };

@@ -1,4 +1,4 @@
-import { getDIC, getDicT, getXDicT, postDicT,getDicNS } from "@/config";
+import { getDIC, getDicT, getXDicT, postDicT, getDicNS } from "@/config";
 let unit = getDIC("bas_matUnit"); // 單位
 let basChemicalmat = getXDicT("BasChemicalmatNew"); // 化工原料
 let basPigment = getXDicT("basPigment"); // 颜料
@@ -136,7 +136,7 @@ export function rhl2F(_this) {
         placeholder: " ",
         type: "select",
         hide: _this.hide === "6" ? false : true,
-        dicData: postDicT("ucmlUserList", "employeename", "ucmlUseroid")
+        dicData: postDicT("ucmlUser", "employeename", "ucmlUseroid")
       }
     ]
   };
@@ -254,7 +254,7 @@ export function rhl1C(_this) {
         span: 6,
         placeholder: " ",
         type: "select",
-        dicData: postDicT("ucmlUserList", "employeename", "ucmlUseroid"),
+        dicData: postDicT("ucmlUser", "employeename", "ucmlUseroid"),
         width: 110
       },
       {
@@ -715,7 +715,11 @@ export function pb2C(_this) {
         filterable: true,
         allowCreate: true,
         defaultFirstOption: true,
-        dicData: getDicNS("whseLocation?warehouseType=1","locationCode", "locationCode"),
+        dicData: getDicNS(
+          "whseLocation?warehouseType=1",
+          "locationCode",
+          "locationCode"
+        ),
         // dicData: getDicT("whseLocation", "locationCode", "locationCode"),
         width: 180
       },
@@ -827,7 +831,11 @@ export function cpb2C(_this) {
         filterable: true,
         allowCreate: true,
         defaultFirstOption: true,
-        dicData: getDicNS("whseLocation?warehouseType=2","locationCode", "locationCode"),
+        dicData: getDicNS(
+          "whseLocation?warehouseType=2",
+          "locationCode",
+          "locationCode"
+        )
         // dicData: getDicT("whseLocation", "locationCode", "locationCode")
       },
       {
@@ -1290,11 +1298,17 @@ export function wjxz3C(_this) {
         filterable: true,
         allowCreate: true,
         defaultFirstOption: true,
-        dicData: getDicNS("whseLocation?warehouseType=" + (  
-        _this.datas === _this.$t("choicDlg.scfl")?"5":
-        _this.datas === _this.$t("choicDlg.wj")?"6":"7" )
-        ,"locationCode", "locationCode"),
-      
+        dicData: getDicNS(
+          "whseLocation?warehouseType=" +
+            (_this.datas === _this.$t("choicDlg.scfl")
+              ? "5"
+              : _this.datas === _this.$t("choicDlg.wj")
+              ? "6"
+              : "7"),
+          "locationCode",
+          "locationCode"
+        )
+
         // dicData: getDicT("whseLocation", "locationCode", "locationCode")
       },
       {

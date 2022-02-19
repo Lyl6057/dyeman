@@ -1,4 +1,4 @@
-import { getDIC, getDicT, postDicT,getDicNS } from '@/config/index'
+import { getDIC, getDicT, postDicT, getDicNS } from "@/config/index";
 
 export function rcpb1F(_this) {
   return {
@@ -10,36 +10,37 @@ export function rcpb1F(_this) {
         label: _this.$t("whseField.rcbh"),
         prop: "yinId",
         span: 6,
-        placeholder: " ",
+        placeholder: " "
       },
       {
         label: _this.$t("whseField.chdh"),
         prop: "purNo",
         span: 6,
         placeholder: " ",
-        display: _this.hide === '2' ? true : false,
+        display: _this.hide === "2" ? true : false
       },
       {
         label: _this.$t("whseField.shdh"),
         prop: "deliNo",
-        display: _this.hide === '2' ? true : false,
+        display: _this.hide === "2" ? true : false,
         span: 6,
-        placeholder: " ",
+        placeholder: " "
       },
       {
         label: _this.$t("whseField.lpbh"),
         prop: "registerNo",
-        display: _this.hide === '1' ? true : false,
+        display: _this.hide === "1" ? true : false,
         span: 6,
-        placeholder: " ",
+        placeholder: " "
       },
       {
         label: _this.$t("whseField.rcrq"),
         prop: "yinDate",
         span: 6,
         placeholder: " ",
-        type: "datetime", format: "yyyy-MM-dd",
-        valueFormat: "yyyy-MM-dd",
+        type: "datetime",
+        format: "yyyy-MM-dd",
+        valueFormat: "yyyy-MM-dd"
       },
       {
         label: _this.$t("whseField.jyzt"),
@@ -47,8 +48,7 @@ export function rcpb1F(_this) {
         span: 6,
         placeholder: " ",
         type: "select",
-        dicData:
-          getDIC('whse_yinstatus')
+        dicData: getDIC("whse_yinstatus")
       },
       //           {
       //   label: "创建日期",
@@ -59,19 +59,17 @@ export function rcpb1F(_this) {
       //   type: "datetime",
       // },
 
-
       {
         label: _this.$t("whseField.cwzt"),
         prop: "finStatus",
         span: 6,
-        display: _this.hide === '1' || _this.hide === '2' ? true : false,
+        display: _this.hide === "1" || _this.hide === "2" ? true : false,
         placeholder: " ",
         type: "select",
-        dicData:
-          getDIC('whse_finStatus')
-      },
-    ],
-  }
+        dicData: getDIC("whse_finStatus")
+      }
+    ]
+  };
 }
 export function rcpb2F(_this) {
   return {
@@ -84,7 +82,7 @@ export function rcpb2F(_this) {
         prop: "yinId",
         span: 6,
         placeholder: " ",
-        disabled: true,
+        disabled: true
       },
       // {
       //   label: "入倉類型",
@@ -102,8 +100,9 @@ export function rcpb2F(_this) {
         span: 6,
         placeholder: " ",
         type: "datetime",
-        disabled: false, format: "yyyy-MM-dd",
-        valueFormat: "yyyy-MM-dd",
+        disabled: false,
+        format: "yyyy-MM-dd",
+        valueFormat: "yyyy-MM-dd"
       },
 
       {
@@ -112,7 +111,7 @@ export function rcpb2F(_this) {
         span: 6,
         placeholder: " ",
         disabled: true,
-        display: _this.hide != '2' ? false : true,
+        display: _this.hide != "2" ? false : true
       },
       {
         label: _this.$t("whseField.shdh"),
@@ -120,7 +119,7 @@ export function rcpb2F(_this) {
         span: 6,
         placeholder: " ",
         disabled: true,
-        display: _this.hide === '2' ? true : false,
+        display: _this.hide === "2" ? true : false
       },
       {
         label: _this.$t("whseField.lpbh"),
@@ -129,24 +128,23 @@ export function rcpb2F(_this) {
         placeholder: " ",
         display: _this.hide === "1" ? true : false,
         disabled: !_this.isAdd,
-        click: (val) => {
+        click: val => {
           if (_this.isAdd) {
-            _this.choiceV = !_this.choiceV
+            _this.choiceV = !_this.choiceV;
             _this.choiceField = "registerNo";
             _this.choiceTarget = _this.form;
             _this.dlgWidth = "60%";
             _this.choiceTle = _this.$t("choicDlg.lpdj");
           }
-
         },
         change: () => {
-          _this.mx = []
-          _this.chooseData = {}
+          _this.mx = [];
+          _this.chooseData = {};
           _this.$nextTick(() => {
-            if (_this.form.registerNo === '') {
-              _this.form.custName = ""
+            if (_this.form.registerNo === "") {
+              _this.form.custName = "";
             }
-          })
+          });
         }
       },
       {
@@ -164,9 +162,9 @@ export function rcpb2F(_this) {
         prop: "yinType",
         cell: false,
         type: "select",
-        dicData: getDIC('Whse_CalicoType'),
+        dicData: getDIC("Whse_CalicoType"),
         span: 6,
-        display: _this.hide === '6' || _this.hide === '4' || _this.hide === '7',
+        display: _this.hide === "6" || _this.hide === "4" || _this.hide === "7",
         disabled: true
       },
       {
@@ -176,7 +174,7 @@ export function rcpb2F(_this) {
         type: "select",
         dicData: getDicT("vWhseMaterialoutPlan", "refName", "refCode"),
         span: 6,
-        display: _this.hide === '5',
+        display: _this.hide === "5",
         disabled: !_this.isAdd,
         click: () => {
           _this.choiceV = !_this.choiceV;
@@ -184,8 +182,7 @@ export function rcpb2F(_this) {
           // this.choiceQ.registerNo = this.form;
           _this.choiceTarget = _this.form;
           _this.dlgWidth = "100%";
-          _this.choiceTle = _this.$t("choicDlg.xzwfpbpl")
-
+          _this.choiceTle = _this.$t("choicDlg.xzwfpbpl");
         }
       },
       {
@@ -193,11 +190,10 @@ export function rcpb2F(_this) {
         prop: "instructId",
         cell: false,
         span: 6,
-        display: _this.hide === '5',
+        display: _this.hide === "5",
         disabled: !_this.isAdd,
         type: "select",
-        dicData:
-          getDicT('viWhseProcessinstruct', "instructId", "instructId"),
+        dicData: getDicT("viWhseProcessinstruct", "instructId", "instructId"),
         // click: () => {
         //   _this.choiceV = !_this.choiceV;
         //   _this.choiceField = "instructId";
@@ -209,12 +205,14 @@ export function rcpb2F(_this) {
         // }
         change: () => {
           _this.$nextTick(() => {
-            if (_this.form.instructId === '' || _this.form.instructId === null) {
-              _this.mx = []
-              _this.chooseData = {}
+            if (
+              _this.form.instructId === "" ||
+              _this.form.instructId === null
+            ) {
+              _this.mx = [];
+              _this.chooseData = {};
             }
-          })
-
+          });
         }
       },
       {
@@ -225,8 +223,7 @@ export function rcpb2F(_this) {
 
         type: "select",
         disabled: true,
-        dicData:
-          getDIC('whse_yinstatus')
+        dicData: getDIC("whse_yinstatus")
       },
 
       {
@@ -236,8 +233,7 @@ export function rcpb2F(_this) {
         span: 6,
         placeholder: " ",
         type: "select",
-        dicData:
-          getDIC('whse_finStatus'),
+        dicData: getDIC("whse_finStatus"),
         disabled: true
       },
       {
@@ -246,13 +242,10 @@ export function rcpb2F(_this) {
         disabled: true,
         span: 6,
         type: "select",
-        dicData:
-          postDicT('ucmlUserList', 'employeename', 'ucmlUseroid')
-      },
-    ],
-  }
-
-
+        dicData: postDicT("ucmlUser", "employeename", "ucmlUseroid")
+      }
+    ]
+  };
 }
 export function rcpbDetailF(_this) {
   return {
@@ -265,7 +258,7 @@ export function rcpbDetailF(_this) {
         prop: "yinId",
         span: 6,
         placeholder: " ",
-        disabled: true,
+        disabled: true
       },
       {
         label: _this.$t("whseField.chdh"),
@@ -273,7 +266,7 @@ export function rcpbDetailF(_this) {
         span: 6,
         placeholder: " ",
         disabled: true,
-        display: _this.hide === '2' ? false : true,
+        display: _this.hide === "2" ? false : true
       },
       {
         label: _this.$t("whseField.djbh"),
@@ -306,8 +299,9 @@ export function rcpbDetailF(_this) {
         span: 6,
         placeholder: " ",
         type: "datetime",
-        disabled: true, format: "yyyy-MM-dd",
-        valueFormat: "yyyy-MM-dd",
+        disabled: true,
+        format: "yyyy-MM-dd",
+        valueFormat: "yyyy-MM-dd"
       },
       {
         label: _this.$t("whseField.shdh"),
@@ -315,7 +309,7 @@ export function rcpbDetailF(_this) {
         span: 6,
         placeholder: " ",
         disabled: true
-      },
+      }
       // {
       //   label: _this.$t("whseField.cwzt"),
       //   prop: "finStatus",
@@ -323,10 +317,8 @@ export function rcpbDetailF(_this) {
       //   placeholder: " ",
       //   disabled: true
       // },
-    ],
-  }
-
-
+    ]
+  };
 }
 export function rcpb1C(_this) {
   return {
@@ -334,7 +326,13 @@ export function rcpb1C(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: _this.hide === '6' || _this.hide === '4' || _this.hide === '5' || _this.hide === '7' ? 'calc(100vh - 233px)' : 'calc(100vh - 275px)',
+    height:
+      _this.hide === "6" ||
+      _this.hide === "4" ||
+      _this.hide === "5" ||
+      _this.hide === "7"
+        ? "calc(100vh - 233px)"
+        : "calc(100vh - 275px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
@@ -342,7 +340,7 @@ export function rcpb1C(_this) {
       {
         label: "胚布入仓OID",
         prop: "whseCalicoinoid",
-        hide: true,
+        hide: true
       },
       {
         label: "#",
@@ -357,19 +355,19 @@ export function rcpb1C(_this) {
         type: "datetime",
         format: "yyyy-MM-dd HH:mm:ss",
         valueFormat: "yyyy-MM-dd HH:mm:ss",
-        align: "center",
+        align: "center"
       },
 
       {
         label: "记录删除标记",
         prop: "sysDeleted",
-        hide: true,
+        hide: true
       },
       {
         label: _this.$t("whseField.rcbh"),
         prop: "yinId",
         cell: true,
-        width: 200,
+        width: 200
       },
       {
         label: _this.$t("whseField.rclx"),
@@ -377,7 +375,7 @@ export function rcpb1C(_this) {
         cell: false,
         width: 140,
         type: "select",
-        dicData: getDIC('Whse_CalicoType'),
+        dicData: getDIC("Whse_CalicoType")
       },
       {
         label: _this.$t("whseField.rcrq"),
@@ -387,7 +385,7 @@ export function rcpb1C(_this) {
         format: "yyyy-MM-dd",
         valueFormat: "yyyy-MM-dd",
         width: 190,
-        align: "center",
+        align: "center"
       },
       {
         label: _this.$t("whseField.chdh"),
@@ -400,38 +398,37 @@ export function rcpb1C(_this) {
           _this.choiceV = !_this.choiceV;
           _this.choiceField = "purNo";
           // _this.choiceQ.purType = '5'
-          _this.oldData = _this.chooseData
+          _this.oldData = _this.chooseData;
           _this.choiceTarget = _this.oldData;
           _this.choiceTle = _this.$t("choicDlg.xzpbcgd");
-        },
+        }
       },
       {
         label: _this.$t("whseField.shdh"),
         prop: "deliNo",
         cell: true,
         width: 180,
-        hide: _this.hide === '2' ? false : true,
-        click: (val) => {
+        hide: _this.hide === "2" ? false : true,
+        click: val => {
           if (!_this.chooseData.purNo) {
-            _this.$tip.error(_this.$t("whseField.xzchdh"))
-            return
+            _this.$tip.error(_this.$t("whseField.xzchdh"));
+            return;
           }
-          _this.choiceV = !_this.choiceV
-          _this.choiceQ.deliType = 'calico'
-          _this.choiceField = "deliNo"
-          _this.oldData = _this.chooseData
+          _this.choiceV = !_this.choiceV;
+          _this.choiceQ.deliType = "calico";
+          _this.choiceField = "deliNo";
+          _this.oldData = _this.chooseData;
           // _this.choiceQ.purNo = this.oldData.purNo
-          _this.choiceTarget = _this.oldData
-          _this.choiceTle = _this.$t("choicDlg.shd")
-        },
+          _this.choiceTarget = _this.oldData;
+          _this.choiceTle = _this.$t("choicDlg.shd");
+        }
       },
       {
         label: _this.$t("whseField.lpbh"),
         prop: "registerNo",
         cell: true,
         width: 180,
-        hide: _this.hide === "1" ? false : true,
-
+        hide: _this.hide === "1" ? false : true
       },
       {
         label: _this.$t("whseField.khbh"),
@@ -440,7 +437,7 @@ export function rcpb1C(_this) {
         hide: _this.hide === "1" ? false : true,
         width: 150,
         type: "select",
-        dicData: getDicT("salEmbryogenesis", "custCode", "registerNo"),
+        dicData: getDicT("salEmbryogenesis", "custCode", "registerNo")
       },
       {
         label: _this.$t("whseField.khmc"),
@@ -449,7 +446,7 @@ export function rcpb1C(_this) {
         hide: _this.hide === "1" ? false : true,
         type: "select",
         dicData: getDicT("basCustomer", "custName", "custCode"),
-        width: 280,
+        width: 280
       },
       {
         label: _this.$t("whseField.jyzt"),
@@ -457,7 +454,7 @@ export function rcpb1C(_this) {
         cell: true,
         width: 120,
         type: "select",
-        dicData: getDIC('whse_yinstatus'),
+        dicData: getDIC("whse_yinstatus")
       },
 
       {
@@ -467,13 +464,13 @@ export function rcpb1C(_this) {
         hide: _this.hide === "5" ? false : true,
         width: 150,
         click: () => {
-          _this.choiceField = "factoryId"
-          _this.choiceV = !_this.choiceV
-          _this.oldData = _this.chooseData
-          _this.choiceTarget = _this.oldData
-          _this.choiceTle = _this.$t("choicDlg.xzwfpbpl"),//'外厂胚布配料计划',
+          _this.choiceField = "factoryId";
+          _this.choiceV = !_this.choiceV;
+          _this.oldData = _this.chooseData;
+          _this.choiceTarget = _this.oldData;
+          (_this.choiceTle = _this.$t("choicDlg.xzwfpbpl")), //'外厂胚布配料计划',
             _this.iptChange(_this.chooseData);
-        },
+        }
       },
       {
         label: _this.$t("whseField.wfcmc"),
@@ -487,48 +484,47 @@ export function rcpb1C(_this) {
       {
         label: _this.$t("whseField.zld"),
         prop: "instructId",
-        hide: true,
+        hide: true
       },
       {
         label: _this.$t("whseField.cwzt"),
         prop: "finStatus",
         cell: true,
         width: 135,
-        hide: _this.hide === '1' || _this.hide === '2' ? false : true,
+        hide: _this.hide === "1" || _this.hide === "2" ? false : true,
         type: "select",
-        dicData:
-          getDIC('whse_finStatus'),
+        dicData: getDIC("whse_finStatus")
       },
       {
         label: "创建用户",
         prop: "sysCreatedby",
-        hide: true,
+        hide: true
       },
       {
         label: "授权用户",
         prop: "sysReplacement",
-        hide: true,
+        hide: true
       },
       {
         label: "所属岗位",
         prop: "sysPostn",
-        hide: true,
+        hide: true
       },
       {
         label: "所属部门",
         prop: "sysDivision",
-        hide: true,
+        hide: true
       },
       {
         label: "所属组织",
         prop: "sysOrg",
-        hide: true,
+        hide: true
       },
       {
         label: "最后修改用户",
         prop: "sysLastUpdBy",
         hide: true,
-        width: 150,
+        width: 150
       },
       {
         label: "最后修改日期",
@@ -538,11 +534,10 @@ export function rcpb1C(_this) {
         width: 180,
         format: "yyyy-MM-dd HH:mm:ss",
         valueFormat: "yyyy-MM-dd HH:mm:ss",
-        align: "center",
-      },
-    ],
-  }
-
+        align: "center"
+      }
+    ]
+  };
 }
 export function rcpb2C(_this) {
   return {
@@ -550,7 +545,7 @@ export function rcpb2C(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: 'calc(100vh - 312px)',
+    height: "calc(100vh - 312px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
@@ -559,15 +554,14 @@ export function rcpb2C(_this) {
     sumColumnList: [
       {
         label: " ",
-        name: 'countingNo',
-        type: 'sum',
+        name: "countingNo",
+        type: "sum"
       },
       {
         label: " ",
-        name: 'weight',
-        type: 'sum'
-      },
-
+        name: "weight",
+        type: "sum"
+      }
     ],
     column: [
       {
@@ -579,16 +573,19 @@ export function rcpb2C(_this) {
       {
         label: "来胚入仓明细OID",
         prop: "whseCalicoinDtlaoid",
-        hide: true,
+        hide: true
       },
       {
         label: _this.$t("whseField.scdh"),
         prop: "prodNo",
         cell: false,
         width: 200,
-        hide: _this.hide === '6' || _this.hide === '4' || _this.hide === '7' ? false : true,
-        placeholder: _this.$t("whseField.qxzscdh"),//"請選擇生產單號",
-        click: (val) => {
+        hide:
+          _this.hide === "6" || _this.hide === "4" || _this.hide === "7"
+            ? false
+            : true,
+        placeholder: _this.$t("whseField.qxzscdh"), //"請選擇生產單號",
+        click: val => {
           // _this.choiceV = !_this.choiceV
           // _this.choiceField = "prodNo";
           // _this.oldData = _this.chooseData;
@@ -596,60 +593,66 @@ export function rcpb2C(_this) {
           // if (_this.hide === '6' || _this.hide === '7') {
           //   _this.choiceTle = "胚布貨物包";
           // }
-          if (_this.hide === '4') {
+          if (_this.hide === "4") {
             _this.choiceTle = _this.$t("choicDlg.pbdd");
           }
-        },
+        }
       },
       {
         label: _this.$t("choicDlg.pbbm"),
         prop: "calicoId",
         cell: false,
         width: 120,
-        hide: _this.hide === '6' || _this.hide === '7' ? true : false,
-        click: (val) => {
-          _this.choiceV = !_this.choiceV
+        hide: _this.hide === "6" || _this.hide === "7" ? true : false,
+        click: val => {
+          _this.choiceV = !_this.choiceV;
           _this.choiceField = "calicoId";
           _this.oldData = _this.chooseData;
           _this.choiceTarget = _this.oldData;
           _this.choiceTle = _this.$t("choicDlg.pbbm");
-        },
+        }
       },
       {
         label: _this.$t("whseField.pbmc"),
         prop: "clothName",
         cell: false,
         width: 650,
-        hide: _this.hide === '6' || _this.hide === '7' ? true : false,
-        click: (val) => {
-        },
+        hide: _this.hide === "6" || _this.hide === "7" ? true : false,
+        click: val => {}
       },
       {
         label: _this.$t("whseField.ps"),
         prop: "countingNo",
-        hide: _this.hide === '6' || _this.hide === '7' || _this.hide === '5' ? false : true,
+        hide:
+          _this.hide === "6" || _this.hide === "7" || _this.hide === "5"
+            ? false
+            : true,
         cell: true,
         width: 100,
-        align: "right",
+        align: "right"
       },
       {
         label: "载具编号",
         prop: "fabticket",
         cell: true,
         width: 140,
-        hide: _this.hide === '6' || _this.hide === '7' ? false : true,
+        hide: _this.hide === "6" || _this.hide === "7" ? false : true
       },
       {
         label: _this.$t("whseField.hwm"),
         prop: "locationCode",
         cell: true,
-        hide: _this.hide === '6' || _this.hide === '7' ? false : true,
+        hide: _this.hide === "6" || _this.hide === "7" ? false : true,
         width: 180,
         filterable: true,
         allowCreate: true,
         defaultFirstOption: true,
-        type:"select",
-        dicData: getDicNS("whseLocation?warehouseType=1","locationCode", "locationCode"),
+        type: "select",
+        dicData: getDicNS(
+          "whseLocation?warehouseType=1",
+          "locationCode",
+          "locationCode"
+        )
         // click: () => {
         //   _this.dlgWidth = "100%"
         //   _this.choiceV = !_this.choiceV
@@ -692,22 +695,20 @@ export function rcpb2C(_this) {
       //   }
       // },
 
-
       // {
       //   label: "来胚入仓_FK",
       //   prop: "whseCalicoinFk",
       //   hide: true,
       // },
 
-
       {
         label: _this.$t("whseField.zl"),
         prop: "weight",
-        hide: _this.hide != '5',
+        hide: _this.hide != "5",
         cell: true,
         width: 100,
-        align: "right",
-      },
+        align: "right"
+      }
 
       // {
       //   label: _this.$t("whseField.zldw"),
@@ -720,8 +721,7 @@ export function rcpb2C(_this) {
 
       // }
     ]
-  }
-
+  };
 }
 export function rcpb3C(_this) {
   return {
@@ -729,7 +729,10 @@ export function rcpb3C(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: _this.hide === '1' || _this.hide === '2' ? 'calc(100vh - 315px)' : 'calc(100vh - 285px)',
+    height:
+      _this.hide === "1" || _this.hide === "2"
+        ? "calc(100vh - 315px)"
+        : "calc(100vh - 285px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
@@ -738,10 +741,9 @@ export function rcpb3C(_this) {
     sumColumnList: [
       {
         label: " ",
-        name: 'weight',
-        type: 'sum'
-      },
-
+        name: "weight",
+        type: "sum"
+      }
     ],
     column: [
       {
@@ -753,12 +755,13 @@ export function rcpb3C(_this) {
       {
         label: "来胚入仓批号资料OID",
         prop: " whseCalicoinDtlbOid",
-        hide: true,
+        hide: true
       },
       {
         label: _this.$t("whseField.ph"),
         prop: "batchNo",
-        cell: true, width: 170,
+        cell: true,
+        width: 170
 
         // click: (val) => {
         //   _this.iptPhChange(_this.choosePhData);
@@ -769,7 +772,7 @@ export function rcpb3C(_this) {
         prop: "countingNo",
         cell: true,
         width: 70,
-        align: "right",
+        align: "right"
         // click: (val) => {
         //   _this.iptPhChange(_this.choosePhData);
         // },
@@ -779,7 +782,7 @@ export function rcpb3C(_this) {
         prop: "weight",
         cell: true,
         width: 100,
-        align: "right",
+        align: "right"
         // click: (val) => {
         //   _this.iptPhChange(_this.choosePhData);
         // },
@@ -790,7 +793,7 @@ export function rcpb3C(_this) {
         cell: true,
         width: 100,
         type: "select",
-        dicData: getDIC("bas_matUnit"),
+        dicData: getDIC("bas_matUnit")
         // click: (val) => {
         //   _this.iptPhChange(_this.choosePhData);
         // },
@@ -799,13 +802,11 @@ export function rcpb3C(_this) {
         label: _this.$t("whseField.krbph"),
         prop: "custTicket",
         cell: true,
-        width: 150,
+        width: 150
         // click: (val) => {
         //   _this.iptPhChange(_this.choosePhData);
         // },
       }
     ]
-  }
-
+  };
 }
-

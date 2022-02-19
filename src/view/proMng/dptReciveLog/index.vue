@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-02-12 16:45:03
+ * @LastEditTime: 2022-02-18 10:30:21
  * @Description: 
 -->
 <template>
@@ -178,6 +178,8 @@ import {
   getProcess,
   getLog,
   getRunJob,
+  getLoginOrg,
+  getDptWorkProcess,
 } from "./api";
 import tem from "./temDlg";
 export default {
@@ -246,7 +248,6 @@ export default {
         if (this.form.weaveJobCode.indexOf("!^%") != -1) {
           this.form.weaveJobCode = this.form.weaveJobCode.split("!^%")[1] || "";
         }
-        console.log(this.form.weaveJobCode);
         this.page.total = res.data.total;
         setTimeout(() => {
           this.loading = false;
@@ -346,6 +347,19 @@ export default {
     },
   },
   created() {
+    getLoginOrg({ account: parent.userID }).then((res) => {
+      if (res.data) {
+        getDptWorkProcess().then((dpt) => {
+          for (let i = 0; i < dpt.data.length; i++) {
+            if (dpt.data[i].orgNo.indexOf(res.data.orgno) != -1) {
+              this.detail.dpt = dpt.data[i].dptCode;
+              console.log(this.detail.dpt);
+              break;
+            }
+          }
+        });
+      }
+    });
     this.spowerClient = this.$store.state.spowerClient;
     let _this = this;
     _this.spowerClient.onmessage = function (e) {

@@ -497,7 +497,7 @@ export default {
             span: 6,
             // type: "select",
             display: false,
-            // dicData: postDicT("ucmlUserList", "employeename", "ucmlUseroid"),
+            // dicData: postDicT("ucmlUser", "employeename", "ucmlUseroid"),
           },
         ],
       },
@@ -660,7 +660,7 @@ export default {
             display: true,
             hide: true,
             type: "select",
-            dicData: postDicT("ucmlUserList", "employeename", "ucmlUseroid"),
+            dicData: postDicT("ucmlUser", "employeename", "ucmlUseroid"),
           },
         ],
       },
@@ -972,16 +972,11 @@ export default {
 </script>
 
 <style lang="stylus">
-#Arrange {
-  .el-dialog__headerbtn {
-    z-index: 99 !important;
-  }
-
-  .ldDlg {
-    .el-dialog__header {
-      padding: 0 !important;
-      height: 0 !important;
-    }
-  }
-}
+#Arrange
+  .el-dialog__headerbtn
+    z-index 99 !important
+  .ldDlg
+    .el-dialog__header
+      padding 0 !important
+      height 0 !important
 </style>

@@ -1934,7 +1934,7 @@ export function mainWCrud(_this) {
             ]
             // type: "select",
             // dicData:
-            //   postDicT('ucmlUserList', 'employeename', 'ucmlUseroid')
+            //   postDicT('ucmlUser', 'employeename', 'ucmlUseroid')
           }
         ]
       }
