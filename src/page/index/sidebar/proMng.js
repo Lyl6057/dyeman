@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-04-01 13:39:35
  * @LastEditors: Lyl
- * @LastEditTime: 2022-01-28 11:11:46
+ * @LastEditTime: 2022-02-24 10:09:33
  * @Description:
  */
 
@@ -88,18 +88,17 @@ export function proMng(_this) {
           index: "proOutWeaveJob"
         },
         {
-          menuName: "5.布飞打印记录",
+          menuName: "5.布飞打印",
+          index: "clothFly"
+        },
+        {
+          menuName: "6.布飞打印记录",
           index: "buffyPrints"
+        },
+        {
+          menuName: "7.外发加工送货单",
+          index: "proWeaveOutworkShip"
         }
-
-        // {
-        //   menuName: "3.落布记录",
-        //   index: "/cropping"
-        // },
-        // {
-        //   menuName: "1.织造通知单",
-        //   index: "/weaveRecord"
-        // },
       ]
     },
     {
@@ -172,30 +171,30 @@ export function proMng(_this) {
         //   index: "/proSalSchedule"
         // },
       ]
-    },
-    {
-      menuName: "六.報表",
-      index: "proReport",
-      icon: "el-icon-document-copy",
-      children: [
-        {
-          menuName: "1.织造工单",
-          index: "proWeaveJob"
-        },
-        // {
-        //   menuName: "2.染整工单",
-        //   index: "/dyeing"
-        // },
-        {
-          menuName: "2.布飞打印",
-          index: "clothFly"
-        }
-        // {
-        //   menuName: "3.纱缸查询",
-        //   index: "yarnBatch"
-        // }
-      ]
     }
+    // {
+    //   menuName: "六.報表",
+    //   index: "proReport",
+    //   icon: "el-icon-document-copy",
+    //   children: [
+    //     {
+    //       menuName: "1.织造工单",
+    //       index: "proWeaveJob"
+    //     },
+    //     // {
+    //     //   menuName: "2.染整工单",
+    //     //   index: "/dyeing"
+    //     // },
+    //     {
+    //       menuName: "2.布飞打印",
+    //       index: "clothFly"
+    //     }
+    //     // {
+    //     //   menuName: "3.纱缸查询",
+    //     //   index: "yarnBatch"
+    //     // }
+    //   ]
+    // }
     // {
     //   menuName: "测试",
     //   index: "test",

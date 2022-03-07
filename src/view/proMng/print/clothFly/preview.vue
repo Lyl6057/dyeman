@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:48:57
  * @LastEditors: Lyl
- * @LastEditTime: 2021-06-21 15:43:17
+ * @LastEditTime: 2022-03-05 08:35:11
  * @Description: 
 -->
 <template>
@@ -126,18 +126,27 @@
             </el-col> -->
           </el-row>
           <el-row class="yl_bh" style="font-size: 20px">
-            |||||||||||||||||||||||||||||||
+            <img :id="'barcode' + i" style="width: 100%" />
           </el-row>
-          <el-row class="yl_bh">
+          <!-- <el-row
+            style="
+              height: 30px;
+              text-align: center;
+              font-size: 20px;
+              line-height: 30px;
+            "
+          >
             {{ item.noteCode }}
-          </el-row>
+          </el-row> -->
         </div>
+
         <!-- <embed :src="url + item.noteId" width="400" height="580" hidden="no" /> -->
       </el-card>
     </div>
   </div>
 </template>
 <script>
+import JsBarcode from "jsbarcode";
 export default {
   name: "",
   props: {
@@ -149,84 +158,76 @@ export default {
     return {
       url: process.env.API_HOST + "/api/proClothNote/preview?id=",
       loading: false,
-      show: false,
+      show: true,
     };
   },
   watch: {
     detail(n, o) {
       this.show = false;
+      this.setBarCode();
+    },
+  },
+  methods: {
+    setBarCode() {
       this.loading = true;
+      this.show = true;
       this.$nextTick(() => {
         setTimeout(() => {
-          this.show = true;
+          this.detail.forEach((item, i) => {
+            JsBarcode("#barcode" + i, item.noteCode, {
+              format: "code128",
+              lineColor: "#000",
+              background: "#fff",
+              width: 2,
+              height: 60,
+              displayValue: true,
+            });
+          });
           this.loading = false;
         }, 500);
       });
     },
   },
-  methods: {},
   created() {},
   mounted() {
-    this.show = false;
-    this.loading = true;
-    this.$nextTick(() => {
-      setTimeout(() => {
-        this.show = true;
-        this.loading = false;
-      }, 500);
-    });
+    this.setBarCode();
   },
   beforeDestroy() {},
 };
 </script>
 <style lang='stylus'>
-#clothFlyYl {
-  height: calc(100vh - 370px);
-  width: 100%;
-  overflow: auto;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  padding: 3px 0;
-
-  .previewBox {
-    width: 300px;
+#clothFlyYl
+  height calc(100vh - 370px)
+  width 100%
+  overflow auto
+  display flex
+  flex-direction row
+  flex-wrap wrap
+  -webkit-user-select none
+  -moz-user-select none
+  -ms-user-select none
+  user-select none
+  padding 3px 0
+  .previewBox
+    width 23%
     // height: 374px;
-    margin: 5px;
-    border: 1px solid #ccc;
+    margin 5px
+    border 1px solid #ccc
     // border-right: none;
-  }
-
-  .tle {
-    font-family: 'Times New Roman';
-    font-size: 16px;
-    text-align: center;
-  }
-
-  .content {
-    margin: 10px 2px 0 2px;
-    text-align: left;
-  }
-
-  .yl_label {
-    font-family: 'Times New Roman';
-    font-size: 12px;
-    margin-left: 3px;
-    margin-top: 8px;
-  }
-
-  .yl_bh {
-    height: 29px;
-    line-height: 29px;
-    text-align: center;
-  }
-
-  .yl_bh:last-child {
-    border-top: 1px solid #000;
-  }
-}
+  .tle
+    font-family 'Times New Roman'
+    font-size 16px
+    text-align center
+  .content
+    margin 10px 2px 0 2px
+    text-align left
+  .yl_label
+    font-family 'Times New Roman'
+    font-size 12px
+    margin-left 3px
+    margin-top 8px
+  .yl_bh
+    text-align center
+  .yl_bh:last-child
+    border-top 1px solid #000
 </style>

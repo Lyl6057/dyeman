@@ -176,7 +176,7 @@ export function rhl2F(_this) {
         placeholder: " ",
         type: "select",
         hide: _this.hide === "6" ? false : true,
-        dicData: postDicT("ucmlUser", "employeename", "ucmlUseroid")
+        dicData: getDicT("ucmlUser", "employeename", "ucmlUseroid")
       }
     ]
   };
@@ -308,7 +308,7 @@ export function rhl1C(_this) {
         span: 6,
         placeholder: " ",
         type: "select",
-        dicData: postDicT("ucmlUser", "employeename", "ucmlUseroid"),
+        dicData: getDicT("ucmlUser", "employeename", "ucmlUseroid"),
         width: 110
       },
       {

@@ -301,7 +301,7 @@ export function rsxkr1C(_this) {
         cell: true,
         width: 140,
         type: "select",
-        dicData: postDicT("ucmlUser", "employeename", "ucmlUseroid")
+        dicData: getDicT("ucmlUser", "employeename", "ucmlUseroid")
         // hide: _this.hide === '6' || _this.hide === '1' ? false : true
       }
     ]

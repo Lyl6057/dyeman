@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-05-03 13:03:03
  * @LastEditors: Lyl
- * @LastEditTime: 2022-01-20 13:12:17
+ * @LastEditTime: 2022-03-05 13:22:39
  * @Description:
  */
 
@@ -454,7 +454,6 @@ export function hgylStockC(_this) {
     ]
   };
 }
-
 export function getHgylStock(params) {
   return axios({
     url: "/api/viewChemicalStock/page",
@@ -462,6 +461,227 @@ export function getHgylStock(params) {
     params: params
   });
 }
+
+export function ylStockF(_this) {
+  return {
+    submitBtn: false,
+    emptyBtn: false,
+    labelWidth: 130,
+    column: [
+      {
+        label: _this.$t("whseField.ph"),
+        prop: "batchNo",
+        cell: false,
+        placeholder: " ",
+        span: 6
+      },
+      {
+        label: _this.$t("whseField.clbh"),
+        prop: "chemicalId",
+        width: 140,
+        placeholder: " ",
+        span: 6
+      }
+    ]
+  };
+}
+export function ylStockC(_this) {
+  return {
+    menu: false,
+    addBtn: false,
+    border: true,
+    highlightCurrentRow: true,
+    height: "calc(100vh - 190px)",
+    refreshBtn: false,
+    columnBtn: false,
+    showOverflowTooltip: true,
+    excelBtn: true,
+    showSummary: true,
+    selection: true,
+    sumColumnList: [
+      {
+        label: " ",
+        name: "stock",
+        type: "sum"
+      }
+    ],
+    page: true,
+    column: [
+      {
+        label: "#",
+        prop: "index",
+        width: 50,
+        align: "center"
+      },
+      // {
+      //   label: "材料种类",
+      //   prop: "kindId",
+      //   width: 100,
+      //   type: "select",
+      //   dicData: kindId
+      // },
+      {
+        label: _this.$t("whseField.clbh"),
+        prop: "chemicalId",
+        width: 140
+      },
+      {
+        label: _this.$t("whseField.clmc"),
+        prop: "chemicalName",
+        type: "select",
+        overHidden: true,
+        width: 400
+      },
+      {
+        label: _this.$t("whseField.ph"),
+        prop: "batchNo",
+        cell: false,
+        width: 180
+      },
+      {
+        label: "库存数量",
+        prop: "weight",
+        cell: false,
+        width: 120,
+        align: "right"
+      },
+      {
+        label: _this.$t("whseField.dw"),
+        prop: "weightUnit",
+        cell: false,
+        width: 80,
+        type: "select",
+        dicData: matUnit
+      }
+    ]
+  };
+}
+export function getYlStock(params) {
+  return axios({
+    url: "/api/viewDyesalinStok/page",
+    method: "get",
+    params: params
+  });
+}
+
+export function sxStockF(_this) {
+  return {
+    submitBtn: false,
+    emptyBtn: false,
+    labelWidth: 130,
+    column: [
+      // {
+      //   label: "纱线编号",
+      //   prop: "yarnsId",
+      //   cell: false,
+      //   placeholder: " ",
+      //   span: 6
+      // },
+      {
+        label: _this.$t("whseField.ph"),
+        prop: "batchNo",
+        cell: false,
+        placeholder: " ",
+        span: 6
+      },
+      {
+        label: _this.$t("whseField.hwm"),
+        prop: "locationCode",
+        cell: false,
+        placeholder: " ",
+        span: 6
+      }
+    ]
+  };
+}
+export function sxStockC(_this) {
+  return {
+    menu: false,
+    addBtn: false,
+    border: true,
+    highlightCurrentRow: true,
+    height: "calc(100vh - 190px)",
+    refreshBtn: false,
+    columnBtn: false,
+    showOverflowTooltip: true,
+    excelBtn: true,
+    showSummary: true,
+    selection: true,
+    sumColumnList: [
+      {
+        label: " ",
+        name: "weight",
+        type: "sum"
+      }
+    ],
+    page: true,
+    column: [
+      {
+        label: "#",
+        prop: "index",
+        width: 50,
+        align: "center"
+      },
+      // {
+      //   label: "材料种类",
+      //   prop: "kindId",
+      //   width: 100,
+      //   type: "select",
+      //   dicData: kindId
+      // },
+      {
+        label: _this.$t("whseField.sxbh"),
+        prop: "yarnsId",
+        width: 140,
+        overHidden: true
+      },
+      {
+        label: _this.$t("whseField.sxmc"),
+        prop: "yarnsName",
+        type: "select",
+        overHidden: true,
+        width: 400
+      },
+      {
+        label: _this.$t("whseField.ph"),
+        prop: "batchNo",
+        cell: false,
+        width: 180,
+        overHidden: true
+      },
+      {
+        label: "库存数量",
+        prop: "weight",
+        cell: false,
+        width: 120,
+        align: "right"
+      },
+      {
+        label: _this.$t("whseField.dw"),
+        prop: "weightUnit",
+        cell: false,
+        width: 80,
+        type: "select",
+        dicData: matUnit
+      },
+      {
+        label: _this.$t("whseField.hwm"),
+        prop: "locationCode",
+        cell: false,
+        overHidden: true,
+        width: 120
+      }
+    ]
+  };
+}
+export function getSxStock(params) {
+  return axios({
+    url: "/api/viewYarnStock/page",
+    method: "get",
+    params: params
+  });
+}
+
 export function cpbInF(_this) {
   return {
     submitBtn: false,
@@ -535,7 +755,6 @@ export function cpbInC(_this) {
         prop: "weightUnit",
         cell: true,
         width: 100,
-        type: "select",
         type: "select",
         dicData: getDIC("bas_matUnit")
       },
@@ -1421,8 +1640,7 @@ export function resolveC(_this) {
         placeholder: " ",
         width: 180,
         overHidden: true,
-        span: 8,
-        placeholder: " "
+        span: 8
       },
       {
         label: "布類描述",
@@ -1431,8 +1649,7 @@ export function resolveC(_this) {
         tip: "Loại vải",
         overHidden: true,
         width: 250,
-        span: 16,
-        placeholder: " "
+        span: 16
         // rules: [{
         //   required: true,
         //   message: "请選擇布類描述",
@@ -2021,8 +2238,7 @@ export function dyeC(_this) {
         placeholder: " ",
         overHidden: true,
         width: 250,
-        span: 12,
-        placeholder: " "
+        span: 12
         // rules: [{
         //   required: true,
         //   message: "请選擇布類描述",
@@ -2073,8 +2289,7 @@ export function dyeC(_this) {
         placeholder: " ",
         width: 180,
         overHidden: true,
-        span: 6,
-        placeholder: " "
+        span: 6
         // rules: [{
         //   required: true,
         //   message: "请選擇顏色名稱",
@@ -2614,7 +2829,6 @@ export function clothNoteC(_this) {
         disabled: true,
         placeholder: " ",
         span: 6,
-        width: 100,
         width: 200,
         overHidden: true,
         hide: true
@@ -2982,7 +3196,6 @@ export function weaveJobC(_this) {
         label: "成品期",
         prop: "productDate",
         width: 120,
-        placeholder: " ",
         span: 6,
         type: "date",
         align: "center",
@@ -3110,7 +3323,6 @@ export function weaveJobC(_this) {
       {
         label: "布類描述",
         prop: "fabricDesc",
-        placeholder: " ",
         overHidden: true,
         width: 250,
         span: 12,
@@ -3126,7 +3338,6 @@ export function weaveJobC(_this) {
       {
         label: "顏色名稱",
         prop: "colorName",
-        placeholder: " ",
         width: 180,
         overHidden: true,
         span: 6,
@@ -3219,13 +3430,13 @@ export function weaveJobC(_this) {
         placeholder: " ",
         span: 6,
         click: () => {
-          if (!_this.form.weaveJobId) {
-            _this.$tip.error("請先保存通知單信息!");
-            return;
-          }
-          _this.crudOp = longCrud(_this);
-          _this.visible = true;
-          _this.tabs = "更改紗長";
+          // if (!_this.form.weaveJobId) {
+          //   _this.$tip.error("請先保存通知單信息!");
+          //   return;
+          // }
+          // _this.crudOp = longCrud(_this);
+          // _this.visible = true;
+          // _this.tabs = "更改紗長";
         }
       },
 
@@ -3275,8 +3486,7 @@ export function weaveJobC(_this) {
         prop: "otherRequire",
         placeholder: " ",
         hide: true,
-        span: 12,
-        placeholder: " "
+        span: 12
       },
 
       {
@@ -3324,7 +3534,6 @@ export function weaveJobC(_this) {
         prop: "transPlate",
         hide: true,
         placeholder: " ",
-        placeholder: " ",
         span: 12
       },
       {
@@ -3332,7 +3541,6 @@ export function weaveJobC(_this) {
         prop: "clothRackWidth",
         placeholder: " ",
         hide: true,
-        placeholder: " ",
         span: 6
       },
       {

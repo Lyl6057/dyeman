@@ -97,8 +97,8 @@ export default {
           this.crud.forEach((item, index) => {
             item.index = index + 1;
             item.check = false;
-            // item.purNo = item.poNo;
-            // item.batNo = item.batchNo;
+            item.purNo = item.poNo || item.purNo;
+            item.batNo = item.batchNo || item.batNo;
             item.$cellEdit = true;
             if (index === this.crud.length - 1) {
               setTimeout(() => {

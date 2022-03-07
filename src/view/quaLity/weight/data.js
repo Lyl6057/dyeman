@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-12-29 13:25:28
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-02-26 10:47:00
  * @Description:
  */
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
@@ -109,7 +109,7 @@ export function mainForm(_this) {
         placeholder: " ",
         align: "center",
         width: 180,
-        sortable:true,
+        sortable: true
       }
     ]
   };
@@ -165,8 +165,7 @@ export function mainCrud(_this) {
         prop: "perching",
         width: 250,
         placeholder: " ",
-        overHidden: true,
-
+        overHidden: true
       },
       {
         label: "訂單號(Số đơn hàng)",
@@ -464,7 +463,7 @@ export function mainCrud(_this) {
         defaultFirstOption: true,
         dicData: getDIC("QC_CLOTH_VISITING_REMOVE")
       },
-     
+
       {
         label: "打印时间(thời gian in)",
         prop: "printedTime",

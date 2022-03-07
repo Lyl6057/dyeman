@@ -1,4 +1,4 @@
-import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
+import { getDIC, getDicT, getXDicT, postDicT, getDicNS } from "@/config";
 let unit = getDIC("bas_matUnit");
 export function rhl1F(_this) {
   return {
@@ -34,6 +34,12 @@ export function rhl1F(_this) {
         span: 6,
         placeholder: " "
       },
+      // {
+      //   label: _this.$t("whseField.gysbh"),
+      //   prop: "batId",
+      //   span: 6,
+      //   placeholder: " "
+      // },
       {
         label: _this.$t("whseField.jyzt"),
         prop: "yinStatus",
@@ -50,6 +56,16 @@ export function rhl1F(_this) {
         placeholder: " ",
         type: "select",
         dicData: getDIC("whse_finStatus")
+      },
+      {
+        label: _this.$t("whseField.czy"),
+        prop: "sysCreatedby",
+        filterable: true,
+        span: 6,
+        placeholder: " ",
+        type: "select",
+        dicData: getDicT("ucmlUser", "employeename", "ucmlUseroid"),
+        width: 120
       }
     ]
   };
@@ -96,7 +112,7 @@ export function rhl2F(_this) {
         span: 6,
         placeholder: " ",
         type: "select",
-        disabled: true,
+        disabled: false,
         display: true,
         dicData: getDIC("whse_yinstatus")
       },
@@ -118,7 +134,7 @@ export function rhl2F(_this) {
         placeholder: " ",
         type: "select",
         hide: _this.hide === "6" ? false : true,
-        dicData: postDicT("ucmlUser", "employeename", "ucmlUseroid")
+        dicData: getDicT("ucmlUser", "employeename", "ucmlUseroid")
       }
     ]
   };
@@ -169,7 +185,7 @@ export function rhl1C(_this) {
         dicData:
           _this.data === _this.$t("iaoMng.hgyl") ||
           _this.data === _this.$t("iaoMng.yl")
-            ? getDIC("Whse_CalicoType")
+            ? getDIC("Whse_ChemType")
             : _this.data === _this.$t("iaoMng.sx")
             ? getDIC("Whse_yinType")
             : getDIC("Whse_AccessoriesType")
@@ -203,6 +219,7 @@ export function rhl1C(_this) {
         prop: "$suppId",
         cell: false,
         width: 280,
+        overHidden: true,
         type: "select",
         dicData: getDicT("basSupplier", "suppName", "suppId")
       },
@@ -235,7 +252,7 @@ export function rhl1C(_this) {
         span: 6,
         placeholder: " ",
         type: "select",
-        dicData: postDicT("ucmlUser", "employeename", "ucmlUseroid"),
+        dicData: getDicT("ucmlUser", "employeename", "ucmlUseroid"),
         width: 120
       },
       {
@@ -337,18 +354,18 @@ export function rhl2C(_this) {
             ? false
             : true
       },
-      {
-        label: _this.$t("whseField.clbh"),
-        prop: "materialNum",
-        cell: false,
-        width: 180,
-        hide:
-          _this.datas === _this.$t("iaoMng.hgyl") &&
-          _this.datas != _this.$t("iaoMng.yl") &&
-          _this.datas != _this.$t("iaoMng.sx")
-            ? false
-            : true
-      },
+      // {
+      //   label: _this.$t("whseField.clbh"),
+      //   prop: "materialNum",
+      //   cell: false,
+      //   width: 180,
+      //   hide:
+      //     _this.datas === _this.$t("iaoMng.hgyl") &&
+      //     _this.datas != _this.$t("iaoMng.yl") &&
+      //     _this.datas != _this.$t("iaoMng.sx")
+      //       ? false
+      //       : true
+      // },
       {
         label: _this.$t("whseField.clmc"),
         prop: "chinName",
@@ -450,8 +467,15 @@ export function rhl2C(_this) {
       //   },
       // },
       {
-        label: _this.$t("whseField.ph"),
-        prop: "batchNo",
+        label: "供应商批号",
+        prop: "batId",
+        cell: true,
+        width: 120,
+        overHidden: true
+      },
+      {
+        label: "本厂纱批号",
+        prop: "batchNos",
         cell: false,
         width: 220
       },
@@ -472,7 +496,7 @@ export function rhl2C(_this) {
         label: _this.$t("whseField.dw"),
         prop: "weightUnit",
         cell: false,
-        width: 100,
+        width: 120,
         type: "select",
         dicData: unit,
         hide:
@@ -518,10 +542,10 @@ export function rhl3C(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(50vh - 198px)",
+    height: "calc(50vh - 145px)",
     refreshBtn: false,
     columnBtn: false,
-    page: true,
+    page: false,
     roykey: "whseChemicalinDtlboid",
     showSummary: true,
     sumColumnList: [
@@ -539,9 +563,10 @@ export function rhl3C(_this) {
         align: "center"
       },
       {
-        label: _this.$t("whseField.ph"),
-        prop: "batchNo",
-        cell: true,
+        label: "本厂纱批号",
+        prop: "batchNos",
+        cell: false,
+        // hide: _this.datas == _this.$t("iaoMng.sx") ? true : false,
         width: 220
       },
       {
@@ -549,8 +574,17 @@ export function rhl3C(_this) {
         prop: "origin",
         cell: true,
         width: 120,
+        hide: _this.datas == _this.$t("iaoMng.sx") ? true : false,
         type: "select",
         dicData: getDIC("Whse_Origin")
+      },
+      {
+        label: _this.$t("whseField.xs"),
+        prop: "cartonNum",
+        cell: true,
+        width: 120,
+        hide: _this.datas == _this.$t("iaoMng.sx") ? false : true,
+        align: "right"
       },
       {
         label: _this.$t("whseField.zl"),
@@ -566,26 +600,43 @@ export function rhl3C(_this) {
         width: 100,
         type: "select",
         dicData: unit
+      },
+      {
+        label: _this.$t("whseField.hwm"),
+        prop:
+          _this.datas == _this.$t("iaoMng.sx") ? "locationCode" : "storageNo",
+        cell: true,
+        width: 100,
+        type: "select",
+        dicData: getDicNS(
+          "whseLocation?warehouseType=" +
+            (_this.datas == _this.$t("iaoMng.sx")
+              ? "0"
+              : _this.datas == _this.$t("iaoMng.yl")
+              ? "4"
+              : "3"),
+          "locationCode",
+          "locationCode",
+          {},
+          "locationCode"
+        )
       }
     ]
   };
 }
-
 export function rhl4C(_this) {
   return {
     menu: false,
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height:
-      _this.datas === _this.$t("iaoMng.yl") ||
-      _this.datas === _this.$t("iaoMng.hgyl")
-        ? "calc(50vh - 198px)"
-        : "calc(100vh - 278px)",
+    height: "calc(50vh - 170px)",
+
     refreshBtn: false,
+    index: true,
     columnBtn: false,
-    page: true,
-    showSummary: true,
+    page: false,
+    showSummary: false,
     sumColumnList: [
       {
         label: " ",
@@ -594,12 +645,12 @@ export function rhl4C(_this) {
       }
     ],
     column: [
-      {
-        label: "#",
-        prop: "index",
-        width: 50,
-        align: "center"
-      },
+      // {
+      //   label: "#",
+      //   prop: "index",
+      //   width: 50,
+      //   align: "center"
+      // },
       {
         label: _this.$t("whseField.sgdh"),
         prop: "appId",
@@ -668,6 +719,13 @@ export function planCrud(_this) {
         align: "center"
       },
       {
+        label: "供应商送货单号",
+        prop: "deliSuppno",
+        cell: false,
+        width: 180,
+        overHidden: true
+      },
+      {
         label: _this.$t("whseField.chdh"),
         prop: "purNo",
         cell: false,
@@ -706,7 +764,7 @@ export function planCrud(_this) {
         label: _this.$t("whseField.clmc"),
         prop: "chinName",
         cell: false,
-        width: 160,
+        width: 200,
         overHidden: true
       },
       {
@@ -738,16 +796,23 @@ export function planCrud(_this) {
         label: _this.$t("whseField.dw"),
         prop: "deliUnit",
         cell: false,
-        width: 60,
+        width: 80,
         type: "select",
         dicData: unit
       },
       {
-        label: _this.$t("whseField.ph"),
-        prop: "batNo",
+        label: "供应商批号",
+        prop: "batId",
         cell: false,
-        width: 220
+        width: 180,
+        overHidden: true
       }
+      // {
+      //   label: "本厂纱批号",
+      //   prop: "batNo",
+      //   cell: false,
+      //   width: 220
+      // }
     ]
   };
 }

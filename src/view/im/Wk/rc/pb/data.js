@@ -242,7 +242,7 @@ export function rcpb2F(_this) {
         disabled: true,
         span: 6,
         type: "select",
-        dicData: postDicT("ucmlUser", "employeename", "ucmlUseroid")
+        dicData: getDicT("ucmlUser", "employeename", "ucmlUseroid")
       }
     ]
   };

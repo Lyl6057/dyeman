@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:48:57
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-17 16:58:01
+ * @LastEditTime: 2022-03-05 08:43:59
  * @Description: 
 -->
 <template>
@@ -133,53 +133,38 @@ export default {
 };
 </script>
 <style lang='stylus'>
-#clothFlyYl {
-  height: calc(100vh - 425px);
-  width: 100%;
-  overflow: auto;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  padding: 3px 0;
-
-  .box {
+#clothFlyYl
+  height calc(100vh - 425px)
+  width 100%
+  overflow auto
+  display flex
+  flex-direction row
+  flex-wrap wrap
+  -webkit-user-select none
+  -moz-user-select none
+  -ms-user-select none
+  user-select none
+  padding 3px 0
+  .box
     // width: 280px;
     // height: 408px;
     // margin: 3px;
     // border: 1px solid #000;
     // border-right: none;
-  }
-
-  .tle {
-    font-family: 'Times New Roman';
-    font-size: 16px;
-    text-align: center;
-  }
-
-  .content {
-    margin: 10px 2px 0 2px;
-    text-align: left;
-  }
-
-  .yl_label {
-    font-family: 'Times New Roman';
-    font-size: 12px;
-    margin-left: 3px;
-    margin-top: 8px;
-  }
-
-  .yl_bh {
-    height: 29px;
-    line-height: 29px;
-    text-align: center;
-  }
-
-  .yl_bh:last-child {
-    border-top: 1px solid #000;
-  }
-}
+  .tle
+    font-family 'Times New Roman'
+    font-size 16px
+    text-align center
+  .content
+    margin 10px 2px 0 2px
+    text-align left
+  .yl_label
+    font-family 'Times New Roman'
+    font-size 12px
+    margin-left 3px
+    margin-top 8px
+  .yl_bh
+    text-align center
+  .yl_bh:last-child
+    border-top 1px solid #000
 </style>

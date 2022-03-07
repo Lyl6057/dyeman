@@ -133,8 +133,9 @@ import {
   updateLocation,
   delLocation,
   delAllLocation,
+  getLocationList,
 } from "./api";
-
+import { getDicNS } from "@/config";
 import { getDIC, getDicT, getXDicT, postDicT, preFixInt } from "@/config";
 import { baseCodeSupply } from "@/api/index";
 import { getUcmlUser } from "@/const/whse.js";
@@ -804,7 +805,7 @@ export default {
       }
       this.locLoding = true;
       this.loc.forEach((item, i) => {
-        item.warehouseType = this.form.warehouseType
+        item.warehouseType = this.form.warehouseType;
         if (!item.locationCode) {
           if (this.shelvesType === "1") {
             item.locationCode = `${this.form.warehouseId}-${
@@ -834,6 +835,14 @@ export default {
           setTimeout(() => {
             this.getLoc(1);
             this.change = false;
+            // 更新字典表
+            // getDicNS(
+            //   "whseLocation?warehouseType=" + this.form.warehouseType,
+            //   "locationCode",
+            //   "locationCode",
+            //   {},
+            //   "locationCode"
+            // );
             // addShelves(this.chooseData.shelves).then((res) => {});
             // this.locLoding = false;
           }, 200);
@@ -886,55 +895,37 @@ export default {
 };
 </script>
 <style lang='stylus'>
-#imWl_Dlg {
-  .shelvesBox {
-    margin-top: 5px;
-
-    .el-input-number .el-input__inner {
-      text-align: left !important;
-    }
-
+#imWl_Dlg
+  .shelvesBox
+    margin-top 5px
+    .el-input-number .el-input__inner
+      text-align left !important
     // .el-form-item--mini.el-form-item {
     // margin-bottom: 0px;
     // }
-    .el-input-number__increase, .el-input-number__decrease {
-      display: none;
-    }
-  }
-
-  .el-dialog__header {
-    padding: 0 !important;
-  }
-
-  .el-dialog__headerbtn {
-    top: 3px;
-    font-size: 18px;
-    font-weight: bold;
-    z-index: 9;
-  }
-
-  .el-dialog__headerbtn .el-dialog__close, #sxrcDlg .el-dialog__headerbtn .el-dialog__close, #wkDlg .el-dialog__headerbtn .el-dialog__close {
-    color: #000;
-    font-size: 24px;
-  }
-
-  .el-tag--mini {
-    height: 24px;
-    padding: 0 5px;
-    line-height: 24px;
-    font-size: 14px;
-  }
-
-  .el-select .el-tag__close.el-icon-close {
-    right: -5px;
-    height: 18px;
-    width: 18px;
-    line-height: 18px;
-  }
-
-  .avue-form .el-input--mini input {
-    height: 35px !important;
-    line-height: 35px;
-  }
-}
+    .el-input-number__increase, .el-input-number__decrease
+      display none
+  .el-dialog__header
+    padding 0 !important
+  .el-dialog__headerbtn
+    top 3px
+    font-size 18px
+    font-weight bold
+    z-index 9
+  .el-dialog__headerbtn .el-dialog__close, #sxrcDlg .el-dialog__headerbtn .el-dialog__close, #wkDlg .el-dialog__headerbtn .el-dialog__close
+    color #000
+    font-size 24px
+  .el-tag--mini
+    height 24px
+    padding 0 5px
+    line-height 24px
+    font-size 14px
+  .el-select .el-tag__close.el-icon-close
+    right -5px
+    height 18px
+    width 18px
+    line-height 18px
+  .avue-form .el-input--mini input
+    height 35px !important
+    line-height 35px
 </style>

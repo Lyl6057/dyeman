@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-07-30 18:23:28
+ * @LastEditTime: 2022-03-02 13:37:03
  * @Description: 
 -->
 <template>
@@ -76,7 +76,7 @@
           <view-container title="已选胚布">
             <el-card
               class="border-card"
-              style="height: calc(100vh - 328px); overflow: auto"
+              style="height: calc(100vh - 365px); overflow: auto"
               id="history"
             >
               <div
@@ -89,6 +89,16 @@
                   <span>布票号: {{ item.noteCode }}</span>
                   <span> 重量: {{ item.clothWeight }}</span>
                   <span> 位置: {{ item.storeSiteCode }}</span>
+                  <span
+                    style="
+                      float: right;
+                      margin: 0 10px 0 0;
+                      font-size: 18px;
+                      color: red;
+                    "
+                    @click="cancelNote(item)"
+                    >X</span
+                  >
                   <!-- <span>验布员工号: {{ item.clothChecker }}</span> -->
                 </div>
 
@@ -117,7 +127,9 @@
         <div class="btnList">
           <el-button type="success" @click="save2">保存</el-button>
           <!-- <el-button type="primary">裁剪</el-button> -->
-          <el-button type="warning">关闭</el-button>
+          <el-button type="warning" @click="dialogVisible = false"
+            >关闭</el-button
+          >
         </div>
         <div class="formBox">
           <avue-form ref="dlgForm" :option="dlgFormOp" v-model="dlgForm">
@@ -205,6 +217,7 @@ export default {
       changeList: [],
       wLoading: false,
       dLoading: false,
+      dlgChooseData: {},
     };
   },
   watch: {
@@ -273,9 +286,19 @@ export default {
       // 开始出仓
       // 1.判断是否重量超过出仓重量
       if (this.weight > this.form.clothWeight) {
-        this.dialogVisible = true;
-        this.dlgFormOp.column[0].dicData = this.history;
-        this.dlgForm.noteCode = this.history.length;
+        // 是否剪布
+        this.$tip
+          .cofirm("是否要剪布?", this, {})
+          .then(() => {
+            this.dialogVisible = true;
+            this.dlgFormOp.column[0].dicData = this.history;
+            this.dlgForm.noteCode = this.history.length;
+          })
+          .catch(() => {
+            this.$tip.cofirm("是否确定开始出仓?", this, {}).then(() => {
+              this.save();
+            });
+          });
 
         // 减布操作
       } else if (this.weight == this.form.clothWeight) {
@@ -302,6 +325,7 @@ export default {
         val = Number(val);
         this.loading = true;
         let data = JSON.parse(JSON.stringify(this.history[val - 1]));
+        this.dlgChooseData = this.history[val - 1];
         this.dlgForm.noteCode = val;
         data.clothWeight = Number(
           data.clothWeight - (this.weight - this.form.clothWeight)
@@ -365,16 +389,16 @@ export default {
         this.history.forEach((item, i) => {
           if (i == this.dlgForm.noteCode - 1) {
             // 新增裁剪出仓的胚布
-            if (item.noteCode.indexOf("-") != -1) {
-              this.dlgCrud[0].noteCode =
-                "-" + item.noteCode.split("-")[1] + "-A";
-            } else if (item.noteCode.indexOf("k") != -1) {
-              this.dlgCrud[0].noteCode =
-                "k" + item.noteCode.split("k")[1] + "-A";
-            } else {
-              this.dlgCrud[0].noteCode =
-                "K" + item.noteCode.split("K")[1] + "-A";
-            }
+            // if (item.noteCode.indexOf("-") != -1) {
+            //   this.dlgCrud[0].noteCode =
+            //     "-" + item.noteCode.split("-")[1] + "-A";
+            // } else if (item.noteCode.indexOf("k") != -1) {
+            //   this.dlgCrud[0].noteCode =
+            //     "k" + item.noteCode.split("k")[1] + "-A";
+            // } else {
+            //   this.dlgCrud[0].noteCode =
+            //     "K" + item.noteCode.split("K")[1] + "-A";
+            // }
             addNote(
               Object.assign(this.dlgCrud[0], {
                 sourceNoteId: item.noteId,
@@ -560,6 +584,9 @@ export default {
         }
       );
     },
+    cancelNote(val) {
+      this.history.splice(val.index - 1, 1);
+    },
     cellClick(val) {
       this.detail = val;
     },
@@ -579,81 +606,52 @@ export default {
 };
 </script>
 <style lang='stylus'>
-.el-tooltip__popper {
-  font-size: 18px !important;
-}
-
-#clothFlyScan {
-  .history {
+.el-tooltip__popper
+  font-size 18px !important
+#clothFlyScan
+  .history
     // display: flex;
     // flex-direction: row;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    font-size: 18px;
-    text-align: left;
-    text-indent: 5px;
-
-    span {
-      margin: 5px;
-    }
-  }
-
-  .el-divider--horizontal {
-    margin: 0;
-  }
-
-  .el-form-item__label, .el-input__inner {
-    font-size: 22px !important;
-    line-height: 50px !important;
-  }
-
-  .el-tabs__item, .el-button {
-    font-size: 18px !important;
-  }
-
-  .avue-form .el-input--mini input {
-    height: 58px;
-    line-height: 58px;
-  }
-
-  .el-card__header {
-    padding: 8px 20px !important;
-  }
-
-  .btnBox {
-    .el-button {
-      margin: 0 20px;
+    overflow hidden
+    text-overflow ellipsis
+    white-space nowrap
+    font-size 18px
+    text-align left
+    text-indent 5px
+    span
+      margin 5px
+  .el-divider--horizontal
+    margin 0
+  .el-form-item__label, .el-input__inner
+    font-size 22px !important
+    line-height 50px !important
+  .el-tabs__item, .el-button
+    font-size 18px !important
+  .avue-form .el-input--mini input
+    height 58px
+    line-height 58px
+  .el-card__header
+    padding 8px 20px !important
+  .btnBox
+    .el-button
+      margin 0 20px
       // width: 20%;
-    }
-  }
-
-  .crudBox {
-    height: 100vh;
-  }
-
-  .text {
-    font-size: 22px;
-    text-align: left;
-    text-indent: 1em;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .item {
+  .crudBox
+    height 100vh
+  .text
+    font-size 22px
+    text-align left
+    text-indent 1em
+    overflow hidden
+    text-overflow ellipsis
+    white-space nowrap
+  .item
     // margin-bottom: 18px;
-    height: 48px;
-    line-height: 48px;
-  }
-
-  .clearfix:before, .clearfix:after {
-    display: table;
-    content: '';
-  }
-
-  .clearfix:after {
-    clear: both;
-  }
-}
+    height 48px
+    line-height 48px
+  .clearfix:before, .clearfix:after
+    display table
+    content ''
+  .clearfix:after
+    clear both
 </style>

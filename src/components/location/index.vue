@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-02-24 08:12:20
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-01-03 15:43:55
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-03-04 10:53:20
  * @Description: 
 -->
 <template>
@@ -132,7 +132,6 @@ export default {
       }
     },
     del() {
-      // return;
       if (Object.keys(this.chooseData).length === 0) {
         this.$tip.error(this.$t("public.delTle"));
         return;
@@ -144,7 +143,15 @@ export default {
         !this.chooseData.whseAccessoriesDtlaoid
       ) {
         this.inData.loc.splice(this.chooseData.index - 1, 1);
-        this.$refs.crud.setCurrentRow(this.inData.loc[0] || {});
+        this.inData.loc.forEach((item, i) => {
+          item.index = i + 1;
+        });
+        if (this.inData.loc.length) {
+          this.$refs.crud.setCurrentRow(this.inData.loc[0]);
+        } else {
+          this.$refs.crud.setCurrentRow();
+        }
+
         return;
       }
       this.$tip

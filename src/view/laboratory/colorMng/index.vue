@@ -100,6 +100,12 @@ export default {
           delete this.form[key];
         }
       }
+      this.form.colorNo = "!^%" + (this.form.colorNo || "");
+      this.form.colorBh = "%" + (this.form.colorBh || "");
+      this.form.colorChn = "%" + (this.form.colorChn || "");
+      this.form.colorEngName = "%" + (this.form.colorEngName || "");
+      this.form.custColorBh = "%" + (this.form.custColorBh || "");
+      this.form.fabricDesc = "%" + (this.form.fabricDesc || "");
       getLabTapcolor(
         Object.assign(this.form, {
           rows: this.page.pageSize,
@@ -110,6 +116,7 @@ export default {
           let records = res.data;
           this.page.total = records.total;
           this.crud = records.records;
+
           this.crud.forEach((item, index) => {
             item.index = index + 1;
             if (index === this.crud.length - 1) {
@@ -118,6 +125,12 @@ export default {
               this.loading = false;
             }
           });
+          this.form.colorNo = this.form.colorNo.replace(/[!^%]/g, "");
+          this.form.colorBh = this.form.colorBh.replace(/[!^%]/g, "");
+          this.form.colorChn = this.form.colorChn.replace(/[!^%]/g, "");
+          this.form.colorEngName = this.form.colorEngName.replace(/[!^%]/g, "");
+          this.form.custColorBh = this.form.custColorBh.replace(/[!^%]/g, "");
+          this.form.fabricDesc = this.form.fabricDesc.replace(/[!^%]/g, "");
           if (this.crud.length === 0) {
             this.loading = false;
           }
@@ -184,7 +197,4 @@ export default {
   beforeDestroy() {},
 };
 </script>
-<style lang='stylus'>
-#colorMng {
-}
-</style>
+<style lang='stylus'></style>

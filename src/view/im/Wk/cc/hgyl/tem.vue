@@ -62,12 +62,20 @@
           <view-container :title="datas.type.split('_')[0] + '批号资料'">
             <div class="btnList" style="margin-bottom: 2px">
               <!-- <el-button type="primary" @click="getDetail">{{this.$t("public.query")}}</el-button> -->
-              <el-button type="primary" @click="addPh" v-if="canSave" :disabled="detail.stockState == '1'">{{
-                this.$t("public.add")
-              }}</el-button>
-              <el-button type="danger" @click="delPh" v-if="canSave" :disabled="detail.stockState == '1'">{{
-                this.$t("public.del")
-              }}</el-button>
+              <el-button
+                type="primary"
+                @click="addPh"
+                v-if="canSave"
+                :disabled="detail.stockState == '1'"
+                >{{ this.$t("public.add") }}</el-button
+              >
+              <el-button
+                type="danger"
+                @click="delPh"
+                v-if="canSave"
+                :disabled="detail.stockState == '1'"
+                >{{ this.$t("public.del") }}</el-button
+              >
             </div>
             <avue-crud
               ref="dlgPhcrud"
@@ -204,7 +212,7 @@ import {
   updateLyHgylDtlb,
 } from "@/api/im/Wk/cc/hgyl";
 import proChoice from "@/components/proMng/index";
-import { getLydmx, getHgylStock } from "./api";
+import { getLydmx, getHgylStock, getSglydmx } from "./api";
 export default {
   props: {
     datas: Object,
@@ -274,9 +282,10 @@ export default {
       saved: false,
       sysCreatedby: "",
       proChoiceV: false,
-      proChoiceTle: "选择化工原料入仓信息",
+      proChoiceTle: "选择化工原料库存",
       proChoiceQ: {},
       purApp: {},
+      oldphData: {},
     };
   },
   watch: {},
@@ -541,6 +550,7 @@ export default {
             this.choiceTle = this.$t("choicDlg.xzsgdzl");
           }
         } else if (this.form.stockType === "2") {
+          this.proChoiceTle = "选择化工原料入仓信息";
           this.proChoiceV = true;
         } else {
           if (!this.form.appId) {
@@ -692,6 +702,8 @@ export default {
                           this.chooseData = {};
                           if (this.mx.length) {
                             this.$refs.dlgcrud.setCurrentRow(this.mx[0]);
+                          } else {
+                            this.$refs.dlgcrud.setCurrentRow();
                           }
                           this.mx.forEach((item, i) => {
                             item.index = i + 1;
@@ -813,6 +825,9 @@ export default {
       this.getPhDetail(val);
     },
     cellPhClick(val) {
+      this.oldphData.$cellEdit = false;
+      this.$set(val, "$cellEdit", true);
+      this.oldphData = val;
       this.choosePh = val;
     },
     close() {
@@ -1041,7 +1056,7 @@ export default {
           if (this.mx[i].list) {
             this.mx[i].stockQty = 0;
             for (let j = 0; j < this.mx[i].list.length; j++) {
-              this.mx[i].stockQty += this.mx[i].list[j].weight;
+              this.mx[i].stockQty += Number(this.mx[i].list[j].weight);
               if (
                 !this.mx[i].list[j].weight ||
                 !this.mx[i].list[j].weightUnit
@@ -1277,18 +1292,6 @@ export default {
           }
         });
       }
-
-      // this.mx.forEach((item, index) => {
-      //   if (!item.whseMaterialDlaoid && !item.whseCalicoselloutDtlaoid) {
-      //     item.whseMaterialFk = this.detail.whseMaterialoid;
-      //     item.whseCalicoselloutFk = this.detail.whseCalicoselloutoid;
-      //   }
-      //   if (index === this.mx.length - 1) {
-      //     this.getDetail();
-      //     this.$tip.success(this.$t("public.bccg"));
-      //   }
-      // });
-      // this.changeList = [];
     },
     savePh() {
       return;
@@ -1377,6 +1380,41 @@ export default {
       if (this.choiceTle === this.$t("choicDlg.xzsgd")) {
         this.form.appId = val.appId;
         this.form.purSingleoid = val.purSingleoid;
+        getSglydmx({
+          applyState: 3,
+          collectSucceed: 0,
+          purCategory: 4,
+          purSingleFk: this.form.purSingleoid,
+        }).then((res) => {
+          let val = res.data;
+          val.forEach((item, i) => {
+            // item.$cellEdit = true;
+            item.materialId = item.materialNum;
+            item.materialName = item.chinName;
+            item.company = item.company;
+            item.stockUnit = item.company;
+            item.bcColorprison = item.materialNum;
+            item.vitality = item.materialNum;
+            item.bcClass = item.materialNum;
+            item.dangerlevel = item.materialNum;
+            item.bcForce = item.materialNum;
+            item.stockQty = 0;
+            // item.weight = 0;
+          });
+          this.mx = this.mx.concat(val);
+          this.page.total = this.mx.length;
+          if (this.mx.length) {
+            this.$refs.dlgcrud.setCurrentRow(this.mx[0]);
+          }
+          this.mx.forEach((e, index) => {
+            e.index = index + 1;
+            if (index == this.mx.length - 1) {
+              setTimeout(() => {
+                this.loading = false;
+              }, 200);
+            }
+          });
+        });
       } else if (this.choiceTle === "选择订单胚布资料") {
         let data = {
           woMatno: val.fabId,
@@ -1474,10 +1512,10 @@ export default {
                 for (let i = 0; i < materStock.length; i++) {
                   if (sum + materStock[i].stock <= item.applyNum) {
                     item.list.push(materStock[i]);
-                    sum += materStock[i].stock;
+                    sum += Number(materStock[i].stock);
                   } else if (item.applyNum - sum > 0) {
                     materStock[i].stock = item.applyNum - sum;
-                    sum += materStock[i].stock;
+                    sum += Number(materStock[i].stock);
                     item.list.push(materStock[i]);
                     break;
                   }
@@ -1623,6 +1661,9 @@ export default {
             }
           });
         });
+        setTimeout(() => {
+          this.outloading = false;
+        }, 200);
       } else if (this.proChoiceTle === "选择化工原料库存") {
         let sum = 0;
         this.chooseData.list.forEach((item, i) => {
@@ -1648,10 +1689,11 @@ export default {
         this.chooseData.list.forEach((item, i) => {
           item.index = i + 1;
         });
+        setTimeout(() => {
+          this.outloading = false;
+        }, 200);
       }
-      setTimeout(() => {
-        this.outloading = false;
-      }, 200);
+
       this.proChoiceV = false;
     },
     sxclose() {
@@ -1734,36 +1776,22 @@ export default {
 };
 </script>
 <style lang='stylus'>
-.el-table {
-  overflow: visible !important;
-}
-
-.el-card__body {
-  padding: 20px 20px 50px 20px;
-}
-
-#sxPlanDlg {
-  .el-dialog__header {
-    padding: 0;
-  }
-
-  .el-card {
-    border: none;
-  }
-
-  .el-dialog__body {
-    padding: 0 !important;
-  }
-
-  .el-dialog__header {
-    padding: 0px;
-    background-color: rgb(2, 26, 60);
-  }
-
-  .formBox {
-    margin-bottom: 0px;
-  }
-
+.el-table
+  overflow visible !important
+.el-card__body
+  padding 20px 20px 50px 20px
+#sxPlanDlg
+  .el-dialog__header
+    padding 0
+  .el-card
+    border none
+  .el-dialog__body
+    padding 0 !important
+  .el-dialog__header
+    padding 0px
+    background-color rgb(2, 26, 60)
+  .formBox
+    margin-bottom 0px
   // .el-button--mini, .el-button--small {
   // font-size: 16px;
   // }
@@ -1771,30 +1799,22 @@ export default {
   // .el-button--mini, .el-button--mini.is-round {
   // padding: 5px 10px;
   // }
-  .avue-crud__menu {
-    min-height: 5px !important;
-    height: 5px !important;
-  }
-
-  .el-tabs__item {
-    font-size: 18px;
-    line-height: 30px;
-    height: 30px;
-  }
-
-  .el-table__header-wrapper, .el-form-item__label, .el-input--mini {
+  .avue-crud__menu
+    min-height 5px !important
+    height 5px !important
+  .el-tabs__item
+    font-size 18px
+    line-height 30px
+    height 30px
+  .el-table__header-wrapper, .el-form-item__label, .el-input--mini
     // font-size: 16px !important;
     // font-weight: 600 !important;
     // color: #000;
-  }
-
-  .el-dialog {
-    margin-top: 0 !important;
-    height: 100%;
-    margin: 0 !important;
-    background-color: rgb(2, 26, 60);
-  }
-
+  .el-dialog
+    margin-top 0 !important
+    height 100%
+    margin 0 !important
+    background-color rgb(2, 26, 60)
   // .avue-form__group {
   // background-color: #fff;
   // }
@@ -1802,26 +1822,15 @@ export default {
   // .el-table--mini td, .el-table--mini th {
   // padding: 2px 0 !important;
   // }
-  .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item {
-    margin-bottom: 10px;
-  }
-
-  .avue-crud__tip {
-    display: none;
-  }
-
-  .el-dialog__header {
-    padding: 0px;
-  }
-
-  .el-dialog__headerbtn {
-    top: 5px;
-    color: #000;
-    font-size: 22px;
-    z-index: 999;
-  }
-}
-
-#rcDetail {
-}
+  .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item
+    margin-bottom 10px
+  .avue-crud__tip
+    display none
+  .el-dialog__header
+    padding 0px
+  .el-dialog__headerbtn
+    top 5px
+    color #000
+    font-size 22px
+    z-index 999
 </style>

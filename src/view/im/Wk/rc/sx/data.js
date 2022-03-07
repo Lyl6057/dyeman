@@ -271,7 +271,7 @@ export function rsxkr2F(_this) {
         disabled: true,
         span: 6,
         type: "select",
-        dicData: postDicT("ucmlUser", "employeename", "ucmlUseroid")
+        dicData: getDicT("ucmlUser", "employeename", "ucmlUseroid")
       }
     ]
   };
@@ -487,7 +487,7 @@ export function rsxkr1C(_this) {
         hide: false,
         width: 100,
         type: "select",
-        dicData: postDicT("ucmlUser", "employeename", "ucmlUseroid")
+        dicData: getDicT("ucmlUser", "employeename", "ucmlUseroid")
       },
       {
         label: "授权用户",

@@ -1,7 +1,7 @@
 import { getDIC, getDicT, postDicT, getXDicT } from "@/config/index";
 let matUnit = getDIC("bas_matUnit");
 let rlData = getXDicT("BasChemicalmatNew");
-let user = postDicT("ucmlUser", "employeename", "ucmlUseroid");
+let user = getDicT("ucmlUser", "employeename", "ucmlUseroid");
 export function rsxkr1F(_this) {
   return {
     submitBtn: false,
@@ -445,6 +445,11 @@ export function rsxkr2C(_this) {
     sumColumnList: [
       {
         label: " ",
+        name: "applyNum",
+        type: "sum"
+      },
+      {
+        label: " ",
         name: "stockQty",
         type: "sum"
       }
@@ -674,7 +679,7 @@ export function rcpb3C(_this) {
       {
         label: "数量",
         prop: "weight",
-        cell: false,
+        cell: true,
         width: 100,
         align: "right"
         // click: (val) => {
@@ -754,7 +759,6 @@ export function rsxkr3C(_this) {
         cell: false,
         width: 500,
         type: "select",
-        hide: false,
         props: {
           label: "whseCalicoinFk",
           value: "whseCalicoinDtlaoid"

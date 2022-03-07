@@ -41,7 +41,7 @@ export const reportOp = _this => {
         span: 6,
         prop: "createMan",
         type: "select",
-        dicData: postDicT("ucmlUser", "employeename", "ucmlUseroid"),
+        dicData: getDicT("ucmlUser", "employeename", "ucmlUseroid"),
         disabled: true
         //   display: false
       },

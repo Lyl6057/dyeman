@@ -172,6 +172,10 @@ import {
   addSxDetali,
   updateSxDetali,
   delSxDetali,
+  addSxDtla,
+  getSxDtla,
+  updateSxDtla,
+  delSxDtla,
 } from "@/api/im/Wk/rc";
 import choice from "@/components/choice";
 import { rhl1F, rhl1C, rhl2C, rhl2F } from "./data";
@@ -256,6 +260,12 @@ export default {
           this.everyThing.delDetail = delSxDetali;
           this.everyThing.getAlloc = getYarninAlloc;
           this.everyThing.addAlloc = addYarninAlloc;
+          this.everyThing.getPh = getSxDtla;
+          this.everyThing.addPh = addSxDtla;
+          this.everyThing.updatePh = updateSxDtla;
+          this.everyThing.delPh = delSxDtla;
+          this.everyThing.batCode = "sx_in_whse";
+
           break;
         case this.$t("iaoMng.fl"):
           this.everyThing.get = getScfl;
@@ -269,6 +279,7 @@ export default {
           this.everyThing.delDetail = delScflDetali;
           this.everyThing.getAlloc = getAccessoriesinAlloc;
           this.everyThing.addAlloc = addAccessoriesinAlloc;
+
           break;
         case this.$t("iaoMng.wjxz"):
           this.everyThing.get = getScfl;
@@ -299,6 +310,7 @@ export default {
           this.everyThing.delPh = delRhlPhDetali;
           this.everyThing.getAlloc = getChemicalinAlloc;
           this.everyThing.addAlloc = addChemicalinAlloc;
+          this.everyThing.batCode = "hgyl_in_whse";
           break;
         case this.$t("iaoMng.yl"):
           this.everyThing.get = getYl;
@@ -315,6 +327,7 @@ export default {
           this.everyThing.updatePh = updateYlDtlb;
           this.everyThing.delPh = delYlDtlb;
           this.everyThing.getAlloc = getDyesainAlloc;
+          this.everyThing.batCode = "yl_in_whse";
           this.everyThing.addAlloc = addDyesainAlloc;
           break;
         default:
@@ -329,9 +342,13 @@ export default {
       if (this.form.yinDate != "" && this.form.yinDate != undefined) {
         this.form.yinDate += " 00:00:00";
       }
+      let queryData = JSON.parse(JSON.stringify(this.form));
+      queryData.yinId = "!^%" + (queryData.yinId ? queryData.yinId : "");
+      queryData.purNo = "%" + (queryData.purNo ? queryData.purNo : "");
+      queryData.deliNo = "%" + (queryData.deliNo ? queryData.deliNo : "");
       this.everyThing
         .get(
-          Object.assign(this.form, {
+          Object.assign(queryData, {
             rows: this.page.pageSize,
             start: this.page.currentPage,
             yinType: this.hide,
@@ -347,12 +364,10 @@ export default {
             item.index = index + 1;
             item.suppId = item.purNo;
             if (index === this.crud.length - 1) {
-              // this.everyThing.mainC.column[7].hide = true;
               this.loading = false;
             }
           });
           if (this.crud.length === 0) {
-            // this.everyThing.mainC.column[7].hide = true;
             this.loading = false;
           }
         })
@@ -372,16 +387,18 @@ export default {
         finStatus: "0",
         purNo: val[0].purNo,
         deliNo: val[0].deliNo,
+        stockState: 0,
+        sysCreated: this.$getNowTime("datetime"),
       };
       this.addList = val;
       baseCodeSupplyEx({ code: this.everyThing.code }).then((res) => {
         data.yinId = res.data.data;
-        getUcmlUser({ usrLogin: parent.userID }).then((Res) => {
-          data.sysCreatedby = Res.data.ucmlUseroid;
-          this.handleRowDBLClick(data);
-          this.screenLoading = false;
-          this.isAdd = true;
-        });
+        // getUcmlUser({ usrLogin: parent.userID }).then((Res) => {
+        data.sysCreatedby = this.$store.state.userOid;
+        this.handleRowDBLClick(data);
+        this.screenLoading = false;
+        this.isAdd = true;
+        // });
       });
     },
     del() {
@@ -469,10 +486,10 @@ export default {
       this.choiceTarget.custId = val.custCode;
       this.choiceTarget.custName = val.custCode;
       this.oldData.$cellEdit = true;
-      for (var key in val) {
+      for (let key in val) {
         delete val[key];
       }
-      for (var key in this.choiceQ) {
+      for (let key in this.choiceQ) {
         delete this.choiceQ[key];
       }
       this.choiceV = false;
@@ -510,11 +527,9 @@ export default {
 };
 </script>
 <style lang='stylus'>
-#rc, #rcDetail {
-  .formBox {
-    margin-bottom: 0px;
-  }
-
+#rc, #rcDetail
+  .formBox
+    margin-bottom 0px
   // .el-button--mini, .el-button--small {
   // font-size: 16px;
   // }
@@ -522,23 +537,17 @@ export default {
   // .el-button--mini, .el-button--mini.is-round {
   // padding: 5px 10px;
   // }
-  .avue-crud__menu {
-    min-height: 5px !important;
-    height: 5px !important;
-  }
-
-  .el-tabs__item {
-    font-size: 18px;
-    line-height: 30px;
-    height: 30px;
-  }
-
-  .el-table__header-wrapper, .el-form-item__label, .el-input--mini {
-    font-size: 16px !important;
+  .avue-crud__menu
+    min-height 5px !important
+    height 5px !important
+  .el-tabs__item
+    font-size 18px
+    line-height 30px
+    height 30px
+  .el-table__header-wrapper, .el-form-item__label, .el-input--mini
+    font-size 16px !important
     // font-weight: 600 !important;
-    color: #000;
-  }
-
+    color #000
   // .avue-form__group {
   // background-color: #fff;
   // }
@@ -546,8 +555,6 @@ export default {
   // .el-table--mini td, .el-table--mini th {
   // padding: 2px 0 !important;
   // }
-  .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item {
-    margin-bottom: 10px;
-  }
-}
+  .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item
+    margin-bottom 10px
 </style>

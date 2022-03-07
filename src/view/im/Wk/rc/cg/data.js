@@ -123,7 +123,7 @@ export function rhl2F(_this) {
         placeholder: " ",
         type: "select",
         hide: _this.hide === "6" ? false : true,
-        dicData: postDicT("ucmlUser", "employeename", "ucmlUseroid")
+        dicData: getDicT("ucmlUser", "employeename", "ucmlUseroid")
       }
     ]
   };
@@ -244,7 +244,7 @@ export function rhl1C(_this) {
         span: 6,
         placeholder: " ",
         type: "select",
-        dicData: postDicT("ucmlUser", "employeename", "ucmlUseroid"),
+        dicData: getDicT("ucmlUser", "employeename", "ucmlUseroid"),
         width: 110
       },
       {
@@ -433,8 +433,8 @@ export function rhl2C(_this) {
       //   },
       // },
       {
-        label: _this.$t("whseField.ph"),
-        prop: "batchNo",
+        label: "本厂纱批号",
+        prop: "batchNos",
         cell: false,
         width: 220
       },
@@ -554,8 +554,8 @@ export function sx2C(_this) {
         dicData: getDicT("basYarnsData", "yarnsName", "yarnsId")
       },
       {
-        label: _this.$t("whseField.ph"),
-        prop: "batchNo",
+        label: "本厂纱批号",
+        prop: "batchNos",
         cell: false,
         width: 120
       },
@@ -848,8 +848,8 @@ export function rhl3C(_this) {
         align: "center"
       },
       {
-        label: _this.$t("whseField.ph"),
-        prop: "batchNo",
+        label: "本厂纱批号",
+        prop: "batchNos",
         cell: true,
         width: 220
       },
@@ -1136,8 +1136,8 @@ export function planCrud(_this) {
       },
 
       {
-        label: _this.$t("whseField.ph"),
-        prop: "batchNo",
+        label: "本厂纱批号",
+        prop: "batchNos",
         cell: false,
         width: 180
       }

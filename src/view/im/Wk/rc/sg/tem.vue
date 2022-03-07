@@ -1,6 +1,10 @@
 <template>
   <div id="rcDetail">
-    <view-container :title="datas + this.$t('iaoMng.rc')">
+    <view-container
+      :title="datas + this.$t('iaoMng.rc')"
+      :element-loading-text="$t('public.loading')"
+      v-loading="screenLoading"
+    >
       <div class="btnList">
         <!-- <el-button type="primary" @click="getDetail">{{this.$t("public.query")}}</el-button> -->
         <!-- <el-button type="primary" @click="add">{{this.$t("public.add")}}</el-button>
@@ -17,7 +21,7 @@
         <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
       </div>
       <el-row class="crudBox">
-        <el-col :span="15">
+        <el-col :span="14">
           <view-container :title="datas + $t('iaoMng.rcmx')">
             <div style="margin-bottom: 2px" class="btnList">
               <el-button type="danger" @click="del">{{
@@ -40,13 +44,8 @@
               @on-load="getDetail"
             ></avue-crud> </view-container
         ></el-col>
-        <el-col :span="9">
-          <view-container
-            :title="datas + $t('iaoMng.rcphzl')"
-            v-if="
-              datas === this.$t('iaoMng.hgyl') || datas === this.$t('iaoMng.yl')
-            "
-          >
+        <el-col :span="10">
+          <view-container :title="datas + $t('iaoMng.rcphzl')">
             <div style="margin-bottom: 2px" class="btnList">
               <el-button type="primary" @click="addPh">{{
                 this.$t("public.add")
@@ -69,7 +68,7 @@
             <avue-crud
               ref="alloc"
               id="alloc"
-              v-loading="ctLoading"
+              v-loading="fpLoading"
               :option="allocOp"
               :page.sync="allocPage"
               :data="chooseData.alloc"
@@ -87,6 +86,7 @@ import {
   getAdsuppliesarticles,
   getProductivesupplies,
   baseCodeSupply,
+  baseCodeSupplyEx,
 } from "@/api/index";
 export default {
   props: {
@@ -101,6 +101,8 @@ export default {
   data() {
     return {
       loading: false,
+      screenLoading: false,
+      fpLoading: false,
       page: {
         pageSize: 10,
         currentPage: 1,
@@ -131,106 +133,137 @@ export default {
         total: 0,
       },
       alloc: [],
+      code: "",
     };
   },
   watch: {},
   methods: {
     getDetail() {
       if (this.isAdd) {
+        this.loading = true;
         this.mx = this.addList;
-        this.mx.forEach((item, i) => {
-          item.index = 1 + i;
-          item.chemicalId = item.materialNum;
-          item.chemicalName = item.chinName;
-          item.yarnsId = item.materialNum;
-          item.yarnsName = item.chinName;
-          item.batchNo = item.batNo;
-          item.weight = item.deliQty;
-          item.weightUnit = item.deliUnit;
-          item.poQty = item.deliQty;
-          item.unitQty = item.deliUnit;
-          if (i === this.mx.length - 1) {
-            setTimeout(() => {
-              this.getAlloc();
-            }, 200);
-          }
+        if (!this.mx.length) {
+          this.loading = false;
+        }
+        baseCodeSupplyEx({ code: this.everyThing.batCode }).then((res) => {
+          this.code = res.data.data;
+          this.mx.forEach((item, i) => {
+            console.log(this.code);
+            item.index = 1 + i;
+            item.chemicalId = item.materialNum;
+            item.chemicalName = item.chinName;
+            item.yarnsId = item.materialNum;
+            item.yarnsName = item.chinName;
+            item.batchNo = this.code;
+            item.batchNos = item.batchNo.slice(2);
+            item.weight = item.deliQty;
+            item.weightUnit = item.deliUnit;
+            item.poQty = item.deliQty;
+            item.unitQty = item.deliUnit;
+            item.list = [
+              {
+                index: 1,
+                batchNo: item.batchNo,
+                batchNos: item.batchNos,
+                weight: item.weight,
+                weightUnit: item.weightUnit,
+              },
+            ];
+            this.code =
+              this.code.substring(0, 5) + (Number(this.code.substring(5)) + 1);
+            if (i === this.mx.length - 1) {
+              setTimeout(() => {
+                this.loading = false;
+                this.getAlloc();
+              }, 200);
+            }
+          });
+          this.page.total = this.mx.length;
+          return;
         });
-        this.page.total = this.mx.length;
-        return;
-      }
-      this.loading = true;
-      this.mx = [];
-      this.mxOp.showSummary = false;
-      this.everyThing
-        .getDetail({
-          rows: this.page.pageSize,
-          start: this.page.currentPage,
-          whseChemicalinFk: this.detail.whseChemicalinoid, // 化工原料Oid
-          whseAccessoriesinFk: this.detail.whseAccessoriesinoid, // 辅料/五金/行政Oid
-          whseYarninFk: this.detail.whseYarninoid, // 纱线Oid
-          whseDyesalinFk: this.detail.whseDyesalinoid, // 顏料Oid
-        })
-        .then((res) => {
-          let dicData = [];
-          if (
-            this.datas === this.$t("iaoMng.hgyl") ||
-            this.datas === this.$t("iaoMng.yl")
-          ) {
-            getHardwarearticles().then((Res1) => {
-              dicData = Res1.data;
-              getAdsuppliesarticles().then((Res) => {
-                dicData = dicData.concat(Res.data);
-                getProductivesupplies().then((scfl) => {
-                  dicData = dicData.concat(scfl.data);
-                  let records = res.data;
-                  this.page.total = records.total;
-                  this.mxOp.column[4].dicData = dicData;
-                  this.mx = records.records;
-                  if (this.mx.length === 0) {
-                    this.loading = false;
-                  }
-                  this.mx.forEach((item, index) => {
-                    item.index = index + 1;
-                    item.chinName = item.materialNum;
-
-                    if (index === this.mx.length - 1) {
-                      this.mxOp.showSummary = true;
-                      setTimeout(() => {
-                        // this.$refs.mx.setCurrentRow(this.mx[0]);
-                        this.getAlloc();
-                        this.loading = false;
-                      }, 200);
+      } else {
+        this.loading = true;
+        this.mx = [];
+        this.mxOp.showSummary = false;
+        this.everyThing
+          .getDetail({
+            rows: this.page.pageSize,
+            start: this.page.currentPage,
+            whseChemicalinFk: this.detail.whseChemicalinoid, // 化工原料Oid
+            whseAccessoriesinFk: this.detail.whseAccessoriesinoid, // 辅料/五金/行政Oid
+            whseYarninFk: this.detail.whseYarninoid, // 纱线Oid
+            whseDyesalinFk: this.detail.whseDyesalinoid, // 顏料Oid
+          })
+          .then((res) => {
+            let dicData = [];
+            if (
+              this.datas === this.$t("iaoMng.hgyl") ||
+              this.datas === this.$t("iaoMng.yl")
+            ) {
+              getHardwarearticles().then((Res1) => {
+                dicData = Res1.data;
+                getAdsuppliesarticles().then((Res) => {
+                  dicData = dicData.concat(Res.data);
+                  getProductivesupplies().then((scfl) => {
+                    dicData = dicData.concat(scfl.data);
+                    let records = res.data;
+                    this.page.total = records.total;
+                    this.mxOp.column[4].dicData = dicData;
+                    this.mx = records.records;
+                    if (this.mx.length === 0) {
+                      this.loading = false;
                     }
+                    this.mx.forEach((item, index) => {
+                      item.index = index + 1;
+                      item.chinName = item.materialNum;
+
+                      if (index === this.mx.length - 1) {
+                        this.mxOp.showSummary = true;
+                        setTimeout(() => {
+                          if (this.mx.length) {
+                            this.$refs.mx.setCurrentRow(this.mx[0]);
+                          }
+
+                          this.getAlloc();
+                          this.loading = false;
+                        }, 200);
+                      }
+                    });
                   });
                 });
               });
-            });
-          } else {
-            let records = res.data;
-            this.page.total = records.total;
-            this.mxOp.column[4].dicData = dicData;
-            this.mx = records.records;
-            if (this.mx.length === 0) {
-              this.loading = false;
-            }
-            this.mx.forEach((item, index) => {
-              item.index = index + 1;
-              item.chinName = item.materialNum;
-              item.yarnsName = item.yarnsId;
-              // item.bcMatengname = item.chemicalId;
-              // item.bcColor = item.chemicalId;
-              // item.bcForce = item.chemicalId;
-              if (index === this.mx.length - 1) {
-                this.mxOp.showSummary = true;
-                setTimeout(() => {
-                  // this.$refs.mx.setCurrentRow(this.mx[0]);
-                  this.getAlloc();
-                  this.loading = false;
-                }, 200);
+            } else {
+              let records = res.data;
+              this.page.total = records.total;
+              this.mxOp.column[4].dicData = dicData;
+              this.mx = records.records;
+              if (this.mx.length === 0) {
+                this.loading = false;
               }
-            });
-          }
-        });
+
+              this.mx.forEach((item, index) => {
+                item.index = index + 1;
+                item.chinName = item.materialNum;
+                item.yarnsName = item.yarnsId;
+                item.batchNos = item.batchNo.slice(2);
+                // item.$cellEdit = true;
+                // item.bcMatengname = item.chemicalId;
+                // item.bcColor = item.chemicalId;
+                // item.bcForce = item.chemicalId;
+                if (index === this.mx.length - 1) {
+                  this.mxOp.showSummary = true;
+                  setTimeout(() => {
+                    if (this.mx.length) {
+                      this.$refs.mx.setCurrentRow(this.mx[0]);
+                    }
+                    this.getAlloc();
+                    this.loading = false;
+                  }, 200);
+                }
+              });
+            }
+          });
+      }
     },
     getPh() {
       if (this.isAdd) {
@@ -244,7 +277,11 @@ export default {
         }
         return;
       }
-      if (!this.chooseData.whseChemicalinDtlaoid) {
+      if (
+        !this.chooseData.whseChemicalinDtlaoid &&
+        !this.chooseData.whseDyesainDtlaoid &&
+        !this.chooseData.whseYarninDtloid
+      ) {
         this.chooseData.list = [];
         return;
       }
@@ -259,23 +296,31 @@ export default {
       this.everyThing
         .getPh({
           whseChemicalinDtlaFk: this.chooseData.whseChemicalinDtlaoid,
+          whseDyesainDtlaFk: this.chooseData.whseDyesainDtlaoid,
+          whseYarninDtlFk: this.chooseData.whseYarninDtloid,
           rows: this.phPage.pageSize,
           start: this.phPage.currentPage,
         })
         .then((res) => {
-          let records = res.data;
-          this.phPage.total = records.total;
+          // let records = res.data;
+
           let data = res.data;
+          this.phPage.total = res.data.length;
           // data = records.records;
           if (data.length === 0) {
             this.ctLoading = false;
           }
           data.forEach((item, index) => {
             item.index = index + 1;
+            item.weightUnit = item.weightUnit || this.chooseData.weightUnit;
+            item.batchNo = item.batchNo || this.chooseData.batchNo;
+            item.batchNos = item.batchNo.slice(2);
             if (index === data.length - 1) {
-              this.chooseData.list = data;
-              this.countOp.showSummary = true;
-              this.ctLoading = false;
+              setTimeout(() => {
+                this.chooseData.list = data;
+                this.countOp.showSummary = true;
+                this.ctLoading = false;
+              }, 200);
             }
           });
         });
@@ -289,15 +334,19 @@ export default {
             deliNo: this.form.deliNo,
             poNo: this.form.purNo,
             materialNum: item.materialNum,
+            // applyNum: item.poQty,
             rows: this.phPage.pageSize,
             start: this.phPage.currentPage,
           }).then((res) => {
-            let data = res.data;
-            item.alloc = data.records;
-            item.alloc.forEach((item, i) => {
-              item.index = i + 1;
-              // item.appId = item.allocMain;
-              // item.applyNum = item.allocQty;
+            let data = res.data.records;
+            // item.alloc = data.records;
+            item.alloc = [];
+            let weight = item.poQty;
+            data.forEach((items, i) => {
+              if (items.applyNum <= weight) {
+                weight -= items.applyNum;
+                item.alloc.push(items);
+              }
             });
             if (i === this.mx.length - 1) {
               this.$refs.mx.setCurrentRow(this.mx[0]);
@@ -306,28 +355,36 @@ export default {
         });
       } else {
         // 获取入仓分配
-
+        this.fpLoading = true;
         this.mx.forEach((item, i) => {
           this.everyThing
             .getAlloc({
               whseChemicalinDtlaFk: item.whseChemicalinDtlaoid,
               whseAccessoriesDtlFk: item.whseAccessoriesDtloid,
               whseYarninDtlaFk: item.whseYarninDtloid,
+              whseDyesainDtlaFk: item.whseDyesainDtlaoid,
               rows: this.phPage.pageSize,
               start: this.phPage.currentPage,
             })
             .then((res) => {
               let data = res.data;
-
-              item.alloc = data.records;
-              item.alloc.forEach((item, i) => {
-                item.index = i + 1;
-                item.appId = item.allocMain;
-                item.applyNum = item.allocQty;
+              this.$nextTick(() => {
+                item.alloc = data;
+                item.alloc.forEach((items, i) => {
+                  items.index = i + 1;
+                  items.appId = items.allocMain;
+                  items.applyNum = items.allocQty;
+                  if (i == item.alloc.length - 1) {
+                    setTimeout(() => {
+                      this.fpLoading = false;
+                    }, 200);
+                  }
+                });
               });
-              if (i === this.mx.length - 1) {
-                this.$refs.mx.setCurrentRow(this.mx[0]);
-              }
+
+              // if (i === this.mx.length - 1) {
+              //   this.$refs.mx.setCurrentRow(this.mx[0]);
+              // }
             });
         });
       }
@@ -345,6 +402,7 @@ export default {
         index: this.chooseData.list.length + 1,
         $cellEdit: true,
         batchNo: this.chooseData.batchNo,
+        batchNos: this.chooseData.batchNos,
         whseChemicalinDtlaFk: this.chooseData.whseChemicalinDtlaoid,
         weightUnit: this.chooseData.weightUnit,
       });
@@ -432,7 +490,8 @@ export default {
       }
       if (
         !this.choosePhData.whseChemicalinDtlboid &&
-        !this.choosePhData.whseDyesainDtlboid
+        !this.choosePhData.whseDyesainDtlboid &&
+        !this.choosePhData.whseYarninDtlaoid
       ) {
         this.chooseData.list.splice(this.choosePhData.index - 1, 1);
         this.phPage.total--;
@@ -445,7 +504,7 @@ export default {
       this.$tip
         .cofirm(
           this.$t("iaoMng.delTle8") +
-            this.choosePhData.batchNo +
+            this.choosePhData.batchNos +
             this.$t("iaoMng.delTle2"),
           this,
           {}
@@ -455,6 +514,8 @@ export default {
             .delPh(
               this.datas === this.$t("iaoMng.yl")
                 ? this.choosePhData.whseDyesainDtlboid
+                : this.datas === this.$t("iaoMng.sx")
+                ? this.choosePhData.whseYarninDtlaoid
                 : this.choosePhData.whseChemicalinDtlboid
             )
             .then((res) => {
@@ -479,17 +540,22 @@ export default {
         });
     },
     cellClick(val) {
+      this.oldData.$cellEdit = false;
+      this.$set(val, "$cellEdit", true);
+      this.oldData = val;
       this.chooseData = val;
       if (!this.chooseData.list) {
         this.chooseData.list = [];
       }
-      if (
-        this.datas === this.$t("iaoMng.hgyl") ||
-        this.datas === this.$t("iaoMng.yl")
-      ) {
-        this.getPh();
-      }
-      this.allocPage.total = this.chooseData.alloc.length;
+      // if (
+      //   this.datas === this.$t("iaoMng.hgyl") ||
+      //   this.datas === this.$t("iaoMng.yl")
+      // ) {
+      this.getPh();
+      // }
+      // this.allocPage.total = this.chooseData.alloc.length
+      //   ? this.chooseData.alloc.length
+      //   : 0;
       // this.getAlloc();
     },
     cellPhClick(val) {
@@ -517,18 +583,14 @@ export default {
             break;
           }
           for (let j = 0; j < this.mx[i].list.length; j++) {
-            if (
-              !this.mx[i].list[j].batchNo ||
-              !this.mx[i].list[j].weight ||
-              !this.mx[i].list[j].weightUnit
-            ) {
+            if (!this.mx[i].list[j].weight || !this.mx[i].list[j].weightUnit) {
               this.$tip.error(this.$t("iaoMng.saveTle17"));
               return;
             }
           }
         }
       }
-
+      this.screenLoading = true;
       this.modified = true;
       if (this.form.yinDate != "" && this.form.yinDate != undefined) {
         this.form.yinDate += " 00:00:00";
@@ -536,7 +598,8 @@ export default {
       if (
         this.form.whseChemicalinoid ||
         this.form.whseAccessoriesinoid ||
-        this.form.whseYarninoid
+        this.form.whseYarninoid ||
+        this.form.whseDyesalinoid
       ) {
         this.everyThing.update(this.form).then((res) => {
           if (this.mx.length === 0) {
@@ -551,19 +614,27 @@ export default {
               if (
                 item.whseChemicalinDtlaoid ||
                 item.whseAccessoriesDtloid ||
-                item.whseYarninDtloid
+                item.whseYarninDtloid ||
+                item.whseDyesainDtlaoid
               ) {
-                resolve();
+                this.everyThing.updateDetail(data).then((res) => {
+                  resolve();
+                });
                 // 修改
               } else {
                 // 新增
                 data.whseChemicalinFk = this.detail.whseChemicalinoid;
                 data.whseAccessoriesinFk = this.detail.whseAccessoriesinoid;
                 data.whseYarninFk = this.detail.whseYarninoid;
+                data.whseDyesalinFk = this.detail.whseDyesalinoid;
                 this.everyThing.addDetail(data).then((res) => {
                   item.whseChemicalinDtlaoid = res.data.data;
                   item.whseAccessoriesDtloid = res.data.data;
                   item.whseYarninDtloid = res.data.data;
+                  item.whseDyesainDtlaoid = res.data.data;
+                  baseCodeSupply({ code: this.everyThing.batCode }).then(
+                    (res) => {}
+                  );
                   resolve();
                 });
               }
@@ -578,18 +649,26 @@ export default {
                 this.mx[i].list.forEach((item) => {
                   item.whseChemicalinDtlaFk = this.mx[i].whseChemicalinDtlaoid;
                   item.whseAccessoriesDtlFk = this.mx[i].whseAccessoriesDtloid;
+                  item.whseDyesainDtlaFk = this.mx[i].whseDyesainDtlaoid;
+                  item.whseYarninDtlFk = this.mx[i].whseYarninDtloid;
+                  // if (
+                  //   this.datas === this.$t("iaoMng.hgyl") ||
+                  //   this.datas === this.$t("iaoMng.yl")
+                  // ) {
                   if (
-                    this.datas === this.$t("iaoMng.hgyl") ||
-                    this.datas === this.$t("iaoMng.yl")
+                    !item.whseChemicalinDtlboid &&
+                    !item.whseDyesainDtlboid &&
+                    !item.whseYarninDtlaoid
                   ) {
-                    if (!item.whseChemicalinDtlboid) {
-                      this.everyThing.addPh(item).then((res) => {
-                        item.whseChemicalinDtlboid = res.data.data;
-                      });
-                    } else {
-                      this.everyThing.updatePh(item).then((res) => {});
-                    }
+                    this.everyThing.addPh(item).then((res) => {
+                      item.whseChemicalinDtlboid = res.data.data;
+                      item.whseDyesainDtlboid = res.data.data;
+                      item.whseYarninDtlaoid = res.data.data;
+                    });
+                  } else {
+                    this.everyThing.updatePh(item).then((res) => {});
                   }
+                  // }
                 });
               }
               if (this.mx[i].alloc) {
@@ -597,10 +676,12 @@ export default {
                   item.whseChemicalinDtlaFk = this.mx[i].whseChemicalinDtlaoid;
                   item.whseAccessoriesDtlFk = this.mx[i].whseAccessoriesDtloid;
                   item.whseYarninDtlaFk = this.mx[i].whseYarninDtloid;
+                  item.whseDyesainDtlaFk = this.mx[i].whseDyesainDtlaoid;
                   if (
                     !item.whseAccessoriesinAllocoid &&
                     !item.whseChemicalinAllocoid &&
-                    !item.whseYarninAllocoid
+                    !item.whseYarninAllocoid &&
+                    !item.whseDyesainAllocoid
                   ) {
                     item.allocMain = item.appId;
                     item.allocQty = item.applyNum;
@@ -608,6 +689,7 @@ export default {
                       item.whseAccessoriesinAllocoid = res.data.data;
                       item.whseChemicalinAllocoid = res.data.data;
                       item.whseYarninAllocoid = res.data.data;
+                      item.whseDyesainAllocoid = res.data.data;
                     });
                   }
                 });
@@ -628,6 +710,7 @@ export default {
           this.form.whseChemicalinoid = res.data.data;
           this.form.whseAccessoriesinoid = res.data.data;
           this.form.whseYarninoid = res.data.data;
+          this.form.whseDyesalinoid = res.data.data;
           // this.$emit("getData");
           let addDtla = (item, i) => {
             return new Promise((resolve, reject) => {
@@ -637,7 +720,8 @@ export default {
               if (
                 item.whseChemicalinDtlaoid ||
                 item.whseAccessoriesDtloid ||
-                item.whseYarninDtloid
+                item.whseYarninDtloid ||
+                item.whseDyesainDtlaoid
               ) {
                 resolve();
                 // 修改
@@ -646,10 +730,15 @@ export default {
                 data.whseChemicalinFk = this.form.whseChemicalinoid;
                 data.whseAccessoriesinFk = this.form.whseAccessoriesinoid;
                 data.whseYarninFk = this.form.whseYarninoid;
+                data.whseDyesalinFk = this.form.whseDyesalinoid;
                 this.everyThing.addDetail(data).then((res) => {
                   item.whseChemicalinDtlaoid = res.data.data;
                   item.whseAccessoriesDtloid = res.data.data;
                   item.whseYarninDtloid = res.data.data;
+                  item.whseDyesainDtlaoid = res.data.data;
+                  baseCodeSupply({ code: this.everyThing.batCode }).then(
+                    (res) => {}
+                  );
                   resolve();
                 });
               }
@@ -664,18 +753,26 @@ export default {
                 this.mx[i].list.forEach((item) => {
                   item.whseChemicalinDtlaFk = this.mx[i].whseChemicalinDtlaoid;
                   item.whseAccessoriesDtlFk = this.mx[i].whseAccessoriesDtloid;
+                  item.whseDyesainDtlaFk = this.mx[i].whseDyesainDtlaoid;
+                  item.whseYarninDtlFk = this.mx[i].whseYarninDtloid;
+                  // if (
+                  //   this.datas === this.$t("iaoMng.hgyl") ||
+                  //   this.datas === this.$t("iaoMng.yl")
+                  // ) {
                   if (
-                    this.datas === this.$t("iaoMng.hgyl") ||
-                    this.datas === this.$t("iaoMng.yl")
+                    !item.whseChemicalinDtlboid &&
+                    !item.whseDyesainDtlboid &&
+                    !item.whseYarninDtlaoid
                   ) {
-                    if (!item.whseChemicalinDtlboid) {
-                      this.everyThing.addPh(item).then((res) => {
-                        item.whseChemicalinDtlboid = res.data.data;
-                      });
-                    } else {
-                      this.everyThing.updatePh(item).then((res) => {});
-                    }
+                    this.everyThing.addPh(item).then((res) => {
+                      item.whseChemicalinDtlboid = res.data.data;
+                      item.whseDyesainDtlboid = res.data.data;
+                      item.whseYarninDtlaoid = res.data.data;
+                    });
+                  } else {
+                    this.everyThing.updatePh(item).then((res) => {});
                   }
+                  // }
                 });
               }
               if (this.mx[i].alloc) {
@@ -683,10 +780,12 @@ export default {
                   item.whseChemicalinDtlaFk = this.mx[i].whseChemicalinDtlaoid;
                   item.whseAccessoriesDtlFk = this.mx[i].whseAccessoriesDtloid;
                   item.whseYarninDtlaFk = this.mx[i].whseYarninDtloid;
+                  item.whseDyesainDtlaFk = this.mx[i].whseDyesainDtlaoid;
                   if (
                     !item.whseAccessoriesinAllocoid &&
                     !item.whseChemicalinAllocoid &&
-                    !item.whseYarninAllocoid
+                    !item.whseYarninAllocoid &&
+                    !item.whseDyesainAllocoid
                   ) {
                     item.allocMain = item.appId;
                     item.allocQty = item.applyNum;
@@ -694,6 +793,7 @@ export default {
                       item.whseAccessoriesinAllocoid = res.data.data;
                       item.whseChemicalinAllocoid = res.data.data;
                       item.whseYarninAllocoid = res.data.data;
+                      item.whseDyesainAllocoid = res.data.data;
                     });
                   }
                 });
@@ -706,6 +806,9 @@ export default {
           });
         });
       }
+      setTimeout(() => {
+        this.screenLoading = false;
+      }, 500);
     },
     close() {
       this.$emit("close");
@@ -723,10 +826,6 @@ export default {
 };
 </script>
 <style lang='stylus'>
-#rcDetail {
-  // .el-input.is-disabled .el-input__inner {
-  // color: #606266;
-  // background-color: #fff;
-  // }
-}
+#rcDetail, .el-table
+  overflow visible !important
 </style>

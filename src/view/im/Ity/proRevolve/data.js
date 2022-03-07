@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-07-17 09:48:54
+ * @LastEditTime: 2022-03-02 13:56:42
  * @Description:
  */
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
@@ -131,7 +131,25 @@ export function dlgForm(_this) {
         span: 12,
         placeholder: " ",
         align: "left",
-        readonly: true
+        readonly: true,
+        change: val => {
+          _this.$nextTick(() => {
+            if (val.value > _this.dlgChooseData.clothWeight) {
+              _this.$tip.warning("回仓数量不能大于原胚布重量!");
+              _this.dlgForm.outWeight = _this.dlgChooseData.clothWeight;
+              return;
+            }
+            if (val.value <= 0) {
+              _this.dlgForm.outWeight = 1;
+              _this.$tip.warning("回仓数量不能小于0!");
+              return;
+            }
+            // _this.$nextTick(() => {
+            _this.dlgCrud[0].clothWeight = _this.dlgCrud[0].realWeight = Number(
+              (_this.dlgChooseData.clothWeight - val.value).toFixed(1)
+            );
+          });
+        }
       }
     ]
   };

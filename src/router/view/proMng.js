@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-29 14:14:56
  * @LastEditors: Lyl
- * @LastEditTime: 2022-02-15 15:00:05
+ * @LastEditTime: 2022-02-24 10:14:06
  * @Description:
  */
 export default [
@@ -11,6 +11,15 @@ export default [
     path: "/",
     name: "主页",
     redirect: "/ProWorkflowInfo"
+  },
+  {
+    path: "/proWeaveOutworkShip",
+    name: "外发加工送货单",
+    component: resolve =>
+      require(["@/view/proMng/proWeaveOutworkShip/index"], resolve),
+    meta: {
+      keepAlive: true
+    }
   },
   {
     path: "/dptReciveLog",

@@ -73,7 +73,7 @@ export function rsxkr1F(_this) {
         placeholder: " ",
         type: "select",
         hide: _this.hide === "6" ? false : true,
-        dicData: postDicT("ucmlUser", "employeename", "ucmlUseroid")
+        dicData: getDicT("ucmlUser", "employeename", "ucmlUseroid")
       }
     ]
   };
@@ -147,7 +147,7 @@ export function rsxkr2F(_this) {
         placeholder: " ",
         type: "select",
         hide: _this.hide === "6" ? false : true,
-        dicData: postDicT("ucmlUser", "employeename", "ucmlUseroid")
+        dicData: getDicT("ucmlUser", "employeename", "ucmlUseroid")
       },
       {
         label: "货运计划编号",
@@ -360,7 +360,7 @@ export function rsxkr1C(_this) {
         cell: true,
         width: 140,
         type: "select",
-        dicData: postDicT("ucmlUser", "employeename", "ucmlUseroid"),
+        dicData: getDicT("ucmlUser", "employeename", "ucmlUseroid"),
         hide: _this.hide === "6" ? false : true
       },
       {

@@ -108,7 +108,7 @@ export function dlgForm(_this) {
         placeholder: " ",
         // type: "select",
         disabled: true
-        // dicData: postDicT("ucmlUser", "employeename", "ucmlUseroid")
+        // dicData: getDicT("ucmlUser", "employeename", "ucmlUseroid")
       },
       {
         label: "接收日期",
@@ -351,7 +351,7 @@ export function dlgCrud(_this) {
         placeholder: " "
         // type: "select",
         // disabled: true,
-        // dicData: postDicT("ucmlUser", "employeename", "ucmlUseroid")
+        // dicData: getDicT("ucmlUser", "employeename", "ucmlUseroid")
       },
       {
         label: "接收日期",

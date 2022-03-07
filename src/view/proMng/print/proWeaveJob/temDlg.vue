@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-02-14 09:23:29
+ * @LastEditTime: 2022-02-25 16:54:26
  * @Description: 
 -->
 <template>
@@ -647,7 +647,7 @@ export default {
                 if (res.data.code == 200) {
                   this.$tip.success(this.$t("public.bccg"));
                 } else {
-                  this.$tip.error(this.$t("public.bcsb"));
+                  this.$tip.error(this.$t("public.bcsb") + res.data.msg);
                 }
                 setTimeout(() => {
                   this.wLoading = false;
@@ -689,7 +689,7 @@ export default {
                     this.$tip.success(this.$t("public.bccg"));
                   }
                 } else {
-                  this.$tip.error(this.$t("public.bcsb"));
+                  this.$tip.error(this.$t("public.bcsb" + res.data.msg));
                 }
                 setTimeout(() => {
                   this.wLoading = false;

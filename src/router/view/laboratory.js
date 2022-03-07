@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-10 13:20:44
  * @LastEditors: Lyl
- * @LastEditTime: 2021-09-22 14:09:50
+ * @LastEditTime: 2022-02-23 08:12:00
  * @Description:
  */
 export default [
@@ -11,6 +11,15 @@ export default [
     path: "/",
     name: "主页",
     redirect: "/colorMng"
+  },
+  {
+    path: "/yarnReport",
+    name: "纱线测试报告",
+    component: resolve =>
+      require(["@/view/laboratory/yarnReport/index"], resolve),
+    meta: {
+      keepAlive: true
+    }
   },
   {
     path: "/colorMng",

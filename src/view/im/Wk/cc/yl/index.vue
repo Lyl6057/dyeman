@@ -1,7 +1,7 @@
 <template>
   <div id="rc">
     <el-tabs type="border-card" v-model="tabs">
-      <el-tab-pane :label="data.type.split('_')[0] + '出库资料'" name="tabs1">
+      <el-tab-pane :label="data.type.split('_')[0] + '资料'" name="tabs1">
         <div class="btnList">
           <!-- <el-button type="warning" @click="getData">取消</el-button> -->
           <el-button type="primary" @click="add" v-if="hide != '2'">{{
@@ -449,7 +449,7 @@ export default {
       for (var key in val) {
         delete val[key];
       }
-      for (var key in this.choiceQ) {
+      for (let key in this.choiceQ) {
         delete this.choiceQ[key];
       }
       this.choiceV = false;
@@ -586,11 +586,9 @@ export default {
 };
 </script>
 <style lang='stylus'>
-#rc, #rcDetail {
-  .formBox {
-    margin-bottom: 0px;
-  }
-
+#rc, #rcDetail
+  .formBox
+    margin-bottom 0px
   // .el-button--mini, .el-button--small {
   // font-size: 16px;
   // }
@@ -598,23 +596,17 @@ export default {
   // .el-button--mini, .el-button--mini.is-round {
   // padding: 5px 10px;
   // }
-  .avue-crud__menu {
-    min-height: 5px !important;
-    height: 5px !important;
-  }
-
-  .el-tabs__item {
-    font-size: 18px;
-    line-height: 30px;
-    height: 30px;
-  }
-
-  .el-table__header-wrapper, .el-form-item__label, .el-input--mini {
-    font-size: 16px !important;
+  .avue-crud__menu
+    min-height 5px !important
+    height 5px !important
+  .el-tabs__item
+    font-size 18px
+    line-height 30px
+    height 30px
+  .el-table__header-wrapper, .el-form-item__label, .el-input--mini
+    font-size 16px !important
     // font-weight: 600 !important;
-    color: #000;
-  }
-
+    color #000
   // .avue-form__group {
   // background-color: #fff;
   // }
@@ -622,8 +614,6 @@ export default {
   // .el-table--mini td, .el-table--mini th {
   // padding: 2px 0 !important;
   // }
-  .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item {
-    margin-bottom: 10px;
-  }
-}
+  .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item
+    margin-bottom 10px
 </style>

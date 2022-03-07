@@ -2,10 +2,10 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-06-19 16:35:02
+ * @LastEditTime: 2022-02-26 10:46:37
  * @Description:
  */
-import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
+import { getDIC, getDicT, getXDicT, postDicT, getDicNS } from "@/config";
 let matUnit = getDIC("bas_matUnit");
 export function mainForm(_this) {
   return {
@@ -358,7 +358,7 @@ export function mainCrud(_this) {
         filterable: true,
         allowCreate: true,
         defaultFirstOption: true,
-        dicData: getXDicT("whseLocation", "locationCode", "locationCode")
+        dicData: getDicNS("whseLocation", "locationCode", "locationCode")
       },
       // {
       //   label: "單位",

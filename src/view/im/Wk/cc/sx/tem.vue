@@ -106,10 +106,10 @@ export default {
       sxV: false,
       sxformOp: sxForm(this),
       sxform: {},
-      form: {},
-      formOp: rsxkr2F(this),
-      mxOp: rsxkr2C(this),
-      mx: [],
+      // form: {},
+      // formOp: rsxkr2F(this),
+      // mxOp: rsxkr2C(this),
+      // mx: [],
       sxcrud: [],
       sxpage: {},
       sxloading: false,
@@ -149,12 +149,17 @@ export default {
         this.mxOp = rsxkr3C(this);
       }
       if (this.isAdd) {
-        if (this.hide === "1" || this.hide === "2") {
+        if (this.hide === "2") {
           this.detail.list.index = 1;
           this.mx.push(Object.assign(this.detail.list, { $cellEdit: true }));
           this.page.total = this.mx.length;
         }
-        if (this.hide === "3" || this.hide === "4" || this.hide === "5") {
+        if (
+          this.hide === "3" ||
+          this.hide === "4" ||
+          this.hide === "5" ||
+          this.hide === "1"
+        ) {
           this.mxOp.column[2].hide = true;
         }
         // this.$refs.dlgcrud.setCurrentRow();
@@ -681,7 +686,7 @@ export default {
       for (var key in val) {
         delete val[key];
       }
-      for (var key in this.choiceQ) {
+      for (let key in this.choiceQ) {
         delete this.choiceQ[key];
       }
       this.choiceV = false;
@@ -704,28 +709,18 @@ export default {
 };
 </script>
 <style lang='stylus'>
-#sxPlanDlg {
-  .el-dialog__header {
-    padding: 0;
-  }
-
-  .el-card {
-    border: none;
-  }
-
-  .el-dialog__body {
-    padding: 0 !important;
-  }
-
-  .el-dialog__header {
-    padding: 0px;
-    background-color: rgb(2, 26, 60);
-  }
-
-  .formBox {
-    margin-bottom: 0px;
-  }
-
+#sxPlanDlg
+  .el-dialog__header
+    padding 0
+  .el-card
+    border none
+  .el-dialog__body
+    padding 0 !important
+  .el-dialog__header
+    padding 0px
+    background-color rgb(2, 26, 60)
+  .formBox
+    margin-bottom 0px
   // .el-button--mini, .el-button--small {
   // font-size: 16px;
   // }
@@ -733,30 +728,22 @@ export default {
   // .el-button--mini, .el-button--mini.is-round {
   // padding: 5px 10px;
   // }
-  .avue-crud__menu {
-    min-height: 5px !important;
-    height: 5px !important;
-  }
-
-  .el-tabs__item {
-    font-size: 18px;
-    line-height: 30px;
-    height: 30px;
-  }
-
-  .el-table__header-wrapper, .el-form-item__label, .el-input--mini {
+  .avue-crud__menu
+    min-height 5px !important
+    height 5px !important
+  .el-tabs__item
+    font-size 18px
+    line-height 30px
+    height 30px
+  .el-table__header-wrapper, .el-form-item__label, .el-input--mini
     // font-size: 16px !important;
     // font-weight: 600 !important;
     // color: #000;
-  }
-
-  .el-dialog {
-    margin-top: 0 !important;
-    height: 100%;
-    margin: 0 !important;
-    background-color: rgb(2, 26, 60);
-  }
-
+  .el-dialog
+    margin-top 0 !important
+    height 100%
+    margin 0 !important
+    background-color rgb(2, 26, 60)
   // .avue-form__group {
   // background-color: #fff;
   // }
@@ -764,26 +751,15 @@ export default {
   // .el-table--mini td, .el-table--mini th {
   // padding: 2px 0 !important;
   // }
-  .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item {
-    margin-bottom: 10px;
-  }
-
-  .avue-crud__tip {
-    display: none;
-  }
-
-  .el-dialog__header {
-    padding: 0px;
-  }
-
-  .el-dialog__headerbtn {
-    top: 5px;
-    color: #000;
-    font-size: 22px;
-    z-index: 999;
-  }
-}
-
-#rcDetail {
-}
+  .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item
+    margin-bottom 10px
+  .avue-crud__tip
+    display none
+  .el-dialog__header
+    padding 0px
+  .el-dialog__headerbtn
+    top 5px
+    color #000
+    font-size 22px
+    z-index 999
 </style>

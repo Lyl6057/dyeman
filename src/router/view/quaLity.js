@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-10 13:20:44
  * @LastEditors: Lyl
- * @LastEditTime: 2022-02-18 14:20:42
+ * @LastEditTime: 2022-02-25 16:00:48
  * @Description:
  */
 export default [
@@ -11,6 +11,22 @@ export default [
     path: "/",
     name: "主页",
     redirect: "/scanWeight"
+  },
+  // {
+  //   path: "/test",
+  //   name: "test",
+  //   component: resolve => require(["@/view/quaLity/test/index"], resolve),
+  //   meta: {
+  //     keepAlive: true
+  //   }
+  // },
+  {
+    path: "/qcTestReport",
+    name: "qc验布报告",
+    component: resolve => require(["@/view/quaLity/qcReport/index"], resolve),
+    meta: {
+      keepAlive: true
+    }
   },
   {
     path: "/finishedQc",

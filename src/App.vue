@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-02-24 08:12:20
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-01-05 19:10:31
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-03-03 08:56:05
  * @Description: 
 -->
 <template>
@@ -38,21 +38,21 @@ export default {
   name: "App",
   data() {
     return {
-      spowerClient:null
+      spowerClient: null,
     };
   },
   mounted() {
     // parent.userID
     webSocket.setClient(this);
-    this.setSpowerClient(this.spowerClient)
+    this.setSpowerClient(this.spowerClient);
     axios({
       url: "/api/ucmlUser",
       method: "get",
-      params: { usrLogin: parent.userID },
+      params: { usrLogin: parent.userID }, // ||
     }).then((Res) => {
       // 登錄用戶oid
       // this.$store.dispatch("setUsers", Res.data.ucmlUseroid);
-      this.setUsers(Res.data.ucmlUseroid);
+      this.setUsers(Res.data[0].ucmlUseroid);
       // this.$store.getters.getUser  --- this.$store.state.userOid
     });
     // 獲取多語言
@@ -68,50 +68,36 @@ export default {
     // window.sessionStorage.setItem("tagView", "[]");
   },
   methods: {
-    ...mapActions(["setUsers", "setLangs","setSpowerClient"]),
-      
+    ...mapActions(["setUsers", "setLangs", "setSpowerClient"]),
   },
 };
 </script>
 
 <style lang="stylus">
-.big {
-  .el-table__fixed-header-wrapper {
-    top: 37px !important;
-  }
-}
-
-.mid {
-  .el-table__fixed-header-wrapper {
-    top: 35px !important;
-  }
-}
-
-body, html, * {
-  font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
-}
-
-.lizi {
-  background-image: url('./assets/bg.jpg');
+.big
+  .el-table__fixed-header-wrapper
+    top 37px !important
+.mid
+  .el-table__fixed-header-wrapper
+    top 35px !important
+body, html, *
+  font-family 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', Arial, sans-serif
+.lizi
+  background-image url('./assets/bg.jpg')
   /* background-size: cover; */
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
-
-#app {
-  font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  width: 100%;
-  height: 100%;
-}
-
-.el-card__body {
-  padding: 0 !important;
-}
+  position absolute
+  top 0
+  left 0
+  width 100%
+  height 100%
+#app
+  font-family 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', Arial, sans-serif
+  -webkit-font-smoothing antialiased
+  -moz-osx-font-smoothing grayscale
+  text-align center
+  color #2c3e50
+  width 100%
+  height 100%
+.el-card__body
+  padding 0 !important
 </style>

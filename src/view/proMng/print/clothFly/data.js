@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-01-06 08:58:15
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-02-22 10:29:39
  * @Description:
  */
 
@@ -285,14 +285,14 @@ export function mainCrud(_this) {
           });
         }
       },
-      {
-        label: "布票號编码",
-        prop: "bph",
-        span: 6,
-        hide: true,
-        placeholder: " ",
-        disabled: true
-      },
+      // {
+      //   label: "布票號编码",
+      //   prop: "bph",
+      //   span: 6,
+      //   hide: true,
+      //   placeholder: " ",
+      //   disabled: true
+      // },
       {
         label: "平均匹重",
         prop: "pz",
@@ -314,44 +314,44 @@ export function mainCrud(_this) {
           });
         }
       },
-      {
-        label: "用紗分組",
-        disabled: false,
-        prop: "proWeaveJobGroupFk",
-        width: 120,
-        type: "select",
-        dicData: [],
-        props: {
-          value: "groupId",
-          label: "groupName"
-        },
-        span: 6,
-        hide: true,
-        change: val => {
-          _this.getYarn(val.value);
-        }
-      },
-      {
-        label: "紗支",
-        prop: "yarnThickness",
-        disabled: true,
-        width: 90,
-        hide: true,
-        span: 12,
-        overHidden: true
-        // type: "textarea",
-        // props: {
-        //   value: "yarnName",
-        //   label: "yarnName"
-        // },
-        // multiple: true,
-        // dicData: [],
-        // rules: [{
-        //   required: true,
-        //   message: "请選擇紗支",
-        //   trigger: "blur"
-        // }],
-      },
+      // {
+      //   label: "用紗分組",
+      //   disabled: false,
+      //   prop: "proWeaveJobGroupFk",
+      //   width: 120,
+      //   type: "select",
+      //   dicData: [],
+      //   props: {
+      //     value: "groupId",
+      //     label: "groupName"
+      //   },
+      //   span: 6,
+      //   hide: true,
+      //   change: val => {
+      //     _this.getYarn(val.value);
+      //   }
+      // },
+      // {
+      //   label: "紗支",
+      //   prop: "yarnThickness",
+      //   disabled: true,
+      //   width: 90,
+      //   hide: true,
+      //   span: 12,
+      //   overHidden: true
+      //   // type: "textarea",
+      //   // props: {
+      //   //   value: "yarnName",
+      //   //   label: "yarnName"
+      //   // },
+      //   // multiple: true,
+      //   // dicData: [],
+      //   // rules: [{
+      //   //   required: true,
+      //   //   message: "请選擇紗支",
+      //   //   trigger: "blur"
+      //   // }],
+      // },
 
       // {
       //   label: "纱牌",
@@ -483,7 +483,7 @@ export function bfCrud(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 450px)",
+    height: "calc(100vh - 410px)",
     refreshBtn: false,
     columnBtn: false,
     page: false,
@@ -515,20 +515,20 @@ export function bfCrud(_this) {
         span: 6,
         sortable: true
       },
-      {
-        label: "用紗分組",
-        disabled: false,
-        prop: "proWeaveJobGroupFk",
-        width: 120,
-        type: "select",
-        overHidden: true,
-        dicData: [],
-        props: {
-          value: "groupId",
-          label: "groupName"
-        },
-        span: 6
-      },
+      // {
+      //   label: "用紗分組",
+      //   disabled: false,
+      //   prop: "proWeaveJobGroupFk",
+      //   width: 120,
+      //   type: "select",
+      //   overHidden: true,
+      //   dicData: [],
+      //   props: {
+      //     value: "groupId",
+      //     label: "groupName"
+      //   },
+      //   span: 6
+      // },
       {
         label: "客戶編號",
         prop: "customerName",

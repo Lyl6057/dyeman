@@ -102,9 +102,15 @@ import {
   cpbInC,
   cpbInF,
   getCpbIn,
+  ylStockC,
+  ylStockF,
+  getYlStock,
   hgylStockC,
   hgylStockF,
   getHgylStock,
+  sxStockC,
+  sxStockF,
+  getSxStock,
   salPoC,
   salPoF,
   getSalPo,
@@ -153,7 +159,7 @@ export default {
           delete this.form[key];
         }
       }
-      for (var key in this.choiceQ) {
+      for (let key in this.choiceQ) {
         if (this.choiceQ[key] === "") {
           delete this.choiceQ[key];
         }
@@ -321,6 +327,21 @@ export default {
   },
   created() {
     switch (this.choiceTle) {
+       case "选择颜料库存":
+        this.choiceC = ylStockC(this);
+        this.choiceF = ylStockF(this);
+        this.getData = getYlStock;
+        break;
+      case "选择化工原料库存":
+        this.choiceC = hgylStockC(this);
+        this.choiceF = hgylStockF(this);
+        this.getData = getHgylStock;
+        break;
+      case "选择纱线库存":
+        this.choiceC = sxStockC(this);
+        this.choiceF = sxStockF(this);
+        this.getData = getSxStock;
+        break;
       case "选择生产工作包":
         this.choiceC = baseStepPackageC(this);
         this.choiceF = baseStepPackageF(this);
@@ -330,11 +351,6 @@ export default {
         this.choiceC = salPoC(this);
         this.choiceF = salPoF(this);
         this.getData = getSalPo;
-        break;
-      case "选择化工原料库存":
-        this.choiceC = hgylStockC(this);
-        this.choiceF = hgylStockF(this);
-        this.getData = getHgylStock;
         break;
       case "选择成品布入仓信息":
         this.choiceC = cpbInC(this);
@@ -420,7 +436,7 @@ export default {
       default:
         break;
     }
-    this.query();
+    // this.query();
   },
   mounted() {},
   updated() {

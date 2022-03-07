@@ -235,7 +235,7 @@ export function getDicT(url, label, value, form = {}, sort) {
   }
 }
 // 获取字典表
-export function getDicNS(url, label, value, form = {}) {
+export function getDicNS(url, label, value, form = {}, sort) {
   // let resultMap = _this.$store.getters.getDic(codeTableId);
   let resultMap = [];
   axios({
@@ -249,9 +249,12 @@ export function getDicNS(url, label, value, form = {}) {
     } else {
       data = res.data;
     }
-    data.sort((a, b) => {
-      return a.orderno - b.orderno;
-    });
+    if (sort) {
+      data.sort((a, b) => {
+        return a[sort] > b[sort] ? 1 : -1;
+      });
+    }
+
     data.forEach(item => {
       for (var key in item) {
         if (item[key] === 0) {

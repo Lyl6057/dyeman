@@ -53,7 +53,7 @@ export function sxForm(_this) {
         placeholder: " ",
         disabled: true,
         type: "select",
-        dicData: postDicT("ucmlUser", "employeename", "ucmlUseroid")
+        dicData: getDicT("ucmlUser", "employeename", "ucmlUseroid")
       }
     ]
   };

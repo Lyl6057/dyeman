@@ -446,23 +446,7 @@ export default {
           this.mx.forEach((item, index) => {
             item.index = index + 1;
             item.chinName = item.materialNum;
-            // item.yarnsName = item.yarnsId;
-            // if (this.datas === this.$t("iaoMng.hgyl")) {
-            //   // 處理英文名稱 、色光、力份信息
-            //   let data = JSON.parse(JSON.stringify(item.chemicalId));
-            //   item.ennamelong = item.chemicalId;
-            //   item.modeltype = item.chemicalId;
-            //   item.vitality = item.chemicalId;
-            // }
-            // if (this.datas === this.$t("iaoMng.yl")) {
-            //   // 處理英文名稱 、色光、力份信息
-            //   item.ennamelong = item.chemicalId;
-            //   item.bcColor = item.chemicalId;
-            //   item.bcForce = item.chemicalId;
-            // }
-            // item.bcMatengname = item.chemicalId;
-            // item.bcColor = item.chemicalId;
-            // item.bcForce = item.chemicalId;
+            item.batchNos = item.batchNo.slice(2);
             if (index === this.mx.length - 1) {
               this.mxOp.showSummary = true;
               setTimeout(() => {
@@ -659,10 +643,10 @@ export default {
             ? this.chooseData.list.slice(-1)[0].weightUnit || "KG"
             : "KG",
       });
-      this.phPage.total++;
       this.$refs.count.setCurrentRow(
         this.chooseData.list[this.chooseData.list.length - 1]
       );
+      this.phPage.total++;
       this.$nextTick(() => {
         this.$toTableLow(this, "count");
       });
@@ -697,9 +681,10 @@ export default {
           countingNo: this.mx.length + 1,
           // materialType: "1",
           batchNo: this.code,
+          batchNos: this.code.slice(2),
         });
         this.code =
-          this.code.substring(0, 3) + (Number(this.code.substring(3)) + 1);
+          this.code.substring(0, 5) + (Number(this.code.substring(5)) + 1);
       }
       this.$refs.mx.setCurrentRow(this.mx[this.mx.length - 1]);
       this.$nextTick(() => {
@@ -765,6 +750,7 @@ export default {
         });
     },
     delPh() {
+      console.log(this.chooseData);
       if (
         Object.keys(this.choosePhData === undefined || this.choosePhData)
           .length === 0 ||
@@ -773,6 +759,7 @@ export default {
         this.$tip.error(this.$t("public.delTle"));
         return;
       }
+      this.ctLoading = true;
       if (
         !this.choosePhData.whseChemicalinDtlboid &&
         !this.choosePhData.whseDyesainDtlboid &&
@@ -781,10 +768,12 @@ export default {
       ) {
         this.chooseData.list.splice(this.choosePhData.index - 1, 1);
         this.phPage.total--;
+
         this.chooseData.list.forEach((item, i) => {
           item.index = i + 1;
         });
         this.$refs.count.setCurrentRow(this.chooseData.list[0] || {});
+        this.ctLoading = false;
         return;
       }
       this.$tip
@@ -807,14 +796,17 @@ export default {
                 this.chooseData.list.forEach((item, i) => {
                   item.index = i + 1;
                 });
+                this.ctLoading = false;
                 this.getPh();
                 // this.choosePhData = {};
               } else {
                 this.$tip.error(this.$t("public.scsb"));
+                this.ctLoading = false;
               }
             })
             .catch((err) => {
               this.$tip.error(this.$t("public.scsb"));
+              this.ctLoading = false;
             });
         })
         .catch((err) => {
@@ -1055,7 +1047,7 @@ export default {
                   item.whseOfficeDtlFk = this.mx[i].whseAccessoriesDtloid;
                   item.whseAccessoriesDtloid = this.mx[i].whseAccessoriesDtloid;
                   // item.whseDyesainDtlaFk = this.mx[i].whseAccessoriesDtloid;
-                
+
                   if (
                     this.datas === this.$t("iaoMng.hgyl") ||
                     this.datas === this.$t("choicDlg.wj") ||
@@ -1070,9 +1062,7 @@ export default {
                       !item.whseAccessoriesDtlaoid &&
                       !item.whseEnergyDtlaId
                     ) {
-                     console.log(item)
                       this.everyThing.addPh(item).then((res) => {
-                        
                         item.whseChemicalinDtlboid = res.data.data;
                         item.whseDyesainDtlboid = res.data.data;
                         item.whseAccessoriesDtlaoid = res.data.data;
@@ -1233,8 +1223,8 @@ export default {
                     this.datas === this.$t("choicDlg.wj") ||
                     this.datas === this.$t("choicDlg.xz") ||
                     this.datas === this.$t("choicDlg.scfl") ||
-                    this.datas === this.$t("choicDlg.rl")||
-                    this.datas === this.$t("iaoMng.yl") 
+                    this.datas === this.$t("choicDlg.rl") ||
+                    this.datas === this.$t("iaoMng.yl")
                   ) {
                     if (
                       !item.whseChemicalinDtlboid &&
@@ -1364,13 +1354,9 @@ export default {
 };
 </script>
 <style lang='stylus'>
-#rcDetail {
-  .el-table {
-    overflow: visible !important;
-  }
-
-  .customize-select .el-input__inner {
-    border: none;
-  }
-}
+#rcDetail
+  .el-table
+    overflow visible !important
+  .customize-select .el-input__inner
+    border none
 </style>

@@ -255,13 +255,13 @@ export default {
       // this.chooseData = {};
       this.oldData = {};
       this.form = this.detail;
-
       let addList = JSON.parse(JSON.stringify(this.addList));
       if (this.isAdd) {
         // this.chooseData = {};
         this.form.purNo = addList[0].poNo;
         this.form.sysCreatedby = this.$store.state.userOid;
         addList.forEach((item, index) => {
+          item.batchNos = item.batchNo.slice(2);
           if (index === 0) {
             if (this.datas === this.$t("iaoMng.pb")) {
               item.loc = [];
@@ -279,6 +279,7 @@ export default {
               item.weightUnit = item.deliUnit;
               item.list.push(JSON.parse(JSON.stringify(item)));
             }
+
             this.mx.push(item);
           } else {
             for (let i = 0; i < this.mx.length; i++) {
@@ -395,6 +396,7 @@ export default {
             item.index = index + 1;
             item.chinName = item.materialNum;
             item.yarnsName = item.yarnsId;
+            item.batchNos = item.batchNo.slice(2);
             if (this.datas === this.$t("iaoMng.hgyl")) {
               // 處理英文名稱 、色光、力份信息
               let data = JSON.parse(JSON.stringify(item.chemicalId));
@@ -470,6 +472,7 @@ export default {
           }
           data.forEach((item, index) => {
             item.index = index + 1;
+            item.batchNos = item.batchNo.slice(2);
             if (index === data.length - 1) {
               this.chooseData.list = data;
               this.countOp.showSummary = true;
@@ -588,6 +591,7 @@ export default {
         index: this.chooseData.list.length + 1,
         $cellEdit: true,
         batchNo: this.chooseData.batchNo,
+        batchNos: this.chooseData.batchNo.slice(2),
         whseChemicalinDtlaFk: this.chooseData.whseChemicalinDtlaoid,
         origin:
           this.chooseData.list.slice(-1).length > 0
@@ -725,7 +729,7 @@ export default {
       this.$tip
         .cofirm(
           this.$t("iaoMng.delTle8") +
-            this.choosePhData.batchNo +
+            this.choosePhData.batchNos +
             this.$t("iaoMng.delTle2"),
           this,
           {}
@@ -1133,10 +1137,9 @@ export default {
 };
 </script>
 <style lang='stylus'>
-#rcDetail {
+#rcDetail
   // .el-input.is-disabled .el-input__inner {
   // color: #606266;
   // background-color: #fff;
   // }
-}
 </style>

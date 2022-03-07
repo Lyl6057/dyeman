@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:48:57
  * @LastEditors: Lyl
- * @LastEditTime: 2021-04-19 18:32:20
+ * @LastEditTime: 2022-03-05 08:43:55
  * @Description: 
 -->
 <template>
@@ -173,8 +173,6 @@ export default {
   }
 
   .yl_bh {
-    height: 29px;
-    line-height: 29px;
     text-align: center;
   }
 

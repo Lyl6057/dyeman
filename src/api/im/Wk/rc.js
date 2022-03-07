@@ -1,4 +1,14 @@
 import axios from "axios";
+
+// ---- 货位
+export function getLocation(params) {
+  return axios({
+    url: "/api/whseLocation",
+    method: "get",
+    params: params
+  });
+}
+
 // ---- 纱线
 export function getSx(params) {
   return axios({
@@ -53,6 +63,35 @@ export function updateSxDetali(params) {
 export function delSxDetali(id) {
   return axios({
     url: "/api/whseYarninDtl/v1.0/removeById?id=" + id,
+    method: "delete"
+  });
+}
+
+export function getSxDtla(params) {
+  return axios({
+    url: "/api/whseYarninDtla/v1.0/list",
+    method: "get",
+    params: params
+  });
+}
+export function addSxDtla(params) {
+  return axios({
+    url: "/api/whseYarninDtla/v1.0/save",
+    method: "post",
+    params: params
+  });
+}
+export function updateSxDtla(params) {
+  return axios({
+    url: "/api/whseYarninDtla/v1.0/updateById",
+    method: "put",
+    params: params
+  });
+}
+
+export function delSxDtla(id) {
+  return axios({
+    url: "/api/whseYarninDtla/v1.0/removeById?id=" + id,
     method: "delete"
   });
 }

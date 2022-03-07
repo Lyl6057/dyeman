@@ -4824,9 +4824,10 @@ export const SingleDtlC = {
     {
       label: i18n.t("whseField.dw"),
       prop: "company",
-      width: 60,
+      width: 80,
       type: "select",
-      dicData: matUnit
+      dicData: matUnit,
+      overHidden: true
     },
     {
       label: i18n.t("whseField.xqrq"),

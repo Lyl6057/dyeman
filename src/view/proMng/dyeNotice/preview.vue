@@ -173,8 +173,6 @@ export default {
   }
 
   .yl_bh {
-    height: 29px;
-    line-height: 29px;
     text-align: center;
   }
 

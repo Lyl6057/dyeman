@@ -2,7 +2,7 @@ import { getDIC, getDicT, postDicT, getXDicT, getDbDicT } from "@/config";
 
 let matUnit = getDIC("bas_matUnit");
 let rlData = getXDicT("basPigment");
-let user = postDicT("ucmlUser", "employeename", "ucmlUseroid");
+let user = getDicT("ucmlUser", "employeename", "ucmlUseroid");
 export function rsxkr1F(_this) {
   return {
     submitBtn: false,
@@ -126,10 +126,10 @@ export function rsxkr2F(_this) {
           if (_this.form.stockType === "2") {
             return;
           }
-
           _this.choiceField = "spNo";
-          _this.oldData = _this.chooseData;
-          _this.choiceTarget = _this.oldData;
+          _this.chooseData = {};
+          // _this.oldData = _this.chooseData;
+          // _this.choiceTarget = _this.oldData;
           _this.mx = [];
           if (_this.form.stockType === "1") {
             _this.choiceQ.purCategory = "8";
@@ -542,7 +542,7 @@ export function rsxkr2C(_this) {
         label: "出货数量",
         prop: "stockQty",
         hide: false,
-        cell: true,
+        cell: false,
         width: 120,
         align: "right",
         type: "number",
@@ -574,13 +574,10 @@ export function rcpb3C(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height:
-      _this.hide === "1" || _this.hide === "2"
-        ? "calc(100vh - 320px)"
-        : "calc(100vh - 285px)",
+    height: "calc(100vh - 284px)",
     refreshBtn: false,
     columnBtn: false,
-    page: true,
+    page: false,
     roykey: "whseCalicoinDtlbOid",
     showSummary: true,
     sumColumnList: [
@@ -597,40 +594,12 @@ export function rcpb3C(_this) {
         width: 50,
         align: "center"
       },
-      {
-        label: "来胚入仓批号资料OID",
-        prop: " whseCalicoinDtlbOid",
-        hide: true
-      },
+
       {
         label: _this.$t("whseField.ph"),
         prop: "batchNo",
-        cell: true,
-        width: 180,
-        hide: _this.hide === "6" ? true : false
-      },
-      {
-        label: _this.$t("whseField.scdh"),
-        prop: "prodNo",
-        cell: true,
-        width: 180,
-        hide: _this.hide != "6" ? true : false,
-        type: "select",
-        dicData: getDicT(
-          "whseCalicoinDtla/v1.0/list",
-          "prodNo",
-          "whseCalicoinDtlaoid"
-        )
-      },
-      {
-        label: _this.$t("whseField.ph2"),
-        prop: "countingNo",
-        cell: true,
-        width: 80,
-        align: "right"
-        // click: (val) => {
-        //   _this.iptPhChange(_this.choosePhData);
-        // },
+        cell: false,
+        width: 180
       },
       {
         label: _this.$t("whseField.zl"),
@@ -654,13 +623,12 @@ export function rcpb3C(_this) {
         // },
       },
       {
-        label: _this.$t("whseField.krbph"),
-        prop: "custTicket",
-        cell: true,
-        width: 150
-        // click: (val) => {
-        //   _this.iptPhChange(_this.choosePhData);
-        // },
+        label: _this.$t("whseField.hwm"),
+        prop: "locationCode",
+        cell: false,
+        width: 140,
+        type: "select",
+        dicData: getDicT("whseLocation", "locationCode", "locationCode")
       }
     ]
   };
@@ -719,7 +687,6 @@ export function rsxkr3C(_this) {
         cell: false,
         width: 500,
         type: "select",
-        hide: false,
         props: {
           label: "whseAccessoriesinFk",
           value: "whseAccessoriesDtloid"

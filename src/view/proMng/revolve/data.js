@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-01-08 18:58:59
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-02-24 16:06:04
  * @Description:
  */
 
@@ -48,7 +48,7 @@ export function mainForm(_this) {
         placeholder: " ",
         type: "datetime",
         format: "yyyy-MM-dd HH:mm:ss",
-        valueFormat: "yyyy-MM-dd HH:mm:ss",
+        valueFormat: "yyyy-MM-dd HH:mm:ss"
       },
       {
         label: "工厂色號",
@@ -131,7 +131,7 @@ export function mainCrud(_this) {
     highlightCurrentRow: true,
     height: "calc(100vh - 315px)",
     refreshBtn: false,
-    columnBtn: false,
+    // columnBtn: false,
     page: true,
     labelWidth: 120,
     selection: true,
@@ -303,8 +303,7 @@ export function mainCrud(_this) {
         width: 180,
         sortable: true,
         overHidden: true,
-        span: 6,
-        placeholder: " "
+        span: 6
       },
       {
         label: "工厂色號",
@@ -396,7 +395,7 @@ export function mainCrud(_this) {
         disabled: false,
         prop: "avgEachWeightKg",
         width: 120,
-        labelWidth:60,
+        labelWidth: 60,
         type: "switch",
         dicData: [
           {
@@ -422,10 +421,10 @@ export function mainCrud(_this) {
         }
       },
       {
-        label: "重量单位",
+        label: "单位",
         prop: "wmUnit",
         tip: "unit",
-        labelWidth:90,
+        labelWidth: 90,
         width: 80,
         span: 5,
         placeholder: " ",
@@ -433,19 +432,19 @@ export function mainCrud(_this) {
         dicData: [
           {
             label: "KG",
-            value: 'KG'
+            value: "KG"
           },
           {
             label: "LBS",
             value: "LBS"
           }
-        ],
+        ]
       },
       {
         label: "疋數",
         prop: "pidCount",
         tip: "Cây",
-        labelWidth:50,
+        labelWidth: 50,
         width: 100,
         span: 3,
         type: "number",
@@ -542,7 +541,7 @@ export function mainCrud(_this) {
         tip: "Loại vải",
         overHidden: true,
         width: 250,
-        span: 12,
+        span: 12
         // rules: [{
         //   required: true,
         //   message: "请選擇布類描述",
@@ -570,6 +569,7 @@ export function mainCrud(_this) {
         width: 180,
         span: 12,
         disabled: false,
+        hide: true,
         type: "select",
         dicData: [],
         multiple: true,
@@ -610,6 +610,7 @@ export function mainCrud(_this) {
         width: 120,
         span: 6,
         type: "number",
+        hide: true,
         align: "right",
         placeholder: " "
       },
@@ -794,9 +795,9 @@ export function mainCrud(_this) {
         label: "代码",
         prop: "custStyleCode",
         tip: "MÃ CODE VẢI XUẤT HÀNG 代码",
-        span: 6,
+        span: 5,
         hide: true,
-        width: 80,
+        width: 60,
         placeholder: " "
       },
       {
@@ -804,7 +805,7 @@ export function mainCrud(_this) {
         // tip: "state",
         disabled: false,
         prop: "firstOrOther",
-        width: 120,
+        width: 100,
         type: "switch",
         dicData: [
           {
@@ -819,6 +820,28 @@ export function mainCrud(_this) {
         hide: false,
         placeholder: " ",
         span: 6
+      },
+      {
+        label: "办单/大货",
+        tip: "Hàng mẫu / Hàng đại trà",
+        disabled: false,
+        prop: "salType",
+        width: 150,
+        type: "switch",
+        dicData: [
+          {
+            label: "办单(Hàng mẫu)",
+            value: "sample"
+          },
+          {
+            label: "大货(Hàng đại trà)",
+            value: "big"
+          }
+        ],
+        hide: false,
+        placeholder: " ",
+        overHidden: true,
+        span: 7
       },
       {
         label: "运转单状态",
@@ -852,6 +875,7 @@ export function mainCrud(_this) {
         width: 80,
         span: 6,
         disabled: true,
+        display: false,
         // hide: true,
         placeholder: " "
       },
@@ -865,8 +889,7 @@ export function mainCrud(_this) {
         display: false,
         type: "datetime",
         format: "yyyy-MM-dd HH:mm:ss",
-        valueFormat: "yyyy-MM-dd HH:mm:ss",
-        placeholder: " "
+        valueFormat: "yyyy-MM-dd HH:mm:ss"
       },
       {
         label: "备注",

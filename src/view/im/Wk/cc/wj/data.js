@@ -39,7 +39,7 @@ export function rsxkr1F(_this) {
         span: 6,
         placeholder: " ",
         type: "select",
-        dicData: postDicT("ucmlUser", "employeename", "ucmlUseroid"),
+        dicData: getDicT("ucmlUser", "employeename", "ucmlUseroid"),
         filterable: true,
         display:
           _this.hide === "6" || _this.hide === "1" || _this.hide === "2"
@@ -52,7 +52,7 @@ export function rsxkr1F(_this) {
         span: 6,
         placeholder: " ",
         type: "select",
-        dicData: postDicT("ucmlUser", "employeename", "ucmlUseroid")
+        dicData: getDicT("ucmlUser", "employeename", "ucmlUseroid")
       }
     ]
   };
@@ -127,7 +127,7 @@ export function rsxkr2F(_this) {
         span: 6,
         placeholder: " ",
         type: "select",
-        dicData: postDicT("ucmlUser", "employeename", "ucmlUseroid"),
+        dicData: getDicT("ucmlUser", "employeename", "ucmlUseroid"),
         filterable: true,
         display:
           _this.hide === "6" || _this.hide === "1" || _this.hide === "2"
@@ -281,7 +281,7 @@ export function rsxkr1C(_this) {
         cell: true,
         width: 140,
         type: "select",
-        dicData: postDicT("ucmlUser", "employeename", "ucmlUseroid"),
+        dicData: getDicT("ucmlUser", "employeename", "ucmlUseroid"),
         filterable: true,
         hide: _this.hide === "1" ? false : true
       },
@@ -312,7 +312,7 @@ export function rsxkr1C(_this) {
         cell: true,
         width: 140,
         type: "select",
-        dicData: postDicT("ucmlUser", "employeename", "ucmlUseroid")
+        dicData: getDicT("ucmlUser", "employeename", "ucmlUseroid")
         // hide: _this.hide === '6' || _this.hide === '1' ? false : true
       }
     ]

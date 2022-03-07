@@ -72,7 +72,8 @@ export function popupForm(_this) {
         span: 6,
         placeholder: "请选择颜色深度",
         type: "select",
-        disabled: !_this.isAdd,
+        // disabled: !_this.isAdd,
+        disabled: false,
         dicData: getDIC("bas_colorclTepth"),
         change: () => {
           if (_this.isAdd) {
@@ -89,7 +90,8 @@ export function popupForm(_this) {
         type: "number",
         minRows: _this.minRows,
         maxRows: _this.maxRows,
-        disabled: true
+        // disabled: true
+        disabled: false
         // change: () => {
         //   // if (_this.form.colorDepth == '') {
         //   //   _this.form.dyeWeight = 0
@@ -188,18 +190,18 @@ export function popupForm(_this) {
         disabled: !_this.isAdd
       },
       {
-        label: "面料",
+        label: "面料编号",
         prop: "fabCode",
         span: 6,
         placeholder: "请选择面料",
         disabled: !_this.isAdd,
         click: () => {
-          _this.dlgWidth = "100%";
-          _this.choiceV = !_this.choiceV;
-          _this.choiceField = "fabCode";
-          // _this.choiceQ.purType = '5'
-          _this.choiceTarget = _this.form;
-          _this.choiceTle = "胚布編碼";
+          // _this.dlgWidth = "100%";
+          // _this.choiceV = !_this.choiceV;
+          // _this.choiceField = "fabCode";
+          // // _this.choiceQ.purType = '5'
+          // _this.choiceTarget = _this.form;
+          // _this.choiceTle = "胚布編碼";
         }
       },
       {
@@ -332,27 +334,32 @@ export function mainCrud(_this) {
       {
         label: "颜色中文",
         prop: "colorChn",
-        width: 120
+        width: 160,
+        overHidden: true
       },
       {
         label: "颜色英文",
         prop: "colorEngName",
-        width: 150
+        width: 150,
+        overHidden: true
       },
       {
         label: "客色号",
         prop: "custColorBh",
-        width: 130
+        width: 130,
+        overHidden: true
       },
       {
         label: "面料编号",
         prop: "fabCode",
-        width: 110
+        width: 110,
+        overHidden: true
       },
       {
         label: "面料",
         prop: "fabricDesc",
-        width: 400
+        width: 400,
+        overHidden: true
       },
       {
         label: "面料来源",

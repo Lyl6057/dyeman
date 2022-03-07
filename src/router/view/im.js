@@ -38,7 +38,7 @@ export default [
   // },
   {
     path: "/proRevolve",
-    name: "生产运转",
+    name: "生产备布",
     component: resolve => require(["@/view/im/Ity/proRevolve/index"], resolve),
     meta: {
       keepAlive: true
@@ -271,6 +271,16 @@ export default [
         path: "/cc_rl",
         name: "cc_rl",
         component: resolve => require(["@/view/im/Wk/cc/rl/index"], resolve),
+        meta: {
+          keepAlive: false
+        }
+      },
+      // 生产领用出库
+      {
+        path: "/cc_productionUse",
+        name: "cc_productionUse",
+        component: resolve =>
+          require(["@/view/im/Wk/cc/productionUse/index"], resolve),
         meta: {
           keepAlive: false
         }

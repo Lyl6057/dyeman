@@ -11,18 +11,16 @@
             >編號規則配置</el-button
           > -->
           <!-- <el-button type="success" @click="save">{{this.$t("public.save")}}</el-button> -->
+          <el-button type="primary" @click="add" v-if="hide != '2'">{{
+            this.$t("public.add")
+          }}</el-button>
           <el-button
             type="success"
             :disabled="Object.keys(chooseData).length === 0"
             @click="handleRowDBLClick(chooseData)"
             >{{ this.$t("public.update") }}</el-button
           >
-          <el-button
-            type="primary"
-            @click="add"
-            v-if="hide != '1' && hide != '2'"
-            >{{ this.$t("public.add") }}</el-button
-          >
+
           <el-button type="danger" @click="del">{{
             this.$t("public.del")
           }}</el-button>
@@ -65,11 +63,7 @@
           ></el-col> -->
         </el-row>
       </el-tab-pane>
-      <el-tab-pane
-        label="未出倉紗線配料計劃"
-        name="tabs2"
-        v-if="hide === '1' || hide === '2'"
-      >
+      <el-tab-pane label="未出倉紗線配料計劃" name="tabs2" v-if="hide === '2'">
         <tab-plan
           :hide="hide"
           @close="close"
@@ -373,11 +367,9 @@ export default {
 };
 </script>
 <style lang='stylus'>
-#rc, #rcDetail {
-  .formBox {
-    margin-bottom: 0px;
-  }
-
+#rc, #rcDetail
+  .formBox
+    margin-bottom 0px
   // .el-button--mini, .el-button--small {
   // font-size: 16px;
   // }
@@ -385,23 +377,17 @@ export default {
   // .el-button--mini, .el-button--mini.is-round {
   // padding: 5px 10px;
   // }
-  .avue-crud__menu {
-    min-height: 5px !important;
-    height: 5px !important;
-  }
-
-  .el-tabs__item {
-    font-size: 18px;
-    line-height: 30px;
-    height: 30px;
-  }
-
-  .el-table__header-wrapper, .el-form-item__label, .el-input--mini {
-    font-size: 16px !important;
+  .avue-crud__menu
+    min-height 5px !important
+    height 5px !important
+  .el-tabs__item
+    font-size 18px
+    line-height 30px
+    height 30px
+  .el-table__header-wrapper, .el-form-item__label, .el-input--mini
+    font-size 16px !important
     // font-weight: 600 !important;
-    color: #000;
-  }
-
+    color #000
   // .avue-form__group {
   // background-color: #fff;
   // }
@@ -409,8 +395,6 @@ export default {
   // .el-table--mini td, .el-table--mini th {
   // padding: 2px 0 !important;
   // }
-  .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item {
-    margin-bottom: 10px;
-  }
-}
+  .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item
+    margin-bottom 10px
 </style>

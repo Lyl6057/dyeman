@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-04-01 14:08:13
  * @LastEditors: Lyl
- * @LastEditTime: 2022-02-18 14:21:05
+ * @LastEditTime: 2022-02-25 16:00:07
  * @Description:
  */
 
@@ -59,6 +59,10 @@ export function quality(_this) {
         {
           menuName: "5.QC验布",
           index: "finishedQc"
+        },
+        {
+          menuName: "6.验布报告",
+          index: "qcTestReport"
         }
       ]
     },

@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-12-27 18:58:28
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-02-22 10:48:06
  * @Description: 
 -->
 <template>
@@ -174,28 +174,28 @@ export default {
         0
       );
       this.form.nowDate = this.$getNowTime("date");
-      getGroup({ proWeaveJobFk: this.form.weaveJobId }).then((group) => {
-        this.yarnList = group.data;
-        group.data.sort((a, b) => {
-          return a.sn - b.sn;
-        });
-        this.formOp.column[13].dicData = group.data;
-        this.crudOp.column[3].dicData = group.data;
-        if (group.data.length > 0) {
-          this.form.proWeaveJobGroupFk = group.data[0].groupId;
-        }
-        getJh({ proWeaveJobFk: this.form.weaveJobId }).then((res) => {
-          res.data.forEach((item) => {
-            this.formOp.column[10].dicData.push({
-              value: item.mathineCode,
-              label: item.mathineCode,
-            });
+      // getGroup({ proWeaveJobFk: this.form.weaveJobId }).then((group) => {
+      // this.yarnList = group.data;
+      // group.data.sort((a, b) => {
+      //   return a.sn - b.sn;
+      // });
+      // this.formOp.column[13].dicData = group.data;
+      // this.crudOp.column[3].dicData = group.data;
+      // if (group.data.length > 0) {
+      //   this.form.proWeaveJobGroupFk = group.data[0].groupId;
+      // }
+      getJh({ proWeaveJobFk: this.form.weaveJobId }).then((res) => {
+        res.data.forEach((item) => {
+          this.formOp.column[10].dicData.push({
+            value: item.mathineCode,
+            label: item.mathineCode,
           });
-          if (res.data.length > 0) {
-            this.form.mathineCode = res.data[0].mathineCode;
-          }
         });
+        if (res.data.length > 0) {
+          this.form.mathineCode = res.data[0].mathineCode;
+        }
       });
+      // });
     },
     typeChange() {
       this.getBf();
@@ -437,9 +437,9 @@ export default {
                   addBf(item)
                     .then((res) => {
                       // item.noteId = res.data.data;
-                      if (res.data.code != 200) {
-                        this.$tip.err(res.data.msg);
-                      }
+                      // if (res.data.code != 200) {
+                      //   this.$tip.err(res.data.msg);
+                      // }
                     })
                     .catch((err) => {
                       this.$tip.warning("生成失败!");
@@ -499,7 +499,7 @@ export default {
       getNote(
         Object.assign(query, {
           weaveJobFk: this.detail.weaveJobId,
-          proWeaveJobGroupFk: this.form.proWeaveJobGroupFk,
+          // proWeaveJobGroupFk: this.form.proWeaveJobGroupFk,
           rows: 999,
           start: 1,
         })
@@ -513,7 +513,7 @@ export default {
         });
         if (this.listType == "3") {
           this.allData = res.data.records;
-         
+
           if (this.options.length <= 1) {
             this.group(this.allData, "machineCode");
           }
@@ -577,7 +577,7 @@ export default {
           if (i == this.crud.length - 1) {
             setTimeout(() => {
               this.wLoading = false;
-              this.$tip.success(this.$t("public.save"));
+              this.$tip.success(this.$t("public.bccg"));
             }, 200);
           }
         });
@@ -654,60 +654,40 @@ export default {
 };
 </script>
 <style lang='stylus'>
-#colorMng_Te1 {
+#colorMng_Te1
   // .el-table__fixed-body-wrapper {
   // top: 35px !important;
   // }
-}
-
-.list-type {
-  margin: 8px 0 0 15px;
-  font-size: 24px;
-
-  .el-radio__inner {
-    width: 18px;
-    height: 18px;
-  }
-}
-
-#colorMng_Dlg {
-  .is-fullscreen {
-    overflow: hidden !important;
-  }
-
-  .el-dialog__header {
-    padding: 0 !important;
-  }
-
-  .el-dialog__headerbtn {
-    top: 3px;
-    font-size: 18px;
-    font-weight: bold;
-    z-index: 9;
-  }
-
-  .el-dialog__headerbtn .el-dialog__close, #sxrcDlg .el-dialog__headerbtn .el-dialog__close, #wkDlg .el-dialog__headerbtn .el-dialog__close {
-    color: #000;
-    font-size: 24px;
-  }
-
-  .el-tag--mini {
-    height: 24px;
-    padding: 0 5px;
-    line-height: 24px;
-    font-size: 14px;
-  }
-
-  .el-select .el-tag__close.el-icon-close {
-    right: -5px;
-    height: 18px;
-    width: 18px;
-    line-height: 18px;
-  }
-
-  .avue-form .el-input--mini input {
-    height: 35px !important;
-    line-height: 35px;
-  }
-}
+.list-type
+  margin 8px 0 0 15px
+  font-size 24px
+  .el-radio__inner
+    width 18px
+    height 18px
+#colorMng_Dlg
+  .is-fullscreen
+    overflow hidden !important
+  .el-dialog__header
+    padding 0 !important
+  .el-dialog__headerbtn
+    top 3px
+    font-size 18px
+    font-weight bold
+    z-index 9
+  .el-dialog__headerbtn .el-dialog__close, #sxrcDlg .el-dialog__headerbtn .el-dialog__close, #wkDlg .el-dialog__headerbtn .el-dialog__close
+    color #000
+    font-size 24px
+  .el-tag--mini
+    height 24px
+    padding 0 5px
+    line-height 24px
+    font-size 14px
+  .el-select .el-tag__close.el-icon-close
+    right -5px
+    height 18px
+    width 18px
+    line-height 18px
+  .avue-form .el-input--mini input
+    height 35px !important
+    line-height 35px
 </style>

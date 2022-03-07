@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-01 14:06:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-07-16 20:48:03
+ * @LastEditTime: 2022-03-02 13:04:04
  * @Description:
  */
 
@@ -56,7 +56,7 @@ export function updateNote(data) {
 // 新增佈飛记录
 export function addNote(data) {
   return axios({
-    url: "/api/proClothNote",
+    url: "/api/proClothNote/cpn",
     method: "post",
     params: data
   });
