@@ -195,6 +195,11 @@ export function noteCrud(_this) {
         label: " ",
         name: "noteCode",
         type: "count"
+      },
+      {
+        label: " ",
+        name: "rw",
+        type: "sum"
       }
     ],
     column: [

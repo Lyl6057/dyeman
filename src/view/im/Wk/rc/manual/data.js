@@ -443,7 +443,7 @@ export function rhl2C(_this) {
       //   },
       // },
       {
-        label: "本厂纱批号",
+        label: "本厂批号",
         prop: "batchNo",
         cell: false,
         width: 220
@@ -912,7 +912,7 @@ export function hgyl2C(_this) {
         dicData: basChemicalmat
       },
       {
-        label: "本厂纱批号",
+        label: "本厂批号",
         prop: "batchNo",
         cell: false,
         width: 230
@@ -1019,7 +1019,7 @@ export function yl2C(_this) {
         dicData: basPigment
       },
       {
-        label: "本厂纱批号",
+        label: "本厂批号",
         prop: "batchNo",
         cell: false,
         width: 230
@@ -1168,7 +1168,7 @@ export function yjxz2C(_this) {
       },
 
       {
-        label: "本厂纱批号",
+        label: "本厂批号",
         prop: "batchNo",
         cell: false,
         width: 230
@@ -1228,7 +1228,7 @@ export function rhl3C(_this) {
         align: "center"
       },
       {
-        label: "本厂纱批号",
+        label: "本厂批号",
         prop: "batchNo",
         cell: false,
         width: 220
@@ -1596,7 +1596,7 @@ export function planCrud(_this) {
       },
 
       {
-        label: "本厂纱批号",
+        label: "本厂批号",
         prop: "batchNo",
         cell: false,
         width: 180

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-03-03 08:49:26
+ * @LastEditTime: 2022-03-08 16:20:51
  * @Description:
 -->
 <template>
@@ -570,13 +570,6 @@ export default {
               delete mainData[item];
             }
           });
-          // } else {
-          //   mainData = {
-          //     runJobId: this.form.runJobId,
-          //     auditState: val,
-          //     runState: val ? this.form.runState : "1",
-          //   };
-          // }
           update(mainData).then((res) => {
             if (val) {
               // 生成漂染单数据
@@ -593,10 +586,8 @@ export default {
                 }
               });
               data.workDate += " 00:00:00";
-
               data.deliveDate += " 00:00:00";
               data.poAmountLb = (data.poAmountKg * 2.2046226).toFixed(2);
-              // data.clothWeight = data.dyeClothWeight;
               getDye({
                 vatNo: data.vatNo,
               }).then((dye) => {
@@ -605,8 +596,9 @@ export default {
                   // 存在数据,更新
                   updateDye(data).then((udye) => {
                     this.form.auditState = val;
-                    this.$emit("refresh");
-                    this.$tip.success(this.$t("public.bccg"));
+                    // this.$emit("refresh");
+                    this.saveTest();
+                    // this.$tip.success(this.$t("public.bccg"));
                     this.wLoading = false;
                   });
                 } else {
@@ -637,8 +629,9 @@ export default {
             } else {
               setTimeout(() => {
                 this.form.auditState = val;
-                this.$emit("refresh");
-                this.$tip.success(this.$t("public.bccg"));
+                // this.$emit("refresh");
+                this.saveTest();
+                // this.$tip.success(this.$t("public.bccg"));
                 this.wLoading = false;
               }, 200);
             }
@@ -676,15 +669,17 @@ export default {
             }
             if (index == res.data.length - 1) {
               this.form.auditState = 1;
-              this.$emit("refresh");
-              this.$tip.success(this.$t("public.bccg"));
+              // this.$emit("refresh");
+              this.saveTest();
+              // this.$tip.success(this.$t("public.bccg"));
               this.wLoading = false;
             }
           });
           if (!res.data.length) {
             this.form.auditState = 1;
             this.$emit("refresh");
-            this.$tip.success(this.$t("public.bccg"));
+            this.saveTest();
+            // this.$tip.success(this.$t("public.bccg"));
             this.wLoading = false;
           }
         })
@@ -917,7 +912,6 @@ export default {
             }
             data.workDate = timeConversion(this.form.workDate);
             data.deliveDate = timeConversion(this.form.deliveDate);
-
             let vat = "";
             data.mergVatNo.forEach((item, i) => {
               if (i == data.mergVatNo.length - 1) {
@@ -1053,11 +1047,17 @@ export default {
             });
           }
           if (i == this.form.item.length - 1) {
-            this.saveBf();
+            // this.saveBf();
+            this.$emit("refresh");
+            this.wLoading = false;
+            this.$tip.success(this.$t("public.bccg"));
           }
         });
       } else {
-        this.saveBf();
+        // this.saveBf();
+        this.$emit("refresh");
+        this.wLoading = false;
+        this.$tip.success(this.$t("public.bccg"));
       }
     },
     saveBf() {

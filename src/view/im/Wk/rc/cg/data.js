@@ -101,7 +101,7 @@ export function rhl2F(_this) {
         span: 6,
         placeholder: " ",
         type: "select",
-        disabled: true,
+        disabled: false,
         display: true,
         dicData: getDIC("whse_yinstatus")
       },
@@ -433,7 +433,7 @@ export function rhl2C(_this) {
       //   },
       // },
       {
-        label: "本厂纱批号",
+        label: "本厂批号",
         prop: "batchNos",
         cell: false,
         width: 220
@@ -554,7 +554,7 @@ export function sx2C(_this) {
         dicData: getDicT("basYarnsData", "yarnsName", "yarnsId")
       },
       {
-        label: "本厂纱批号",
+        label: "本厂批号",
         prop: "batchNos",
         cell: false,
         width: 120
@@ -848,7 +848,7 @@ export function rhl3C(_this) {
         align: "center"
       },
       {
-        label: "本厂纱批号",
+        label: "本厂批号",
         prop: "batchNos",
         cell: true,
         width: 220
@@ -1136,7 +1136,7 @@ export function planCrud(_this) {
       },
 
       {
-        label: "本厂纱批号",
+        label: "本厂批号",
         prop: "batchNos",
         cell: false,
         width: 180

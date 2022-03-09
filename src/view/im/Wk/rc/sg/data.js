@@ -474,7 +474,7 @@ export function rhl2C(_this) {
         overHidden: true
       },
       {
-        label: "本厂纱批号",
+        label: _this.datas == _this.$t("iaoMng.sx") ? "本厂纱批号" : "本厂批号",
         prop: "batchNos",
         cell: false,
         width: 220
@@ -563,7 +563,7 @@ export function rhl3C(_this) {
         align: "center"
       },
       {
-        label: "本厂纱批号",
+        label: _this.datas == _this.$t("iaoMng.sx") ? "本厂纱批号" : "本厂批号",
         prop: "batchNos",
         cell: false,
         // hide: _this.datas == _this.$t("iaoMng.sx") ? true : false,
@@ -808,7 +808,7 @@ export function planCrud(_this) {
         overHidden: true
       }
       // {
-      //   label: "本厂纱批号",
+      //   label: "本厂批号",
       //   prop: "batNo",
       //   cell: false,
       //   width: 220

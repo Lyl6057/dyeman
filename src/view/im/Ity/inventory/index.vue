@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-24 14:15:12
  * @LastEditors: Lyl
- * @LastEditTime: 2022-02-09 13:57:24
+ * @LastEditTime: 2022-03-09 10:06:29
  * @Description: 
 -->
 <template>
@@ -38,6 +38,8 @@
 </template>
 <script>
 import {
+  getSx,
+  getSxList,
   getRhl,
   getRll,
   getRhlList,
@@ -46,7 +48,7 @@ import {
   getCpbList,
 } from "./api";
 import { getDIC, getDicT, getXDicT } from "@/config/index";
-import { formOp, crudOp, formTemOp, finishedCrud } from "./data";
+import { formOp, crudOp, formTemOp, finishedCrud, sxOp } from "./data";
 import XlsxTemplate from "xlsx-template";
 import JSZipUtils from "jszip-utils";
 import saveAs from "file-saver";
@@ -88,6 +90,11 @@ export default {
         }
       }
       switch (this.form.type) {
+        case "SX":
+          this.getFun = getSx;
+          this.getList = getSxList;
+          this.crudOp = sxOp(this);
+          break;
         case "RHL":
           this.getFun = getRhl;
           this.getList = getRhlList;
@@ -109,6 +116,7 @@ export default {
           this.loading = false;
           return;
       }
+      this.form.yarnsId = this.form.chemicalId;
       this.getFun(
         Object.assign(this.form, {
           rows: this.page.pageSize,
@@ -262,7 +270,7 @@ export default {
     },
   },
   created() {
-    this.form.type = "RHL";
+    this.form.type = "SX";
   },
   updated() {
     this.$nextTick(() => {

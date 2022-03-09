@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-24 14:21:15
  * @LastEditors: Lyl
- * @LastEditTime: 2022-02-23 08:04:39
+ * @LastEditTime: 2022-03-09 10:07:34
  * @Description:
  */
 
@@ -174,6 +174,7 @@ export function crudOp(_this) {
         label: _this.$t("whseField.ph"),
         prop: "batchNo",
         cell: false,
+        overHidden: true,
         width: 180
       },
       {
@@ -228,6 +229,7 @@ export function crudTemOp(_this) {
         label: _this.$t("whseField.ph"),
         prop: "batchNo",
         cell: true,
+        overHidden: true,
         width: 160
       },
       {
@@ -358,6 +360,83 @@ export function finishedCrud(_this) {
         span: 6,
         type: "select",
         dicData: matUnit
+      }
+    ]
+  };
+}
+
+export function sxOp(_this) {
+  return {
+    menu: false,
+    addBtn: false,
+    border: true,
+    highlightCurrentRow: true,
+    height: "calc(100vh - 285px)",
+    refreshBtn: false,
+    columnBtn: false,
+    showOverflowTooltip: true,
+    excelBtn: true,
+    showSummary: true,
+    sumColumnList: [
+      {
+        label: " ",
+        name: "weight",
+        type: "sum"
+      }
+    ],
+    page: true,
+    column: [
+      {
+        label: "#",
+        prop: "index",
+        width: 50,
+        align: "center"
+      },
+      {
+        label: _this.$t("whseField.clbh"),
+        prop: "yarnsId",
+        width: 140
+      },
+      {
+        label: _this.$t("whseField.clmc"),
+        prop: "yarnsName",
+        type: "select",
+        overHidden: true,
+        width: 400
+      },
+      {
+        label: "供应商批号",
+        prop: "batId",
+        cell: false,
+        width: 180
+      },
+      {
+        label: _this.$t("whseField.ph"),
+        prop: "batchNo",
+        cell: false,
+        width: 180,
+        overHidden: true
+      },
+      {
+        label: "库存数量",
+        prop: "weight",
+        cell: false,
+        width: 120,
+        align: "right"
+      },
+      {
+        label: _this.$t("whseField.dw"),
+        prop: "weightUnit",
+        cell: false,
+        width: 80,
+        type: "select",
+        dicData: matUnit
+      },
+      {
+        label: _this.$t("whseField.hwm"),
+        prop: "locationCode",
+        cell: false,
+        width: 120
       }
     ]
   };

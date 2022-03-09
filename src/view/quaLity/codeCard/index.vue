@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-02-19 16:32:18
+ * @LastEditTime: 2022-03-08 14:35:14
  * @Description:
 -->
 <template>
@@ -24,6 +24,12 @@
         }}</el-button>
         <el-button type="primary" @click="print" :disabled="!selectList.length"
           >打印</el-button
+        >
+        <el-button
+          type="primary"
+          @click="batchEdit"
+          :disabled="!selectList.length"
+          >修改载具</el-button
         >
         <!-- <el-button type="primary" @click="outExcel1">导出</el-button> -->
         <!-- <el-button type="primary" @click="outExcel">导出明细表</el-button> -->
@@ -137,6 +143,25 @@
           
         </view-container> -->
       </el-dialog>
+      <el-dialog
+        id="normal_Dlg"
+        title="请输入新的载具编号"
+        :visible.sync="loadDialogVisible"
+        width="30%"
+        center
+        append-to-body
+        style="text-align: center"
+      >
+        <el-input
+          v-model="newLoad"
+          placeholder="新载具编号(new vehicle number)"
+          style="width: 50%; margin: 0 auto; text-align: center"
+        ></el-input>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="loadDialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="loadSubmit">确 定</el-button>
+        </span>
+      </el-dialog>
     </view-container>
   </div>
 </template>
@@ -169,7 +194,7 @@ export default {
       formOp: mainForm(this),
       form: {
         weaveJobFk: "",
-        clothState: 1,
+        clothState: "",
         // productNo: "",
       },
       crudOp: mainCrud(this),
@@ -207,6 +232,8 @@ export default {
       prsocket: null,
       tabs: "update",
       historyCheck: {},
+      loadDialogVisible: false,
+      newLoad: "",
     };
   },
   watch: {},
@@ -219,23 +246,24 @@ export default {
           delete this.form[key];
         }
       }
+      let data = JSON.parse(JSON.stringify(this.form));
       let r_clothCheckTime_r = "";
-      if (this.form.clothCheckTime && this.form.clothCheckTime.length) {
-        r_clothCheckTime_r = `!%5E%5b${this.form.clothCheckTime[0]} 07:30:00~${this.form.clothCheckTime[1]} 07:30:00%5d`;
+      if (data.clothCheckTime && data.clothCheckTime.length) {
+        r_clothCheckTime_r = `!%5E%5b${data.clothCheckTime[0]} 07:30:00~${data.clothCheckTime[1]} 07:30:00%5d`;
       } else {
         r_clothCheckTime_r = "!%5E";
       }
-      this.form.vatNo = "%" + (this.form.vatNo ? this.form.vatNo : "");
-      this.form.clothChecker =
-        "%" + (this.form.clothChecker ? this.form.clothChecker : "");
-      let data = JSON.parse(JSON.stringify(this.form));
+      data.vatNo = "%" + (data.vatNo ? data.vatNo : "");
+      data.storeLoadCode = "%" + (data.storeLoadCode ? data.storeLoadCode : "");
+      data.clothChecker = "%" + (data.clothChecker ? data.clothChecker : "");
+
       data.clothCheckTime = null;
       get(
         Object.assign(data, {
           rows: this.page.pageSize,
           start: this.page.currentPage,
           isPrinted: true,
-          clothState: this.form.clothState || 1,
+          // clothState: this.form.clothState,
           cardType: 1,
         }),
         r_clothCheckTime_r
@@ -251,12 +279,9 @@ export default {
           // item.$cellEdit = true;
           item.index = i + 1;
         });
-        if (this.form.vatNo.indexOf("%") != -1) {
-          this.form.vatNo = this.form.vatNo.split("%")[1] || "";
-        }
-        if (this.form.clothChecker.indexOf("%") != -1) {
-          this.form.clothChecker = this.form.clothChecker.split("%")[1] || "";
-        }
+        // this.form.vatNo = this.form.vatNo.replace(/[!^%]/g, "");
+        // this.form.clothChecker = this.form.clothChecker.replace(/[!^%]/g, "");
+        // this.form.storeLoadCode = this.form.storeLoadCode.replace(/[!^%]/g, "");
         this.page.total = res.data.total;
         // console.log(this.form);
         // if (this.form.productNo.indexOf("!^%") != -1) {
@@ -392,22 +417,8 @@ export default {
           data[0] = Number((parseInt(Number(data[0]) * 10) / 10).toFixed(1));
           if (_this.detail.weightUnit == "KG") {
             _this.detail.netWeight = Number(data[0]); //;
-            // _this.detail.netWeightLbs = _this.detail.netWeight * 2.2046;
-
-            // _this.detail.grossWeight =
-            //   _this.detail.netWeight +
-            //   Number(_this.detail.paperTube || 0) +
-            //   Number(_this.detail.qcTakeOut || 0);
-            // _this.detail.grossWeightLbs = _this.detail.grossWeight * 2.2046;
           } else {
             _this.detail.netWeightLbs = Number(data[0]); //;
-            // _this.detail.netWeight = _this.detail.netWeightLbs / 2.2046;
-
-            // _this.detail.grossWeightLbs =
-            //   _this.detail.netWeightLbs +
-            //   Number(_this.detail.paperTube || 0) +
-            //   Number(_this.detail.qcTakeOut || 0);
-            // _this.detail.grossWeight = _this.detail.grossWeightLbs / 2.2046;
           }
         } else {
           _this.detail.netWeight = Number(e.data);
@@ -953,6 +964,31 @@ export default {
         console.log(e);
       }
     },
+    batchEdit() {
+      this.loadDialogVisible = true;
+    },
+    loadSubmit() {
+      if (!this.newLoad) {
+        this.$tip.error("新载具编号不能为空!");
+        return;
+      }
+      if (!this.selectList.length) {
+        this.$tip.error("请选择要修改的数据!");
+        return;
+      }
+      this.wLoading = true;
+      this.selectList.forEach((item, i) => {
+        item.storeLoadCode = this.newLoad;
+        updateNote(item).then((res) => {
+          if (i == this.selectList.length - 1) {
+            this.form.storeLoadCode = this.newLoad;
+            this.query();
+            this.loadDialogVisible = false;
+            this.$tip.success("修改成功!");
+          }
+        });
+      });
+    },
     print() {
       if (this.prsocket.readyState == 3) {
         this.setCz();
@@ -983,7 +1019,7 @@ export default {
   },
   created() {},
   mounted() {
-    this.setCz();
+    // this.setCz();
     getCheckItem().then((res) => {
       let data = res.data.filter((item) => {
         return item.checkType != 2;
@@ -1000,4 +1036,11 @@ export default {
     overflow visible !important
   .el-tag--mini
     display none !important
+#normal_Dlg
+  .el-dialog__header
+    padding 20px !important
+    text-align center
+  .el-dialog__body
+    padding 10px !important
+    text-align center
 </style>

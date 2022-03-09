@@ -372,12 +372,12 @@ export default {
       sheetV: false,
       tabs: "loc",
       wj: getDicTs(
-        "basHardwarearticles",
-        this.$store.state.lang == "1" ? "chinName" : "engName",
+        "basHardwarearticlesnew",
+        this.$store.state.lang == "1" ? "cnnamelong" : "ennamelong",
         "hardwareId",
-        "itemspec",
-        "model",
-        "msUnit"
+        "specs1",
+        "specs2",
+        "specs3"
       ),
       xz: getDicTs(
         "basAdsuppliesarticles",

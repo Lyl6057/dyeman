@@ -253,7 +253,7 @@ export function rsxkr2F(_this) {
         type: "select",
         display: _this.hide === "5" ? false : true,
         dicData: getDIC("whse_yinstatus"),
-        disabled: true
+        disabled: false
       },
       {
         label: _this.$t("whseField.cwzt"),

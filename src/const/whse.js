@@ -4743,7 +4743,8 @@ export const SingleC = {
     {
       label: i18n.t("whseField.sqbm"),
       prop: "appDep",
-      width: 120
+      width: 150,
+      overHidden: true
     },
     {
       label: i18n.t("whseField.sqrq"),

@@ -2,10 +2,26 @@
  * @Author: Lyl
  * @Date: 2021-03-24 14:21:09
  * @LastEditors: Lyl
- * @LastEditTime: 2022-02-09 13:43:32
+ * @LastEditTime: 2022-03-09 08:20:55
  * @Description:
  */
 import axios from "axios";
+
+export function getSxList(params) {
+  return axios({
+    url: "/api/viewYarnStock",
+    method: "get",
+    params: params
+  });
+}
+
+export function getSx(params) {
+  return axios({
+    url: "/api/viewYarnStock/page",
+    method: "get",
+    params: params
+  });
+}
 
 export function getRhlList(params) {
   return axios({

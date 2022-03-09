@@ -170,7 +170,8 @@ export default {
               },
             ];
             this.code =
-              this.code.substring(0, 5) + (Number(this.code.substring(5)) + 1);
+              this.code.substring(0, 3) +
+              this.$preFixInt(Number(this.code.substring(5)) + 1, 5);
             if (i === this.mx.length - 1) {
               setTimeout(() => {
                 this.loading = false;
@@ -216,7 +217,7 @@ export default {
                     this.mx.forEach((item, index) => {
                       item.index = index + 1;
                       item.chinName = item.materialNum;
-
+                      item.batchNos = item.batchNo.slice(2);
                       if (index === this.mx.length - 1) {
                         this.mxOp.showSummary = true;
                         setTimeout(() => {
