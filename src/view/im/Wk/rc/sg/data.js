@@ -674,6 +674,12 @@ export function planForm(_this) {
     labelWidth: 150,
     column: [
       {
+        label: "供应商送货单号",
+        prop: "deliSuppno",
+        span: 6,
+        placeholder: " "
+      },
+      {
         label: _this.$t("whseField.chdh"),
         prop: "purNo",
         span: 6,
@@ -719,6 +725,23 @@ export function planCrud(_this) {
         align: "center"
       },
       {
+        label: _this.$t("whseField.shdh"),
+        prop: "deliNo",
+        cell: false,
+        width: 180,
+        sortable: true
+      },
+      {
+        label: _this.$t("whseField.shrq"),
+        prop: "deliDate",
+        type: "date",
+        width: 120,
+        format: "yyyy-MM-dd",
+        valueFormat: "yyyy-MM-dd",
+        align: "center",
+        sortable: true
+      },
+      {
         label: "供应商送货单号",
         prop: "deliSuppno",
         cell: false,
@@ -729,7 +752,8 @@ export function planCrud(_this) {
         label: _this.$t("whseField.chdh"),
         prop: "purNo",
         cell: false,
-        width: 180
+        width: 180,
+        sortable: true
       },
       // {
       //   label: "供應商",
@@ -739,21 +763,7 @@ export function planCrud(_this) {
       //   type: "select",
       //   dicData: getDicT("purSinglepo", "suppName", "suppId")
       // },
-      {
-        label: _this.$t("whseField.shdh"),
-        prop: "deliNo",
-        cell: false,
-        width: 180
-      },
-      {
-        label: _this.$t("whseField.shrq"),
-        prop: "deliDate",
-        type: "date",
-        width: 120,
-        format: "yyyy-MM-dd",
-        valueFormat: "yyyy-MM-dd",
-        align: "center"
-      },
+
       {
         label: _this.$t("whseField.clbh"),
         prop: "materialNum",

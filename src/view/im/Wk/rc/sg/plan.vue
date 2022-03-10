@@ -80,9 +80,15 @@ export default {
       this.loading = true;
       // this.crudOp.height = "calc(100vh - 208px)";
       // this.crudOp.selection = false;
+      let queryData = JSON.parse(JSON.stringify(this.form));
+      // queryData.deliNo = "!^%" + (queryData.deliNo || "");
+      // queryData.purNo = "%" + (queryData.purNo || "");
+      // queryData.poNo = queryData.purNo;
+      // queryData.materialNum = "%" + (queryData.materialNum || "");
+      // queryData.deliSuppno = "%" + (queryData.deliSuppno || "");
       this.everyThing
         .getPlan(
-          Object.assign(this.form, {
+          Object.assign(queryData, {
             rows: this.page.pageSize,
             start: this.page.currentPage,
           })

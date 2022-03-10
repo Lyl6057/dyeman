@@ -241,7 +241,7 @@ export default {
   watch: {},
   methods: {
     getData() {
-      this.loading = true;
+      this.screenLoading = true;
       this.everyThing = {
         mainF: rhl1F(this),
         mainC: rhl1C(this),
@@ -364,15 +364,20 @@ export default {
             item.index = index + 1;
             item.suppId = item.purNo;
             if (index === this.crud.length - 1) {
-              this.loading = false;
+              setTimeout(() => {
+                this.screenLoading = false;
+              }, 200);
             }
           });
+
           if (this.crud.length === 0) {
-            this.loading = false;
+            setTimeout(() => {
+              this.screenLoading = false;
+            }, 200);
           }
         })
         .catch((e) => {
-          this.loading = false;
+          this.screenLoading = false;
         });
     },
     add(val) {

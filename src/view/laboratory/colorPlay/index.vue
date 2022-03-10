@@ -45,7 +45,6 @@
         append-to-body
         :close-on-click-modal="false"
         :close-on-press-escape="false"
-        v-if="dialogVisible"
       >
         <tem-dlg
           ref="tem"
@@ -54,7 +53,6 @@
           :code="code"
           @refresh="query"
           @close="dialogVisible = false"
-          v-if="dialogVisible"
         ></tem-dlg>
       </el-dialog>
     </view-container>
@@ -187,7 +185,4 @@ export default {
   beforeDestroy() {},
 };
 </script>
-<style lang='stylus'>
-#colorMng {
-}
-</style>
+<style lang='stylus'></style>

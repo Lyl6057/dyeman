@@ -269,10 +269,10 @@ export default {
             this.page.total = records.total;
             this.crud = records.records;
             this.crud.sort((a, b) => {
-              var a = a.typeNo.toLowerCase();
-              var b = b.typeNo.toLowerCase();
-              if (a < b) return -1;
-              if (a > b) return 1;
+              var a1 = a.typeNo.toLowerCase();
+              var b1 = b.typeNo.toLowerCase();
+              if (a1 < b1) return -1;
+              if (a1 > b1) return 1;
               return 0;
             });
             this.crud.forEach((item, index) => {
@@ -1070,10 +1070,10 @@ export default {
         }
       }
 
-      for (var key in val) {
+      for (let key in val) {
         delete val[key];
       }
-      for (var key in this.choiceQ) {
+      for (let key in this.choiceQ) {
         delete this.choiceQ[key];
       }
       this.choiceV = false;
@@ -1113,10 +1113,10 @@ export default {
         this.dtlePage.pageSize = 50;
       }
 
-      for (var key in val) {
+      for (let key in val) {
         delete val[key];
       }
-      for (var key in this.choiceQ) {
+      for (let key in this.choiceQ) {
         delete this.choiceQ[key];
       }
       this.addDlg = false;
@@ -1159,79 +1159,49 @@ export default {
 };
 </script>
 <style lang='stylus'>
-.process_Dlg {
-  .el-input-number__decrease, .el-input-number__increase {
-    display: none !important;
-  }
-
-  .el-input-number.is-controls-right .el-input__inner {
-    padding-right: 5px;
-  }
-}
-
-#colorMng_Dlg {
-  .el-table--mini td {
-    padding: 4px 0 !important;
-  }
-
-  .avue-crud .el-input--mini input {
-    height: 26px;
-    line-height: 26px;
-  }
-
-  .dtlTbs {
-    .el-tabs--border-card>.el-tabs__header {
-      border-bottom: none !important;
-    }
-
-    .el-card.is-always-shadow {
-      -webkit-box-shadow: none;
-      box-shadow: none;
-    }
-
-    .el-tabs--border-card {
-      -webkit-box-shadow: none;
-      box-shadow: none;
-    }
-  }
-
-  .el-dialog__header {
-    padding: 0 !important;
-  }
-
-  .el-dialog__headerbtn {
-    top: 3px;
-    font-size: 18px;
-    font-weight: bold;
-    z-index: 9;
-  }
-
-  .el-dialog__headerbtn .el-dialog__close, #sxrcDlg .el-dialog__headerbtn .el-dialog__close, #wkDlg .el-dialog__headerbtn .el-dialog__close {
-    color: #000;
-    font-size: 24px;
-  }
-
-  .el-tag--mini {
-    height: 24px;
-    padding: 0 5px;
-    line-height: 24px;
-    font-size: 14px;
-  }
-
-  .el-select .el-tag__close.el-icon-close {
-    right: -5px;
-    height: 18px;
-    width: 18px;
-    line-height: 18px;
-  }
-
-  .avue-form .el-input--mini input {
-    height: 35px !important;
-    line-height: 35px;
-  }
-
-  .el-dialog.is-fullscreen {
-    overflow: hidden !important;
-  }
-}
+.process_Dlg
+  .el-input-number__decrease, .el-input-number__increase
+    display none !important
+  .el-input-number.is-controls-right .el-input__inner
+    padding-right 5px
+#colorMng_Dlg
+  .el-table--mini td
+    padding 4px 0 !important
+  .avue-crud .el-input--mini input
+    height 26px
+    line-height 26px
+  .dtlTbs
+    .el-tabs--border-card>.el-tabs__header
+      border-bottom none !important
+    .el-card.is-always-shadow
+      -webkit-box-shadow none
+      box-shadow none
+    .el-tabs--border-card
+      -webkit-box-shadow none
+      box-shadow none
+  .el-dialog__header
+    padding 0 !important
+  .el-dialog__headerbtn
+    top 3px
+    font-size 18px
+    font-weight bold
+    z-index 9
+  .el-dialog__headerbtn .el-dialog__close, #sxrcDlg .el-dialog__headerbtn .el-dialog__close, #wkDlg .el-dialog__headerbtn .el-dialog__close
+    color #000
+    font-size 24px
+  .el-tag--mini
+    height 24px
+    padding 0 5px
+    line-height 24px
+    font-size 14px
+  .el-select .el-tag__close.el-icon-close
+    right -5px
+    height 18px
+    width 18px
+    line-height 18px
+  .avue-form .el-input--mini input
+    height 35px !important
+    line-height 35px
+  .el-dialog.is-fullscreen
+    overflow hidden !important
 </style>

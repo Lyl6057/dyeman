@@ -327,7 +327,7 @@ export default {
   },
   created() {
     switch (this.choiceTle) {
-       case "选择颜料库存":
+      case "选择颜料库存":
         this.choiceC = ylStockC(this);
         this.choiceF = ylStockF(this);
         this.getData = getYlStock;
@@ -436,7 +436,7 @@ export default {
       default:
         break;
     }
-    // this.query();
+    this.query();
   },
   mounted() {},
   updated() {
