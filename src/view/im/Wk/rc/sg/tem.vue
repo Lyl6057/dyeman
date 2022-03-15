@@ -148,14 +148,18 @@ export default {
         baseCodeSupplyEx({ code: this.everyThing.batCode }).then((res) => {
           this.code = res.data.data;
           this.mx.forEach((item, i) => {
-            console.log(this.code);
             item.index = 1 + i;
             item.chemicalId = item.materialNum;
             item.chemicalName = item.chinName;
             item.yarnsId = item.materialNum;
             item.yarnsName = item.chinName;
-            item.batchNo = this.code;
-            item.batchNos = item.batchNo.slice(2);
+            if (this.datas != this.$t("iaoMng.sx")) {
+              item.batchNo = this.code;
+              item.batchNos = item.batchNo.slice(2);
+            } else {
+              item.batchNos = item.batchNo;
+            }
+
             item.weight = item.deliQty;
             item.weightUnit = item.deliUnit;
             item.poQty = item.deliQty;
@@ -246,7 +250,12 @@ export default {
                 item.index = index + 1;
                 item.chinName = item.materialNum;
                 item.yarnsName = item.yarnsId;
-                item.batchNos = item.batchNo.slice(2);
+                if (this.datas == this.$t("iaoMng.sx")) {
+                  item.batchNos = item.batchNo;
+                } else {
+                  item.batchNos = item.batchNo.slice(2);
+                }
+
                 // item.$cellEdit = true;
                 // item.bcMatengname = item.chemicalId;
                 // item.bcColor = item.chemicalId;
@@ -315,7 +324,11 @@ export default {
             item.index = index + 1;
             item.weightUnit = item.weightUnit || this.chooseData.weightUnit;
             item.batchNo = item.batchNo || this.chooseData.batchNo;
-            item.batchNos = item.batchNo.slice(2);
+            if (this.datas == this.$t("iaoMng.sx")) {
+              item.batchNos = item.batchNo;
+            } else {
+              item.batchNos = item.batchNo.slice(2);
+            }
             if (index === data.length - 1) {
               setTimeout(() => {
                 this.chooseData.list = data;
@@ -633,9 +646,11 @@ export default {
                   item.whseAccessoriesDtloid = res.data.data;
                   item.whseYarninDtloid = res.data.data;
                   item.whseDyesainDtlaoid = res.data.data;
-                  baseCodeSupply({ code: this.everyThing.batCode }).then(
-                    (res) => {}
-                  );
+                  if (this.datas != this.$t("iaoMng.sx")) {
+                    baseCodeSupply({ code: this.everyThing.batCode }).then(
+                      (res) => {}
+                    );
+                  }
                   resolve();
                 });
               }
@@ -737,9 +752,11 @@ export default {
                   item.whseAccessoriesDtloid = res.data.data;
                   item.whseYarninDtloid = res.data.data;
                   item.whseDyesainDtlaoid = res.data.data;
-                  baseCodeSupply({ code: this.everyThing.batCode }).then(
-                    (res) => {}
-                  );
+                  if (this.datas != this.$t("iaoMng.sx")) {
+                    baseCodeSupply({ code: this.everyThing.batCode }).then(
+                      (res) => {}
+                    );
+                  }
                   resolve();
                 });
               }

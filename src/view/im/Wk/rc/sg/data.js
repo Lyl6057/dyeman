@@ -41,6 +41,14 @@ export function rhl1F(_this) {
       //   placeholder: " "
       // },
       {
+        label: _this.datas == _this.$t("iaoMng.sx") ? "本厂纱批号" : "本厂批号",
+        prop: "batchNo",
+        cell: false,
+        span: 6,
+        placeholder: " ",
+        overHidden: true
+      },
+      {
         label: _this.$t("whseField.jyzt"),
         prop: "yinStatus",
         span: 6,
@@ -174,7 +182,7 @@ export function rhl1C(_this) {
         label: _this.$t("whseField.rcbh"),
         prop: "yinId",
         cell: false,
-        width: 200
+        width: 160
       },
       {
         label: _this.$t("whseField.rclx"),
@@ -228,6 +236,13 @@ export function rhl1C(_this) {
         prop: "deliNo",
         cell: false,
         width: 180
+      },
+      {
+        label: _this.datas == _this.$t("iaoMng.sx") ? "本厂纱批号" : "本厂批号",
+        prop: "batchNo",
+        cell: false,
+        width: 200,
+        overHidden: true
       },
 
       {
@@ -470,14 +485,14 @@ export function rhl2C(_this) {
         label: "供应商批号",
         prop: "batId",
         cell: true,
-        width: 120,
+        width: 140,
         overHidden: true
       },
       {
         label: _this.datas == _this.$t("iaoMng.sx") ? "本厂纱批号" : "本厂批号",
         prop: "batchNos",
         cell: false,
-        width: 220
+        width: 200
       },
       {
         label: _this.$t("whseField.zl"),
@@ -728,7 +743,7 @@ export function planCrud(_this) {
         label: _this.$t("whseField.shdh"),
         prop: "deliNo",
         cell: false,
-        width: 180,
+        width: 160,
         sortable: true
       },
       {
@@ -745,14 +760,14 @@ export function planCrud(_this) {
         label: "供应商送货单号",
         prop: "deliSuppno",
         cell: false,
-        width: 180,
+        width: 160,
         overHidden: true
       },
       {
         label: _this.$t("whseField.chdh"),
         prop: "purNo",
         cell: false,
-        width: 180,
+        width: 160,
         sortable: true
       },
       // {
@@ -768,7 +783,7 @@ export function planCrud(_this) {
         label: _this.$t("whseField.clbh"),
         prop: "materialNum",
         cell: false,
-        width: 140
+        width: 120
       },
       {
         label: _this.$t("whseField.clmc"),
@@ -816,13 +831,20 @@ export function planCrud(_this) {
         cell: false,
         width: 180,
         overHidden: true
+      },
+      {
+        label: _this.data === _this.$t("iaoMng.sx") ? "本厂纱批号" : "本厂批号",
+        prop: "batNo",
+        cell: false,
+        width: 160
+      },
+      {
+        label: "备注",
+        prop: "deliRemark",
+        cell: false,
+        width: 200,
+        overHidden: true
       }
-      // {
-      //   label: "本厂批号",
-      //   prop: "batNo",
-      //   cell: false,
-      //   width: 220
-      // }
     ]
   };
 }

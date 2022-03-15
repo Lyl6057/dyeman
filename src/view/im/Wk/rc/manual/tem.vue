@@ -2,26 +2,12 @@
   <div id="rcDetail">
     <view-container :title="datas + $t('iaoMng.rcmx')" v-loading="wloading">
       <div class="btnList">
-        <!-- <el-button type="primary" @click="getDetail">{{this.$t("public.query")}}</el-button> -->
-        <!-- <el-button type="primary" @click="add">{{this.$t("public.add")}}</el-button>
-        <el-button type="danger" @click="del">{{ this.$t("public.del") }}</el-button> -->
         <el-button
           type="success"
           @click="saveAll"
           :disabled="detail.stockState == '1'"
           >{{ this.$t("public.save") }}</el-button
         >
-        <!-- <el-button
-          type="primary"
-          @click="createCk"
-          v-if="
-            form.whseYarninoid ||
-            form.whseCalicoinoid ||
-            form.whseChemicalinoid ||
-            form.whseDyesalinoid
-          "
-          >{{ $t("iaoMng.scsjd") }}</el-button
-        > -->
         <el-button type="warning" @click="close">{{
           this.$t("public.close")
         }}</el-button>
@@ -420,18 +406,20 @@ export default {
       this.loading = true;
       this.mx = [];
       this.mxOp.showSummary = false;
+      console.log(this.form);
       this.everyThing
         .getDetail({
           rows: this.page.pageSize,
           start: this.page.currentPage,
-          whseYarninFk: this.detail.whseYarninoid,
-          whseCalicoinFk: this.detail.whseCalicoinoid,
-          whseChemicalinFk: this.detail.whseChemicalinoid, // 化工原料Oid
-          whseAccessoriesInFk: this.detail.whseAccessoriesinoid, // 辅料/五金/行政Oid
-          whseDyesalinFk: this.detail.whseDyesalinoid, // 顏料Oid
-          whseFinishedclothinFk: this.detail.whseFinishedclothinoid,
-          whseEnergyInFk: this.detail.energyInId,
-          whseOfficeInFk: this.detail.whseAccessoriesinoid,
+          whseYarninFk: this.form.whseYarninoid,
+          whseCalicoinFk: this.form.whseCalicoinoid,
+          whseChemicalinFk: this.form.whseChemicalinoid, // 化工原料Oid
+          whseAccessoriesInFk: this.form.whseAccessoriesinoid, // 辅料/五金/行政Oid
+          whseDyesalinFk: this.form.whseDyesalinoid, // 顏料Oid
+          whseFinishedclothinFk: this.form.whseFinishedclothinoid,
+          whseEnergyInFk: this.form.energyInId,
+          whseOfficeInFk: this.form.whseAccessoriesinoid,
+          whseHardwareInFk: this.form.whseAccessoriesinoid,
         })
         .then((res) => {
           let records = res.data;

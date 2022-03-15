@@ -57,14 +57,21 @@ export function popupForm(_this) {
   return {
     submitBtn: false,
     emptyBtn: false,
-    labelWidth: 120,
+    labelWidth: 125,
     column: [
       {
         label: "色号",
         prop: "colorNo",
         span: 6,
         placeholder: " ",
-        disabled: true
+        disabled: true,
+        rules: [
+          {
+            required: true,
+            message: "請輸入色号",
+            trigger: "blur"
+          }
+        ]
       },
       {
         label: "颜色深度",
@@ -79,7 +86,14 @@ export function popupForm(_this) {
           if (_this.isAdd) {
             _this.depth();
           }
-        }
+        },
+        rules: [
+          {
+            required: true,
+            message: "请选择颜色深度",
+            trigger: "blur"
+          }
+        ]
       },
       {
         label: "染料份量(％)",
@@ -121,7 +135,14 @@ export function popupForm(_this) {
           _this.choiceTle = _this.$t("choicDlg.xzkh");
         },
         type: "select",
-        dicData: getDicT("basCustomer", "custName", "custCode")
+        dicData: getDicT("basCustomer", "custName", "custCode"),
+        rules: [
+          {
+            required: true,
+            message: "請选择客户",
+            trigger: "blur"
+          }
+        ]
       },
       {
         label: "日期",
@@ -136,7 +157,14 @@ export function popupForm(_this) {
       {
         label: "颜色英文",
         prop: "colorEngName",
-        span: 6
+        span: 6,
+        rules: [
+          {
+            required: true,
+            message: "請輸入颜色英文",
+            trigger: "blur"
+          }
+        ]
       },
       {
         label: "状态",
@@ -227,12 +255,26 @@ export function popupForm(_this) {
         disabled: !_this.isAdd,
         change: () => {
           _this.lights();
-        }
+        },
+        rules: [
+          {
+            required: true,
+            message: "請选择第一光源",
+            trigger: "blur"
+          }
+        ]
       },
       {
         label: "面料英文描述",
         prop: "fabricDescEng",
-        span: 12
+        span: 12,
+        rules: [
+          {
+            required: true,
+            message: "請輸入面料英文描述",
+            trigger: "blur"
+          }
+        ]
       },
       {
         label: "染色类别",
@@ -240,7 +282,14 @@ export function popupForm(_this) {
         span: 6,
         placeholder: "请选择染色类别",
         type: "select",
-        dicData: getDIC("LAP_DYETYPE")
+        dicData: getDIC("LAP_DYETYPE"),
+        rules: [
+          {
+            required: true,
+            message: "請选择染色类别",
+            trigger: "blur"
+          }
+        ]
       },
 
       {
@@ -252,7 +301,14 @@ export function popupForm(_this) {
         tags: false,
         type: "select",
         disabled: true,
-        dicData: getDIC("sal_colorLights")
+        dicData: getDIC("sal_colorLights"),
+        rules: [
+          {
+            required: true,
+            message: "請选择第二光源",
+            trigger: "blur"
+          }
+        ]
         // change: () => {
         //   _this.lights("2")
         // }
@@ -263,7 +319,14 @@ export function popupForm(_this) {
         span: 6,
         placeholder: "请选择对色标准",
         type: "select",
-        dicData: getDIC("sal_colorStandard")
+        dicData: getDIC("sal_colorStandard"),
+        rules: [
+          {
+            required: true,
+            message: "請选择对色标准",
+            trigger: "blur"
+          }
+        ]
       },
       {
         label: "是否双染",
@@ -286,7 +349,14 @@ export function popupForm(_this) {
         label: "档案编号",
         prop: "recN0",
         span: 6,
-        disabled: !_this.isAdd
+        disabled: !_this.isAdd,
+        rules: [
+          {
+            required: true,
+            message: "請輸入档案编号",
+            trigger: "blur"
+          }
+        ]
       },
       {
         label: _this.$t("energy.bz"),

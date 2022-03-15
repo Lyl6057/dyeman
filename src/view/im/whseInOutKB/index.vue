@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-01-12 15:39:08
  * @LastEditors: Lyl
- * @LastEditTime: 2022-02-11 13:33:44
+ * @LastEditTime: 2022-03-11 16:53:19
  * @FilePath: \iot.vue\src\view\im\whseInOutKB\index.vue
  * @Description: 
 -->
@@ -273,10 +273,18 @@ export default {
         this.$tip.error("请输入缸号或者载具编号!");
         return;
       }
-      // if (!this.form.vatNo && !this.form.proName && this.form.type == 2) {
-      //   this.$tip.error("单号不能为空!");
+      // if (
+      //   !this.form.storeLoadCode &&
+      //   !this.form.proName &&
+      //   this.form.type == 1
+      // ) {
+      //   this.$tip.error("请输入织单号或者载具编号!");
       //   return;
       // }
+      if (!this.form.vatNo && !this.form.proName && this.form.type == 2) {
+        this.$tip.error("单号不能为空!");
+        return;
+      }
       this.wLoading = true;
       if (this.form.goodsType == 1) {
         this.form.clothState = this.form.type;
@@ -288,6 +296,7 @@ export default {
         // 胚布入仓
         getInCloth({
           storeLoadCode: this.form.storeLoadCode,
+          clothState: 1,
           page: this.mainPage.currentPage,
           rows: this.mainPage.pageSize,
           start: this.mainPage.currentPage,
@@ -1183,17 +1192,15 @@ export default {
     },
     changeGoodsType(val) {
       // this.$nextTick(() => {
-      console.log(val);
       this.crud = [];
       if (val == 1) {
         this.crudOp = clothCrud(this);
-        // this.formOp.column[4].display = this.form.type == 1 ? false : true;
-        // this.formOp.column[5].display = false;
+        this.formOp.column[4].display = this.form.type == 1 ? false : true;
+        this.formOp.column[5].display = false;
       } else {
         this.crudOp = finishedCrud(this);
-        // finishedCrud(this);
-        // this.formOp.column[5].display = this.form.type == 1 ? false : true;
-        // this.formOp.column[4].display = false;
+        this.formOp.column[5].display = this.form.type == 1 ? false : true;
+        this.formOp.column[4].display = false;
       }
       // });
     },

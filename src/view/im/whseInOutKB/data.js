@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-01-12 15:46:05
  * @LastEditors: Lyl
- * @LastEditTime: 2022-02-10 09:10:02
+ * @LastEditTime: 2022-03-11 16:52:18
  * @FilePath: \iot.vue\src\view\im\whseInOutKB\data.js
  * @Description:
  */
@@ -133,10 +133,10 @@ export function formOp(_this) {
         width: 120,
         type: "select",
         dicData: [
-          // {
-          //   label: "胚布",
-          //   value: 1
-          // },
+          {
+            label: "胚布",
+            value: 1
+          },
           {
             label: "成品布",
             value: 2

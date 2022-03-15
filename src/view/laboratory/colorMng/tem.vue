@@ -109,71 +109,51 @@ export default {
       }
     },
     save() {
-      if (this.form.colorNo === "" || this.form.colorDepth === "") {
-        this.$tip.error("色号/颜色深度不能为空!");
-        return;
-      } else if (
-        this.form.custColorBh === "" ||
-        this.form.colorBh === "" ||
-        this.form.colorChn === ""
-      ) {
-        this.$tip.error("客色号/颜色编号/颜色中文不能为空!");
-        return;
-      } else if (this.form.custCode === "" || this.form.colorDate === "") {
-        this.$tip.error("客户/日期不能为空!");
-        return;
-      } else if (this.form.fabCode === "" || this.form.fabricDesc === "") {
-        this.$tip.error("面料/面料中文描述不能为空!");
-        return;
-      } else if (
-        this.form.colorLights === "" ||
-        this.form.lapDyetype === "" ||
-        this.form.colorStandard === ""
-      ) {
-        this.$tip.error("第一光源 /染色类别/对色标准不能为空!");
-        return;
-      } else if (this.form.recN0 === "") {
-        this.$tip.error("档案编号不能为空!");
-        return;
-      }
-      this.wLoading = true;
-      this.refresh = true;
-      if (this.form.labTapcoloroid) {
-        // update
-        updateLabTapcolor(this.form)
-          .then((res) => {
-            this.wLoading = false;
-            this.$tip.success(this.$t("public.bccg"));
-          })
-          .catch((err) => {
-            this.wLoading = false;
-            this.$tip.error("保存失败!" + err);
-          });
-      } else {
-        // add
-        if (this.form.deputyLights.length > 0) {
-          let data = "";
-          this.form.deputyLights.forEach((item, i) => {
-            if (i === this.form.deputyLights.length - 1) {
-              data += item;
-            } else {
-              data += item + ",";
+      this.$refs.form.validate((valid, done) => {
+        if (valid) {
+          this.refresh = true;
+          this.wLoading = true;
+          if (this.form.labTapcoloroid) {
+            // update
+            updateLabTapcolor(this.form)
+              .then((res) => {
+                this.wLoading = false;
+                this.$tip.success(this.$t("public.bccg"));
+              })
+              .catch((err) => {
+                this.wLoading = false;
+                this.$tip.error("保存失败!" + err);
+              });
+          } else {
+            // add
+            if (this.form.deputyLights.length > 0) {
+              let data = "";
+              this.form.deputyLights.forEach((item, i) => {
+                if (i === this.form.deputyLights.length - 1) {
+                  data += item;
+                } else {
+                  data += item + ",";
+                }
+              });
+              this.form.deputyLights = data;
             }
-          });
-          this.form.deputyLights = data;
+            addLabTapcolor(this.form)
+              .then((res) => {
+                baseCodeSupply({ code: "color_num" }).then((res) => {});
+                this.form.labTapcoloroid = res.data.data;
+                this.wLoading = false;
+                this.$tip.success(this.$t("public.bccg"));
+              })
+              .catch((err) => {
+                this.wLoading = false;
+                this.$tip.error("保存失败!" + err);
+              });
+          }
+        } else {
+          this.wLoading = false;
+          this.$tip.warning("请补充色号信息!");
         }
-        addLabTapcolor(this.form)
-          .then((res) => {
-            baseCodeSupply({ code: "color_num" }).then((res) => {});
-            this.form.labTapcoloroid = res.data.data;
-            this.wLoading = false;
-            this.$tip.success(this.$t("public.bccg"));
-          })
-          .catch((err) => {
-            this.wLoading = false;
-            this.$tip.error("保存失败!" + err);
-          });
-      }
+      });
     },
     depth() {
       // 监听颜色深度变化
@@ -302,7 +282,7 @@ export default {
       for (var key in val) {
         delete val[key];
       }
-      for (var key in this.choiceQ) {
+      for (let key in this.choiceQ) {
         delete this.choiceQ[key];
       }
       this.choiceV = false;

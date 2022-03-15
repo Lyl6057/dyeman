@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-02-18 10:29:45
+ * @LastEditTime: 2022-03-11 16:07:03
  * @Description: 
 -->
 <template>
@@ -49,6 +49,7 @@
               placeholder="请输入缸号"
               :remote-method="remoteMethod"
               :loading="vatLoading"
+              @change="getLogWeight"
             >
               <el-option
                 v-for="item in options"
@@ -70,6 +71,7 @@
               placeholder="请输入织单号"
               :remote-method="remoteMethod"
               :loading="vatLoading"
+              @change="getLogWeight"
             >
               <el-option
                 v-for="item in options"
@@ -88,7 +90,7 @@
 <script>
 import choice from "@/components/proMng/index";
 import { mainCrud, dlgForm, dlgCrud } from "./data";
-import { add, getRunJobByPage, getWeave } from "./api";
+import { add, getRunJobByPage, getWeave, getLog } from "./api";
 export default {
   name: "techCodeTem",
   props: {
@@ -150,6 +152,13 @@ export default {
           });
         });
       }
+    },
+    getLogWeight(vatNo) {
+      // getLog({
+      //   runJobId: vatNo,
+      // }).then((res) => {
+      //   // console.log(res);
+      // });
     },
     getData() {
       this.form = this.detail;

@@ -1301,7 +1301,7 @@ export function wjxz3C(_this) {
       },
       {
         label: _this.$t("whseField.hwm"),
-        prop: "locationCode",
+        prop: "boxCarId",
         cell: true,
         width: 180,
         type: "select",

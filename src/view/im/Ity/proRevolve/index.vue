@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-03-02 13:37:03
+ * @LastEditTime: 2022-03-12 13:29:17
  * @Description: 
 -->
 <template>
@@ -342,6 +342,10 @@ export default {
       }
     },
     save2() {
+      if (!this.history.length) {
+        this.$tip.warning("请扫描布票!");
+        return;
+      }
       this.dLoading = true;
       let whseId = "";
       baseCodeSupplyEx({ code: "whse_out" }).then((res) => {
@@ -350,6 +354,7 @@ export default {
           retDate: this.$getNowTime("datetime"),
           retCode: res.data.data,
           retUsername: parent.userID,
+          stockState: 0,
           sysCreated: this.$getNowTime("datetime"),
           sysCreatedby: this.$store.state.userOid,
         }).then((res) => {
@@ -366,7 +371,7 @@ export default {
                   // 裁剪的胚布
                   addOutWhseDlb({
                     batchNo: outPh.data.data,
-                    countingNo: i + 1,
+                    countingNo: item.eachNumber || i + 1,
                     custTicket: this.dlgCrud[0].noteCode,
                     weight: this.dlgCrud[0].clothWeight, // 裁剪后胚布
                     weightUnit: item.weightUnit,
@@ -375,7 +380,7 @@ export default {
                 } else {
                   addOutWhseDlb({
                     batchNo: outPh.data.data,
-                    countingNo: i + 1,
+                    countingNo: item.eachNumber || i + 1,
                     custTicket: item.noteCode,
                     weight: item.clothWeight,
                     weightUnit: item.weightUnit,
@@ -467,6 +472,10 @@ export default {
       });
     },
     save() {
+      if (!this.history.length) {
+        this.$tip.warning("请扫描布票!");
+        return;
+      }
       this.wLoading = true;
       let whseId = "";
       baseCodeSupplyEx({ code: "whse_out" }).then((res) => {
@@ -475,6 +484,7 @@ export default {
           retDate: this.$getNowTime("datetime"),
           retCode: res.data.data,
           retUsername: parent.userID,
+          stockState: 0,
           sysCreated: this.$getNowTime("datetime"),
           sysCreatedby: this.$store.state.userOid,
         }).then((res) => {
@@ -489,7 +499,7 @@ export default {
               this.history.forEach((item, i) => {
                 addOutWhseDlb({
                   batchNo: outPh.data.data,
-                  countingNo: i + 1,
+                  countingNo: item.eachNumber || i + 1,
                   custTicket: item.noteCode,
                   weight: item.clothWeight,
                   weightUnit: item.weightUnit,

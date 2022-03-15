@@ -422,18 +422,22 @@ export default {
           delete this.form[key];
         }
       }
-      if (this.form.retDate != "" && this.form.retDate != undefined) {
-        this.form.retDate += " 00:00:00";
+      let queryData = JSON.parse(JSON.stringify(this.form));
+      if (queryData.retDate != "" && queryData.retDate != undefined) {
+        queryData.retDate += " 00:00:00";
       }
-      if (this.form.stockDate != "" && this.form.stockDate != undefined) {
-        this.form.stockDate += " 00:00:00";
+      if (queryData.stockDate != "" && queryData.stockDate != undefined) {
+        queryData.stockDate += " 00:00:00";
       }
-      if (this.form.woDate != "" && this.form.woDate != undefined) {
-        this.form.woDate += " 00:00:00";
+      if (queryData.woDate != "" && queryData.woDate != undefined) {
+        queryData.woDate += " 00:00:00";
       }
+      queryData.stockId = "!^%" + (queryData.stockId ? queryData.stockId : "");
+      queryData.retCode = "!^%" + (queryData.retCode ? queryData.retCode : "");
+      queryData.woOutno = "!^%" + (queryData.woOutno ? queryData.woOutno : "");
       this.everyThing
         .get(
-          Object.assign(this.form, {
+          Object.assign(queryData, {
             rows: this.page.pageSize,
             start: this.page.currentPage,
             yinType: this.hide,
@@ -464,12 +468,16 @@ export default {
             // item.retCode = item.stockId;
             // item.retDate = item.stockDate;
             if (index === this.crud.length - 1) {
-              this.loading = false;
+              setTimeout(() => {
+                this.loading = false;
+              }, 200);
             }
           });
 
           if (this.crud.length === 0) {
-            this.loading = false;
+            setTimeout(() => {
+              this.loading = false;
+            }, 200);
           }
         })
         .catch((e) => {
@@ -637,28 +645,20 @@ export default {
 };
 </script>
 <style lang='stylus'>
-#rc, #rcDetail {
-  .formBox {
-    margin-bottom: 0px;
-  }
-
-  .avue-crud__menu {
-    min-height: 5px !important;
-    height: 5px !important;
-  }
-
-  .el-tabs__item {
-    font-size: 18px;
-    line-height: 30px;
-    height: 30px;
-  }
-
-  .el-table__header-wrapper, .el-form-item__label, .el-input--mini {
-    font-size: 16px !important;
+#rc, #rcDetail
+  .formBox
+    margin-bottom 0px
+  .avue-crud__menu
+    min-height 5px !important
+    height 5px !important
+  .el-tabs__item
+    font-size 18px
+    line-height 30px
+    height 30px
+  .el-table__header-wrapper, .el-form-item__label, .el-input--mini
+    font-size 16px !important
     // font-weight: 600 !important;
-    color: #000;
-  }
-
+    color #000
   // .avue-form__group {
   // background-color: #fff;
   // }
@@ -666,8 +666,6 @@ export default {
   // .el-table--mini td, .el-table--mini th {
   // padding: 2px 0 !important;
   // }
-  .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item {
-    margin-bottom: 10px;
-  }
-}
+  .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item
+    margin-bottom 10px
 </style>

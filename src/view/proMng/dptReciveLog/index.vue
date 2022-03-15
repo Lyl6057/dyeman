@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-02-18 10:30:21
+ * @LastEditTime: 2022-03-11 15:36:50
  * @Description: 
 -->
 <template>
@@ -353,7 +353,6 @@ export default {
           for (let i = 0; i < dpt.data.length; i++) {
             if (dpt.data[i].orgNo.indexOf(res.data.orgno) != -1) {
               this.detail.dpt = dpt.data[i].dptCode;
-              console.log(this.detail.dpt);
               break;
             }
           }

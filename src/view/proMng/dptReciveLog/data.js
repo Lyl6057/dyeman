@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-02-16 11:01:04
+ * @LastEditTime: 2022-03-11 15:23:20
  * @Description:
  */
 
@@ -90,7 +90,10 @@ export function dlgForm(_this) {
             message: "請选择缸號",
             trigger: "blur"
           }
-        ]
+        ],
+        change: val => {
+          _this.getLogWeight(val.value);
+        }
       },
       {
         label: "织单号",
@@ -145,9 +148,23 @@ export function dlgForm(_this) {
         ]
       },
       {
+        label: "计划产量",
+        prop: "planOutput",
+        span: 8,
+        type: "number",
+        placeholder: " "
+      },
+      {
+        label: "实际产量",
+        prop: "realOutput",
+        type: "number",
+        span: 8,
+        placeholder: " "
+      },
+      {
         label: "说明",
         prop: "acceptDesc",
-        span: 16,
+        span: 24,
         placeholder: " "
       }
     ]
