@@ -121,14 +121,14 @@ export default {
     initCrudHeader(data){
       let column = [
         {
-          label: "客户", prop: "custName", align: "left", overHidden: true, width: "200",
+          label: "客户", prop: "custName", align: "left", overHidden: true, width: "200", fixed: true,
           formatter(row){
             return row.poKind == 2 ? '' : row.custName
           },
         },
-        {label: "(kg)", prop: "colTypeName", align: "center", width: "80"},
+        {label: "(kg)", prop: "colTypeName", align: "center", width: "80",fixed: true,},
         {
-          label: "总计", prop: "poQtyTol", align: "center", width: "120",
+          label: "总计", prop: "poQtyTol", align: "center", width: "120",fixed: true,
           formatter(row){
             return row.poQtyTol ? num2ThousandthFormat(row.poQtyTol) : '-' ;
           }
