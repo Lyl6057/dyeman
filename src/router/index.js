@@ -16,10 +16,10 @@ import store from "@/store/index";
 // import pro from "@/router/view/pro";
 // import re from '@/router/view/re'
 // import iq from '@/router/view/iq'
-import whseMng from "@/router/view/im";
+// import whseMng from "@/router/view/im";
 // import quaLity from "@/router/view/quaLity";
 // import laboratory from "./view/laboratory";
-// import proMng from "./view/proMng";
+import proMng from "./view/proMng";
 // import energy from "./view/energy";
 Vue.use(Router);
 const originalPush = Router.prototype.push;
@@ -56,10 +56,10 @@ const router = new Router({
         // ...pro,
         // ...re,
         // ...iq,
-        ...whseMng
+        // ...whseMng
         // ...quaLity
         // ...laboratory
-        // ...proMng
+        ...proMng
         // ...energy
       ]
     },

@@ -63,6 +63,10 @@ export function proMng(_this) {
         {
           menuName: "8.收单管理",
           index: "dptReciveLog"
+        },
+        {
+          menuName: "9.生产看板",
+          index: "proRpt"
         }
       ]
     },

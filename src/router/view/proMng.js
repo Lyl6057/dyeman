@@ -31,6 +31,15 @@ export default [
     }
   },
   {
+    path: "/proRpt",
+    name: "生产看板",
+    component: resolve =>
+      require(["@/view/proMng/ProRpt/index"], resolve),
+    meta: {
+      keepAlive: false
+    }
+  },
+  {
     path: "/ProWorkflowInfo",
     name: "生产工序",
     component: resolve => require(["@/view/proMng/ProWorkflow/index"], resolve),
