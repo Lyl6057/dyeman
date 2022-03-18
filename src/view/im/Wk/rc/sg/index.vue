@@ -366,14 +366,14 @@ export default {
             if (index === this.crud.length - 1) {
               setTimeout(() => {
                 this.screenLoading = false;
-              }, 200);
+              }, 500);
             }
           });
 
           if (this.crud.length === 0) {
             setTimeout(() => {
               this.screenLoading = false;
-            }, 200);
+            }, 500);
           }
         })
         .catch((e) => {

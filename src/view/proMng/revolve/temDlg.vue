@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-03-08 16:20:51
+ * @LastEditTime: 2022-03-16 16:23:05
  * @Description:
 -->
 <template>
@@ -327,7 +327,7 @@ export default {
         weaveJobCode: "!^%" + val,
         rows: 10,
         start: 1,
-        isWorkOut: 0,
+        // isWorkOut: 0,
       }).then((res) => {
         this.options = res.data.records;
         this.vatLoading = false;
@@ -769,9 +769,9 @@ export default {
               this.form.firstOrOther = "2";
               // this.form.runState = "1";
               this.form.auditState = 0;
-              this.form.salType = "sample";
               this.wLoading = false;
             }
+            this.form.salType = "sample";
             this.form.wmUnit = "KG";
             this.form.serviceOperator = parent.userID;
             this.form.runState = "1";

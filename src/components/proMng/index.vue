@@ -170,8 +170,16 @@ export default {
             if (item.stepName === "生产过程") {
               item.nodes.forEach((t) => {
                 if (t.stepName === "染整中心") {
-                  this.crud = t.nodes;
-                  this.backups = t.nodes;
+                  // this.crud = t.nodes;
+                  t.nodes.forEach((rz) => {
+                    this.crud.push(rz);
+                    if (rz.nodes.length) {
+                      rz.nodes.forEach((rs) => {
+                        this.crud.push(rs);
+                      });
+                    }
+                  });
+                  this.backups = JSON.parse(JSON.stringify(this.crud));
                 }
               });
             }

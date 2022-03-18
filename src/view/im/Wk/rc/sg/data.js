@@ -41,7 +41,7 @@ export function rhl1F(_this) {
       //   placeholder: " "
       // },
       {
-        label: _this.datas == _this.$t("iaoMng.sx") ? "本厂纱批号" : "本厂批号",
+        label: _this.data == _this.$t("iaoMng.sx") ? "本厂纱批号" : "本厂批号",
         prop: "batchNo",
         cell: false,
         span: 6,
@@ -166,6 +166,7 @@ export function rhl1C(_this) {
       {
         label: "#",
         prop: "index",
+        fixed: true,
         width: 50,
         align: "center"
       },
@@ -182,7 +183,8 @@ export function rhl1C(_this) {
         label: _this.$t("whseField.rcbh"),
         prop: "yinId",
         cell: false,
-        width: 160
+        width: 160,
+        fixed: true
       },
       {
         label: _this.$t("whseField.rclx"),
@@ -238,7 +240,7 @@ export function rhl1C(_this) {
         width: 180
       },
       {
-        label: _this.datas == _this.$t("iaoMng.sx") ? "本厂纱批号" : "本厂批号",
+        label: _this.data == _this.$t("iaoMng.sx") ? "本厂纱批号" : "本厂批号",
         prop: "batchNo",
         cell: false,
         width: 200,
@@ -403,17 +405,32 @@ export function rhl2C(_this) {
         label: _this.$t("whseField.sxbh"),
         prop: "yarnsId",
         cell: false,
-        width: 180,
+        width: 100,
+        overHidden: true,
         hide: _this.datas != _this.$t("iaoMng.sx")
       },
       {
         label: _this.$t("whseField.sxmc"),
         prop: "yarnsName",
         cell: false,
-        width: 450,
+        width: 400,
+        overHidden: true,
         hide: _this.datas != _this.$t("iaoMng.sx"),
         type: "select",
         dicData: getDicT("basYarnsData", "yarnsName", "yarnsId")
+      },
+      {
+        label: _this.$t("whseField.sp"),
+        prop: "yarnsCard",
+        cell: true,
+        width: 140,
+        type: "select",
+        dicData: getDIC("bas_yarnBrand"),
+        filterable: true,
+        allowCreate: true,
+        defaultFirstOption: true,
+        overHidden: true,
+        hide: _this.datas != _this.$t("iaoMng.sx")
       },
       {
         label: _this.$t("whseField.clzl"),
@@ -485,14 +502,14 @@ export function rhl2C(_this) {
         label: "供应商批号",
         prop: "batId",
         cell: true,
-        width: 140,
+        width: 160,
         overHidden: true
       },
       {
         label: _this.datas == _this.$t("iaoMng.sx") ? "本厂纱批号" : "本厂批号",
         prop: "batchNos",
         cell: false,
-        width: 200
+        width: 120
       },
       {
         label: _this.$t("whseField.zl"),
@@ -511,8 +528,9 @@ export function rhl2C(_this) {
         label: _this.$t("whseField.dw"),
         prop: "weightUnit",
         cell: false,
-        width: 120,
+        width: 100,
         type: "select",
+        overHidden: true,
         dicData: unit,
         hide:
           _this.datas === _this.$t("iaoMng.hgyl") ||
@@ -547,6 +565,22 @@ export function rhl2C(_this) {
           _this.datas != _this.$t("iaoMng.sx")
             ? false
             : true
+      },
+      {
+        label: "颜色",
+        prop: "colorName",
+        overHidden: true,
+        cell: true,
+        width: 140,
+        hide: _this.datas != _this.$t("iaoMng.sx")
+      },
+      {
+        label: "色号",
+        prop: "colorNo",
+        overHidden: true,
+        cell: true,
+        width: 140,
+        hide: _this.datas != _this.$t("iaoMng.sx")
       }
     ]
   };
@@ -582,7 +616,8 @@ export function rhl3C(_this) {
         prop: "batchNos",
         cell: false,
         // hide: _this.datas == _this.$t("iaoMng.sx") ? true : false,
-        width: 220
+        width: 120,
+        overHidden: true
       },
       {
         label: _this.$t("whseField.cd"),
@@ -594,34 +629,47 @@ export function rhl3C(_this) {
         dicData: getDIC("Whse_Origin")
       },
       {
-        label: _this.$t("whseField.xs"),
-        prop: "cartonNum",
-        cell: true,
-        width: 120,
-        hide: _this.datas == _this.$t("iaoMng.sx") ? false : true,
-        align: "right"
-      },
-      {
         label: _this.$t("whseField.zl"),
         prop: "weight",
         cell: true,
-        width: 120,
+        width: 100,
         align: "right"
       },
+      {
+        label: "件数",
+        prop: "cartonNum",
+        cell: true,
+        width: 80,
+        overHidden: true,
+        hide: _this.datas == _this.$t("iaoMng.sx") ? false : true,
+        align: "right"
+      },
+
       {
         label: _this.$t("whseField.dw"),
         prop: "weightUnit",
         cell: true,
         width: 100,
+        hide: _this.datas == _this.$t("iaoMng.sx") ? true : false,
         type: "select",
         dicData: unit
+      },
+      {
+        label: "包装规格",
+        prop: "packSize",
+        cell: true,
+        width: 100,
+        hide: _this.datas == _this.$t("iaoMng.sx") ? false : true,
+        type: "select",
+        filterable: true,
+        dicData: getDIC("bas_yarnPackUnit")
       },
       {
         label: _this.$t("whseField.hwm"),
         prop:
           _this.datas == _this.$t("iaoMng.sx") ? "locationCode" : "storageNo",
         cell: true,
-        width: 100,
+        width: 140,
         type: "select",
         dicData: getDicNS(
           "whseLocation?warehouseType=" +
@@ -686,8 +734,14 @@ export function planForm(_this) {
   return {
     submitBtn: false,
     emptyBtn: false,
-    labelWidth: 150,
+    labelWidth: 130,
     column: [
+      {
+        label: _this.$t("whseField.shdh"),
+        prop: "deliNo",
+        span: 6,
+        placeholder: " "
+      },
       {
         label: "供应商送货单号",
         prop: "deliSuppno",
@@ -706,12 +760,7 @@ export function planForm(_this) {
       //   span: 6,
       //   placeholder: " ",
       // },
-      {
-        label: _this.$t("whseField.shdh"),
-        prop: "deliNo",
-        span: 6,
-        placeholder: " "
-      },
+
       {
         label: _this.$t("whseField.clbh"),
         prop: "materialNum",
@@ -737,6 +786,7 @@ export function planCrud(_this) {
         label: "#",
         prop: "index",
         width: 40,
+        fixed: true,
         align: "center"
       },
       {
@@ -744,7 +794,8 @@ export function planCrud(_this) {
         prop: "deliNo",
         cell: false,
         width: 160,
-        sortable: true
+        fixed: true
+        // sortable: true
       },
       {
         label: _this.$t("whseField.shrq"),
@@ -753,8 +804,8 @@ export function planCrud(_this) {
         width: 120,
         format: "yyyy-MM-dd",
         valueFormat: "yyyy-MM-dd",
-        align: "center",
-        sortable: true
+        align: "center"
+        // sortable: true
       },
       {
         label: "供应商送货单号",
@@ -767,8 +818,8 @@ export function planCrud(_this) {
         label: _this.$t("whseField.chdh"),
         prop: "purNo",
         cell: false,
-        width: 160,
-        sortable: true
+        width: 160
+        // sortable: true
       },
       // {
       //   label: "供應商",

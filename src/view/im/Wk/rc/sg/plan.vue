@@ -81,11 +81,11 @@ export default {
       // this.crudOp.height = "calc(100vh - 208px)";
       // this.crudOp.selection = false;
       let queryData = JSON.parse(JSON.stringify(this.form));
-      // queryData.deliNo = "!^%" + (queryData.deliNo || "");
-      // queryData.purNo = "%" + (queryData.purNo || "");
-      // queryData.poNo = queryData.purNo;
-      // queryData.materialNum = "%" + (queryData.materialNum || "");
-      // queryData.deliSuppno = "%" + (queryData.deliSuppno || "");
+      queryData.deliNo = "!^%" + (queryData.deliNo || "");
+      queryData.purNo = "%" + (queryData.purNo || "");
+      queryData.poNo = queryData.purNo;
+      queryData.materialNum = "%" + (queryData.materialNum || "");
+      queryData.deliSuppno = "%" + (queryData.deliSuppno || "");
       this.everyThing
         .getPlan(
           Object.assign(queryData, {

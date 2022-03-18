@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-24 14:15:12
  * @LastEditors: Lyl
- * @LastEditTime: 2022-03-09 10:06:29
+ * @LastEditTime: 2022-03-18 09:06:30
  * @Description: 
 -->
 <template>
@@ -78,6 +78,9 @@ export default {
       getList: null,
       chemicalData: getXDicT("BasChemicalmatNew"), // 化工原料
       pigmentData: getXDicT("basPigment"), // 颜料
+      typeObj: {
+        sort: null,
+      },
     };
   },
   watch: {},
@@ -94,16 +97,19 @@ export default {
           this.getFun = getSx;
           this.getList = getSxList;
           this.crudOp = sxOp(this);
+          // this.typeObj.sort = 'yarnsId'
           break;
         case "RHL":
           this.getFun = getRhl;
           this.getList = getRhlList;
           this.crudOp = crudOp(this);
+          // this.typeObj.sort = 'chemicalId'
           break;
         case "RLL":
           this.getFun = getRll;
           this.getList = getRllList;
           this.crudOp = crudOp(this);
+          // this.typeObj.sort = 'chemicalId'
           break;
         case "CPB":
           this.getFun = getCpb;

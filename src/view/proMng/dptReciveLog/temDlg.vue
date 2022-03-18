@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-03-11 16:07:03
+ * @LastEditTime: 2022-03-16 15:05:13
  * @Description: 
 -->
 <template>
@@ -133,6 +133,7 @@ export default {
           this.$nextTick(() => {
             if (res.data.records.length == 1) {
               this.form.runJobFk = res.data.records[0].runJobId;
+              this.form.clothWeight = res.data.records[0].clothWeight;
             }
           });
         });
@@ -148,17 +149,52 @@ export default {
           this.$nextTick(() => {
             if (res.data.records.length == 1) {
               this.form.weaveJobId = res.data.records[0].weaveJobId;
+              this.form.clothWeight = res.data.records[0].clothWeight;
             }
           });
         });
       }
     },
-    getLogWeight(vatNo) {
-      // getLog({
-      //   runJobId: vatNo,
-      // }).then((res) => {
-      //   // console.log(res);
-      // });
+    getLogWeight(id) {
+      getLog({
+        runJobId: id,
+      }).then((res) => {
+        if (res.data.length) {
+          let list = res.data.sort((a, b) => {
+            return a.acceptDate > b.acceptDate ? 1 : -1;
+          });
+          this.form.planOutput = list[0].realOutput || 0;
+          this.form.realOutput = list[0].realOutput || 0;
+        } else {
+          if (this.tabs == "rd") {
+            getRunJobByPage({
+              runJobId: id,
+              rows: 10,
+              start: 1,
+              page: 1,
+            }).then((vatRes) => {
+              if (vatRes.data.length) {
+                let weight = vatRes.data.records[0].clothWeight || 0;
+                this.form.planOutput = weight;
+                this.form.realOutput = weight;
+              }
+            });
+          } else {
+            getWeave({
+              weaveJobId: id,
+              rows: 10,
+              start: 1,
+              page: 1,
+            }).then((weaveRes) => {
+              if (weaveRes.data.length) {
+                let weight = weaveRes.data.records[0].clothWeight || 0;
+                this.form.planOutput = weight;
+                this.form.realOutput = weight;
+              }
+            });
+          }
+        }
+      });
     },
     getData() {
       this.form = this.detail;
@@ -166,6 +202,8 @@ export default {
       this.form.acceptStaff = parent.userID;
       this.form.acceptDate = this.$getNowTime("datetime");
       this.form.dptworkProcessFk = this.detail.dpt || "";
+      this.form.planOutput = 0;
+      this.form.realOutput = 0;
     },
     save() {
       this.$refs.form.validate((valid, done) => {

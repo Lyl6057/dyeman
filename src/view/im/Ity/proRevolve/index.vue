@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-03-12 13:29:17
+ * @LastEditTime: 2022-03-16 16:36:56
  * @Description: 
 -->
 <template>
@@ -547,10 +547,7 @@ export default {
         (res) => {
           this.wLoading = true;
           if (res.data.length) {
-            if (
-              res.data[0].weaveJobFk.toLocaleLowerCase() !=
-              this.form.weaveJobId.toLocaleLowerCase()
-            ) {
+            if (res.data[0].proName != this.form.weaveJobCode) {
               setTimeout(() => {
                 this.form.clothNoteCode = "";
               }, 500);
