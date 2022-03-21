@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-01-12 15:39:08
  * @LastEditors: Lyl
- * @LastEditTime: 2022-03-18 13:54:14
+ * @LastEditTime: 2022-03-21 15:39:41
  * @FilePath: \iot.vue\src\view\im\whseInOutKB\index.vue
  * @Description: 
 -->
@@ -137,7 +137,8 @@ export default {
         total: 0,
       },
       mainPage: {
-        pageSize: 50,
+        pageSizes: [50, 100, 200, 500],
+        pageSize: 500,
         currentPage: 1,
         total: 0,
       },
@@ -341,104 +342,98 @@ export default {
           });
         } else {
           //成品布出仓
-          let query = JSON.parse(JSON.stringify(this.form));
-          query.vatNo = "%" + (query.vatNo ? query.vatNo : "");
-          getFinalStock(query).then((res) => {
-            if (!res.data.length) {
+          // this.form.vatNo = this.form.vatNo
+          //   ? (this.form.vatNo = "%" + this.form.vatNo)
+          //   : "";
+          getFinalStock(
+            Object.assign({
+              page: this.mainPage.currentPage,
+              rows: this.mainPage.pageSize,
+              start: this.mainPage.currentPage,
+              vatNo: this.form.vatNo,
+              storeLoadCode: this.form.storeLoadCode,
+              clothState: 1,
+              cardType: 1,
+            })
+          ).then((res) => {
+            if (!res.data.records.length) {
               this.$tip.warning("暂无数据!");
-              if (this.form.vatNo.indexOf("%") != -1) {
-                this.form.vatNo = this.form.vatNo.split("%")[1];
-              }
+              // if (this.form.vatNo.indexOf("%") != -1) {
+              // this.form.vatNo = this.form.vatNo.split("%")[1];
+              // }
               this.crud = [];
               this.wLoading = false;
               return;
             }
+            this.mainPage.total = res.data.total;
             if (this.form.vatNo) {
               this.crud = [];
-              let data = this.group(res.data, "storeLoadCode");
-              // this.formOp.column[6].dicData = [];
-              // this.form.storeLoadCode = "";
+              let data = this.group(res.data.records, "storeLoadCode");
               data.forEach((item, i) => {
-                // this.formOp.column[6].dicData.push({
-                //   value: item.storeLoadCode,
-                //   label: item.storeLoadCode,
-                // });
-                getFinalStock({ storeLoadCode: item.storeLoadCode }).then(
-                  (loadRes) => {
-                    let vatList = loadRes.data;
-                    vatList = this.group(vatList, "vatNo");
-                    let vatData = [];
-                    vatList.forEach((vat, j) => {
-                      vat.data = vat.data.sort((a, b) => {
-                        return a.pidNo > b.pidNo ? 1 : -1;
-                      });
-                      let sumWeight = 0;
-                      vat.data.forEach((jk, k) => {
-                        jk.id = `${i + 1}-${j + 1}-${k + 1}`;
-                        jk.index = k + 1;
-                        // if (jk.weightUnit == "KG") {
-                        //   jk.netWeight = jk.weight;
-                        // } else {
-                        //   jk.netWeightLbs = jk.weight;
-                        // }
-                        jk.netWeight = jk.weight;
-                        sumWeight += jk.weight;
-                      });
+                getFinalStock({
+                  storeLoadCode: item.storeLoadCode,
+                  clothState: 1,
+                  cardType: 1,
+                  page: 1,
+                  rows: 9999,
+                  vatNo: this.form.vatNo,
+                }).then((loadRes) => {
+                  let vatList = loadRes.data.records;
+                  vatList = this.group(vatList, "vatNo");
+                  let vatData = [];
+                  vatList.forEach((vat, j) => {
+                    vat.data = vat.data.sort((a, b) => {
+                      return a.pidNo > b.pidNo ? 1 : -1;
+                    });
+                    let sumWeight = 0;
+                    vat.data.forEach((jk, k) => {
+                      jk.id = `${i + 1}-${j + 1}-${k + 1}`;
+                      jk.index = k + 1;
+                      jk.netWeight = jk.netWeight;
+                      sumWeight += jk.netWeight;
+                    });
 
-                      vatData.push({
-                        vatNo: vat.vatNo,
-                        children: vat.data,
-                        id: `${i + 1}-${j + 1}`,
-                        index: j + 1,
-                        netWeight: Number(sumWeight.toFixed(1)),
-                        weightUnit: vat.data[0].weightUnit,
-                        pidNo: vat.data.length,
-                      });
-                      // this.idArr.push(`${i + 1}-${j + 1}`);
+                    vatData.push({
+                      vatNo: vat.vatNo,
+                      children: vat.data,
+                      id: `${i + 1}-${j + 1}`,
+                      index: j + 1,
+                      netWeight: Number(sumWeight.toFixed(1)),
+                      weightUnit: vat.data[0].weightUnit,
+                      pidNo: vat.data.length,
                     });
-                    this.crud.push({
-                      storeLoadCode: item.storeLoadCode,
-                      id: i + 1,
-                      children: vatData,
-                      index: i + 1,
-                    });
-                  }
-                );
+                    // this.idArr.push(`${i + 1}-${j + 1}`);
+                  });
+                  this.crud.push({
+                    storeLoadCode: item.storeLoadCode,
+                    id: i + 1,
+                    children: vatData,
+                    index: i + 1,
+                  });
+                });
               });
               setTimeout(() => {
                 this.crud = this.crud.sort((a, b) => {
                   return a.index > b.index ? 1 : -1;
                 });
-
-                // this.form.storeLoadCode =
-                //   this.formOp.column[6].dicData[0].value;
                 this.$set(this.form, "storageState", this.crud.length ? 0 : 1);
-                if (this.form.vatNo.indexOf("%") != -1) {
-                  this.form.vatNo = this.form.vatNo.split("%")[1];
-                }
                 this.wLoading = false;
               }, 200);
             } else {
-              this.crud = res.data.sort((a, b) => {
+              this.crud = res.data.records.sort((a, b) => {
                 return a.productNo > b.productNo ? 1 : -1;
               });
               this.$set(this.form, "storageState", this.crud.length ? 0 : 1);
               this.$nextTick(() => {
                 this.crud.forEach((item, i) => {
                   item.index = i + 1;
-                  item.netWeight = item.weight;
                   item.storeSiteCode = item.locationCode;
-                  // if (item.weightUnit == "KG") {
-                  //   item.netWeight = item.weight;
-                  // } else {
-                  //   item.netWeightLbs = item.weight;
-                  // }
                   this.$refs.crud.toggleRowSelection(item, true);
                 });
               });
-              if (this.form.vatNo.indexOf("%") != -1) {
-                this.form.vatNo = this.form.vatNo.split("%")[1];
-              }
+              // if (this.form.vatNo.indexOf("%") != -1) {
+              //   this.form.vatNo = this.form.vatNo.split("%")[1];
+              // }
               setTimeout(() => {
                 this.wLoading = false;
               }, 500);

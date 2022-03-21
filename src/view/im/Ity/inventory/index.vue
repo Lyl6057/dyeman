@@ -2,7 +2,11 @@
  * @Author: Lyl
  * @Date: 2021-03-24 14:15:12
  * @LastEditors: Lyl
- * @LastEditTime: 2022-03-19 13:39:06
+<<<<<<< Updated upstream
+ * @LastEditTime: 2022-03-21 15:39:09
+=======
+ * @LastEditTime: 2022-03-18 09:06:30
+>>>>>>> Stashed changes
  * @Description: 
 -->
 <template>
@@ -104,20 +108,19 @@ export default {
           this.getFun = getSx;
           this.getList = getSxList;
           this.crudOp = sxOp(this);
-          this.typeObj.sort = "yarnsId";
-
+          // this.typeObj.sort = 'yarnsId'
           break;
         case "RHL":
           this.getFun = getRhl;
           this.getList = getRhlList;
           this.crudOp = crudOp(this);
-          this.typeObj.sort = "chemicalId";
+          // this.typeObj.sort = 'chemicalId'
           break;
         case "RLL":
           this.getFun = getRll;
           this.getList = getRllList;
           this.crudOp = crudOp(this);
-          this.typeObj.sort = "chemicalId";
+          // this.typeObj.sort = 'chemicalId'
           break;
         case "CPB":
           this.getFun = getCpb;

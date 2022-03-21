@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-01-13 09:53:53
  * @LastEditors: Lyl
- * @LastEditTime: 2022-03-18 13:49:55
+ * @LastEditTime: 2022-03-21 15:39:39
  * @FilePath: \iot.vue\src\view\im\whseInOutKB\api.js
  * @Description:
  */
@@ -29,7 +29,7 @@ export function updateStorageLog(data) {
 // 查询成品布库存
 export function getFinalStock(params) {
   return axios({
-    url: "/api/prodStock",
+    url: "/api/proFinalProductCard/stockpage", //prodStock
     method: "get",
     params: params
   });
