@@ -232,7 +232,11 @@
                 :type="datas"
               ></loction>
             </el-tab-pane>
-            <el-tab-pane :label="datas + this.$t('iaoMng.rcphzl')" name="ph">
+            <el-tab-pane
+              :label="datas + this.$t('iaoMng.rcphzl')"
+              name="ph"
+              v-if="datas != this.$t('iaoMng.yl')"
+            >
               <div class="btnList">
                 <el-button type="primary" @click="addPh">{{
                   this.$t("public.add")
@@ -406,7 +410,6 @@ export default {
       this.loading = true;
       this.mx = [];
       this.mxOp.showSummary = false;
-      console.log(this.form);
       this.everyThing
         .getDetail({
           rows: this.page.pageSize,
@@ -434,26 +437,22 @@ export default {
           this.mx.forEach((item, index) => {
             item.index = index + 1;
             item.chinName = item.materialNum;
-            item.batchNos = item.batchNo.slice(2);
+            if (this.datas != this.$t("iaoMng.sx")) {
+              item.batchNos = item.batchNo.slice(2);
+            } else {
+              item.batchNos = item.batchNo;
+            }
             if (index === this.mx.length - 1) {
               this.mxOp.showSummary = true;
               setTimeout(() => {
-                // this.$refs.mx.setCurrentRow(this.mx[0]);
-                // this.getAlloc();
+                this.$refs.mx.setCurrentRow(this.mx[0]);
                 this.loading = false;
               }, 200);
             }
           });
-          // }
-          setTimeout(() => {
-            if (this.mx.length) {
-              this.$refs.mx.setCurrentRow(this.mx[0]);
-            }
-          }, 200);
         });
     },
     getPh() {
-      console.log(this.chooseData);
       if (this.isAdd) {
         if (this.chooseData.list) {
           if (this.chooseData.list.length != 0) {
@@ -672,7 +671,8 @@ export default {
           batchNos: this.code.slice(2),
         });
         this.code =
-          this.code.substring(0, 5) + (Number(this.code.substring(5)) + 1);
+          this.code.substring(0, 3) +
+          this.$preFixInt(Number(this.code.substring(3)) + 1, 5);
       }
       this.$refs.mx.setCurrentRow(this.mx[this.mx.length - 1]);
       this.$nextTick(() => {

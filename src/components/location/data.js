@@ -1,11 +1,11 @@
 /*
  * @Author: Lyl
  * @Date: 2021-02-24 08:12:20
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-01-04 09:49:02
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-03-19 10:39:24
  * @Description:
  */
-import { getDIC, getDicT, getXDicT, postDicT,getDicNS } from "@/config";
+import { getDIC, getDicT, getXDicT, postDicT, getDicNS } from "@/config";
 import axios from "axios";
 export function loc1C(_this) {
   return {
@@ -37,22 +37,7 @@ export function loc1C(_this) {
         width: 50,
         align: "center"
       },
-      {
-        label: _this.$t("whseField.hwm"), //"貨位碼",
-        prop: "locationCode",
-        cell: true,
-        type: "select",
-        filterable: true,
-        allowCreate: true,
-        defaultFirstOption: true,
-        dicData: getDicNS("whseLocation?warehouseType=" + (
-        _this.type== _this.$t("iaoMng.sx")?"0":
-        _this.type== _this.$t("iaoMng.pb")?"1":
-        _this.type== _this.$t("iaoMng.hgyl")?"3":
-        _this.type== _this.$t("iaoMng.scfl")?"5":"4") ,
-         "locationCode", "locationCode"),
-        width: 180
-      },
+
       {
         label: "箱數",
         prop: "cartonNum",
@@ -73,6 +58,30 @@ export function loc1C(_this) {
         // change: () => {
         //   _this.$refs["crud"].doLayout();
         // }
+      },
+      {
+        label: _this.$t("whseField.hwm"), //"貨位碼",
+        prop: "locationCode",
+        cell: true,
+        type: "select",
+        filterable: true,
+        allowCreate: true,
+        defaultFirstOption: true,
+        dicData: getDicNS(
+          "whseLocation?warehouseType=" +
+            (_this.type == _this.$t("iaoMng.sx")
+              ? "0"
+              : _this.type == _this.$t("iaoMng.pb")
+              ? "1"
+              : _this.type == _this.$t("iaoMng.hgyl")
+              ? "3"
+              : _this.type == _this.$t("iaoMng.scfl")
+              ? "5"
+              : "4"),
+          "locationCode",
+          "locationCode"
+        ),
+        width: 180
       }
     ]
   };

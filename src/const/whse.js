@@ -5224,6 +5224,12 @@ export const purApplicationDtlC = {
       align: "center"
     },
     {
+      label: "生产织单号",
+      prop: "weaveNo",
+      width: 120,
+      overHidden: true
+    },
+    {
       label: i18n.t("whseField.clbh"),
       prop: "materielCode",
       width: 140
@@ -5231,12 +5237,15 @@ export const purApplicationDtlC = {
     {
       label: i18n.t("whseField.clmc"),
       prop: "materielName",
-      width: 300
+      width: 300,
+      overHidden: true
     },
     {
       label: i18n.t("whseField.slsl"),
       prop: "applyNum",
-      width: 100
+      width: 100,
+      precision: 2
+      // type: "number"
     },
     {
       label: i18n.t("whseField.dw"),
@@ -5244,6 +5253,24 @@ export const purApplicationDtlC = {
       width: 100,
       type: "select",
       dicData: matUnit
+    },
+    {
+      label: "品牌",
+      prop: "yarnsCard",
+      width: 120,
+      overHidden: true
+    },
+    {
+      label: "供应商批号",
+      prop: "batId",
+      width: 140,
+      overHidden: true
+    },
+    {
+      label: "本厂批号",
+      prop: "batchNo",
+      width: 140,
+      overHidden: true
     },
     {
       label: i18n.t("whseField.ytbz"),

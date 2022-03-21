@@ -22,7 +22,7 @@
         <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
       </div>
       <el-row>
-        <el-col :span="14">
+        <el-col :span="16">
           <view-container :title="type + '生产领用明细'">
             <div class="btnList" style="margin-bottom: 2px">
               <el-button
@@ -50,7 +50,7 @@
               @on-load="getDetail"
             ></avue-crud> </view-container
         ></el-col>
-        <el-col :span="10">
+        <el-col :span="8">
           <view-container :title="type + '生产领用批号资料'">
             <div class="btnList" style="margin-bottom: 2px">
               <el-button
@@ -277,6 +277,7 @@ export default {
           whseRetguestcalicoFk: this.detail.whseRetguestcalicooid,
           whseChemicalOutFk: this.detail.whseChemicalOutId,
           whseRetyarninFk: this.detail.whseRetyarninoid,
+          yarnsId: "!^",
         })
         .then((res) => {
           let records = res.data;
@@ -285,6 +286,8 @@ export default {
           this.mx.forEach((item, index) => {
             item.$cellEdit = true;
             item.index = index + 1;
+            item.applyNum = item.applyNum.toFixed(2);
+            item.weight = item.weight.toFixed(2);
             if (index === this.mx.length - 1) {
               setTimeout(() => {
                 if (this.mx.length > 0) {
@@ -334,6 +337,7 @@ export default {
           }
           this.chooseData.list.forEach((item, index) => {
             item.weightUnit = this.chooseData.weightUnit;
+            item.weight = item.weight.toFixed(2);
             // item.$cellEdit = true;
             item.index = index + 1;
             if (index === this.chooseData.list.length - 1) {
@@ -397,6 +401,7 @@ export default {
       // });
       // if (this.hide == "1") {
       this.proChoiceQ.yarnsId = this.chooseData.yarnsId;
+      this.proChoiceQ.batchNo = this.chooseData.batchNo;
       this.proChoiceTle = "选择纱线库存";
       this.proChoiceV = true;
       // }
@@ -794,6 +799,7 @@ export default {
             // item.$cellEdit = true;
             item.yarnsId = item.materialNum;
             item.yarnsName = item.chinName;
+            item.yarnBrand = item.yarnsCard;
             item.weightUnit = item.company;
             item.weight = 0;
           });
@@ -819,6 +825,7 @@ export default {
           item.materialName = item.chinName;
           item.yarnsId = item.materialNum;
           item.yarnsName = item.chinName;
+          item.yarnBrand = item.yarnsCard;
           item.company = item.company;
           item.stockUnit = item.company;
         });
@@ -858,10 +865,13 @@ export default {
               item.bcClass = item.materielCode;
               item.dangerlevel = item.materielCode;
               item.bcForce = item.materielCode;
-              item.weight = 0;
-              // item.list = [];
+              item.weight = 0; // item.applyNum;
+              item.suppBatchNo = item.batId;
+              item.weaveJobCode = item.weaveNo;
+              item.yarnBrand = item.yarnsCard;
+              item.list = []; // [JSON.parse(JSON.stringify(item))];
               // item.list.forEach((item, i) => {
-              //   item.weight = item.stock;
+              //   item.weight = item.applyNum;
               //   item.$cellEdit = true;
               //   item.index = i + 1;
               // });
@@ -899,6 +909,9 @@ export default {
           item.dangerlevel = item.materielCode;
           item.bcForce = item.materielCode;
           item.weight = 0;
+          item.suppBatchNo = item.batId;
+          item.weaveJobCode = item.weaveNo;
+          item.yarnBrand = item.yarnsCard;
         });
         this.mx = this.mx.concat(val);
         this.mx = this.unique(this.mx, "yarnsId");
@@ -1007,6 +1020,7 @@ export default {
         if (this.form.stockType == 2) {
           val.forEach((item, i) => {
             item.$cellEdit = true;
+            item.whseYarninDtlaFk = item.whseYarninDtlaoid;
             item.list = [JSON.parse(JSON.stringify(item))];
             item.applyNum = item.weight;
             this.mx.push(item);
@@ -1021,6 +1035,7 @@ export default {
           });
           val.forEach((item, i) => {
             item.weight = item.stock;
+            item.whseYarninDtlaFk = item.whseYarninDtlaoid;
             item.$cellEdit = true;
           });
           for (let i = 0; i < val.length; i++) {
@@ -1060,8 +1075,8 @@ export default {
       this.mx = [];
       if (val === "1") {
         // this.mxOp.column[4].hide = true;
-        this.mxOp.column[3].hide = false;
-        this.mxOp.column[3].label = "申购数量";
+        this.mxOp.column[7].hide = false;
+        this.mxOp.column[7].label = "申领数量";
         this.formOp.column[4].label = "申购单";
         if (!this.isAdd) {
           return;
@@ -1071,13 +1086,13 @@ export default {
         // 其他
         // this.mxOp.column[4].hide = false;
         // this.mxOp.column[4].label = this.$t("whseField.ph");
-        this.mxOp.column[3].hide = false;
-        this.mxOp.column[3].label = "入仓数量";
+        this.mxOp.column[7].hide = false;
+        this.mxOp.column[7].label = "入仓数量";
         this.formOp.column[4].disabled = true;
       } else {
         // this.mxOp.column[4].hide = true;
-        this.mxOp.column[3].hide = false;
-        this.mxOp.column[3].label = "領用数量";
+        this.mxOp.column[7].hide = false;
+        this.mxOp.column[7].label = "申领数量";
         if (!this.isAdd) {
           return;
         }

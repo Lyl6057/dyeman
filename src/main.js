@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-24 08:12:20
  * @LastEditors: Lyl
- * @LastEditTime: 2021-10-25 09:55:06
+ * @LastEditTime: 2022-03-18 14:15:42
  * @Description:
  */
 // The Vue build version to load with the `import` command
@@ -44,6 +44,7 @@ import {
   getDicT,
   getNowTime,
   unique,
+  group,
   toTableLow,
   preFixInt
 } from "./config/index";
@@ -65,6 +66,7 @@ Vue.prototype.$codeValue = getDIC;
 Vue.prototype.$codeValueT = getDicT;
 Vue.prototype.$getNowTime = getNowTime;
 Vue.prototype.$unique = unique;
+Vue.prototype.$grouping = group;
 Vue.prototype.$sortable = Sortable;
 Vue.prototype.$toTableLow = toTableLow;
 Vue.prototype.$preFixInt = preFixInt;

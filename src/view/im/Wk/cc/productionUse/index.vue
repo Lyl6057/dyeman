@@ -46,6 +46,8 @@
               :data="crud"
               :page.sync="page"
               v-loading="loading"
+              element-loading-text="正在拼命加载..."
+              element-loading-spinner="el-icon-loading"
               @on-load="getData"
               @current-row-change="cellClick"
               @row-dblclick="handleRowDBLClick"

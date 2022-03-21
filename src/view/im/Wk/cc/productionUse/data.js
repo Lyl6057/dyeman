@@ -132,14 +132,19 @@ export function rsxkr2F(_this) {
         prop: "appId",
         span: 6,
         click: () => {
+          _this.$nextTick(() => {
+            console.log(_this.form.stockType);
+          });
           if (_this.form.stockType === "2") {
             return;
           }
+
           _this.choiceField = "spNo";
           _this.oldData = _this.chooseData;
           _this.choiceTarget = _this.oldData;
           _this.mx = [];
-          if (_this.form.stockType === "1") {
+          _this.choiceV = !_this.choiceV;
+          if (_this.form.stockType == "1") {
             _this.choiceQ.purCategory =
               _this.type == _this.$t("iaoMng.sx") ? "4" : "5";
             _this.choiceTle = _this.$t("choicDlg.xzsgd");
@@ -150,7 +155,6 @@ export function rsxkr2F(_this) {
             _this.choiceQ.collectSucceed = 0;
             _this.choiceTle = _this.$t("choicDlg.xzsqlyd");
           }
-          _this.choiceV = !_this.choiceV;
         },
         placeholder: " ",
         disabled: !_this.isAdd
@@ -289,6 +293,13 @@ export function rsxkr2C(_this) {
         align: "center"
       },
       {
+        label: "生产织单号",
+        prop: "weaveJobCode",
+        cell: false,
+        width: 140,
+        overHidden: true
+      },
+      {
         label: "材料編號",
         prop: "yarnsId",
         cell: false,
@@ -301,20 +312,34 @@ export function rsxkr2C(_this) {
         width: 280,
         overHidden: true
       },
-
-      // {
-      //   label: _this.$t("whseField.ph"),
-      //   prop: "batchNo",
-      //   hide: false,
-      //   width: 120,
-      //   overHidden: true
-      // },
       {
-        label: "申购数量",
+        label: "纱牌",
+        prop: "yarnBrand",
+        hide: false,
+        width: 120,
+        overHidden: true
+      },
+      {
+        label: "供应商批号",
+        prop: "suppBatchNo",
+        hide: false,
+        width: 120,
+        overHidden: true
+      },
+      {
+        label: _this.$t("whseField.ph"),
+        prop: "batchNo",
+        hide: false,
+        width: 120,
+        overHidden: true
+      },
+      {
+        label: "申领数量",
         prop: "applyNum",
         hide: false,
         width: 120,
-        align: "right"
+        align: "right",
+        precision: 2
       },
       {
         label: "出货数量",
@@ -323,7 +348,8 @@ export function rsxkr2C(_this) {
         cell: false,
         width: 120,
         align: "right",
-        type: "number",
+        // type: "number",
+        precision: 1,
         placeholder: " ",
         change: val => {
           if (val.value > _this.chooseData.applyNum) {
@@ -375,12 +401,12 @@ export function rcpb3C(_this) {
         width: 50,
         align: "center"
       },
-      {
-        label: _this.$t("whseField.ph"),
-        prop: "batchNo",
-        cell: false,
-        width: 200
-      },
+      // {
+      //   label: _this.$t("whseField.ph"),
+      //   prop: "batchNo",
+      //   cell: false,
+      //   width: 200
+      // },
       {
         label: "数量",
         prop: "weight",
@@ -388,14 +414,22 @@ export function rcpb3C(_this) {
         width: 100,
         align: "right"
       },
-      // {
-      //   label: _this.$t("whseField.dw"),
-      //   prop: "weightUnit",
-      //   cell: true,
-      //   width: 100,
-      //   type: "select",
-      //   dicData: matUnit
-      // },
+      {
+        label: "件数",
+        prop: "cartonNum",
+        cell: true,
+        width: 100,
+        align: "right"
+      },
+      {
+        label: "包装规格",
+        prop: "packSize",
+        hide: false,
+        width: 90,
+        cell: true,
+        type: "select",
+        dicData: getDIC("bas_yarnPackUnit")
+      },
       {
         label: _this.$t("whseField.hwm"),
         prop: "locationCode",

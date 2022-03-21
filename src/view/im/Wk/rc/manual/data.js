@@ -565,15 +565,16 @@ export function sx2C(_this) {
         dicData: getDicT("basYarnsData", "yarnsName", "yarnsId")
       },
       {
-        label: "本厂纱批号",
-        prop: "batchNos",
-        cell: false,
-        width: 140
-      },
-      {
         label: "供应商批号",
         prop: "batId",
         cell: true,
+        width: 140,
+        overHidden: true
+      },
+      {
+        label: "本厂纱批号",
+        prop: "batchNos",
+        cell: false,
         width: 140
       },
 
@@ -912,10 +913,17 @@ export function hgyl2C(_this) {
         dicData: basChemicalmat
       },
       {
+        label: "供应商批号",
+        prop: "batId",
+        cell: true,
+        width: 140,
+        overHidden: true
+      },
+      {
         label: "本厂批号",
-        prop: "batchNo",
+        prop: "batchNos",
         cell: false,
-        width: 230
+        width: 120
       },
       {
         label: _this.$t("energy.sl"),
@@ -1019,10 +1027,18 @@ export function yl2C(_this) {
         dicData: basPigment
       },
       {
+        label: "供应商批号",
+        prop: "batId",
+        cell: true,
+        width: 140,
+        overHidden: true
+      },
+      {
         label: "本厂批号",
-        prop: "batchNo",
+        prop: "batchNos",
         cell: false,
-        width: 230
+        width: 120,
+        overHidden: true
       },
       {
         label: _this.$t("energy.sl"),

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-02-24 16:06:04
+ * @LastEditTime: 2022-03-19 15:49:47
  * @Description:
  */
 
@@ -819,7 +819,12 @@ export function mainCrud(_this) {
         ],
         hide: false,
         placeholder: " ",
-        span: 6
+        span: 6,
+        change: () => {
+          _this.$nextTick(() => {
+            _this.typeChange();
+          });
+        }
       },
       {
         label: "办单/大货",
@@ -841,7 +846,12 @@ export function mainCrud(_this) {
         hide: false,
         placeholder: " ",
         overHidden: true,
-        span: 7
+        span: 7,
+        change: () => {
+          _this.$nextTick(() => {
+            _this.typeChange();
+          });
+        }
       },
       {
         label: "运转单状态",

@@ -408,6 +408,32 @@ export function unique(arr, val) {
   const res = new Map();
   return arr.filter(a => !res.has(a[val]) && res.set(a[val], 1));
 }
+/* @arr 数组
+   @type 分组的属性
+*/
+export function group(arr, type) {
+  let map = {},
+    dest = [];
+  for (var i = 0; i < arr.length; i++) {
+    var ai = arr[i];
+    if (!map[ai[type]]) {
+      dest.push({
+        [type]: ai[type],
+        children: [ai]
+      });
+      map[ai[type]] = ai;
+    } else {
+      for (var j = 0; j < dest.length; j++) {
+        var dj = dest[j];
+        if (dj[type] == ai[type]) {
+          dj.children.push(ai);
+          break;
+        }
+      }
+    }
+  }
+  return dest;
+}
 
 export function preFixInt(num, n) {
   return (Array(n).join(0) + num).slice(-n);

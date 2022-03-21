@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-01-13 09:53:53
  * @LastEditors: Lyl
- * @LastEditTime: 2022-03-17 15:16:59
+ * @LastEditTime: 2022-03-18 13:49:55
  * @FilePath: \iot.vue\src\view\im\whseInOutKB\api.js
  * @Description:
  */
@@ -29,7 +29,7 @@ export function updateStorageLog(data) {
 // 查询成品布库存
 export function getFinalStock(params) {
   return axios({
-    url: "/api/proFinalProductCard/stockpage", //prodStock
+    url: "/api/prodStock",
     method: "get",
     params: params
   });
@@ -101,7 +101,7 @@ export function updateNote(data) {
 // 查询成品布码卡称重记录 state = 1 已称重 2 已入仓
 export function getInFinished(params) {
   return axios({
-    url: "/api/proFinalProductCard/page",
+    url: "/api/proFinalProductCard/stockpage",
     method: "get",
     params: params
   });

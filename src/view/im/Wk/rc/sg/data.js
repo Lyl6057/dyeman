@@ -365,6 +365,7 @@ export function rhl2C(_this) {
         prop: "chemicalName",
         cell: false,
         width: 180,
+        overHidden: true,
         hide:
           _this.datas === _this.$t("iaoMng.hgyl") ||
           _this.datas === _this.$t("iaoMng.yl")
@@ -388,6 +389,7 @@ export function rhl2C(_this) {
         prop: "chinName",
         cell: false,
         width: 180,
+        overHidden: true,
         hide:
           _this.datas != _this.$t("iaoMng.hgyl") &&
           _this.datas != _this.$t("iaoMng.yl") &&
@@ -887,7 +889,8 @@ export function planCrud(_this) {
         label: _this.data === _this.$t("iaoMng.sx") ? "本厂纱批号" : "本厂批号",
         prop: "batNo",
         cell: false,
-        width: 160
+        width: 160,
+        overHidden: true
       },
       {
         label: "备注",

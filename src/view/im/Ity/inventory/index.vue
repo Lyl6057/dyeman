@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-24 14:15:12
  * @LastEditors: Lyl
- * @LastEditTime: 2022-03-18 09:06:30
+ * @LastEditTime: 2022-03-19 13:39:06
  * @Description: 
 -->
 <template>
@@ -16,7 +16,12 @@
         <el-button type="primary" @click="getData">{{
           this.$t("public.query")
         }}</el-button>
-        <el-button type="primary" @click="outExcel">导出</el-button>
+        <el-button
+          type="primary"
+          @click="outExcel"
+          :disabled="form.type == 'CPB'"
+          >导出</el-button
+        >
       </div>
       <div class="formBox">
         <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
@@ -61,13 +66,15 @@ export default {
       loading: false,
       loadLabel: "拼命加载中",
       page: {
-        pageSizes: [20, 50, 100, 200, 500],
-        pageSize: 20,
+        pageSizes: [50, 100, 200, 500, 1000],
+        pageSize: 200,
         currentPage: 1,
         total: 0,
       },
       formOp: formOp(this),
-      form: {},
+      form: {
+        type: "SX",
+      },
       crudOp: crudOp(this),
       crud: [],
       detail: {},
@@ -97,24 +104,26 @@ export default {
           this.getFun = getSx;
           this.getList = getSxList;
           this.crudOp = sxOp(this);
-          // this.typeObj.sort = 'yarnsId'
+          this.typeObj.sort = "yarnsId";
+
           break;
         case "RHL":
           this.getFun = getRhl;
           this.getList = getRhlList;
           this.crudOp = crudOp(this);
-          // this.typeObj.sort = 'chemicalId'
+          this.typeObj.sort = "chemicalId";
           break;
         case "RLL":
           this.getFun = getRll;
           this.getList = getRllList;
           this.crudOp = crudOp(this);
-          // this.typeObj.sort = 'chemicalId'
+          this.typeObj.sort = "chemicalId";
           break;
         case "CPB":
           this.getFun = getCpb;
           this.getList = getCpbList;
           this.crudOp = finishedCrud(this);
+          this.typeObj.sort = "productNo";
           this.form.productNo = "!^"; // 成品编号升序
           break;
         default:
@@ -122,25 +131,45 @@ export default {
           this.loading = false;
           return;
       }
-      this.form.yarnsId = this.form.chemicalId;
+      let query = JSON.parse(JSON.stringify(this.form));
+      query.yarnsId = "!^%" + (query.chemicalId || "");
       this.getFun(
-        Object.assign(this.form, {
+        Object.assign(query, {
           rows: this.page.pageSize,
           start: this.page.currentPage,
         })
       ).then((res) => {
-        let data = res.data;
-        this.page.total = data.total;
-        this.crud = data.records;
-        this.crud.length === 0 ? (this.loading = false) : "";
-        this.crud.sort((a, b) => {
-          return a.chemicalId > b.chemicalId ? 1 : -1;
+        this.page.total = res.data.total;
+        let group = this.$grouping(
+          res.data.records,
+          this.form.type == "SX"
+            ? "yarnsId"
+            : this.form.type == "CPB"
+            ? "vatNo"
+            : "chemicalId"
+        );
+        group.forEach((item, i) => {
+          item.children.sort((a, b) => (a.batchNo > b.batchNo ? 1 : -1));
+          item.index = i + 1;
+          item.yarnsName = item.children[0].yarnsName;
+          item.chemicalName = item.children[0].chemicalName;
+          item.weightUnit = item.children[0].weightUnit;
+          if (!item.weight) item.weight = 0;
+          if (!item.stock) item.stock = 0;
+          item.children.forEach((child, j) => {
+            child.index = item.index + "-" + (j + 1);
+            child.weight = child.weight ? child.weight.toFixed(2) : 0;
+            child.stock = child.stock ? child.stock.toFixed(2) : 0;
+            (child.yarnsId = ""), (child.yarnsName = "");
+            item.weight += Number(child.weight) || Number(child.stock);
+          });
+          item.weight = item.weight.toFixed(2);
+          item.stock = item.weight;
         });
+        this.crud = group;
+        this.crud.length === 0 ? (this.loading = false) : "";
         this.crud.forEach((item, i) => {
           item.index = i + 1;
-          // item.materialName = item.materialId;
-          // item.oldpooccupyqty = item.oldpooccupyqty.toFixed(2);
-          // item.openingQty = item.openingQty.toFixed(2);
           if (this.crud.length - 1 === i) {
             this.loading = false;
           }
@@ -159,17 +188,22 @@ export default {
         // Replacements take place on first sheet
         var sheetNumber = "Sheet1";
         // Set up some placeholder values matching the placeholders in the template
+        let data = {
+          chemicalId: "!^",
+          yarnsId: "!^",
+          productNo: "!^",
+        };
         this.getList().then((res) => {
           this.crud = res.data;
-          this.crud.sort((a, b) => {
-            return a.chemicalId > b.chemicalId ? 1 : -1;
-          });
+          this.crud.sort((a, b) =>
+            a[this.typeObj.sort] > b[this.typeObj.sort] ? -1 : 1
+          );
           this.crud.forEach((item, i) => {
+            item.chemicalId = item.chemicalId || item.yarnsId;
+            item.chemicalName = item.chemicalName || item.yarnsName;
+            item.stock = item.weight || item.stock;
             item.index = i + 1;
           });
-          // this.crud = arr;
-          // console.log(this.crud);
-          // return;
           var values = {
             arr: this.crud,
           };
@@ -275,13 +309,13 @@ export default {
       document.getElementsByClassName("el-dialog__headerbtn")[0].click();
     },
   },
-  created() {
-    this.form.type = "SX";
-  },
+  created() {},
   updated() {
-    this.$nextTick(() => {
-      this.$refs["crud"].doLayout();
-    });
+    if (this.crud.length) {
+      this.$nextTick(() => {
+        this.$refs["crud"].doLayout();
+      });
+    }
   },
   mounted() {},
   beforeDestroy() {},
@@ -289,6 +323,8 @@ export default {
 </script>
 <style lang='stylus'>
 #ityInventory
+  .el-table__placeholder
+    display none
   .el-dialog
     margin-top 0 !important
     height 100%

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-03-16 16:23:05
+ * @LastEditTime: 2022-03-21 09:23:53
  * @Description:
 -->
 <template>
@@ -761,7 +761,7 @@ export default {
               this.form.vatNo = "DF-" + res.data.data;
               this.form.weaveFactoryName = "S.POWER";
               this.form.address = "S.POWER WAREHOUSE";
-              this.form.compLightSource = ["I", "G"];
+              this.form.compLightSource = ["H", "G"];
               this.form.throwDry = "3Washing / 3tumble";
               this.form.poVatCount = 1;
               this.form.vatIndex = 1;
@@ -893,6 +893,34 @@ export default {
           this.$tip.warning(this.$t("public.qxcz"));
         });
     },
+    typeChange() {
+      let data = this.form;
+      if (!data.remark) data.remark = "";
+      let addText = "";
+      data.remark = data.remark.replace(/^大货,/, "");
+      data.remark = data.remark.replace(/^办单,/, "");
+      data.remark = data.remark.replace(/^缸差,/, "");
+      data.remark = data.remark.replace(/^头缸,/, "");
+
+      if (data.salType == "sample") {
+        // 判断备注开头是否有办布字样
+        const nReg = /^办单/;
+        if (!nReg.test(data.remark)) addText += "办单,";
+      } else {
+        // 判断备注开头是否有大货字样
+        const nReg = /^大货/;
+        if (!nReg.test(data.remark)) addText += "大货,";
+        if (data.firstOrOther == "1") {
+          const nReg = /^头缸/;
+          if (!nReg.test(data.remark)) addText += "头缸,";
+        } else {
+          const nReg = /^缸差/;
+          if (!nReg.test(data.remark)) addText += "缸差,";
+        }
+      }
+
+      data.remark = addText + data.remark;
+    },
     save() {
       this.wLoading = true;
       this.$refs.form.validate((valid, done) => {
@@ -935,32 +963,6 @@ export default {
             data.item = null;
             data.poAmountLb = Number((data.poAmountKg * 2.204623).toFixed(2));
             data.vatNo = data.vatNo.replace(/\s/g, "");
-            if (!data.remark) data.remark = "";
-            let addText = "";
-            data.remark = data.remark.replace(/^大货,/, "");
-            data.remark = data.remark.replace(/^办单,/, "");
-            data.remark = data.remark.replace(/^缸差,/, "");
-            data.remark = data.remark.replace(/^头缸,/, "");
-
-            if (data.salType == "sample") {
-              // 判断备注开头是否有办布字样
-              const nReg = /^办单/;
-              if (!nReg.test(data.remark)) addText += "办单,";
-            } else {
-              // 判断备注开头是否有大货字样
-              const nReg = /^大货/;
-              if (!nReg.test(data.remark)) addText += "大货,";
-              if (data.firstOrOther == "1") {
-                const nReg = /^头缸/;
-                if (!nReg.test(data.remark)) addText += "头缸,";
-              } else {
-                const nReg = /^缸差/;
-                if (!nReg.test(data.remark)) addText += "缸差,";
-              }
-            }
-
-            data.remark = addText + data.remark;
-            this.form.remark = data.remark;
             // data.pidCount = this.form.bf.length || 0;
             if (data.runJobId) {
               // update

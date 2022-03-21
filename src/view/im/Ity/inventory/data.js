@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-24 14:21:15
  * @LastEditors: Lyl
- * @LastEditTime: 2022-03-09 10:07:34
+ * @LastEditTime: 2022-03-19 13:30:45
  * @Description:
  */
 
@@ -25,8 +25,10 @@ export function formOp(_this) {
         dicData: kindId,
         change: () => {
           _this.$nextTick(() => {
-            _this.page.currentPage = 1;
-            _this.getData();
+            if (!_this.loading) {
+              _this.page.currentPage = 1;
+              _this.getData();
+            }
           });
         }
       },
@@ -136,6 +138,8 @@ export function crudOp(_this) {
     showOverflowTooltip: true,
     excelBtn: true,
     showSummary: true,
+    tree: true,
+    rowKey: "index",
     sumColumnList: [
       {
         label: " ",
@@ -148,8 +152,9 @@ export function crudOp(_this) {
       {
         label: "#",
         prop: "index",
-        width: 50,
-        align: "center"
+        width: 80,
+        align: "left",
+        overHidden: true
       },
       // {
       //   label: "材料种类",
@@ -267,8 +272,8 @@ export function finishedCrud(_this) {
     labelWidth: 100,
     selection: false,
     menuTitle: "称重",
-    rowKey: "id",
-    tree: false,
+    rowKey: "index",
+    tree: true,
     defaultExpandAll: false,
     expandLevel: 2,
     showSummary: true,
@@ -289,19 +294,10 @@ export function finishedCrud(_this) {
       {
         label: "#",
         prop: "index",
-        width: 50,
-        align: "center",
-        display: false
-      },
-      {
-        label: "载具编号",
-        prop: "storeLoadCode",
-        span: 8,
-        placeholder: " ",
-        cell: true,
-        overHidden: true,
-        sortable: true,
-        width: 120
+        width: 80,
+        align: "left",
+        display: false,
+        overHidden: true
       },
       {
         label: "缸号",
@@ -312,6 +308,16 @@ export function finishedCrud(_this) {
         disabled: true,
         overHidden: true,
         sortable: true
+      },
+      {
+        label: "载具编号",
+        prop: "storeLoadCode",
+        span: 8,
+        placeholder: " ",
+        cell: true,
+        overHidden: true,
+        sortable: true,
+        width: 120
       },
       {
         label: "成品编号",
@@ -377,6 +383,8 @@ export function sxOp(_this) {
     showOverflowTooltip: true,
     excelBtn: true,
     showSummary: true,
+    tree: true,
+    rowKey: "index",
     sumColumnList: [
       {
         label: " ",
@@ -389,13 +397,16 @@ export function sxOp(_this) {
       {
         label: "#",
         prop: "index",
-        width: 50,
-        align: "center"
+        width: 80,
+        overHidden: true,
+        align: "left",
+        fixed: true
       },
       {
         label: _this.$t("whseField.clbh"),
         prop: "yarnsId",
-        width: 140
+        width: 120,
+        fixed: true
       },
       {
         label: _this.$t("whseField.clmc"),
@@ -405,24 +416,34 @@ export function sxOp(_this) {
         width: 400
       },
       {
+        label: "纱牌",
+        prop: "yarnsCard",
+        cell: false,
+        width: 120,
+        overHidden: true
+      },
+      {
         label: "供应商批号",
         prop: "batId",
         cell: false,
-        width: 180
+        width: 180,
+        overHidden: true
       },
       {
         label: _this.$t("whseField.ph"),
         prop: "batchNo",
         cell: false,
-        width: 180,
+        width: 120,
         overHidden: true
       },
       {
         label: "库存数量",
         prop: "weight",
         cell: false,
-        width: 120,
-        align: "right"
+        width: 100,
+        type: "number",
+        align: "right",
+        precision: "2"
       },
       {
         label: _this.$t("whseField.dw"),
@@ -437,6 +458,16 @@ export function sxOp(_this) {
         prop: "locationCode",
         cell: false,
         width: 120
+      },
+      {
+        label: _this.$t("whseField.jyzt"),
+        prop: "yinStatus",
+        span: 6,
+        placeholder: " ",
+        width: 100,
+        type: "select",
+        dicData: getDIC("whse_yinStatus"),
+        disabled: true
       }
     ]
   };

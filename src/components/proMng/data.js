@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-05-03 13:03:03
  * @LastEditors: Lyl
- * @LastEditTime: 2022-03-05 13:22:39
+ * @LastEditTime: 2022-03-18 16:21:12
  * @Description:
  */
 
@@ -582,6 +582,7 @@ export function sxStockF(_this) {
         prop: "batchNo",
         cell: false,
         placeholder: " ",
+        disabled: true,
         span: 6
       },
       {
