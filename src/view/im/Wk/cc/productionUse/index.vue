@@ -21,15 +21,23 @@
             v-if="hide != '1' && hide != '2'"
             >編號規則配置</el-button
           > -->
-          <el-button type="primary" @click="getData">{{
-            this.$t("public.query")
-          }}</el-button>
+
           <el-button
             type="success"
             :disabled="Object.keys(chooseData).length === 0"
             @click="Audit(chooseData)"
             >{{ this.$t("public.audit") }}</el-button
           >
+          <el-button
+            type="primary"
+            :disabled="Object.keys(chooseData).length === 0"
+            @click="handleOpenRpt"
+          >
+            {{ this.$t("public.report") }}
+          </el-button>
+          <el-button type="primary" @click="getData">{{
+            this.$t("public.query")
+          }}</el-button>
           <el-button type="warning" @click="close">{{
             this.$t("public.close")
           }}</el-button>
@@ -127,6 +135,7 @@ import {
   baseCodeSupplyEx,
   getPurApplication,
   updatePurApp,
+  fetchFineReportUrl,
 } from "@/api/index";
 import { rsxkr1F, rsxkr1C, rsxkr2C, rsxkr2F } from "./data";
 import { getHgyl, addHgyl, delHgyl, updateHgyl } from "@/api/im/Wk/cc/hgyl";
@@ -331,6 +340,24 @@ export default {
         .catch((err) => {
           this.$tip.warning(this.$t("public.qxcz"));
         });
+    },
+    // 打开报表 获取fineReport的数据
+    handleOpenRpt() {
+      let queryData = {
+        module: "WHSE",
+        id: "WHSE_RETYANIN",
+      };
+      fetchFineReportUrl(queryData).then((res) => {
+        if (res.data) {
+          let url = res.data.url + "&retCode=" + this.chooseData.retCode;
+          let oA = document.createElement("a");
+          oA.href = url;
+          oA.target = "_blank";
+          oA.click();
+        } else {
+          this.$tip.warning("报表不存在");
+        }
+      });
     },
     choiceData(val) {
       if (Object.keys(val).length === 0) {

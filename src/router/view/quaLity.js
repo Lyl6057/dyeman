@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-10 13:20:44
  * @LastEditors: Lyl
- * @LastEditTime: 2022-02-25 16:00:48
+ * @LastEditTime: 2022-03-22 09:41:15
  * @Description:
  */
 export default [
@@ -20,6 +20,15 @@ export default [
   //     keepAlive: true
   //   }
   // },
+  {
+    path: "/qcDetailReport",
+    name: "成品明细报表",
+    component: resolve =>
+      require(["@/view/quaLity/qcDetailReport/index"], resolve),
+    meta: {
+      keepAlive: true
+    }
+  },
   {
     path: "/qcTestReport",
     name: "qc验布报告",

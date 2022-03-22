@@ -276,7 +276,6 @@ export function noteCrud(_this) {
           }
         ]
       },
-
       {
         label: "机台号",
         prop: "loomCode",
@@ -287,10 +286,28 @@ export function noteCrud(_this) {
         span: 6
       },
       {
+        label: "载具编号",
+        prop: "storeLoadCode",
+        cell: true,
+        width: 130,
+        placeholder: " ",
+        overHidden: true,
+        span: 6
+      },
+      {
+        label: "货位",
+        prop: "storeSiteCode",
+        cell: true,
+        width: 130,
+        placeholder: " ",
+        overHidden: true,
+        span: 6
+      },
+      {
         label: "备注",
         prop: "remark",
         cell: true,
-        width: 250,
+        // width: 250,
         placeholder: " ",
         overHidden: true,
         span: 6

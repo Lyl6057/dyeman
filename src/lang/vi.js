@@ -16,6 +16,7 @@ export default {
   public: {
     add: "Điểm mới",
     update: "Sửa đổi",
+    report: "report",
     del: "Xoá bỏ",
     query: "Truy vấn",
     choose: "選擇",
