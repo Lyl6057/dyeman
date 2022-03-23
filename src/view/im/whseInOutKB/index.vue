@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-01-12 15:39:08
  * @LastEditors: Lyl
- * @LastEditTime: 2022-03-21 15:39:41
+ * @LastEditTime: 2022-03-23 13:14:44
  * @FilePath: \iot.vue\src\view\im\whseInOutKB\index.vue
  * @Description: 
 -->
@@ -342,21 +342,18 @@ export default {
           });
         } else {
           //成品布出仓
-          // this.form.vatNo = this.form.vatNo
-          //   ? (this.form.vatNo = "%" + this.form.vatNo)
-          //   : "";
           getFinalStock(
             Object.assign({
               page: this.mainPage.currentPage,
               rows: this.mainPage.pageSize,
               start: this.mainPage.currentPage,
-              vatNo: this.form.vatNo,
+              vatNo: "%" + this.form.vatNo,
               storeLoadCode: this.form.storeLoadCode,
               clothState: 1,
               cardType: 1,
             })
           ).then((res) => {
-            if (!res.data.records.length) {
+            if (!res.data.length) {
               this.$tip.warning("暂无数据!");
               // if (this.form.vatNo.indexOf("%") != -1) {
               // this.form.vatNo = this.form.vatNo.split("%")[1];
@@ -365,10 +362,10 @@ export default {
               this.wLoading = false;
               return;
             }
-            this.mainPage.total = res.data.total;
+            this.mainPage.total = res.data.length;
             if (this.form.vatNo) {
               this.crud = [];
-              let data = this.group(res.data.records, "storeLoadCode");
+              let data = this.group(res.data, "storeLoadCode");
               data.forEach((item, i) => {
                 getFinalStock({
                   storeLoadCode: item.storeLoadCode,
@@ -376,9 +373,9 @@ export default {
                   cardType: 1,
                   page: 1,
                   rows: 9999,
-                  vatNo: this.form.vatNo,
+                  // vatNo: this.form.vatNo,
                 }).then((loadRes) => {
-                  let vatList = loadRes.data.records;
+                  let vatList = loadRes.data;
                   vatList = this.group(vatList, "vatNo");
                   let vatData = [];
                   vatList.forEach((vat, j) => {
@@ -389,8 +386,8 @@ export default {
                     vat.data.forEach((jk, k) => {
                       jk.id = `${i + 1}-${j + 1}-${k + 1}`;
                       jk.index = k + 1;
-                      jk.netWeight = jk.netWeight;
-                      sumWeight += jk.netWeight;
+                      jk.netWeight = jk.weight;
+                      sumWeight += jk.weight;
                     });
 
                     vatData.push({

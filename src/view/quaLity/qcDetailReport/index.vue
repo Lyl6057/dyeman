@@ -2,21 +2,21 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-03-22 13:50:59
+ * @LastEditTime: 2022-03-23 13:47:03
  * @Description:
 -->
 <template>
   <div
     id="qcDeatilReport"
     :element-loading-text="$t('public.loading')"
-    v-loading="wLoading"
+    v-loading="wloading"
   >
     <view-container title="成品码卡报表">
       <el-row class="btnList">
         <el-button type="primary" @click="query">{{
           this.$t("public.query")
         }}</el-button>
-        <el-button type="primary" @click="query">{{
+        <el-button type="primary" @click="outReport">{{
           this.$t("public.report")
         }}</el-button>
       </el-row>
@@ -31,9 +31,9 @@
               clearable
               default-first-option
               placeholder="请输入缸号"
+              :loading="serachLoading"
               :remote-method="remoteMethod"
-              :loading="vatLoading"
-              @change="getLogWeight"
+              @change="query"
             >
               <el-option
                 v-for="item in options"
@@ -62,7 +62,7 @@
 </template>
 <script>
 import { mainForm, mainCrud, dlgForm, dlgCrud } from "./data";
-import { get, add, update, getRunJobByPage } from "./api";
+import { get, add, update, getRunJobByPage, getFinishedNote } from "./api";
 export default {
   name: "qcDeatilReport",
   components: {},
@@ -78,18 +78,15 @@ export default {
         total: 0,
       },
       wloading: false,
+      loading: false,
+      serachLoading: false,
+      options: [],
     };
   },
   watch: {},
   methods: {
     query() {
       this.wloading = true;
-      // let { prop, order } = this.sort;
-      for (let key in this.form) {
-        if (!this.form[key]) {
-          delete this.form[key];
-        }
-      }
       let data = JSON.parse(JSON.stringify(this.form));
       get(
         Object.assign(data, {
@@ -101,24 +98,7 @@ export default {
         })
       ).then((res) => {
         this.crud = res.data.records;
-        if (this.crud.length > 0) {
-          this.$refs.crud.setCurrentRow(this.crud[0]);
-        }
-        this.crud.sort((a, b) => {
-          return a.pidNo > b.pidNo ? 1 : -1;
-        });
-        this.crud.forEach((item, i) => {
-          // item.$cellEdit = true;
-          item.index = i + 1;
-        });
-        // this.form.vatNo = this.form.vatNo.replace(/[!^%]/g, "");
-        // this.form.clothChecker = this.form.clothChecker.replace(/[!^%]/g, "");
-        // this.form.storeLoadCode = this.form.storeLoadCode.replace(/[!^%]/g, "");
         this.page.total = res.data.total;
-        // console.log(this.form);
-        // if (this.form.productNo.indexOf("!^%") != -1) {
-        //   this.form.productNo = this.form.productNo.split("!^%")[0] || "";
-        // }
         setTimeout(() => {
           this.$refs.crud.setCurrentRow(this.crud[0] || {});
           this.wloading = false;
@@ -126,7 +106,7 @@ export default {
       });
     },
     remoteMethod(val) {
-      this.wloading = true;
+      this.serachLoading = true;
       getRunJobByPage({
         vatNo: "!^%" + val,
         rows: 10,
@@ -134,13 +114,87 @@ export default {
         page: 1,
       }).then((res) => {
         this.options = res.data.records;
-        this.wloading = false;
+        this.serachLoading = false;
         this.$nextTick(() => {
           if (res.data.records.length == 1) {
-            this.form.runJobFk = res.data.records[0].runJobId;
-            this.form.clothWeight = res.data.records[0].clothWeight;
+            this.form.vatNo = res.data.records[0].vatNo;
           }
         });
+      });
+    },
+    outReport() {
+      this.wloading = true;
+      // 查询缸号信息
+      getRunJobByPage({
+        vatNo: this.form.vatNo,
+        rows: 10,
+        start: 1,
+        page: 1,
+      }).then((res) => {
+        if (res.data.records.length) {
+          let vatData = res.data.records[0]; // 当前缸号信息
+          let checkData = {
+            vatNo: vatData.vatNo,
+            fabricName: vatData.fabName,
+            colorName: vatData.colorName,
+            yarnBrand: vatData.yarnCard,
+            factBatch: vatData.yarnCylinder,
+            yarnBatch: vatData.yarnNumber,
+            calicoPidCount: vatData.pidCount,
+            calicoAmount: vatData.clothWeight,
+          };
+          // 查询缸号下的成品布
+          getFinishedNote({
+            vatNo: this.form.vatNo,
+            cardType: 1, // 1为有效成品数据
+          }).then((note) => {
+            checkData.fabricPidCount = note.data.length; // 成品总疋数
+            checkData.weightKg = 0; // 成品总重量KG
+            checkData.weightLbs = 0; // LBS
+            checkData.fabricLength = 0;
+            checkData.storeCodes = "";
+            note.data.forEach((item, i) => {
+              checkData.weightKg += item.netWeight || 0;
+              checkData.weightLbs += item.netWeightLbs || 0;
+              checkData.fabricLength += item.yardLength || 0;
+              checkData.storeCodes +=
+                checkData.storeCodes.indexOf(item.storeLoadCode) == -1
+                  ? item.storeLoadCode
+                    ? item.storeLoadCode + ","
+                    : ""
+                  : "";
+            });
+            checkData.weightKg = Number(checkData.weightKg.toFixed(2));
+            checkData.weightLbs = Number(checkData.weightLbs.toFixed(2));
+            checkData.storeCodes = checkData.storeCodes.replace(/,$/, "");
+            // 计算损耗 = (成品重量 / 入缸胚布重量 - 1) *  100
+            checkData.lossRate = Number(
+              (checkData.weightKg / checkData.calicoAmount - 1) * 100
+            ).toFixed(2);
+            if (this.crud.length) {
+              // 存在记录,修改
+              update(
+                Object.assign(checkData, {
+                  checkoutId: this.crud[0].checkoutId,
+                  remark: this.form.remark,
+                })
+              ).then((res) => {
+                this.query();
+              });
+            } else {
+              add(
+                Object.assign(checkData, {
+                  remark: this.form.remark,
+                  checkoutDate: this.$getNowTime("datetime"),
+                })
+              ).then((res) => {
+                this.query();
+              });
+            }
+          });
+        } else {
+          this.$tip.warning("无此缸号信息！");
+        }
       });
     },
   },

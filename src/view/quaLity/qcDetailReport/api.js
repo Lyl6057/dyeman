@@ -2,11 +2,19 @@
  * @Author: Lyl
  * @Date: 2021-02-01 14:06:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-03-22 13:39:08
+ * @LastEditTime: 2022-03-23 10:11:37
  * @Description:
  */
 
 import axios from "axios";
+
+export function getFinishedNote(params) {
+  return axios({
+    url: "/api/proFinalProductCard",
+    method: "get",
+    params: params
+  });
+}
 
 export function getRunJobByPage(params) {
   return axios({
