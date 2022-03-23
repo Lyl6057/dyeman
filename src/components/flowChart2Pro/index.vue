@@ -8,11 +8,11 @@
 import { fetchFlowChartData2Pro } from "./api";
 export default {
   name: "flowChartProRef",
-  props:{
+  props: {
     value: {
       type: String,
-      default: () => ""
-    }
+      default: () => "",
+    },
   },
   data() {
     return {
@@ -26,19 +26,19 @@ export default {
       // 画布样式信息
       oCanvasStyle: {
         H: 0,
-        W: 0
+        W: 0,
       },
       // 标题栏位高度
-      titleH: 30
+      titleH: 30,
     };
   },
-  watch:{
+  watch: {
     value: {
-      handler(value){
-        this.getFlowChartData();  
+      handler(value) {
+        this.getFlowChartData();
       },
-      immediate: true
-    }
+      immediate: true,
+    },
   },
   created() {
     // this.getFlowChartData();
@@ -48,12 +48,12 @@ export default {
     getFlowChartData() {
       let params = {
         // runJobFk: "a08f1cc0-094d-42ba-8fda-552b789bef52"
-        runJobFk: this.value
+        runJobFk: this.value,
       };
-      fetchFlowChartData2Pro(params).then(res => {
+      fetchFlowChartData2Pro(params).then((res) => {
         let resData = res.data;
         this.bleRunJobData = resData.proBleadyeRunJob || {};
-        this.dataList = resData.proDptReciveLogList.map(item => {
+        this.dataList = resData.proDptReciveLogList.map((item) => {
           item.date = item.acceptDate.substr(5, 11);
           return item;
         });
@@ -91,7 +91,9 @@ export default {
         // 获取耗时
         userHourse = ((eDateTime - sDataTime) / 1000 / 60 / 60).toFixed(2);
       }
-      let text = `缸号：${vatNo || ''} 颜色：${colorName || ''} 数量：${clothWeight || '' }${wmUnit || ''} 耗时：${userHourse || ''}小时`;
+      let text = `缸号：${vatNo || ""} 颜色：${colorName || ""} 数量：${
+        clothWeight || ""
+      }${wmUnit || ""} 耗时：${userHourse || ""}小时`;
       let textW = ctx.measureText(text).width;
       ctx.fillStyle = this.COLOR;
       ctx.font = "15px serif";
@@ -108,25 +110,24 @@ export default {
     renderColType(ctx) {
       ctx.fillStyle = this.COLOR;
       ctx.font = "13px serif";
-      ctx.fillText("时间轴", 10, 50 + this.titleH);
-      ctx.fillText("工序", 65, 50 + this.titleH);
-      ctx.fillText("部门", 70, 20 + this.titleH);
+      ctx.fillText("时间", 30, 45 + this.titleH);
+      ctx.fillText("工序", 65, 45 + this.titleH);
+      ctx.fillText("部门", 90, 30 + this.titleH);
 
-      ctx.beginPath();
       ctx.strokeStyle = this.COLOR;
-      ctx.moveTo(50, 18 + this.titleH);
-      ctx.lineTo(60, 60 + this.titleH);
-      ctx.moveTo(50, 18 + this.titleH);
-      ctx.lineTo(90, 30 + this.titleH);
+      ctx.moveTo(60, 20 + this.titleH);
+      ctx.lineTo(60, 50 + this.titleH);
+      ctx.moveTo(60, 20 + this.titleH);
+      ctx.lineTo(120, 45 + this.titleH);
       ctx.stroke();
     },
 
     // 绘制表头项
     renderTableColItem(ctx) {
-      let initX = 120,
+      let initX = 135,
         initY = 15 + this.titleH,
         itemH = 30;
-      this.headerData.forEach(item => {
+      this.headerData.forEach((item) => {
         let textW = ctx.measureText(item.dptName).width;
         let itemW = textW * 2.3;
         ctx.beginPath();
@@ -170,7 +171,7 @@ export default {
       let initY = 80 + this.titleH,
         colX = 60;
       this.dataList.forEach((item, index) => {
-        item.date.split(" ").forEach(dItem => {
+        item.date.split(" ").forEach((dItem) => {
           let textW = ctx.measureText(dItem).width;
           ctx.fillStyle = this.COLOR;
           ctx.font = "13px serif";
@@ -190,7 +191,7 @@ export default {
           Object.assign(target, { [item.dptCode]: item.centerX }),
         {}
       );
-      this.dataList.forEach(item => {
+      this.dataList.forEach((item) => {
         let posX = posXEnum[item.dptworkProcessFk];
         // 存储X轴
         item.posX = posX - 5;
@@ -203,23 +204,22 @@ export default {
     renderLine2Proc(ctx) {
       // 切换为实线
       ctx.setLineDash([]);
-      ctx.lineWidth = 2;
+      ctx.lineWidth = 1;
       this.dataList.forEach((item, index, arr) => {
         let nextItem = arr[index + 1];
         if (!nextItem) return;
         let formX = item.posX + 5,
-            formY = item.posY + 20,
-            toX = nextItem.posX + 5,
-            toY = nextItem.posY;
+          formY = item.posY + 20,
+          toX = nextItem.posX + 5,
+          toY = nextItem.posY;
         ctx.beginPath();
         ctx.strokeStyle = this.COLOR;
         ctx.moveTo(formX, formY);
-        ctx.lineTo(toX, toY);
+        // ctx.lineTo(toX, toY);
         ctx.stroke();
-        let midX = formX + ((toX - formX) / 2);
-        let midY = formY + ((toY - formY) / 2);
-        this.drawArrow(ctx,formX, formY, midX, midY, 30, 8, 2, this.COLOR )
-       
+        let midX = formX + (toX - formX) - (toX > formX ? 10 : -10);
+        let midY = formY + (toY - formY);
+        this.drawArrow(ctx, formX, formY, midX, midY, 30, 8, 2, this.COLOR);
       });
     },
     // 绘制三角形箭头
@@ -255,10 +255,10 @@ export default {
       arrowY = toY + botY;
       ctx.lineTo(arrowX, arrowY);
       ctx.strokeStyle = color;
-      ctx.lineWidth = width;
+      ctx.lineWidth = 1;
       ctx.stroke();
       ctx.restore();
-    }
-  }
+    },
+  },
 };
 </script>
