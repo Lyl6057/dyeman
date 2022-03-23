@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-03-11 15:36:50
+ * @LastEditTime: 2022-03-23 14:52:57
  * @Description: 
 -->
 <template>
@@ -26,6 +26,9 @@
               this.$t("public.add")
             }}</el-button>
           </el-tooltip>
+          <el-button type="success" @click="flowVisible = true"
+            >流程图</el-button
+          >
           <el-tooltip
             class="item"
             effect="dark"
@@ -120,7 +123,6 @@
                 :page.sync="page"
                 v-loading="loading"
                 @on-load="query"
-                @row-dblclick="handleRowDBLClick"
                 @current-row-change="cellClick"
               >
               </avue-crud>
@@ -147,6 +149,15 @@
     </el-tabs>
     <el-dialog
       id="colorMng_Dlg"
+      :visible.sync="flowVisible"
+      width="70%"
+      top="5vh"
+      append-to-body
+    >
+      <flow-chart-pro ref="flowchartpro" v-model="fk"></flow-chart-pro>
+    </el-dialog>
+    <el-dialog
+      id="colorMng_Dlg"
       :visible.sync="dialogVisible"
       width="70%"
       append-to-body
@@ -166,6 +177,7 @@
   </div>
 </template>
 <script>
+import flowChartPro from "@/components/flowChart2Pro/index.vue";
 import { mainForm, mainCrud, dlgCrud, weavecrud, weaveForm } from "./data";
 import {
   get,
@@ -186,6 +198,7 @@ export default {
   name: "",
   components: {
     temDlg: tem,
+    flowChartPro,
   },
   data() {
     return {
@@ -213,6 +226,8 @@ export default {
       weaveCrudOp: weavecrud(this),
       weaveCrud: [],
       tabs: "rd",
+      flowVisible: false,
+      fk: "",
     };
   },
   watch: {},
@@ -334,9 +349,11 @@ export default {
     },
     handleRowDBLClick(val) {
       // this.detail = val;
+      this.flowVisible = true;
     },
     cellClick(val) {
       this.sloading = true;
+      this.fk = val.runJobId || val.weaveJobId;
       getLog({
         runJobId: val.runJobId || val.weaveJobId,
       }).then((res) => {
