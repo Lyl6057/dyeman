@@ -1,12 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-03-24 14:15:12
- * @LastEditors: Lyl
-<<<<<<< Updated upstream
- * @LastEditTime: 2022-03-24 08:05:07
-=======
- * @LastEditTime: 2022-03-18 09:06:30
->>>>>>> Stashed changes
+ * @LastEditors: Symbol_Yang
+ * @LastEditTime: 2022-03-24 11:33:37
  * @Description: 
 -->
 <template>
@@ -25,6 +21,12 @@
           @click="outExcel"
           :disabled="form.type == 'CPB'"
           >导出</el-button
+        >
+        <el-button
+          type="warning"
+          :disabled="!form.type"
+          @click="handleCreateInventory"
+          >生成盘点清单</el-button
         >
       </div>
       <div class="formBox">
@@ -55,9 +57,11 @@ import {
   getRllList,
   getCpb,
   getCpbList,
+  fetchCheckHasExistByNow,
+  createSnapshot2StockType
 } from "./api";
 import { getDIC, getDicT, getXDicT } from "@/config/index";
-import { formOp, crudOp, formTemOp, finishedCrud, sxOp } from "./data";
+import { formOp, crudOp, formTemOp, finishedCrud, sxOp, } from "./data";
 import XlsxTemplate from "xlsx-template";
 import JSZipUtils from "jszip-utils";
 import saveAs from "file-saver";
@@ -96,6 +100,35 @@ export default {
   },
   watch: {},
   methods: {
+    //  生成盘点清单
+    async handleCreateInventory(){
+      let type = this.form.type;
+      if(!type) return  this.$tip.warning("请选择生成的材料类型~");
+      let params = {
+          stockType: type
+      }
+      let hasExist = await fetchCheckHasExistByNow(params).then(res => res.data.data);
+      console.log("has exist", hasExist)
+      if(hasExist){
+        this.$tip.cofirm("当天已存在库存快照,是否进行覆盖").then(res => {
+          this.validAfterCreateSnapshot(params)
+        })
+      }else{
+         this.validAfterCreateSnapshot(params)
+      }
+    },
+    validAfterCreateSnapshot(params){
+      this.loading = true;
+      createSnapshot2StockType(params).then(res => {
+        if(res.data.code == 200){
+          this.$tip.success("生成成功~")
+        }else{
+          this.$tip.error("生成失败~")
+        }
+      }).finally(_ => {
+        this.loading = false;
+      })
+    },
     getData() {
       this.loading = true;
       for (var key in this.form) {

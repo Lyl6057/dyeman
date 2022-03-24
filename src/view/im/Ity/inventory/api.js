@@ -1,11 +1,29 @@
 /*
  * @Author: Lyl
  * @Date: 2021-03-24 14:21:09
- * @LastEditors: Lyl
- * @LastEditTime: 2022-03-09 08:20:55
+ * @LastEditors: Symbol_Yang
+ * @LastEditTime: 2022-03-24 11:14:35
  * @Description:
  */
 import axios from "axios";
+
+// 判断当天是否已存在清单
+export function fetchCheckHasExistByNow(params){
+  return axios({
+    url: "/api/whseInventory/check/has/exist",
+    method: "get",
+    params: params
+  });
+}
+
+// 生成指定的材料类型盘点清单快照
+export function createSnapshot2StockType(params){
+  return axios({
+    url: "/api/whseInventory/snapshot",
+    method: "get",
+    params: params
+  });
+}
 
 export function getSxList(params) {
   return axios({
