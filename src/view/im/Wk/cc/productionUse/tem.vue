@@ -599,7 +599,10 @@ export default {
           this.$tip.error("数量不能为空!");
           return;
         }
-        if (this.mx[i].weight > this.mx[i].applyNum) {
+        if (
+          this.mx[i].weight >
+          this.mx[i].applyNum + (this.mx[i].debitQty || 0)
+        ) {
           this.$tip.error("出仓数量不能超过领用数量!");
           return;
         }
@@ -801,6 +804,7 @@ export default {
             item.yarnsName = item.chinName;
             item.yarnBrand = item.yarnsCard;
             item.weightUnit = item.company;
+            item.debitQty = 0;
             item.weight = 0;
           });
           this.mx = this.mx.concat(val);
@@ -827,6 +831,7 @@ export default {
           item.yarnsName = item.chinName;
           item.yarnBrand = item.yarnsCard;
           item.company = item.company;
+          item.debitQty = 0;
           item.stockUnit = item.company;
         });
         this.mx = this.mx.concat(val);
@@ -857,6 +862,7 @@ export default {
               item.materialName = item.materielName;
               item.yarnsId = item.materielCode;
               item.yarnsName = item.materielName;
+              item.debitQty = 0;
               item.company = item.company;
               item.stockUnit = item.company;
               item.weightUnit = item.company;
@@ -906,6 +912,7 @@ export default {
           item.bcColorprison = item.materielCode;
           item.vitality = item.materielCode;
           item.bcClass = item.materielCode;
+          item.debitQty = 0;
           item.dangerlevel = item.materielCode;
           item.bcForce = item.materielCode;
           item.weight = 0;

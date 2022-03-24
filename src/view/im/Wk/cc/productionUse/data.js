@@ -342,6 +342,15 @@ export function rsxkr2C(_this) {
         precision: 2
       },
       {
+        label: "借纱数量",
+        prop: "debitQty",
+        cell: true,
+        width: 100,
+        align: "right",
+        placeholder: " "
+        // hide: _this.datas === _this.$t("iaoMng.sx") ? false : true
+      },
+      {
         label: "出货数量",
         prop: "weight",
         hide: false,

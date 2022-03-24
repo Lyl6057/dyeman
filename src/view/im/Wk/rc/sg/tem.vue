@@ -153,6 +153,7 @@ export default {
             item.chemicalName = item.chinName;
             item.yarnsId = item.materialNum;
             item.yarnsName = item.chinName;
+            item.materialName = item.chinName;
             if (this.datas != this.$t("iaoMng.sx")) {
               item.batchNo = this.code;
               item.batchNos = item.batchNo.slice(2);
@@ -198,6 +199,7 @@ export default {
             whseAccessoriesinFk: this.detail.whseAccessoriesinoid, // 辅料/五金/行政Oid
             whseYarninFk: this.detail.whseYarninoid, // 纱线Oid
             whseDyesalinFk: this.detail.whseDyesalinoid, // 顏料Oid
+            whseEnergyInFk: this.detail.energyInId, // 燃料Oid
           })
           .then((res) => {
             let dicData = [];
@@ -290,7 +292,8 @@ export default {
       if (
         !this.chooseData.whseChemicalinDtlaoid &&
         !this.chooseData.whseDyesainDtlaoid &&
-        !this.chooseData.whseYarninDtloid
+        !this.chooseData.whseYarninDtloid &&
+        !this.chooseData.energyDtloid
       ) {
         this.chooseData.list = [];
         return;
@@ -308,6 +311,7 @@ export default {
           whseChemicalinDtlaFk: this.chooseData.whseChemicalinDtlaoid,
           whseDyesainDtlaFk: this.chooseData.whseDyesainDtlaoid,
           whseYarninDtlFk: this.chooseData.whseYarninDtloid,
+          energyDtloid: this.chooseData.energyDtloid,
           rows: this.phPage.pageSize,
           start: this.phPage.currentPage,
         })
@@ -368,6 +372,10 @@ export default {
           });
         });
       } else {
+        // if (this.datas == this.$t("choicDlg.rl")) {
+        //   this.fpLoading = false;
+        //   return;
+        // }
         // 获取入仓分配
         this.fpLoading = true;
         this.mx.forEach((item, i) => {
@@ -377,6 +385,7 @@ export default {
               whseAccessoriesDtlFk: item.whseAccessoriesDtloid,
               whseYarninDtlaFk: item.whseYarninDtloid,
               whseDyesainDtlaFk: item.whseDyesainDtlaoid,
+              WhseEnerginDtlaFK: item.energyDtloid,
               rows: this.phPage.pageSize,
               start: this.phPage.currentPage,
             })
@@ -436,7 +445,8 @@ export default {
         !this.chooseData.whseChemicalinDtlaoid &&
         !this.chooseData.whseAccessoriesDtloid &&
         !this.chooseData.whseYarninDtloid &&
-        !this.chooseData.whseDyesainDtlaoid
+        !this.chooseData.whseDyesainDtlaoid &&
+        !this.chooseData.energyDtloid
       ) {
         this.mx.splice(this.chooseData.index - 1, 1);
         this.$refs.mx.setCurrentRow(this.mx[this.mx.length - 1] || {});
@@ -445,13 +455,6 @@ export default {
       this.$tip
         .cofirm(
           this.$t("iaoMng.delTle11") +
-            (this.datas === this.$t("iaoMng.hgyl")
-              ? this.$t("iaoMng.hgyl")
-              : this.datas === this.$t("iaoMng.yl")
-              ? this.$t("iaoMng.yl")
-              : this.datas === this.$t("iaoMng.sx")
-              ? this.$t("iaoMng.sx")
-              : this.$t("whseField.clbh")) +
             this.$t("iaoMng.delTle12") +
             (this.datas === this.$t("iaoMng.hgyl") ||
             this.datas === this.$t("iaoMng.yl")
@@ -472,6 +475,8 @@ export default {
                 ? this.chooseData.whseDyesainDtlaoid
                 : this.datas === this.$t("iaoMng.sx")
                 ? this.chooseData.whseYarninDtloid
+                : this.datas === this.$t("choicDlg.rl")
+                ? this.chooseData.energyDtloid
                 : this.chooseData.whseAccessoriesDtloid
             )
             .then((res) => {
@@ -505,7 +510,8 @@ export default {
       if (
         !this.choosePhData.whseChemicalinDtlboid &&
         !this.choosePhData.whseDyesainDtlboid &&
-        !this.choosePhData.whseYarninDtlaoid
+        !this.choosePhData.whseYarninDtlaoid &&
+        !this.choosePhData.whseEnergyDtlaId
       ) {
         this.chooseData.list.splice(this.choosePhData.index - 1, 1);
         this.phPage.total--;
@@ -530,6 +536,8 @@ export default {
                 ? this.choosePhData.whseDyesainDtlboid
                 : this.datas === this.$t("iaoMng.sx")
                 ? this.choosePhData.whseYarninDtlaoid
+                : this.datas === this.$t("choicDlg.rl")
+                ? this.choosePhData.whseEnergyDtlaId
                 : this.choosePhData.whseChemicalinDtlboid
             )
             .then((res) => {
@@ -613,7 +621,8 @@ export default {
         this.form.whseChemicalinoid ||
         this.form.whseAccessoriesinoid ||
         this.form.whseYarninoid ||
-        this.form.whseDyesalinoid
+        this.form.whseDyesalinoid ||
+        this.form.energyInId
       ) {
         this.everyThing.update(this.form).then((res) => {
           if (this.mx.length === 0) {
@@ -629,7 +638,8 @@ export default {
                 item.whseChemicalinDtlaoid ||
                 item.whseAccessoriesDtloid ||
                 item.whseYarninDtloid ||
-                item.whseDyesainDtlaoid
+                item.whseDyesainDtlaoid ||
+                item.energyDtloid
               ) {
                 this.everyThing.updateDetail(data).then((res) => {
                   resolve();
@@ -641,11 +651,13 @@ export default {
                 data.whseAccessoriesinFk = this.detail.whseAccessoriesinoid;
                 data.whseYarninFk = this.detail.whseYarninoid;
                 data.whseDyesalinFk = this.detail.whseDyesalinoid;
+                data.whseEnergyInFk = this.detail.energyInId;
                 this.everyThing.addDetail(data).then((res) => {
                   item.whseChemicalinDtlaoid = res.data.data;
                   item.whseAccessoriesDtloid = res.data.data;
                   item.whseYarninDtloid = res.data.data;
                   item.whseDyesainDtlaoid = res.data.data;
+                  item.energyDtloid = res.data.data;
                   if (this.datas != this.$t("iaoMng.sx")) {
                     baseCodeSupply({ code: this.everyThing.batCode }).then(
                       (res) => {}
@@ -667,6 +679,7 @@ export default {
                   item.whseAccessoriesDtlFk = this.mx[i].whseAccessoriesDtloid;
                   item.whseDyesainDtlaFk = this.mx[i].whseDyesainDtlaoid;
                   item.whseYarninDtlFk = this.mx[i].whseYarninDtloid;
+                  item.energyDtloid = this.mx[i].energyDtloid;
                   // if (
                   //   this.datas === this.$t("iaoMng.hgyl") ||
                   //   this.datas === this.$t("iaoMng.yl")
@@ -674,12 +687,14 @@ export default {
                   if (
                     !item.whseChemicalinDtlboid &&
                     !item.whseDyesainDtlboid &&
-                    !item.whseYarninDtlaoid
+                    !item.whseYarninDtlaoid &&
+                    !item.whseEnergyDtlaId
                   ) {
                     this.everyThing.addPh(item).then((res) => {
                       item.whseChemicalinDtlboid = res.data.data;
                       item.whseDyesainDtlboid = res.data.data;
                       item.whseYarninDtlaoid = res.data.data;
+                      item.whseEnergyDtlaId = res.data.data;
                     });
                   } else {
                     this.everyThing.updatePh(item).then((res) => {});
@@ -693,6 +708,7 @@ export default {
                   item.whseAccessoriesDtlFk = this.mx[i].whseAccessoriesDtloid;
                   item.whseYarninDtlaFk = this.mx[i].whseYarninDtloid;
                   item.whseDyesainDtlaFk = this.mx[i].whseDyesainDtlaoid;
+                  item.energyDtloid = this.mx[i].energyDtloid;
                   if (
                     !item.whseAccessoriesinAllocoid &&
                     !item.whseChemicalinAllocoid &&
@@ -724,6 +740,7 @@ export default {
           }
           baseCodeSupply({ code: this.everyThing.code }).then((res) => {});
           this.form.whseChemicalinoid = res.data.data;
+          this.form.energyInId = res.data.data;
           this.form.whseAccessoriesinoid = res.data.data;
           this.form.whseYarninoid = res.data.data;
           this.form.whseDyesalinoid = res.data.data;
@@ -737,7 +754,8 @@ export default {
                 item.whseChemicalinDtlaoid ||
                 item.whseAccessoriesDtloid ||
                 item.whseYarninDtloid ||
-                item.whseDyesainDtlaoid
+                item.whseDyesainDtlaoid ||
+                item.energyDtloid
               ) {
                 resolve();
                 // 修改
@@ -747,8 +765,10 @@ export default {
                 data.whseAccessoriesinFk = this.form.whseAccessoriesinoid;
                 data.whseYarninFk = this.form.whseYarninoid;
                 data.whseDyesalinFk = this.form.whseDyesalinoid;
+                data.whseEnergyInFk = this.form.energyInId;
                 this.everyThing.addDetail(data).then((res) => {
                   item.whseChemicalinDtlaoid = res.data.data;
+                  item.energyDtloid = res.data.data;
                   item.whseAccessoriesDtloid = res.data.data;
                   item.whseYarninDtloid = res.data.data;
                   item.whseDyesainDtlaoid = res.data.data;
@@ -770,6 +790,8 @@ export default {
               if (this.mx[i].list) {
                 this.mx[i].list.forEach((item) => {
                   item.whseChemicalinDtlaFk = this.mx[i].whseChemicalinDtlaoid;
+                  item.energyDtloid = this.mx[i].energyDtloid;
+                  item.energyDtlFk = this.mx[i].energyDtloid;
                   item.whseAccessoriesDtlFk = this.mx[i].whseAccessoriesDtloid;
                   item.whseDyesainDtlaFk = this.mx[i].whseDyesainDtlaoid;
                   item.whseYarninDtlFk = this.mx[i].whseYarninDtloid;
@@ -780,12 +802,14 @@ export default {
                   if (
                     !item.whseChemicalinDtlboid &&
                     !item.whseDyesainDtlboid &&
-                    !item.whseYarninDtlaoid
+                    !item.whseYarninDtlaoid &&
+                    !item.whseEnergyDtlaId
                   ) {
                     this.everyThing.addPh(item).then((res) => {
                       item.whseChemicalinDtlboid = res.data.data;
                       item.whseDyesainDtlboid = res.data.data;
                       item.whseYarninDtlaoid = res.data.data;
+                      item.whseEnergyDtlaId = res.data.data;
                     });
                   } else {
                     this.everyThing.updatePh(item).then((res) => {});
@@ -796,6 +820,8 @@ export default {
               if (this.mx[i].alloc) {
                 this.mx[i].alloc.forEach((item) => {
                   item.whseChemicalinDtlaFk = this.mx[i].whseChemicalinDtlaoid;
+                  item.energyDtloid = this.mx[i].energyDtloid;
+                  item.energyDtlFk = this.mx[i].energyDtloid;
                   item.whseAccessoriesDtlFk = this.mx[i].whseAccessoriesDtloid;
                   item.whseYarninDtlaFk = this.mx[i].whseYarninDtloid;
                   item.whseDyesainDtlaFk = this.mx[i].whseDyesainDtlaoid;

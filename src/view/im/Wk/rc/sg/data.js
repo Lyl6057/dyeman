@@ -196,7 +196,8 @@ export function rhl1C(_this) {
           _this.data === _this.$t("iaoMng.hgyl") ||
           _this.data === _this.$t("iaoMng.yl")
             ? getDIC("Whse_ChemType")
-            : _this.data === _this.$t("iaoMng.sx")
+            : _this.data === _this.$t("iaoMng.sx") ||
+              _this.data === _this.$t("choicDlg.rl")
             ? getDIC("Whse_yinType")
             : getDIC("Whse_AccessoriesType")
       },
@@ -372,37 +373,39 @@ export function rhl2C(_this) {
             ? false
             : true
       },
+      {
+        label: _this.$t("whseField.clbh"),
+        prop: "materialNum",
+        cell: false,
+        width: 180,
+        hide: _this.datas === _this.$t("choicDlg.rl") ? false : true
+      },
+      {
+        label: _this.$t("whseField.clmc"),
+        prop: "materialName",
+        cell: false,
+        width: 180,
+        hide: _this.datas === _this.$t("choicDlg.rl") ? false : true
+      },
       // {
-      //   label: _this.$t("whseField.clbh"),
-      //   prop: "materialNum",
+      //   label: _this.$t("whseField.clmc"),
+      //   prop: "chinName",
       //   cell: false,
       //   width: 180,
+      //   overHidden: true,
       //   hide:
-      //     _this.datas === _this.$t("iaoMng.hgyl") &&
+      //     _this.datas != _this.$t("iaoMng.hgyl") &&
       //     _this.datas != _this.$t("iaoMng.yl") &&
       //     _this.datas != _this.$t("iaoMng.sx")
       //       ? false
-      //       : true
+      //       : true,
+      //   type: "select",
+      //   props: {
+      //     label: "chinName",
+      //     value: "hardwareId"
+      //   }
+      //   // dicData: getDicT("basHardwarearticles", "chinName", "hardwareId")
       // },
-      {
-        label: _this.$t("whseField.clmc"),
-        prop: "chinName",
-        cell: false,
-        width: 180,
-        overHidden: true,
-        hide:
-          _this.datas != _this.$t("iaoMng.hgyl") &&
-          _this.datas != _this.$t("iaoMng.yl") &&
-          _this.datas != _this.$t("iaoMng.sx")
-            ? false
-            : true,
-        type: "select",
-        props: {
-          label: "chinName",
-          value: "hardwareId"
-        }
-        // dicData: getDicT("basHardwarearticles", "chinName", "hardwareId")
-      },
       {
         label: _this.$t("whseField.sxbh"),
         prop: "yarnsId",
@@ -526,6 +529,7 @@ export function rhl2C(_this) {
             ? false
             : true
       },
+
       {
         label: _this.$t("whseField.dw"),
         prop: "weightUnit",
@@ -626,7 +630,7 @@ export function rhl3C(_this) {
         prop: "origin",
         cell: true,
         width: 120,
-        hide: _this.datas == _this.$t("iaoMng.sx") ? true : false,
+        hide: _this.datas != _this.$t("iaoMng.sx") ? true : false,
         type: "select",
         dicData: getDIC("Whse_Origin")
       },
@@ -652,7 +656,7 @@ export function rhl3C(_this) {
         prop: "weightUnit",
         cell: true,
         width: 100,
-        hide: _this.datas == _this.$t("iaoMng.sx") ? true : false,
+        // hide: _this.datas == _this.$t("iaoMng.sx") ? true : false,
         type: "select",
         dicData: unit
       },
@@ -679,7 +683,9 @@ export function rhl3C(_this) {
               ? "0"
               : _this.datas == _this.$t("iaoMng.yl")
               ? "4"
-              : "3"),
+              : _this.datas == _this.$t("iaoMng.hgyl")
+              ? "3"
+              : "8"),
           "locationCode",
           "locationCode",
           {},

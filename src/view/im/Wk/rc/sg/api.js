@@ -1,5 +1,31 @@
 import axios from "axios";
 
+// 燃料送货单视图
+export function getWhseEnergyInV2(params) {
+  return axios({
+    url: "/api/whseEnergyIn/v2/page",
+    method: "get",
+    params: params
+  });
+}
+
+// 纱线入仓分配
+export function getRlAlloc(params) {
+  return axios({
+    url: "/api/whseEnerginAlloc",
+    method: "get",
+    params: params
+  });
+}
+
+export function addRlAlloc(params) {
+  return axios({
+    url: "/api/whseEnerginAlloc",
+    method: "post",
+    params: params
+  });
+}
+
 // 纱线
 export function getviPuryarnNostock(params) {
   return axios({
@@ -111,24 +137,3 @@ export function addAccessoriesinAlloc(params) {
     params: params
   });
 }
-
-// export function addSx(params) {
-//   return axios({
-//     url: '/api/whseYarnin/v1.0/save',
-//     method: 'post',
-//     params: params
-//   })
-// }
-// export function updateSx(params) {
-//   return axios({
-//     url: '/api/whseYarnin/v1.0/updateById',
-//     method: 'put',
-//     params: params
-//   })
-// }
-// export function delSx(id) {
-//   return axios({
-//     url: '/api/whseYarnin/v1.0/removeById?id=' + id,
-//     method: 'delete',
-//   })
-// }

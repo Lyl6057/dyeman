@@ -389,7 +389,7 @@ export default {
         "basFuel",
         this.$store.state.lang == "1" ? "chinName" : "engName",
         "hardwareId",
-        "itemspec",
+        "BasFuelDtlFk",
         "model",
         "msUnit"
       ),

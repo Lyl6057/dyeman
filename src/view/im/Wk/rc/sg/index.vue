@@ -176,6 +176,19 @@ import {
   getSxDtla,
   updateSxDtla,
   delSxDtla,
+  //燃料
+  getRl,
+  delRl,
+  updateRl,
+  addRl,
+  getRlDetali,
+  addRlDetali,
+  updateRlDetali,
+  delRlDetali,
+  getRlLocList,
+  addRlLoc,
+  updateRlLoc,
+  delRlLoc,
 } from "@/api/im/Wk/rc";
 import choice from "@/components/choice";
 import { rhl1F, rhl1C, rhl2C, rhl2F } from "./data";
@@ -195,6 +208,9 @@ import {
   // 纱线入仓分配
   getYarninAlloc,
   addYarninAlloc,
+  getWhseEnergyInV2,
+  getRlAlloc,
+  addRlAlloc,
 } from "./api";
 export default {
   name: "",
@@ -330,6 +346,24 @@ export default {
           this.everyThing.batCode = "yl_in_whse";
           this.everyThing.addAlloc = addDyesainAlloc;
           break;
+        case this.$t("choicDlg.rl"):
+          this.everyThing.getPlan = getWhseEnergyInV2;
+          this.everyThing.get = getRl;
+          this.everyThing.del = delRl;
+          this.everyThing.update = updateRl;
+          this.everyThing.add = addRl;
+          this.everyThing.getDetail = getRlDetali;
+          this.everyThing.addDetail = addRlDetali;
+          this.everyThing.updateDetail = updateRlDetali;
+          this.everyThing.delDetail = delRlDetali;
+          this.everyThing.getPh = getRlLocList;
+          this.everyThing.addPh = addRlLoc;
+          this.everyThing.updatePh = updateRlLoc;
+          this.everyThing.delPh = delRlLoc;
+          this.everyThing.getAlloc = getRlAlloc;
+          this.everyThing.addAlloc = addRlAlloc;
+          this.everyThing.batCode = "rl_in_whse";
+          break;
         default:
           break;
       }
@@ -415,7 +449,8 @@ export default {
         !this.chooseData.whseChemicalinoid &&
         !this.chooseData.whseAccessoriesinoid &&
         !this.chooseData.whseYarninoid &&
-        !this.chooseData.whseDyesalinoid
+        !this.chooseData.whseDyesalinoid &&
+        !this.chooseData.energyInId
       ) {
         this.crud.splice(this.chooseData.index - 1, 1);
         this.chooseData = {};
@@ -437,6 +472,8 @@ export default {
                 ? this.chooseData.whseDyesalinoid
                 : this.data === this.$t("iaoMng.sx")
                 ? this.chooseData.whseYarninoid
+                : this.data === this.$t("choicDlg.rl")
+                ? this.chooseData.energyInId
                 : this.chooseData.whseAccessoriesinoid
             )
             .then((res) => {
