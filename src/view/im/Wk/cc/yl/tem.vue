@@ -1007,6 +1007,7 @@ export default {
             item.bcForce = item.materialNum;
             item.applyNum = item.applyNum;
             item.weightUnit = item.company;
+
             item.stockQty = 0;
           });
           this.mx = this.mx.concat(val);
@@ -1283,6 +1284,7 @@ export default {
             item.bcForce = item.chemicalId;
             item.applyNum = item.weight;
             item.stockQty = item.weight;
+            item.weight = item.stock;
             this.mx.push(item);
             this.mx = this.unique(this.mx, "batchNo");
             if (i == val.length - 1) {
@@ -1306,7 +1308,7 @@ export default {
           //   sum += item.weight;
           // });
           val.forEach((item, i) => {
-            // item.weight = item.stock;
+            item.weight = item.stock;
             item.$cellEdit = true;
             item.whseDyesainDtlbFk = item.whseDyesainDtlboid;
             this.chooseData.list.push(item);

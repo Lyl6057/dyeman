@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-05-03 13:03:03
  * @LastEditors: Lyl
- * @LastEditTime: 2022-03-18 16:21:12
+ * @LastEditTime: 2022-03-23 19:20:15
  * @Description:
  */
 
@@ -540,7 +540,7 @@ export function ylStockC(_this) {
       },
       {
         label: "库存数量",
-        prop: "weight",
+        prop: "stock",
         cell: false,
         width: 120,
         align: "right"
@@ -558,7 +558,7 @@ export function ylStockC(_this) {
 }
 export function getYlStock(params) {
   return axios({
-    url: "/api/viewDyesalinStok/page",
+    url: "/api/viewDyestuffStock/page",
     method: "get",
     params: params
   });

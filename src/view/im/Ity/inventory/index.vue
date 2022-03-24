@@ -3,7 +3,7 @@
  * @Date: 2021-03-24 14:15:12
  * @LastEditors: Lyl
 <<<<<<< Updated upstream
- * @LastEditTime: 2022-03-21 15:39:09
+ * @LastEditTime: 2022-03-24 08:05:07
 =======
  * @LastEditTime: 2022-03-18 09:06:30
 >>>>>>> Stashed changes
@@ -163,7 +163,10 @@ export default {
             child.index = item.index + "-" + (j + 1);
             child.weight = child.weight ? child.weight.toFixed(2) : 0;
             child.stock = child.stock ? child.stock.toFixed(2) : 0;
-            (child.yarnsId = ""), (child.yarnsName = "");
+            child.yarnsId = "";
+            child.yarnsName = "";
+            child.chemicalId = "";
+            child.chemicalName = "";
             item.weight += Number(child.weight) || Number(child.stock);
           });
           item.weight = item.weight.toFixed(2);
