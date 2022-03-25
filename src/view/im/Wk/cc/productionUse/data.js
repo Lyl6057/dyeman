@@ -344,7 +344,7 @@ export function rsxkr2C(_this) {
       {
         label: "借纱数量",
         prop: "debitQty",
-        cell: true,
+        cell: false,
         width: 100,
         align: "right",
         placeholder: " "

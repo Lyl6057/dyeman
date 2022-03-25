@@ -599,13 +599,17 @@ export default {
           this.$tip.error("数量不能为空!");
           return;
         }
-        if (
-          this.mx[i].weight >
-          this.mx[i].applyNum + (this.mx[i].debitQty || 0)
-        ) {
-          this.$tip.error("出仓数量不能超过领用数量!");
-          return;
-        }
+        // if (
+        //   this.mx[i].weight >
+        //   this.mx[i].applyNum + (this.mx[i].debitQty || 0)
+        // ) {
+        //   this.$tip.error("出仓数量不能超过领用数量!");
+        //   return;
+        // }
+        this.mx[i].debitQty =
+          this.mx[i].weight > this.mx[i].applyNum
+            ? Number((this.mx[i].weight - this.mx[i].applyNum).toFixed(2))
+            : 0;
       }
       this.outloading = true;
       this.modified = true;
@@ -1038,26 +1042,27 @@ export default {
         } else {
           let sum = 0;
           this.chooseData.list.forEach((item, i) => {
-            sum += item.weight;
+            sum += Number(item.weight);
           });
           val.forEach((item, i) => {
-            item.weight = item.stock;
+            // item.weight = item.stock;
             item.whseYarninDtlaFk = item.whseYarninDtlaoid;
             item.$cellEdit = true;
           });
           for (let i = 0; i < val.length; i++) {
-            if (sum + val[i].stock <= this.chooseData.applyNum) {
+            if (sum + val[i].weight <= this.chooseData.applyNum) {
               this.chooseData.list.push(val[i]);
-              sum += val[i].stock;
+              sum += Number(val[i].weight);
             } else if (this.chooseData.applyNum - sum > 0) {
               val[i].weight = this.chooseData.applyNum - sum;
-              sum += val[i].weight;
+              sum += Number(val[i].weight);
               this.chooseData.list.push(val[i]);
               break;
             }
           }
-          this.chooseData.weight = sum;
-          this.chooseData.list = this.unique(this.chooseData.list, "batchNo");
+          // console.log(sum);
+          this.chooseData.weight = Number(sum);
+          // this.chooseData.list = this.unique(this.chooseData.list, "batchNo");
           this.chooseData.list.forEach((item, i) => {
             item.index = i + 1;
           });

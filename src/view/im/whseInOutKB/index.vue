@@ -356,7 +356,7 @@ export default {
               cardType: 1,
             })
           ).then((res) => {
-            if (!res.data.records.length) {
+            if (!res.data.length) {
               this.$tip.warning("暂无数据!");
               // if (this.form.vatNo.indexOf("%") != -1) {
               // this.form.vatNo = this.form.vatNo.split("%")[1];
@@ -365,10 +365,10 @@ export default {
               this.wLoading = false;
               return;
             }
-            this.mainPage.total = res.data.total;
+            this.mainPage.total = res.data.length;
             if (this.form.vatNo) {
               this.crud = [];
-              let data = this.group(res.data.records, "storeLoadCode");
+              let data = this.group(res.data, "storeLoadCode");
               data.forEach((item, i) => {
                 getFinalStock({
                   storeLoadCode: item.storeLoadCode,
@@ -378,7 +378,7 @@ export default {
                   rows: 9999,
                   vatNo: this.form.vatNo,
                 }).then((loadRes) => {
-                  let vatList = loadRes.data.records;
+                  let vatList = loadRes.data;
                   vatList = this.group(vatList, "vatNo");
                   let vatData = [];
                   vatList.forEach((vat, j) => {
