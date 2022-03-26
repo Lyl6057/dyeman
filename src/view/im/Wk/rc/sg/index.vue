@@ -176,7 +176,7 @@ import {
   getSxDtla,
   updateSxDtla,
   delSxDtla,
-  //燃料
+  //能源
   getRl,
   delRl,
   updateRl,

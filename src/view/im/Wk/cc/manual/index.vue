@@ -214,7 +214,7 @@ import {
 } from "@/api/im/Wk/cc/xz";
 
 import {
-  //  燃料
+  //  能源
   getRl,
   delRl,
   updateRl,

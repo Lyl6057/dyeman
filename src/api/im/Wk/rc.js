@@ -859,7 +859,7 @@ export function delXzLoc(id) {
   });
 }
 
-// ------ 燃料
+// ------ 能源
 export function getRl(params) {
   return axios({
     url: "/api/whseEnergyIn/page",

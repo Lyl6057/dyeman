@@ -234,7 +234,7 @@ import {
   delXzLoc,
   updateXzLoc,
   addXzLoc,
-  //  燃料
+  //  能源
   getRl,
   delRl,
   updateRl,

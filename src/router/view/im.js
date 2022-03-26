@@ -266,7 +266,7 @@ export default [
           keepAlive: false
         }
       },
-      // 燃料
+      // 能源
       {
         path: "/cc_rl",
         name: "cc_rl",

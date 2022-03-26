@@ -597,7 +597,10 @@ export function rhl3C(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(50vh - 145px)",
+    height:
+      _this.datas == _this.$t("iaoMng.sx")
+        ? "calc(50vh - 145px)"
+        : "calc(100vh - 279px)",
     refreshBtn: false,
     columnBtn: false,
     page: false,

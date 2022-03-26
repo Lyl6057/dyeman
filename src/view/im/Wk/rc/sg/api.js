@@ -1,6 +1,6 @@
 import axios from "axios";
 
-// 燃料送货单视图
+// 能源送货单视图
 export function getWhseEnergyInV2(params) {
   return axios({
     url: "/api/whseEnergyIn/v2/page",

@@ -259,7 +259,7 @@ export default {
             if (
               this.choiceTle == "选择生产辅料入仓信息" ||
               this.choiceTle == "选择五金入仓信息" ||
-              this.choiceTle == "选择燃料入仓信息"
+              this.choiceTle == "选择能源入仓信息"
             ) {
               item.materialName = item.materialNum;
             }
@@ -365,7 +365,7 @@ export default {
         this.choiceF = cpbInF(this);
         this.getData = getCpbIn;
         break;
-      case "选择燃料入仓信息":
+      case "选择能源入仓信息":
         this.choiceC = rlInC(this);
         this.choiceF = rlInF(this);
         this.getData = getRlIn;

@@ -385,7 +385,7 @@ export default {
       this.form = this.detail;
       if (this.isAdd) {
         this.form.sysCreatedby = this.$store.state.userOid;
-        this.form.stockState = 0
+        this.form.stockState = 0;
         if (this.datas == this.$t("iaoMng.scfl")) {
           // baseCodeSupplyEx({ code: this.everyThing.batchCode }).then((res) => {
           //   this.code = res.data.data;
@@ -607,7 +607,7 @@ export default {
         return;
       }
       if (this.datas == this.$t("choicDlg.rl")) {
-        this.choiceTle = "选择燃料入仓信息";
+        this.choiceTle = "选择能源入仓信息";
         this.choiceV = true;
         return;
       }
@@ -1344,13 +1344,9 @@ export default {
 };
 </script>
 <style lang='stylus'>
-#rcDetail {
-  .el-table {
-    overflow: visible !important;
-  }
-
-  .customize-select .el-input__inner {
-    border: none;
-  }
-}
+#rcDetail
+  .el-table
+    overflow visible !important
+  .customize-select .el-input__inner
+    border none
 </style>

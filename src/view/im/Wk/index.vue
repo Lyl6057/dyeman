@@ -631,7 +631,7 @@ export default {
               click: () => {
                 this.toView("rc_sg", this.$t("choicDlg.rl") + "_6");
               },
-              title: "燃料申购",
+              title: "能源申购",
               icon: "el-icon-s-claim",
               color: "#409EFF",
             },

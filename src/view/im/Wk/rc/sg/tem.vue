@@ -64,7 +64,10 @@
               @current-row-change="cellPhClick"
             ></avue-crud>
           </view-container>
-          <view-container :title="datas + $t('iaoMng.fpjl')">
+          <view-container
+            :title="datas + $t('iaoMng.fpjl')"
+            v-if="datas == this.$t('iaoMng.sx')"
+          >
             <avue-crud
               ref="alloc"
               id="alloc"
@@ -199,7 +202,7 @@ export default {
             whseAccessoriesinFk: this.detail.whseAccessoriesinoid, // 辅料/五金/行政Oid
             whseYarninFk: this.detail.whseYarninoid, // 纱线Oid
             whseDyesalinFk: this.detail.whseDyesalinoid, // 顏料Oid
-            whseEnergyInFk: this.detail.energyInId, // 燃料Oid
+            whseEnergyInFk: this.detail.energyInId, // 能源Oid
           })
           .then((res) => {
             let dicData = [];
@@ -344,6 +347,14 @@ export default {
         });
     },
     getAlloc() {
+      if (this.datas != this.$t("iaoMng.sx")) {
+        setTimeout(() => {
+          this.$refs.mx.setCurrentRow(this.mx[0]);
+          this.fpLoading = false;
+        }, 200);
+
+        return;
+      }
       if (this.isAdd) {
         // 获取申购单
         // this.ctLoading = true;
@@ -598,7 +609,8 @@ export default {
       if (
         this.datas === this.$t("iaoMng.hgyl") ||
         this.datas === this.$t("iaoMng.yl") ||
-        this.datas === this.$t("iaoMng.sx")
+        this.datas === this.$t("iaoMng.sx") ||
+        this.datas === this.$t("choicDlg.rl")
       ) {
         for (let i = 0; i < this.mx.length; i++) {
           if (!this.mx[i].list) {
