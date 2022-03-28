@@ -143,10 +143,10 @@ export default {
   methods: {
     getDetail() {
       if (this.isAdd) {
-        this.loading = true;
+        this.screenLoading = true;
         this.mx = this.addList;
         if (!this.mx.length) {
-          this.loading = false;
+          this.screenLoading = false;
         }
         baseCodeSupplyEx({ code: this.everyThing.batCode }).then((res) => {
           this.code = res.data.data;
@@ -181,10 +181,9 @@ export default {
               this.code.substring(0, 3) +
               this.$preFixInt(Number(this.code.substring(5)) + 1, 5);
             if (i === this.mx.length - 1) {
-              setTimeout(() => {
-                this.loading = false;
-                this.getAlloc();
-              }, 200);
+              // setTimeout(() => {
+              this.getAlloc();
+              // }, 200);
             }
           });
           this.page.total = this.mx.length;
@@ -255,16 +254,12 @@ export default {
                 item.index = index + 1;
                 item.chinName = item.materialNum;
                 item.yarnsName = item.yarnsId;
+                if (!item.materialName) item.materialName = item.materialNum;
                 if (this.datas == this.$t("iaoMng.sx")) {
                   item.batchNos = item.batchNo;
                 } else {
                   item.batchNos = item.batchNo.slice(2);
                 }
-
-                // item.$cellEdit = true;
-                // item.bcMatengname = item.chemicalId;
-                // item.bcColor = item.chemicalId;
-                // item.bcForce = item.chemicalId;
                 if (index === this.mx.length - 1) {
                   this.mxOp.showSummary = true;
                   setTimeout(() => {
@@ -296,7 +291,8 @@ export default {
         !this.chooseData.whseChemicalinDtlaoid &&
         !this.chooseData.whseDyesainDtlaoid &&
         !this.chooseData.whseYarninDtloid &&
-        !this.chooseData.energyDtloid
+        !this.chooseData.energyDtloid &&
+        !this.chooseData.whseAccessoriesDtloid
       ) {
         this.chooseData.list = [];
         return;
@@ -315,6 +311,7 @@ export default {
           whseDyesainDtlaFk: this.chooseData.whseDyesainDtlaoid,
           whseYarninDtlFk: this.chooseData.whseYarninDtloid,
           energyDtloid: this.chooseData.energyDtloid,
+          whseAccessoriesDtlFk: this.chooseData.whseAccessoriesDtloid,
           rows: this.phPage.pageSize,
           start: this.phPage.currentPage,
         })
@@ -348,8 +345,9 @@ export default {
     },
     getAlloc() {
       if (this.datas != this.$t("iaoMng.sx")) {
+        this.$refs.mx.setCurrentRow(this.mx[0]);
         setTimeout(() => {
-          this.$refs.mx.setCurrentRow(this.mx[0]);
+          this.screenLoading = false;
           this.fpLoading = false;
         }, 200);
 
@@ -410,6 +408,7 @@ export default {
                   items.applyNum = items.allocQty;
                   if (i == item.alloc.length - 1) {
                     setTimeout(() => {
+                      this.screenLoading = false;
                       this.fpLoading = false;
                     }, 200);
                   }
@@ -493,7 +492,6 @@ export default {
             .then((res) => {
               if (res.data.code === 200) {
                 this.$tip.success(this.$t("public.sccg"));
-                this.modified = true;
                 this.mx.splice(this.chooseData.index - 1, 1);
                 this.getDetail();
                 this.chooseData = {};
@@ -522,7 +520,8 @@ export default {
         !this.choosePhData.whseChemicalinDtlboid &&
         !this.choosePhData.whseDyesainDtlboid &&
         !this.choosePhData.whseYarninDtlaoid &&
-        !this.choosePhData.whseEnergyDtlaId
+        !this.choosePhData.whseEnergyDtlaId &&
+        !this.choosePhData.whseAccessoriesDtlaoid
       ) {
         this.chooseData.list.splice(this.choosePhData.index - 1, 1);
         this.phPage.total--;
@@ -549,6 +548,8 @@ export default {
                 ? this.choosePhData.whseYarninDtlaoid
                 : this.datas === this.$t("choicDlg.rl")
                 ? this.choosePhData.whseEnergyDtlaId
+                : this.datas === this.$t("iaoMng.fl")
+                ? this.choosePhData.whseAccessoriesDtlaoid
                 : this.choosePhData.whseChemicalinDtlboid
             )
             .then((res) => {
@@ -692,21 +693,20 @@ export default {
                   item.whseDyesainDtlaFk = this.mx[i].whseDyesainDtlaoid;
                   item.whseYarninDtlFk = this.mx[i].whseYarninDtloid;
                   item.energyDtloid = this.mx[i].energyDtloid;
-                  // if (
-                  //   this.datas === this.$t("iaoMng.hgyl") ||
-                  //   this.datas === this.$t("iaoMng.yl")
-                  // ) {
+                  // item.whseAccessoriesDtlFk = this.mx[i].whseAccessoriesDtloid;
                   if (
                     !item.whseChemicalinDtlboid &&
                     !item.whseDyesainDtlboid &&
                     !item.whseYarninDtlaoid &&
-                    !item.whseEnergyDtlaId
+                    !item.whseEnergyDtlaId &&
+                    !item.whseAccessoriesDtlaoid
                   ) {
                     this.everyThing.addPh(item).then((res) => {
                       item.whseChemicalinDtlboid = res.data.data;
                       item.whseDyesainDtlboid = res.data.data;
                       item.whseYarninDtlaoid = res.data.data;
                       item.whseEnergyDtlaId = res.data.data;
+                      item.whseAccessoriesDtlaoid = res.data.data;
                     });
                   } else {
                     this.everyThing.updatePh(item).then((res) => {});
@@ -807,21 +807,20 @@ export default {
                   item.whseAccessoriesDtlFk = this.mx[i].whseAccessoriesDtloid;
                   item.whseDyesainDtlaFk = this.mx[i].whseDyesainDtlaoid;
                   item.whseYarninDtlFk = this.mx[i].whseYarninDtloid;
-                  // if (
-                  //   this.datas === this.$t("iaoMng.hgyl") ||
-                  //   this.datas === this.$t("iaoMng.yl")
-                  // ) {
+                  // item.whseAccessoriesDtlFk = this.mx[i].whseAccessoriesDtloid;
                   if (
                     !item.whseChemicalinDtlboid &&
                     !item.whseDyesainDtlboid &&
                     !item.whseYarninDtlaoid &&
-                    !item.whseEnergyDtlaId
+                    !item.whseEnergyDtlaId &&
+                    !item.whseAccessoriesDtlaoid
                   ) {
                     this.everyThing.addPh(item).then((res) => {
                       item.whseChemicalinDtlboid = res.data.data;
                       item.whseDyesainDtlboid = res.data.data;
                       item.whseYarninDtlaoid = res.data.data;
                       item.whseEnergyDtlaId = res.data.data;
+                      item.whseAccessoriesDtlaoid = res.data.data;
                     });
                   } else {
                     this.everyThing.updatePh(item).then((res) => {});
@@ -868,9 +867,9 @@ export default {
     },
     close() {
       this.$emit("close");
-      // if (this.modified) {
-      this.$emit("getData");
-      // }
+      if (this.modified) {
+        this.$emit("getData");
+      }
     },
   },
   created() {},

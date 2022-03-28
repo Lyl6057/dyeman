@@ -150,6 +150,7 @@ import {
   addFinclothselloutDtlb,
   updateFinclothselloutDtlb,
   delFinclothselloutDtlb,
+  getFinclothselloutDtlbList,
 } from "@/api/im/Wk/cc/cpb";
 export default {
   props: {
@@ -222,7 +223,7 @@ export default {
       this.func.getDetail = getFinclothselloutDtla;
       this.func.delDetail = delFinclothselloutDtla;
       this.func.addDetail = addFinclothselloutDtla;
-      this.func.getPhDetail = getFinclothselloutDtlb;
+      this.func.getPhDetail = getFinclothselloutDtlbList;
       this.func.delPhDetail = delFinclothselloutDtlb;
       this.func.addPhDetail = addFinclothselloutDtlb;
       if (
@@ -238,8 +239,8 @@ export default {
       // this.mxOp = rsxkr3C(this);
       this.func
         .getDetail({
-          rows: this.page.pageSize,
-          start: this.page.currentPage,
+          // rows: this.page.pageSize,
+          // start: this.page.currentPage,
           whseFinclothselloutFk: this.detail.whseFinclothselloutoid,
         })
         .then((res) => {
@@ -262,7 +263,6 @@ export default {
         });
     },
     getPhDetail(val) {
-      console.log(val);
       if (val === null || !val.whseFinclothselloutDtlaoid) {
         this.rcData = [];
         return;
@@ -271,14 +271,14 @@ export default {
       this.rcOp.showSummary = false;
       this.func
         .getPhDetail({
-          rows: this.page.pageSize,
-          start: this.page.currentPage,
+          // rows: this.page.pageSize,
+          // start: this.page.currentPage,
           whseFinclothselloutDtlaFk: val.whseFinclothselloutDtlaoid,
         })
         .then((res) => {
           let records = res.data;
-          this.rcPage.total = records.total;
-          this.rcData = records.records;
+          this.rcPage.total = records.length;
+          this.rcData = records;
           if (this.rcData.length === 0) {
             this.rcloading = false;
           }
@@ -562,9 +562,8 @@ export default {
               this.sxcheckList[i].custTicket ===
               this.chooseData.list[j].custTicket
             ) {
-              this.sxcheckList[i].whseMaterialDlboid = this.chooseData.list[
-                j
-              ].whseMaterialDlboid;
+              this.sxcheckList[i].whseMaterialDlboid =
+                this.chooseData.list[j].whseMaterialDlboid;
               break;
             }
           }
@@ -597,9 +596,8 @@ export default {
         for (let i = 0; i < this.sxcheckList.length; i++) {
           for (let j = 0; j < this.mx.length; j++) {
             if (this.sxcheckList[i].calicoId === this.mx[j].calicoId) {
-              this.sxcheckList[i].whseMaterialDlaoid = this.mx[
-                j
-              ].whseMaterialDlaoid;
+              this.sxcheckList[i].whseMaterialDlaoid =
+                this.mx[j].whseMaterialDlaoid;
               break;
             }
           }
@@ -656,9 +654,8 @@ export default {
           if (this.mx[i].list) {
             this.mx[i].list.forEach((item) => {
               if (!item.whseFinclothselloutDtlboid && this.hide === "6") {
-                item.whseFinclothselloutDtlaFk = this.mx[
-                  i
-                ].whseFinclothselloutDtlaFk;
+                item.whseFinclothselloutDtlaFk =
+                  this.mx[i].whseFinclothselloutDtlaFk;
                 item.prodNo = item.batchNo;
                 this.func.addPhDetail(item).then((res) => {
                   item.whseFinclothselloutDtlboid = res.data.data;
@@ -897,7 +894,7 @@ export default {
   },
   created() {},
   mounted() {
-    this.rcOp.height = "calc(100vh - 275px)";
+    this.rcOp.height = "calc(100vh - 239px)";
     if (this.hide === "3" || this.hide === "4" || this.hide === "5") {
       this.mxOp = rsxkr3C(this);
     }
@@ -914,28 +911,18 @@ export default {
 };
 </script>
 <style lang='stylus'>
-#sxPlanDlg {
-  .el-dialog__header {
-    padding: 0;
-  }
-
-  .el-card {
-    border: none;
-  }
-
-  .el-dialog__body {
-    padding: 0 !important;
-  }
-
-  .el-dialog__header {
-    padding: 0px;
-    background-color: rgb(2, 26, 60);
-  }
-
-  .formBox {
-    margin-bottom: 0px;
-  }
-
+#sxPlanDlg
+  .el-dialog__header
+    padding 0
+  .el-card
+    border none
+  .el-dialog__body
+    padding 0 !important
+  .el-dialog__header
+    padding 0px
+    background-color rgb(2, 26, 60)
+  .formBox
+    margin-bottom 0px
   // .el-button--mini, .el-button--small {
   // font-size: 16px;
   // }
@@ -943,30 +930,22 @@ export default {
   // .el-button--mini, .el-button--mini.is-round {
   // padding: 5px 10px;
   // }
-  .avue-crud__menu {
-    min-height: 5px !important;
-    height: 5px !important;
-  }
-
-  .el-tabs__item {
-    font-size: 18px;
-    line-height: 30px;
-    height: 30px;
-  }
-
-  .el-table__header-wrapper, .el-form-item__label, .el-input--mini {
+  .avue-crud__menu
+    min-height 5px !important
+    height 5px !important
+  .el-tabs__item
+    font-size 18px
+    line-height 30px
+    height 30px
+  .el-table__header-wrapper, .el-form-item__label, .el-input--mini
     // font-size: 16px !important;
     // font-weight: 600 !important;
     // color: #000;
-  }
-
-  .el-dialog {
-    margin-top: 0 !important;
-    height: 100%;
-    margin: 0 !important;
-    background-color: rgb(2, 26, 60);
-  }
-
+  .el-dialog
+    margin-top 0 !important
+    height 100%
+    margin 0 !important
+    background-color rgb(2, 26, 60)
   // .avue-form__group {
   // background-color: #fff;
   // }
@@ -974,26 +953,15 @@ export default {
   // .el-table--mini td, .el-table--mini th {
   // padding: 2px 0 !important;
   // }
-  .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item {
-    margin-bottom: 10px;
-  }
-
-  .avue-crud__tip {
-    display: none;
-  }
-
-  .el-dialog__header {
-    padding: 0px;
-  }
-
-  .el-dialog__headerbtn {
-    top: 5px;
-    color: #000;
-    font-size: 22px;
-    z-index: 999;
-  }
-}
-
-#rcDetail {
-}
+  .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item
+    margin-bottom 10px
+  .avue-crud__tip
+    display none
+  .el-dialog__header
+    padding 0px
+  .el-dialog__headerbtn
+    top 5px
+    color #000
+    font-size 22px
+    z-index 999
 </style>

@@ -285,7 +285,7 @@ export default {
             hide: false,
             width: 110,
             type: "select",
-            dicData: getDIC("Whse_Transfer_unit"),
+            dicData: getDIC("bas_matUnit"),
           },
           {
             label: "通过",
@@ -399,7 +399,7 @@ export default {
             cell: true,
             hide: false,
             type: "select",
-            dicData: getDIC("Whse_Transfer_unit"),
+            dicData: getDIC("bas_matUnit"),
             width: 110,
           },
           {
@@ -714,130 +714,88 @@ export default {
 };
 </script>
 <style lang='stylus'>
-.el-dropdown-menu--mini .el-dropdown-menu__item {
-  font-size: 16px !important;
-  padding: 4px 6px;
-}
-
-.ypdDlg {
-  width: 30%;
-  margin-left: 70%;
-
-  .el-dialog {
-    margin-top: 0 !important;
-    float: right;
-  }
-}
-
-.pdDlg {
-  .el-table th>.cell {
-    font-size: 17px;
-  }
-
-  th.is-leaf {
-    line-height: 25px;
-  }
-
-  .el-dialog__header {
-    padding: 10px 20px 0;
-    text-align: center;
-  }
-}
-
-#preview {
-  background: #021a3c;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  -webkit-user-select: none;
-  user-select: none;
-  height: 100%;
-  width: 100%;
-
-  .logBox {
-    width: 99%;
-    margin: 0 auto;
-
-    .el-input--mini {
-      padding-left: 5px;
+.el-dropdown-menu--mini .el-dropdown-menu__item
+  font-size 16px !important
+  padding 4px 6px
+.ypdDlg
+  width 30%
+  margin-left 70%
+  .el-dialog
+    margin-top 0 !important
+    float right
+.pdDlg
+  .el-table th>.cell
+    font-size 17px
+  th.is-leaf
+    line-height 25px
+  .el-dialog__header
+    padding 10px 20px 0
+    text-align center
+#preview
+  background #021a3c
+  -moz-user-select none
+  -ms-user-select none
+  -webkit-user-select none
+  user-select none
+  height 100%
+  width 100%
+  .logBox
+    width 99%
+    margin 0 auto
+    .el-input--mini
+      padding-left 5px
       // background-color: #fff;
       // border: 1px solid #fff;
-      height: calc(100vh - 645px) !important;
-      font-size: 16px !important;
-      letter-spacing: 1px;
-    }
-  }
-
-  .queueBox {
-    width: 100%;
+      height calc(100vh - 645px) !important
+      font-size 16px !important
+      letter-spacing 1px
+  .queueBox
+    width 100%
     // height: 105px;
     // position: absolute;
     // bottom: 0;
     // left: 0;
-    border: 1px solid #fff;
-    overflow: auto;
-
-    .queueContent {
-    }
-
-    .queueList {
-      float: left;
-      width: 100px;
-      height: 50px;
-      line-height: 50px;
-      text-align: center;
-      border: 1px solid #fff;
-      font-size: 18px;
-      position: relative;
-
-      >span {
-        position: absolute;
-        top: -15px;
-        right: 5px;
-        font-size: 16px;
-        color: red;
-        font-weight: bold;
-        cursor: pointer;
-      }
-    }
-  }
-
-  .el-table__row--level-0 {
-    background-color: rgb(223, 223, 223);
-  }
-
-  .el-table__indent {
-    height: 0;
-    display: none !important;
-  }
-
-  .el-input__inner {
-    font-size: 16px;
-  }
-
-  .el-form-item__label {
-    color: #fff;
-    font-size: 16px;
-    font-weight: bold;
-  }
-
-  .el-tabs--border-card, .el-tabs--border-card>.el-tabs__header, .el-tabs--border-card>.el-tabs__header .el-tabs__item.is-active {
-    background-color: rgb(2, 26, 60) !important;
-    color: #fff;
-  }
-
-  .el-row {
-    background-color: rgb(2, 26, 60);
-    height: calc(100vh - 95px);
-  }
-
-  .el-textarea__inner {
-    height: calc(100vh - 600px) !important;
-  }
-
-  .el-table__body tr.current-row>td, .el-table__body tr:hover>td {
-    background-color: rgb(245, 108, 108) !important;
-  }
-
+    border 1px solid #fff
+    overflow auto
+    .queueContent
+    .queueList
+      float left
+      width 100px
+      height 50px
+      line-height 50px
+      text-align center
+      border 1px solid #fff
+      font-size 18px
+      position relative
+      >span
+        position absolute
+        top -15px
+        right 5px
+        font-size 16px
+        color red
+        font-weight bold
+        cursor pointer
+  .el-table__row--level-0
+    background-color rgb(223, 223, 223)
+  .el-table__indent
+    height 0
+    display none !important
+  .el-input__inner
+    font-size 16px
+  .el-form-item__label
+    color #fff
+    font-size 16px
+    font-weight bold
+  .el-tabs--border-card, .el-tabs--border-card>.el-tabs__header, .el-tabs--border-card>.el-tabs__header .el-tabs__item.is-active
+    background-color rgb(2, 26, 60) !important
+    color #fff
+  .el-row
+    background-color rgb(2, 26, 60)
+    height calc(100vh - 95px)
+  .el-textarea__inner
+    height calc(100vh - 600px) !important
+  .el-table__body tr.current-row>td, .el-table__body tr:hover>td
+    background-color rgb(245, 108, 108) !important
   // .el-table__fixed-body-wrapper {
   // top: 40px !important;
   // }
@@ -845,16 +803,10 @@ export default {
   // .is-leaf:first-child {
   // border-bottom: none !important;
   // }
-  .el-tag--mini {
-    display: none;
-  }
-
-  .area, .cabinet {
-    text-align: center;
-  }
-
-  .cabinet:hover {
-    opacity: 0.6 !important;
-  }
-}
+  .el-tag--mini
+    display none
+  .area, .cabinet
+    text-align center
+  .cabinet:hover
+    opacity 0.6 !important
 </style>

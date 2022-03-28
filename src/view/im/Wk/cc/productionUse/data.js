@@ -622,7 +622,7 @@ export function rsxkr3C(_this) {
         cell: false,
         width: 100,
         type: "select",
-        dicData: getDIC("Whse_Transfer_unit")
+        dicData: getDIC("bas_matUnit")
       }
     ]
   };

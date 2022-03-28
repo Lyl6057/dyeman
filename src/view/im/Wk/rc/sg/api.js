@@ -72,7 +72,7 @@ export function getVpnvex(params) {
 // 生产辅料
 export function getVpnv(params) {
   return axios({
-    url: "/api/whseAccessoriesin/vpnv",
+    url: "/api/whseAccessoriesIn/vpnv",
     method: "get",
     params: params
   });

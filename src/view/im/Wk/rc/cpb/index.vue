@@ -42,10 +42,11 @@
             <avue-crud
               ref="crud"
               id="crud"
+              v-loading="loading"
               :option="everyThing.mainC"
               :data="crud"
               :page.sync="page"
-              v-loading="loading"
+              :row-style="rowStyle"
               @on-load="getData"
               @current-row-change="cellClick"
               @row-dblclick="handleRowDBLClick"
@@ -233,6 +234,14 @@ export default {
         }
       }
     },
+    rowStyle({ row, column, rowIndex }) {
+      if (!row.wms) {
+        return {
+          backgroundColor: "#E6A23C",
+          color: "#000",
+        };
+      }
+    },
     del() {
       if (Object.keys(this.chooseData).length === 0) {
         this.$tip.error(this.$t("public.delTle"));
@@ -342,11 +351,9 @@ export default {
 };
 </script>
 <style lang='stylus'>
-#rc, #rcDetail {
-  .formBox {
-    margin-bottom: 0px;
-  }
-
+#rc, #rcDetail
+  .formBox
+    margin-bottom 0px
   // .el-button--mini, .el-button--small {
   // font-size: 16px;
   // }
@@ -354,23 +361,17 @@ export default {
   // .el-button--mini, .el-button--mini.is-round {
   // padding: 5px 10px;
   // }
-  .avue-crud__menu {
-    min-height: 5px !important;
-    height: 5px !important;
-  }
-
-  .el-tabs__item {
-    font-size: 18px;
-    line-height: 30px;
-    height: 30px;
-  }
-
-  .el-table__header-wrapper, .el-form-item__label, .el-input--mini {
-    font-size: 16px !important;
+  .avue-crud__menu
+    min-height 5px !important
+    height 5px !important
+  .el-tabs__item
+    font-size 18px
+    line-height 30px
+    height 30px
+  .el-table__header-wrapper, .el-form-item__label, .el-input--mini
+    font-size 16px !important
     // font-weight: 600 !important;
-    color: #000;
-  }
-
+    color #000
   // .avue-form__group {
   // background-color: #fff;
   // }
@@ -378,8 +379,6 @@ export default {
   // .el-table--mini td, .el-table--mini th {
   // padding: 2px 0 !important;
   // }
-  .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item {
-    margin-bottom: 10px;
-  }
-}
+  .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item
+    margin-bottom 10px
 </style>

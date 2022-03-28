@@ -537,7 +537,7 @@ export function rsxkr2C(_this) {
       //   cell: true,
       //   width: 100,
       //   type: "select",
-      //   dicData: getDIC("Whse_Transfer_unit"),
+      //   dicData: getDIC("bas_matUnit"),
       // },
 
       {

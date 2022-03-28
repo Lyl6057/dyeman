@@ -1,4 +1,4 @@
-import i18n from '@/lang/index'
+import i18n from "@/lang/index";
 export const workerF = {
   submitBtn: false,
   emptyBtn: false,
@@ -11,52 +11,52 @@ export const workerF = {
       label: "订单编号",
       prop: "poNo",
       span: 4,
-      placeholder: " ",
+      placeholder: " "
     },
     {
       labelWidth: 60,
-      label: i18n.t('whseField.khmc'),
+      label: i18n.t("whseField.khmc"),
       prop: "cust",
       span: 4,
-      placeholder: " ",
+      placeholder: " "
     },
     {
       labelWidth: 60,
       label: i18n.t("whseField.zl"),
       prop: "weight",
       span: 4,
-      placeholder: " ",
+      placeholder: " "
     },
     {
       label: "日期起",
       labelWidth: 70,
       prop: "startDate",
       span: 4,
-      placeholder: " ",
+      placeholder: " "
     },
     {
       label: "日期至",
       labelWidth: 70,
       prop: "endDate",
       span: 4,
-      placeholder: " ",
+      placeholder: " "
     },
     {
       label: "日期至",
       labelWidth: 70,
       prop: "endDate1",
       span: 4,
-      placeholder: " ",
-    }, {
+      placeholder: " "
+    },
+    {
       label: "日期至",
       labelWidth: 70,
       prop: "endDat2",
       span: 4,
-      placeholder: " ",
-    },
+      placeholder: " "
+    }
   ]
-
-}
+};
 
 // export const workerC = {
 //   menu: false,
@@ -110,7 +110,7 @@ export const workerF = {
 //     //   label: "單位",
 //     //   prop: "weightUnit",
 //     //   type: "select",
-//     //   dicData: getDIC("Whse_Transfer_unit"),
+//     //   dicData: getDIC("bas_matUnit"),
 //     // }
 //   ]
 // }

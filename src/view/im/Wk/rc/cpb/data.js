@@ -39,13 +39,23 @@ export function rsxkr1F(_this) {
       },
 
       {
-        label: _this.$t("whseField.cwzt"),
-        prop: "finStatus",
+        label: "WMS状态",
+        prop: "wms",
         span: 6,
         placeholder: " ",
         type: "select",
-        display: _this.hide === "1" ? true : false,
-        dicData: getDIC("whse_finStatus")
+        width: 120,
+        // display: _this.hide === "1" ? true : false,
+        dicData: [
+          {
+            value: true,
+            label: "已确认"
+          },
+          {
+            value: false,
+            label: "待确认"
+          }
+        ]
       }
     ]
   };
@@ -171,7 +181,8 @@ export function rsxkr1C(_this) {
         label: _this.$t("whseField.rcbh"),
         prop: "yinId",
         cell: true,
-        width: 160
+        width: 160,
+        overHidden: true
       },
       {
         label: _this.$t("whseField.rclx"),
@@ -255,6 +266,27 @@ export function rsxkr1C(_this) {
         cell: true,
         hide: _this.hide === "2" ? false : true,
         width: 250
+      },
+      {
+        label: "WMS确认",
+        prop: "wms",
+        cell: true,
+        width: 120,
+        type: "select",
+        dicData: [
+          {
+            value: true,
+            label: "已确认"
+          },
+          {
+            value: false,
+            label: "待确认"
+          },
+          {
+            value: "",
+            label: "待确认"
+          }
+        ]
       },
       {
         label: "创建用户",

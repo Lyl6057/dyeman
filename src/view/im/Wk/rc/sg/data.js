@@ -223,6 +223,7 @@ export function rhl1C(_this) {
         cell: false,
         width: 110,
         type: "select",
+        overHidden: true,
         dicData: getDicT("purSinglepo", "suppId", "poNo")
       },
       {
@@ -378,14 +379,21 @@ export function rhl2C(_this) {
         prop: "materialNum",
         cell: false,
         width: 180,
-        hide: _this.datas === _this.$t("choicDlg.rl") ? false : true
+        hide:
+          _this.datas === _this.$t("choicDlg.rl") ||
+          _this.datas === _this.$t("iaoMng.fl")
+            ? false
+            : true
       },
       {
         label: _this.$t("whseField.clmc"),
         prop: "materialName",
         cell: false,
+        type: _this.datas === _this.$t("choicDlg.rl") ? "select" : "",
         width: 180,
-        hide: _this.datas === _this.$t("choicDlg.rl") ? false : true
+        overHidden: true,
+        hide: _this.datas === _this.$t("iaoMng.fl") ? false : true,
+        dicData: getDicT("basProductivesupplies", "chinName", "hardwareId")
       },
       // {
       //   label: _this.$t("whseField.clmc"),
@@ -638,7 +646,7 @@ export function rhl3C(_this) {
         dicData: getDIC("Whse_Origin")
       },
       {
-        label: _this.$t("whseField.zl"),
+        label: _this.$t("energy.sl"),
         prop: "weight",
         cell: true,
         width: 100,
@@ -654,15 +662,15 @@ export function rhl3C(_this) {
         align: "right"
       },
 
-      {
-        label: _this.$t("whseField.dw"),
-        prop: "weightUnit",
-        cell: true,
-        width: 100,
-        // hide: _this.datas == _this.$t("iaoMng.sx") ? true : false,
-        type: "select",
-        dicData: unit
-      },
+      // {
+      //   label: _this.$t("whseField.dw"),
+      //   prop: "weightUnit",
+      //   cell: true,
+      //   width: 100,
+      //   // hide: _this.datas == _this.$t("iaoMng.sx") ? true : false,
+      //   type: "select",
+      //   dicData: unit
+      // },
       {
         label: "包装规格",
         prop: "packSize",
@@ -688,6 +696,8 @@ export function rhl3C(_this) {
               ? "4"
               : _this.datas == _this.$t("iaoMng.hgyl")
               ? "3"
+              : _this.datas == _this.$t("iaoMng.fl")
+              ? "5"
               : "8"),
           "locationCode",
           "locationCode",

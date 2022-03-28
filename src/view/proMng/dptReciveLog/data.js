@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-03-11 15:23:20
+ * @LastEditTime: 2022-03-28 11:00:41
  * @Description:
  */
 
@@ -162,9 +162,27 @@ export function dlgForm(_this) {
         placeholder: " "
       },
       {
+        label: "收/发单",
+        prop: "dispathReceive",
+        span: 8,
+        placeholder: " ",
+        type: "select",
+        clearable: false,
+        dicData: [
+          {
+            value: 1,
+            label: "收单"
+          },
+          {
+            value: 2,
+            label: "发单"
+          }
+        ]
+      },
+      {
         label: "说明",
         prop: "acceptDesc",
-        span: 24,
+        span: 16,
         placeholder: " "
       }
     ]

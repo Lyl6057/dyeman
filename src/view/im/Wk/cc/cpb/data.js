@@ -35,15 +35,15 @@ export function rsxkr1F(_this) {
         placeholder: " ",
         display: _this.hide === "6"
       },
-      {
-        label: _this.$t("whseField.cwzt"),
-        prop: "finStatus",
-        span: 6,
-        placeholder: " ",
-        type: "select",
-        dicData: getDIC("whse_finStatus"),
-        display: _this.hide === "6"
-      },
+      // {
+      //   label: _this.$t("whseField.cwzt"),
+      //   prop: "finStatus",
+      //   span: 6,
+      //   placeholder: " ",
+      //   type: "select",
+      //   dicData: getDIC("whse_finStatus"),
+      //   display: _this.hide === "6"
+      // },
       {
         label: _this.$t("whseField.czy"),
         prop: "sysCreatedby",
@@ -53,6 +53,24 @@ export function rsxkr1F(_this) {
         type: "select",
         hide: _this.hide === "6" ? false : true,
         dicData: getDicT("ucmlUser", "employeename", "ucmlUseroid")
+      },
+      {
+        label: "WMS状态",
+        prop: "wms",
+        span: 6,
+        placeholder: " ",
+        type: "select",
+        display: _this.hide === "6" ? true : false,
+        dicData: [
+          {
+            value: true,
+            label: "已确认"
+          },
+          {
+            value: false,
+            label: "待确认"
+          }
+        ]
       }
     ]
   };
@@ -263,6 +281,25 @@ export function rsxkr1C(_this) {
         placeholder: " ",
         hide: _this.hide == "4" || _this.hide == "3" ? false : true,
         width: 500
+      },
+      {
+        label: "WMS状态",
+        prop: "wms",
+        span: 6,
+        placeholder: " ",
+        type: "select",
+        width: 120,
+        display: _this.hide === "6" ? true : false,
+        dicData: [
+          {
+            value: true,
+            label: "已确认"
+          },
+          {
+            value: false,
+            label: "待确认"
+          }
+        ]
       }
     ]
   };
@@ -293,23 +330,39 @@ export function rsxkr2C(_this) {
         align: "center"
       },
       {
-        label: "订单号",
-        prop: "woOrderno",
+        label: "载具编号",
+        prop: "storeLoadCode",
         cell: false,
         width: 140,
         hide: _this.hide === "6" ? false : true
       },
       {
+        label: _this.$t("whseField.ps"),
+        prop: "pidCount",
+        cell: false,
+        width: 120,
+        hide: _this.hide === "6" ? false : true
+      },
+      {
+        label: "订单号",
+        prop: "woOrderno",
+        cell: false,
+        width: 140,
+        hide: _this.hide === "6" ? true : false
+      },
+      {
         label: "成品布编号",
         prop: "woMatno",
         cell: false,
-        width: 140
+        width: 140,
+        hide: _this.hide === "6" ? true : false
       },
       {
         label: "成品布名称",
         prop: "woMatname",
         cell: false,
-        width: 700
+        width: 700,
+        hide: _this.hide === "6" ? true : false
       },
       {
         label: "颜色",
@@ -317,7 +370,8 @@ export function rsxkr2C(_this) {
         cell: true,
         width: 180,
         type: "select",
-        dicData: postDicT("salPoDtlaList", "colorName", "salPoDtlaoid")
+        dicData: postDicT("salPoDtlaList", "colorName", "salPoDtlaoid"),
+        hide: _this.hide === "6" ? true : false
       }
       // {
       //   label: _this.$t("whseField.zl"),
@@ -332,7 +386,7 @@ export function rsxkr2C(_this) {
       //   cell: true,
       //   width: 100,
       //   type: "select",
-      //   dicData: getDIC("Whse_Transfer_unit"),
+      //   dicData: getDIC("bas_matUnit"),
       // },
     ]
   };
@@ -349,7 +403,7 @@ export function rcpb3C(_this) {
         : "calc(100vh - 285px)",
     refreshBtn: false,
     columnBtn: false,
-    page: true,
+    page: false,
     roykey: "whseCalicoinDtlbOid",
     showSummary: true,
     sumColumnList: [
@@ -383,7 +437,7 @@ export function rcpb3C(_this) {
 
       // },
       {
-        label: _this.$t("whseField.ps"),
+        label: _this.$t("whseField.ph2"),
         prop: "countingNo",
         cell: true,
         width: 80,
@@ -408,7 +462,7 @@ export function rcpb3C(_this) {
         cell: true,
         width: 100,
         type: "select",
-        dicData: getDIC("Whse_Transfer_unit")
+        dicData: getDIC("bas_matUnit")
         // click: (val) => {
         //   _this.iptPhChange(_this.choosePhData);
         // },
@@ -478,7 +532,6 @@ export function rsxkr3C(_this) {
         cell: false,
         width: 500,
         type: "select",
-        hide: false,
         props: {
           label: "whseCalicoinFk",
           value: "whseCalicoinDtlaoid"
@@ -588,7 +641,7 @@ export function rsxkr3C(_this) {
         cell: false,
         width: 100,
         type: "select",
-        dicData: getDIC("Whse_Transfer_unit")
+        dicData: getDIC("bas_matUnit")
       }
     ]
   };
@@ -701,7 +754,7 @@ export function planCrud(_this) {
         cell: true,
         width: 120,
         type: "select",
-        dicData: getDIC("Whse_Transfer_unit")
+        dicData: getDIC("bas_matUnit")
       }
     ]
   };

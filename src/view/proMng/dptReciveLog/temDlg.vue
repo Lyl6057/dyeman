@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-03-16 15:05:13
+ * @LastEditTime: 2022-03-28 10:59:07
  * @Description: 
 -->
 <template>
@@ -204,6 +204,7 @@ export default {
       this.form.dptworkProcessFk = this.detail.dpt || "";
       this.form.planOutput = 0;
       this.form.realOutput = 0;
+      this.form.dispathReceive = 1;
     },
     save() {
       this.$refs.form.validate((valid, done) => {

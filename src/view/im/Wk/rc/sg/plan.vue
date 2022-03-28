@@ -78,8 +78,6 @@ export default {
   methods: {
     getData() {
       this.loading = true;
-      // this.crudOp.height = "calc(100vh - 208px)";
-      // this.crudOp.selection = false;
       let queryData = JSON.parse(JSON.stringify(this.form));
       queryData.deliNo = "!^%" + (queryData.deliNo || "");
       queryData.purNo = "%" + (queryData.purNo || "");

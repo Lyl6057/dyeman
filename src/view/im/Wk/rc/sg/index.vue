@@ -163,6 +163,10 @@ import {
   addScflDetali,
   updateScflDetali,
   delScflDetali,
+  getScflLocList,
+  addScflLoc,
+  updateScflLoc,
+  delScflLoc,
   // 紗線
   getSx,
   delSx,
@@ -281,7 +285,6 @@ export default {
           this.everyThing.updatePh = updateSxDtla;
           this.everyThing.delPh = delSxDtla;
           this.everyThing.batCode = "sx_in_whse";
-
           break;
         case this.$t("iaoMng.fl"):
           this.everyThing.get = getScfl;
@@ -293,9 +296,11 @@ export default {
           this.everyThing.addDetail = addScflDetali;
           this.everyThing.updateDetail = updateScflDetali;
           this.everyThing.delDetail = delScflDetali;
-          this.everyThing.getAlloc = getAccessoriesinAlloc;
-          this.everyThing.addAlloc = addAccessoriesinAlloc;
-
+          this.everyThing.getPh = getScflLocList;
+          this.everyThing.addPh = addScflLoc;
+          this.everyThing.updatePh = updateScflLoc;
+          this.everyThing.delPh = delScflLoc;
+          this.everyThing.batCode = "scfl_in_whse";
           break;
         case this.$t("iaoMng.wjxz"):
           this.everyThing.get = getScfl;
