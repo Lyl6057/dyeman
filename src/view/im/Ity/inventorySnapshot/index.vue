@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-03-26 09:57:57
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-03-28 15:04:41
+ * @LastEditTime: 2022-03-28 15:40:50
 -->
 <template>
   <div id="ityInventoryList">
@@ -146,7 +146,7 @@ export default {
     },
     // 获取数据
     getDataList() {
-      this.loading = false;
+      this.loading = true ;
       let params = Object.assign({
           rows: this.page.pageSize,
           start: this.page.currentPage,
@@ -154,6 +154,8 @@ export default {
       fetchInvSnapDataByPage(params).then(res => {
           this.page.total = res.data.total;
           this.crudDataList = res.data.records
+      }).finally(_ => {
+          this.loading = false;
       })
     },
     // 保存
