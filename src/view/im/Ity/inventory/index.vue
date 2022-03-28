@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-24 14:15:12
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-03-24 11:33:37
+ * @LastEditTime: 2022-03-28 15:16:23
  * @Description: 
 -->
 <template>
@@ -123,7 +123,7 @@ export default {
         if(res.data.code == 200){
           this.$tip.success("生成成功~")
         }else{
-          this.$tip.error("生成失败~")
+          this.$tip.error(res.data.msg)
         }
       }).finally(_ => {
         this.loading = false;

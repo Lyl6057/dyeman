@@ -808,7 +808,6 @@ export default {
             item.yarnsName = item.chinName;
             item.yarnBrand = item.yarnsCard;
             item.weightUnit = item.company;
-            item.debitQty = 0;
             item.weight = 0;
           });
           this.mx = this.mx.concat(val);
@@ -835,7 +834,6 @@ export default {
           item.yarnsName = item.chinName;
           item.yarnBrand = item.yarnsCard;
           item.company = item.company;
-          item.debitQty = 0;
           item.stockUnit = item.company;
         });
         this.mx = this.mx.concat(val);
@@ -866,7 +864,6 @@ export default {
               item.materialName = item.materielName;
               item.yarnsId = item.materielCode;
               item.yarnsName = item.materielName;
-              item.debitQty = 0;
               item.company = item.company;
               item.stockUnit = item.company;
               item.weightUnit = item.company;
@@ -916,7 +913,6 @@ export default {
           item.bcColorprison = item.materielCode;
           item.vitality = item.materielCode;
           item.bcClass = item.materielCode;
-          item.debitQty = 0;
           item.dangerlevel = item.materielCode;
           item.bcForce = item.materielCode;
           item.weight = 0;

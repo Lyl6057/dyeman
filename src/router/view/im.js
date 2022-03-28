@@ -61,6 +61,14 @@ export default [
     }
   },
   {
+    path: "/inventorySnapshot",
+    name: "盘点清单",
+    component: resolve => require(["@/view/im/Ity/inventorySnapshot/index"], resolve),
+    meta: {
+      keepAlive: true
+    }
+  },
+  {
     path: "/whseVehicle",
     name: "仓库载具管理",
     component: resolve => require(["@/view/im/Ity/vehicle/index"], resolve),

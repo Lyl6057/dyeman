@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-04-01 13:39:35
- * @LastEditors: Lyl
- * @LastEditTime: 2022-01-12 15:38:00
+ * @LastEditors: Symbol_Yang
+ * @LastEditTime: 2022-03-26 10:13:15
  * @Description:
  */
 
@@ -60,6 +60,10 @@ export function whseMng(_this) {
         {
           menuName: "2.库存查询", //'1.仓位管理'
           index: "inventory"
+        },
+        {
+          menuName: "3.盘点清单",
+          index: "inventorySnapshot"
         }
         // {
         //   menuName: "2.生产运转出仓", //'2.生产运转'
