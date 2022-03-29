@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-03-08 14:35:14
+ * @LastEditTime: 2022-03-29 09:50:08
  * @Description:
 -->
 <template>
@@ -31,9 +31,12 @@
           :disabled="!selectList.length"
           >修改载具</el-button
         >
+        <el-button type="danger" @click="del" :disabled="!selectList.length">{{
+          this.$t("public.del")
+        }}</el-button>
         <!-- <el-button type="primary" @click="outExcel1">导出</el-button> -->
         <!-- <el-button type="primary" @click="outExcel">导出明细表</el-button> -->
-        <el-dropdown
+        <!-- <el-dropdown
           split-button
           type="primary"
           @click="outExcel(1)"
@@ -64,7 +67,7 @@
               >磅(LBS)</el-dropdown-item
             >
           </el-dropdown-menu>
-        </el-dropdown>
+        </el-dropdown> -->
       </el-row>
       <el-row class="formBox">
         <avue-form ref="form" :option="formOp" v-model="form"> </avue-form>
@@ -256,7 +259,6 @@ export default {
       data.vatNo = "%" + (data.vatNo ? data.vatNo : "");
       data.storeLoadCode = "%" + (data.storeLoadCode ? data.storeLoadCode : "");
       data.clothChecker = "%" + (data.clothChecker ? data.clothChecker : "");
-
       data.clothCheckTime = null;
       get(
         Object.assign(data, {
@@ -265,6 +267,7 @@ export default {
           isPrinted: true,
           // clothState: this.form.clothState,
           cardType: 1,
+          delFlag: false,
         }),
         r_clothCheckTime_r
       ).then((res) => {
@@ -333,6 +336,26 @@ export default {
         }
       });
       // });
+    },
+    del() {
+      this.$tip.cofirm("是否确定删除选中的数据?").then(() => {
+        this.wLoading = true;
+        this.selectList.forEach((item, i) => {
+          update(
+            Object.assign(item, {
+              delFlag: true,
+            })
+          ).then((res) => {
+            if (i == this.selectList.length - 1) {
+              this.$tip.success("删除成功！");
+              this.query();
+              setTimeout(() => {
+                this.wLoading = false;
+              }, 200);
+            }
+          });
+        });
+      });
     },
     recover() {
       this.$tip.cofirm("是否确定恢复到选中的数据?").then(() => {

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-01-13 15:47:56
+ * @LastEditTime: 2022-03-29 09:53:49
  * @Description:
 -->
 <template>
@@ -141,6 +141,7 @@ export default {
           start: this.page.currentPage,
           isPrinted: 1, // 已打印
           cardType: 1,
+          delFlag: false,
         }),
         r_clothCheckTime_r
       ).then((res) => {

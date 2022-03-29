@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-02-19 09:46:40
+ * @LastEditTime: 2022-03-29 10:04:07
  * @Description:
 -->
 <template>
@@ -232,6 +232,7 @@ export default {
           start: this.page.currentPage,
           isPrinted: true,
           clothState: this.form.clothState || 1,
+          delFlag: false,
         })
       ).then((res) => {
         this.crud = res.data.records;

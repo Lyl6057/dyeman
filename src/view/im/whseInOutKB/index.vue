@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-01-12 15:39:08
  * @LastEditors: Lyl
- * @LastEditTime: 2022-03-25 20:48:39
+ * @LastEditTime: 2022-03-28 19:00:54
  * @FilePath: \iot.vue\src\view\im\whseInOutKB\index.vue
  * @Description: 
 -->
@@ -342,9 +342,6 @@ export default {
           });
         } else {
           //成品布出仓
-          // this.form.vatNo = this.form.vatNo
-          //   ? (this.form.vatNo = "%" + this.form.vatNo)
-          //   : "";
           getFinalStock(
             Object.assign({
               page: this.mainPage.currentPage,

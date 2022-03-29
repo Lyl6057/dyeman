@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-03-22 14:09:12
+ * @LastEditTime: 2022-03-29 08:23:31
  * @Description:
  */
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
@@ -19,7 +19,8 @@ export function mainForm(_this) {
         prop: "vatNo",
         span: 6,
         placeholder: " ",
-        tip: "MS đơn sản xuất bp Dệt"
+        tip: "MS đơn sản xuất bp Dệt",
+        formslot: true
       },
       {
         label: "备注",
@@ -51,27 +52,16 @@ export function mainCrud(_this) {
     menuTitle: "称重",
     // sumColumnList: [],
     column: [
-      {
-        label: "编号",
-        prop: "checkoutCode",
-        span: 6,
-        align: "center",
-        // sortable: true,
-        width: 120,
-        overHidden: true
-      },
-      {
-        label: "日期",
-        prop: "checkoutDate",
-        type: "date",
-        format: "yyyy-MM-dd HH:mm:ss",
-        valueFormat: "yyyy-MM-dd HH:mm:ss",
-        span: 6,
-        align: "center",
-        // sortable: true,
-        width: 200,
-        overHidden: true
-      },
+      // {
+      //   label: "编号",
+      //   prop: "checkoutCode",
+      //   span: 6,
+      //   align: "center",
+      //   // sortable: true,
+      //   width: 120,
+      //   overHidden: true
+      // },
+
       {
         label: "缸号",
         prop: "vatNo",
@@ -81,7 +71,7 @@ export function mainCrud(_this) {
         disabled: true,
         overHidden: true,
         sortable: true,
-        formslot: true
+        fixed: true
       },
       {
         label: "布类名称",
@@ -89,7 +79,7 @@ export function mainCrud(_this) {
         disabled: true,
         placeholder: " ",
         span: 6,
-        width: 100,
+        width: 180,
         overHidden: true
       },
       {
@@ -179,12 +169,12 @@ export function mainCrud(_this) {
         overHidden: true
       },
       {
-        label: "成品损耗",
+        label: "成品损耗(%)",
         prop: "lossRate",
         disabled: true,
         placeholder: " ",
         span: 6,
-        width: 100,
+        width: 120,
         type: "number",
         overHidden: true
       },
@@ -214,6 +204,18 @@ export function mainCrud(_this) {
         placeholder: " ",
         overHidden: true,
         cell: true
+      },
+      {
+        label: "日期",
+        prop: "checkoutDate",
+        type: "date",
+        format: "yyyy-MM-dd HH:mm:ss",
+        valueFormat: "yyyy-MM-dd HH:mm:ss",
+        span: 6,
+        align: "center",
+        // sortable: true,
+        width: 200,
+        overHidden: true
       }
     ]
   };
