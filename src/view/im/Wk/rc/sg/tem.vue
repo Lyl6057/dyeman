@@ -198,7 +198,7 @@ export default {
             rows: this.page.pageSize,
             start: this.page.currentPage,
             whseChemicalinFk: this.detail.whseChemicalinoid, // 化工原料Oid
-            whseAccessoriesinFk: this.detail.whseAccessoriesinoid, // 辅料/五金/行政Oid
+            whseAccessoriesInFk: this.detail.whseAccessoriesinoid, // 辅料/五金/行政Oid
             whseYarninFk: this.detail.whseYarninoid, // 纱线Oid
             whseDyesalinFk: this.detail.whseDyesalinoid, // 顏料Oid
             whseEnergyInFk: this.detail.energyInId, // 能源Oid
