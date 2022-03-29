@@ -2,10 +2,10 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-03-28 11:00:41
+ * @LastEditTime: 2022-03-29 14:03:10
  * @Description:
  */
-
+var baseUrl = "http://192.168.5.1:91";
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
 let cust = getDicT("basCustomer", "custName", "custCode");
 const vatList = getDicT("proBleadyeRunJob", "vatNo", "runJobId");
@@ -113,54 +113,26 @@ export function dlgForm(_this) {
         disabled: true
         // dicData: getDicT("ucmlUser", "employeename", "ucmlUseroid")
       },
-      {
-        label: "接收日期",
-        prop: "acceptDate",
-        width: 150,
-        span: 8,
-        type: "datetime",
-        disabled: true,
-        align: "center",
-        format: "yyyy-MM-dd HH:mm:ss",
-        valueFormat: "yyyy-MM-dd HH:mm:ss",
-        placeholder: " ",
-        rules: [
-          {
-            required: true,
-            message: "請輸入接收日期",
-            trigger: "blur"
-          }
-        ]
-      },
-      {
-        label: "部门",
-        prop: "dptworkProcessFk",
-        span: 8,
-        placeholder: " ",
-        type: "select",
-        dicData: getDicT("proDptworkProcess", "dptName", "dptCode", {}, "sn"),
-        rules: [
-          {
-            required: true,
-            message: "請选择部门",
-            trigger: "blur"
-          }
-        ]
-      },
-      {
-        label: "计划产量",
-        prop: "planOutput",
-        span: 8,
-        type: "number",
-        placeholder: " "
-      },
-      {
-        label: "实际产量",
-        prop: "realOutput",
-        type: "number",
-        span: 8,
-        placeholder: " "
-      },
+      // {
+      //   label: "接收日期",
+      //   prop: "acceptDate",
+      //   width: 150,
+      //   span: 8,
+      //   type: "datetime",
+      //   disabled: true,
+      //   align: "center",
+      //   format: "yyyy-MM-dd HH:mm:ss",
+      //   valueFormat: "yyyy-MM-dd HH:mm:ss",
+      //   placeholder: " ",
+      //   rules: [
+      //     {
+      //       required: true,
+      //       message: "請輸入接收日期",
+      //       trigger: "blur"
+      //     }
+      //   ]
+      // },
+
       {
         label: "收/发单",
         prop: "dispathReceive",
@@ -178,6 +150,57 @@ export function dlgForm(_this) {
             label: "发单"
           }
         ]
+      },
+      {
+        label: "部门",
+        prop: "dptworkProcessFk",
+        span: 8,
+        placeholder: " ",
+        type: "select",
+
+        dicData: getDicT("proDptworkProcess", "dptName", "dptCode", {}, "sn"),
+        rules: [
+          {
+            required: true,
+            message: "請选择部门",
+            trigger: "blur"
+          }
+        ],
+        cascader: ["stepId"]
+      },
+      {
+        label: "计划产量",
+        prop: "planOutput",
+        span: 8,
+        type: "number",
+        placeholder: " "
+      },
+      {
+        label: "实际产量",
+        prop: "realOutput",
+        type: "number",
+        span: 8,
+        placeholder: " "
+      },
+
+      {
+        label: "工序",
+        prop: "stepId",
+        span: 8,
+        placeholder: " ",
+        type: "select",
+        props: {
+          label: "stepName",
+          value: "stepId"
+        },
+        cascaderIndex: 0,
+        dicUrl: `${baseUrl}/api/baseWorkStep/List?orgCodes=%25{{dptworkProcessFk}}`
+        // dicData: postDicT(
+        //   "baseWorkStepList",
+        //   "stepName",
+        //   "stepId",
+        //   _this.form ? _this.form.dptworkProcessFk || "" : ""
+        // )
       },
       {
         label: "说明",
@@ -376,6 +399,19 @@ export function dlgCrud(_this) {
         //     trigger: "blur"
         //   }
         // ]
+      },
+      {
+        label: "工序",
+        prop: "stepId",
+        overHidden: true,
+        span: 16,
+        placeholder: " ",
+        type: "select",
+        props: {
+          label: "stepName",
+          value: "stepId"
+        },
+        dicUrl: `${baseUrl}/api/baseWorkStep/List`
       },
       {
         label: "接收人",

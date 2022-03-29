@@ -661,7 +661,7 @@ export default {
               } else {
                 // 新增
                 data.whseChemicalinFk = this.detail.whseChemicalinoid;
-                data.whseAccessoriesinFk = this.detail.whseAccessoriesinoid;
+                data.whseAccessoriesInFk = this.detail.whseAccessoriesinoid;
                 data.whseYarninFk = this.detail.whseYarninoid;
                 data.whseDyesalinFk = this.detail.whseDyesalinoid;
                 data.whseEnergyInFk = this.detail.energyInId;
@@ -774,7 +774,7 @@ export default {
               } else {
                 // 新增
                 data.whseChemicalinFk = this.form.whseChemicalinoid;
-                data.whseAccessoriesinFk = this.form.whseAccessoriesinoid;
+                data.whseAccessoriesInFk = this.form.whseAccessoriesinoid;
                 data.whseYarninFk = this.form.whseYarninoid;
                 data.whseDyesalinFk = this.form.whseDyesalinoid;
                 data.whseEnergyInFk = this.form.energyInId;

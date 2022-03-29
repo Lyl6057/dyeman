@@ -79,11 +79,14 @@ export default {
     getData() {
       this.loading = true;
       let queryData = JSON.parse(JSON.stringify(this.form));
-      queryData.deliNo = "!^%" + (queryData.deliNo || "");
-      queryData.purNo = "%" + (queryData.purNo || "");
-      queryData.poNo = queryData.purNo;
-      queryData.materialNum = "%" + (queryData.materialNum || "");
-      queryData.deliSuppno = "%" + (queryData.deliSuppno || "");
+      if (this.data != this.$t("iaoMng.fl")) {
+        queryData.deliNo = "!^%" + (queryData.deliNo || "");
+        queryData.purNo = "%" + (queryData.purNo || "");
+        queryData.poNo = queryData.purNo;
+        queryData.materialNum = "%" + (queryData.materialNum || "");
+        queryData.deliSuppno = "%" + (queryData.deliSuppno || "");
+      }
+
       this.everyThing
         .getPlan(
           Object.assign(queryData, {

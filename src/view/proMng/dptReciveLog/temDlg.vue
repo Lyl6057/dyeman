@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-03-28 10:59:07
+ * @LastEditTime: 2022-03-29 14:00:48
  * @Description: 
 -->
 <template>
@@ -159,6 +159,7 @@ export default {
       getLog({
         runJobId: id,
       }).then((res) => {
+        console.log(res);
         if (res.data.length) {
           let list = res.data.sort((a, b) => {
             return a.acceptDate > b.acceptDate ? 1 : -1;
@@ -173,7 +174,8 @@ export default {
               start: 1,
               page: 1,
             }).then((vatRes) => {
-              if (vatRes.data.length) {
+              if (vatRes.data.records.length) {
+                console.log(vatRes);
                 let weight = vatRes.data.records[0].clothWeight || 0;
                 this.form.planOutput = weight;
                 this.form.realOutput = weight;
@@ -186,7 +188,7 @@ export default {
               start: 1,
               page: 1,
             }).then((weaveRes) => {
-              if (weaveRes.data.length) {
+              if (weaveRes.data.records.length) {
                 let weight = weaveRes.data.records[0].clothWeight || 0;
                 this.form.planOutput = weight;
                 this.form.realOutput = weight;

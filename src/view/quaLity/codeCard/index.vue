@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-03-29 09:50:08
+ * @LastEditTime: 2022-03-29 10:28:13
  * @Description:
 -->
 <template>
@@ -341,11 +341,7 @@ export default {
       this.$tip.cofirm("是否确定删除选中的数据?").then(() => {
         this.wLoading = true;
         this.selectList.forEach((item, i) => {
-          update(
-            Object.assign(item, {
-              delFlag: true,
-            })
-          ).then((res) => {
+          del(item.cardId).then((res) => {
             if (i == this.selectList.length - 1) {
               this.$tip.success("删除成功！");
               this.query();
