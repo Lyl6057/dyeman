@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-03-26 09:57:57
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-03-28 15:40:50
+ * @LastEditTime: 2022-03-30 11:01:51
 -->
 <template>
   <div id="ityInventoryList">
@@ -31,6 +31,12 @@
           :disabled="hasOperate"
           @click="handleStartCount"
           >启动盘点</el-button
+        >
+        <el-button
+          type="warning"
+          :disabled="hasOperate"
+          @click="handeInvDtlEdit"
+          >盘点明细录入</el-button
         >
       </div>
       <div class="formBox">
@@ -60,6 +66,9 @@
       </div>
           <avue-form ref="editForm" :option="editFormOp" v-model="editFormData"></avue-form>
       </el-dialog>
+      <el-dialog :fullscreen='true' :visible.sync="dtlDialogVisible" :append-to-body="true" width="100%" :close-on-click-modal="false">
+        <inv-dtl ref="invDtlRef" @closeDialog='dtlDialogVisible = false' ></inv-dtl>
+      </el-dialog>
     </view-container>
   </div>
 </template>
@@ -70,9 +79,12 @@ import {
     fetchFineReportUrl
 } from "./api";
 import { queryFormOp, crudOp, editFormOp } from "./data";
+import InvDtl from "./InvDtl.vue"
 export default {
   name: "",
-  components: {},
+  components: {
+    "inv-dtl":InvDtl,
+  },
   data() {
     return {
       dialogVisible: false,
@@ -92,6 +104,10 @@ export default {
       editFormOp: editFormOp(this),
       chooseData: {},
       dialogLoading: false,
+
+      // 明细弹窗
+      dtlDialogVisible: false,
+
     };
   },
   computed:{
@@ -108,6 +124,12 @@ export default {
     }
   },
   methods: {
+    // 盘点明细录入
+    async handeInvDtlEdit(){
+      this.dtlDialogVisible = true;
+      await this.$nextTick();
+      this.$refs.invDtlRef.optionInit(this.chooseData);
+    },
     // 导出
     handleExport(){
         let { materialClass, inventoryNo  } = this.chooseData;

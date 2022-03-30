@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-03-26 09:58:34
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-03-28 09:09:20
+ * @LastEditTime: 2022-03-30 11:04:18
  */
 
 
@@ -158,3 +158,256 @@ export function editFormOp(_this) {
     ],
   }
 }
+
+
+// 明细数据
+// 查询框
+export function dtlFormOp(_this){
+  return {
+    submitBtn: false,
+    emptyBtn: false,
+    labelWidth: 100,
+    column:[
+      {
+        label: "盘点编号",
+        prop: "inventoryNo",
+        span: 4,
+        disabled: true,
+        placeholder: " ",
+      },
+      {
+        label: "盘点类型",
+        prop: "inventoryTypeName",
+        span: 4,
+        disabled: true,
+        placeholder: " ",
+      },
+      {
+        label: "材料编号",
+        prop: "matCode",
+        span: 4,
+        placeholder: " ",
+      }
+    ]
+  }
+}
+
+// 公共配置
+const commonOp = {
+    menu: false,
+    addBtn: false,
+    border: true,
+    highlightCurrentRow: true,
+    height: "calc(100vh - 160px)",
+    refreshBtn: false,
+    columnBtn: false,
+    showOverflowTooltip: true,
+    excelBtn: true,
+    showSummary: false,
+    rowKey: "index",
+    index: true,
+}
+// 纱线
+export function sxCrudOp(_this){
+  return {
+    ...commonOp,
+    column: [
+      {
+        label: _this.$t("whseField.clbh"),
+        prop: "yarnsId",
+        width: 120,
+        fixed: true
+      },
+      {
+        label: _this.$t("whseField.clmc"),
+        prop: "yarnsName",
+        type: "select",
+        overHidden: true,
+        width: 400
+      },
+      {
+        label: "纱牌",
+        prop: "yarnsCard",
+        cell: false,
+        width: 120,
+        overHidden: true
+      },
+      {
+        label: "供应商批号",
+        prop: "batId",
+        cell: false,
+        width: 180,
+        overHidden: true
+      },
+      {
+        label: _this.$t("whseField.ph"),
+        prop: "batchNo",
+        cell: false,
+        width: 120,
+        overHidden: true
+      },
+      {
+        label: "库存数量",
+        prop: "stockQty",
+        cell: false,
+        width: 100,
+        type: "number",
+        align: "right",
+        precision: "2"
+      },
+      {
+        label: "实际数量",
+        prop: "inventoryQty",
+        cell: true,
+        width: 120,
+        type: "number"
+      },
+      {
+        label: _this.$t("whseField.dw"),
+        prop: "unitName",
+        cell: false,
+        width: 80,
+      },
+      {
+        label: _this.$t("whseField.hwm"),
+        prop: "locationId",
+        cell: false,
+        width: 120
+      },
+      {
+        label: "备注",
+        prop: "remarks",
+        cell: true,
+        width: 150,
+        placeholder: " "
+      }
+    ]
+  }
+}
+
+// 通用配置 （化工原料、燃料）
+export function pubCrudOp(_this){
+  return {
+    ...commonOp,
+    column: [
+      {
+        label: _this.$t("whseField.clbh"),
+        prop: "materialCode",
+        width: 120,
+        fixed: true
+      },
+      {
+        label: _this.$t("whseField.clmc"),
+        prop: "materialName",
+        type: "select",
+        overHidden: true,
+        width: 400
+      },
+      {
+        label: _this.$t("whseField.ph"),
+        prop: "batchNo",
+        cell: false,
+        width: 120,
+        overHidden: true
+      },
+      {
+        label: "库存数量",
+        prop: "stockQty",
+        cell: false,
+        width: 100,
+        type: "number",
+        align: "right",
+        precision: "2"
+      },
+      {
+        label: "实际数量",
+        prop: "inventoryQty",
+        cell: true,
+        width: 120,
+        type: "number"
+      },
+      {
+        label: _this.$t("whseField.dw"),
+        prop: "unitName",
+        cell: false,
+        width: 80,
+      },
+      {
+        label: "备注",
+        prop: "remarks",
+        cell: true,
+        width: 150,
+        placeholder: " "
+      }
+    ]
+  }
+}
+
+
+// 成品布
+export function cpbCrudOp(_this){
+  return {
+    ...commonOp,
+    column:[
+      {
+        label: "缸号",
+        prop: "vatNo",
+        width: 180,
+        overHidden: true,
+      },
+      {
+        label: "载具编号",
+        prop: "storeLoadCode",
+        cell: false,
+        overHidden: true,
+        width: 120
+      },
+      {
+        label: "成品编号",
+        prop: "productNo",
+        width: 150,
+        overHidden: true
+      },
+      {
+        label: "存储位置",
+        prop: "locationCode",
+        width: 120,
+      },
+      {
+        label: "匹號",
+        prop: "batchNo",
+        width: 80,
+        align: "right",
+      },
+      {
+        label: "重量",
+        prop: "stockQty",
+        width: 100,
+        align: "right",
+        type: "number",
+        precision: 2
+      },
+      {
+        label: "实际重量",
+        prop: "inventoryQty",
+        cell: true,
+        width: 120,
+        type: "number"
+      },
+      {
+        label: _this.$t("whseField.dw"),
+        prop: "unitName",
+        cell: false,
+        width: 80,
+      },
+      {
+        label: "备注",
+        prop: "remarks",
+        cell: true,
+        width: 150,
+        placeholder: " "
+      }
+    ]
+  }
+}
+

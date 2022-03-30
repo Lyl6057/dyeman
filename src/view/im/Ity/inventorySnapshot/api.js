@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-03-26 09:59:34
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-03-28 14:39:59
+ * @LastEditTime: 2022-03-29 15:55:23
  */
 
 
@@ -35,3 +35,43 @@ export function fetchUpdateInvSnapData(params){
     params: params
   });
 }
+
+
+//  获取盘点详情数据
+export function fetchInvDtlDataByPage(params){
+  return axios({
+    url: "/api/whseInventoryDtl/page",
+    method: "get",
+    params: params
+  });
+}
+
+// 判断是否存在修改
+export function validIsEditQty(params){
+  return axios({
+    url: "/api/whseInventoryDtl/valid/isEdit/qty",
+    method: "get",
+    params: params
+  });
+}
+
+// 一键录入实际库存
+export function fetchAllUpdateInvQty(data){
+  return axios({
+    url: "/api/whseInventoryDtl/update/all/inventory/qty",
+    method: "post",
+    data: data
+  });
+}
+
+
+// 批量修改实际库存值
+export function fetchBatchUpdateInvQty(data){
+  return axios({
+    url: "/api/whseInventoryDtl/batch/update/inventory/qty",
+    method: "post",
+    data: data
+  });
+}
+
+
