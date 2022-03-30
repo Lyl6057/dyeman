@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-03-29 10:05:29
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-03-30 13:43:26
+ * @LastEditTime: 2022-03-30 17:32:47
 -->
 
 <template>
@@ -15,9 +15,10 @@
             v-loading="loading"
             >
             <div class="btnList">
-                <el-button type='primary' @click="handleAllInput">一键录入</el-button>
+                <el-button type='primary' :disabled="isEdit" @click="handleAllInput">一键录入</el-button>
+                <el-button type='primary' :disabled="isEdit" @click="handleInvConfirm">盘盈盘亏确认</el-button>
                 <el-button type='primary' @click='getDataList'>{{ $t("public.query") }}</el-button>
-                <el-button type='success' :disabled="crudDataList.length == 0" @click='handleBatchSave'>{{ $t("public.save") }}</el-button>
+                <el-button type='success' :disabled="isEdit || crudDataList.length == 0" @click='handleBatchSave'>{{ $t("public.save") }}</el-button>
                 <el-button type='warning' @click='handleClose'>{{ $t("public.close") }}</el-button>
             </div>
             <div class="formBox">
@@ -41,7 +42,7 @@
 
 <script>
 import { dtlFormOp,sxCrudOp,pubCrudOp ,cpbCrudOp} from "./data";
-import { fetchInvDtlDataByPage,validIsEditQty,fetchAllUpdateInvQty,fetchBatchUpdateInvQty } from "./api";
+import { fetchInvDtlDataByPage,validIsEditQty,fetchAllUpdateInvQty,fetchBatchUpdateInvQty,inventoryConfirm } from "./api";
 export default {
     name: "inventoryDtl",
     data(){
@@ -64,9 +65,32 @@ export default {
                 whseInventoryoid: "",
                 inventoryNo: ""
             },
+            // 主数据更新
+            dataHasUpdate: false,
+        }
+    },
+    computed:{
+        isEdit(){
+            return this.inventoryData.inventoryState == '4'
         }
     },
     methods:{
+        // 盘盈盘亏确认
+        handleInvConfirm(){
+            if(this.inventoryData.inventoryState != 2) return this.$tip.warning("盘点状态有误，请确认");
+            this.loading = true;
+            let params = {
+                whseInventoryoid: this.inventoryData.whseInventoryoid,
+                materialClass: this.inventoryData.materialClass
+            }
+            inventoryConfirm(params).then(res => {
+                if(res.data.code != 200) return this.$tip.wraning(res.data.msg);
+                this.inventoryData.inventoryState = "4";
+                this.dataHasUpdate = true;
+            }).finally(() => {
+                this.loading = false;
+            })
+        },
         // 单元格样式
         handleCellStyle({row,column,rowIndex,columnIndex}){
             if(column.property === 'stockQty'){
@@ -76,7 +100,8 @@ export default {
                 }
             }else if(column.property === 'inventoryQty'){
                 return {
-                    backgroundColor: row.inventoryQty != row.stockQty  ? "red" : "green"
+                    backgroundColor: row.inventoryQty != row.stockQty  ? "red" : "green",
+                    color: "white"
                 }
             }
         },
@@ -163,7 +188,7 @@ export default {
                 if(res.data.code != 200) return this.$tip.warning(res.data.msg);
                 let {records, total} = res.data.data;
                 this.crudDataList = (records || []).map(item => {
-                    item.$cellEdit = true;
+                    item.$cellEdit = this.inventoryData.inventoryState != 4 ;
                     return item;
                 });
                 this.page.total = total;

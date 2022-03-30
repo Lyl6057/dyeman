@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-03-26 09:57:57
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-03-30 11:01:51
+ * @LastEditTime: 2022-03-30 17:13:04
 -->
 <template>
   <div id="ityInventoryList">
@@ -204,11 +204,11 @@ export default {
     },
     // 编辑
     handleEdit(){
-        this.handleRowDBLClick();
+       this.editFormData = this.chooseData;
+        this.dialogVisible = true;
     },
     handleRowDBLClick(val) {
-      this.editFormData = this.chooseData;
-      this.dialogVisible = true;
+      this.handeInvDtlEdit();
     },
     cellClick(row) {
       this.chooseData = row;

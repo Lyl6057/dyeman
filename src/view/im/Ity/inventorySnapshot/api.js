@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-03-26 09:59:34
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-03-29 15:55:23
+ * @LastEditTime: 2022-03-30 17:20:44
  */
 
 
@@ -69,6 +69,15 @@ export function fetchAllUpdateInvQty(data){
 export function fetchBatchUpdateInvQty(data){
   return axios({
     url: "/api/whseInventoryDtl/batch/update/inventory/qty",
+    method: "post",
+    data: data
+  });
+}
+
+// 盘盈盘亏确认
+export function inventoryConfirm(data){
+  return axios({
+    url: "/api/whseInventoryDtl/confirm",
     method: "post",
     data: data
   });
