@@ -376,6 +376,8 @@ export default {
               }
             });
             if (i === this.mx.length - 1) {
+              this.screenLoading = false;
+              this.fpLoading = false;
               this.$refs.mx.setCurrentRow(this.mx[0]);
             }
           });

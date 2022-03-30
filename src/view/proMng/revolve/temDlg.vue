@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-03-16 16:23:05
+ * @LastEditTime: 2022-03-30 14:18:06
  * @Description:
 -->
 <template>
@@ -51,6 +51,12 @@
           type="primary"
           @click="auditHandle(form.auditState ? 0 : 1)"
           >{{ form.auditState ? "取消审核" : "审核" }}</el-button
+        >
+        <el-button
+          type="warning"
+          @click="splitHandle"
+          :disabled="!form.runJobId"
+          >新增成品布</el-button
         >
         <el-tooltip
           class="item"
@@ -203,6 +209,61 @@
         />
       </view-container>
     </el-dialog>
+    <el-dialog
+      id="colorMng_Dlg"
+      :visible.sync="splitDlg"
+      width="60%"
+      top="5vh"
+      append-to-body
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+      v-if="splitDlg"
+    >
+      <view-container
+        title="拆缸預覽"
+        v-loading="vatLoading"
+        style="height: 1calc (100vh - 80px)"
+      >
+        <div class="btnList">
+          <el-button type="success" @click="saveSplite">保存</el-button>
+          <el-button type="warning" @click="splitDlg = false">关闭</el-button>
+
+          <span style="margin-left: 10px; font-size: 15px">拆缸缸号:</span>
+          <el-select
+            v-model="splitVatNo"
+            filterable
+            remote
+            reserve-keyword
+            clearable
+            default-first-option
+            placeholder="请输入缸号"
+            :remote-method="vatMethod"
+            @change="vatChange"
+          >
+            <el-option
+              v-for="item in vatList"
+              :key="item.runJobId"
+              :label="item.vatNo"
+              :value="item.vatNo"
+            >
+            </el-option>
+          </el-select>
+        </div>
+        <el-transfer
+          filterable
+          v-model="checkData"
+          filter-placeholder="关键字搜索"
+          :data="finishedNotes"
+          :props="{
+            key: 'cardId',
+            label: 'productNo',
+          }"
+          :right-default-checked="checked"
+          :titles="[splitVatNo || '拆缸缸号', form.vatNo]"
+          style="margin-top: 10px"
+        ></el-transfer>
+      </view-container>
+    </el-dialog>
     <choice
       :choiceV="choiceV"
       :choiceTle="choiceTle"
@@ -217,7 +278,15 @@
 <script>
 import choice from "@/components/proMng/index";
 import { addWash, addDyes, getTechargueList } from "../print/dyeing/api";
-import { mainCrud, dlgForm, dlgCrud, bfOp, testOp, itemOp } from "./data";
+import {
+  mainCrud,
+  dlgForm,
+  dlgCrud,
+  bfOp,
+  testOp,
+  itemOp,
+  cpbOp,
+} from "./data";
 import { timeConversion } from "@/config/util";
 import { baseCodeSupplyEx, baseCodeSupply } from "@/api/index";
 import {
@@ -249,21 +318,33 @@ import {
   updateDye,
   addDye,
   getWeave,
+  getFinishList,
+  updateFinished,
 } from "./api";
 export default {
   name: "",
   props: {
     detail: Object,
     isAdd: Boolean,
+    isSplit: Boolean,
     copyC: Boolean,
     audit: Boolean,
+    splitType: String,
   },
   components: {
     choice: choice,
   },
   data() {
     return {
+      finishedNote: [],
+      vatList: "",
+      finishedNotes: [],
+      checkData: [],
+      checked: [],
+      splitVatNo: "",
+      splitDlg: false,
       wLoading: false,
+      splitLoading: false,
       formOp: mainCrud(this),
       form: {
         forClothLockJoin: false,
@@ -301,6 +382,7 @@ export default {
       choiceTarget: {},
       choiceField: "",
       choiceQ: {},
+      cpbOp: cpbOp(this),
       bfOp: bfOp(this),
       bfLoading: false,
       testOp: testOp(this),
@@ -339,6 +421,67 @@ export default {
             }, 200);
           }
         });
+      });
+    },
+    vatMethod(val) {
+      get({
+        vatNo: "!^%" + val,
+        rows: 10,
+        start: 1,
+      }).then((res) => {
+        this.vatList = res.data.records;
+      });
+    },
+    splitHandle() {
+      this.getFinish();
+      this.splitDlg = true;
+    },
+    getFinish() {
+      getFinishList({ vatNo: this.form.vatNo, cardType: 1 }).then((res) => {
+        res.data.sort((a, b) => {
+          return a.productNo > b.productNo ? 1 : -1;
+        });
+        res.data.forEach((item) => {
+          this.checkData.push(item.cardId);
+          this.finishedNotes = res.data;
+        });
+      });
+    },
+    saveSplite() {
+      this.vatLoading = true;
+      let data = [];
+      this.finishedNotes.forEach((item) => {
+        if (this.checkData.indexOf(item.cardId) != -1) {
+          data.push(item);
+        }
+      });
+      data.forEach((item, i) => {
+        item.vatNo = this.form.vatNo;
+        updateFinished(item).then((res) => {
+          if (i == data.length - 1) {
+            this.vatLoading = false;
+            this.$tip.success("保存成功!");
+            this.getFinish();
+            this.vatChange();
+          }
+        });
+      });
+    },
+    vatChange() {
+      this.checked = [];
+
+      this.splitLoading = true;
+      getFinishList({
+        vatNo: this.splitVatNo,
+        cardType: 1,
+        // delFlag: "",
+      }).then((res) => {
+        this.finishedNotes = this.finishedNotes.concat(
+          res.data.sort((a, b) => {
+            return a.productNo > b.productNo ? 1 : -1;
+          })
+        );
+        // this.checkData.push(this.finishedNotes[0].cardId);
       });
     },
     codeChange() {
@@ -698,10 +841,16 @@ export default {
           baseCodeSupplyEx({ code: "dye_batch" }).then((res) => {
             if (this.copyC) {
               this.form = JSON.parse(JSON.stringify(this.detail));
-              this.form.vatNo += "A";
+              get({ vatNo: "%" + this.form.vatNo + this.splitType }).then(
+                (vatList) => {
+                  this.form.vatNo =
+                    this.form.vatNo +
+                    this.splitType +
+                    (vatList.data.records.length + 1);
+                }
+              );
               this.form.runJobId = "";
               this.form.auditState = 0;
-
               Object.keys(this.form).forEach((item) => {
                 if (this.isEmpty(this.form[item])) {
                   delete this.form[item];
@@ -1353,17 +1502,31 @@ export default {
 };
 </script>
 <style lang='stylus'>
+.el-transfer-panel__body, .el-transfer-panel__list.is-filterable
+  height calc(100vh - 200px)
+.el-transfer-panel .el-checkbox__inner
+  height 16px
+  width 16px
+.el-transfer-panel__filter .el-input__inner
+  font-size 15px
+.el-transfer-panel__filter
+  margin 5px
+.el-transfer-panel
+  width 250px
 .el-tag--mini
   height 28px !important
   // padding: 0 5px;
   line-height 28px !important
   font-size 14px
+.el-input--mini .el-input__inner
+  height 33px
+  line-height 33px
 // .el-table__fixed-body-wrapper {
 // top: 60px !important;
 // }
 #revolve
   .el-radio__label
-    font-size 16px
+    font-size 15px
   .avue-group__header
     margin-bottom 10px
     height 30px

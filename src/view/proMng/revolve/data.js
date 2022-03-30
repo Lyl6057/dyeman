@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-03-19 15:49:47
+ * @LastEditTime: 2022-03-30 08:12:08
  * @Description:
  */
 
@@ -1267,7 +1267,7 @@ export function bfOp(_this) {
     addBtn: true,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 3.866667rem)",
+    height: "calc(100vh - 145px)",
     refreshBtn: false,
     columnBtn: false,
     page: false,
@@ -1389,6 +1389,65 @@ export function bfOp(_this) {
     ]
   };
 }
+
+export function cpbOp(_this) {
+  return {
+    menu: false,
+    addBtn: true,
+    border: true,
+    highlightCurrentRow: true,
+    height: "calc(100vh - 189px)",
+    refreshBtn: false,
+    columnBtn: false,
+    page: false,
+    labelWidth: 130,
+    selection: true,
+    showSummary: true,
+    sumColumnList: [
+      {
+        label: " ",
+        name: "neiWeight",
+        type: "sum"
+      },
+      {
+        label: " ",
+        name: "productNo",
+        type: "count"
+      }
+    ],
+    column: [
+      {
+        label: "#",
+        prop: "sn",
+        width: 50,
+        align: "center",
+        display: false
+      },
+      {
+        label: "成品编号",
+        prop: "productNo",
+        overHidden: true,
+        span: 6,
+        disabled: false,
+        sortable: true,
+        cell: false
+      },
+      {
+        label: "重量(KG)",
+        prop: "netWeight",
+        overHidden: true,
+        width: 70,
+        span: 6,
+        placeholder: " ",
+        // type: "select",
+        // dicData: getDicT("proClothNote", "clothWeight", "noteCode"),
+        align: "right",
+        hide: false
+      }
+    ]
+  };
+}
+
 export function testOp(_this) {
   return {
     menu: false,

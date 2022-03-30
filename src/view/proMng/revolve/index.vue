@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-12-20 16:19:18
+ * @LastEditTime: 2022-03-29 16:46:55
  * @Description:
 -->
 <template>
@@ -78,6 +78,7 @@
             >复制</el-button
           >
         </el-tooltip>
+
         <!-- <el-button
           type="primary"
           @click="audit"
@@ -95,9 +96,27 @@
             this.$t("public.query")
           }}</el-button>
         </el-tooltip>
-        <!-- <el-button type="warning" @click="close">{{
-          this.$t("public.close")
-        }}</el-button> -->
+        <el-dropdown
+          split-button
+          type="primary"
+          @click="splitVatNo('A')"
+          :loading="wloading"
+          :disabled="!detail.runJobId"
+          style="margin-left: 10px"
+        >
+          拆缸
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item @click.native="splitVatNo('A')"
+              >改单拆缸</el-dropdown-item
+            >
+            <el-dropdown-item @click.native="splitVatNo('R')"
+              >改染拆缸</el-dropdown-item
+            >
+            <el-dropdown-item @click.native="splitVatNo('W')"
+              >废布拆缸</el-dropdown-item
+            >
+          </el-dropdown-menu>
+        </el-dropdown>
       </el-row>
       <el-row class="formBox">
         <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
@@ -133,6 +152,8 @@
           :detail="detail"
           :isAdd="isAdd"
           :copyC="copyC"
+          :isSplit="isSplit"
+          :splitType="splitType"
           @close="dialogVisible = false"
           @print="print"
           @refresh="query"
@@ -197,6 +218,7 @@ export default {
       dialogVisible: false,
       detail: {},
       isAdd: false,
+      isSplit: false,
       input: "",
       wloading: false,
       czsocket: {},
@@ -204,6 +226,7 @@ export default {
       pdfUrl: "",
       copyC: false,
       selectList: [],
+      splitType: "A",
     };
   },
   watch: {},
@@ -283,12 +306,22 @@ export default {
     },
     copyEvent() {
       this.isAdd = true;
+      this.splitType = "A";
       this.copyC = true;
+      this.isSplit = false;
       this.dialogVisible = true;
     },
     add() {
+      this.isSplit = false;
       this.isAdd = true;
       this.copyC = false;
+      this.dialogVisible = true;
+    },
+    splitVatNo(type) {
+      this.splitType = type;
+      this.isSplit = true;
+      this.isAdd = true;
+      this.copyC = true;
       this.dialogVisible = true;
     },
     del() {
@@ -388,14 +421,13 @@ export default {
 };
 </script>
 <style lang='stylus'>
-#runJob {
-  .avue-crud__tip {
-    display: none !important;
-    height: 0px !important;
-  }
-
-  .avue-crud__menu {
-    height: 35px !important;
-  }
-}
+#runJob
+  .avue-crud__tip
+    display none !important
+    height 0px !important
+  .avue-crud__menu
+    height 35px !important
+.el-dropdown-menu--mini .el-dropdown-menu__item
+  font-size 15px !important
+  line-height 28px !important
 </style>
