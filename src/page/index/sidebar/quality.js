@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-04-01 14:08:13
  * @LastEditors: Lyl
- * @LastEditTime: 2022-03-22 09:31:59
+ * @LastEditTime: 2022-03-30 16:01:27
  * @Description:
  */
 
@@ -65,7 +65,11 @@ export function quality(_this) {
           index: "qcTestReport"
         },
         {
-          menuName: "7.报表",
+          menuName: "7.拆缸",
+          index: "modifyFinished"
+        },
+        {
+          menuName: "8.报表",
           index: "qcDetailReport"
         }
       ]

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-03-29 14:00:48
+ * @LastEditTime: 2022-03-30 19:20:41
  * @Description: 
 -->
 <template>
@@ -97,6 +97,7 @@ export default {
     detail: Object,
     isAdd: Boolean,
     tabs: String,
+    userId: String,
   },
   components: {
     choice: choice,
@@ -159,7 +160,6 @@ export default {
       getLog({
         runJobId: id,
       }).then((res) => {
-        console.log(res);
         if (res.data.length) {
           let list = res.data.sort((a, b) => {
             return a.acceptDate > b.acceptDate ? 1 : -1;
@@ -175,7 +175,6 @@ export default {
               page: 1,
             }).then((vatRes) => {
               if (vatRes.data.records.length) {
-                console.log(vatRes);
                 let weight = vatRes.data.records[0].clothWeight || 0;
                 this.form.planOutput = weight;
                 this.form.realOutput = weight;
@@ -200,10 +199,9 @@ export default {
     },
     getData() {
       this.form = this.detail;
-      // this.form.acceptStaff = this.$store.state.userOid;
       this.form.acceptStaff = parent.userID;
       this.form.acceptDate = this.$getNowTime("datetime");
-      this.form.dptworkProcessFk = this.detail.dpt || "";
+      this.form.dptworkProcessFk = this.userId || "";
       this.form.planOutput = 0;
       this.form.realOutput = 0;
       this.form.dispathReceive = 1;

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-03-30 14:18:06
+ * @LastEditTime: 2022-03-30 18:53:25
  * @Description:
 -->
 <template>
@@ -52,12 +52,12 @@
           @click="auditHandle(form.auditState ? 0 : 1)"
           >{{ form.auditState ? "取消审核" : "审核" }}</el-button
         >
-        <el-button
+        <!-- <el-button
           type="warning"
           @click="splitHandle"
           :disabled="!form.runJobId"
           >新增成品布</el-button
-        >
+        > -->
         <el-tooltip
           class="item"
           effect="dark"
@@ -245,6 +245,7 @@
               :key="item.runJobId"
               :label="item.vatNo"
               :value="item.vatNo"
+              :disabled="item.vatNo == form.vatNo"
             >
             </el-option>
           </el-select>
@@ -258,7 +259,6 @@
             key: 'cardId',
             label: 'productNo',
           }"
-          :right-default-checked="checked"
           :titles="[splitVatNo || '拆缸缸号', form.vatNo]"
           style="margin-top: 10px"
         ></el-transfer>
@@ -433,17 +433,20 @@ export default {
       });
     },
     splitHandle() {
-      this.getFinish();
+      if (!this.checkData.length) {
+        this.getFinish();
+      }
       this.splitDlg = true;
     },
     getFinish() {
+      this.checkData = [];
       getFinishList({ vatNo: this.form.vatNo, cardType: 1 }).then((res) => {
         res.data.sort((a, b) => {
           return a.productNo > b.productNo ? 1 : -1;
         });
+        this.finishedNotes = this.finishedNotes.concat(res.data);
         res.data.forEach((item) => {
           this.checkData.push(item.cardId);
-          this.finishedNotes = res.data;
         });
       });
     },
@@ -461,7 +464,6 @@ export default {
           if (i == data.length - 1) {
             this.vatLoading = false;
             this.$tip.success("保存成功!");
-            this.getFinish();
             this.vatChange();
           }
         });
@@ -469,19 +471,17 @@ export default {
     },
     vatChange() {
       this.checked = [];
-
+      this.finishedNotes = [];
       this.splitLoading = true;
       getFinishList({
         vatNo: this.splitVatNo,
         cardType: 1,
         // delFlag: "",
       }).then((res) => {
-        this.finishedNotes = this.finishedNotes.concat(
-          res.data.sort((a, b) => {
-            return a.productNo > b.productNo ? 1 : -1;
-          })
-        );
-        // this.checkData.push(this.finishedNotes[0].cardId);
+        this.finishedNotes = res.data.sort((a, b) => {
+          return a.productNo > b.productNo ? 1 : -1;
+        });
+        this.getFinish();
       });
     },
     codeChange() {

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-03-23 14:52:57
+ * @LastEditTime: 2022-03-30 19:20:56
  * @Description: 
 -->
 <template>
@@ -169,6 +169,7 @@
         ref="tem"
         :detail="detail"
         :isAdd="isAdd"
+        :userId="userId"
         :tabs="tabs"
         @close="dialogVisible = false"
         @refresh="query"
@@ -228,13 +229,14 @@ export default {
       tabs: "rd",
       flowVisible: false,
       fk: "",
+      userId: "",
     };
   },
   watch: {},
   methods: {
     query() {
       this.loading = true;
-      this.detail = {};
+      // this.detail = {};
       for (let key in this.form) {
         if (this.form[key] == "") {
           delete this.form[key];
@@ -251,9 +253,6 @@ export default {
         })
       ).then((res) => {
         this.crud = res.data.records;
-        // this.crud = this.crud.sort((a, b) => {
-        //   return a.bleadyeCode > b.bleadyeCode ? 1 : -1;
-        // });
         this.crud.forEach((item, i) => {
           item.index = i + 1;
         });
@@ -278,36 +277,6 @@ export default {
       this.$nextTick(() => {
         this.query();
       });
-    },
-    print() {
-      this.$tip
-        .cofirm(
-          "是否確定打印生產單號為【 " +
-            this.detail.weaveJobCode +
-            this.$t("iaoMng.delTle2"),
-          this,
-          {}
-        )
-        .then(() => {
-          print({ weaveJobCode: this.detail.weaveJobCode }).then((res) => {
-            if (res.data.msg === "打印成功") {
-              this.wloading = true;
-              setTimeout(() => {
-                this.wloading = false;
-                this.$tip.success(res.data.msg);
-              }, 2000);
-            } else {
-              this.wloading = true;
-              setTimeout(() => {
-                this.wloading = false;
-                this.$tip.error(res.data.msg);
-              }, 500);
-            }
-          });
-        })
-        .catch((err) => {
-          this.$tip.warning(this.$t("public.qxcz"));
-        });
     },
     add() {
       this.isAdd = true;
@@ -364,12 +333,13 @@ export default {
     },
   },
   created() {
-    getLoginOrg({ account: parent.userID }).then((res) => {
+    getLoginOrg({ account: "mia" }).then((res) => {
+      // parent.userID
       if (res.data) {
         getDptWorkProcess().then((dpt) => {
           for (let i = 0; i < dpt.data.length; i++) {
             if (dpt.data[i].orgNo.indexOf(res.data.orgno) != -1) {
-              this.detail.dpt = dpt.data[i].dptCode;
+              this.userId = dpt.data[i].dptCode;
               break;
             }
           }
