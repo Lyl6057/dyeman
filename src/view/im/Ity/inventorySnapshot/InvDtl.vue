@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-03-29 10:05:29
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-03-30 11:50:10
+ * @LastEditTime: 2022-03-30 13:43:26
 -->
 
 <template>
@@ -71,7 +71,8 @@ export default {
         handleCellStyle({row,column,rowIndex,columnIndex}){
             if(column.property === 'stockQty'){
                 return {
-                    backgroundColor: "#ccc"
+                    backgroundColor: "#ccc",
+                    fontWeight: "bolder"
                 }
             }else if(column.property === 'inventoryQty'){
                 return {
@@ -177,3 +178,5 @@ export default {
     }
 }
 </script>
+<style scoped>
+</style>
