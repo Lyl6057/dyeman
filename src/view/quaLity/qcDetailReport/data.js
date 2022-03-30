@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-03-29 08:23:31
+ * @LastEditTime: 2022-03-30 14:28:43
  * @Description:
  */
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
@@ -12,7 +12,7 @@ export function mainForm(_this) {
   return {
     submitBtn: false,
     emptyBtn: false,
-    labelWidth: 80,
+    labelWidth: 100,
     column: [
       {
         label: "缸号",
@@ -23,9 +23,26 @@ export function mainForm(_this) {
         formslot: true
       },
       {
+        label: "重量单位",
+        prop: "wmUnit",
+        span: 6,
+        placeholder: " ",
+        type: "select",
+        dicData: [
+          {
+            value: "KG",
+            labek: "KG"
+          },
+          {
+            value: "LBS",
+            labek: "LBS"
+          }
+        ]
+      },
+      {
         label: "备注",
         prop: "remark",
-        span: 18,
+        span: 12,
         placeholder: " "
       }
     ]

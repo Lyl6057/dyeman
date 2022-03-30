@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-03-29 08:41:58
+ * @LastEditTime: 2022-03-30 15:23:01
  * @Description:
 -->
 <template>
@@ -54,6 +54,7 @@
           :page.sync="page"
           v-loading="loading"
           @on-load="query"
+          @cell-click="cellClick"
         >
         </avue-crud>
       </el-row>
@@ -69,7 +70,9 @@ export default {
   data() {
     return {
       formOp: mainForm(this),
-      form: {},
+      form: {
+        wmUnit: "KG",
+      },
       crudOp: mainCrud(this),
       crud: [],
       page: {
@@ -100,7 +103,9 @@ export default {
         this.crud = res.data.records;
         this.page.total = res.data.total;
         setTimeout(() => {
-          this.$refs.crud.setCurrentRow(this.crud[0] || {});
+          this.$nextTick(() => {
+            this.$refs.crud.setCurrentRow(this.crud[0] || {});
+          });
           this.wloading = false;
         }, 200);
       });
@@ -172,51 +177,63 @@ export default {
             checkData.lossRate = Number(
               (checkData.weightKg / checkData.calicoAmount - 1) * 100
             ).toFixed(2);
-            if (this.crud.length) {
-              // 存在记录,修改
-              update(
-                Object.assign(checkData, {
-                  checkoutId: this.crud[0].checkoutId,
-                  remark: this.form.remark,
-                })
-              ).then((res) => {
-                this.query();
-                let name = encodeURI(
-                  "http:" +
-                    process.env.API_HOST.split(":")[1] +
-                    ":92/api/proFinalProductCard/warehousingdetails?vatNo=" +
-                    this.form.vatNo
-                );
-                window.open(name);
-              });
-            } else {
-              add(
-                Object.assign(checkData, {
-                  remark: this.form.remark,
-                  checkoutDate: this.$getNowTime("datetime"),
-                })
-              ).then((res) => {
-                this.query();
-                let name = encodeURI(
-                  "http:" +
-                    process.env.API_HOST.split(":")[1] +
-                    ":92/api/proFinalProductCard/warehousingdetails?vatNo=" +
-                    this.form.vatNo
-                );
-                window.open(name);
-              });
-            }
+            get({ vatNo: this.form.vatNo }).then((vatNo) => {
+              if (vatNo.data.records.length) {
+                // 存在记录,修改
+                update(
+                  Object.assign(checkData, {
+                    checkoutId: vatNo.data.records[0].checkoutId,
+                    remark: this.form.remark,
+                    wmUnit: this.form.wmUnit,
+                  })
+                ).then((res) => {
+                  // this.query();
+                  let name = encodeURI(
+                    "http:" +
+                      process.env.API_HOST.split(":")[1] +
+                      ":92/api/proFinalProductCard/warehousingdetails?vatNo=" +
+                      this.form.vatNo +
+                      "&units=" +
+                      this.form.wmUnit
+                  );
+                  window.open(name);
+                  this.wloading = false;
+                });
+              } else {
+                add(
+                  Object.assign(checkData, {
+                    remark: this.form.remark,
+                    checkoutDate: this.$getNowTime("datetime"),
+                    wmUnit: this.form.wmUnit,
+                  })
+                ).then((res) => {
+                  // this.query();
+                  let name = encodeURI(
+                    "http:" +
+                      process.env.API_HOST.split(":")[1] +
+                      ":92/api/proFinalProductCard/warehousingdetails?vatNo=" +
+                      this.form.vatNo +
+                      "&units=" +
+                      this.form.wmUnit
+                  );
+                  window.open(name);
+                  this.wloading = false;
+                });
+              }
+            });
           });
         } else {
           this.$tip.warning("无此缸号信息！");
         }
       });
     },
+    cellClick(val) {
+      this.remoteMethod(val.vatNo);
+      this.form.vatNo = val.vatNo;
+    },
   },
   updated() {},
-  created() {
-    console.log();
-  },
+  created() {},
   mounted() {},
   beforeDestroy() {},
 };
