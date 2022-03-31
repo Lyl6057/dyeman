@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-03-26 09:57:57
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-03-30 17:13:04
+ * @LastEditTime: 2022-03-31 10:19:42
 -->
 <template>
   <div id="ityInventoryList">
@@ -67,7 +67,7 @@
           <avue-form ref="editForm" :option="editFormOp" v-model="editFormData"></avue-form>
       </el-dialog>
       <el-dialog :fullscreen='true' :visible.sync="dtlDialogVisible" :append-to-body="true" width="100%" :close-on-click-modal="false">
-        <inv-dtl ref="invDtlRef" @closeDialog='dtlDialogVisible = false' ></inv-dtl>
+        <inv-dtl v-if='dtlDialogVisible' ref="invDtlRef" @closeDialog='handleDtlCloseDialog' ></inv-dtl>
       </el-dialog>
     </view-container>
   </div>
@@ -124,6 +124,10 @@ export default {
     }
   },
   methods: {
+    handleDtlCloseDialog(isRefresh){
+      this.dtlDialogVisible = false
+      isRefresh && this.getDataList();
+    },
     // 盘点明细录入
     async handeInvDtlEdit(){
       this.dtlDialogVisible = true;
@@ -149,10 +153,14 @@ export default {
         })
     },
     // 启动盘点
-    handleStartCount(){
-        let { inventoryDate, inventoryType } = this.chooseData;
+    async handleStartCount(){
+        let { inventoryDate, inventoryType, inventoryState } = this.chooseData;
         if(!inventoryDate) return this.$tip.warning("未填入盘点日期");
         if(!inventoryType) return this.$tip.warning("未填入盘点类型");
+        if(inventoryState == 4){
+          let isContinue = await this.$tip.cofirm("该数据已盘点结束，是否确认重新开启~").then(_ => true).catch(_ => false);
+          if(!isContinue) return;
+        }
         let data = Object.assign({}, this.chooseData,{inventoryState: "2"});
         this.loading = true;
         fetchUpdateInvSnapData(data).then(res => {

@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-03-26 09:59:34
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-03-30 17:20:44
+ * @LastEditTime: 2022-03-31 09:53:49
  */
 
 
@@ -71,6 +71,15 @@ export function fetchBatchUpdateInvQty(data){
     url: "/api/whseInventoryDtl/batch/update/inventory/qty",
     method: "post",
     data: data
+  });
+}
+
+// 检查是否存在入仓记录
+export function validIsExistWhseIn(params){
+  return axios({
+    url: "/api/whseInventoryDtl/check/is/exist",
+    method: "get",
+    params: params
   });
 }
 

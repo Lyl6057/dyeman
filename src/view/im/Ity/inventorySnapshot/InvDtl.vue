@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-03-29 10:05:29
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-03-30 17:32:47
+ * @LastEditTime: 2022-03-31 10:13:01
 -->
 
 <template>
@@ -42,7 +42,7 @@
 
 <script>
 import { dtlFormOp,sxCrudOp,pubCrudOp ,cpbCrudOp} from "./data";
-import { fetchInvDtlDataByPage,validIsEditQty,fetchAllUpdateInvQty,fetchBatchUpdateInvQty,inventoryConfirm } from "./api";
+import { fetchInvDtlDataByPage,validIsEditQty,fetchAllUpdateInvQty,fetchBatchUpdateInvQty,inventoryConfirm,validIsExistWhseIn } from "./api";
 export default {
     name: "inventoryDtl",
     data(){
@@ -57,7 +57,7 @@ export default {
             },
             crudOp: sxCrudOp(this),
             crudDataList:[],
-            queryFormOp: dtlFormOp(this),
+            queryFormOp: {},
             queryForm: {},
             // 盘点数据
             inventoryData: {
@@ -75,10 +75,52 @@ export default {
         }
     },
     methods:{
+        // 初始化
+        optionInit(invData){
+            switch(invData.materialClass){
+                case "SX":
+                    this.crudOp = sxCrudOp(this);
+                    break;
+                case "CPB":
+                    this.crudOp = cpbCrudOp(this);
+                    break;
+                default:
+                    this.crudOp = pubCrudOp(this);
+            }
+            this.queryFormOp = dtlFormOp(this,invData.materialClass);
+            this.page.currentPage = 1;
+            this.inventoryData = invData;
+            this.queryForm.inventoryNo = invData.inventoryNo;
+            this.queryForm.inventoryTypeName = invData.inventoryTypeName;
+            this.queryForm.matCode = "";
+            this.getDataList();
+        },
+        // 过滤差异数据
+        filterSameQty(data){
+            this.page.currentPage = 1;
+            this.queryForm.isFilterSameQty = data.value;
+            this.getDataList();
+        },
         // 盘盈盘亏确认
-        handleInvConfirm(){
+        async handleInvConfirm(){
             if(this.inventoryData.inventoryState != 2) return this.$tip.warning("盘点状态有误，请确认");
+            let isConfirn = await this.$tip.cofirm("是否确认进行盘盈盘亏入仓确认~").then(_ => true).catch(_ => false);
+            if(!isConfirn) return;
+            // 判断是否已存在该入仓数据
             this.loading = true;
+            let isJudgeExistInvNo  = await validIsExistWhseIn(this.inventoryData).then(res => res.data.data);
+            // 是否确认提交
+            let isComfirmSubmit = true;
+            if(isJudgeExistInvNo){
+                isComfirmSubmit = await this.$tip.cofirm("已存在该盘盈盘亏结果入仓数据，是否进行覆盖~").then(_ => true).catch(_ => false);
+            }
+
+            if(!isComfirmSubmit) return this.loading = false;
+            this.loading = true;
+
+            //提交前，先做一次保存，确保数据无误
+            await this.handleBatchSave(false);
+            
             let params = {
                 whseInventoryoid: this.inventoryData.whseInventoryoid,
                 materialClass: this.inventoryData.materialClass
@@ -106,7 +148,7 @@ export default {
             }
         },
         // 批量保存
-        handleBatchSave(){
+        handleBatchSave(refresh = true){
             let dataList = this.crudDataList.map(item => {
                 return {
                     whseInventoryDtloid: item.id,
@@ -115,19 +157,21 @@ export default {
                 }
             });
             this.loading = true;
-            console.log("data list",dataList);
 
-            fetchBatchUpdateInvQty(dataList).then(res => {
+            return fetchBatchUpdateInvQty(dataList).then(res => {
                 if(res.data.code != 200) this.$tip.warning(res.data.msg);
-                this.$tip.success(res.data.msg);
-                this.getDataList();
+                // 刷新数据
+                if(refresh){
+                    this.$tip.success(res.data.msg);
+                    this.getDataList();
+                }
             }).finally(_ => {
                 this.loading = false;
             })
         },
         // 关闭
         handleClose(){
-            this.$emit("closeDialog",false);
+            this.$emit("closeDialog",this.dataHasUpdate);
         },
         // 一键修改
         async handleAllInput(){
@@ -151,37 +195,18 @@ export default {
                 this.getDataList();
             })
         },
-        // 初始化
-        optionInit(invData){
-            switch(invData.materialClass){
-                case "SX":
-                    this.crudOp = sxCrudOp(this);
-                    break;
-                case "CPB":
-                    this.crudOp = cpbCrudOp(this);
-                    break;
-                default:
-                    this.crudOp = pubCrudOp(this);
-            }
-            this.page.currentPage = 1;
-            this.inventoryData = invData;
-            this.queryForm.inventoryNo = invData.inventoryNo;
-            this.queryForm.inventoryTypeName = invData.inventoryTypeName;
-            this.queryForm.matCode = "";
-            this.getDataList();
-            
-        },
+        
         // 获取数据
         getDataList(){
             let {materialClass, whseInventoryoid} = this.inventoryData;
-            console.log("inventoryData",this.inventoryData)
             // 若无类似和流水号参数，则无法查询
             if(!(materialClass && whseInventoryoid)) return;
             let params = {
                 rows: this.page.pageSize,
                 start: this.page.currentPage,
                 materialClass, whseInventoryoid,
-                matCode: this.queryForm.matCode
+                matCode: this.queryForm.matCode,
+                isFilterSameQty: this.queryForm.isFilterSameQty
             };
             this.loading = true;
             fetchInvDtlDataByPage(params).then(res => {
