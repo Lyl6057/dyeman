@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-03-26 09:58:34
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-03-30 11:04:18
+ * @LastEditTime: 2022-03-31 10:14:58
  */
 
 
@@ -162,7 +162,8 @@ export function editFormOp(_this) {
 
 // 明细数据
 // 查询框
-export function dtlFormOp(_this){
+export function dtlFormOp(_this,invType){
+  console.log()
   return {
     submitBtn: false,
     emptyBtn: false,
@@ -183,10 +184,17 @@ export function dtlFormOp(_this){
         placeholder: " ",
       },
       {
-        label: "材料编号",
+        label:  invType == "CPB" ? "缸号" : "材料编号",
         prop: "matCode",
         span: 4,
         placeholder: " ",
+      },
+      {
+        label: "差异显示",
+        prop: "isFilterSameQty",
+        type: "switch",
+        span: 4,
+        change: _this.filterSameQty
       }
     ]
   }
@@ -260,7 +268,8 @@ export function sxCrudOp(_this){
         prop: "inventoryQty",
         cell: true,
         width: 120,
-        type: "number"
+        type: "number",
+        align: "right",
       },
       {
         label: _this.$t("whseField.dw"),
@@ -324,7 +333,8 @@ export function pubCrudOp(_this){
         prop: "inventoryQty",
         cell: true,
         width: 120,
-        type: "number"
+        type: "number",
+        align: "right",
       },
       {
         label: _this.$t("whseField.dw"),
@@ -392,7 +402,8 @@ export function cpbCrudOp(_this){
         prop: "inventoryQty",
         cell: true,
         width: 120,
-        type: "number"
+        type: "number",
+        align: "right",
       },
       {
         label: _this.$t("whseField.dw"),
