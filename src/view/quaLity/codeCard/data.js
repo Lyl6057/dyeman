@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-02-19 16:32:48
+ * @LastEditTime: 2022-03-31 11:09:43
  * @Description:
  */
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
@@ -328,7 +328,7 @@ export function mainCrud(_this) {
         minRows: 0,
         type: "number",
         precision: 1,
-        align: "left",
+        align: "right",
         placeholder: " "
       },
       {

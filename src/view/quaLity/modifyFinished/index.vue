@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-03-31 08:50:56
+ * @LastEditTime: 2022-03-31 14:30:42
  * @Description:
 -->
 <template>
@@ -11,85 +11,115 @@
     :element-loading-text="$t('public.loading')"
     v-loading="wloading"
   >
-    <view-container title="拆缸管理">
-      <el-row class="btnList">
-        <el-button type="success" @click="save">{{
-          this.$t("public.save")
-        }}</el-button>
-      </el-row>
-      <el-row class="formBox">
-        <avue-form ref="form" :option="formOp" v-model="form">
-          <template slot-scope="scope" slot="vatNo1">
-            <el-select
-              v-model="form.vatNo1"
-              filterable
-              remote
-              reserve-keyword
-              clearable
-              default-first-option
-              placeholder="请输入缸号"
-              :remote-method="vatMethod"
-              @change="vatChange"
-            >
-              <el-option
-                v-for="item in vatList"
-                :key="item.vatNo"
-                :label="item.vatNo"
-                :value="item.vatNo"
-                :disabled="item.vatNo == form.vatNo2"
+    <el-tabs type="border-card" v-model="tabs">
+      <el-tab-pane label="拆缸管理" name="first">
+        <el-row class="btnList">
+          <el-button type="success" @click="save">{{
+            this.$t("public.save")
+          }}</el-button>
+        </el-row>
+        <el-row class="formBox">
+          <avue-form ref="form" :option="formOp" v-model="form">
+            <template slot-scope="scope" slot="vatNo1">
+              <el-select
+                v-model="form.vatNo1"
+                filterable
+                remote
+                reserve-keyword
+                clearable
+                default-first-option
+                placeholder="请输入缸号"
+                :remote-method="vatMethod"
+                @change="vatChange"
               >
-              </el-option>
-            </el-select>
-          </template>
-          <template slot-scope="scope" slot="vatNo2">
-            <el-select
-              v-model="form.vatNo2"
-              filterable
-              remote
-              reserve-keyword
-              clearable
-              default-first-option
-              placeholder="请输入缸号"
-              :remote-method="vatMethod"
-              @change="vatChange"
-            >
-              <el-option
-                v-for="item in vatList"
-                :key="item.vatNo"
-                :label="item.vatNo"
-                :value="item.vatNo"
-                :disabled="item.vatNo == form.vatNo1"
+                <el-option
+                  v-for="item in vatList"
+                  :key="item.vatNo"
+                  :label="item.vatNo"
+                  :value="item.vatNo"
+                  :disabled="item.vatNo == form.vatNo2"
+                >
+                </el-option>
+              </el-select>
+            </template>
+            <template slot-scope="scope" slot="vatNo2">
+              <el-select
+                v-model="form.vatNo2"
+                filterable
+                remote
+                reserve-keyword
+                clearable
+                default-first-option
+                placeholder="请输入缸号"
+                :remote-method="vatMethod"
+                @change="vatChange"
               >
-              </el-option>
-            </el-select>
-          </template>
-        </avue-form>
-      </el-row>
-      <el-row class="crudBox">
-        <el-transfer
-          filterable
-          v-model="checkData"
-          filter-placeholder="关键字搜索"
-          :data="finishedNotes"
-          :props="{
-            key: 'cardId',
-            label: 'productNo',
-          }"
-          :titles="[form.vatNo1 || '拆缸缸号', form.vatNo2 || '目标缸号']"
-          style="margin: 10px"
-        >
-          <span slot-scope="{ option }"
-            >{{ option.vatNo }} - {{ option.pidNo }} -
-            {{ option.netWeight + "KG" }}</span
-          ></el-transfer
-        >
-      </el-row>
-    </view-container>
+                <el-option
+                  v-for="item in vatList"
+                  :key="item.vatNo"
+                  :label="item.vatNo"
+                  :value="item.vatNo"
+                  :disabled="item.vatNo == form.vatNo1"
+                >
+                </el-option>
+              </el-select>
+            </template>
+          </avue-form>
+        </el-row>
+        <el-row class="crudBox">
+          <el-transfer
+            filterable
+            v-model="checkData"
+            filter-placeholder="关键字搜索"
+            :data="finishedNotes"
+            :props="{
+              key: 'cardId',
+              label: 'productNo',
+            }"
+            :titles="[form.vatNo1 || '拆缸缸号', form.vatNo2 || '目标缸号']"
+            style="margin: 10px"
+          >
+            <span slot-scope="{ option }"
+              >{{ option.vatNo }} - {{ option.pidNo }} -
+              {{ option.netWeight + "KG" }}</span
+            ></el-transfer
+          >
+        </el-row>
+      </el-tab-pane>
+      <el-tab-pane label="删除数据" name="second">
+        <el-row class="btnList">
+          <el-button type="primary" @click="query">{{
+            this.$t("public.query")
+          }}</el-button>
+          <el-button
+            type="danger"
+            @click="del"
+            :disabled="!selectList.length"
+            >{{ this.$t("public.del") }}</el-button
+          >
+        </el-row>
+        <el-row class="formBox">
+          <avue-form ref="form" :option="secondFOp" v-model="secondF">
+          </avue-form>
+        </el-row>
+        <el-row class="crudBox">
+          <avue-crud
+            ref="secondcrud"
+            :option="secondCOp"
+            :data="secondC"
+            :page.sync="secondPage"
+            @on-load="query"
+            @selection-change="selectionChange"
+          >
+          </avue-crud>
+        </el-row>
+      </el-tab-pane>
+    </el-tabs>
   </div>
 </template>
 <script>
-import { mainForm, mainCrud, dlgForm, dlgCrud } from "./data";
-import { get, getFinishList, updateFinished } from "./api";
+import { mainForm, mainCrud, secondForm, secondCrud } from "./data";
+import { get, getFinishList, updateFinished, getFinish, del } from "./api";
 export default {
   name: "qcDeatilReport",
   components: {},
@@ -111,6 +141,17 @@ export default {
       loading: false,
       serachLoading: false,
       options: [],
+      tabs: "first",
+      selectList: [],
+      secondFOp: secondForm(this),
+      secondF: {},
+      secondCOp: secondCrud(this),
+      secondC: [],
+      secondPage: {
+        pageSize: 100,
+        pageSizes: [20, 50, 100, 200, 500],
+        total: 0,
+      },
     };
   },
   watch: {},
@@ -180,6 +221,65 @@ export default {
           }
         });
       });
+    },
+    query() {
+      this.wLoading = true;
+      for (let key in this.secondF) {
+        if (!this.secondF[key]) {
+          delete this.secondF[key];
+        }
+      }
+      let data = JSON.parse(JSON.stringify(this.secondF));
+      let r_clothCheckTime_r = "";
+      if (data.clothCheckTime && data.clothCheckTime.length) {
+        r_clothCheckTime_r = `!%5E%5b${data.clothCheckTime[0]} 07:30:00~${data.clothCheckTime[1]} 07:30:00%5d`;
+      } else {
+        r_clothCheckTime_r = "!%5E";
+      }
+      data.vatNo = "%" + (data.vatNo ? data.vatNo : "");
+      data.storeLoadCode = "%" + (data.storeLoadCode ? data.storeLoadCode : "");
+      data.clothChecker = "%" + (data.clothChecker ? data.clothChecker : "");
+      data.clothCheckTime = null;
+      getFinish(
+        Object.assign(data, {
+          rows: this.secondPage.pageSize,
+          start: this.secondPage.currentPage,
+          isPrinted: true,
+          // clothState: this.form.clothState,
+          cardType: 1,
+          delFlag: false,
+        }),
+        r_clothCheckTime_r
+      ).then((res) => {
+        this.secondC = res.data.records;
+        if (this.secondC.length > 0) {
+          this.$refs.secondcrud.setCurrentRow(this.secondC[0]);
+        }
+        this.secondC.forEach((item, i) => {
+          item.index = i + 1;
+        });
+        this.secondPage.total = res.data.total;
+        this.wLoading = false;
+      });
+    },
+    del() {
+      this.$tip.cofirm("是否确定删除选中的数据?").then(() => {
+        this.wLoading = true;
+        this.selectList.forEach((item, i) => {
+          del(item.cardId).then((res) => {
+            if (i == this.selectList.length - 1) {
+              this.$tip.success("删除成功！");
+              this.query();
+              setTimeout(() => {
+                this.wLoading = false;
+              }, 200);
+            }
+          });
+        });
+      });
+    },
+    selectionChange(val) {
+      this.selectList = val;
     },
   },
   updated() {},

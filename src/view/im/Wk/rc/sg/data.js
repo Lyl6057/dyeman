@@ -266,6 +266,17 @@ export function rhl1C(_this) {
         dicData: getDIC("whse_finStatus")
       },
       {
+        label: _this.$t("whseField.rczt"),
+        prop: "stockState",
+        span: 6,
+        cell: false,
+        placeholder: " ",
+        type: "select",
+        dicData: getDIC("whse_outStatus"),
+        // hide: _this.hide != "6",
+        width: 120
+      },
+      {
         label: _this.$t("whseField.czy"),
         prop: "sysCreatedby",
         span: 6,

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-03-29 10:28:13
+ * @LastEditTime: 2022-03-31 14:44:34
  * @Description:
 -->
 <template>
@@ -31,9 +31,9 @@
           :disabled="!selectList.length"
           >修改载具</el-button
         >
-        <el-button type="danger" @click="del" :disabled="!selectList.length">{{
+        <!-- <el-button type="danger" @click="del" :disabled="!selectList.length">{{
           this.$t("public.del")
-        }}</el-button>
+        }}</el-button> -->
         <!-- <el-button type="primary" @click="outExcel1">导出</el-button> -->
         <!-- <el-button type="primary" @click="outExcel">导出明细表</el-button> -->
         <!-- <el-dropdown

@@ -9,9 +9,12 @@
         <!-- <el-button type="primary" @click="getDetail">{{this.$t("public.query")}}</el-button> -->
         <!-- <el-button type="primary" @click="add">{{this.$t("public.add")}}</el-button>
         <el-button type="danger" @click="del">{{ this.$t("public.del") }}</el-button> -->
-        <el-button type="success" @click="saveAll">{{
-          this.$t("public.save")
-        }}</el-button>
+        <el-button
+          type="success"
+          @click="saveAll"
+          :disabled="form.stockState == '1'"
+          >{{ this.$t("public.save") }}</el-button
+        >
         <!-- <el-button type="warning" @click="getDetail">取消</el-button> -->
         <el-button type="warning" @click="close">{{
           this.$t("public.close")
@@ -24,9 +27,12 @@
         <el-col :span="14">
           <view-container :title="datas + $t('iaoMng.rcmx')">
             <div style="margin-bottom: 2px" class="btnList">
-              <el-button type="danger" @click="del">{{
-                this.$t("public.del")
-              }}</el-button>
+              <el-button
+                type="danger"
+                @click="del"
+                :disabled="form.stockState == '1'"
+                >{{ this.$t("public.del") }}</el-button
+              >
               <!-- <el-button
                 type="success"
                 :disabled="changeList.length === 0"
@@ -47,12 +53,18 @@
         <el-col :span="10">
           <view-container :title="datas + $t('iaoMng.rcphzl')">
             <div style="margin-bottom: 2px" class="btnList">
-              <el-button type="primary" @click="addPh">{{
-                this.$t("public.add")
-              }}</el-button>
-              <el-button type="danger" @click="delPh">{{
-                this.$t("public.del")
-              }}</el-button>
+              <el-button
+                type="primary"
+                @click="addPh"
+                :disabled="form.stockState == '1'"
+                >{{ this.$t("public.add") }}</el-button
+              >
+              <el-button
+                type="danger"
+                @click="delPh"
+                :disabled="form.stockState == '1'"
+                >{{ this.$t("public.del") }}</el-button
+              >
             </div>
             <avue-crud
               ref="count"
@@ -748,6 +760,7 @@ export default {
           });
         });
       } else {
+        this.form.stockState = "0";
         this.everyThing.add(this.form).then((res) => {
           if (this.mx.length === 0) {
             this.$tip.success(this.$t("public.bccg"));

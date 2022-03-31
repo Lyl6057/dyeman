@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-01 14:06:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-01-13 10:02:16
+ * @LastEditTime: 2022-03-31 14:31:12
  * @Description:
  */
 
@@ -70,10 +70,9 @@ export function update(data) {
   });
 }
 
-// 修改佈飛记录
 export function del(id) {
   return axios({
-    url: "/api/proFinalProductCard?noteId=" + id,
+    url: "/api/proFinalProductCard?cardId=" + id,
     method: "delete"
   });
 }

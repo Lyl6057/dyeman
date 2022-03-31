@@ -24,7 +24,7 @@
             >編號規則配置</el-button
           > -->
 
-          <!-- <el-button type="warning" @click="getData">取消</el-button> -->
+          <el-button type="success" @click="audit">审核</el-button>
           <el-button type="primary" @click="getData">{{
             this.$t("public.query")
           }}</el-button>
@@ -495,6 +495,38 @@ export default {
                 // this.getData();
               } else {
                 this.$tip.error(this.$t("public.scsb"));
+              }
+            })
+            .catch((err) => {
+              this.$tip.error(this.$t("public.scsb"));
+            });
+        })
+        .catch((err) => {
+          this.$tip.warning(this.$t("public.qxcz"));
+        });
+    },
+    audit() {
+      if (Object.keys(this.chooseData).length === 0) {
+        this.$tip.error("请选择要审核的数据!");
+        return;
+      }
+      this.$tip
+        .cofirm(
+          "是否确定审核通过入仓编号为 【 " +
+            this.chooseData.yinId +
+            " 】的数据",
+          this,
+          {}
+        )
+        .then(() => {
+          this.everyThing
+            .update(Object.assign(this.chooseData, { stockState: "1" }))
+            .then((res) => {
+              if (res.data.code === 200) {
+                this.$tip.success("审核成功!");
+                this.getData();
+              } else {
+                this.$tip.error("审核失败!");
               }
             })
             .catch((err) => {

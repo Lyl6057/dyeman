@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-04-01 14:08:13
  * @LastEditors: Lyl
- * @LastEditTime: 2022-03-30 16:01:27
+ * @LastEditTime: 2022-03-31 14:44:06
  * @Description:
  */
 
@@ -65,7 +65,7 @@ export function quality(_this) {
           index: "qcTestReport"
         },
         {
-          menuName: "7.拆缸",
+          menuName: "7.修改成品布",
           index: "modifyFinished"
         },
         {
