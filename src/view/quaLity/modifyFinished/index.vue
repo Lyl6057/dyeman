@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-03-30 18:41:07
+ * @LastEditTime: 2022-03-31 08:50:56
  * @Description:
 -->
 <template>
@@ -77,7 +77,12 @@
           }"
           :titles="[form.vatNo1 || '拆缸缸号', form.vatNo2 || '目标缸号']"
           style="margin: 10px"
-        ></el-transfer>
+        >
+          <span slot-scope="{ option }"
+            >{{ option.vatNo }} - {{ option.pidNo }} -
+            {{ option.netWeight + "KG" }}</span
+          ></el-transfer
+        >
       </el-row>
     </view-container>
   </div>
@@ -194,7 +199,7 @@ export default {
   .el-transfer-panel__body
     height calc(100vh - 270px) !important
   .el-transfer-panel
-    width 250px
+    width 450px
   .el-transfer-panel .el-checkbox__inner
     height 18px
     width 18px

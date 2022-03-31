@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-03-29 14:03:10
+ * @LastEditTime: 2022-03-31 09:02:00
  * @Description:
  */
 var baseUrl = "http://192.168.5.1:91";
@@ -412,6 +412,26 @@ export function dlgCrud(_this) {
           value: "stepId"
         },
         dicUrl: `${baseUrl}/api/baseWorkStep/List`
+      },
+
+      {
+        label: "收/发单",
+        prop: "dispathReceive",
+        span: 8,
+        placeholder: " ",
+        width: 90,
+        type: "select",
+        clearable: false,
+        dicData: [
+          {
+            value: 1,
+            label: "收单"
+          },
+          {
+            value: 2,
+            label: "发单"
+          }
+        ]
       },
       {
         label: "接收人",

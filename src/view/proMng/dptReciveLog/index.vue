@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-03-30 19:20:56
+ * @LastEditTime: 2022-03-31 09:01:21
  * @Description: 
 -->
 <template>
@@ -44,7 +44,7 @@
           <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
         </el-row>
         <el-row class="crudBox">
-          <el-col :span="12">
+          <el-col :span="10">
             <view-container
               title="缸号信息"
               v-loading="sloading"
@@ -64,7 +64,7 @@
               </avue-crud>
             </view-container>
           </el-col>
-          <el-col :span="12">
+          <el-col :span="14">
             <view-container
               title="收单日志"
               v-loading="sloading"
@@ -109,7 +109,7 @@
           <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
         </el-row>
         <el-row class="crudBox">
-          <el-col :span="12">
+          <el-col :span="10">
             <view-container
               title="织单信息"
               v-loading="sloading"
@@ -128,7 +128,7 @@
               </avue-crud>
             </view-container>
           </el-col>
-          <el-col :span="12">
+          <el-col :span="14">
             <view-container
               title="收单日志"
               v-loading="sloading"
