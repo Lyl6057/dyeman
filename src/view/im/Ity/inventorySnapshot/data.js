@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-03-26 09:58:34
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-03-31 10:14:58
+ * @LastEditTime: 2022-04-01 15:28:10
  */
 
 
@@ -206,7 +206,7 @@ const commonOp = {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 160px)",
+    height: "calc(100vh - 210px)",
     refreshBtn: false,
     columnBtn: false,
     showOverflowTooltip: true,
