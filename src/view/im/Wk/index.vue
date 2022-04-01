@@ -597,6 +597,14 @@ export default {
               color: "#409EFF",
             },
             {
+              click: () => {
+                this.toView("rc_sg", this.$t("choicDlg.wj") + "_7");
+              },
+              title: "五金申购",
+              icon: "el-icon-s-claim",
+              color: "#409EFF",
+            },
+            {
               title: this.$t("iaoMng.xzrc"),
               icon: "yx-icf-cailiaogongcheng",
               color: "#606266",
@@ -607,6 +615,14 @@ export default {
               },
               title: this.$t("iaoMng.sgrc"),
               icon: "el-icon-thumb",
+              color: "#409EFF",
+            },
+            {
+              click: () => {
+                this.toView("rc_sg", this.$t("choicDlg.xz") + "_7");
+              },
+              title: "行政申购",
+              icon: "el-icon-s-claim",
               color: "#409EFF",
             },
           ],
@@ -1343,7 +1359,7 @@ export default {
   .avue-data-cardText .item-content
     margin-top 10px
     display none
-  .avue-data-cardText .el-col:nth-child(1) .item, .tabs1 .el-col:nth-child(7) .avue-data-cardText .el-col:nth-child(3) .item, .tabs2 .el-col:nth-child(7) .avue-data-cardText .el-col:nth-child(6) .item
+  .avue-data-cardText .el-col:nth-child(1) .item, .tabs1 .el-col:nth-child(7) .avue-data-cardText .el-col:nth-child(4) .item, .tabs2 .el-col:nth-child(7) .avue-data-cardText .el-col:nth-child(6) .item
     background-color #ccc
     min-height 20px
     .item-header
