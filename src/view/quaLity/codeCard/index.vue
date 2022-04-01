@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-03-31 14:44:34
+ * @LastEditTime: 2022-04-01 08:57:35
  * @Description:
 -->
 <template>
@@ -322,6 +322,8 @@ export default {
         return;
       }
       this.wLoading = true;
+      this.detail.productNo =
+        this.detail.vatNo + this.$preFixInt(this.detail.pidNo, 3);
       update(this.detail).then((res) => {
         if (res.data.code == 200) {
           setTimeout(() => {

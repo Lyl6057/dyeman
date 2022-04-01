@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-03-30 18:53:25
+ * @LastEditTime: 2022-04-01 15:49:36
  * @Description:
 -->
 <template>
@@ -851,6 +851,8 @@ export default {
               );
               this.form.runJobId = "";
               this.form.auditState = 0;
+              this.form.clothWeight = 0;
+              this.form.pidCount = 1;
               Object.keys(this.form).forEach((item) => {
                 if (this.isEmpty(this.form[item])) {
                   delete this.form[item];

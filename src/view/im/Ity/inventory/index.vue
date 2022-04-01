@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-03-24 14:15:12
- * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-03-28 15:16:23
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-04-01 14:47:40
  * @Description: 
 -->
 <template>
@@ -16,12 +16,7 @@
         <el-button type="primary" @click="getData">{{
           this.$t("public.query")
         }}</el-button>
-        <el-button
-          type="primary"
-          @click="outExcel"
-          :disabled="form.type == 'CPB'"
-          >导出</el-button
-        >
+        <el-button type="primary" @click="outTransit">导出</el-button>
         <el-button
           type="warning"
           :disabled="!form.type"
@@ -38,7 +33,6 @@
           :option="crudOp"
           :data="crud"
           :page.sync="page"
-          v-loading="loading"
           @on-load="getData"
           @row-dblclick="handleRowDBLClick"
           @current-row-change="cellClick"
@@ -57,11 +51,20 @@ import {
   getRllList,
   getCpb,
   getCpbList,
+  getNote,
+  getNoteList,
   fetchCheckHasExistByNow,
-  createSnapshot2StockType
+  createSnapshot2StockType,
 } from "./api";
 import { getDIC, getDicT, getXDicT } from "@/config/index";
-import { formOp, crudOp, formTemOp, finishedCrud, sxOp, } from "./data";
+import {
+  formOp,
+  crudOp,
+  formTemOp,
+  finishedCrud,
+  sxOp,
+  noteCrud,
+} from "./data";
 import XlsxTemplate from "xlsx-template";
 import JSZipUtils from "jszip-utils";
 import saveAs from "file-saver";
@@ -101,36 +104,41 @@ export default {
   watch: {},
   methods: {
     //  生成盘点清单
-    async handleCreateInventory(){
+    async handleCreateInventory() {
       let type = this.form.type;
-      if(!type) return  this.$tip.warning("请选择生成的材料类型~");
+      if (!type) return this.$tip.warning("请选择生成的材料类型~");
       let params = {
-          stockType: type
-      }
-      let hasExist = await fetchCheckHasExistByNow(params).then(res => res.data.data);
-      console.log("has exist", hasExist)
-      if(hasExist){
-        this.$tip.cofirm("当天已存在库存快照,是否进行覆盖").then(res => {
-          this.validAfterCreateSnapshot(params)
-        })
-      }else{
-         this.validAfterCreateSnapshot(params)
+        stockType: type,
+      };
+      let hasExist = await fetchCheckHasExistByNow(params).then(
+        (res) => res.data.data
+      );
+      console.log("has exist", hasExist);
+      if (hasExist) {
+        this.$tip.cofirm("当天已存在库存快照,是否进行覆盖").then((res) => {
+          this.validAfterCreateSnapshot(params);
+        });
+      } else {
+        this.validAfterCreateSnapshot(params);
       }
     },
-    validAfterCreateSnapshot(params){
+    validAfterCreateSnapshot(params) {
       this.loading = true;
-      createSnapshot2StockType(params).then(res => {
-        if(res.data.code == 200){
-          this.$tip.success("生成成功~")
-        }else{
-          this.$tip.error(res.data.msg)
-        }
-      }).finally(_ => {
-        this.loading = false;
-      })
+      createSnapshot2StockType(params)
+        .then((res) => {
+          if (res.data.code == 200) {
+            this.$tip.success("生成成功~");
+          } else {
+            this.$tip.error(res.data.msg);
+          }
+        })
+        .finally((_) => {
+          this.loading = false;
+        });
     },
     getData() {
       this.loading = true;
+      this.crud = [];
       for (var key in this.form) {
         if (this.form[key] === "") {
           delete this.form[key];
@@ -141,19 +149,22 @@ export default {
           this.getFun = getSx;
           this.getList = getSxList;
           this.crudOp = sxOp(this);
-          // this.typeObj.sort = 'yarnsId'
+          this.typeObj.sort = "batchNo";
+          this.typeObj.outAdr = "./static/xlxsTemplate/inventory.xlsx";
           break;
         case "RHL":
           this.getFun = getRhl;
           this.getList = getRhlList;
           this.crudOp = crudOp(this);
-          // this.typeObj.sort = 'chemicalId'
+          this.typeObj.sort = "batchNo";
+          this.typeObj.outAdr = "./static/xlxsTemplate/inventory.xlsx";
           break;
         case "RLL":
           this.getFun = getRll;
           this.getList = getRllList;
           this.crudOp = crudOp(this);
-          // this.typeObj.sort = 'chemicalId'
+          this.typeObj.sort = "batchNo";
+          this.typeObj.outAdr = "./static/xlxsTemplate/inventory.xlsx";
           break;
         case "CPB":
           this.getFun = getCpb;
@@ -161,6 +172,14 @@ export default {
           this.crudOp = finishedCrud(this);
           this.typeObj.sort = "productNo";
           this.form.productNo = "!^"; // 成品编号升序
+          this.typeObj.outAdr = "./static/xlxsTemplate/inventory.xlsx";
+          break;
+        case "PB":
+          this.getFun = getNote;
+          this.getList = getNoteList;
+          this.crudOp = noteCrud(this);
+          this.typeObj.sort = "noteCode";
+          this.typeObj.outAdr = "./static/xlxsTemplate/inventory_cloth.xlsx";
           break;
         default:
           this.crud = [];
@@ -169,59 +188,98 @@ export default {
       }
       let query = JSON.parse(JSON.stringify(this.form));
       query.yarnsId = "!^%" + (query.chemicalId || "");
+      query.proName = "!^%" + (query.proName || "");
+      query.vatNo = "!^%" + (query.vatNo || "");
+      query.noteCode = "!^%" + (query.noteCode || "");
+      query.storeLoadCode = "!^%" + (query.storeLoadCode || "");
+      // query.chemicalId = "!^%" + (query.chemicalId || "");
       this.getFun(
         Object.assign(query, {
           rows: this.page.pageSize,
           start: this.page.currentPage,
+          clothState: 2,
         })
       ).then((res) => {
         this.page.total = res.data.total;
+
         let group = this.$grouping(
           res.data.records,
           this.form.type == "SX"
             ? "yarnsId"
             : this.form.type == "CPB"
             ? "vatNo"
+            : this.form.type == "PB"
+            ? "proName"
             : "chemicalId"
         );
         group.forEach((item, i) => {
-          item.children.sort((a, b) => (a.batchNo > b.batchNo ? 1 : -1));
+          item.children.sort((a, b) =>
+            a[this.typeObj.sort] > b[this.typeObj.sort] ? 1 : -1
+          );
           item.index = i + 1;
           item.yarnsName = item.children[0].yarnsName;
           item.chemicalName = item.children[0].chemicalName;
           item.weightUnit = item.children[0].weightUnit;
+          item.customerName = item.children[0].customerName;
+          item.fabricName = item.children[0].fabricName;
+          item.proName = item.children[0].proName;
+          item.clothWeight = 0;
           if (!item.weight) item.weight = 0;
           if (!item.stock) item.stock = 0;
           item.children.forEach((child, j) => {
             child.index = item.index + "-" + (j + 1);
             child.weight = child.weight ? child.weight.toFixed(2) : 0;
             child.stock = child.stock ? child.stock.toFixed(2) : 0;
+            child.clothWeight = child.clothWeight
+              ? child.clothWeight.toFixed(2)
+              : 0;
+            child.vatNo = "";
             child.yarnsId = "";
             child.yarnsName = "";
             child.chemicalId = "";
             child.chemicalName = "";
+            child.customerName = "";
+            child.fabricName = "";
+            child.proName = "";
             item.weight += Number(child.weight) || Number(child.stock);
+            item.clothWeight += Number(child.clothWeight || 0);
           });
           item.weight = item.weight.toFixed(2);
           item.stock = item.weight;
+          item.clothWeight = item.clothWeight.toFixed(2);
         });
         this.crud = group;
         this.crud.length === 0 ? (this.loading = false) : "";
         this.crud.forEach((item, i) => {
           item.index = i + 1;
           if (this.crud.length - 1 === i) {
-            this.loading = false;
+            setTimeout(() => {
+              this.loading = false;
+            }, 500);
           }
         });
       });
+    },
+    outTransit() {
+      switch (this.form.type) {
+        case "CPB":
+          // this.outExcel();
+          this.$tip.warning("功能待开发!");
+          break;
+        case "PB":
+          this.$tip.warning("功能待开发!");
+          // this.outExcel();
+          break;
+        default:
+          this.outExcel();
+          return;
+      }
     },
     async outExcel() {
       this.loading = true;
       try {
         //获得Excel模板的buffer对象
-        const exlBuf = await JSZipUtils.getBinaryContent(
-          "./static/xlxsTemplate/inventory.xlsx"
-        );
+        const exlBuf = await JSZipUtils.getBinaryContent(this.typeObj.outAdr);
         // Create a template
         var template = new XlsxTemplate(exlBuf);
         // Replacements take place on first sheet
@@ -350,11 +408,11 @@ export default {
   },
   created() {},
   updated() {
-    if (this.crud.length) {
-      this.$nextTick(() => {
+    this.$nextTick(() => {
+      if (this.crud.length) {
         this.$refs["crud"].doLayout();
-      });
-    }
+      }
+    });
   },
   mounted() {},
   beforeDestroy() {},

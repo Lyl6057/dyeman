@@ -2,11 +2,12 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-03-30 08:12:08
+ * @LastEditTime: 2022-04-01 10:23:07
  * @Description:
  */
 
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
+let cust = getDicT("basCustomer", "custName", "custCode");
 
 export function mainForm(_this) {
   return {
@@ -120,8 +121,6 @@ export function dlgForm(_this) {
     ]
   };
 }
-
-let cust = getDicT("basCustomer", "custName", "custCode");
 
 export function mainCrud(_this) {
   return {

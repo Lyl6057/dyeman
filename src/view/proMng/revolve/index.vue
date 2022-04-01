@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-03-29 16:46:55
+ * @LastEditTime: 2022-04-01 13:13:43
  * @Description:
 -->
 <template>
@@ -107,13 +107,13 @@
           拆缸
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item @click.native="splitVatNo('A')"
-              >改单拆缸</el-dropdown-item
+              >A 改单拆缸</el-dropdown-item
             >
             <el-dropdown-item @click.native="splitVatNo('R')"
-              >改染拆缸</el-dropdown-item
+              >R 改染拆缸</el-dropdown-item
             >
             <el-dropdown-item @click.native="splitVatNo('W')"
-              >废布拆缸</el-dropdown-item
+              >W 废布拆缸</el-dropdown-item
             >
           </el-dropdown-menu>
         </el-dropdown>

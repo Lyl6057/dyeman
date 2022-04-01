@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-24 14:21:15
  * @LastEditors: Lyl
- * @LastEditTime: 2022-03-19 13:30:45
+ * @LastEditTime: 2022-04-01 13:51:07
  * @Description:
  */
 
@@ -23,9 +23,24 @@ export function formOp(_this) {
         placeholder: " ",
         type: "select",
         dicData: kindId,
-        change: () => {
+        change: val => {
           _this.$nextTick(() => {
+            if (val.value == "CPB") {
+              _this.formOp.column[4].display = true;
+              _this.formOp.column[5].display = false;
+              _this.formOp.column[6].display = false;
+            } else if (val.value == "PB") {
+              _this.formOp.column[4].display = false;
+              _this.formOp.column[5].display = true;
+              _this.formOp.column[6].display = true;
+            } else {
+              _this.formOp.column[4].display = false;
+              _this.formOp.column[5].display = false;
+              _this.formOp.column[6].display = false;
+            }
             if (!_this.loading) {
+              _this.loading = true;
+              _this.crud = [];
               _this.page.currentPage = 1;
               _this.getData();
             }
@@ -46,18 +61,38 @@ export function formOp(_this) {
         span: 6
       },
       {
+        label: "供应商批号",
+        prop: "batId",
+        cell: false,
+        placeholder: " ",
+        span: 6
+      },
+      {
         label: "缸号",
         prop: "vatNo",
         span: 6,
-        placeholder: " "
-        // display: _this.form ? true : _this.form.type == "CPB" ? true : false
+        placeholder: " ",
+        display: true
+      },
+      {
+        label: "织单号",
+        prop: "proName",
+        span: 6,
+        placeholder: " ",
+        display: true
+      },
+      {
+        label: "布飞编号",
+        prop: "noteCode",
+        span: 6,
+        placeholder: " ",
+        display: true
       },
       {
         label: "载具编号",
         prop: "storeLoadCode",
         span: 6,
         placeholder: " "
-        // display: _this.form ? true : _this.form.type == "CPB" ? true : false
       }
     ]
   };
@@ -300,6 +335,29 @@ export function finishedCrud(_this) {
         overHidden: true
       },
       {
+        label: "客戶名称",
+        prop: "customerName",
+        width: 140,
+        disabled: true,
+        placeholder: " ",
+        span: 6,
+        display: false,
+        overHidden: true,
+        type: "select",
+        dicData: getDicT("basCustomer", "custName", "custCode")
+      },
+
+      {
+        label: "布类名称",
+        prop: "fabricName",
+        disabled: true,
+        placeholder: " ",
+        span: 6,
+        width: 200,
+        overHidden: true,
+        hide: false
+      },
+      {
         label: "缸号",
         prop: "vatNo",
         width: 180,
@@ -309,34 +367,19 @@ export function finishedCrud(_this) {
         overHidden: true,
         sortable: true
       },
+
       {
-        label: "载具编号",
-        prop: "storeLoadCode",
-        span: 8,
-        placeholder: " ",
-        cell: true,
-        overHidden: true,
-        sortable: true,
-        width: 120
-      },
-      {
-        label: "成品编号",
+        label: "码卡编号",
         prop: "productNo",
-        width: 150,
+        width: 170,
         span: 6,
         placeholder: " ",
         disabled: true,
         overHidden: true
       },
+
       {
-        label: "存储位置",
-        prop: "locationCode",
-        cell: true,
-        width: 120,
-        placeholder: " "
-      },
-      {
-        label: "匹號",
+        label: "匹号",
         prop: "pidNo",
         width: 80,
         align: "right",
@@ -358,7 +401,7 @@ export function finishedCrud(_this) {
         precision: 1
       },
       {
-        label: "單位",
+        label: "单位",
         prop: "weightUnit",
         width: 80,
         display: false,
@@ -366,6 +409,23 @@ export function finishedCrud(_this) {
         span: 6,
         type: "select",
         dicData: matUnit
+      },
+      {
+        label: "载具编号",
+        prop: "storeLoadCode",
+        span: 8,
+        placeholder: " ",
+        cell: true,
+        overHidden: true,
+        sortable: true,
+        width: 120
+      },
+      {
+        label: "货位码",
+        prop: "locationCode",
+        cell: true,
+        width: 120,
+        placeholder: " "
       }
     ]
   };
@@ -468,6 +528,144 @@ export function sxOp(_this) {
         type: "select",
         dicData: getDIC("whse_yinStatus"),
         disabled: true
+      }
+    ]
+  };
+}
+
+export function noteCrud(_this) {
+  return {
+    menu: false,
+    addBtn: false,
+    cancelBtn: false,
+    editBtn: false,
+    delBtn: false,
+    menuWidth: 80,
+    border: true,
+    index: false,
+    highlightCurrentRow: true,
+    height: "calc(100vh - 267px)",
+    refreshBtn: false,
+    columnBtn: false,
+    page: true,
+    labelWidth: 100,
+    selection: false,
+    showSummary: true,
+    tree: true,
+    rowKey: "index",
+    sumColumnList: [
+      {
+        label: " ",
+        name: "clothWeight",
+        type: "sum"
+      }
+    ],
+    column: [
+      {
+        label: "#",
+        prop: "index",
+        width: 80,
+        overHidden: true,
+        align: "left",
+        fixed: true
+      },
+      {
+        label: "客戶名称",
+        prop: "customerName",
+        width: 140,
+        disabled: true,
+        placeholder: " ",
+        span: 6,
+        display: false,
+        overHidden: true,
+        type: "select",
+        dicData: getDicT("basCustomer", "custName", "custCode")
+      },
+
+      {
+        label: "布类名称",
+        prop: "fabricName",
+        disabled: true,
+        placeholder: " ",
+        span: 6,
+        width: 200,
+        overHidden: true,
+        hide: false
+      },
+
+      {
+        label: "织单号",
+        prop: "proName",
+        width: 130,
+        span: 6,
+        placeholder: " ",
+        disabled: true,
+        overHidden: true
+      },
+
+      {
+        label: "疋号",
+        prop: "eachNumber",
+        width: 105,
+        align: "right",
+        // sortable: true,
+        span: 6,
+        type: "number",
+        precision: 0
+      },
+      {
+        label: "布飞编号",
+        prop: "noteCode",
+        width: 170,
+        disabled: true,
+        placeholder: " ",
+        span: 6,
+        // sortable: true,
+        overHidden: true
+      },
+      {
+        label: _this.$t("whseField.zl"),
+        prop: "clothWeight",
+        width: 120,
+        align: "right",
+        span: 6,
+        cell: true,
+        placeholder: " ",
+        type: "number",
+        precision: 1
+      },
+      {
+        label: "单位",
+        prop: "weightUnit",
+        width: 80,
+        display: false,
+        placeholder: " ",
+        span: 6,
+        type: "select",
+        dicData: matUnit
+      },
+
+      {
+        label: "载具编号",
+        prop: "storeLoadCode",
+        span: 8,
+        placeholder: " ",
+        cell: true,
+        overHidden: true,
+        sortable: true,
+        width: 140
+      },
+      {
+        label: "货位码",
+        prop: "storeSiteCode",
+        cell: true,
+        width: 140,
+        placeholder: " ",
+        type: "select",
+        props: {
+          label: "locationCode",
+          value: "locationCode"
+        }
       }
     ]
   };

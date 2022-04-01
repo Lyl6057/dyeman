@@ -1,14 +1,14 @@
 /*
  * @Author: Lyl
  * @Date: 2021-03-24 14:21:09
- * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-03-24 11:14:35
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-04-01 09:48:23
  * @Description:
  */
 import axios from "axios";
 
 // 判断当天是否已存在清单
-export function fetchCheckHasExistByNow(params){
+export function fetchCheckHasExistByNow(params) {
   return axios({
     url: "/api/whseInventory/check/has/exist",
     method: "get",
@@ -17,7 +17,7 @@ export function fetchCheckHasExistByNow(params){
 }
 
 // 生成指定的材料类型盘点清单快照
-export function createSnapshot2StockType(params){
+export function createSnapshot2StockType(params) {
   return axios({
     url: "/api/whseInventory/snapshot",
     method: "get",
@@ -82,6 +82,22 @@ export function getCpbList(params) {
 export function getCpb(params) {
   return axios({
     url: "/api/prodStock/page",
+    method: "get",
+    params: params
+  });
+}
+
+export function getNote(params) {
+  return axios({
+    url: "/api/proClothNote/page",
+    method: "get",
+    params: params
+  });
+}
+
+export function getNoteList(params) {
+  return axios({
+    url: "/api/proClothNote",
     method: "get",
     params: params
   });

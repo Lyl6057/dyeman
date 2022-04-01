@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-03-31 11:09:43
+ * @LastEditTime: 2022-04-01 08:46:05
  * @Description:
  */
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
@@ -539,7 +539,7 @@ export function dlgForm(_this) {
         align: "right",
         span: 8,
         placeholder: " ",
-        disabled: true,
+        disabled: false,
         type: "number",
         tip: "Số cây vải"
       },
