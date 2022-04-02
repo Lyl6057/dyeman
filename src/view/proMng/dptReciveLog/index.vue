@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-03-31 09:01:21
+ * @LastEditTime: 2022-04-02 16:27:14
  * @Description: 
 -->
 <template>
@@ -44,7 +44,7 @@
           <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
         </el-row>
         <el-row class="crudBox">
-          <el-col :span="10">
+          <el-col :span="6">
             <view-container
               title="缸号信息"
               v-loading="sloading"
@@ -64,7 +64,7 @@
               </avue-crud>
             </view-container>
           </el-col>
-          <el-col :span="14">
+          <el-col :span="18">
             <view-container
               title="收单日志"
               v-loading="sloading"
@@ -109,7 +109,7 @@
           <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
         </el-row>
         <el-row class="crudBox">
-          <el-col :span="10">
+          <el-col :span="6">
             <view-container
               title="织单信息"
               v-loading="sloading"
@@ -128,7 +128,7 @@
               </avue-crud>
             </view-container>
           </el-col>
-          <el-col :span="14">
+          <el-col :span="18">
             <view-container
               title="收单日志"
               v-loading="sloading"
@@ -159,6 +159,7 @@
     <el-dialog
       id="colorMng_Dlg"
       :visible.sync="dialogVisible"
+      fullscreen
       width="70%"
       append-to-body
       :close-on-click-modal="false"
@@ -281,40 +282,6 @@ export default {
     add() {
       this.isAdd = true;
       this.dialogVisible = true;
-    },
-    del() {
-      this.$tip
-        .cofirm("是否确定删除選中的數據?", this, {})
-        .then(() => {
-          del(this.detail.bleadyeCodeId)
-            .then((res) => {
-              if (res.data.code === 200) {
-                getDtl(
-                  Object.assign({
-                    proBleadyeTechCodeFk: this.detail.bleadyeCode,
-                    rows: 999,
-                    start: 1,
-                  })
-                ).then((res) => {
-                  res.data.records.forEach((item, i) => {
-                    delDtl(item.codeItemIt).then((res) => {});
-                  });
-                });
-                setTimeout(() => {
-                  this.$tip.success(this.$t("public.sccg"));
-                  this.query();
-                }, 200);
-              } else {
-                this.$tip.error(this.$t("public.scsb"));
-              }
-            })
-            .catch((err) => {
-              this.$tip.error(this.$t("public.scsb"));
-            });
-        })
-        .catch((err) => {
-          this.$tip.warning(this.$t("public.qxcz"));
-        });
     },
     handleRowDBLClick(val) {
       // this.detail = val;

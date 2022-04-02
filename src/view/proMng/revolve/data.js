@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-01 10:23:07
+ * @LastEditTime: 2022-04-02 10:49:25
  * @Description:
  */
 
@@ -467,7 +467,16 @@ export function mainCrud(_this) {
           }
         ]
       },
-
+      {
+        label: "拆缸重量",
+        prop: "divdCw",
+        overHidden: true,
+        width: 120,
+        span: 6,
+        disabled: false,
+        type: "number",
+        placeholder: " "
+      },
       {
         label: "布类代码",
         prop: "fabricCode",
@@ -522,6 +531,24 @@ export function mainCrud(_this) {
         disabled: false,
         hide: true
       },
+
+      {
+        label: "合染缸號",
+        tip: "Số bồn nhuộm chung",
+        prop: "mergVatNo",
+        overHidden: true,
+        width: 180,
+        span: 6,
+        disabled: false,
+        hide: true,
+        type: "select",
+        dicData: [],
+        multiple: true,
+        filterable: true,
+        allowCreate: true,
+        defaultFirstOption: true,
+        placeholder: " "
+      },
       {
         label: "布匹成份",
         prop: "fabElements",
@@ -560,23 +587,6 @@ export function mainCrud(_this) {
       //   disabled: true,
       // },
 
-      {
-        label: "合染缸號",
-        tip: "Số bồn nhuộm chung",
-        prop: "mergVatNo",
-        overHidden: true,
-        width: 180,
-        span: 12,
-        disabled: false,
-        hide: true,
-        type: "select",
-        dicData: [],
-        multiple: true,
-        filterable: true,
-        allowCreate: true,
-        defaultFirstOption: true,
-        placeholder: " "
-      },
       {
         label: "织厂",
         tip: "Xưởng dệt",

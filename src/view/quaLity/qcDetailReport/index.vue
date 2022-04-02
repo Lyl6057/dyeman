@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-03-30 15:23:01
+ * @LastEditTime: 2022-04-02 15:32:14
  * @Description:
 -->
 <template>
@@ -63,7 +63,15 @@
 </template>
 <script>
 import { mainForm, mainCrud, dlgForm, dlgCrud } from "./data";
-import { get, add, update, getRunJobByPage, getFinishedNote } from "./api";
+import {
+  get,
+  add,
+  update,
+  getRunJobByPage,
+  getFinishedNote,
+  getDismantleVatno,
+  updateRunJob,
+} from "./api";
 export default {
   name: "qcDeatilReport",
   components: {},
@@ -187,7 +195,7 @@ export default {
                     wmUnit: this.form.wmUnit,
                   })
                 ).then((res) => {
-                  // this.query();
+                  this.updateDivdWeight();
                   let name = encodeURI(
                     "http:" +
                       process.env.API_HOST.split(":")[1] +
@@ -207,7 +215,7 @@ export default {
                     wmUnit: this.form.wmUnit,
                   })
                 ).then((res) => {
-                  // this.query();
+                  this.updateDivdWeight();
                   let name = encodeURI(
                     "http:" +
                       process.env.API_HOST.split(":")[1] +
@@ -225,6 +233,22 @@ export default {
         } else {
           this.$tip.warning("无此缸号信息！");
         }
+      });
+    },
+    updateDivdWeight() {
+      let sIndex = this.form.vatNo.search("[AWR]");
+      let sVatNo =
+        sIndex > 0 ? this.form.vatNo.substring(0, sIndex) : this.form.vatNo; // 筛选原缸号
+      getDismantleVatno(sVatNo).then((res) => {
+        getRunJobByPage({
+          vatNo: sVatNo,
+          rows: 10,
+          start: 1,
+          page: 1,
+        }).then((vatList) => {
+          vatList.data.records[0].divdCw = res.data[sVatNo]; // 获取拆缸重量
+          updateRunJob(vatList.data.records[0]).then((res) => {}); // 更新原缸拆缸重量
+        });
       });
     },
     cellClick(val) {

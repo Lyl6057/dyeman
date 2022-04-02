@@ -2,13 +2,13 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-03-30 19:20:41
+ * @LastEditTime: 2022-04-02 16:26:38
  * @Description: 
 -->
 <template>
   <div id="techCodeTem">
     <view-container
-      title="新增收单日志"
+      title="新增日志"
       :element-loading-text="$t('public.loading')"
       v-loading="wLoading"
       class="not-number-icon"
@@ -116,6 +116,7 @@ export default {
       loading: false,
       vatLoading: false,
       options: [],
+      acceptStaff: parent.userID,
     };
   },
   watch: {},
@@ -188,7 +189,7 @@ export default {
               page: 1,
             }).then((weaveRes) => {
               if (weaveRes.data.records.length) {
-                let weight = weaveRes.data.records[0].clothWeight || 0;
+                let weight = weaveRes.data.records[0].amount || 0;
                 this.form.planOutput = weight;
                 this.form.realOutput = weight;
               }
@@ -248,7 +249,6 @@ export default {
       // this.check();
       // this.visible = false;
     },
-
     close() {
       if (this.refresh) {
         this.$emit("refresh");
@@ -272,9 +272,6 @@ export default {
   },
   created() {},
   mounted() {
-    // document
-    //   .getElementsByClassName("el-upload el-upload--text")[0]
-    //   .getElementsByTagName("span")[0].innerHTML = "选择图片";
     this.getData();
     this.remoteMethod("");
   },

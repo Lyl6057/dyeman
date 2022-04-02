@@ -1,9 +1,27 @@
 import axios from "axios";
 
-// 能源送货单视图
+// 能源申购送货单视图
 export function getWhseEnergyInV2(params) {
   return axios({
     url: "/api/whseEnergyIn/v2/page",
+    method: "get",
+    params: params
+  });
+}
+
+// 五金申购送货单视图
+export function getWhseHardwareUnin(params) {
+  return axios({
+    url: "/api/whseHardwareIn/unIn/page",
+    method: "get",
+    params: params
+  });
+}
+
+// 行政申购送货单视图
+export function getWhseOfficeUnin(params) {
+  return axios({
+    url: "/api/whseOfficeIn/unIn/page",
     method: "get",
     params: params
   });

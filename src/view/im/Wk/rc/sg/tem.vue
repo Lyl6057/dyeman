@@ -214,6 +214,7 @@ export default {
             whseYarninFk: this.detail.whseYarninoid, // 纱线Oid
             whseDyesalinFk: this.detail.whseDyesalinoid, // 顏料Oid
             whseEnergyInFk: this.detail.energyInId, // 能源Oid
+            whseHardwareInFk: this.detail.whseAccessoriesinoid,
           })
           .then((res) => {
             let dicData = [];
@@ -324,6 +325,7 @@ export default {
           whseYarninDtlFk: this.chooseData.whseYarninDtloid,
           energyDtloid: this.chooseData.energyDtloid,
           whseAccessoriesDtlFk: this.chooseData.whseAccessoriesDtloid,
+          whseAccessoriesDtloid: this.chooseData.whseAccessoriesDtloid,
           rows: this.phPage.pageSize,
           start: this.phPage.currentPage,
         })
@@ -562,9 +564,9 @@ export default {
                 ? this.choosePhData.whseYarninDtlaoid
                 : this.datas === this.$t("choicDlg.rl")
                 ? this.choosePhData.whseEnergyDtlaId
-                : this.datas === this.$t("iaoMng.fl")
-                ? this.choosePhData.whseAccessoriesDtlaoid
-                : this.choosePhData.whseChemicalinDtlboid
+                : this.datas === this.$t("iaoMng.hgyl")
+                ? this.choosePhData.whseChemicalinDtlboid
+                : this.choosePhData.whseAccessoriesDtlaoid
             )
             .then((res) => {
               if (res.data.code === 200) {
@@ -679,6 +681,8 @@ export default {
                 data.whseYarninFk = this.detail.whseYarninoid;
                 data.whseDyesalinFk = this.detail.whseDyesalinoid;
                 data.whseEnergyInFk = this.detail.energyInId;
+                data.whseHardwareInFk = this.detail.whseAccessoriesinoid;
+                data.whseOfficeInFk = this.detail.whseAccessoriesinoid;
                 this.everyThing.addDetail(data).then((res) => {
                   item.whseChemicalinDtlaoid = res.data.data;
                   item.whseAccessoriesDtloid = res.data.data;
@@ -707,7 +711,8 @@ export default {
                   item.whseDyesainDtlaFk = this.mx[i].whseDyesainDtlaoid;
                   item.whseYarninDtlFk = this.mx[i].whseYarninDtloid;
                   item.energyDtloid = this.mx[i].energyDtloid;
-                  // item.whseAccessoriesDtlFk = this.mx[i].whseAccessoriesDtloid;
+                  item.whseAccessoriesDtloid = this.mx[i].whseAccessoriesDtloid;
+                  item.whseOfficeDtlFk = this.mx[i].whseAccessoriesDtloid;
                   if (
                     !item.whseChemicalinDtlboid &&
                     !item.whseDyesainDtlboid &&
@@ -793,6 +798,8 @@ export default {
                 data.whseYarninFk = this.form.whseYarninoid;
                 data.whseDyesalinFk = this.form.whseDyesalinoid;
                 data.whseEnergyInFk = this.form.energyInId;
+                data.whseHardwareInFk = this.form.whseAccessoriesinoid;
+                data.whseOfficeInFk = this.form.whseAccessoriesinoid;
                 this.everyThing.addDetail(data).then((res) => {
                   item.whseChemicalinDtlaoid = res.data.data;
                   item.energyDtloid = res.data.data;
@@ -822,7 +829,8 @@ export default {
                   item.whseAccessoriesDtlFk = this.mx[i].whseAccessoriesDtloid;
                   item.whseDyesainDtlaFk = this.mx[i].whseDyesainDtlaoid;
                   item.whseYarninDtlFk = this.mx[i].whseYarninDtloid;
-                  // item.whseAccessoriesDtlFk = this.mx[i].whseAccessoriesDtloid;
+                  item.whseAccessoriesDtloid = this.mx[i].whseAccessoriesDtloid;
+                  item.whseOfficeDtlFk = this.mx[i].whseAccessoriesDtloid;
                   if (
                     !item.whseChemicalinDtlboid &&
                     !item.whseDyesainDtlboid &&

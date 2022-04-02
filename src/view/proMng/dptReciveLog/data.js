@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-03-31 09:02:00
+ * @LastEditTime: 2022-04-02 16:45:38
  * @Description:
  */
 var baseUrl = "http://192.168.5.1:91";
@@ -77,9 +77,10 @@ export function dlgForm(_this) {
       {
         label: "缸号",
         prop: "runJobFk",
-        span: 8,
+        span: 6,
         placeholder: " ",
         type: "select",
+        tipPlacement: "right",
         display: _this.tabs == "rd" ? true : false,
         filterable: true,
         formslot: true,
@@ -96,65 +97,74 @@ export function dlgForm(_this) {
         }
       },
       {
+        label: "收/发单",
+        prop: "dispathReceive",
+        span: 6,
+        placeholder: " ",
+        tipPlacement: "right",
+        type: "select",
+        clearable: false,
+        tip: "nhận đơn / gửi đơn",
+        dicData: [
+          {
+            value: 1,
+            label: "收单(nhận đơn)"
+          },
+          {
+            value: 2,
+            label: "发单(gửi đơn)"
+          }
+        ],
+        change: val => {
+          if (val.value == 1) {
+            _this.form.dptworkProcessFk = _this.userId || "";
+            _this.form.acceptStaff = parent.userID || "MIA";
+            _this.form.sendProcessFk = "";
+            _this.form.sendStaff = "";
+          } else {
+            _this.form.dptworkProcessFk = "";
+            _this.form.acceptStaff = "";
+            _this.form.sendProcessFk = _this.userId || "";
+            _this.form.sendStaff = parent.userID || "MIA";
+          }
+        }
+      },
+      {
         label: "织单号",
         display: _this.tabs == "zd" ? true : false,
         prop: "weaveJobId",
         type: "select",
-        span: 8,
+        span: 6,
         placeholder: " ",
+        tipPlacement: "right",
         formslot: true
       },
-      {
-        label: "接收人",
-        prop: "acceptStaff",
-        span: 8,
-        placeholder: " ",
-        // type: "select",
-        disabled: true
-        // dicData: getDicT("ucmlUser", "employeename", "ucmlUseroid")
-      },
-      // {
-      //   label: "接收日期",
-      //   prop: "acceptDate",
-      //   width: 150,
-      //   span: 8,
-      //   type: "datetime",
-      //   disabled: true,
-      //   align: "center",
-      //   format: "yyyy-MM-dd HH:mm:ss",
-      //   valueFormat: "yyyy-MM-dd HH:mm:ss",
-      //   placeholder: " ",
-      //   rules: [
-      //     {
-      //       required: true,
-      //       message: "請輸入接收日期",
-      //       trigger: "blur"
-      //     }
-      //   ]
-      // },
 
       {
-        label: "收/发单",
-        prop: "dispathReceive",
-        span: 8,
-        placeholder: " ",
-        type: "select",
-        clearable: false,
-        dicData: [
-          {
-            value: 1,
-            label: "收单"
-          },
-          {
-            value: 2,
-            label: "发单"
-          }
-        ]
+        label: "计划产量",
+        prop: "planOutput",
+        span: 6,
+        type: "number",
+        tip: "sản lượng kế hoạch",
+        tipPlacement: "right",
+        placeholder: " "
       },
       {
-        label: "部门",
-        prop: "dptworkProcessFk",
-        span: 8,
+        label: "实际产量",
+        prop: "realOutput",
+        type: "number",
+        span: 6,
+        tipPlacement: "right",
+        tip: "sản lượng thực tế",
+        placeholder: " "
+      },
+
+      {
+        label: "发单部门",
+        prop: "sendProcessFk",
+        tipPlacement: "right",
+        span: 6,
+        tip: "bộ phận gửi đơn",
         placeholder: " ",
         type: "select",
 
@@ -169,26 +179,56 @@ export function dlgForm(_this) {
         cascader: ["stepId"]
       },
       {
-        label: "计划产量",
-        prop: "planOutput",
-        span: 8,
-        type: "number",
-        placeholder: " "
+        label: "发单人",
+        prop: "sendStaff",
+        span: 6,
+        placeholder: " ",
+        tipPlacement: "right",
+        tip: "người gửi đơn",
+        disabled: false,
+        type: "select",
+        dicData: getDicT("ucmlUser", "usrLogin", "usrLogin"),
+        filterable: true
       },
       {
-        label: "实际产量",
-        prop: "realOutput",
-        type: "number",
-        span: 8,
-        placeholder: " "
-      },
+        label: "收单部门",
+        prop: "dptworkProcessFk",
+        span: 6,
+        tip: "bộ phận nhận đơn",
+        placeholder: " ",
+        tipPlacement: "right",
+        type: "select",
 
+        dicData: getDicT("proDptworkProcess", "dptName", "dptCode", {}, "sn"),
+        rules: [
+          {
+            required: true,
+            message: "請选择部门",
+            trigger: "blur"
+          }
+        ],
+        cascader: ["stepId"]
+      },
+      {
+        label: "收单人",
+        prop: "acceptStaff",
+        tipPlacement: "right",
+        span: 6,
+        tip: "người nhận đơn",
+        placeholder: " ",
+        type: "select",
+        dicData: getDicT("ucmlUser", "usrLogin", "usrLogin"),
+        disabled: false,
+        filterable: true
+      },
       {
         label: "工序",
         prop: "stepId",
-        span: 8,
+        tip: "quá trình",
+        span: 6,
         placeholder: " ",
         type: "select",
+        tipPlacement: "right",
         props: {
           label: "stepName",
           value: "stepId"
@@ -205,7 +245,9 @@ export function dlgForm(_this) {
       {
         label: "说明",
         prop: "acceptDesc",
-        span: 16,
+        tipPlacement: "right",
+        span: 18,
+        tip: "remark",
         placeholder: " "
       }
     ]
@@ -376,50 +418,12 @@ export function dlgCrud(_this) {
     index: true,
     labelWidth: 130,
     column: [
-      // {
-      //   label: "#",
-      //   prop: "index",
-      //   width: 50,
-      //   align: "center",
-      //   display: false
-      // },
-      {
-        label: "部门",
-        prop: "dptName",
-        span: 8,
-        placeholder: " ",
-        width: 100,
-        overHidden: true
-        // type: "select",
-        // dicData: getDicT("proDptworkProcess", "dptName", "dptCode"),
-        // rules: [
-        //   {
-        //     required: true,
-        //     message: "請选择部门",
-        //     trigger: "blur"
-        //   }
-        // ]
-      },
-      {
-        label: "工序",
-        prop: "stepId",
-        overHidden: true,
-        span: 16,
-        placeholder: " ",
-        type: "select",
-        props: {
-          label: "stepName",
-          value: "stepId"
-        },
-        dicUrl: `${baseUrl}/api/baseWorkStep/List`
-      },
-
       {
         label: "收/发单",
         prop: "dispathReceive",
         span: 8,
         placeholder: " ",
-        width: 90,
+        width: 80,
         type: "select",
         clearable: false,
         dicData: [
@@ -434,18 +438,79 @@ export function dlgCrud(_this) {
         ]
       },
       {
-        label: "接收人",
-        prop: "acceptStaff",
-        width: 100,
+        label: "工序",
+        prop: "stepId",
         overHidden: true,
-        span: 8,
-        placeholder: " "
-        // type: "select",
-        // disabled: true,
-        // dicData: getDicT("ucmlUser", "employeename", "ucmlUseroid")
+        span: 16,
+        width: 120,
+        placeholder: " ",
+        type: "select",
+        props: {
+          label: "stepName",
+          value: "stepId"
+        },
+        dicUrl: `${baseUrl}/api/baseWorkStep/List`
       },
       {
-        label: "接收日期",
+        label: "发单部门",
+        prop: "sendProcessFk",
+        tipPlacement: "right",
+        span: 6,
+        tip: "bộ phận gửi đơn",
+        placeholder: " ",
+        type: "select",
+        dicData: getDicT("proDptworkProcess", "dptName", "dptCode", {}, "sn"),
+        width: 100
+      },
+      {
+        label: "发单人",
+        prop: "sendStaff",
+        span: 6,
+        placeholder: " ",
+        tipPlacement: "right",
+        tip: "người gửi đơn",
+        disabled: false,
+        type: "select",
+        overHidden: true,
+        width: 100,
+        dicData: getDicT("ucmlUser", "usrLogin", "usrLogin"),
+        filterable: true
+      },
+      {
+        label: "收单部门",
+        prop: "dptworkProcessFk",
+        span: 6,
+        tip: "bộ phận nhận đơn",
+        placeholder: " ",
+        tipPlacement: "right",
+        type: "select",
+        width: 100,
+        dicData: getDicT("proDptworkProcess", "dptName", "dptCode", {}, "sn"),
+        rules: [
+          {
+            required: true,
+            message: "請选择部门",
+            trigger: "blur"
+          }
+        ],
+        cascader: ["stepId"]
+      },
+      {
+        label: "收单人",
+        prop: "acceptStaff",
+        tipPlacement: "right",
+        span: 6,
+        tip: "người nhận đơn",
+        placeholder: " ",
+        width: 100,
+        type: "select",
+        overHidden: true,
+        dicData: getDicT("ucmlUser", "usrLogin", "usrLogin"),
+        disabled: false,
+        filterable: true
+      },
+      {
+        label: "操作日期",
         prop: "acceptDate",
         width: 160,
         overHidden: true,

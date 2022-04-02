@@ -392,7 +392,9 @@ export function rhl2C(_this) {
         width: 180,
         hide:
           _this.datas === _this.$t("choicDlg.rl") ||
-          _this.datas === _this.$t("iaoMng.fl")
+          _this.datas === _this.$t("iaoMng.fl") ||
+          _this.datas === _this.$t("choicDlg.wj") ||
+          _this.datas === _this.$t("choicDlg.xz")
             ? false
             : true
       },
@@ -400,11 +402,25 @@ export function rhl2C(_this) {
         label: _this.$t("whseField.clmc"),
         prop: "materialName",
         cell: false,
-        type: _this.datas === _this.$t("choicDlg.rl") ? "select" : "",
+        type:
+          _this.datas === _this.$t("choicDlg.rl") ||
+          _this.datas === _this.$t("choicDlg.wj")
+            ? "select"
+            : "",
         width: 180,
         overHidden: true,
-        hide: _this.datas === _this.$t("iaoMng.fl") ? false : true,
-        dicData: getDicT("basProductivesupplies", "chinName", "hardwareId")
+        hide:
+          _this.datas === _this.$t("iaoMng.fl") ||
+          _this.datas === _this.$t("choicDlg.wj") ||
+          _this.datas === _this.$t("choicDlg.xz")
+            ? false
+            : true,
+        dicData:
+          _this.datas === _this.$t("iaoMng.fl")
+            ? getDicT("basProductivesupplies", "chinName", "hardwareId")
+            : _this.datas === _this.$t("choicDlg.wj")
+            ? getDicT("basHardwarearticlesnew", "cnnamelong", "hardwareId")
+            : getDicT("basAdsuppliesarticles", "chinName", "hardwareId")
       },
       // {
       //   label: _this.$t("whseField.clmc"),
@@ -709,6 +725,10 @@ export function rhl3C(_this) {
               ? "3"
               : _this.datas == _this.$t("iaoMng.fl")
               ? "5"
+              : _this.datas == _this.$t("choicDlg.wj")
+              ? "6"
+              : _this.datas == _this.$t("choicDlg.xz")
+              ? "7"
               : "8"),
           "locationCode",
           "locationCode",

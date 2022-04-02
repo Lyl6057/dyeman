@@ -1483,7 +1483,7 @@ export default {
         this.purApp = val;
         let stockList = [];
         getHgylStock().then((res) => {
-          stockList = res.data;
+          stockList = res.data.filter((item) => item.stock > 0);
           getLydmx({
             purApplicationFk: this.form.purApplicationoid,
           }).then((res) => {

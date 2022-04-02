@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-01 15:49:36
+ * @LastEditTime: 2022-04-02 08:31:01
  * @Description:
 -->
 <template>
@@ -841,14 +841,20 @@ export default {
           baseCodeSupplyEx({ code: "dye_batch" }).then((res) => {
             if (this.copyC) {
               this.form = JSON.parse(JSON.stringify(this.detail));
-              get({ vatNo: "%" + this.form.vatNo + this.splitType }).then(
-                (vatList) => {
-                  this.form.vatNo =
-                    this.form.vatNo +
-                    this.splitType +
-                    (vatList.data.records.length + 1);
-                }
-              );
+              if (this.isSplit) {
+                get({ vatNo: "%" + this.form.vatNo + this.splitType }).then(
+                  (vatList) => {
+                    this.form.origVat = this.detail.vatNo;
+                    this.form.vatNo =
+                      this.form.vatNo +
+                      this.splitType +
+                      (vatList.data.records.length + 1);
+                    this.form.divdVatFlag = 1; // 拆单标志
+                  }
+                );
+              } else {
+                this.form.divdVatFlag = 0; // 拆单标志
+              }
               this.form.runJobId = "";
               this.form.auditState = 0;
               this.form.clothWeight = 0;

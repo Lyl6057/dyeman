@@ -574,7 +574,7 @@ export function rcpb3C(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 284px)",
+    height: "calc(100vh - 288px)",
     refreshBtn: false,
     columnBtn: false,
     page: false,

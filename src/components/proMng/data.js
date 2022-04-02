@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-05-03 13:03:03
  * @LastEditors: Lyl
- * @LastEditTime: 2022-03-23 19:20:15
+ * @LastEditTime: 2022-04-02 13:55:23
  * @Description:
  */
 
@@ -389,7 +389,7 @@ export function hgylStockC(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 190px)",
+    height: "calc(100vh - 200px)",
     refreshBtn: false,
     columnBtn: false,
     showOverflowTooltip: true,
@@ -403,6 +403,9 @@ export function hgylStockC(_this) {
         type: "sum"
       }
     ],
+    selectable: (row, index) => {
+      return row.stock > 0;
+    },
     page: true,
     column: [
       {
@@ -491,7 +494,7 @@ export function ylStockC(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 190px)",
+    height: "calc(100vh - 200px)",
     refreshBtn: false,
     columnBtn: false,
     showOverflowTooltip: true,
@@ -505,6 +508,9 @@ export function ylStockC(_this) {
         type: "sum"
       }
     ],
+    selectable: (row, index) => {
+      return row.stock > 0;
+    },
     page: true,
     column: [
       {
@@ -601,7 +607,7 @@ export function sxStockC(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 190px)",
+    height: "calc(100vh - 200px)",
     refreshBtn: false,
     columnBtn: false,
     showOverflowTooltip: true,
@@ -615,6 +621,9 @@ export function sxStockC(_this) {
         type: "sum"
       }
     ],
+    selectable: (row, index) => {
+      return row.weight > 0;
+    },
     page: true,
     column: [
       {

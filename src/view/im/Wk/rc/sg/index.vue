@@ -193,6 +193,32 @@ import {
   addRlLoc,
   updateRlLoc,
   delRlLoc,
+  // 五金
+  getWj,
+  addWj,
+  updateWj,
+  delWj,
+  getWjDetali,
+  addWjDetali,
+  updateWjDetali,
+  delWjDetali,
+  getWjLocList,
+  addWjLoc,
+  updateWjLoc,
+  delWjLoc,
+  // 行政
+  getXz,
+  addXz,
+  updateXz,
+  delXz,
+  getXzDetali,
+  addXzDetali,
+  updateXzDetali,
+  delXzDetali,
+  getXzLocList,
+  addXzLoc,
+  updateXzLoc,
+  delXzLoc,
 } from "@/api/im/Wk/rc";
 import choice from "@/components/choice";
 import { rhl1F, rhl1C, rhl2C, rhl2F } from "./data";
@@ -215,6 +241,10 @@ import {
   getWhseEnergyInV2,
   getRlAlloc,
   addRlAlloc,
+  // 五金
+  getWhseHardwareUnin,
+  // 行政
+  getWhseOfficeUnin,
 } from "./api";
 export default {
   name: "",
@@ -302,18 +332,37 @@ export default {
           this.everyThing.delPh = delScflLoc;
           this.everyThing.batCode = "scfl_in_whse";
           break;
-        case this.$t("iaoMng.wjxz"):
-          this.everyThing.get = getScfl;
-          this.everyThing.del = delScfl;
-          this.everyThing.update = updateScfl;
-          this.everyThing.add = addScfl;
-          this.everyThing.getPlan = getVpnvi;
-          this.everyThing.getDetail = getScflDetali;
-          this.everyThing.addDetail = addScflDetali;
-          this.everyThing.updateDetail = updateScflDetali;
-          this.everyThing.delDetail = delScflDetali;
-          this.everyThing.getAlloc = getAccessoriesinAlloc;
-          this.everyThing.addAlloc = addAccessoriesinAlloc;
+        case this.$t("choicDlg.wj"):
+          this.everyThing.get = getWj;
+          this.everyThing.del = delWj;
+          this.everyThing.update = updateWj;
+          this.everyThing.add = addWj;
+          this.everyThing.getPlan = getWhseHardwareUnin;
+          this.everyThing.getDetail = getWjDetali;
+          this.everyThing.addDetail = addWjDetali;
+          this.everyThing.updateDetail = updateWjDetali;
+          this.everyThing.delDetail = delWjDetali;
+          this.everyThing.getPh = getWjLocList;
+          this.everyThing.addPh = addWjLoc;
+          this.everyThing.updatePh = updateWjLoc;
+          this.everyThing.delPh = delWjLoc;
+          this.everyThing.batCode = "wj_in_whse";
+          break;
+        case this.$t("choicDlg.xz"):
+          this.everyThing.get = getXz;
+          this.everyThing.del = delXz;
+          this.everyThing.update = updateXz;
+          this.everyThing.add = addXz;
+          this.everyThing.getPlan = getWhseOfficeUnin;
+          this.everyThing.getDetail = getXzDetali;
+          this.everyThing.addDetail = addXzDetali;
+          this.everyThing.updateDetail = updateXzDetali;
+          this.everyThing.delDetail = delXzDetali;
+          this.everyThing.getPh = getXzLocList;
+          this.everyThing.addPh = addXzLoc;
+          this.everyThing.updatePh = updateXzLoc;
+          this.everyThing.delPh = delXzLoc;
+          this.everyThing.batCode = "xz_in_whse";
           break;
         case this.$t("iaoMng.hgyl"):
           this.everyThing.get = getRhl;

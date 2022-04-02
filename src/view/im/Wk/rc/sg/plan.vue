@@ -101,12 +101,14 @@ export default {
           if (this.crud.length === 0) {
             this.loading = false;
           }
+
           this.crud.forEach((item, index) => {
             item.index = index + 1;
             item.check = false;
             item.purNo = item.poNo || item.purNo;
             item.batNo = item.batchNo || item.batNo;
             item.$cellEdit = true;
+            // item.deliQty = Number(item.deliQty.toFixed(2));
             if (index === this.crud.length - 1) {
               setTimeout(() => {
                 // this.crudOp.selection = true;
