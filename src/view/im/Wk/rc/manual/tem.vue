@@ -668,11 +668,18 @@ export default {
           countingNo: this.mx.length + 1,
           // materialType: "1",
           batchNo: this.code,
-          batchNos: this.code.slice(2),
+          batchNos:
+            this.datas == this.$t("iaoMng.sx") ? this.code : this.code.slice(2),
         });
-        this.code =
-          this.code.substring(0, 3) +
-          this.$preFixInt(Number(this.code.substring(3)) + 1, 5);
+        if (this.datas == this.$t("iaoMng.sx")) {
+          this.code =
+            this.code.substring(0, 1) +
+            this.$preFixInt(Number(this.code.substring(1)) + 1, 5);
+        } else {
+          this.code =
+            this.code.substring(0, 3) +
+            this.$preFixInt(Number(this.code.substring(3)) + 1, 5);
+        }
       }
       this.$refs.mx.setCurrentRow(this.mx[this.mx.length - 1]);
       this.$nextTick(() => {

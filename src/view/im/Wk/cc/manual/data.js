@@ -672,19 +672,20 @@ export function pb2C(_this) {
         width: 50,
         align: "center"
       },
-      // {
-      //   label: _this.$t("whseField.pbbh"), //"胚布編號",
-      //   prop: "calicoId",
-      //   cell: true,
-      //   width: 100
-      // },
+      {
+        label: "缸号", //"胚布編號",
+        prop: "vatNo",
+        cell: false,
+        width: 180,
+        overHidden: true
+      },
       {
         label: "生产单号",
         prop: "calicoId",
-        cell: false
-        // width: 180
+        cell: false,
+        width: 180,
         // slot: true,
-        // overHidden: true,
+        overHidden: true
         // width: 350,
         // type: "select",
         // dicData: getDicT("basCalico", "clothName", "calicoId")

@@ -368,9 +368,9 @@ export default {
     };
   },
   watch: {
-    mx(n, o) {
-      this.page.total = n.length;
-    },
+    // mx(n, o) {
+    //   this.page.total = n.length;
+    // },
     chooseData(n, o) {
       if (n.list) {
         this.phPage.total = n.list.length;

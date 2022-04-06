@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-01-12 15:39:08
  * @LastEditors: Lyl
- * @LastEditTime: 2022-03-28 19:00:54
+ * @LastEditTime: 2022-04-06 16:55:16
  * @FilePath: \iot.vue\src\view\im\whseInOutKB\index.vue
  * @Description: 
 -->
@@ -271,17 +271,9 @@ export default {
         return;
       }
       if (!this.form.storeLoadCode && !this.form.vatNo && this.form.type == 2) {
-        this.$tip.error("请输入缸号或者载具编号!");
+        this.$tip.error("请输入单号或者载具编号!");
         return;
       }
-      // if (
-      //   !this.form.storeLoadCode &&
-      //   !this.form.proName &&
-      //   this.form.type == 1
-      // ) {
-      //   this.$tip.error("请输入织单号或者载具编号!");
-      //   return;
-      // }
       if (!this.form.vatNo && !this.form.proName && this.form.type == 2) {
         this.$tip.error("单号不能为空!");
         return;
@@ -294,23 +286,27 @@ export default {
             delete this.form[key];
           }
         }
-        // 胚布入仓
-        getInCloth({
-          storeLoadCode: this.form.storeLoadCode,
-          clothState: 1,
-          page: this.mainPage.currentPage,
-          rows: this.mainPage.pageSize,
-          start: this.mainPage.currentPage,
-        }).then((res) => {
-          this.crud = res.data.records;
-          this.mainPage.total = res.data.total;
-          this.$set(this.form, "storageState", this.crud.length ? 0 : 1);
-          this.crud.forEach((item, i) => {
-            item.index = i + 1;
-            // this.$refs.crud.toggleRowSelection(item, true);
+        if (this.form.type) {
+          // 胚布入仓
+          getInCloth({
+            storeLoadCode: this.form.storeLoadCode,
+            clothState: 1,
+            page: this.mainPage.currentPage,
+            rows: this.mainPage.pageSize,
+            start: this.mainPage.currentPage,
+          }).then((res) => {
+            this.crud = res.data.records;
+            this.mainPage.total = res.data.total;
+            this.$set(this.form, "storageState", this.crud.length ? 0 : 1);
+            this.crud.forEach((item, i) => {
+              item.index = i + 1;
+            });
           });
-          this.wLoading = false;
-        });
+        } else {
+          this.$tip.error("待开发!");
+        }
+
+        this.wLoading = false;
       } else {
         this.form.clothState = this.form.type;
         for (let key in this.form) {
@@ -330,11 +326,9 @@ export default {
               return a.productNo > b.productNo ? 1 : -1;
             });
             this.mainPage.total = res.data.total;
-            // this.form.storageState = this.crud.length ? 0 : 1;
             this.$set(this.form, "storageState", this.crud.length ? 0 : 1);
             this.crud.forEach((item, i) => {
               item.index = i + 1;
-              // this.$refs.crud.toggleRowSelection(item, true);
             });
             setTimeout(() => {
               this.wLoading = false;
@@ -355,9 +349,6 @@ export default {
           ).then((res) => {
             if (!res.data.length) {
               this.$tip.warning("暂无数据!");
-              // if (this.form.vatNo.indexOf("%") != -1) {
-              // this.form.vatNo = this.form.vatNo.split("%")[1];
-              // }
               this.crud = [];
               this.wLoading = false;
               return;
@@ -389,7 +380,6 @@ export default {
                       jk.netWeight = jk.weight;
                       sumWeight += jk.netWeight;
                     });
-
                     vatData.push({
                       vatNo: vat.vatNo,
                       children: vat.data,
@@ -428,9 +418,6 @@ export default {
                   this.$refs.crud.toggleRowSelection(item, true);
                 });
               });
-              // if (this.form.vatNo.indexOf("%") != -1) {
-              //   this.form.vatNo = this.form.vatNo.split("%")[1];
-              // }
               setTimeout(() => {
                 this.wLoading = false;
               }, 500);
@@ -441,11 +428,6 @@ export default {
     },
     queryTask() {
       this.wLoading = true;
-      for (let key in this.taskForm) {
-        if (this.taskForm[key] == "") {
-          delete this.taskForm[key];
-        }
-      }
       this.taskForm.barCode = this.taskForm.barCode
         ? (this.taskForm.barCode = "%" + this.taskForm.barCode)
         : "";

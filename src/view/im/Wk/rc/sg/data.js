@@ -541,7 +541,7 @@ export function rhl2C(_this) {
       {
         label: "供应商批号",
         prop: "batId",
-        cell: true,
+        cell: false,
         width: 160,
         overHidden: true
       },
@@ -933,10 +933,12 @@ export function planCrud(_this) {
         prop: "batId",
         cell: false,
         width: 180,
-        overHidden: true
+        overHidden: true,
+        hide: _this.data != _this.$t("iaoMng.sx")
       },
       {
-        label: _this.data === _this.$t("iaoMng.sx") ? "本厂纱批号" : "本厂批号",
+        label:
+          _this.data === _this.$t("iaoMng.sx") ? "本厂纱批号" : "供应商编号",
         prop: "batNo",
         cell: false,
         width: 160,

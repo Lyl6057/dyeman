@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-02 16:27:14
+ * @LastEditTime: 2022-04-05 09:15:58
  * @Description: 
 -->
 <template>
@@ -300,8 +300,7 @@ export default {
     },
   },
   created() {
-    getLoginOrg({ account: "mia" }).then((res) => {
-      // parent.userID
+    getLoginOrg({ account: parent.userID }).then((res) => {
       if (res.data) {
         getDptWorkProcess().then((dpt) => {
           for (let i = 0; i < dpt.data.length; i++) {

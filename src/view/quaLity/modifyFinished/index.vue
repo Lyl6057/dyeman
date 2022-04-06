@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-03-31 14:30:42
+ * @LastEditTime: 2022-04-05 10:37:54
  * @Description:
 -->
 <template>
@@ -86,16 +86,16 @@
           >
         </el-row>
       </el-tab-pane>
-      <el-tab-pane label="删除数据" name="second">
+      <el-tab-pane label="删除/恢复数据" name="second">
         <el-row class="btnList">
           <el-button type="primary" @click="query">{{
             this.$t("public.query")
           }}</el-button>
           <el-button
-            type="danger"
+            :type="secondF.delFlag ? 'success' : 'danger'"
             @click="del"
             :disabled="!selectList.length"
-            >{{ this.$t("public.del") }}</el-button
+            >{{ secondF.delFlag ? "恢复" : "删除" }}</el-button
           >
         </el-row>
         <el-row class="formBox">
@@ -108,6 +108,7 @@
             :option="secondCOp"
             :data="secondC"
             :page.sync="secondPage"
+            v-loading="tloading"
             @on-load="query"
             @selection-change="selectionChange"
           >
@@ -140,11 +141,14 @@ export default {
       wloading: false,
       loading: false,
       serachLoading: false,
+      tloading: false,
       options: [],
       tabs: "first",
       selectList: [],
       secondFOp: secondForm(this),
-      secondF: {},
+      secondF: {
+        delFlag: false,
+      },
       secondCOp: secondCrud(this),
       secondC: [],
       secondPage: {
@@ -184,6 +188,7 @@ export default {
           cardType: 1,
           // delFlag: "",
         }).then((res) => {
+          this.checkData = [];
           this.finishedNotes = this.finishedNotes.concat(
             res.data.sort((a, b) => {
               return a.productNo > b.productNo ? 1 : -1;
@@ -206,6 +211,10 @@ export default {
       });
     },
     save() {
+      if (!this.form.vatNo1 || !this.form.vatNo2) {
+        this.$tip.error("请补充缸号信息！");
+        return;
+      }
       this.wloading = true;
       this.finishedNotes.forEach((item, i) => {
         // 属于右侧缸号
@@ -223,12 +232,12 @@ export default {
       });
     },
     query() {
-      this.wLoading = true;
-      for (let key in this.secondF) {
-        if (!this.secondF[key]) {
-          delete this.secondF[key];
-        }
-      }
+      this.tloading = true;
+      // for (let key in this.secondF) {
+      //   if (!this.secondF[key]) {
+      //     delete this.secondF[key];
+      //   }
+      // }
       let data = JSON.parse(JSON.stringify(this.secondF));
       let r_clothCheckTime_r = "";
       if (data.clothCheckTime && data.clothCheckTime.length) {
@@ -247,7 +256,7 @@ export default {
           isPrinted: true,
           // clothState: this.form.clothState,
           cardType: 1,
-          delFlag: false,
+          // delFlag: false,
         }),
         r_clothCheckTime_r
       ).then((res) => {
@@ -259,24 +268,46 @@ export default {
           item.index = i + 1;
         });
         this.secondPage.total = res.data.total;
-        this.wLoading = false;
+        setTimeout(() => {
+          this.tloading = false;
+        }, 200);
       });
     },
     del() {
-      this.$tip.cofirm("是否确定删除选中的数据?").then(() => {
-        this.wLoading = true;
-        this.selectList.forEach((item, i) => {
-          del(item.cardId).then((res) => {
-            if (i == this.selectList.length - 1) {
-              this.$tip.success("删除成功！");
-              this.query();
-              setTimeout(() => {
-                this.wLoading = false;
-              }, 200);
-            }
+      if (this.secondF.delFlag) {
+        // true 未已删除，则为恢复数据
+        this.$tip.cofirm("是否确定恢复选中的数据?").then(() => {
+          this.wLoading = true;
+          this.selectList.forEach((item, i) => {
+            item.delFlag = false;
+            updateFinished(item).then((res) => {
+              if (i == this.selectList.length - 1) {
+                this.$tip.success("恢复成功！");
+                this.query();
+                setTimeout(() => {
+                  this.wLoading = false;
+                }, 200);
+              }
+            });
           });
         });
-      });
+      } else {
+        // false 未未删除，则删除数据
+        this.$tip.cofirm("是否确定删除选中的数据?").then(() => {
+          this.wLoading = true;
+          this.selectList.forEach((item, i) => {
+            del(item.cardId).then((res) => {
+              if (i == this.selectList.length - 1) {
+                this.$tip.success("删除成功！");
+                this.query();
+                setTimeout(() => {
+                  this.wLoading = false;
+                }, 200);
+              }
+            });
+          });
+        });
+      }
     },
     selectionChange(val) {
       this.selectList = val;

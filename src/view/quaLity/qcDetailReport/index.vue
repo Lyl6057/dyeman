@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-02 15:32:14
+ * @LastEditTime: 2022-04-04 16:59:56
  * @Description:
 -->
 <template>
@@ -16,9 +16,12 @@
         <el-button type="primary" @click="query">{{
           this.$t("public.query")
         }}</el-button>
-        <el-button type="primary" @click="outReport" :disabled="!form.vatNo">{{
-          this.$t("public.report")
-        }}</el-button>
+        <el-button
+          type="primary"
+          @click="updateDivdWeight"
+          :disabled="!form.vatNo"
+          >{{ this.$t("public.report") }}</el-button
+        >
       </el-row>
       <el-row class="formBox">
         <avue-form ref="form" :option="formOp" v-model="form">
@@ -154,7 +157,9 @@ export default {
             factBatch: vatData.yarnCylinder,
             yarnBatch: vatData.yarnNumber,
             calicoPidCount: vatData.pidCount,
-            calicoAmount: vatData.clothWeight,
+            calicoAmount: vatData.clothWeight
+              ? vatData.clothWeight
+              : vatData.divdCw,
           };
           // 查询缸号下的成品布
           getFinishedNote({
@@ -162,6 +167,11 @@ export default {
             cardType: 1, // 1为有效成品数据
             delFlag: false,
           }).then((note) => {
+            if (!note.data.length) {
+              this.$tip.error("该缸号暂无成品!");
+              this.wloading = false;
+              return;
+            }
             checkData.fabricPidCount = note.data.length; // 成品总疋数
             checkData.weightKg = 0; // 成品总重量KG
             checkData.weightLbs = 0; // LBS
@@ -185,6 +195,8 @@ export default {
             checkData.lossRate = Number(
               (checkData.weightKg / checkData.calicoAmount - 1) * 100
             ).toFixed(2);
+            checkData.lossRate =
+              checkData.lossRate == "Infinity" ? 0 : checkData.lossRate;
             get({ vatNo: this.form.vatNo }).then((vatNo) => {
               if (vatNo.data.records.length) {
                 // 存在记录,修改
@@ -195,7 +207,7 @@ export default {
                     wmUnit: this.form.wmUnit,
                   })
                 ).then((res) => {
-                  this.updateDivdWeight();
+                  // this.updateDivdWeight();
                   let name = encodeURI(
                     "http:" +
                       process.env.API_HOST.split(":")[1] +
@@ -215,7 +227,7 @@ export default {
                     wmUnit: this.form.wmUnit,
                   })
                 ).then((res) => {
-                  this.updateDivdWeight();
+                  // this.updateDivdWeight();
                   let name = encodeURI(
                     "http:" +
                       process.env.API_HOST.split(":")[1] +
@@ -247,7 +259,9 @@ export default {
           page: 1,
         }).then((vatList) => {
           vatList.data.records[0].divdCw = res.data[sVatNo]; // 获取拆缸重量
-          updateRunJob(vatList.data.records[0]).then((res) => {}); // 更新原缸拆缸重量
+          updateRunJob(vatList.data.records[0]).then((res) => {
+            this.outReport();
+          }); // 更新原缸拆缸重量
         });
       });
     },

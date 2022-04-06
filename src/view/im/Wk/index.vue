@@ -835,6 +835,14 @@ export default {
               icon: "el-icon-thumb",
               color: "#409EFF",
             },
+            {
+              click: () => {
+                this.toView("cc_manual", this.$t("whseField.cpb") + "_0");
+              },
+              title: "检验出仓",
+              icon: "el-icon-s-claim",
+              color: "#409EFF",
+            },
           ],
         },
         option4: {

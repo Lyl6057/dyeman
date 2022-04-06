@@ -170,6 +170,7 @@ export default {
             item.yarnsName = item.chinName;
             item.materialName = item.chinName;
             if (this.datas != this.$t("iaoMng.sx")) {
+              item.batId = item.batNo;
               item.batchNo = this.code;
               item.batchNos = item.batchNo.slice(2);
             } else {
@@ -215,6 +216,7 @@ export default {
             whseDyesalinFk: this.detail.whseDyesalinoid, // 顏料Oid
             whseEnergyInFk: this.detail.energyInId, // 能源Oid
             whseHardwareInFk: this.detail.whseAccessoriesinoid,
+            whseOfficeInFk: this.detail.whseAccessoriesinoid,
           })
           .then((res) => {
             let dicData = [];
@@ -326,6 +328,7 @@ export default {
           energyDtloid: this.chooseData.energyDtloid,
           whseAccessoriesDtlFk: this.chooseData.whseAccessoriesDtloid,
           whseAccessoriesDtloid: this.chooseData.whseAccessoriesDtloid,
+          whseOfficeDtlFk: this.chooseData.whseAccessoriesDtloid,
           rows: this.phPage.pageSize,
           start: this.phPage.currentPage,
         })

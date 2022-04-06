@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-02 10:49:25
+ * @LastEditTime: 2022-04-04 10:07:35
  * @Description:
  */
 
@@ -352,7 +352,7 @@ export function mainCrud(_this) {
         // }
       },
       {
-        label: "合计数量",
+        label: "投胚数量",
         tip: "Tổng cộng(KG)",
         prop: "clothWeight",
         width: 130,
@@ -363,7 +363,7 @@ export function mainCrud(_this) {
         rules: [
           {
             required: true,
-            message: "请输入合计数量",
+            message: "请输入投胚数量",
             trigger: "blur"
           }
         ],

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-02 16:45:38
+ * @LastEditTime: 2022-04-06 10:28:49
  * @Description:
  */
 var baseUrl = "http://192.168.5.1:91";
@@ -75,28 +75,6 @@ export function dlgForm(_this) {
     labelWidth: 100,
     column: [
       {
-        label: "缸号",
-        prop: "runJobFk",
-        span: 6,
-        placeholder: " ",
-        type: "select",
-        tipPlacement: "right",
-        display: _this.tabs == "rd" ? true : false,
-        filterable: true,
-        formslot: true,
-        dicData: vatList,
-        rules: [
-          {
-            required: true,
-            message: "請选择缸號",
-            trigger: "blur"
-          }
-        ],
-        change: val => {
-          _this.getLogWeight(val.value);
-        }
-      },
-      {
         label: "收/发单",
         prop: "dispathReceive",
         span: 6,
@@ -118,17 +96,40 @@ export function dlgForm(_this) {
         change: val => {
           if (val.value == 1) {
             _this.form.dptworkProcessFk = _this.userId || "";
-            _this.form.acceptStaff = parent.userID || "MIA";
+            _this.form.acceptStaff = parent.userID;
             _this.form.sendProcessFk = "";
             _this.form.sendStaff = "";
           } else {
             _this.form.dptworkProcessFk = "";
             _this.form.acceptStaff = "";
             _this.form.sendProcessFk = _this.userId || "";
-            _this.form.sendStaff = parent.userID || "MIA";
+            _this.form.sendStaff = parent.userID;
           }
         }
       },
+      {
+        label: "缸号",
+        prop: "runJobFk",
+        span: 6,
+        placeholder: " ",
+        type: "select",
+        tipPlacement: "right",
+        display: _this.tabs == "rd" ? true : false,
+        filterable: true,
+        formslot: true,
+        dicData: vatList,
+        rules: [
+          {
+            required: true,
+            message: "請选择缸號",
+            trigger: "blur"
+          }
+        ],
+        change: val => {
+          _this.getLogWeight(val.value);
+        }
+      },
+
       {
         label: "织单号",
         display: _this.tabs == "zd" ? true : false,
@@ -178,18 +179,18 @@ export function dlgForm(_this) {
         ],
         cascader: ["stepId"]
       },
-      {
-        label: "发单人",
-        prop: "sendStaff",
-        span: 6,
-        placeholder: " ",
-        tipPlacement: "right",
-        tip: "người gửi đơn",
-        disabled: false,
-        type: "select",
-        dicData: getDicT("ucmlUser", "usrLogin", "usrLogin"),
-        filterable: true
-      },
+      // {
+      //   label: "发单人",
+      //   prop: "sendStaff",
+      //   span: 6,
+      //   placeholder: " ",
+      //   tipPlacement: "right",
+      //   tip: "người gửi đơn",
+      //   disabled: false,
+      //   type: "select",
+      //   dicData: getDicT("ucmlUser", "employeename", "usrLogin"),
+      //   filterable: true
+      // },
       {
         label: "收单部门",
         prop: "dptworkProcessFk",
@@ -209,18 +210,18 @@ export function dlgForm(_this) {
         ],
         cascader: ["stepId"]
       },
-      {
-        label: "收单人",
-        prop: "acceptStaff",
-        tipPlacement: "right",
-        span: 6,
-        tip: "người nhận đơn",
-        placeholder: " ",
-        type: "select",
-        dicData: getDicT("ucmlUser", "usrLogin", "usrLogin"),
-        disabled: false,
-        filterable: true
-      },
+      // {
+      //   label: "收单人",
+      //   prop: "acceptStaff",
+      //   tipPlacement: "right",
+      //   span: 6,
+      //   tip: "người nhận đơn",
+      //   placeholder: " ",
+      //   type: "select",
+      //   dicData: getDicT("ucmlUser", "employeename", "usrLogin"),
+      //   disabled: false,
+      //   filterable: true
+      // },
       {
         label: "工序",
         prop: "stepId",
@@ -246,7 +247,7 @@ export function dlgForm(_this) {
         label: "说明",
         prop: "acceptDesc",
         tipPlacement: "right",
-        span: 18,
+        span: 24,
         tip: "remark",
         placeholder: " "
       }
@@ -473,7 +474,7 @@ export function dlgCrud(_this) {
         type: "select",
         overHidden: true,
         width: 100,
-        dicData: getDicT("ucmlUser", "usrLogin", "usrLogin"),
+        dicData: getDicT("ucmlUser", "employeename", "usrLogin"),
         filterable: true
       },
       {
@@ -505,7 +506,7 @@ export function dlgCrud(_this) {
         width: 100,
         type: "select",
         overHidden: true,
-        dicData: getDicT("ucmlUser", "usrLogin", "usrLogin"),
+        dicData: getDicT("ucmlUser", "employeename", "usrLogin"),
         disabled: false,
         filterable: true
       },

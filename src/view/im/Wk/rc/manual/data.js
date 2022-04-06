@@ -444,7 +444,7 @@ export function rhl2C(_this) {
       // },
       {
         label: "本厂批号",
-        prop: "batchNo",
+        prop: "batchNos",
         cell: false,
         width: 220
       },
@@ -1185,9 +1185,9 @@ export function yjxz2C(_this) {
 
       {
         label: "本厂批号",
-        prop: "batchNo",
+        prop: "batchNos",
         cell: false,
-        width: 230
+        width: 120
       },
       {
         label: _this.$t("energy.sl"),

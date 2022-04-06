@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-03-16 16:36:56
+ * @LastEditTime: 2022-04-05 08:35:14
  * @Description: 
 -->
 <template>
@@ -364,6 +364,7 @@ export default {
             whseId = res.data.data;
             addOutWhseDla({
               calicoId: this.form.weaveJobCode,
+              vatNo: this.form.vatNo,
               whseMaterialFk: whseId,
             }).then((dla) => {
               this.history.forEach((item, i) => {
@@ -494,6 +495,7 @@ export default {
             whseId = res.data.data;
             addOutWhseDla({
               calicoId: this.form.weaveJobCode,
+              vatNo: this.form.vatNo,
               whseMaterialFk: whseId,
             }).then((dla) => {
               this.history.forEach((item, i) => {

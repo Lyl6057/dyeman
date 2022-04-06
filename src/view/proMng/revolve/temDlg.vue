@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-02 08:31:01
+ * @LastEditTime: 2022-04-06 08:06:50
  * @Description:
 -->
 <template>
@@ -855,7 +855,7 @@ export default {
               } else {
                 this.form.divdVatFlag = 0; // 拆单标志
               }
-              this.form.runJobId = "";
+
               this.form.auditState = 0;
               this.form.clothWeight = 0;
               this.form.pidCount = 1;
@@ -932,6 +932,7 @@ export default {
             this.form.wmUnit = "KG";
             this.form.serviceOperator = parent.userID;
             this.form.runState = "1";
+            this.form.runJobId = "";
           });
         }, 200);
       } else {

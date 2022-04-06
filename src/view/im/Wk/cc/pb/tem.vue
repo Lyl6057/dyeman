@@ -800,9 +800,8 @@ export default {
               this.sxcheckList[i].custTicket ===
               this.chooseData.list[j].custTicket
             ) {
-              this.sxcheckList[i].whseMaterialDlboid = this.chooseData.list[
-                j
-              ].whseMaterialDlboid;
+              this.sxcheckList[i].whseMaterialDlboid =
+                this.chooseData.list[j].whseMaterialDlboid;
               break;
             }
           }
@@ -834,9 +833,8 @@ export default {
         for (let i = 0; i < this.sxcheckList.length; i++) {
           for (let j = 0; j < this.mx.length; j++) {
             if (this.sxcheckList[i].calicoId === this.mx[j].calicoId) {
-              this.sxcheckList[i].whseMaterialDlaoid = this.mx[
-                j
-              ].whseMaterialDlaoid;
+              this.sxcheckList[i].whseMaterialDlaoid =
+                this.mx[j].whseMaterialDlaoid;
               break;
             }
           }
@@ -1317,30 +1315,19 @@ export default {
 };
 </script>
 <style lang='stylus'>
-#sxPlanDlg {
-  overflow: hidden !important;
-
-  .el-dialog__header {
-    padding: 0;
-  }
-
-  .el-card {
-    border: none;
-  }
-
-  .el-dialog__body {
-    padding: 0 !important;
-  }
-
-  .el-dialog__header {
-    padding: 0px;
-    background-color: rgb(2, 26, 60);
-  }
-
-  .formBox {
-    margin-bottom: 0px;
-  }
-
+#sxPlanDlg
+  overflow hidden !important
+  .el-dialog__header
+    padding 0
+  .el-card
+    border none
+  .el-dialog__body
+    padding 0 !important
+  .el-dialog__header
+    padding 0px
+    background-color rgb(2, 26, 60)
+  .formBox
+    margin-bottom 0px
   // .el-button--mini, .el-button--small {
   // font-size: 16px;
   // }
@@ -1348,31 +1335,23 @@ export default {
   // .el-button--mini, .el-button--mini.is-round {
   // padding: 5px 10px;
   // }
-  .avue-crud__menu {
-    min-height: 5px !important;
-    height: 5px !important;
-  }
-
-  .el-tabs__item {
-    font-size: 18px;
-    line-height: 30px;
-    height: 30px;
-  }
-
-  .el-table__header-wrapper, .el-form-item__label, .el-input--mini {
+  .avue-crud__menu
+    min-height 5px !important
+    height 5px !important
+  .el-tabs__item
+    font-size 18px
+    line-height 30px
+    height 30px
+  .el-table__header-wrapper, .el-form-item__label, .el-input--mini
     // font-size: 16px !important;
     // font-weight: 600 !important;
     // color: #000;
-  }
-
-  .el-dialog {
-    margin-top: 0 !important;
-    height: 100%;
-    margin: 0 !important;
-    background-color: rgb(2, 26, 60);
-    overflow: hidden;
-  }
-
+  .el-dialog
+    margin-top 0 !important
+    height 100%
+    margin 0 !important
+    background-color rgb(2, 26, 60)
+    overflow hidden
   // .avue-form__group {
   // background-color: #fff;
   // }
@@ -1380,26 +1359,15 @@ export default {
   // .el-table--mini td, .el-table--mini th {
   // padding: 2px 0 !important;
   // }
-  .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item {
-    margin-bottom: 10px;
-  }
-
-  .avue-crud__tip {
-    display: none;
-  }
-
-  .el-dialog__header {
-    padding: 0px;
-  }
-
-  .el-dialog__headerbtn {
-    top: 5px;
-    color: #000;
-    font-size: 22px;
-    z-index: 999;
-  }
-}
-
-#rcDetail {
-}
+  .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item
+    margin-bottom 10px
+  .avue-crud__tip
+    display none
+  .el-dialog__header
+    padding 0px
+  .el-dialog__headerbtn
+    top 5px
+    color #000
+    font-size 22px
+    z-index 999
 </style>

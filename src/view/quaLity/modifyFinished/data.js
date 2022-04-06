@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-03-31 14:25:10
+ * @LastEditTime: 2022-04-05 10:39:18
  * @Description:
  */
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
@@ -638,29 +638,6 @@ export function secondForm(_this) {
         tip: "MS đơn sản xuất bp Dệt"
       },
       {
-        label: "客戶",
-        prop: "custCode",
-        width: 150,
-        placeholder: " ",
-        span: 6,
-        overHidden: true,
-        filterable: true,
-        allowCreate: true,
-        defaultFirstOption: true,
-        type: "select",
-        tip: "Khách hàng",
-        dicData: cust
-      },
-      {
-        label: "匹號",
-        prop: "pidNo",
-        width: 80,
-        align: "right",
-        span: 6,
-        placeholder: " ",
-        tip: "Số cây vải"
-      },
-      {
         label: "载具编号",
         tip: "Mã lồng thép",
         prop: "storeLoadCode",
@@ -669,26 +646,6 @@ export function secondForm(_this) {
         cell: true,
         overHidden: true,
         width: 120
-      },
-      {
-        label: "验布员工号",
-        prop: "clothChecker",
-        span: 6,
-        placeholder: " ",
-        width: 180,
-        overHidden: true
-      },
-      {
-        label: "验布时间",
-        prop: "clothCheckTime",
-        type: "datetimerange",
-        format: "yyyy-MM-dd",
-        valueFormat: "yyyy-MM-dd",
-        span: 12,
-        tip: "thời gian in",
-        placeholder: " ",
-        align: "center",
-        width: 180
       },
       {
         label: "成品布状态",
@@ -714,6 +671,35 @@ export function secondForm(_this) {
             value: 3
           }
         ]
+      },
+      {
+        label: "删除状态",
+        tip: "delete state",
+        prop: "delFlag",
+        span: 6,
+        placeholder: " ",
+        cell: true,
+        overHidden: true,
+        width: 120,
+        type: "select",
+        clearable: false,
+        dicData: [
+          {
+            label: "未删除",
+            value: false
+          },
+          {
+            label: "已删除",
+            value: true
+          }
+        ],
+        change: () => {
+          _this.$nextTick(() => {
+            if (!_this.tloading) {
+              _this.query();
+            }
+          });
+        }
       }
     ]
   };
@@ -729,7 +715,7 @@ export function secondCrud(_this) {
     border: true,
     index: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 330px)",
+    height: "calc(100vh - 290px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
