@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-03-26 09:58:34
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-01 15:28:10
+ * @LastEditTime: 2022-04-07 14:26:07
  */
 
 
@@ -215,6 +215,17 @@ const commonOp = {
     rowKey: "index",
     index: true,
 }
+const invResultCol =   {
+  label: "盈|亏",
+  prop: "invResult",
+  width: 120,
+  type: "number",
+  align: "right",
+  formatter: (row) => {
+    let diffQty = row.inventoryQty - row.stockQty
+    return (diffQty > 0 ? "+" : "") + (diffQty).toFixed(2);
+  },
+}
 // 纱线
 export function sxCrudOp(_this){
   return {
@@ -271,6 +282,7 @@ export function sxCrudOp(_this){
         type: "number",
         align: "right",
       },
+      invResultCol,
       {
         label: _this.$t("whseField.dw"),
         prop: "unitName",
@@ -336,6 +348,7 @@ export function pubCrudOp(_this){
         type: "number",
         align: "right",
       },
+      invResultCol,
       {
         label: _this.$t("whseField.dw"),
         prop: "unitName",
@@ -405,6 +418,7 @@ export function cpbCrudOp(_this){
         type: "number",
         align: "right",
       },
+      invResultCol,
       {
         label: _this.$t("whseField.dw"),
         prop: "unitName",
