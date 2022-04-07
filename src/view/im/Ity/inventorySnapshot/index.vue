@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-03-26 09:57:57
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-03-31 10:19:42
+ * @LastEditTime: 2022-04-07 17:10:06
 -->
 <template>
   <div id="ityInventoryList">
@@ -20,12 +20,17 @@
         <el-button type="primary" @click="getDataList">{{
           this.$t("public.query")
         }}</el-button>
-        <el-button
-          type="primary"
-          :disabled="hasOperate"
-          @click="handleExport"
-          >导出</el-button
-        >
+        <el-dropdown>
+        <span class="el-dropdown-link">
+          <el-button type="primary" >导出<i class="el-icon-arrow-down el-icon--right"></i></el-button>
+        </span>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item><el-button type="success" :disabled="hasOperate" @click="handleExport(0)" >导出盘点清单</el-button></el-dropdown-item>
+          <el-dropdown-item></el-dropdown-item>
+          <el-dropdown-item><el-button type="danger" :disabled="hasOperate" @click="handleExport(1)" >导出盈亏清单</el-button></el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
+        
         <el-button
           type="primary"
           :disabled="hasOperate"
@@ -135,7 +140,7 @@ export default {
       this.$refs.invDtlRef.optionInit(this.chooseData);
     },
     // 导出
-    handleExport(){
+    handleExport(status){
         let { materialClass, inventoryNo  } = this.chooseData;
         let parmas = {
             module: "WHSE",
@@ -144,6 +149,9 @@ export default {
         fetchFineReportUrl(parmas).then(res => {
             let url = res.data.url;
             let type = materialClass.toLocaleLowerCase();
+            if(status === 1){
+              type += "_end"
+            }
             url = url.replace("###",type);
             url += `&inventory_no=${inventoryNo}`;
             let oA = document.createElement('a');

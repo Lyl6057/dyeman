@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-03-29 10:05:29
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-01 14:14:06
+ * @LastEditTime: 2022-04-07 14:23:31
 -->
 
 <template>
@@ -141,9 +141,29 @@ export default {
                     fontWeight: "bolder"
                 }
             }else if(column.property === 'inventoryQty'){
+                let bgColor = "";
+                if(+row.inventoryQty > +row.stockQty){
+                    bgColor = "#aa0000";
+                }else if(+row.inventoryQty < +row.stockQty){
+                    bgColor = "#00aa00"
+                }else {
+                    bgColor = "#aaa"
+                }
                 return {
-                    backgroundColor: row.inventoryQty != row.stockQty  ? "red" : "green",
+                    backgroundColor: bgColor,
                     color: "white"
+                }
+            }else if(column.property === 'invResult'){
+                let color = "#000";
+                if(+row.inventoryQty > +row.stockQty){
+                    color = '#aa0000'
+                }else if(+row.inventoryQty < +row.stockQty){
+                    color = "#00aa00"
+                }
+                console.log("color",row.inventoryQty, row.stockQty,color);
+                return {
+                    color: color,
+                    fontWeight: "blob"
                 }
             }
         },
