@@ -651,6 +651,27 @@ export default {
               icon: "el-icon-s-claim",
               color: "#409EFF",
             },
+            {
+              title: this.$t("iaoMng.sbrc"),
+              icon: "yx-icf-cailiaogongcheng",
+              color: "#606266",
+            },
+            // {
+            //   click: () => {
+            //     this.toView("rc_manual", this.$t("choicDlg.rl") + "_0");
+            //   },
+            //   title: this.$t("iaoMng.sgrc"),
+            //   icon: "el-icon-thumb",
+            //   color: "#409EFF",
+            // },
+            {
+              click: () => {
+                this.toView("rc_sg", this.$t("iaoMng.sb") + "_7");
+              },
+              title: "设备申购",
+              icon: "el-icon-s-claim",
+              color: "#409EFF",
+            },
           ],
         },
       },
@@ -1280,29 +1301,6 @@ export default {
     line-height 30px
     height 30px
 #wkDlg, #sxrcDlg, #kbDlg
-  // .el-table__fixed-body-wrapper {
-  // top: 45px !important;
-  // }
-
-  // .el-input__inner {
-  // border: none;
-  // border-bottom: 1px solid #fff;
-  // border-radius: 0;
-  // font-size: 20px;
-  // color: #fff;
-  // cursor: auto;
-  // background-color: rgb(2, 26, 60);
-  // }
-
-  // .el-form-item__label {
-  // color: #fff;
-  // font-size: 19px !important;
-  // font-weight: bold;
-  // }
-
-  // .avue-group .el-collapse, .avue-group .el-collapse-item__wrap {
-  // background-color: rgb(2, 26, 60);
-  // }
   .el-input.is-disabled .el-input__inner
     color #606266
     // background-color: #fff;
@@ -1367,7 +1365,7 @@ export default {
   .avue-data-cardText .item-content
     margin-top 10px
     display none
-  .avue-data-cardText .el-col:nth-child(1) .item, .tabs1 .el-col:nth-child(7) .avue-data-cardText .el-col:nth-child(4) .item, .tabs2 .el-col:nth-child(7) .avue-data-cardText .el-col:nth-child(6) .item
+  .avue-data-cardText .el-col:nth-child(1) .item, .tabs1 .el-col:nth-child(7) .avue-data-cardText .el-col:nth-child(4) .item, .tabs1 .el-col:nth-child(8) .avue-data-cardText .el-col:nth-child(4) .item, .tabs2 .el-col:nth-child(7) .avue-data-cardText .el-col:nth-child(6) .item
     background-color #ccc
     min-height 20px
     .item-header

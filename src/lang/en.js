@@ -100,6 +100,8 @@ export default {
   },
   iaoMng: {
     // 出入庫
+    sb: "设备",
+    sbrc: "设备入仓",
     sxcc: "纱线出仓",
     sclycc: "生产领用出仓",
     wfjgscc: "外发加工纱出仓",

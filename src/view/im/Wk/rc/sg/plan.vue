@@ -60,7 +60,7 @@ export default {
     return {
       loading: false,
       page: {
-        pageSize: 10,
+        pageSize: 50,
         currentPage: 1,
         total: 0,
       },

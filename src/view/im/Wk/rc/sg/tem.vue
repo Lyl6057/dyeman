@@ -119,12 +119,12 @@ export default {
       screenLoading: false,
       fpLoading: false,
       page: {
-        pageSize: 10,
+        pageSize: 50,
         currentPage: 1,
         total: 0,
       },
       phPage: {
-        pageSize: 10,
+        pageSize: 50,
         currentPage: 1,
         total: 0,
       },
@@ -157,6 +157,7 @@ export default {
       if (this.isAdd) {
         this.screenLoading = true;
         this.mx = this.addList;
+        // this.form.stockState = 0;
         if (!this.mx.length) {
           this.screenLoading = false;
         }
@@ -175,8 +176,8 @@ export default {
               item.batchNos = item.batchNo.slice(2);
             } else {
               item.batchNos = item.batchNo;
+              item.yarnsCard = item.model;
             }
-
             item.weight = item.deliQty;
             item.weightUnit = item.deliUnit;
             item.poQty = item.deliQty;
@@ -217,6 +218,8 @@ export default {
             whseEnergyInFk: this.detail.energyInId, // 能源Oid
             whseHardwareInFk: this.detail.whseAccessoriesinoid,
             whseOfficeInFk: this.detail.whseAccessoriesinoid,
+            whseEquipmentInFk: this.detail.whseEquipmentInoid,
+            // batchNo: "%^!",
           })
           .then((res) => {
             let dicData = [];
@@ -259,12 +262,14 @@ export default {
             } else {
               let records = res.data;
               this.page.total = records.total;
-              this.mxOp.column[4].dicData = dicData;
+              // this.mxOp.column[4].dicData = dicData;
               this.mx = records.records;
               if (this.mx.length === 0) {
                 this.loading = false;
               }
-
+              this.mx = this.mx.sort((a, b) => {
+                return a.batchNo > b.batchNo ? 1 : -1;
+              });
               this.mx.forEach((item, index) => {
                 item.index = index + 1;
                 item.chinName = item.materialNum;
@@ -307,7 +312,8 @@ export default {
         !this.chooseData.whseDyesainDtlaoid &&
         !this.chooseData.whseYarninDtloid &&
         !this.chooseData.energyDtloid &&
-        !this.chooseData.whseAccessoriesDtloid
+        !this.chooseData.whseAccessoriesDtloid &&
+        !this.chooseData.whseEquipmentDtloid
       ) {
         this.chooseData.list = [];
         return;
@@ -329,6 +335,7 @@ export default {
           whseAccessoriesDtlFk: this.chooseData.whseAccessoriesDtloid,
           whseAccessoriesDtloid: this.chooseData.whseAccessoriesDtloid,
           whseOfficeDtlFk: this.chooseData.whseAccessoriesDtloid,
+          whseEquipmentDtlFk: this.chooseData.whseEquipmentDtloid,
           rows: this.phPage.pageSize,
           start: this.phPage.currentPage,
         })
@@ -475,7 +482,8 @@ export default {
         !this.chooseData.whseAccessoriesDtloid &&
         !this.chooseData.whseYarninDtloid &&
         !this.chooseData.whseDyesainDtlaoid &&
-        !this.chooseData.energyDtloid
+        !this.chooseData.energyDtloid &&
+        !this.chooseData.whseEquipmentDtloid
       ) {
         this.mx.splice(this.chooseData.index - 1, 1);
         this.$refs.mx.setCurrentRow(this.mx[this.mx.length - 1] || {});
@@ -506,6 +514,8 @@ export default {
                 ? this.chooseData.whseYarninDtloid
                 : this.datas === this.$t("choicDlg.rl")
                 ? this.chooseData.energyDtloid
+                : this.datas === this.$t("iaoMng.sb")
+                ? this.chooseData.whseEquipmentDtloid
                 : this.chooseData.whseAccessoriesDtloid
             )
             .then((res) => {
@@ -540,7 +550,8 @@ export default {
         !this.choosePhData.whseDyesainDtlboid &&
         !this.choosePhData.whseYarninDtlaoid &&
         !this.choosePhData.whseEnergyDtlaId &&
-        !this.choosePhData.whseAccessoriesDtlaoid
+        !this.choosePhData.whseAccessoriesDtlaoid &&
+        !this.choosePhData.whseEquipmentDtlaoid
       ) {
         this.chooseData.list.splice(this.choosePhData.index - 1, 1);
         this.phPage.total--;
@@ -569,6 +580,8 @@ export default {
                 ? this.choosePhData.whseEnergyDtlaId
                 : this.datas === this.$t("iaoMng.hgyl")
                 ? this.choosePhData.whseChemicalinDtlboid
+                : this.datas === this.$t("iaoMng.sb")
+                ? this.choosePhData.whseEquipmentDtlaoid
                 : this.choosePhData.whseAccessoriesDtlaoid
             )
             .then((res) => {
@@ -654,7 +667,8 @@ export default {
         this.form.whseAccessoriesinoid ||
         this.form.whseYarninoid ||
         this.form.whseDyesalinoid ||
-        this.form.energyInId
+        this.form.energyInId ||
+        this.form.whseEquipmentInoid
       ) {
         this.everyThing.update(this.form).then((res) => {
           if (this.mx.length === 0) {
@@ -671,7 +685,8 @@ export default {
                 item.whseAccessoriesDtloid ||
                 item.whseYarninDtloid ||
                 item.whseDyesainDtlaoid ||
-                item.energyDtloid
+                item.energyDtloid ||
+                item.whseEquipmentDtloid
               ) {
                 this.everyThing.updateDetail(data).then((res) => {
                   resolve();
@@ -686,12 +701,14 @@ export default {
                 data.whseEnergyInFk = this.detail.energyInId;
                 data.whseHardwareInFk = this.detail.whseAccessoriesinoid;
                 data.whseOfficeInFk = this.detail.whseAccessoriesinoid;
+                data.whseEquipmentInFk = this.detail.whseEquipmentInoid;
                 this.everyThing.addDetail(data).then((res) => {
                   item.whseChemicalinDtlaoid = res.data.data;
                   item.whseAccessoriesDtloid = res.data.data;
                   item.whseYarninDtloid = res.data.data;
                   item.whseDyesainDtlaoid = res.data.data;
                   item.energyDtloid = res.data.data;
+                  item.whseEquipmentDtloid = res.data.data;
                   if (this.datas != this.$t("iaoMng.sx")) {
                     baseCodeSupply({ code: this.everyThing.batCode }).then(
                       (res) => {}
@@ -716,12 +733,14 @@ export default {
                   item.energyDtloid = this.mx[i].energyDtloid;
                   item.whseAccessoriesDtloid = this.mx[i].whseAccessoriesDtloid;
                   item.whseOfficeDtlFk = this.mx[i].whseAccessoriesDtloid;
+                  item.whseEquipmentDtlFk = this.mx[i].whseEquipmentDtloid;
                   if (
                     !item.whseChemicalinDtlboid &&
                     !item.whseDyesainDtlboid &&
                     !item.whseYarninDtlaoid &&
                     !item.whseEnergyDtlaId &&
-                    !item.whseAccessoriesDtlaoid
+                    !item.whseAccessoriesDtlaoid &&
+                    !item.whseEquipmentDtlaoid
                   ) {
                     this.everyThing.addPh(item).then((res) => {
                       item.whseChemicalinDtlboid = res.data.data;
@@ -729,6 +748,7 @@ export default {
                       item.whseYarninDtlaoid = res.data.data;
                       item.whseEnergyDtlaId = res.data.data;
                       item.whseAccessoriesDtlaoid = res.data.data;
+                      item.whseEquipmentDtlaoid = res.data.data;
                     });
                   } else {
                     this.everyThing.updatePh(item).then((res) => {});
@@ -779,6 +799,7 @@ export default {
           this.form.whseAccessoriesinoid = res.data.data;
           this.form.whseYarninoid = res.data.data;
           this.form.whseDyesalinoid = res.data.data;
+          this.form.whseEquipmentInoid = res.data.data;
           // this.$emit("getData");
           let addDtla = (item, i) => {
             return new Promise((resolve, reject) => {
@@ -790,7 +811,8 @@ export default {
                 item.whseAccessoriesDtloid ||
                 item.whseYarninDtloid ||
                 item.whseDyesainDtlaoid ||
-                item.energyDtloid
+                item.energyDtloid ||
+                item.whseEquipmentDtloid
               ) {
                 resolve();
                 // 修改
@@ -803,12 +825,14 @@ export default {
                 data.whseEnergyInFk = this.form.energyInId;
                 data.whseHardwareInFk = this.form.whseAccessoriesinoid;
                 data.whseOfficeInFk = this.form.whseAccessoriesinoid;
+                data.whseEquipmentInFk = this.form.whseEquipmentInoid;
                 this.everyThing.addDetail(data).then((res) => {
                   item.whseChemicalinDtlaoid = res.data.data;
                   item.energyDtloid = res.data.data;
                   item.whseAccessoriesDtloid = res.data.data;
                   item.whseYarninDtloid = res.data.data;
                   item.whseDyesainDtlaoid = res.data.data;
+                  item.whseEquipmentDtloid = res.data.data;
                   if (this.datas != this.$t("iaoMng.sx")) {
                     baseCodeSupply({ code: this.everyThing.batCode }).then(
                       (res) => {}
@@ -834,12 +858,14 @@ export default {
                   item.whseYarninDtlFk = this.mx[i].whseYarninDtloid;
                   item.whseAccessoriesDtloid = this.mx[i].whseAccessoriesDtloid;
                   item.whseOfficeDtlFk = this.mx[i].whseAccessoriesDtloid;
+                  item.whseEquipmentDtlFk = this.mx[i].whseEquipmentDtloid;
                   if (
                     !item.whseChemicalinDtlboid &&
                     !item.whseDyesainDtlboid &&
                     !item.whseYarninDtlaoid &&
                     !item.whseEnergyDtlaId &&
-                    !item.whseAccessoriesDtlaoid
+                    !item.whseAccessoriesDtlaoid &&
+                    !item.whseEquipmentDtlaoid
                   ) {
                     this.everyThing.addPh(item).then((res) => {
                       item.whseChemicalinDtlboid = res.data.data;
@@ -847,6 +873,7 @@ export default {
                       item.whseYarninDtlaoid = res.data.data;
                       item.whseEnergyDtlaId = res.data.data;
                       item.whseAccessoriesDtlaoid = res.data.data;
+                      item.whseEquipmentDtlaoid = res.data.data;
                     });
                   } else {
                     this.everyThing.updatePh(item).then((res) => {});

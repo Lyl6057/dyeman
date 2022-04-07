@@ -394,7 +394,8 @@ export function rhl2C(_this) {
           _this.datas === _this.$t("choicDlg.rl") ||
           _this.datas === _this.$t("iaoMng.fl") ||
           _this.datas === _this.$t("choicDlg.wj") ||
-          _this.datas === _this.$t("choicDlg.xz")
+          _this.datas === _this.$t("choicDlg.xz") ||
+          _this.datas === _this.$t("iaoMng.sb")
             ? false
             : true
       },
@@ -404,15 +405,18 @@ export function rhl2C(_this) {
         cell: false,
         type:
           _this.datas === _this.$t("choicDlg.rl") ||
-          _this.datas === _this.$t("choicDlg.wj")
+          _this.datas === _this.$t("choicDlg.wj") ||
+          _this.datas === _this.$t("iaoMng.sb")
             ? "select"
             : "",
         width: 180,
         overHidden: true,
         hide:
           _this.datas === _this.$t("iaoMng.fl") ||
+          _this.datas === _this.$t("choicDlg.rl") ||
           _this.datas === _this.$t("choicDlg.wj") ||
-          _this.datas === _this.$t("choicDlg.xz")
+          _this.datas === _this.$t("choicDlg.xz") ||
+          _this.datas === _this.$t("iaoMng.sb")
             ? false
             : true,
         dicData:
@@ -420,27 +424,8 @@ export function rhl2C(_this) {
             ? getDicT("basProductivesupplies", "chinName", "hardwareId")
             : _this.datas === _this.$t("choicDlg.wj")
             ? getDicT("basHardwarearticlesnew", "cnnamelong", "hardwareId")
-            : getDicT("basAdsuppliesarticles", "chinName", "hardwareId")
+            : getDicT("basHardwarearticlesnew", "cnnamelong", "hardwareId")
       },
-      // {
-      //   label: _this.$t("whseField.clmc"),
-      //   prop: "chinName",
-      //   cell: false,
-      //   width: 180,
-      //   overHidden: true,
-      //   hide:
-      //     _this.datas != _this.$t("iaoMng.hgyl") &&
-      //     _this.datas != _this.$t("iaoMng.yl") &&
-      //     _this.datas != _this.$t("iaoMng.sx")
-      //       ? false
-      //       : true,
-      //   type: "select",
-      //   props: {
-      //     label: "chinName",
-      //     value: "hardwareId"
-      //   }
-      //   // dicData: getDicT("basHardwarearticles", "chinName", "hardwareId")
-      // },
       {
         label: _this.$t("whseField.sxbh"),
         prop: "yarnsId",
@@ -479,65 +464,6 @@ export function rhl2C(_this) {
         width: 180,
         hide: true
       },
-      // {
-      //   label: "化工原料英文名稱 ",
-      //   prop: "bcMatengname",
-      //   cell: false,
-      //   width: 180,
-      //   click: (val) => {
-      //     _this.iptChange(_this.chooseData);
-      //   },
-      //   props: {
-      //     label: "bcMatengname",
-      //     value: "bcCode"
-      //   },
-      //   type: "select",
-      //   dicData: Chemicalmat
-      // },
-      // {
-      //   label: "色光",
-      //   prop: "bcColor",
-      //   cell: false,
-      //   width: 100,
-      //   click: (val) => {
-      //     _this.iptChange(_this.chooseData);
-      //   },
-      //   props: {
-      //     label: "bcColor",
-      //     value: "bcCode"
-      //   },
-      //   type: "select",
-      //   dicData: Chemicalmat
-      // },
-      // {
-      //   label: "力份 ",
-      //   prop: "bcForce",
-      //   width: 100,
-      //   props: {
-      //     label: "bcForce",
-      //     value: "bcCode"
-      //   },
-      //   type: "select",
-      //   dicData: Chemicalmat
-      // },
-      // {
-      //   label: _this.$t("whseField.scdh"),
-      //   prop: "prodNo",
-      //   cell: true,
-      //   width: 150,
-      //   click: (val) => {
-      //     _this.iptChange(_this.chooseData);
-      //   },
-      // },
-      // {
-      //   label: _this.$t("whseField.mkh"),
-      //   prop: "fabticket",
-      //   cell: true,
-      //   width: 150,
-      //   click: (val) => {
-      //     _this.iptChange(_this.chooseData);
-      //   },
-      // },
       {
         label: "供应商批号",
         prop: "batId",
@@ -714,7 +640,7 @@ export function rhl3C(_this) {
           _this.datas == _this.$t("iaoMng.sx") ? "locationCode" : "storageNo",
         cell: true,
         width: 140,
-        type: "select",
+        type: "select", //Whse_warehouse_type
         dicData: getDicNS(
           "whseLocation?warehouseType=" +
             (_this.datas == _this.$t("iaoMng.sx")
@@ -729,6 +655,8 @@ export function rhl3C(_this) {
               ? "6"
               : _this.datas == _this.$t("choicDlg.xz")
               ? "7"
+              : _this.datas == _this.$t("iaoMng.sb")
+              ? "9"
               : "8"),
           "locationCode",
           "locationCode",
@@ -896,11 +824,14 @@ export function planCrud(_this) {
         overHidden: true
       },
       {
-        label: _this.$t("whseField.xh"),
+        label:
+          _this.data == _this.$t("iaoMng.sx")
+            ? _this.$t("whseField.sp")
+            : _this.$t("whseField.xh"),
         prop: "model",
         cell: false,
-        width: 170,
-        hide: _this.data === _this.$t("iaoMng.sx")
+        width: 170
+        // hide: _this.data === _this.$t("iaoMng.sx")
       },
       {
         label: _this.$t("whseField.gg"),

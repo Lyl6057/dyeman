@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-24 14:15:12
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-01 14:47:40
+ * @LastEditTime: 2022-04-07 16:43:46
  * @Description: 
 -->
 <template>
@@ -68,6 +68,7 @@ import {
 import XlsxTemplate from "xlsx-template";
 import JSZipUtils from "jszip-utils";
 import saveAs from "file-saver";
+import { fetchFineReportUrl } from "@/api/index";
 export default {
   name: "",
   components: {},
@@ -264,16 +265,34 @@ export default {
       switch (this.form.type) {
         case "CPB":
           // this.outExcel();
-          this.$tip.warning("功能待开发!");
+          // this.$tip.warning("功能待开发!");
           break;
         case "PB":
-          this.$tip.warning("功能待开发!");
-          // this.outExcel();
+          // this.$tip.warning("功能待开发!");
+          this.handleOpenRpt();
           break;
         default:
           this.outExcel();
           return;
       }
+    },
+    // 打开报表 获取fineReport的数据
+    handleOpenRpt() {
+      let queryData = {
+        module: "INV",
+        id: "INVENTORY_FINISHED_CLOTH",
+      };
+      fetchFineReportUrl(queryData).then((res) => {
+        if (res.data) {
+          let url = res.data.url + "&clothState=2";
+          let oA = document.createElement("a");
+          oA.href = url;
+          oA.target = "_blank";
+          oA.click();
+        } else {
+          this.$tip.warning("报表不存在");
+        }
+      });
     },
     async outExcel() {
       this.loading = true;

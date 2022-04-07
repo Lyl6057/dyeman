@@ -956,3 +956,89 @@ export function delRlLoc(id) {
     method: "delete"
   });
 }
+
+export function getEqu(params) {
+  return axios({
+    url: "/api/whseEquipmentIn/v1.0/listByPage",
+    method: "get",
+    params: params
+  });
+}
+export function addEqu(params) {
+  return axios({
+    url: "/api/whseEquipmentIn/v1.0/save",
+    method: "post",
+    params: params
+  });
+}
+export function updateEqu(params) {
+  return axios({
+    url: "/api/whseEquipmentIn/v1.0/updateById",
+    method: "put",
+    params: params
+  });
+}
+export function delEqu(id) {
+  return axios({
+    url: "/api/whseEquipmentIn/v1.0/removeById?id=" + id,
+    method: "delete"
+  });
+}
+
+export function getEquDtla(params) {
+  return axios({
+    url: "/api/whseEquipmentDtl/v1.0/listByPage",
+    method: "get",
+    params: params
+  });
+}
+export function addEquDtla(params) {
+  return axios({
+    url: "/api/whseEquipmentDtl/v1.0/save",
+    method: "post",
+    params: params
+  });
+}
+export function updateEquDtla(params) {
+  return axios({
+    url: "/api/whseEquipmentDtl/v1.0/updateById",
+    method: "put",
+    params: params
+  });
+}
+export function delEquDtla(id) {
+  return axios({
+    url: "/api/whseEquipmentDtl/v1.0/removeById?id=" + id,
+    method: "delete"
+  });
+}
+
+// 疋号信息
+export function getEquDtlb(params) {
+  return axios({
+    url: "/api/whseEquipmentDtla/v1.0/list",
+    method: "get",
+    params: params
+  });
+}
+export function addEquDtlb(params) {
+  return axios({
+    url: "/api/whseEquipmentDtla/v1.0/save",
+    method: "post",
+    params: params
+  });
+}
+export function updateEquDtlb(params) {
+  return axios({
+    url: "/api/whseEquipmentDtla/v1.0/updateById",
+    method: "put",
+    params: params
+  });
+}
+
+export function delEquDtlb(id) {
+  return axios({
+    url: "/api/whseEquipmentDtla/v1.0/removeById?id=" + id,
+    method: "delete"
+  });
+}

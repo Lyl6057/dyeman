@@ -1,5 +1,14 @@
 import axios from "axios";
 
+// 设备申购送货单视图
+export function getWhseEquInV2(params) {
+  return axios({
+    url: "/api/whseEquipmentIn/v1.0/unIn/listByPage",
+    method: "get",
+    params: params
+  });
+}
+
 // 能源申购送货单视图
 export function getWhseEnergyInV2(params) {
   return axios({

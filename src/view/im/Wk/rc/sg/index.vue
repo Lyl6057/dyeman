@@ -14,16 +14,9 @@
           <el-button type="danger" @click="del">{{
             this.$t("public.del")
           }}</el-button>
-          <!-- <el-button
-            type="success"
-            :disabled="changeList.length === 0"
-            @click="save"
-            >{{this.$t("public.save")}}</el-button
-          > -->
           <!-- <el-button type="warning" @click="ruleV = true" v-if="hide != 8"
             >編號規則配置</el-button
           > -->
-
           <el-button type="success" @click="audit">审核</el-button>
           <el-button type="primary" @click="getData">{{
             this.$t("public.query")
@@ -219,6 +212,19 @@ import {
   addXzLoc,
   updateXzLoc,
   delXzLoc,
+  // 设备
+  getEqu,
+  delEqu,
+  updateEqu,
+  addEqu,
+  getEquDtla,
+  addEquDtla,
+  updateEquDtla,
+  delEquDtla,
+  getEquDtlb,
+  addEquDtlb,
+  updateEquDtlb,
+  delEquDtlb,
 } from "@/api/im/Wk/rc";
 import choice from "@/components/choice";
 import { rhl1F, rhl1C, rhl2C, rhl2F } from "./data";
@@ -245,6 +251,7 @@ import {
   getWhseHardwareUnin,
   // 行政
   getWhseOfficeUnin,
+  getWhseEquInV2,
 } from "./api";
 export default {
   name: "",
@@ -400,6 +407,22 @@ export default {
           this.everyThing.batCode = "yl_in_whse";
           this.everyThing.addAlloc = addDyesainAlloc;
           break;
+        case this.$t("iaoMng.sb"):
+          this.everyThing.get = getEqu;
+          this.everyThing.del = delEqu;
+          this.everyThing.update = updateEqu;
+          this.everyThing.add = addEqu;
+          this.everyThing.getPlan = getWhseEquInV2;
+          this.everyThing.getDetail = getEquDtla;
+          this.everyThing.addDetail = addEquDtla;
+          this.everyThing.updateDetail = updateEquDtla;
+          this.everyThing.delDetail = delEquDtla;
+          this.everyThing.getPh = getEquDtlb;
+          this.everyThing.addPh = addEquDtlb;
+          this.everyThing.updatePh = updateEquDtlb;
+          this.everyThing.delPh = delEquDtlb;
+          this.everyThing.batCode = "equ_in_whse";
+          break;
         case this.$t("choicDlg.rl"):
           this.everyThing.getPlan = getWhseEnergyInV2;
           this.everyThing.get = getRl;
@@ -445,12 +468,11 @@ export default {
         .then((res) => {
           let records = res.data;
           this.page.total = records.total;
-          this.changeList = [];
           this.crud = records.records;
           this.crud.forEach((item, index) => {
+            item.suppId = item.purNo;
             item.finStatus = String(item.finStatus);
             item.index = index + 1;
-            item.suppId = item.purNo;
             if (index === this.crud.length - 1) {
               setTimeout(() => {
                 this.screenLoading = false;
@@ -480,7 +502,7 @@ export default {
         finStatus: "0",
         purNo: val[0].purNo,
         deliNo: val[0].deliNo,
-        stockState: 0,
+        stockState: "0",
         sysCreated: this.$getNowTime("datetime"),
       };
       this.addList = val;
@@ -504,7 +526,8 @@ export default {
         !this.chooseData.whseAccessoriesinoid &&
         !this.chooseData.whseYarninoid &&
         !this.chooseData.whseDyesalinoid &&
-        !this.chooseData.energyInId
+        !this.chooseData.energyInId &&
+        !this.chooseData.whseEquipmentInoid
       ) {
         this.crud.splice(this.chooseData.index - 1, 1);
         this.chooseData = {};
@@ -528,6 +551,8 @@ export default {
                 ? this.chooseData.whseYarninoid
                 : this.data === this.$t("choicDlg.rl")
                 ? this.chooseData.energyInId
+                : this.data === this.$t("iaoMng.sb")
+                ? this.chooseData.whseEquipmentInoid
                 : this.chooseData.whseAccessoriesinoid
             )
             .then((res) => {

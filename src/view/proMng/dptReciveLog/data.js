@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-06 10:28:49
+ * @LastEditTime: 2022-04-06 19:17:11
  * @Description:
  */
 var baseUrl = "http://192.168.5.1:91";
@@ -99,6 +99,7 @@ export function dlgForm(_this) {
             _this.form.acceptStaff = parent.userID;
             _this.form.sendProcessFk = "";
             _this.form.sendStaff = "";
+            _this.form.sendProcessFk = _this.lastLog.sendProcessFk;
           } else {
             _this.form.dptworkProcessFk = "";
             _this.form.acceptStaff = "";
@@ -111,6 +112,7 @@ export function dlgForm(_this) {
         label: "缸号",
         prop: "runJobFk",
         span: 6,
+        tip: "Số lô nhuộm",
         placeholder: " ",
         type: "select",
         tipPlacement: "right",

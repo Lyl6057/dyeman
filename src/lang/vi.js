@@ -91,6 +91,8 @@ export default {
   },
   iaoMng: {
     // 出入庫
+    sb: "设备",
+    sbrc: "设备入仓",
     wjrc: "五金用品入倉",
     xzrc: "行政用品入倉",
     flrc: "生產輔料入倉",

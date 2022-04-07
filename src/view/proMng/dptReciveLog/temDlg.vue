@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-06 10:30:25
+ * @LastEditTime: 2022-04-06 19:17:04
  * @Description: 
 -->
 <template>
@@ -117,6 +117,7 @@ export default {
       vatLoading: false,
       options: [],
       acceptStaff: parent.userID,
+      lastLog: {},
     };
   },
   watch: {},
@@ -163,10 +164,15 @@ export default {
       }).then((res) => {
         if (res.data.length) {
           let list = res.data.sort((a, b) => {
-            return a.acceptDate > b.acceptDate ? 1 : -1;
+            return a.acceptDate < b.acceptDate ? 1 : -1;
           });
           this.form.planOutput = list[0].realOutput || 0;
           this.form.realOutput = list[0].realOutput || 0;
+          this.lastLog = list[0]
+          if (this.form.dispathReceive == 1) {
+            this.form.sendProcessFk = this.lastLog.sendProcessFk;
+          }
+          this.lastLog = list[0];
         } else {
           if (this.tabs == "rd") {
             getRunJobByPage({
