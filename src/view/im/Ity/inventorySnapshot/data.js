@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-03-26 09:58:34
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-07 14:26:07
+ * @LastEditTime: 2022-04-08 12:00:24
  */
 
 
@@ -56,27 +56,53 @@ export function queryFormOp(_this) {
   };
 }
 
+export function queryFormOp_log(_this) {
+  return {
+    submitBtn: false,
+    emptyBtn: false,
+    labelWidth: 100,
+    column: [{
+        label: "物料种类",
+        prop: "materialClass",
+        span: 6,
+        placeholder: " ",
+        type: "select",
+        dicData: kindId,
+        change: () => {
+          //   _this.$nextTick(() => {
+          //     if (!_this.loading) {
+          //       _this.page.currentPage = 1;
+          //       _this.getData();
+          //     }
+          //   });
+        }
+      },
+    ]
+  };
+}
+
+
+const mainCrudOpCommon = {
+  menu: false,
+  addBtn: false,
+  border: true,
+  highlightCurrentRow: true,
+  height: "calc(100vh - 285px)",
+  refreshBtn: false,
+  columnBtn: false,
+  showOverflowTooltip: true,
+  excelBtn: true,
+  showSummary: false,
+  tree: true,
+  rowKey: "index",
+  index: true,
+  page: true,
+}
+
+
 export function crudOp(_this) {
   return {
-    menu: false,
-    addBtn: false,
-    border: true,
-    highlightCurrentRow: true,
-    height: "calc(100vh - 285px)",
-    refreshBtn: false,
-    columnBtn: false,
-    showOverflowTooltip: true,
-    excelBtn: true,
-    showSummary: true,
-    tree: true,
-    rowKey: "index",
-    index: true,
-    sumColumnList: [{
-      label: " ",
-      name: "stock",
-      type: "sum"
-    }],
-    page: true,
+   ...mainCrudOpCommon,
     column: [{
         label: "盘点编号",
         prop: "inventoryNo",
@@ -109,6 +135,27 @@ export function crudOp(_this) {
     ]
   };
 }
+
+export function crudOp_log(_this) {
+  return {
+   ...mainCrudOpCommon,
+    column: [{
+        label: "盘点编号",
+        prop: "inventoryNo",
+        width: 160
+      },
+      {
+        label: "物料类别",
+        //   prop: "materialClass",
+        prop: "materialClassName",
+        type: "select",
+        width: 100
+      },
+    ]
+  };
+}
+
+
 
 export function editFormOp(_this) {
   return {
@@ -215,16 +262,19 @@ const commonOp = {
     rowKey: "index",
     index: true,
 }
-const invResultCol =   {
-  label: "盈|亏",
-  prop: "invResult",
-  width: 120,
-  type: "number",
-  align: "right",
-  formatter: (row) => {
-    let diffQty = row.inventoryQty - row.stockQty
-    return (diffQty > 0 ? "+" : "") + (diffQty).toFixed(2);
-  },
+const invResultCol = (_this) => {
+  return {
+    label: "盈|亏",
+    prop: "invResult",
+    width: 120,
+    type: "number",
+    align: "right",
+    hide: !_this.hasOperate,
+    formatter: (row) => {
+      let diffQty = row.inventoryQty - row.stockQty
+      return (diffQty > 0 ? "+" : "") + (diffQty).toFixed(2);
+    },
+  }
 }
 // 纱线
 export function sxCrudOp(_this){
@@ -281,8 +331,9 @@ export function sxCrudOp(_this){
         width: 120,
         type: "number",
         align: "right",
+        hide: !_this.hasOperate
       },
-      invResultCol,
+      invResultCol(_this),
       {
         label: _this.$t("whseField.dw"),
         prop: "unitName",
@@ -300,7 +351,8 @@ export function sxCrudOp(_this){
         prop: "remarks",
         cell: true,
         width: 150,
-        placeholder: " "
+        placeholder: " ",
+        hide: !_this.hasOperate,
       }
     ]
   }
@@ -347,8 +399,9 @@ export function pubCrudOp(_this){
         width: 120,
         type: "number",
         align: "right",
+        hide: !_this.hasOperate,
       },
-      invResultCol,
+      invResultCol(_this),
       {
         label: _this.$t("whseField.dw"),
         prop: "unitName",
@@ -360,7 +413,8 @@ export function pubCrudOp(_this){
         prop: "remarks",
         cell: true,
         width: 150,
-        placeholder: " "
+        placeholder: " ",
+        hide: !_this.hasOperate,
       }
     ]
   }
@@ -417,8 +471,9 @@ export function cpbCrudOp(_this){
         width: 120,
         type: "number",
         align: "right",
+        hide: !_this.hasOperate,
       },
-      invResultCol,
+      invResultCol(_this),
       {
         label: _this.$t("whseField.dw"),
         prop: "unitName",
@@ -430,7 +485,8 @@ export function cpbCrudOp(_this){
         prop: "remarks",
         cell: true,
         width: 150,
-        placeholder: " "
+        placeholder: " ",
+        hide: !_this.hasOperate,
       }
     ]
   }

@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-03-29 10:05:29
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-07 14:23:31
+ * @LastEditTime: 2022-04-08 11:40:14
 -->
 
 <template>
@@ -15,10 +15,10 @@
             v-loading="loading"
             >
             <div class="btnList">
-                <el-button type='primary' :disabled="isEdit" @click="handleAllInput">一键录入</el-button>
-                <el-button type='primary' :disabled="isEdit" @click="handleInvConfirm">盘盈盘亏确认</el-button>
+                <el-button type='primary' v-if='hasOperate' :disabled="isEdit" @click="handleAllInput">一键录入</el-button>
+                <el-button type='primary' v-if='hasOperate' :disabled="isEdit" @click="handleInvConfirm">盘盈盘亏确认</el-button>
                 <el-button type='primary' @click='getDataList'>{{ $t("public.query") }}</el-button>
-                <el-button type='success' :disabled="isEdit || crudDataList.length == 0" @click='handleBatchSave'>{{ $t("public.save") }}</el-button>
+                <el-button type='success' v-if='hasOperate' :disabled="isEdit || crudDataList.length == 0" @click='handleBatchSave'>{{ $t("public.save") }}</el-button>
                 <el-button type='warning' @click='handleClose'>{{ $t("public.close") }}</el-button>
             </div>
             <div class="formBox">
@@ -45,6 +45,12 @@ import { dtlFormOp,sxCrudOp,pubCrudOp ,cpbCrudOp} from "./data";
 import { fetchInvDtlDataByPage,validIsEditQty,fetchAllUpdateInvQty,fetchBatchUpdateInvQty,inventoryConfirm,validIsExistWhseIn } from "./api";
 export default {
     name: "inventoryDtl",
+    props:{
+        hasOperate: {
+            type: Boolean,
+            default: () => true
+        }
+    },
     data(){
         return {
             loadLabel: "拼命加载中",
@@ -160,7 +166,6 @@ export default {
                 }else if(+row.inventoryQty < +row.stockQty){
                     color = "#00aa00"
                 }
-                console.log("color",row.inventoryQty, row.stockQty,color);
                 return {
                     color: color,
                     fontWeight: "blob"
