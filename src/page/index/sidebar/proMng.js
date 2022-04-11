@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-04-01 13:39:35
- * @LastEditors: Lyl
- * @LastEditTime: 2022-02-24 10:09:33
+ * @LastEditors: Symbol_Yang
+ * @LastEditTime: 2022-04-08 17:23:08
  * @Description:
  */
 
@@ -102,6 +102,10 @@ export function proMng(_this) {
         {
           menuName: "7.外发加工送货单",
           index: "proWeaveOutworkShip"
+        },
+        {
+          menuName: "8.退纱通知单",
+          index: "returnYarnsNotice"
         }
       ]
     },
