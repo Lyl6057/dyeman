@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-09 10:07:01
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-11 15:38:01
+ * @LastEditTime: 2022-04-12 10:57:14
 -->
 <template>
   <div class="ret-yarn-data-container">
@@ -12,7 +12,7 @@
       <div class="btnList">
         <el-button type="primary" @click="handleSelect">选择</el-button>
         <el-button type="warning" @click="handleClose">{{ this.$t("public.close") }}</el-button>
-        <el-button type="primary" @click="getDataList">{{ this.$t("public.query") }}</el-button>
+        <el-button type="primary" @click="handleQuery">{{ this.$t("public.query") }}</el-button>
       </div>
       <div class="formBox">
         <avue-form ref="form" :option="retYarnFormOp" v-model="retYarnData"></avue-form>
@@ -65,6 +65,11 @@ export default {
     };
   },
   methods: {
+    // 查询
+    handleQuery(){
+      this.page.currentPage = 1;
+      this.getDataList();
+    },
     // 获取选中的值
     handleSelectionChange(rows) {
       this.selectList = rows;
