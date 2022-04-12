@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-01-12 15:46:05
  * @LastEditors: Lyl
- * @LastEditTime: 2022-03-11 16:52:18
+ * @LastEditTime: 2022-04-08 15:23:38
  * @FilePath: \iot.vue\src\view\im\whseInOutKB\data.js
  * @Description:
  */
@@ -100,26 +100,26 @@ export function formOp(_this) {
           }
         ],
         change: val => {
-          if (val.value == 1) {
-            _this.formOp.column[2].dicData = inExit;
-            _this.form.exit = inExit[0].value;
-            _this.formOp.column[4].display = false;
-            _this.formOp.column[5].display = false;
-            // _this.formOp.column[6].type = "";
-            // _this.formOp.column[5].display = false;
-            _this.crud = [];
-          } else {
-            _this.formOp.column[2].dicData = outExit;
-            _this.formOp.column[4].display =
-              _this.form.goodsType == 1 ? true : false;
-            _this.formOp.column[5].display =
-              //   _this.form.goodsType == 1 ? false : true;
-              // _this.formOp.column[6].type = "select";
-              // _this.form.exit = outExit[0].value;
-              _this.form.exit = "C";
-            // _this.formOp.column[5].display = true;
-            _this.crud = [];
-          }
+          // if (val.value == 1) {
+          //   _this.formOp.column[2].dicData = inExit;
+          //   _this.form.exit = inExit[0].value;
+          //   // _this.formOp.column[4].display = false;
+          //   // _this.formOp.column[5].display = false;
+          //   // _this.formOp.column[6].type = "";
+          //   // _this.formOp.column[5].display = false;
+          //   _this.crud = [];
+          // } else {
+          //   _this.formOp.column[2].dicData = outExit;
+          //   // _this.formOp.column[4].display =
+          //   //   _this.form.goodsType == 1 ? true : false;
+          //   // _this.formOp.column[5].display =
+          //   //   _this.form.goodsType == 1 ? false : true;
+          //   // _this.formOp.column[6].type = "select";
+          //   // _this.form.exit = outExit[0].value;
+          //   _this.form.exit = "C";
+          //   // _this.formOp.column[5].display = true;
+          //   _this.crud = [];
+          // }
         }
       },
       {
@@ -191,7 +191,7 @@ export function formOp(_this) {
       {
         label: "缸号",
         prop: "vatNo",
-        display: false,
+        display: true,
         span: 6,
         placeholder: " ",
         width: 125,
@@ -289,7 +289,7 @@ export function finishedCrud(_this) {
         cell: true,
         overHidden: true,
         sortable: true,
-        width: 120
+        width: 140
       },
       {
         label: "缸号",
@@ -313,7 +313,7 @@ export function finishedCrud(_this) {
       {
         label: "存储位置",
         prop: "storeSiteCode",
-        cell: true,
+        cell: false,
         width: 120,
         placeholder: " "
         // type: "select",
@@ -350,7 +350,7 @@ export function finishedCrud(_this) {
         width: 100,
         align: "right",
         span: 6,
-        cell: true,
+        cell: false,
         placeholder: " ",
         type: "number",
         minRows: 0,
@@ -423,7 +423,7 @@ export function finishedCrud(_this) {
         width: 250,
         placeholder: " ",
         // overHidden: true,
-        cell: true,
+        cell: false,
         type: "select",
         filterable: true,
         allowCreate: true,
@@ -436,7 +436,7 @@ export function finishedCrud(_this) {
         prop: "realGramWeight",
         width: 120,
         span: 8,
-        cell: true,
+        cell: false,
         // type: "number",
         align: "left",
         placeholder: " ",
@@ -447,7 +447,7 @@ export function finishedCrud(_this) {
         // tip: "Tổng cộng(KG)",
         prop: "actualSideBreadth",
         width: 120,
-        cell: true,
+        cell: false,
         span: 8,
         // type: "number",
         align: "left",

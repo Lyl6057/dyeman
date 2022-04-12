@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-11-15 19:25:29
+ * @LastEditTime: 2022-04-09 10:07:04
  * @Description: 
 -->
 <template>
@@ -35,10 +35,6 @@
         <el-button type="primary" @click="query">{{
           this.$t("public.query")
         }}</el-button>
-
-        <!-- <el-button type="warning" @click="close">{{
-          this.$t("public.close")
-        }}</el-button> -->
       </el-row>
       <el-row class="formBox">
         <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
@@ -129,7 +125,7 @@ export default {
   watch: {},
   methods: {
     query() {
-      this.loading = true;
+      this.wloading = true;
       this.detail = {};
       this.crud = [];
       for (let key in this.form) {
@@ -137,9 +133,10 @@ export default {
           delete this.form[key];
         }
       }
-      // this.form.vatNo = "!^%" + (this.form.vatNo ? this.form.vatNo : "");
+      let queryData = JSON.parse(JSON.stringify(this.form));
+      queryData.vatNo = "!^%" + (queryData.vatNo || "");
       get(
-        Object.assign(this.form, {
+        Object.assign(queryData, {
           rows: this.page.pageSize,
           page: this.page.currentPage,
         })
@@ -154,14 +151,11 @@ export default {
             this.$refs.crud.setCurrentRow(this.crud[0]);
           }
           this.page.total = res.data.total;
-          // if (this.form.vatNo.indexOf("!^%") != -1) {
-          //   this.form.vatNo = this.form.vatNo.split("!^%")[1] || "";
-          // }
-          this.loading = false;
+          this.wloading = false;
         })
         .catch((e) => {
           this.$tip.error(e);
-          this.loading = false;
+          this.wloading = false;
           console.log(e);
         });
     },
@@ -229,7 +223,4 @@ export default {
   beforeDestroy() {},
 };
 </script>
-<style lang='stylus'>
-#finalizeDesign {
-}
-</style>
+<style lang='stylus'></style>

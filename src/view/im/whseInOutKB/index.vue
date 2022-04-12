@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-01-12 15:39:08
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-06 16:55:16
+ * @LastEditTime: 2022-04-08 16:39:07
  * @FilePath: \iot.vue\src\view\im\whseInOutKB\index.vue
  * @Description: 
 -->
@@ -15,18 +15,19 @@
     <el-tabs v-model="tabs" type="border-card">
       <el-tab-pane label="出入库看板" name="kanban">
         <el-row class="btnList">
-          <el-button type="success" @click="sendTask">提交任务</el-button>
+          <el-button type="success" @click="sendTask" :disabled="!crud.length"
+            >提交任务</el-button
+          >
           <!-- <el-button type="success" @click="submit">提交</el-button> -->
           <el-button type="primary" @click="query">{{
             this.$t("public.query")
           }}</el-button>
           <el-button
             type="primary"
-            @click="updateStore"
-            :disabled="!this.selectList.length && form.type == 2"
+            @click="dialogVisible = true"
+            :disabled="!crud.length || form.type == 2"
             >修改载具</el-button
           >
-          <el-input v-model="storageCode" style="width: 100px" />
         </el-row>
         <el-row class="formBox">
           <avue-form ref="form" :option="formOp" v-model="form"> </avue-form>
@@ -41,20 +42,13 @@
               v-loading="loading"
               @on-load="query"
             ></avue-crud>
-            <!--   :summary-method="summaryMethod"     :cell-style="cellStyle"    :expandRowKeys="idArr"  -->
-          </el-row>
-        </view-container></el-tab-pane
-      >
+          </el-row> </view-container
+      ></el-tab-pane>
       <el-tab-pane label="任务管理" name="task">
         <el-row class="btnList">
           <el-button type="primary" @click="queryTask">{{
             this.$t("public.query")
           }}</el-button>
-          <!-- <el-button type="primary" @click="finishTask(taskChoose)"
-            >模拟完成任务</el-button
-          >
-          <span style="color: #000">货位码:</span>
-          <el-input v-model="taskChoose.storageCode" style="width: 100px" /> -->
         </el-row>
         <el-row class="formBox">
           <avue-form ref="form" :option="taskFormOp" v-model="taskForm">
@@ -75,6 +69,23 @@
         </view-container>
       </el-tab-pane>
     </el-tabs>
+    <el-dialog
+      id="colorMng_Dlg"
+      :visible.sync="dialogVisible"
+      fullscreen
+      width="70%"
+      append-to-body
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+    >
+      <updatenote-com
+        v-if="dialogVisible"
+        ref="tem"
+        :noteList="crud"
+        :noteType="tabs"
+        @close="diaClose"
+      ></updatenote-com>
+    </el-dialog>
   </div>
 </template>
 
@@ -120,8 +131,11 @@ import {
   updateFinishedDtla,
 } from "./api";
 import { webSocket } from "@/config/index.js";
+import updatenoteCom from "./updateNote.vue";
 export default {
-  components: {},
+  components: {
+    updatenoteCom,
+  },
   props: {},
   data() {
     return {
@@ -266,11 +280,11 @@ export default {
   mounted() {},
   methods: {
     query() {
-      if (!this.form.storeLoadCode && this.form.type == 1) {
-        this.$tip.error("载具编号不能为空!");
-        return;
-      }
-      if (!this.form.storeLoadCode && !this.form.vatNo && this.form.type == 2) {
+      // if (!this.form.storeLoadCode && this.form.type == 1) {
+      //   this.$tip.error("载具编号不能为空!");
+      //   return;
+      // }
+      if (!this.form.storeLoadCode && !this.form.vatNo) {
         this.$tip.error("请输入单号或者载具编号!");
         return;
       }
@@ -305,7 +319,6 @@ export default {
         } else {
           this.$tip.error("待开发!");
         }
-
         this.wLoading = false;
       } else {
         this.form.clothState = this.form.type;
@@ -321,6 +334,9 @@ export default {
             page: this.mainPage.currentPage,
             rows: this.mainPage.pageSize,
             start: this.mainPage.currentPage,
+            vatNo: this.form.vatNo,
+            cardType: 1,
+            clothState: 3,
           }).then((res) => {
             this.crud = res.data.records.sort((a, b) => {
               return a.productNo > b.productNo ? 1 : -1;
@@ -1169,10 +1185,9 @@ export default {
       if (val == 1) {
         this.crudOp = clothCrud(this);
         this.formOp.column[4].display = this.form.type == 1 ? false : true;
-        this.formOp.column[5].display = false;
       } else {
         this.crudOp = finishedCrud(this);
-        this.formOp.column[5].display = this.form.type == 1 ? false : true;
+        this.formOp.column[5].display = true;
         this.formOp.column[4].display = false;
       }
       // });
@@ -1252,10 +1267,14 @@ export default {
       }
       return dest;
     },
+    diaClose() {
+      this.dialogVisible = false;
+      this.query();
+    },
   },
   updated() {
     this.$nextTick(() => {
-      this.$refs["crud"].doLayout();
+      if (this.crud.length) this.$refs["crud"].doLayout();
     });
   },
 };

@@ -6,6 +6,15 @@ export default [
     redirect: "/imWl"
   },
   {
+    path: "/stockVehicle",
+    name: "在库载具",
+    component: resolve =>
+      require(["@/view/im/ity/stockVehicle/index"], resolve),
+    meta: {
+      keepAlive: true
+    }
+  },
+  {
     path: "/imWl",
     name: "仓位管理",
     component: resolve => require(["@/view/im/Wl/index"], resolve),
@@ -63,7 +72,8 @@ export default [
   {
     path: "/inventorySnapshot",
     name: "盘点清单",
-    component: resolve => require(["@/view/im/Ity/inventorySnapshot/index"], resolve),
+    component: resolve =>
+      require(["@/view/im/Ity/inventorySnapshot/index"], resolve),
     meta: {
       keepAlive: true
     }

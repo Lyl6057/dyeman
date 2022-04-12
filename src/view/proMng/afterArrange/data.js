@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-11-02 19:05:30
+ * @LastEditTime: 2022-04-09 13:42:29
  * @Description:
  */
 
@@ -129,7 +129,6 @@ export function mainCrud(_this) {
         overHidden: true,
         width: 140,
         span: 6,
-        disabled: false,
         props: {
           label: "custCode",
           value: "vatNo"

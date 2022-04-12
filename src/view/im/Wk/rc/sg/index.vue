@@ -473,13 +473,13 @@ export default {
             item.suppId = item.purNo;
             item.finStatus = String(item.finStatus);
             item.index = index + 1;
+            item.stockState += "";
             if (index === this.crud.length - 1) {
               setTimeout(() => {
                 this.screenLoading = false;
-              }, 500);
+              }, 200);
             }
           });
-
           if (this.crud.length === 0) {
             setTimeout(() => {
               this.screenLoading = false;
