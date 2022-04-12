@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-01-29 14:14:56
- * @LastEditors: Lyl
- * @LastEditTime: 2022-02-24 10:14:06
+ * @LastEditors: Symbol_Yang
+ * @LastEditTime: 2022-04-08 17:22:15
  * @Description:
  */
 export default [
@@ -17,6 +17,15 @@ export default [
     name: "外发加工送货单",
     component: resolve =>
       require(["@/view/proMng/proWeaveOutworkShip/index"], resolve),
+    meta: {
+      keepAlive: true
+    }
+  },
+  {
+    path: "/returnYarnsNotice",
+    name: "退纱通知单",
+    component: resolve =>
+      require(["@/view/proMng/ReturnYarnsNotice/index"], resolve),
     meta: {
       keepAlive: true
     }
