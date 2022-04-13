@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-23 08:03:49
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-12 11:05:41
+ * @LastEditTime: 2022-04-13 14:32:07
  * @Description:
  */
 import Vue from "vue";
@@ -16,7 +16,7 @@ import store from "@/store/index";
 // import pro from "@/router/view/pro";
 // import re from '@/router/view/re'
 // import iq from '@/router/view/iq'
-import whseMng from "@/router/view/im"; 
+import whseMng from "@/router/view/im";
 // import quaLity from "@/router/view/quaLity";
 // import laboratory from "./view/laboratory";
 // import proMng from "./view/proMng";

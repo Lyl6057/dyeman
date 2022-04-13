@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-11 14:29:42
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-11 15:41:43
+ * @LastEditTime: 2022-04-13 14:19:46
 -->
 <template>
   <div class="yarn-stock-container">
@@ -93,7 +93,8 @@ export default {
           yarnsName: item.yarnsName,
           yarnsCard: item.yarnsCard,
           suppBatNo: item.batId,
-          batchNo: item.batchNo
+          batchNo: item.batchNo,
+          weightUnit: item.weightUnit
         };
       });
       this.$emit("selected", selectList);

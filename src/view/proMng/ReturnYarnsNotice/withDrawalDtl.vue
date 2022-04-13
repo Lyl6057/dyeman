@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-09 09:06:25
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-11 16:39:18
+ * @LastEditTime: 2022-04-13 14:29:44
 -->
 <template>
   <div class="with-drawal-dlt-container">
@@ -123,7 +123,9 @@ export default {
     initData() {
       this.withDrawalFormData = {
         withdrawalNo: "",
-        happenDate: ""
+        happenDate: "",
+        typeOf: "",
+        extFactId: ""
       };
       this.crudDataList = [];
       this.delOidList = [];
