@@ -254,7 +254,7 @@ export function retReatDtlCrudOp(_this){
         width: 120,
         type: "number",
         align: "right",
-        precision: "2",
+        precision: 2,
         formatter: (row,value) => {
           return value && value.toFixed(2)
         }
@@ -265,7 +265,7 @@ export function retReatDtlCrudOp(_this){
         cell: true,
         type: "number",
         align: "right",
-        precision: "2",
+        precision: 2,
         formatter: (row,value) => {
           return value && value.toFixed(2)
         }
@@ -280,7 +280,7 @@ export function retReatDtlCrudOp(_this){
         cell: true,
         type: "number",
         align: "right",
-        precision: "2",
+        precision: 2,
         formatter: (row,value) => {
           return value && value.toFixed(2)
         }
