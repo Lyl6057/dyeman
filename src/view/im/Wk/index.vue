@@ -712,7 +712,8 @@ export default {
             // level_4
             {
               click: () => {
-                this.toView("cc_sx", this.$t("iaoMng.tgysscc") + "_4");
+                // this.toView("cc_sx", this.$t("iaoMng.tgysscc") + "_4");
+                this.toView("cc_ret_reat", this.$t("iaoMng.tgysscc") + "_4");
               },
               title: this.$t("iaoMng.tgysscc"),
               icon: "el-icon-s-claim",

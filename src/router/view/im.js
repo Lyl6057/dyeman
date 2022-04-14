@@ -221,6 +221,15 @@ export default [
           keepAlive: false
         }
       },
+      // 退供应商纱出仓
+      {
+        path: "/cc_ret_reat",
+        name: "cc_ret_reat",
+        component: resolve => require(["@/view/im/Wk/cc/retRect/index"], resolve),
+        meta: {
+          keepAlive: false
+        }
+      },
       //  胚布出仓
       {
         path: "/cc_pb",

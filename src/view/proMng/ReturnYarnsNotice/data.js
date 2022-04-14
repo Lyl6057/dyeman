@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-08 17:26:12
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-11 16:40:08
+ * @LastEditTime: 2022-04-13 14:17:11
  */
 
 import {
@@ -126,6 +126,13 @@ export function dtlCrudOp(_this){
                 width: 120,
                 type: "number",
                 cell: true,
+            },
+            {
+                label: "单位",
+                prop: "weightUnit",
+                width: 120,
+                type: "select",
+                dicData: getDIC("bas_matUnit"),
             },
             {
                 label: "件数",

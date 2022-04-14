@@ -4,15 +4,15 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-08 17:19:47
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-11 16:22:35
+ * @LastEditTime: 2022-04-13 14:20:07
 -->
 <template>
   <div id="return-yarns-notice-container">
     <view-container title="退纱通知单" :element-loading-text="loadLabel" v-loading="loading">
       <div class="btnList">
-        <el-button type="danger" @click="handleDelete">{{ this.$t("public.del") }}</el-button>
-        <el-button type="success" @click="handleUpdate">{{ this.$t("public.update") }}</el-button>
         <el-button type="primary" @click="handleAdd">{{ this.$t("public.add") }}</el-button>
+        <el-button type="success" @click="handleUpdate">{{ this.$t("public.update") }}</el-button>
+        <el-button type="danger" @click="handleDelete">{{ this.$t("public.del") }}</el-button>
         <el-button type="primary" @click="getDataList">{{ this.$t("public.query") }}</el-button>
       </div>
       <div class="formBox">
