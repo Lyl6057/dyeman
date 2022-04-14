@@ -142,8 +142,6 @@ export default {
   methods: {
     getData() {
       this.loading = true;
-
-      // this.crud = [];
       this.everyThing = {
         mainF: rsxkr1F(this),
         mainC: rsxkr1C(this),
@@ -158,8 +156,10 @@ export default {
           delete this.form[key];
         }
       }
+      let queryData = JSON.parse(JSON.stringify(this.form));
+      queryData.yinId = "!^%" + (queryData.yinId || "");
       getCpb(
-        Object.assign(this.form, {
+        Object.assign(queryData, {
           rows: this.page.pageSize,
           start: this.page.currentPage,
           yinType: JSON.parse(localStorage.getItem("imWk")).type.split("_")[1],
@@ -189,8 +189,9 @@ export default {
             item.index = index + 1;
             if (index === this.crud.length - 1) {
               this.$refs.crud.setCurrentRow(0);
-
-              this.loading = false;
+              setTimeout(() => {
+                this.loading = false;
+              }, 200);
             }
           });
           this.$refs.tem.mx = [];

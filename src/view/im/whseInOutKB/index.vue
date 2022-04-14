@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-01-12 15:39:08
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-08 16:39:07
+ * @LastEditTime: 2022-04-14 10:18:07
  * @FilePath: \iot.vue\src\view\im\whseInOutKB\index.vue
  * @Description: 
 -->
@@ -22,11 +22,14 @@
           <el-button type="primary" @click="query">{{
             this.$t("public.query")
           }}</el-button>
-          <el-button
+          <!-- <el-button
             type="primary"
             @click="dialogVisible = true"
             :disabled="!crud.length || form.type == 2"
             >修改载具</el-button
+          > -->
+          <el-button type="primary" @click="inVisible = true"
+            >手工入库</el-button
           >
         </el-row>
         <el-row class="formBox">
@@ -41,6 +44,7 @@
               :data="crud"
               v-loading="loading"
               @on-load="query"
+              @row-dblclick="handleRowDBLClick"
             ></avue-crud>
           </el-row> </view-container
       ></el-tab-pane>
@@ -54,7 +58,7 @@
           <avue-form ref="form" :option="taskFormOp" v-model="taskForm">
           </avue-form>
         </el-row>
-        <view-container title="布笼物品信息">
+        <view-container title="任务信息">
           <el-row class="crudBox" style="margin-top: 5px">
             <avue-crud
               ref="task"
@@ -86,11 +90,34 @@
         @close="diaClose"
       ></updatenote-com>
     </el-dialog>
+    <el-dialog
+      id="colorMng_Dlg"
+      :visible.sync="inVisible"
+      fullscreen
+      width="70%"
+      append-to-body
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+    >
+      <inwhse-com
+        v-if="inVisible"
+        ref="inwhse"
+        :form="form"
+        @close="inVisible = false"
+      ></inwhse-com>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { formOp, finishedCrud, clothCrud, taskForm, taskCrud } from "./data";
+import {
+  formOp,
+  finishedCrud,
+  clothCrud,
+  taskForm,
+  taskCrud,
+  finishedStockOp,
+} from "./data";
 import { baseCodeSupply, baseCodeSupplyEx } from "@/api/index";
 import {
   getInCloth,
@@ -132,9 +159,11 @@ import {
 } from "./api";
 import { webSocket } from "@/config/index.js";
 import updatenoteCom from "./updateNote.vue";
+import inwhseCom from "./inWhse.vue";
 export default {
   components: {
     updatenoteCom,
+    inwhseCom,
   },
   props: {},
   data() {
@@ -245,6 +274,7 @@ export default {
       tabs: "kanban",
       taskChoose: {},
       idArr: [],
+      inVisible: false,
     };
   },
   watch: {},
@@ -280,10 +310,6 @@ export default {
   mounted() {},
   methods: {
     query() {
-      // if (!this.form.storeLoadCode && this.form.type == 1) {
-      //   this.$tip.error("载具编号不能为空!");
-      //   return;
-      // }
       if (!this.form.storeLoadCode && !this.form.vatNo) {
         this.$tip.error("请输入单号或者载具编号!");
         return;
@@ -315,11 +341,27 @@ export default {
             this.crud.forEach((item, i) => {
               item.index = i + 1;
             });
+            this.wLoading = false;
           });
         } else {
+          // 胚布出仓
+          getInCloth({
+            storeLoadCode: this.form.storeLoadCode,
+            clothState: 1,
+            page: this.mainPage.currentPage,
+            rows: this.mainPage.pageSize,
+            start: this.mainPage.currentPage,
+          }).then((res) => {
+            this.crud = res.data.records;
+            this.mainPage.total = res.data.total;
+            this.$set(this.form, "storageState", this.crud.length ? 0 : 1);
+            this.crud.forEach((item, i) => {
+              item.index = i + 1;
+            });
+            this.wLoading = false;
+          });
           this.$tip.error("待开发!");
         }
-        this.wLoading = false;
       } else {
         this.form.clothState = this.form.type;
         for (let key in this.form) {
@@ -336,7 +378,7 @@ export default {
             start: this.mainPage.currentPage,
             vatNo: this.form.vatNo,
             cardType: 1,
-            clothState: 3,
+            // clothState: 3,
           }).then((res) => {
             this.crud = res.data.records.sort((a, b) => {
               return a.productNo > b.productNo ? 1 : -1;
@@ -357,87 +399,97 @@ export default {
               page: this.mainPage.currentPage,
               rows: this.mainPage.pageSize,
               start: this.mainPage.currentPage,
-              vatNo: "%" + this.form.vatNo,
-              storeLoadCode: this.form.storeLoadCode,
-              clothState: 1,
+              vatNo: "!^%" + (this.form.vatNo || ""),
+              palletCode: "%" + (this.form.storeLoadCode || ""),
+              // clothState: 1,
               cardType: 1,
             })
           ).then((res) => {
-            if (!res.data.length) {
+            if (!res.data.records.length) {
               this.$tip.warning("暂无数据!");
               this.crud = [];
               this.wLoading = false;
+              this.$set(this.form, "storageState", 0);
               return;
             }
-            this.mainPage.total = res.data.length;
-            if (this.form.vatNo) {
-              this.crud = [];
-              let data = this.group(res.data, "storeLoadCode");
-              data.forEach((item, i) => {
-                getFinalStock({
-                  storeLoadCode: item.storeLoadCode,
-                  clothState: 1,
-                  cardType: 1,
-                  page: 1,
-                  rows: 9999,
-                  vatNo: "%" + this.form.vatNo,
-                }).then((loadRes) => {
-                  let vatList = loadRes.data;
-                  vatList = this.group(vatList, "vatNo");
-                  let vatData = [];
-                  vatList.forEach((vat, j) => {
-                    vat.data = vat.data.sort((a, b) => {
-                      return a.pidNo > b.pidNo ? 1 : -1;
-                    });
-                    let sumWeight = 0;
-                    vat.data.forEach((jk, k) => {
-                      jk.id = `${i + 1}-${j + 1}-${k + 1}`;
-                      jk.index = k + 1;
-                      jk.netWeight = jk.weight;
-                      sumWeight += jk.netWeight;
-                    });
-                    vatData.push({
-                      vatNo: vat.vatNo,
-                      children: vat.data,
-                      id: `${i + 1}-${j + 1}`,
-                      index: j + 1,
-                      netWeight: Number(sumWeight.toFixed(1)),
-                      weightUnit: vat.data[0].weightUnit,
-                      pidNo: vat.data.length,
-                    });
-                    // this.idArr.push(`${i + 1}-${j + 1}`);
-                  });
-                  this.crud.push({
-                    storeLoadCode: item.storeLoadCode,
-                    id: i + 1,
-                    children: vatData,
-                    index: i + 1,
-                  });
-                });
-              });
-              setTimeout(() => {
-                this.crud = this.crud.sort((a, b) => {
-                  return a.index > b.index ? 1 : -1;
-                });
-                this.$set(this.form, "storageState", this.crud.length ? 0 : 1);
-                this.wLoading = false;
-              }, 200);
-            } else {
-              this.crud = res.data.records.sort((a, b) => {
-                return a.productNo > b.productNo ? 1 : -1;
-              });
-              this.$set(this.form, "storageState", this.crud.length ? 0 : 1);
-              this.$nextTick(() => {
-                this.crud.forEach((item, i) => {
-                  item.index = i + 1;
-                  item.storeSiteCode = item.locationCode;
-                  this.$refs.crud.toggleRowSelection(item, true);
-                });
-              });
-              setTimeout(() => {
-                this.wLoading = false;
-              }, 500);
-            }
+            this.mainPage.total = res.data.total;
+            this.crud = res.data.records;
+            this.crud.forEach((item, i) => {
+              item.storeLoadCode = item.palletCode;
+              item.storeSiteCode = item.storageId;
+              // item.pidNos = item.pidNos.replace(/^,/, "");
+              item.index = i + 1;
+            });
+            this.$set(this.form, "storageState", 1);
+            this.wLoading = false;
+            // if (this.form.vatNo) {
+            //   this.crud = [];
+            //   let data = this.group(res.data, "storeLoadCode");
+            //   data.forEach((item, i) => {
+            //     getFinalStock({
+            //       storeLoadCode: item.storeLoadCode,
+            //       clothState: 1,
+            //       cardType: 1,
+            //       page: 1,
+            //       rows: 9999,
+            //       // vatNo: "%" + this.form.vatNo,
+            //     }).then((loadRes) => {
+            //       let vatList = loadRes.data;
+            //       vatList = this.group(vatList, "vatNo");
+            //       let vatData = [];
+            //       vatList.forEach((vat, j) => {
+            //         vat.data = vat.data.sort((a, b) => {
+            //           return a.pidNo > b.pidNo ? 1 : -1;
+            //         });
+            //         let sumWeight = 0;
+            //         vat.data.forEach((jk, k) => {
+            //           jk.id = `${i + 1}-${j + 1}-${k + 1}`;
+            //           jk.index = k + 1;
+            //           jk.netWeight = jk.weight;
+            //           sumWeight += jk.netWeight;
+            //         });
+            //         vatData.push({
+            //           vatNo: vat.vatNo,
+            //           children: vat.data,
+            //           id: `${i + 1}-${j + 1}`,
+            //           index: j + 1,
+            //           netWeight: Number(sumWeight.toFixed(1)),
+            //           weightUnit: vat.data[0].weightUnit,
+            //           pidNo: vat.data.length,
+            //         });
+            //         // this.idArr.push(`${i + 1}-${j + 1}`);
+            //       });
+            //       this.crud.push({
+            //         storeLoadCode: item.storeLoadCode,
+            //         id: i + 1,
+            //         children: vatData,
+            //         index: i + 1,
+            //       });
+            //     });
+            //   });
+            //   setTimeout(() => {
+            //     this.crud = this.crud.sort((a, b) => {
+            //       return a.index > b.index ? 1 : -1;
+            //     });
+            //     this.$set(this.form, "storageState", this.crud.length ? 0 : 1);
+            //     this.wLoading = false;
+            //   }, 200);
+            // } else {
+            //   this.crud = res.data.records.sort((a, b) => {
+            //     return a.productNo > b.productNo ? 1 : -1;
+            //   });
+            //   this.$set(this.form, "storageState", this.crud.length ? 0 : 1);
+            //   this.$nextTick(() => {
+            //     this.crud.forEach((item, i) => {
+            //       item.index = i + 1;
+            //       item.storeSiteCode = item.locationCode;
+            //       this.$refs.crud.toggleRowSelection(item, true);
+            //     });
+            //   });
+            //   setTimeout(() => {
+            //     this.wLoading = false;
+            //   }, 500);
+            // }
           });
         }
       }
@@ -1180,19 +1232,43 @@ export default {
       }
     },
     changeGoodsType(val) {
-      // this.$nextTick(() => {
       this.crud = [];
       if (val == 1) {
         this.crudOp = clothCrud(this);
         this.formOp.column[4].display = this.form.type == 1 ? false : true;
       } else {
-        this.crudOp = finishedCrud(this);
-        this.formOp.column[5].display = true;
+        this.crudOp =
+          this.form.type == 1 ? finishedCrud(this) : finishedStockOp(this);
         this.formOp.column[4].display = false;
       }
-      // });
     },
-    handleRowDBLClick(val) {},
+    typeChange(value) {
+      if (value == 1) {
+        this.formOp.column[2].dicData = this.inExit;
+        this.form.exit = this.inExit[0].value;
+        // _this.formOp.column[4].display = false;
+        this.formOp.column[5].display = false;
+        // _this.formOp.column[6].type = "";
+        // _this.formOp.column[5].display = false;
+        this.crud = [];
+      } else {
+        this.formOp.column[2].dicData = this.outExit;
+        // _this.formOp.column[4].display =
+        //   _this.form.goodsType == 1 ? true : false;
+        this.formOp.column[5].display = this.form.goodsType == 1 ? false : true;
+        // _this.formOp.column[6].type = "select";
+        // _this.form.exit = outExit[0].value;
+        this.form.exit = "C";
+        // _this.formOp.column[5].display = true;
+        this.crud = [];
+      }
+      this.$nextTick(() => {
+        this.changeGoodsType(this.form.type);
+      });
+    },
+    handleRowDBLClick(val) {
+      this.$set(this.form, "storeLoadCode", val.storeLoadCode);
+    },
     cellClick(val) {
       this.taskChoose = val;
     },

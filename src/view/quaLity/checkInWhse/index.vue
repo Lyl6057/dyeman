@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-02-15 16:08:19
+ * @LastEditTime: 2022-04-14 09:58:29
  * @Description:
 -->
 <template>
@@ -32,8 +32,8 @@
         <span
           v-if="crud.length && weightSum > 0"
           style="float: right; margin-right: 10px"
-          >【 {{ crud[0].weaveJobCode }} 】织胚数量:{{ crud[0].amount }},
-          已织重量: {{ weightSum }}, 剩余重量:
+          >【 {{ crud[0].weaveJobCode }} 】织胚数量:{{ crud[0].amount }} KG,
+          已织数量: {{ weightSum }} KG, 剩余数量:
           {{
             (crud[0].amount - weightSum > 0
               ? crud[0].amount - weightSum

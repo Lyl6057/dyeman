@@ -184,6 +184,7 @@ export default {
           delete this.form[key];
         }
       }
+      // let queryData = JSON.parse(JSON.stringify(this.form));
       this.everyThing
         .func(
           Object.assign(this.form, {

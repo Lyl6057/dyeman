@@ -276,15 +276,19 @@ export default {
           delete this.form[key];
         }
       }
-      if (this.form.stockDate && this.form.stockDate.indexOf(" ") == -1) {
-        this.form.stockDate += " 00:00:00";
+      let queryData = JSON.parse(JSON.stringify(this.form));
+      if (queryData.stockDate && queryData.stockDate.indexOf(" ") == -1) {
+        queryData.stockDate += " 00:00:00";
       }
-      if (this.form.retDate && this.form.retDate.indexOf(" ") == -1) {
-        this.form.retDate += " 00:00:00";
+      if (queryData.retDate && queryData.retDate.indexOf(" ") == -1) {
+        queryData.retDate += " 00:00:00";
       }
+      queryData.stockId = "!^%" + (queryData.stockId ? queryData.stockId : "");
+      queryData.retCode = "!^%" + (queryData.retCode ? queryData.retCode : "");
+      queryData.woOutno = "!^%" + (queryData.woOutno ? queryData.woOutno : "");
       this.everyThing
         .func(
-          Object.assign(this.form, {
+          Object.assign(queryData, {
             rows: this.page.pageSize,
             start: this.page.currentPage,
             retType: JSON.parse(localStorage.getItem("imWk")).type.split(

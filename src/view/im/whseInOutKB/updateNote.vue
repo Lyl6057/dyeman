@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-04-08 14:41:23
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-08 16:34:00
+ * @LastEditTime: 2022-04-13 15:19:42
  * @FilePath: \iot.vue\src\view\im\whseInOutKB\updateNote.vue
  * @Description: 
 -->
@@ -104,9 +104,6 @@ export default {
     },
     sumbit() {
       if (!this.newLoad) return this.$tip.warning("请输入新的载具编号!");
-      this.selectList.forEach((item) => {
-        item.storeLoadCode = this.newLoad;
-      });
       this.visible = false;
     },
   },

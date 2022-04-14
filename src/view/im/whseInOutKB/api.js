@@ -2,11 +2,20 @@
  * @Author: Lyl
  * @Date: 2022-01-13 09:53:53
  * @LastEditors: Lyl
- * @LastEditTime: 2022-03-28 19:01:24
+ * @LastEditTime: 2022-04-14 10:24:52
  * @FilePath: \iot.vue\src\view\im\whseInOutKB\api.js
  * @Description:
  */
 import axios from "axios";
+
+// 新增载具日志
+export function addStorageLog(data) {
+  return axios({
+    url: "/api/whsCarriageStorageLog",
+    method: "post",
+    params: data
+  });
+}
 
 // 查询载具日志
 export function getStorageLog(params) {
@@ -29,7 +38,7 @@ export function updateStorageLog(data) {
 // 查询成品布库存
 export function getFinalStock(params) {
   return axios({
-    url: "/api/prodStock", //prodStock
+    url: "/api/viewWmsTray/page", //prodStock
     method: "get",
     params: params
   });
@@ -39,6 +48,14 @@ export function getFinalStock(params) {
 export function sendTask(data) {
   return axios({
     url: "/erp/sendWmsIns",
+    method: "post",
+    data: data
+  });
+}
+// 发送任务,不生成入库记录
+export function sendTaskNoin(data) {
+  return axios({
+    url: "/erp/sendWmsInsEx",
     method: "post",
     data: data
   });

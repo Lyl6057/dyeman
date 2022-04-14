@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-01-12 15:46:05
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-08 15:23:38
+ * @LastEditTime: 2022-04-14 09:38:41
  * @FilePath: \iot.vue\src\view\im\whseInOutKB\data.js
  * @Description:
  */
@@ -100,26 +100,7 @@ export function formOp(_this) {
           }
         ],
         change: val => {
-          // if (val.value == 1) {
-          //   _this.formOp.column[2].dicData = inExit;
-          //   _this.form.exit = inExit[0].value;
-          //   // _this.formOp.column[4].display = false;
-          //   // _this.formOp.column[5].display = false;
-          //   // _this.formOp.column[6].type = "";
-          //   // _this.formOp.column[5].display = false;
-          //   _this.crud = [];
-          // } else {
-          //   _this.formOp.column[2].dicData = outExit;
-          //   // _this.formOp.column[4].display =
-          //   //   _this.form.goodsType == 1 ? true : false;
-          //   // _this.formOp.column[5].display =
-          //   //   _this.form.goodsType == 1 ? false : true;
-          //   // _this.formOp.column[6].type = "select";
-          //   // _this.form.exit = outExit[0].value;
-          //   _this.form.exit = "C";
-          //   // _this.formOp.column[5].display = true;
-          //   _this.crud = [];
-          // }
+          _this.typeChange(val.value);
         }
       },
       {
@@ -191,7 +172,7 @@ export function formOp(_this) {
       {
         label: "缸号",
         prop: "vatNo",
-        display: true,
+        display: false,
         span: 6,
         placeholder: " ",
         width: 125,
@@ -477,7 +458,209 @@ export function finishedCrud(_this) {
     ]
   };
 }
+export function finishedStockOp(_this) {
+  return {
+    menu: false,
+    addBtn: false,
+    cancelBtn: false,
+    editBtn: false,
+    delBtn: false,
+    menuWidth: 80,
+    border: true,
+    index: false,
+    highlightCurrentRow: true,
+    height: "calc(100vh - 320px)",
+    refreshBtn: false,
+    columnBtn: false,
+    page: true,
+    labelWidth: 100,
+    selection: false,
+    menuTitle: "称重",
+    rowKey: "id",
+    tree: true,
+    defaultExpandAll: true,
+    expandLevel: 2,
+    showSummary: false,
+    sumColumnList: [],
+    column: [
+      {
+        label: "#",
+        prop: "index",
+        width: 50,
+        align: "center",
+        display: false,
+        fixed: true
+      },
+      {
+        label: "载具编号",
+        prop: "palletCode",
+        span: 8,
+        placeholder: " ",
+        cell: true,
+        overHidden: true,
+        width: 100,
+        fixed: true
+      },
+      {
+        label: "缸号",
+        prop: "vatNo",
+        width: 140,
+        span: 6,
+        placeholder: " ",
+        disabled: true,
+        overHidden: true,
+        fixed: true
+      },
+      {
+        label: "总疋数",
+        prop: "piiCount",
+        width: 80,
+        span: 6,
+        align: "right",
+        placeholder: " "
+      },
+      {
+        label: "疋号",
+        prop: "pidNos",
+        width: 160,
+        span: 6,
+        overHidden: true,
+        placeholder: " "
+      },
+      {
+        label: "存储位置",
+        prop: "storageId",
+        cell: false,
+        width: 120,
+        overHidden: true,
+        placeholder: " "
+      },
+      {
+        label: "客人訂單號",
+        prop: "custPoNo",
+        width: 120,
+        span: 6,
+        placeholder: " ",
+        disabled: true,
+        overHidden: true
+      },
+      {
+        label: "本厂訂單號",
+        prop: "salPoNo",
+        width: 120,
+        span: 6,
+        placeholder: " ",
+        disabled: true,
+        overHidden: true
+      },
+      {
+        label: "客戶",
+        prop: "custCode",
+        width: 120,
+        disabled: true,
+        placeholder: " ",
+        span: 6,
+        display: false,
+        overHidden: true
+      },
+      {
+        label: "开單日期",
+        tip: "Ngày lập đơn",
+        prop: "workDate",
+        width: 120,
+        span: 6,
+        type: "date",
+        align: "center",
+        format: "yyyy-MM-dd",
+        valueFormat: "yyyy-MM-dd"
+      },
+      {
+        label: "交货日期",
+        prop: "deliveDate",
+        width: 120,
+        span: 6,
+        type: "date",
+        align: "center",
+        format: "yyyy-MM-dd",
+        valueFormat: "yyyy-MM-dd"
+      },
+      {
+        label: "布料编号",
+        prop: "fabricCode",
+        width: 100,
+        overHidden: true,
+        // sortable: true,
+        span: 6
+      },
+      {
+        label: "布料名称",
+        prop: "fabName",
+        width: 250,
+        overHidden: true,
+        span: 6
+      },
 
+      {
+        label: "头缸/缸差",
+        disabled: false,
+        prop: "firstOrOther",
+        width: 100,
+        type: "switch",
+        dicData: [
+          {
+            label: "头缸",
+            value: "1"
+          },
+          {
+            label: "缸差",
+            value: "2"
+          }
+        ],
+        hide: false,
+        placeholder: " "
+      },
+
+      {
+        label: "顏色",
+        prop: "colorName",
+        disabled: true,
+        placeholder: " ",
+        span: 6,
+        width: 120,
+        overHidden: true
+      },
+      {
+        label: "色号",
+        prop: "colorCode",
+        disabled: true,
+        placeholder: " ",
+        span: 6,
+        width: 120,
+        overHidden: true
+      },
+      {
+        label: "克重",
+        prop: "gramWeight",
+        width: 120,
+        span: 8,
+        cell: false,
+        align: "left",
+        placeholder: " ",
+        overHidden: true
+      },
+      {
+        label: "幅宽",
+        prop: "breadth",
+        width: 120,
+        cell: false,
+        span: 8,
+        align: "left",
+        placeholder: " ",
+        overHidden: true
+      }
+    ]
+  };
+}
 export function clothCrud(_this) {
   return {
     menu: false,
@@ -1124,6 +1307,157 @@ export function taskCrud(_this) {
         align: "center",
         sortable: true,
         width: 200
+      }
+    ]
+  };
+}
+
+export function inWhseCrud(_this) {
+  return {
+    menu: false,
+    addBtn: false,
+    cancelBtn: false,
+    editBtn: false,
+    delBtn: false,
+    menuWidth: 80,
+    border: true,
+    index: false,
+    highlightCurrentRow: true,
+    height: "calc(100vh - 120px)",
+    refreshBtn: false,
+    columnBtn: false,
+    page: false,
+    labelWidth: 100,
+    selection: true,
+    showSummary: true,
+    sumColumnList: [
+      {
+        label: " ",
+        name: "vatNo",
+        type: "count"
+      },
+      {
+        label: " ",
+        name: "netWeight",
+        type: "sum",
+        decimals: 1
+      }
+    ],
+    column: [
+      {
+        label: "#",
+        prop: "index",
+        width: 60,
+        align: "center",
+        display: false
+      },
+
+      {
+        label: "缸号",
+        prop: "vatNo",
+        width: 140,
+        span: 6,
+        placeholder: " ",
+        disabled: true,
+        overHidden: true,
+        sortable: true
+      },
+
+      {
+        label: "匹號",
+        prop: "pidNo",
+        width: 60,
+        align: "right",
+        span: 6,
+        type: "number",
+        precision: 0
+      },
+      {
+        label: "成品编号",
+        prop: "productNo",
+        width: 170,
+        span: 6,
+        placeholder: " ",
+        disabled: true,
+        overHidden: true
+      },
+      {
+        label: "载具编号",
+        prop: "storeLoadCode",
+        span: 8,
+        placeholder: " ",
+        cell: true,
+        overHidden: true,
+        width: 120
+      },
+      {
+        label: "净重(KG)",
+        prop: "netWeight",
+        width: 100,
+        align: "right",
+        span: 6,
+        cell: false,
+        placeholder: " ",
+        type: "number",
+        minRows: 0,
+        precision: 1
+      },
+      {
+        label: "净重(LBS)",
+        prop: "netWeightLbs",
+        width: 100,
+        align: "right",
+        span: 6,
+        cell: false,
+        placeholder: " ",
+        type: "number",
+        minRows: 0,
+        precision: 1
+      },
+      {
+        label: "單位",
+        prop: "weightUnit",
+        width: 80,
+        display: false,
+        placeholder: " ",
+        span: 6,
+        type: "select",
+        dicData: matUnit
+      },
+      {
+        label: "码长",
+        // tip: "Tổng cộng(KG)",
+        prop: "yardLength",
+        width: 100,
+        span: 8,
+        type: "number",
+        align: "right",
+        // precision: 1,
+        minRows: 0,
+        placeholder: " "
+      },
+      {
+        label: "克重",
+        prop: "realGramWeight",
+        width: 120,
+        span: 8,
+        cell: false,
+        // type: "number",
+        align: "left",
+        placeholder: " ",
+        overHidden: true
+      },
+      {
+        label: "幅宽",
+        // tip: "Tổng cộng(KG)",
+        prop: "actualSideBreadth",
+        width: 120,
+        cell: false,
+        span: 8,
+        // type: "number",
+        align: "left",
+        placeholder: " ",
+        overHidden: true
       }
     ]
   };

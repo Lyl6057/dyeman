@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-24 14:15:12
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-09 15:31:39
+ * @LastEditTime: 2022-04-12 14:22:19
  * @Description: 
 -->
 <template>
@@ -44,7 +44,7 @@ export default {
       loadLabel: "拼命加载中",
       page: {
         pageSizes: [50, 100, 200, 500, 1000],
-        pageSize: 100,
+        pageSize: 50,
         currentPage: 1,
         total: 0,
       },

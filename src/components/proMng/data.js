@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-05-03 13:03:03
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-02 13:55:23
+ * @LastEditTime: 2022-04-13 14:11:01
  * @Description:
  */
 
@@ -20,6 +20,262 @@ let basChemical = getXDicT("BasChemicalmatNew");
 let basPigment = getXDicT("basPigment");
 let basProductivesupplies = getXDicT("basProductivesupplies");
 let basFuel = getXDicT("basFuel");
+
+export function getFinishedNote(params) {
+  return axios({
+    url: "/api/proFinalProductCard/page",
+    method: "get",
+    params: params
+  });
+}
+export function finishedNoteF(_this) {
+  return {
+    submitBtn: false,
+    emptyBtn: false,
+    labelWidth: 100,
+    column: [
+      {
+        label: "缸号",
+        prop: "vatNo",
+        tip: "Số lô nhuộm",
+        span: 6,
+        placeholder: " "
+      },
+      {
+        label: "疋号",
+        prop: "pidNo",
+        tip: "Số cây vải",
+        span: 6,
+        placeholder: " "
+      },
+      {
+        label: "成品编号",
+        prop: "productNo",
+        tip: "Số lô nhuộm",
+        span: 6,
+        placeholder: " "
+      }
+    ]
+  };
+}
+
+export function finishedNoteC(_this) {
+  return {
+    menu: false,
+    addBtn: false,
+    cancelBtn: false,
+    editBtn: false,
+    delBtn: false,
+    menuWidth: 80,
+    border: true,
+    index: false,
+    highlightCurrentRow: true,
+    height: "calc(100vh - 250px)",
+    refreshBtn: false,
+    columnBtn: false,
+    page: true,
+    labelWidth: 100,
+    selection: true,
+    menuTitle: "称重",
+    rowKey: "id",
+    tree: true,
+    defaultExpandAll: true,
+    expandLevel: 2,
+    showSummary: false,
+    sumColumnList: [
+      {
+        label: " ",
+        name: "productNo",
+        type: "count"
+      },
+      {
+        label: " ",
+        name: "netWeight",
+        type: "sum",
+        decimals: 1
+      }
+    ],
+    column: [
+      {
+        label: "#",
+        prop: "index",
+        width: 50,
+        align: "center",
+        display: false
+      },
+      // {
+      //   label: "载具编号",
+      //   prop: "storeLoadCode",
+      //   span: 8,
+      //   placeholder: " ",
+      //   cell: true,
+      //   overHidden: true,
+      //   sortable: true,
+      //   width: 140
+      // },
+      {
+        label: "缸号",
+        prop: "vatNo",
+        width: 140,
+        span: 6,
+        placeholder: " ",
+        disabled: true,
+        overHidden: true,
+        sortable: true
+      },
+      {
+        label: "匹號",
+        prop: "pidNo",
+        width: 60,
+        align: "right",
+        span: 6,
+        type: "number",
+        precision: 0
+      },
+      {
+        label: "成品编号",
+        prop: "productNo",
+        width: 170,
+        span: 6,
+        placeholder: " ",
+        disabled: true,
+        overHidden: true
+      },
+      {
+        label: "净重(KG)",
+        prop: "netWeight",
+        width: 100,
+        align: "right",
+        span: 6,
+        cell: false,
+        placeholder: " ",
+        type: "number",
+        minRows: 0,
+        precision: 1
+      },
+      {
+        label: "净重(LBS)",
+        prop: "netWeightLbs",
+        width: 100,
+        align: "right",
+        span: 6,
+        cell: false,
+        placeholder: " ",
+        type: "number",
+        minRows: 0,
+        precision: 1
+      },
+      {
+        label: "單位",
+        prop: "weightUnit",
+        width: 80,
+        display: false,
+        placeholder: " ",
+        span: 6,
+        type: "select",
+        dicData: matUnit
+      },
+      {
+        label: "码长",
+        // tip: "Tổng cộng(KG)",
+        prop: "yardLength",
+        width: 80,
+        span: 8,
+        type: "number",
+        align: "right",
+        // precision: 1,
+        minRows: 0,
+        placeholder: " "
+      },
+
+      {
+        label: "訂單號",
+        prop: "poNo",
+        width: 120,
+        span: 6,
+        placeholder: " ",
+        disabled: true,
+        overHidden: true,
+        hide: true
+      },
+      {
+        label: "客戶",
+        prop: "custCode",
+        width: 120,
+        disabled: true,
+        placeholder: " ",
+        span: 6,
+        display: false,
+        overHidden: true
+      },
+      {
+        label: "布类名称",
+        prop: "fabName",
+        disabled: true,
+        placeholder: " ",
+        span: 6,
+        width: 100,
+        overHidden: true,
+        hide: true
+      },
+      {
+        label: "顏色",
+        prop: "colorName",
+        disabled: true,
+        placeholder: " ",
+        span: 6,
+        width: 120,
+        overHidden: true,
+        hide: true
+      },
+
+      {
+        label: "克重",
+        // tip: "Tổng cộng(KG)",
+        prop: "realGramWeight",
+        width: 120,
+        span: 8,
+        cell: false,
+        // type: "number",
+        align: "left",
+        placeholder: " ",
+        overHidden: true
+      },
+      {
+        label: "幅宽",
+        // tip: "Tổng cộng(KG)",
+        prop: "actualSideBreadth",
+        width: 120,
+        cell: false,
+        span: 8,
+        // type: "number",
+        align: "left",
+        placeholder: " ",
+        overHidden: true
+      },
+      {
+        label: "验布员工号",
+        prop: "clothChecker",
+        span: 8,
+        placeholder: " ",
+        width: 125,
+        sortable: true,
+        overHidden: true
+      },
+      {
+        label: "验布时间",
+        prop: "clothCheckTime",
+        type: "date",
+        format: "yyyy-MM-dd HH:mm:ss",
+        valueFormat: "yyyy-MM-dd HH:mm:ss",
+        span: 6,
+        align: "center",
+        // sortable: true,
+        width: 160
+      }
+    ]
+  };
+}
 
 export function getBaseStepPackage(params) {
   return axios({

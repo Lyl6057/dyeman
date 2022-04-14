@@ -4,7 +4,7 @@
       id="choiceDlg"
       :visible.sync="choiceV"
       :width="dlgWidth"
-      top="10vh"
+      :top="marginTop"
       :fullscreen="dlgWidth === '100%'"
       append-to-body
       :close-on-click-modal="false"
@@ -117,6 +117,9 @@ import {
   getBaseStepPackage,
   baseStepPackageF,
   baseStepPackageC,
+  finishedNoteC,
+  finishedNoteF,
+  getFinishedNote,
 } from "./data";
 
 export default {
@@ -127,11 +130,15 @@ export default {
     choiceTle: String,
     dlgWidth: String,
     choiceQ: Object,
+    marginTop: {
+      type: String,
+      default: "10vh",
+    },
   },
   data() {
     return {
       page: {
-        pageSize: 20,
+        pageSize: 50,
         currentPage: 1,
         total: 0,
         pageSizes: [20, 50, 100, 500],
@@ -227,14 +234,14 @@ export default {
           });
         });
       } else {
-        this.form.vatNo = "!^%" + (this.form.vatNo ? this.form.vatNo : "");
-        this.form.poNo = "!^%" + (this.form.poNo ? this.form.poNo : "");
-        // this.form.stepCode =
-        //   "!^%" + (this.form.stepCode ? this.form.stepCode : "");
-        this.form.weaveJobCode =
-          "%" + (this.form.weaveJobCode ? this.form.weaveJobCode : "");
+        let queryData = JSON.parse(JSON.stringify(this.form));
+        queryData.vatNo = "!^%" + (queryData.vatNo || "");
+        queryData.poNo = "!^%" + (queryData.poNo || "");
+        queryData.weaveJobCode = "!^%" + (queryData.weaveJobCode || "");
+        queryData[this.choiceQ.sortF] =
+          "!^%" + (queryData[this.choiceQ.sortF] || "");
         this.getData(
-          Object.assign(this.form, this.choiceQ, {
+          Object.assign(queryData, this.choiceQ, {
             rows: this.page.pageSize,
             start: this.page.currentPage,
           })
@@ -276,18 +283,6 @@ export default {
               }, 200);
             }
           });
-          if (this.form.vatNo.indexOf("!^%") != -1) {
-            this.form.vatNo = this.form.vatNo.split("!^%")[1] || "";
-          }
-          if (this.form.poNo.indexOf("!^%") != -1) {
-            this.form.poNo = this.form.poNo.split("!^%")[1] || "";
-          }
-          if (this.form.weaveJobCode.indexOf("%") != -1) {
-            this.form.weaveJobCode = this.form.weaveJobCode.split("%")[1] || "";
-          }
-          // if (this.form.stepCode.indexOf("!^%") != -1) {
-          //   this.form.stepCode = this.form.stepCode.split("!^%")[1] || "";
-          // }
         });
       }
     },
@@ -335,6 +330,11 @@ export default {
   },
   created() {
     switch (this.choiceTle) {
+      case "选择成品布":
+        this.choiceC = finishedNoteC(this);
+        this.choiceF = finishedNoteF(this);
+        this.getData = getFinishedNote;
+        break;
       case "选择颜料库存":
         this.choiceC = ylStockC(this);
         this.choiceF = ylStockF(this);
