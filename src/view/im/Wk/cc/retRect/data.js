@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-12 09:07:11
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-13 10:34:24
+ * @LastEditTime: 2022-04-14 15:43:45
  */
 import {
   getDIC,
@@ -58,7 +58,7 @@ export function crudOp(_this) {
         width: 160,
       },
       {
-        label: "单据状态",
+        label: "出仓状态",
         prop: "retState",
         width: 160,
         type: "select",
@@ -97,7 +97,7 @@ export function queryFormOp(_this) {
         labelWidth: 150
       },
       {
-        label: "单据状态",
+        label: "出仓状态",
         prop: "retState",
         span: 5,
         type: "select",
@@ -201,7 +201,7 @@ export function retReatFormOp(_this) {
         disabled: true,
       },
       {
-        label: "单据状态",
+        label: "出仓状态",
         prop: "retState",
         span: 5,
         type: "select",
