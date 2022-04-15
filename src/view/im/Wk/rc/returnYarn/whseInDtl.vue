@@ -4,13 +4,17 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:18:51
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-15 10:33:16
+ * @LastEditTime: 2022-04-15 11:07:45
 -->
 <template>
   <div id="whse-yarn-in-dtl-container">
     <view-container title="本厂余纱退纱" :element-loading-text="loadLabel" v-loading="loading">
       <div class="btnList">
-        <el-button type="primary" @click="handleSave">{{ this.$t("public.save") }}</el-button>
+        <el-button
+          type="primary"
+          @click="handleSave"
+          :disabled="hasNotEdit"
+        >{{ this.$t("public.save") }}</el-button>
         <el-button type="warning" @click="handleClose">{{ this.$t("public.close") }}</el-button>
       </div>
       <div class="formBox">
@@ -36,8 +40,16 @@
         <el-col :span="7">
           <view-container title="货位资料">
             <div class="btnList">
-              <el-button type="primary" @click="handleAddDtla" >{{ this.$t("public.add") }}</el-button>
-              <el-button type="danger" @click="handleDelDtla">{{ this.$t("public.del") }}</el-button>
+              <el-button
+                type="primary"
+                :disabled="hasNotEdit"
+                @click="handleAddDtla"
+              >{{ this.$t("public.add") }}</el-button>
+              <el-button
+                type="danger"
+                :disabled="hasNotEdit"
+                @click="handleDelDtla"
+              >{{ this.$t("public.del") }}</el-button>
             </div>
             <div class="crudBox">
               <avue-crud
@@ -73,8 +85,8 @@ import { baseCodeSupplyEx, baseCodeSupply } from "@/api/index";
 import v1 from "uuid/v1";
 export default {
   name: "whseInDtl",
-  props:{
-    imWkType:{
+  props: {
+    imWkType: {
       type: String,
       default: () => ""
     }
@@ -96,7 +108,7 @@ export default {
       dtlaCurIdx: -1,
 
       // 货位明细删除oid集合
-      dtlaDelOids: [],
+      dtlaDelOids: []
     };
   },
   watch: {
@@ -116,19 +128,24 @@ export default {
       }
     }
   },
+  computed: {
+    hasNotEdit() {
+      return this.whseYarnInFormData.stockState == "1";
+    }
+  },
   methods: {
     // 新增货位数据
-    handleAddDtla(){
-        this.whseYarnInDtlaDataList.push({
-          isAdd: true,
-          whseYarninDtlaoid: v1(),
-        })  
+    handleAddDtla() {
+      this.whseYarnInDtlaDataList.push({
+        isAdd: true,
+        whseYarninDtlaoid: v1()
+      });
     },
     // 删除货位明细数据
-    handleDelDtla(){
-      if(this.dtlaCurIdx == -1) return  this.$tip.warning("请选择数据");
-      let delRow = this.whseYarnInDtlaDataList.splice(this.dtlaCurIdx,1)[0];
-      if(delRow && !delRow.isAdd){
+    handleDelDtla() {
+      if (this.dtlaCurIdx == -1) return this.$tip.warning("请选择数据");
+      let delRow = this.whseYarnInDtlaDataList.splice(this.dtlaCurIdx, 1)[0];
+      if (delRow && !delRow.isAdd) {
         this.dtlaDelOids.push(delRow.whseYarninDtlaoid);
       }
     },
@@ -153,6 +170,7 @@ export default {
               whseYarninFk: item.whseYarninFk,
               inWeight: item.whseNum,
               yarnsId: item.yarnsId,
+              yarnsName: item.yarnsName,
               batchNo: item.batchNo,
               weight: item.cartonWei,
               weightUnit: item.weightUnit,
@@ -226,28 +244,32 @@ export default {
       });
       let dataListReqs = [
         batchSaveOrUpdateDtlDataList(dtlDataList),
-        batchSaveOrUpdateDtlaDataList(dtlaDataList),
+        batchSaveOrUpdateDtlaDataList(dtlaDataList)
       ];
-      if(this.dtlaDelOids.length > 0){
-        dataListReqs.push(batchRemoveDtlaDataById(this.dtlaDelOids))
+      if (this.dtlaDelOids.length > 0) {
+        dataListReqs.push(batchRemoveDtlaDataById(this.dtlaDelOids));
       }
       return Promise.all(dataListReqs);
     },
     // 明细点击事件
     handleDtlRowClick(row) {
-      if (this.dtlCurIdx > -1) {
-        this.whseYarnInDtlDataList[this.dtlCurIdx].$cellEdit = false;
+      if (!this.hasNotEdit) {
+        if (this.dtlCurIdx > -1) {
+          this.whseYarnInDtlDataList[this.dtlCurIdx].$cellEdit = false;
+        }
+        row.$cellEdit = true;
       }
       this.dtlCurIdx = row.$index;
-      row.$cellEdit = true;
     },
     // 货位码数据点击事件
     handleDtlaRowClick(row) {
-      if (this.dtlaCurIdx > -1) {
-        this.whseYarnInDtlaDataList[this.dtlaCurIdx].$cellEdit = false;
+      if (!this.hasNotEdit) {
+        if (this.dtlaCurIdx > -1) {
+          this.whseYarnInDtlaDataList[this.dtlaCurIdx].$cellEdit = false;
+        }
+        row.$cellEdit = true;
       }
       this.dtlaCurIdx = row.$index;
-      row.$cellEdit = true;
     },
     // 关闭
     handleClose() {
@@ -280,8 +302,8 @@ export default {
       this.loading = true;
       let params = {
         typeOf: this.imWkType - 4,
-        withdrawalNo: withDrawalNo,
-      }
+        withdrawalNo: withDrawalNo
+      };
       fetchRetYarnNoticDataList(params)
         .then(res => {
           this.whseYarnInDtlDataList = res.data.map(item => {
