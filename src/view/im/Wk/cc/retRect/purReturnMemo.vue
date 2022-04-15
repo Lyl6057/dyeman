@@ -4,12 +4,13 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-12 14:44:01
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-13 08:18:44
+ * @LastEditTime: 2022-04-15 11:22:22
 -->
 <template>
   <view-container title="退货（纱）通知单" :element-loading-text="loadLabel" v-loading="loading">
     <div class="btnList">
-      <el-button type="primary" @click="handleSelect">退纱出仓</el-button>
+      <el-button type="success" @click="handleSelect">退纱出仓</el-button>
+      <el-button type="primary" @click="handleQuery">{{ this.$t("public.query") }}</el-button>
       <el-button type="warning" @click="handleClose">{{ this.$t("public.close") }}</el-button>
     </div>
     <div class="crudBox">
@@ -47,6 +48,11 @@ export default {
     };
   },
   methods: {
+    // 查询
+    handleQuery(){
+      this.page.currentPage = 1;
+      this.getDataList();
+    },
     //   退纱出仓
     handleSelect() {
         if(!this.curSelRowRemeoNo) return this.$tip.warning("请选择通知单数据");

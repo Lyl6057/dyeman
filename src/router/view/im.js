@@ -166,6 +166,15 @@ export default [
           keepAlive: false
         }
       },
+      // 本厂退纱
+      {
+        path: "/fac_ret_yarn_in",
+        name: "facRetYarnIn",
+        component: resolve => require(["@/view/im/Wk/rc/returnYarn/index"], resolve),
+        meta: {
+          keepAlive: false
+        }
+      },
       //  胚布入仓
       {
         path: "/rc_pb",

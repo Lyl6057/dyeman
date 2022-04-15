@@ -161,7 +161,7 @@ export default {
             // level_4
             {
               click: () => {
-                this.toView("rc_sx", this.$t("iaoMng.ystc") + "_4");
+                this.toView("facRetYarnIn", this.$t("iaoMng.ystc") + "_4");
               },
               title: this.$t("iaoMng.ystc"),
               icon: "el-icon-s-home",
@@ -172,7 +172,7 @@ export default {
             // level_5
             {
               click: () => {
-                this.toView("rc_sx", this.$t("iaoMng.wfts") + "_5");
+                this.toView("facRetYarnIn", this.$t("iaoMng.wfts") + "_5");
               },
               title: this.$t("iaoMng.wfts"),
               icon: "el-icon-s-home",
