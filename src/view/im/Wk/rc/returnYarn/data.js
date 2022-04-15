@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:08:41
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-15 10:12:48
+ * @LastEditTime: 2022-04-15 16:31:19
  */
 import {
   getDIC,
@@ -109,7 +109,7 @@ export function whseInFormOp(_this) {
     labelWidth: 100,
     column: [{
       label: "入仓编号",
-      prop: "yinCode",
+      prop: "yinId",
       span: 5,
       placeholder: " ",
     }, {
