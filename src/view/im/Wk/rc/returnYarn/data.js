@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:08:41
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-14 17:37:25
+ * @LastEditTime: 2022-04-15 08:28:10
  */
 import {
   getDIC,
@@ -321,7 +321,7 @@ export function whseYarnInDtlaCrudOp(_this) {
   return {
     ...mainCrudOpCommon,
     page: false,
-    rowKey: "whseYarninDtloid",
+    rowKey: "whseYarninDtlaoid",
     column: [{
       label: "数量",
       prop: "weight",

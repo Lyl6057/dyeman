@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:18:23
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-14 17:43:28
+ * @LastEditTime: 2022-04-15 09:17:02
 -->
 <template>
   <div id="return-yarn-in-container">
@@ -61,7 +61,7 @@ export default {
   methods: {
     getDataList() {
       this.loading = true;
-      let { yinId, registerNo } = this.queryForm;
+      let { yinId, registerNo, yinDate } = this.queryForm;
       let params = {
         page: this.page.currentPage,
         rows: this.page.pageSize,
@@ -69,6 +69,12 @@ export default {
         yinId: "%" + (yinId || ""),
         registerNo: "%" + (registerNo || "")
       };
+      if(yinDate && yinDate.length == 2){
+        Object.assign(params,{
+          yinSDate: yinDate[0],
+          yinEDate: yinDate[1]
+        })
+      }
       fetchWhseYarnInDataListByPage(params).then(res => {
         this.page.total = res.data.total;
         this.crudDataList = res.data.records.map(item => {

@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:08:31
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-14 17:26:19
+ * @LastEditTime: 2022-04-15 08:34:19
 -->
 <template>
   <div id="return-yarn-container" >
@@ -44,7 +44,7 @@ export default {
       tabName:{
         handler(value){
           if(value == 'whseUnIn'){
-            this.$refs.whseInDtlRef && this.$refs.whseInDtlRef.getDataList();
+            this.$refs.whseUnInRef && this.$refs.whseUnInRef.getDataList();
           }
         }
       }
@@ -61,7 +61,7 @@ export default {
         this.tabName = "whseIn",
         this.whseYarnInDtlVisible = true;
         await this.$nextTick();
-        this.$refs.whseInDtlRef.initData(withDrawalNo);
+        this.$refs.whseInDtlRef.addAndCreateData(withDrawalNo);
       },
       // 明细数据关闭
       handleDtlClose(hasRefresh){

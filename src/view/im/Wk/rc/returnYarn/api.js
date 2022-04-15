@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:08:47
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-14 16:05:05
+ * @LastEditTime: 2022-04-15 08:50:29
  */
 
 import axios from "axios";
@@ -81,6 +81,16 @@ export function batchSaveOrUpdateDtlaDataList(data){
         data: data,
     })
 }
+
+// 批量删除货位码明细数据
+export function batchRemoveDtlaDataById(data){
+    return axios({
+        url: "/api/whseYarninDtla/v1.0/batch/removeById",
+        method: "post",
+        data: data,
+    })
+}
+
 
 // 根据纱线入仓id获取明细数据和货位码数据
 export function fetchWhseYarnInDtlAndDtlaData(params){

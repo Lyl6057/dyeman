@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:18:51
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-14 16:30:50
+ * @LastEditTime: 2022-04-15 08:55:10
 -->
 <template>
   <div id="whse-yarn-in-dtl-container">
@@ -36,8 +36,8 @@
         <el-col :span="7">
           <view-container title="货位资料">
             <div class="btnList">
-              <el-button type="primary">{{ this.$t("public.add") }}</el-button>
-              <el-button type="danger">{{ this.$t("public.del") }}</el-button>
+              <el-button type="primary" @click="handleAddDtla" >{{ this.$t("public.add") }}</el-button>
+              <el-button type="danger" @click="handleDelDtla">{{ this.$t("public.del") }}</el-button>
             </div>
             <div class="crudBox">
               <avue-crud
@@ -65,7 +65,8 @@ import {
   updateWhseYarnInData,
   batchSaveOrUpdateDtlDataList,
   batchSaveOrUpdateDtlaDataList,
-  fetchWhseYarnInDtlAndDtlaData
+  fetchWhseYarnInDtlAndDtlaData,
+  batchRemoveDtlaDataById
 } from "./api";
 import { timeConversion } from "@/config/util";
 import { baseCodeSupplyEx, baseCodeSupply } from "@/api/index";
@@ -83,15 +84,24 @@ export default {
       whseYarnInDtlaCrudOp: whseYarnInDtlaCrudOp(this),
       whseYarnInDtlaDataList: [],
       hasRefresh: false,
-
+      // 当前选中明细索引
       dtlCurIdx: -1,
-      dtlaCurIdx: -1
+      // 当前选中货位明细索引
+      dtlaCurIdx: -1,
+
+      // 货位明细删除oid集合
+      dtlaDelOids: [],
     };
   },
   watch: {
     dtlCurIdx: {
-      handler(value) {
-        if (value > -1) {
+      handler(value, oValue) {
+        if (oValue != -1 && this.dtlaCurIdx != -1) {
+          this.whseYarnInDtlDataList[oValue].aChildren[
+            this.dtlaCurIdx
+          ].$cellEdit = false;
+        }
+        if (value != -1) {
           this.dtlaCurIdx = -1;
           this.whseYarnInDtlaDataList = this.whseYarnInDtlDataList[
             value
@@ -101,33 +111,57 @@ export default {
     }
   },
   methods: {
+    // 新增货位数据
+    handleAddDtla(){
+        this.whseYarnInDtlaDataList.push({
+          isAdd: true,
+          whseYarninDtlaoid: v1(),
+        })  
+    },
+    // 删除货位明细数据
+    handleDelDtla(){
+      if(this.dtlaCurIdx == -1) return  this.$tip.warning("请选择数据");
+      let delRow = this.whseYarnInDtlaDataList.splice(this.dtlaCurIdx,1)[0];
+      if(delRow && !delRow.isAdd){
+        this.dtlaDelOids.push(delRow.whseYarninDtlaoid);
+      }
+    },
+    // 初始化数据
+    initData() {
+      this.dtlCurIdx = -1;
+      this.dtlaCurIdx = -1;
+      this.dtlaDelOids = [];
+    },
     // 获取纱线入仓明细数据
     getWhseYarnInData(whseYarnInData) {
       this.loading = true;
       this.whseYarnInFormData = whseYarnInData;
-
+      this.initData();
       fetchWhseYarnInDtlAndDtlaData({
         whseYarnInoid: whseYarnInData.whseYarninoid
-      }).then(res => {
-        this.whseYarnInDtlDataList = res.data.map(item => {
-          return {
-            whseYarninDtloid: item.whseYarninDtloid,
-            whseYarninFk: item.whseYarninFk,
-            inWeight: item.whseNum,
-            yarnsId: item.yarnsId,
-            batchNo: item.batchNo,
-            weight: item.cartonWei,
-            weightUnit: item.weightUnit,
-            yarnsCard: item.yarnsCard,
-            suppBatNo: item.batId,
-            weaveJobCode: item.placeOrigin,
-            remarks: item.colorName,
-            aChildren: item.dtlaChildren
-          };
+      })
+        .then(res => {
+          this.whseYarnInDtlDataList = res.data.map(item => {
+            return {
+              whseYarninDtloid: item.whseYarninDtloid,
+              whseYarninFk: item.whseYarninFk,
+              inWeight: item.whseNum,
+              yarnsId: item.yarnsId,
+              batchNo: item.batchNo,
+              weight: item.cartonWei,
+              weightUnit: item.weightUnit,
+              yarnsCard: item.yarnsCard,
+              suppBatNo: item.batId,
+              weaveJobCode: item.placeOrigin,
+              remarks: item.colorName,
+              aChildren: item.dtlaChildren || []
+            };
+          });
+          this.whseYarnInDtlaDataList = [];
+        })
+        .finally(() => {
+          this.loading = false;
         });
-      }).finally(() => {
-        this.loading = false;
-      });
     },
     // 保存数据
     async handleSave() {
@@ -186,8 +220,11 @@ export default {
       });
       let dataListReqs = [
         batchSaveOrUpdateDtlDataList(dtlDataList),
-        batchSaveOrUpdateDtlaDataList(dtlaDataList)
+        batchSaveOrUpdateDtlaDataList(dtlaDataList),
       ];
+      if(this.dtlaDelOids.length > 0){
+        dataListReqs.push(batchRemoveDtlaDataById(this.dtlaDelOids))
+      }
       return Promise.all(dataListReqs);
     },
     // 明细点击事件
@@ -211,7 +248,8 @@ export default {
       this.$emit("close", this.hasRefresh);
     },
     // 新增数据初始化
-    initData(withDrawalNo) {
+    addAndCreateData(withDrawalNo) {
+      this.initData();
       this.createWhseYarnInData(withDrawalNo);
       this.extractData(withDrawalNo);
     },
