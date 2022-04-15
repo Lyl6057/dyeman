@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:18:23
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-15 09:17:02
+ * @LastEditTime: 2022-04-15 09:54:35
 -->
 <template>
   <div id="return-yarn-in-container">
@@ -33,7 +33,7 @@
 </template>
 <script>
 import {  whseInCrudOp, whseInFormOp } from "./data"
-import { fetchWhseYarnInDataListByPage,removeWhseYarnInData } from "./api"
+import { fetchWhseYarnInDataListByPage,removeWhseYarnInData,updateWhseYarnInData } from "./api"
 export default {
   name: "returnYarnIn",
   data() {
@@ -60,6 +60,7 @@ export default {
   },
   methods: {
     getDataList() {
+      console.log(JSON.parse(localStorage.getItem("imWk")))
       this.loading = true;
       let { yinId, registerNo, yinDate } = this.queryForm;
       let params = {
@@ -105,7 +106,18 @@ export default {
       this.curSelectRow = row;
     },
     // 审核
-    handleExamine(){},
+    handleExamine(){
+      let row = this.curSelectRow || {};
+      if(!row.whseYarninoid) return this.$tip.warning("请选择数据");
+      let whseYarninData = Object.assign({},row,{stockState: "1"});
+      this.loading = true;
+      updateWhseYarnInData(whseYarninData).then(res => {
+        this.$tip.success("审核成功");
+        this.getDataList();
+      }).finally(() => {
+        this.loading = false;
+      });
+    },
     // 关闭
     handleClose(){
       document.getElementsByClassName("el-dialog__headerbtn")[0].click();
