@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-12-30 20:31:45
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-04-15 08:05:15
  * @Description: 
 -->
 <template>
@@ -218,7 +218,9 @@ export default {
       choiceTle: "选择染整工单",
       choiceTarget: {},
       choiceField: "",
-      choiceQ: {},
+      choiceQ: {
+        sortF: "vatNo",
+      },
       code: "",
       pfCrud: pfCrud(this),
       group: [],
@@ -693,10 +695,12 @@ export default {
         // this.form.dyeAfterBreadth = val.breadth;
         // this.form.dyeAfterWeight = val.gramWeight;
         this.form.fabricName = val.fabName;
-        if(val.gramWeightAfter){
-           this.form.dryClothWeight =Number(val.gramWeightAfter.match(/\d+/g)[0]) // val.gramWeightAfter;
+        if (val.gramWeightAfter) {
+          this.form.dryClothWeight = Number(
+            val.gramWeightAfter.match(/\d+/g)[0]
+          ); // val.gramWeightAfter;
         }
-       
+
         this.form.fabricCompone = val.fabElements;
 
         this.form.proBreadthSide =
@@ -824,82 +828,52 @@ export default {
 };
 </script>
 <style lang='stylus'>
-.el-tooltip__popper {
-  font-size: 16px !important;
-}
-
-#ldOrderDlg {
-  overflow: hidden;
-
-  .el-form-item__label {
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-  }
-
-  .avue-group__header {
-    margin-bottom: 15px !important;
+.el-tooltip__popper
+  font-size 16px !important
+#ldOrderDlg
+  overflow hidden
+  .el-form-item__label
+    -webkit-user-select none
+    -moz-user-select none
+    -ms-user-select none
+    user-select none
+  .avue-group__header
+    margin-bottom 15px !important
     // margin-top: -5px;
-    height: 30px;
-  }
-
-  .formBox {
-    height: calc(100vh - 75px) !important;
-    overflow: auto;
-  }
-
-  .el-input-number__decrease, .el-input-number__increase {
-    display: none;
-  }
-
-  .el-input-number .el-input__inner {
-    text-align: left !important;
-  }
-
-  .el-input-number.is-controls-right .el-input__inner {
-    padding-left: 5px !important;
-  }
-}
-
-#colorMng_Dlg {
-  .is-fullscreen {
-    overflow: hidden !important;
-  }
-
-  .el-dialog__header {
-    padding: 0 !important;
-  }
-
-  .el-dialog__headerbtn {
-    top: 3px;
-    font-size: 18px;
-    font-weight: bold;
-    z-index: 9;
-  }
-
-  .el-dialog__headerbtn .el-dialog__close, #sxrcDlg .el-dialog__headerbtn .el-dialog__close, #wkDlg .el-dialog__headerbtn .el-dialog__close {
-    color: #000;
-    font-size: 24px;
-  }
-
-  .el-tag--mini {
-    height: 24px;
-    padding: 0 5px;
-    line-height: 24px;
-    font-size: 14px;
-  }
-
-  .el-select .el-tag__close.el-icon-close {
-    right: -5px;
-    height: 18px;
-    width: 18px;
-    line-height: 18px;
-  }
-
-  .avue-form .el-input--mini input {
-    height: 35px !important;
-    line-height: 35px;
-  }
-}
+    height 30px
+  .formBox
+    height calc(100vh - 75px) !important
+    overflow auto
+  .el-input-number__decrease, .el-input-number__increase
+    display none
+  .el-input-number .el-input__inner
+    text-align left !important
+  .el-input-number.is-controls-right .el-input__inner
+    padding-left 5px !important
+#colorMng_Dlg
+  .is-fullscreen
+    overflow hidden !important
+  .el-dialog__header
+    padding 0 !important
+  .el-dialog__headerbtn
+    top 3px
+    font-size 18px
+    font-weight bold
+    z-index 9
+  .el-dialog__headerbtn .el-dialog__close, #sxrcDlg .el-dialog__headerbtn .el-dialog__close, #wkDlg .el-dialog__headerbtn .el-dialog__close
+    color #000
+    font-size 24px
+  .el-tag--mini
+    height 24px
+    padding 0 5px
+    line-height 24px
+    font-size 14px
+  .el-select .el-tag__close.el-icon-close
+    right -5px
+    height 18px
+    width 18px
+    line-height 18px
+  .avue-form .el-input--mini input
+    height 35px !important
+    line-height 35px
 </style>

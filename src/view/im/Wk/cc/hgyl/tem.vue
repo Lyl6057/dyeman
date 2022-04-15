@@ -1671,6 +1671,7 @@ export default {
         });
         val.forEach((item, i) => {
           item.weight = item.stock;
+          // item.whseChemicalinFk = item.whseChemicalinDtlaoid;
           item.$cellEdit = true;
         });
         for (let i = 0; i < val.length; i++) {

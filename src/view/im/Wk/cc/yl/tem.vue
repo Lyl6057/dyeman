@@ -1271,6 +1271,7 @@ export default {
           this.mxOp.column[10].hide = false;
           val.forEach((item, i) => {
             item.$cellEdit = true;
+            item.whseDyesainDtlbFk = item.whseDyesainDtlaoid;
             item.list = [JSON.parse(JSON.stringify(item))];
             item.materialId = item.chemicalId;
             item.traCompany = item.weightUnit;

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-01-12 15:39:08
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-14 10:18:07
+ * @LastEditTime: 2022-04-15 14:48:31
  * @FilePath: \iot.vue\src\view\im\whseInOutKB\index.vue
  * @Description: 
 -->
@@ -15,9 +15,7 @@
     <el-tabs v-model="tabs" type="border-card">
       <el-tab-pane label="出入库看板" name="kanban">
         <el-row class="btnList">
-          <el-button type="success" @click="sendTask" :disabled="!crud.length"
-            >提交任务</el-button
-          >
+          <el-button type="success" @click="sendTask">提交任务</el-button>
           <!-- <el-button type="success" @click="submit">提交</el-button> -->
           <el-button type="primary" @click="query">{{
             this.$t("public.query")
@@ -28,9 +26,9 @@
             :disabled="!crud.length || form.type == 2"
             >修改载具</el-button
           > -->
-          <el-button type="primary" @click="inVisible = true"
+          <!-- <el-button type="primary" @click="inVisible = true"
             >手工入库</el-button
-          >
+          > -->
         </el-row>
         <el-row class="formBox">
           <avue-form ref="form" :option="formOp" v-model="form"> </avue-form>
@@ -499,6 +497,7 @@ export default {
       this.taskForm.barCode = this.taskForm.barCode
         ? (this.taskForm.barCode = "%" + this.taskForm.barCode)
         : "";
+      this.taskForm.orderId = "!^";
       getTask(
         Object.assign(this.taskForm, {
           rows: this.page.pageSize,
@@ -803,6 +802,10 @@ export default {
         .catch(() => {});
     },
     sendTask() {
+      if (this.form.type == 1) {
+        this.inVisible = true;
+        return;
+      }
       if (!this.form.storeLoadCode) {
         this.$tip.error("载具编号不能为空!");
         return;
