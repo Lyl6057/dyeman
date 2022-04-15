@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:08:47
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-15 08:50:29
+ * @LastEditTime: 2022-04-15 10:38:44
  */
 
 import axios from "axios";
@@ -30,11 +30,11 @@ export function fetchRetYarnNoticDataListByPage(params){
 }
 
 // 通过退纱通知单号获取入仓数据
-export function fetchRetYarnNoticDataList(withDrawalNo){
+export function fetchRetYarnNoticDataList(params){
     return axios({
         url: "/api/proYarnsWithdrawalDtl/v1.0/complete/list",
         method: "get",
-        params:{withDrawalNo}
+        params:params
     })
 }
 

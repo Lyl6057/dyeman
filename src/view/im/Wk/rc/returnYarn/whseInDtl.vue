@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:18:51
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-15 08:55:10
+ * @LastEditTime: 2022-04-15 10:33:16
 -->
 <template>
   <div id="whse-yarn-in-dtl-container">
@@ -73,6 +73,12 @@ import { baseCodeSupplyEx, baseCodeSupply } from "@/api/index";
 import v1 from "uuid/v1";
 export default {
   name: "whseInDtl",
+  props:{
+    imWkType:{
+      type: String,
+      default: () => ""
+    }
+  },
   data() {
     return {
       loading: false,
@@ -257,7 +263,7 @@ export default {
     createWhseYarnInData(withDrawalNo) {
       this.whseYarnInFormData = {
         whseYarninoid: "",
-        yinType: "4",
+        yinType: this.imWkType, // 4 本厂 | 5 外厂
         stockState: "0",
         registerNo: withDrawalNo,
         finStatus: "0",
@@ -272,7 +278,11 @@ export default {
     // 数据抽取
     extractData(withDrawalNo) {
       this.loading = true;
-      fetchRetYarnNoticDataList(withDrawalNo)
+      let params = {
+        typeOf: this.imWkType - 4,
+        withdrawalNo: withDrawalNo,
+      }
+      fetchRetYarnNoticDataList(params)
         .then(res => {
           this.whseYarnInDtlDataList = res.data.map(item => {
             let dtlOid = v1();

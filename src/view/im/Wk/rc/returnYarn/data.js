@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:08:41
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-15 08:28:10
+ * @LastEditTime: 2022-04-15 10:12:48
  */
 import {
   getDIC,
@@ -139,6 +139,12 @@ export function retYarnNoticCrudOp(_this) {
         label: "退纱通知单号",
         prop: "withdrawalNo",
         width: 120,
+      },
+      {
+        label: "外发厂",
+        prop: "extFactId",
+        width: 120,
+        hide: _this.imWkType == "4"
       },
       {
         label: "退纱日期",

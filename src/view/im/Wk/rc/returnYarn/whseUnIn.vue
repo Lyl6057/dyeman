@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:18:36
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-14 17:32:15
+ * @LastEditTime: 2022-04-15 10:09:18
 -->
 <template>
   <div id="whse-unIn-container">
@@ -35,6 +35,12 @@ import { retYarnNoticCrudOp } from "./data"
 import { fetchRetYarnNoticDataListByPage } from "./api"
 export default {
   name: "whseUnIn",
+  props:{
+    imWkType:{
+      type: String,
+      default: () => ""
+    }
+  },
   data() {
     return {
       loading: false,
@@ -63,7 +69,8 @@ export default {
         this.curSelectWithDrawalNo = ""
         let params = {
             page: this.page.currentPage,
-            rows: this.page.pageSize
+            rows: this.page.pageSize,
+            typeOf: this.imWkType - 4
         }
         fetchRetYarnNoticDataListByPage(params).then(res => {
             this.page.total = res.data.total;

@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:18:23
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-15 09:54:35
+ * @LastEditTime: 2022-04-15 10:41:21
 -->
 <template>
   <div id="return-yarn-in-container">
@@ -36,6 +36,12 @@ import {  whseInCrudOp, whseInFormOp } from "./data"
 import { fetchWhseYarnInDataListByPage,removeWhseYarnInData,updateWhseYarnInData } from "./api"
 export default {
   name: "returnYarnIn",
+  props:{
+    imWkType:{
+      type: String,
+      default: () => ""
+    }
+  },
   data() {
     return {
       loading: false,
@@ -54,19 +60,18 @@ export default {
   },
   computed:{
       hasEdit(){
-          // return this.curSelectRow.stockState != "0";
-          return false;
+          return this.curSelectRow.stockState != "0";
+          // return false;
       }
   },
   methods: {
     getDataList() {
-      console.log(JSON.parse(localStorage.getItem("imWk")))
       this.loading = true;
       let { yinId, registerNo, yinDate } = this.queryForm;
       let params = {
         page: this.page.currentPage,
         rows: this.page.pageSize,
-        yinType: 4,
+        yinType: this.imWkType, // 4 本厂 | 5 外厂
         yinId: "%" + (yinId || ""),
         registerNo: "%" + (registerNo || "")
       };
