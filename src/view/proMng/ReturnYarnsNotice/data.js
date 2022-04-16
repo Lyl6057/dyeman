@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-08 17:26:12
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-16 08:16:54
+ * @LastEditTime: 2022-04-16 08:18:31
  */
 
 import {
@@ -70,7 +70,8 @@ export function crudOp(_this) {
         width: 160,
         formatter:(row, value) => {
             return value ? '√' : "×"
-        }
+        },
+        align: "center"
       },
     ]
   };

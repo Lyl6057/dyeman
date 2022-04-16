@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-08 17:19:47
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-13 14:20:07
+ * @LastEditTime: 2022-04-16 08:38:22
 -->
 <template>
   <div id="return-yarns-notice-container">
@@ -28,6 +28,7 @@
           @on-load="getDataList"
           @row-dblclick="handleRowDBLClick"
           @row-click="handleCellClick"
+          :cell-style="handleCellStyle"
         ></avue-crud>
       </div>
     </view-container>
@@ -73,6 +74,14 @@ export default {
     };
   },
   methods: {
+    handleCellStyle({row,column}){
+      if(column.property == 'isInStock'){
+        return {
+          fontWeight: "bolder",
+          color: row.isInStock ? "green" : "red"
+        }
+      }
+    },
     //   关闭
     handleDtlClose(hasRefresh){
         this.dltDialogVisible = false;
