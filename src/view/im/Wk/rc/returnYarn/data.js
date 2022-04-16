@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:08:41
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-15 16:31:19
+ * @LastEditTime: 2022-04-16 10:37:26
  */
 import {
   getDIC,
@@ -302,8 +302,10 @@ export function whseYarnInDtlCrudOp(_this) {
       width: 100,
       align: "right",
       type: "number",
-      formatter: fillZero,
-      cell: true,
+      formatter: (row,value) => {
+        return row.aChildren.reduce((a,b) => a + +(b.weight || 0), 0).toFixed(2)
+      },
+      // cell: true,
     }, {
       label: "单位",
       prop: "weightUnit",
@@ -334,14 +336,16 @@ export function whseYarnInDtlaCrudOp(_this) {
       width: 100,
       cell: true,
       type: "number",
-      align: "right"
+      align: "right",
+      formatter: fillZero
     }, {
       label: "件数",
       prop: "cartonNum",
       width: 100,
       cell: true,
       type: "number",
-      align: "right"
+      align: "right",
+      formatter: fillZero
     }, {
       label: "包装规格",
       prop: "packSize",

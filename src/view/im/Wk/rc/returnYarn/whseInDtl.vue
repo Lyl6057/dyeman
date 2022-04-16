@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:18:51
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-15 16:53:58
+ * @LastEditTime: 2022-04-16 10:40:04
 -->
 <template>
   <div id="whse-yarn-in-dtl-container">
@@ -212,24 +212,10 @@ export default {
     saveDtlData(whseYarninOid) {
       let dtlaDataList = [];
       let dtlDataList = this.whseYarnInDtlDataList.map((item, index) => {
-        // 明细数据
-        let tDtlData = {
-          whseYarninDtloid: item.whseYarninDtloid,
-          whseYarninFk: whseYarninOid,
-          whseNum: item.inWeight,
-          seqQty: index + 1,
-          yarnsId: item.yarnsId,
-          batchNo: item.batchNo,
-          cartonWei: item.weight,
-          weight: item.inWeight,
-          weightUnit: item.weightUnit,
-          yarnsCard: item.yarnsCard,
-          batId: item.suppBatNo,
-          placeOrigin: item.weaveJobCode,
-          colorName: item.remarks
-        };
+        let inWeight = 0;
         // 货位数据
         item.aChildren.forEach(aItem => {
+          inWeight += (aItem.weight || 0)
           dtlaDataList.push({
             whseYarninDtlaoid: aItem.whseYarninDtlaoid,
             whseYarninDtlFk: item.whseYarninDtloid,
@@ -242,6 +228,22 @@ export default {
         });
         return tDtlData;
       });
+      // 明细数据
+        let tDtlData = {
+          whseYarninDtloid: item.whseYarninDtloid,
+          whseYarninFk: whseYarninOid,
+          whseNum: inWeight,
+          seqQty: index + 1,
+          yarnsId: item.yarnsId,
+          batchNo: item.batchNo,
+          cartonWei: item.weight,
+          weight: inWeight,
+          weightUnit: item.weightUnit,
+          yarnsCard: item.yarnsCard,
+          batId: item.suppBatNo,
+          placeOrigin: item.weaveJobCode,
+          colorName: item.remarks
+        };
       let dataListReqs = [
         batchSaveOrUpdateDtlDataList(dtlDataList),
         batchSaveOrUpdateDtlaDataList(dtlaDataList)
