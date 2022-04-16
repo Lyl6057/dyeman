@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:18:51
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-15 11:07:45
+ * @LastEditTime: 2022-04-15 16:53:58
 -->
 <template>
   <div id="whse-yarn-in-dtl-container">
@@ -309,6 +309,7 @@ export default {
           this.whseYarnInDtlDataList = res.data.map(item => {
             let dtlOid = v1();
             item.whseYarninDtloid = dtlOid;
+            item.inWeight = item.weight;
             item.aChildren = [
               {
                 whseYarninDtlFk: dtlOid,

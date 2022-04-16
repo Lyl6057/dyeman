@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-08 17:26:12
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-13 14:17:11
+ * @LastEditTime: 2022-04-16 08:16:54
  */
 
 import {
@@ -66,8 +66,11 @@ export function crudOp(_this) {
       },
       {
         label: "已入仓",
-        prop: "hasIn",
-        width: 160
+        prop: "isInStock",
+        width: 160,
+        formatter:(row, value) => {
+            return value ? '√' : "×"
+        }
       },
     ]
   };
