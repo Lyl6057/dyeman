@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-09 09:06:25
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-13 14:29:44
+ * @LastEditTime: 2022-04-16 08:55:57
 -->
 <template>
   <div class="with-drawal-dlt-container">
@@ -122,6 +122,7 @@ export default {
     // 初始化数据
     initData() {
       this.withDrawalFormData = {
+        proYarnsWithdrawaloid: "",
         withdrawalNo: "",
         happenDate: "",
         typeOf: "",
