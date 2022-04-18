@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-12 10:34:33
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-18 10:08:37
+ * @LastEditTime: 2022-04-18 16:22:41
 -->
 <template>
   <div class="with-drawal-dlt-container">
@@ -23,7 +23,7 @@
       <el-row>
         <el-col :span="17">
           <view-container title="退纱通知单明细">
-            <div class="btnList"></div>
+            <!-- <div class="btnList"></div> -->
             <avue-crud
               ref="dtlCrudRef"
               :option="dtlCrudOp"
@@ -38,7 +38,7 @@
         </el-col>
         <el-col :span="7">
           <view-container title="货位码明细">
-            <div class="btnList">
+            <!-- <div class="btnList">
               <el-button
                 type="primary"
                 :disabled="hasEdit"
@@ -49,7 +49,7 @@
                 :disabled="hasEdit"
                 @click="handleDelDtla"
               >{{ this.$t("public.del") }}</el-button>
-            </div>
+            </div> -->
             <avue-crud
               ref="dtlaCrudRef"
               :option="retReatDtlaCrudOp"

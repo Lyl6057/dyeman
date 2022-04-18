@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-12 09:07:11
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-18 10:10:50
+ * @LastEditTime: 2022-04-18 16:22:57
  */
 import {
   getDIC,
@@ -317,14 +317,14 @@ export function retReatDtlaCrudOp(_this){
         prop: "packSize",
         width: 120,
         type: "select",
-        cell: true,
+        cell: false,
         dicData: getDIC("bas_yarnPackUnit")
       },{
         label: "货位码",
         prop: "locationCode",
         width: 120,
         overHidden: true,
-        cell: true,
+        cell: false,
         type: "select",
         dicData: getDicNS("whseLocation?warehouseType=0", "locationCode", "locationCode")
       }
