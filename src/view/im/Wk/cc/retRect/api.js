@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-12 10:09:35
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-13 10:51:49
+ * @LastEditTime: 2022-04-18 09:52:49
  */
 import axios from "axios";
 
@@ -83,3 +83,20 @@ export function batchAddOrUpdateRetReatDtlData(dataList){
     })
 }
 
+// 批量新增货位明细数据
+export function batchAddOrUpdateRetReatDtlaData(dataList){
+    return axios({
+        url: "/api/whseRetreatDtla/v1.0/batch/save",
+        method: "post",
+        data: dataList
+    })
+}
+
+// 批量删除货位明细数据
+export function batchRemoveDtlaById(oids){
+    return axios({
+        url: "/api/whseRetreatDtla/v1.0/batch/removeById",
+        method: "post",
+        data: oids
+    })
+}

@@ -4,11 +4,12 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-12 09:07:11
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-14 15:43:45
+ * @LastEditTime: 2022-04-18 10:10:50
  */
 import {
   getDIC,
-  getDicT
+  getDicT,
+  getDicNS
 } from "@/config/index";
 
 let retType = getDIC("whse_retState");
@@ -221,6 +222,7 @@ export function retReatFormOp(_this) {
 export function retReatDtlCrudOp(_this){
   return {
     ...mainCrudOpCommon,
+    height: "calc(100vh - 205px)",
     rowKey:"whseYarninDtloid",
     page:false,
     column: [{
@@ -230,7 +232,7 @@ export function retReatDtlCrudOp(_this){
       },{
         label: "纱线编号",
         prop: "yarnsId",
-        width: 120
+        width: 100
       },{
         label: "纱线名称",
         prop: "yarnsName",
@@ -239,7 +241,7 @@ export function retReatDtlCrudOp(_this){
       },{
         label: "纱牌",
         prop: "yarnsCard",
-        width: 120
+        width: 100
       },{
         label: "供应商批号",
         prop: "batId",
@@ -262,12 +264,12 @@ export function retReatDtlCrudOp(_this){
         label: "退纱重量",
         prop: "retWeight",
         width: 120,
-        cell: true,
+        // cell: true,
         type: "number",
         align: "right",
         precision: 2,
         formatter: (row,value) => {
-          return value && value.toFixed(2)
+          return row.retreatDtlaList.reduce((a,b) => a + +(b.retWeight || 0), 0).toFixed(2)
         }
       },{
         label: "单位",
@@ -277,19 +279,55 @@ export function retReatDtlCrudOp(_this){
         label: "退纱件数",
         prop: "retPcsNum",
         width: 120,
+        type: "number",
+        align: "right",
+        formatter: (row,value) => {
+          return row.retreatDtlaList.reduce((a,b) => a + +(b.retPcs || 0), 0)
+        }
+      }
+    ]
+  }
+}
+
+export function retReatDtlaCrudOp(_this){
+  return {
+    ...mainCrudOpCommon,
+    height: "calc(100vh - 205px)",
+    rowKey:"whseRetreatDtlaoid",
+    page:false,
+    column: [{
+        label: "退纱重量",
+        prop: "retWeight",
+        width: 120,
         cell: true,
         type: "number",
         align: "right",
-        precision: 2,
         formatter: (row,value) => {
           return value && value.toFixed(2)
         }
       },{
+        label: "退纱件数",
+        prop: "retPcs",
+        type: "number",
+        align: "right",
+        width: 100,
+        cell: true
+      },{
         label: "包装规格",
-        prop: "packName",
-        width: 120
-        
-      },
+        prop: "packSize",
+        width: 120,
+        type: "select",
+        cell: true,
+        dicData: getDIC("bas_yarnPackUnit")
+      },{
+        label: "货位码",
+        prop: "locationCode",
+        width: 120,
+        overHidden: true,
+        cell: true,
+        type: "select",
+        dicData: getDicNS("whseLocation?warehouseType=0", "locationCode", "locationCode")
+      }
     ]
   }
 }
