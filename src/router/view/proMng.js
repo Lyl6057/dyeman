@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-01-29 14:14:56
- * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-08 17:22:15
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-04-19 07:53:24
  * @Description:
  */
 export default [
@@ -11,6 +11,15 @@ export default [
     path: "/",
     name: "主页",
     redirect: "/ProWorkflowInfo"
+  },
+  {
+    path: "/dyeDeliveryNote",
+    name: "出库送货单",
+    component: resolve =>
+      require(["@/view/proMng/dyeDeliveryNote/index"], resolve),
+    meta: {
+      keepAlive: true
+    }
   },
   {
     path: "/proWeaveOutworkShip",
@@ -42,8 +51,7 @@ export default [
   {
     path: "/proRpt",
     name: "生产看板",
-    component: resolve =>
-      require(["@/view/proMng/ProRpt/index"], resolve),
+    component: resolve => require(["@/view/proMng/ProRpt/index"], resolve),
     meta: {
       keepAlive: false
     }

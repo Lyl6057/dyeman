@@ -103,61 +103,9 @@
   </div>
 </template>
 <script>
-import { rsxkr2C, rsxkr2F, sxForm, rsxkr3C, rcpb3C } from "./data";
+import { rsxkr2C, rsxkr2F, rcpb3C } from "./data";
 import choice from "@/components/choice";
-import { getPb, getPbDetali, getPbDetaliList, getPbPh } from "@/api/im/Wk/rc";
-import {
-  getPbDetalis,
-  addPbDetali,
-  updatePbDetali,
-  delPbDetali,
-  getPhDetali,
-  addPhDetali,
-  delPhDetali,
-  getMaterial,
-  addMaterial,
-  getPbOutPlan,
-  getPbTransferDtl,
-  addPbTransferDtl,
-  updatePbTransferDtl,
-  delPbTransferDtl,
-  getEmbryogenesisDtl,
-  getPbPlan,
-  // 销售出库
-  getCalicoselloutDtla,
-  addCalicoselloutDtla,
-  updateCalicoselloutDtla,
-  delCalicoselloutDtla,
-  getCalicoselloutDtlb,
-  addCalicoselloutDtlb,
-  delCalicoselloutDtlb,
-  // 退供应商明细
-  getRetsuppcalicoDtl,
-  updateRetsuppcalicoDtl,
-  addRetsuppcalicoDtl,
-  delRetsuppcalicoDtl,
-  // 退客人明细
-  getRetguestcalicodtl,
-  addRetguestcalicodtl,
-  updateRetguestcalicodtl,
-  delRetguestcalicodtl,
-  // 调仓
-  getTransfercalicoDtl,
-  addTransfercalicoDtl,
-  updateTransfercalicoDtl,
-  delTransfercalicoDtl,
-} from "@/api/im/Wk/cc/pb";
 import { baseCodeSupply, updatePurApp } from "@/api/index";
-import {
-  getHgylDtl,
-  addHgylDtl,
-  delHgylDtl,
-  updateHgylDtl,
-  getLyHgylDtlb,
-  addLyHgylDtlb,
-  delLyHgylDtlb,
-  updateLyHgylDtlb,
-} from "@/api/im/Wk/cc/hgyl";
 import proChoice from "@/components/proMng/index";
 import { getLydmx, getSglydmx, updateSglyd, getHgylStock } from "./api";
 export default {
@@ -201,7 +149,6 @@ export default {
       canLeave: false,
       ruleV: false,
       sxV: false,
-      sxformOp: sxForm(this),
       sxform: {},
       outform: {},
       outformOp: rsxkr2F(this),
@@ -240,10 +187,12 @@ export default {
     getDetail() {
       this.loading = true;
       if (this.isAdd) {
+        this.form.sysCreatedby = this.$store.state.userOid;
         this.form = this.detail;
         this.loading = false;
         return;
       }
+      this.form.sysLastUpdBy = this.$store.state.userOid;
       if (
         Object.keys(this.detail).length === 0 ||
         (!this.detail.whseCalicoselloutoid &&
@@ -1116,7 +1065,6 @@ export default {
   },
   created() {},
   mounted() {
-    this.form.sysCreatedby = this.$store.state.userOid;
     this.form = this.detail;
   },
   updated() {

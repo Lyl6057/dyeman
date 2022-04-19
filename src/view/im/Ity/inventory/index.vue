@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-24 14:15:12
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-07 16:43:46
+ * @LastEditTime: 2022-04-19 10:08:11
  * @Description: 
 -->
 <template>
@@ -221,8 +221,8 @@ export default {
           item.yarnsName = item.children[0].yarnsName;
           item.chemicalName = item.children[0].chemicalName;
           item.weightUnit = item.children[0].weightUnit;
-          item.customerName = item.children[0].customerName;
-          item.fabricName = item.children[0].fabricName;
+          // item.custCode = item.children[0].custCode;
+          // item.fabName = item.children[0].fabName;
           item.proName = item.children[0].proName;
           item.clothWeight = 0;
           if (!item.weight) item.weight = 0;
@@ -239,8 +239,8 @@ export default {
             child.yarnsName = "";
             child.chemicalId = "";
             child.chemicalName = "";
-            child.customerName = "";
-            child.fabricName = "";
+            // child.custCode = "";
+            // child.fabName = "";
             child.proName = "";
             item.weight += Number(child.weight) || Number(child.stock);
             item.clothWeight += Number(child.clothWeight || 0);
@@ -264,12 +264,10 @@ export default {
     outTransit() {
       switch (this.form.type) {
         case "CPB":
-          // this.outExcel();
-          // this.$tip.warning("功能待开发!");
+          this.handleOpenRpt("INVENTORY_PRODUCT_STOCK");
           break;
         case "PB":
-          // this.$tip.warning("功能待开发!");
-          this.handleOpenRpt();
+          this.handleOpenRpt("INVENTORY_FINISHED_CLOTH");
           break;
         default:
           this.outExcel();
@@ -277,10 +275,10 @@ export default {
       }
     },
     // 打开报表 获取fineReport的数据
-    handleOpenRpt() {
+    handleOpenRpt(id) {
       let queryData = {
         module: "INV",
-        id: "INVENTORY_FINISHED_CLOTH",
+        id,
       };
       fetchFineReportUrl(queryData).then((res) => {
         if (res.data) {
@@ -346,10 +344,6 @@ export default {
       } catch (e) {
         console.log(e);
       }
-
-      // return;
-      // this.crudOp.title = this.form.$type + "库存明细";
-      // this.$refs.crud.rowExcel();
     },
     add() {
       this.isAdd = false;

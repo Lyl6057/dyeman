@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-01-15 07:51:47
+ * @LastEditTime: 2022-04-16 16:44:59
  * @Description:
  */
 
@@ -189,14 +189,14 @@ export function mainCrud(_this, audit) {
           : _this.detail.auditState && !_this.isAdd
           ? true
           : false,
-        overHidden: true
-        // rules: [
-        //   {
-        //     required: true,
-        //     message: "请選擇訂單編號",
-        //     trigger: "blur"
-        //   }
-        // ]
+        overHidden: true,
+        rules: [
+          {
+            required: true,
+            message: "请選擇訂單編號",
+            trigger: "blur"
+          }
+        ]
         // click: () => {
         //   _this.visible = true
         // }

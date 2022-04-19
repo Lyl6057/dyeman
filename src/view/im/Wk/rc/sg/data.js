@@ -447,7 +447,7 @@ export function rhl2C(_this) {
       {
         label: _this.$t("whseField.sp"),
         prop: "yarnsCard",
-        cell: true,
+        cell: false,
         width: 140,
         type: "select",
         dicData: getDIC("bas_yarnBrand"),

@@ -135,10 +135,7 @@ import {
   delAllLocation,
   getLocationList,
 } from "./api";
-import { getDicNS } from "@/config";
-import { getDIC, getDicT, getXDicT, postDicT, preFixInt } from "@/config";
-import { baseCodeSupply } from "@/api/index";
-import { getUcmlUser } from "@/const/whse.js";
+import { getDIC, preFixInt } from "@/config";
 export default {
   name: "",
   props: {
@@ -727,75 +724,73 @@ export default {
         });
       } else {
         // this.form.whseWarehouseFk = this.form.whseWarehouseoid;
-        getUcmlUser({ usrLogin: parent.userID }).then((Res) => {
-          this.form.sysCreatedby = Res.data.ucmlUseroid;
-          addWarehouse(this.form).then((res) => {
-            if (this.partion.length === 0) {
-              setTimeout(() => {
-                this.wLoading = false;
-              }, 200);
-              this.$tip.success(this.$t("public.bccg"));
-            }
-            this.form.whseWarehouseoid = res.data.data;
-            // this.$emit("getData");
-            let addDtla = (item, i) => {
-              return new Promise((resolve, reject) => {
-                let data = JSON.parse(JSON.stringify(item));
-                data.list = [];
-                data.shelves = [];
-                data.warehouseId = this.form.warehouseId;
-                if (item.whsePartitionoid) {
-                  updatePartition(data).then((res) => {
-                    resolve();
-                  });
-                  // 修改
-                } else {
-                  // 新增
-                  data.whseWarehouseFk = this.form.whseWarehouseoid;
-                  addPartition(data).then((res) => {
-                    item.whsePartitionoid = res.data.data;
-                    resolve();
-                  });
-                }
-              });
-            };
-            let promiseArr = this.partion.map((item, i) => {
-              return addDtla(item, i);
+        this.form.sysCreatedby = this.$store.state.userOid;
+        addWarehouse(this.form).then((res) => {
+          if (this.partion.length === 0) {
+            setTimeout(() => {
+              this.wLoading = false;
+            }, 200);
+            this.$tip.success(this.$t("public.bccg"));
+          }
+          this.form.whseWarehouseoid = res.data.data;
+          // this.$emit("getData");
+          let addDtla = (item, i) => {
+            return new Promise((resolve, reject) => {
+              let data = JSON.parse(JSON.stringify(item));
+              data.list = [];
+              data.shelves = [];
+              data.warehouseId = this.form.warehouseId;
+              if (item.whsePartitionoid) {
+                updatePartition(data).then((res) => {
+                  resolve();
+                });
+                // 修改
+              } else {
+                // 新增
+                data.whseWarehouseFk = this.form.whseWarehouseoid;
+                addPartition(data).then((res) => {
+                  item.whsePartitionoid = res.data.data;
+                  resolve();
+                });
+              }
             });
-            Promise.all(promiseArr).then((res) => {
-              setTimeout(() => {
-                this.wLoading = false;
-              }, 200);
-              this.$tip.success(this.$t("public.bccg"));
-              // if (this.partion[i].list) {
-              //   this.partion[i].list.forEach((item) => {
-              //     item.areaCode = this.chooseData.areaCode;
-              //     item.warehouseId = this.form.warehouseId;
-              //     item.whseWarehouseFk = this.form.whseWarehouseoid;
-              //     if (!item.whseLocationoid) {
-              //       item.whsePartitionFk = this.partion[i].whsePartitionoid;
-              //       addLocation(item).then((res) => {
-              //         item.whseLocationoid = res.data.data;
-              //       });
-              //     } else {
-              //       updateLocation(item).then((res) => {});
-              //     }
-              //   });
-              // }
-              // if (this.partion[i].shelves) {
-              //   addShelves(this.partion[i].shelves).then((res) => {});
-              // }
-            });
-            // if (i === this.partion.length - 1) {
-            //   // this.detail = this.form;
-            //   this.query(1);
-            //   this.isAdd = false;
-            //   setTimeout(() => {
-            //     this.$tip.success(this.$t("public.bccg"));
-            //     // this.wLoading = false;
-            //   }, 200);
+          };
+          let promiseArr = this.partion.map((item, i) => {
+            return addDtla(item, i);
+          });
+          Promise.all(promiseArr).then((res) => {
+            setTimeout(() => {
+              this.wLoading = false;
+            }, 200);
+            this.$tip.success(this.$t("public.bccg"));
+            // if (this.partion[i].list) {
+            //   this.partion[i].list.forEach((item) => {
+            //     item.areaCode = this.chooseData.areaCode;
+            //     item.warehouseId = this.form.warehouseId;
+            //     item.whseWarehouseFk = this.form.whseWarehouseoid;
+            //     if (!item.whseLocationoid) {
+            //       item.whsePartitionFk = this.partion[i].whsePartitionoid;
+            //       addLocation(item).then((res) => {
+            //         item.whseLocationoid = res.data.data;
+            //       });
+            //     } else {
+            //       updateLocation(item).then((res) => {});
+            //     }
+            //   });
+            // }
+            // if (this.partion[i].shelves) {
+            //   addShelves(this.partion[i].shelves).then((res) => {});
             // }
           });
+          // if (i === this.partion.length - 1) {
+          //   // this.detail = this.form;
+          //   this.query(1);
+          //   this.isAdd = false;
+          //   setTimeout(() => {
+          //     this.$tip.success(this.$t("public.bccg"));
+          //     // this.wLoading = false;
+          //   }, 200);
+          // }
         });
       }
     },

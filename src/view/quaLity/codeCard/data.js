@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-01 08:46:05
+ * @LastEditTime: 2022-04-19 10:55:34
  * @Description:
  */
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
@@ -148,9 +148,46 @@ export function mainCrud(_this) {
     page: true,
     labelWidth: 100,
     selection: true,
-    showSummary: false,
+    showSummary: true,
     menuTitle: "称重",
-    // sumColumnList: [],
+    sumColumnList: [
+      {
+        label: "共",
+        name: "vatNo",
+        type: "count",
+        decimals: 1
+      },
+      {
+        label: " ",
+        name: "yardLength",
+        type: "sum",
+        decimals: 1
+      },
+      {
+        label: " ",
+        name: "netWeight",
+        type: "sum",
+        decimals: 1
+      },
+      {
+        label: " ",
+        name: "netWeightLbs",
+        type: "sum",
+        decimals: 1
+      },
+      {
+        label: " ",
+        name: "grossWeight",
+        type: "sum",
+        decimals: 1
+      },
+      {
+        label: " ",
+        name: "grossWeightLbs",
+        type: "sum",
+        decimals: 1
+      }
+    ],
     column: [
       // {
       //   label: "#",

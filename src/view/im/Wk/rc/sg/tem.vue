@@ -156,7 +156,7 @@ export default {
     getDetail() {
       if (this.isAdd) {
         this.screenLoading = true;
-        this.mx = this.addList;
+        this.mx = JSON.parse(JSON.stringify(this.addList));
         // this.form.stockState = 0;
         if (!this.mx.length) {
           this.screenLoading = false;
@@ -646,6 +646,13 @@ export default {
         this.datas === this.$t("choicDlg.rl")
       ) {
         for (let i = 0; i < this.mx.length; i++) {
+          if (
+            this.datas === this.$t("iaoMng.sx") &&
+            (!this.mx[i].yarnsCard || !this.mx[i].batId || !this.mx[i].batchNos)
+          ) {
+            this.$tip.error("纱牌/供应商批号/本厂纱批号不能为空!");
+            return;
+          }
           if (!this.mx[i].list) {
             break;
           }

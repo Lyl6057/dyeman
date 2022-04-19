@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-05-03 13:03:03
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-15 11:19:22
+ * @LastEditTime: 2022-04-19 10:29:09
  * @Description:
  */
 
@@ -49,7 +49,7 @@ export function finishedNoteF(_this) {
         placeholder: " "
       },
       {
-        label: "疋号集合",
+        label: "选中集合",
         prop: "pidNos",
         // tip: "Số lô nhuộm",
         span: 12,
@@ -107,13 +107,13 @@ export function finishedNoteC(_this) {
       }
     ],
     column: [
-      {
-        label: "#",
-        prop: "index",
-        width: 50,
-        align: "center",
-        display: false
-      },
+      // {
+      //   label: "#",
+      //   prop: "index",
+      //   width: 50,
+      //   align: "center",
+      //   display: false
+      // },
       // {
       //   label: "载具编号",
       //   prop: "storeLoadCode",

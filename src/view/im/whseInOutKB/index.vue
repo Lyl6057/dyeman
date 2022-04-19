@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-01-12 15:39:08
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-15 14:48:31
+ * @LastEditTime: 2022-04-18 13:51:07
  * @FilePath: \iot.vue\src\view\im\whseInOutKB\index.vue
  * @Description: 
 -->
@@ -179,7 +179,7 @@ export default {
       },
       mainPage: {
         pageSizes: [50, 100, 200, 500],
-        pageSize: 500,
+        pageSize: 50,
         currentPage: 1,
         total: 0,
       },
@@ -312,10 +312,10 @@ export default {
         this.$tip.error("请输入单号或者载具编号!");
         return;
       }
-      if (!this.form.vatNo && !this.form.proName && this.form.type == 2) {
-        this.$tip.error("单号不能为空!");
-        return;
-      }
+      // if (!this.form.vatNo && !this.form.proName && this.form.type == 2) {
+      //   this.$tip.error("单号不能为空!");
+      //   return;
+      // }
       this.wLoading = true;
       if (this.form.goodsType == 1) {
         this.form.clothState = this.form.type;

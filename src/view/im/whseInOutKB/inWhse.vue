@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-04-08 14:41:23
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-15 13:34:06
+ * @LastEditTime: 2022-04-16 14:57:12
  * @FilePath: \iot.vue\src\view\im\whseInOutKB\inWhse.vue
  * @Description: 
 -->
@@ -149,6 +149,16 @@ export default {
           type: this.form.goodsType, // 物料类别
           // storageCode: list[0].storeLoadCode,
         }).then((sendRes) => {
+          if (sendRes.data.code) {
+            this.$tip.error(sendRes.data.data);
+            this.loading = false;
+            return;
+          }
+          if (sendRes.data == "返回异常") {
+            this.$tip.error(sendRes.data);
+            this.loading = false;
+            return;
+          }
           baseCodeSupplyEx({ code: "whse_in" }).then((bat) => {
             baseCodeSupply({ code: "whse_in" }).then((bat) => {});
             let addList = this.group(list, "storeLoadCode");

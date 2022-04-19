@@ -89,7 +89,7 @@
         </el-col>
       </el-row>
 
-      <el-dialog
+      <!-- <el-dialog
         id="sxPlanDlg"
         :visible.sync="sxV"
         append-to-body
@@ -131,7 +131,7 @@
             ></avue-crud>
           </div>
         </view-container>
-      </el-dialog>
+      </el-dialog> -->
     </view-container>
     <choice
       ref="choice"
@@ -156,7 +156,7 @@
   </div>
 </template>
 <script>
-import { rsxkr2C, rsxkr2F, sxForm, rsxkr3C, rcpb3C } from "./data";
+import { rsxkr2C, rsxkr2F, sxForm, rcpb3C } from "./data";
 import choice from "@/components/choice";
 import { getPb, getPbDetali, getPbDetaliList, getPbPh } from "@/api/im/Wk/rc";
 import {
@@ -254,7 +254,7 @@ export default {
       canLeave: false,
       ruleV: false,
       sxV: false,
-      sxformOp: sxForm(this),
+      sxformOp: {},
       sxform: {},
       outform: {},
       outformOp: rsxkr2F(this),
@@ -298,14 +298,12 @@ export default {
         this.func.updateDetail = updateRetguestcalicodtl;
         this.func.addDetail = addRetguestcalicodtl;
         this.mxOp.column[3].hide = false;
-        // this.mxOp = rsxkr3C(this);
       } else if (this.hide === "4") {
         this.func.getDetail = getRetsuppcalicoDtl;
         this.func.updateDetail = updateRetsuppcalicoDtl;
         this.func.delDetail = delRetsuppcalicoDtl;
         this.func.addDetail = addRetsuppcalicoDtl;
         this.mxOp.column[3].hide = false;
-        // this.mxOp = rsxkr3C(this);
       } else if (this.hide === "5") {
         this.func.getDetail = getTransfercalicoDtl;
         this.func.updateDetail = updateTransfercalicoDtl;
@@ -319,7 +317,6 @@ export default {
         this.func.getPhDetail = getCalicoselloutDtlb;
         this.func.delPhDetail = delCalicoselloutDtlb;
         this.func.addPhDetail = addCalicoselloutDtlb;
-        // this.mxOp = rsxkr3C(this);
       } else if (this.hide === "1") {
         this.func.getDetail = getHgylDtl;
         this.func.delDetail = delHgylDtl;
@@ -329,7 +326,6 @@ export default {
         this.func.delPhDetail = delLyHgylDtlb;
         this.func.updateDtlb = updateLyHgylDtlb;
         this.func.addDtlb = addLyHgylDtlb;
-        // this.mxOp = rsxkr3C(this);
       } else {
         this.func.getDetail = getPbDetalis;
         this.func.delDetail = delPbDetali;
@@ -1749,9 +1745,9 @@ export default {
   mounted() {
     this.sysCreatedby = this.$store.state.userOid;
     // this.rcOp.height = "calc(100vh - 288px)";
-    if (this.hide === "3" || this.hide === "4" || this.hide === "5") {
-      this.mxOp = rsxkr3C(this);
-    }
+    // if (this.hide === "3" || this.hide === "4" || this.hide === "5") {
+    //   this.mxOp = rsxkr3C(this);
+    // }
     if (this.hide === "6") {
       this.detail.retCode = this.detail.woOutno;
       this.detail.retDate = this.detail.woDate;

@@ -387,41 +387,29 @@ export default {
 };
 </script>
 <style lang="stylus">
-#codeCard {
-  .el-tag {
-    font-size: 16px;
-  }
-
-  .avue-form .el-input--mini input {
-    height: 48px !important;
-    line-height: 48px !important;
-  }
-
-  .el-input__inner, .el-form-item__label {
-    font-size: 22px !important;
-    line-height: 45px !important;
-  }
-
-  .el-button, .el-button--mini.is-round {
-    padding: 8px 12px 8px 12px !important;
-    font-size: 20px !important;
-    margin-left: 20px;
-  }
-
-  .historyText {
-    font-size: 22px;
-    text-align: left;
+#codeCard
+  .el-tag
+    font-size 16px
+  .avue-form .el-input--mini input
+    height 48px !important
+    line-height 48px !important
+  .el-input__inner, .el-form-item__label
+    font-size 22px !important
+    line-height 45px !important
+  .el-button, .el-button--mini.is-round
+    padding 8px 12px 8px 12px !important
+    font-size 20px !important
+    margin-left 20px
+  .historyText
+    font-size 22px
+    text-align left
     // text-indent: 1em;
-    margin-left: 10px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    height: 46px;
-    line-height: 46px;
-  }
-
-  .item {
+    margin-left 10px
+    overflow hidden
+    text-overflow ellipsis
+    white-space nowrap
+    height 46px
+    line-height 46px
+  .item
     // margin-bottom: 18px;
-  }
-}
 </style>

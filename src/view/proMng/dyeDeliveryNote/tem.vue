@@ -1,7 +1,7 @@
 <template>
   <div id="colorMng_Tem">
     <view-container
-      title="外发加工送货单管理"
+      title="出库送货单管理"
       :element-loading-text="$t('public.loading')"
       v-loading="wLoading"
     >
@@ -17,7 +17,7 @@
       <div class="formBox">
         <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
       </div>
-      <view-container title="胚布明细">
+      <view-container title="成品布明细">
         <div class="btnList">
           <el-button type="primary" @click="add">{{
             this.$t("public.add")
@@ -63,7 +63,7 @@ import {
   updateNote,
   addNote,
 } from "./api";
-import choice from "@/components/choice";
+import choice from "@/components/proMng/index";
 import { getDIC, getDicT, getXDicT, postDicT, preFixInt } from "@/config";
 import { baseCodeSupply, baseCodeSupplyEx } from "@/api/index";
 // import XLSX from "xlsx";
@@ -85,17 +85,21 @@ export default {
       crudOp: noteCrud(this),
       crud: [],
       page: {
-        pageSize: 10,
+        pageSize: 50,
         currentPage: 1,
         total: 0,
       },
       minRows: 1,
       maxRows: 5,
       choiceV: false,
-      choiceTle: this.$t("choicDlg.xzkh"),
+      choiceTle: "选择成品布",
       choiceTarget: {},
       choiceField: "",
-      choiceQ: {},
+      choiceQ: {
+        cardType: 1,
+        r_clothState_r: "||1||2||3",
+        productNo: "^^%",
+      },
       chooseData: {},
       oldData: {},
       lightDic: [],
@@ -110,37 +114,34 @@ export default {
     getData() {
       this.wLoading = true;
       if (this.isAdd) {
-        //  baseCodeSupplyEx({ code: "dye_batch" }).then((res) => {
-        this.form = {
-          deliDate: this.$getNowTime("datetime"),
-          isAudit: false,
-        };
-        this.wLoading = false;
-        // });
+        baseCodeSupplyEx({ code: "dye_deliveryNote" }).then((res) => {
+          this.form = {
+            outDate: this.$getNowTime("datetime"),
+            outCode: res.data.data,
+            applicant: this.$store.state.userOid,
+          };
+          this.wLoading = false;
+        });
       } else {
         get({
           rows: 1,
           start: 1,
-          shipId: this.detail.shipId,
+          orderId: this.detail.orderId,
         }).then((res) => {
-          if (res.data.records.length) {
-            this.form = res.data.records[0];
-          } else {
-            this.form = this.detail;
-          }
+          this.form = res.data.records[0] || this.detail;
           this.getShipdetail();
         });
       }
     },
     getShipdetail() {
-      if (!this.form.shipId) {
+      if (!this.form.orderId) {
         this.wLoading = false;
         return;
       }
       getNote({
         rows: this.page.pageSize,
         start: this.page.currentPage,
-        outworkShipFk: this.form.shipId,
+        outOrderFk: this.form.orderId,
       }).then((res) => {
         let records = res.data;
         this.page.total = records.total;
@@ -148,9 +149,7 @@ export default {
         this.crud.forEach((item, i) => {
           item.index = i + 1;
         });
-        if (this.crud.length) {
-          this.$refs.crud.setCurrentRow(this.crud[0]);
-        }
+        if (this.crud.length) this.$refs.crud.setCurrentRow(this.crud[0]);
         setTimeout(() => {
           this.wLoading = false;
         }, 200);
@@ -159,25 +158,20 @@ export default {
     save() {
       this.$refs.form.validate((valid, done) => {
         if (valid) {
-          let weight = 0;
-          // 检查布票信息
-          for (let i = 0; i < this.crud.length; i++) {
-            weight += this.crud[i].rw;
-            if (!this.crud[i].noteCode) {
-              this.$tip.warning("布票号不能为空!");
-              done();
-              return;
-            } else if (!this.crud[i].rw) {
-              this.$tip.warning("布票实收重量不能为空!");
-              done();
-              return;
+          const func = (item, index) => {
+            if (!item.vatNo || !item.productNo) {
+              return false;
             }
+            return true;
+          };
+          if (!this.crud.every(func)) {
+            this.$tip.warning("缸号/成品布编号不能为空!");
+            done();
+            return;
           }
           this.wLoading = true;
           try {
-            this.form.deliQty = weight;
-            if (this.form.shipId) {
-              // update
+            if (this.form.orderId) {
               update(this.form)
                 .then((res) => {
                   this.refresh = true;
@@ -187,10 +181,12 @@ export default {
                   this.$tip.error("保存失败!" + err);
                 });
             } else {
-              // update
               add(this.form)
                 .then((res) => {
-                  this.form.shipId = res.data.data;
+                  baseCodeSupply({ code: "dye_deliveryNote" }).then(
+                    (res) => {}
+                  );
+                  this.form.orderId = res.data.data;
                   this.refresh = true;
                   this.saveNote();
                 })
@@ -205,19 +201,19 @@ export default {
         } else {
           this.wLoading = false;
           done();
-          this.$tip.error("请补充报告信息!");
+          this.$tip.error("请补充送货单信息!");
         }
       });
     },
     saveNote() {
       if (this.crud.length) {
         this.crud.forEach((item, i) => {
-          if (item.noteId) {
+          if (item.dtlId) {
             updateNote(item).then((res) => {});
           } else {
-            item.outworkShipFk = this.form.shipId;
+            item.outOrderFk = this.form.orderId;
             addNote(item).then((res) => {
-              item.noteId = res.data.data;
+              item.orderId = res.data.data;
             });
           }
           if (i == this.crud.length - 1) {
@@ -233,18 +229,14 @@ export default {
       }
     },
     add() {
-      this.crud.push({
-        index: this.crud.length + 1,
-      });
-      this.$refs.crud.setCurrentRow(this.crud[this.crud.length - 1]);
+      this.choiceV = true;
     },
     del() {
       if (Object.keys(this.chooseData).length === 0) {
         this.$tip.error(this.$t("public.delTle"));
         return;
       }
-      if (!this.chooseData.noteId) {
-        this.$tip.success(this.$t("public.sccg"));
+      if (!this.chooseData.dtlId) {
         this.crud.splice(this.chooseData.index - 1, 1);
         this.crud.forEach((item, i) => {
           item.index = i + 1;
@@ -256,14 +248,14 @@ export default {
       }
       this.$tip
         .cofirm(
-          "是否确定删除布票号为 【 " +
-            this.chooseData.noteCode +
+          "是否确定删除成品编号为 【 " +
+            this.chooseData.productNo +
             this.$t("iaoMng.delTle2"),
           this,
           {}
         )
         .then(() => {
-          delNote(this.chooseData.noteId)
+          delNote(this.chooseData.dtlId)
             .then((res) => {
               if (res.data.code === 200) {
                 this.$tip.success(this.$t("public.sccg"));
@@ -286,7 +278,6 @@ export default {
           this.$tip.warning(this.$t("public.qxcz"));
         });
     },
-
     cellClick(val) {
       this.oldData.$cellEdit = false;
       this.$set(val, "$cellEdit", true);
@@ -302,30 +293,20 @@ export default {
       }
     },
     choiceData(val) {
-      if (Object.keys(val).length === 0) {
+      this.wLoading = true;
+      if (val.length === 0) {
         this.choiceV = false;
         return;
       }
-      this.choiceTarget[this.choiceField] = val[this.choiceField];
-      if (this.choiceTle === this.$t("choicDlg.xzkh")) {
-        this.form.custCode = val.custCode;
-        this.form.custName = val.custName;
-      }
-      if (this.choiceTle === this.$t("choicDlg.pbbm")) {
-        this.form.fabCode = val.calicoId;
-        this.form.fabricDesc = val.gustCalicoName;
-      }
-      if (this.choiceTle === this.$t("choicDlg.xzshxx")) {
-        this.form.colorBh = val.colorNo;
-        this.form.colorChn = val.colorName;
-      }
-      for (let key in val) {
-        delete val[key];
-      }
-      for (let key in this.choiceQ) {
-        delete this.choiceQ[key];
-      }
+      this.crud = this.crud.concat(val);
+      this.crud = this.$unique(this.crud, "productNo");
+      this.crud.forEach((item, i) => {
+        item.index = i + 1;
+      });
       this.choiceV = false;
+      setTimeout(() => {
+        this.wLoading = false;
+      }, 200);
     },
   },
   created() {},

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-05 10:37:54
+ * @LastEditTime: 2022-04-18 16:10:39
  * @Description:
 -->
 <template>
@@ -97,6 +97,13 @@
             :disabled="!selectList.length"
             >{{ secondF.delFlag ? "恢复" : "删除" }}</el-button
           >
+          <el-button
+            type="primary"
+            @click="splitNote"
+            v-if="!secondF.delFlag"
+            :disabled="!detail.cardId"
+            >拆布</el-button
+          >
         </el-row>
         <el-row class="formBox">
           <avue-form ref="form" :option="secondFOp" v-model="secondF">
@@ -110,22 +117,75 @@
             :page.sync="secondPage"
             v-loading="tloading"
             @on-load="query"
+            @cell-click="cellClick"
             @selection-change="selectionChange"
           >
           </avue-crud>
         </el-row>
       </el-tab-pane>
     </el-tabs>
+    <el-dialog
+      id="colorMng_Dlg"
+      :visible.sync="splitDlg"
+      width="80%"
+      top="10vh"
+      append-to-body
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+    >
+      <view-container
+        title="拆布预览"
+        v-loading="splitLoading"
+        :element-loading-text="$t('public.loading')"
+      >
+        <div class="btnList">
+          <el-popover placement="right" width="160" v-model="visible">
+            <p>是否确定保存？</p>
+            <div style="text-align: right">
+              <el-button size="mini" type="text" @click="visible = false"
+                >取消</el-button
+              >
+              <el-button type="primary" size="mini" @click="splitSubmit"
+                >确定</el-button
+              >
+            </div>
+            <el-button type="success" slot="reference">{{
+              this.$t("public.save")
+            }}</el-button>
+          </el-popover>
+
+          <el-button
+            type="warning"
+            @click="splitDlg = false"
+            style="margin-left: 10px"
+            >{{ this.$t("public.close") }}</el-button
+          >
+          <span class="btn-right-title"> 缸号： {{ detail.vatNo }}</span>
+        </div>
+        <el-row class="formBox">
+          <avue-form ref="form" :option="splitOp" v-model="splitF"> </avue-form>
+        </el-row>
+      </view-container>
+    </el-dialog>
   </div>
 </template>
 <script>
-import { mainForm, mainCrud, secondForm, secondCrud } from "./data";
-import { get, getFinishList, updateFinished, getFinish, del } from "./api";
+import { mainForm, mainCrud, secondForm, secondCrud, splitForm } from "./data";
+import {
+  get,
+  getFinishList,
+  updateFinished,
+  getFinish,
+  del,
+  addFinished,
+} from "./api";
 export default {
   name: "qcDeatilReport",
   components: {},
   data() {
     return {
+      splitOp: splitForm(this),
+      splitF: {},
       checkData: [],
       finishedNotes: [],
       vatList: [],
@@ -152,10 +212,14 @@ export default {
       secondCOp: secondCrud(this),
       secondC: [],
       secondPage: {
-        pageSize: 100,
+        pageSize: 20,
         pageSizes: [20, 50, 100, 200, 500],
         total: 0,
       },
+      splitDlg: false,
+      detail: {},
+      visible: false,
+      splitLoading: false,
     };
   },
   watch: {},
@@ -233,11 +297,7 @@ export default {
     },
     query() {
       this.tloading = true;
-      // for (let key in this.secondF) {
-      //   if (!this.secondF[key]) {
-      //     delete this.secondF[key];
-      //   }
-      // }
+      this.detail = {};
       let data = JSON.parse(JSON.stringify(this.secondF));
       let r_clothCheckTime_r = "";
       if (data.clothCheckTime && data.clothCheckTime.length) {
@@ -261,15 +321,18 @@ export default {
         r_clothCheckTime_r
       ).then((res) => {
         this.secondC = res.data.records;
-        if (this.secondC.length > 0) {
-          this.$refs.secondcrud.setCurrentRow(this.secondC[0]);
-        }
         this.secondC.forEach((item, i) => {
           item.index = i + 1;
         });
         this.secondPage.total = res.data.total;
+        if (!this.secondC.length) this.tloading = false;
         setTimeout(() => {
-          this.tloading = false;
+          this.$nextTick(() => {
+            if (this.secondC.length) {
+              this.$refs.secondcrud.setCurrentRow();
+              this.tloading = false;
+            }
+          });
         }, 200);
       });
     },
@@ -309,8 +372,47 @@ export default {
         });
       }
     },
+    cellClick(val) {
+      this.detail = val;
+    },
     selectionChange(val) {
       this.selectList = val;
+    },
+    splitNote() {
+      this.splitDlg = true;
+      this.splitF = Object.assign(this.detail, {
+        vatNoNew: this.detail.vatNo,
+        pidNoNew: this.detail.pidNo + 100,
+        productNoNew: this.detail.vatNo + (this.detail.pidNo + 100),
+        netWeightNew: 0,
+        netWeightNewLbs: 0,
+      });
+    },
+    splitSubmit() {
+      if (!this.splitF.netWeightNew || !this.splitF.netWeight) {
+        this.$tip.warning("重量不能为空!");
+        return;
+      }
+      this.splitLoading = true;
+      updateFinished(this.splitF).then((res) => {});
+      let data = JSON.parse(JSON.stringify(this.splitF));
+      data.netWeight = data.netWeightNew;
+      data.netWeightLbs = data.netWeightNewLbs;
+      data.productNo = data.productNoNew;
+      data.pidNo = data.pidNoNew;
+      addFinished(data).then((res) => {
+        if (res.data.code == 200) {
+          this.$tip.success("保存成功!");
+        } else {
+          this.$tip.error("保存成功!");
+        }
+        setTimeout(() => {
+          this.query();
+          this.visible = false;
+          this.splitDlg = false;
+          this.splitLoading = false;
+        }, 200);
+      });
     },
   },
   updated() {},
@@ -320,6 +422,11 @@ export default {
 };
 </script>
 <style lang='stylus'>
+>>>.avue-group--header
+  display none
+.btn-right-title
+  font-size 17px
+  margin-left 1em
 #modifyFinished
   .el-checkbox
     margin-right 0px

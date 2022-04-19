@@ -15,7 +15,7 @@
       </div>
 
       <div class="formBox">
-        <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
+        <avue-form ref="form" :option="formOp" v-model="form"> </avue-form>
       </div>
       <!-- <view-container title="色号资料">
         <div class="crudBox" style="margin-top: 5px">
@@ -118,6 +118,7 @@ export default {
             updateLabTapcolor(this.form)
               .then((res) => {
                 this.wLoading = false;
+                done();
                 this.$tip.success(this.$t("public.bccg"));
               })
               .catch((err) => {
@@ -125,23 +126,12 @@ export default {
                 this.$tip.error("保存失败!" + err);
               });
           } else {
-            // add
-            if (this.form.deputyLights.length > 0) {
-              let data = "";
-              this.form.deputyLights.forEach((item, i) => {
-                if (i === this.form.deputyLights.length - 1) {
-                  data += item;
-                } else {
-                  data += item + ",";
-                }
-              });
-              this.form.deputyLights = data;
-            }
             addLabTapcolor(this.form)
               .then((res) => {
                 baseCodeSupply({ code: "color_num" }).then((res) => {});
                 this.form.labTapcoloroid = res.data.data;
                 this.wLoading = false;
+                done();
                 this.$tip.success(this.$t("public.bccg"));
               })
               .catch((err) => {
@@ -193,7 +183,7 @@ export default {
             this.formOp.column[2].maxRows = 1.2;
             break;
           default:
-            this.form.dyeWeight = 0;
+            this.form.dyeWeight = this.isAdd ? 0 : this.form.dyeWeight;
             this.formOp.column[2].minRows = 0;
             this.formOp.column[2].maxRows = 100;
             break;
@@ -203,9 +193,11 @@ export default {
           codeId: this.form.colorDepth,
           codeTableId: "bas_colorclTepth",
         }).then((res) => {
-          // this.form.colorNo =
-          //   this.code[0].label + res.data[0].reserved1 + this.codeSupplyNum;
-          this.form.colorNo = res.data[0].reserved1 + this.codeSupplyNum;
+          this.form.colorNo =
+            res.data[0].reserved1 +
+            (this.isAdd
+              ? this.codeSupplyNum
+              : this.form.colorNo.replace(/[^0-9]/gi, ""));
         });
       });
     },
@@ -213,26 +205,22 @@ export default {
       this.$nextTick(() => {
         if (this.form.colorLights != "" && this.form.colorLights != null) {
           this.$set(this.formOp.column[18], "disabled", false);
-          // this.form.deputyLights = "";
+          this.$set(this.formOp.column[19], "disabled", false);
           let data = JSON.parse(JSON.stringify(this.formOp.column[18].dicData));
-          data.forEach((item, i) => {
-            // this.$nextTick(() => {
-            if (this.form.colorLights === item.value) {
-              // this.$set(item, "disabled", true);
-              item.disabled = true;
-            } else {
-              // this.$set(item, "disabled", false);
-              item.disabled = false;
-            }
-            // });
-            if (i === data.length - 1) {
-              // this.formOp.column[18].dicData = data;
-              this.$set(this.formOp.column[18], "dicData", data);
-            }
-          });
+          let data1 = data.filter(
+            (item) => item.value != this.form.colorLights
+          );
+          let data2 = data.filter(
+            (item) =>
+              item.value != this.form.colorLights &&
+              item.value != this.form.deputyLights
+          );
+          this.$set(this.formOp.column[18], "dicData", data1);
+          this.$set(this.formOp.column[19], "dicData", data2);
         } else {
           this.$set(this.form, "deputyLights", "");
           this.$set(this.formOp.column[18], "disabled", true);
+          this.$set(this.formOp.column[19], "disabled", true);
         }
       });
       // else {

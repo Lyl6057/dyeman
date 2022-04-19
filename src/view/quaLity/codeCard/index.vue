@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-01 08:57:35
+ * @LastEditTime: 2022-04-19 10:53:53
  * @Description:
 -->
 <template>
@@ -82,10 +82,10 @@
           @on-load="query"
           @row-dblclick="handleRowDBLClick"
           @current-row-change="cellClick"
-          :summary-method="summaryMethod"
           @selection-change="selectionChange"
         >
           <!--  @sort-change="sortChange" -->
+          <!-- :summary-method="summaryMethod" -->
           <!-- <template slot="menu">
             <el-button size="small" type="primary" @click="weighing"
               >称重</el-button
@@ -490,25 +490,25 @@ export default {
     selectionChange(list) {
       this.selectList = list;
     },
-    summaryMethod({ columns, data }) {
-      const sums = [];
-      if (columns.length > 0) {
-        columns.forEach((column, index) => {
-          if (index == 0) {
-            sums[index] = "合計";
-          }
-          if (index == 2) {
-            let num = 0;
-            this.selectList.forEach((item) => {
-              num += Number(item.netWeight);
-            });
-            sums[index] = "選中重量：" + num.toFixed(1);
-            this.checkSum = num.toFixed(1);
-          }
-        });
-      }
-      return sums;
-    },
+    // summaryMethod({ columns, data }) {
+    //   const sums = [];
+    //   if (columns.length > 0) {
+    //     columns.forEach((column, index) => {
+    //       if (index == 0) {
+    //         sums[index] = "合計";
+    //       }
+    //       if (index == 2) {
+    //         let num = 0;
+    //         this.selectList.forEach((item) => {
+    //           num += Number(item.netWeight);
+    //         });
+    //         sums[index] = "選中重量：" + num.toFixed(1);
+    //         this.checkSum = num.toFixed(1);
+    //       }
+    //     });
+    //   }
+    //   return sums;
+    // },
     async outExcel(type) {
       if (!this.form.vatNo) {
         this.$tip.warning("请先输入缸号!");

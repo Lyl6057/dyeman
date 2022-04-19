@@ -53,71 +53,6 @@
         @updateList="updateList"
       >
       </tem>
-      <!-- <div class="formBox">
-          <avue-form
-            ref="form"
-            :option="outformOp"
-            v-model="outform"
-          ></avue-form>
-        </div>
-        <view-container :title="tle + '出庫單明細'">
-          <div class="btnList">
-            <el-button type="primary" @click="addDetail" :disabled="!canSave"
-              >{{this.$t("public.add")}}</el-button
-            >
-            <el-button type="danger" @click="delDetail" :disabled="!canSave"
-              >{{ this.$t("public.del") }}</el-button
-            >
-          </div>
-          <div class="crudBox">
-            <avue-crud
-              ref="outcrud1"
-              id="outcrud"
-              :option="outcrudOp"
-              :data="outcrud"
-              :page.sync="outpage"
-              @on-load="getDetali"
-              @current-row-change="cellDetailClick"
-            ></avue-crud>
-          </div>
-          <el-dialog
-            id="sxPlanDlg"
-            :visible.sync="sxV"
-            append-to-body
-            fullscreen
-            :close-on-click-modal="false"
-            :close-on-press-escape="false"
-            :before-close="sxclose"
-            v-if="sxV"
-          >
-            <view-container title="選擇紗線配料">
-              <div class="btnList">
-                <el-button type="primary" @click="getSxData">{{this.$t("public.query")}}</el-button>
-                <el-button type="success" @click="check">{{this.$t("public.choose")}}</el-button>
-                <el-button type="warning" @click="sxclose">{{this.$t("public.close")}}</el-button>
-              </div>
-              <div class="formBox">
-                <avue-form
-                  ref="sxform"
-                  :option="sxformOp"
-                  v-model="sxform"
-                ></avue-form>
-              </div>
-              <div class="crudBox">
-                <avue-crud
-                  ref="sxcrud"
-                  id="sxcrud"
-                  :option="outcrudOp"
-                  :data="sxcrud"
-                  :page.sync="sxpage"
-                  v-loading="loading"
-                  @on-load="getSxData"
-                  @selection-change="sxselectionChange"
-                ></avue-crud>
-              </div>
-            </view-container>
-          </el-dialog>
-        </view-container> -->
     </el-dialog>
     <el-dialog
       id="wkRuleDlg"
@@ -135,14 +70,7 @@
   </div>
 </template>
 <script>
-import {
-  planCrud,
-  PlanOutCrud,
-  planForm,
-  rsxkr2F,
-  sxForm,
-  rsxkr2C,
-} from "./data";
+import { planCrud, PlanOutCrud, planForm, rsxkr2F, rsxkr2C } from "./data";
 import rule from "@/components/rule";
 import tem from "./tem";
 import { baseCodeSupply } from "@/api/index";
@@ -196,8 +124,6 @@ export default {
       outformOp: rsxkr2F(this),
       outcrudOp: rsxkr2C(this),
       outcrud: [],
-      sxform: {},
-      sxformOp: sxForm(this),
       sxcrud: [{ index: 0 }],
       chooseData: {},
       planV: false,
@@ -289,41 +215,7 @@ export default {
       //   });
       // });
     },
-    getSxData() {
-      this.sxloading = true;
-      for (var key in this.sxform) {
-        if (this.sxform[key] === "") {
-          delete this.sxform[key];
-        }
-      }
-      getSxDetali(
-        Object.assign(this.sxform, {
-          rows: this.sxpage.pageSize,
-          start: this.sxpage.currentPage,
-          yarnsId: this.outform.yarnsId,
-          // yarnsName: this.outform.$yarnsName,
-        })
-      ).then((res) => {
-        let records = res.data;
-        this.sxpage.total = records.total;
-        this.sxcrud = records.records;
-        if (this.sxcrud.length === 0) {
-          this.sxloading = false;
-        }
-        this.sxcrud.forEach((item, index) => {
-          item.index = index + 1;
-          item.yarnsName = item.yarnsId;
-          // setTimeout(() => {
-          //   if (item.$yarnsName === item.yarnsName) {
-          //     this.$set(item, "yarnsName", "");
-          //   }
-          // }, 200);
-          if (index === this.sxcrud.length - 1) {
-            this.sxloading = false;
-          }
-        });
-      });
-    },
+
     outOrder() {
       if (Object.keys(this.chooseData).length > 0) {
         this.outform = this.chooseData;
@@ -465,28 +357,18 @@ export default {
 };
 </script>
 <style lang='stylus'>
-#sxPlanDlg {
-  .el-dialog__header {
-    padding: 0;
-  }
-
-  .el-card {
-    border: none;
-  }
-
-  .el-dialog__body {
-    padding: 0 !important;
-  }
-
-  .el-dialog__header {
-    padding: 0px;
-    background-color: rgb(2, 26, 60);
-  }
-
-  .formBox {
-    margin-bottom: 0px;
-  }
-
+#sxPlanDlg
+  .el-dialog__header
+    padding 0
+  .el-card
+    border none
+  .el-dialog__body
+    padding 0 !important
+  .el-dialog__header
+    padding 0px
+    background-color rgb(2, 26, 60)
+  .formBox
+    margin-bottom 0px
   // .el-button--mini, .el-button--small {
   // font-size: 16px;
   // }
@@ -494,30 +376,22 @@ export default {
   // .el-button--mini, .el-button--mini.is-round {
   // padding: 5px 10px;
   // }
-  .avue-crud__menu {
-    min-height: 5px !important;
-    height: 5px !important;
-  }
-
-  .el-tabs__item {
-    font-size: 18px;
-    line-height: 30px;
-    height: 30px;
-  }
-
-  .el-table__header-wrapper, .el-form-item__label, .el-input--mini {
+  .avue-crud__menu
+    min-height 5px !important
+    height 5px !important
+  .el-tabs__item
+    font-size 18px
+    line-height 30px
+    height 30px
+  .el-table__header-wrapper, .el-form-item__label, .el-input--mini
     // font-size: 16px !important;
     // font-weight: 600 !important;
     // color: #000;
-  }
-
-  .el-dialog {
-    margin-top: 0 !important;
-    height: 100%;
-    margin: 0 !important;
-    background-color: rgb(2, 26, 60);
-  }
-
+  .el-dialog
+    margin-top 0 !important
+    height 100%
+    margin 0 !important
+    background-color rgb(2, 26, 60)
   // .avue-form__group {
   // background-color: #fff;
   // }
@@ -525,29 +399,18 @@ export default {
   // .el-table--mini td, .el-table--mini th {
   // padding: 2px 0 !important;
   // }
-  .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item {
-    margin-bottom: 10px;
-  }
-
-  .avue-crud__tip {
-    display: none;
-  }
-
-  .el-dialog__header {
-    padding: 0px;
-  }
-
-  .el-dialog__headerbtn {
-    top: 5px;
-    color: #000;
-    font-size: 22px;
-    z-index: 999;
-  }
-}
-
-#outPlan {
-  .el-input.is-disabled .el-input__inner {
-    color: #606266;
-  }
-}
+  .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item
+    margin-bottom 10px
+  .avue-crud__tip
+    display none
+  .el-dialog__header
+    padding 0px
+  .el-dialog__headerbtn
+    top 5px
+    color #000
+    font-size 22px
+    z-index 999
+#outPlan
+  .el-input.is-disabled .el-input__inner
+    color #606266
 </style>

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-04 10:07:35
+ * @LastEditTime: 2022-04-18 13:10:23
  * @Description:
  */
 
@@ -423,11 +423,11 @@ export function mainCrud(_this) {
         label: "单位",
         prop: "wmUnit",
         tip: "unit",
-        labelWidth: 90,
+        labelWidth: 60,
         width: 80,
-        span: 5,
+        span: 4,
         placeholder: " ",
-        type: "switch",
+        type: "select",
         dicData: [
           {
             label: "KG",
@@ -436,6 +436,10 @@ export function mainCrud(_this) {
           {
             label: "LBS",
             value: "LBS"
+          },
+          {
+            label: "套/Bộ",
+            value: "SET"
           }
         ]
       },
@@ -443,9 +447,9 @@ export function mainCrud(_this) {
         label: "疋數",
         prop: "pidCount",
         tip: "Cây",
-        labelWidth: 50,
+        labelWidth: 70,
         width: 100,
-        span: 3,
+        span: 4,
         type: "number",
         align: "right",
         placeholder: " "

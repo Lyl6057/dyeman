@@ -157,7 +157,7 @@ export default {
       changeList: [],
       canLeave: false,
       ruleV: false,
-      sxformOp: sxForm(this),
+      sxformOp: {},
       sxform: {},
       outform: {},
       outformOp: rsxkr2F(this),

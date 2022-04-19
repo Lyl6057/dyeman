@@ -427,15 +427,6 @@ export function rcpb3C(_this) {
         cell: true,
         width: 180
       },
-      // {
-      //   label: _this.$t("whseField.gh"),
-      //   prop: "batchNo",
-      //   cell: true, width: 150,
-      //   hide: _this.hide != '6' ? true : false,
-      //   // type: "select",
-      //   // dicData: getDicT("whseCalicoinDtla/v1.0/list", "prodNo", "whseCalicoinDtlaoid"),
-
-      // },
       {
         label: _this.$t("whseField.ph2"),
         prop: "countingNo",
@@ -480,172 +471,6 @@ export function rcpb3C(_this) {
   };
 }
 
-let rsxkr3CDic = getXDicT("whseCalicoinDtla/v1.0/list");
-// 退供应商、客人明细
-export function rsxkr3C(_this) {
-  return {
-    menu: false,
-    addBtn: false,
-    border: true,
-    highlightCurrentRow: true,
-    height: "calc(100vh - 287px)",
-    refreshBtn: false,
-    columnBtn: false,
-    page: true,
-    showSummary: true,
-    sumColumnList: [
-      {
-        label: " ",
-        name: "retTotalpi",
-        type: "sum"
-      },
-      {
-        label: " ",
-        name: "retTotalweight",
-        type: "sum"
-      }
-    ],
-    column: [
-      {
-        prop: "index",
-        label: "#",
-        width: 50,
-        align: "center"
-      },
-      {
-        label: "whseRetreatDtloid",
-        prop: "whseRetreatDtloid",
-        hide: true
-      },
-      {
-        label: _this.$t("whseField.rcbh"),
-        prop: "$whseCalicoinFk",
-        cell: false,
-        width: 140,
-        type: "select",
-        dicData: getDicT("whseCalicoin/v1.0/list", "yinId", "whseCalicoinoid"),
-        hide: _this.hide === "5" ? true : false
-      },
-      {
-        label: "入仓编号2",
-        prop: "whseCalicoinFk",
-        cell: false,
-        width: 500,
-        type: "select",
-        props: {
-          label: "whseCalicoinFk",
-          value: "whseCalicoinDtlaoid"
-        },
-        dicData: rsxkr3CDic,
-        hide: _this.hide === "5" ? true : false
-      },
-      {
-        label: "胚布编码",
-        prop: "calicoId",
-        cell: false,
-        width: 140,
-        type: "select",
-        props: {
-          label: "calicoId",
-          value: "whseCalicoinDtlaoid"
-        },
-        dicData: rsxkr3CDic,
-        hide: _this.hide === "5" ? true : false
-      },
-      // {
-      //   label: _this.$t("whseField.pbmc"),
-      //   prop: "clothName",
-      //   cell: true,
-      //   width: 140,
-      //   type: "select",
-      //   dicData: getDicT("whseYarninDtl/v1.0/list", "yarnsId", "whseYarninDtloid"),
-      // },
-      {
-        label: _this.$t("whseField.scdh"),
-        prop: "prodNo",
-        cell: false,
-        width: 140,
-        dicData: getDicT(
-          "whseCalicoinDtla/v1.0/list",
-          "prodNo",
-          "whseCalicoinDtlaoid"
-        ),
-        hide: _this.hide != "5" ? true : false
-      },
-      {
-        label: _this.$t("whseField.ph"),
-        prop: "batchNo",
-        cell: false,
-        width: 180,
-        type: "select",
-        props: {
-          label: "batchNo",
-          value: "whseCalicoinDtlaoid"
-        },
-        dicData: rsxkr3CDic
-      },
-      {
-        label: _this.$t("whseField.ps"),
-        prop: "countingNo",
-        cell: false,
-        width: 100,
-        align: "right",
-        type: "select",
-        props: {
-          label: "countingNo",
-          value: "whseCalicoinDtlaoid"
-        },
-        dicData: rsxkr3CDic,
-        hide: _this.hide === "5" ? true : false
-      },
-      {
-        label: _this.$t("whseField.zl"),
-        prop: "weight",
-        cell: false,
-        width: 140,
-        align: "right",
-        type: "select",
-        props: {
-          label: "weight",
-          value: "whseCalicoinDtlaoid"
-        },
-        dicData: rsxkr3CDic
-      },
-      {
-        label: "退回总疋数",
-        prop: "retTotalpi",
-        cell: true,
-        width: 140,
-        align: "right",
-        hide: _this.hide === "5" ? true : false
-      },
-      {
-        label: "退回重量",
-        prop: "retTotalweight",
-        cell: true,
-        width: 140,
-        align: "right",
-        hide: _this.hide === "5" ? true : false
-      },
-      {
-        label: "调仓重量",
-        prop: "traWeight",
-        cell: true,
-        width: 140,
-        align: "right",
-        hide: _this.hide != "5" ? true : false
-      },
-      {
-        label: _this.$t("whseField.dw"),
-        prop: "retCompany",
-        cell: false,
-        width: 100,
-        type: "select",
-        dicData: getDIC("bas_matUnit")
-      }
-    ]
-  };
-}
 // 本廠配料
 export function planCrud(_this) {
   return {
@@ -925,15 +750,6 @@ export function sxForm(_this) {
       //   span: 6,
       //   placeholder: " ",
       //   disabled: true
-      // },
-      // {
-      //   label: _this.$t("whseField.scdh"),
-      //   prop: "prodNo",
-      //   span: 6,
-      //   placeholder: " ",
-      //   disabled: false,
-      //   type: "tree",
-      //   dicData: getDicT("whseCalicoinDtla/v1.0/list", "prodNo", "whseCalicoinDtlaoid"),
       // },
 
       {
