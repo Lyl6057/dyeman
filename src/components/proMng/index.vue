@@ -34,7 +34,7 @@
           <div class="crudBox">
             <avue-crud
               id="proChoice"
-              ref="crud"
+              ref="proChoice"
               :option="choiceC"
               :data="crud"
               :page.sync="page"
@@ -235,11 +235,11 @@ export default {
         });
       } else {
         let queryData = JSON.parse(JSON.stringify(this.form));
-        queryData.vatNo = "!^%" + (queryData.vatNo || "");
-        queryData.poNo = "!^%" + (queryData.poNo || "");
-        queryData.weaveJobCode = "!^%" + (queryData.weaveJobCode || "");
-        queryData[this.choiceQ.sortF] =
-          "!^%" + (queryData[this.choiceQ.sortF] || "");
+        if (this.choiceQ.sortF) {
+          queryData[this.choiceQ.sortF] =
+            "^^%" + (queryData[this.choiceQ.sortF] || "");
+        }
+
         this.getData(
           Object.assign(queryData, this.choiceQ, {
             rows: this.page.pageSize,

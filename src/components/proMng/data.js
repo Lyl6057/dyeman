@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-05-03 13:03:03
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-13 14:11:01
+ * @LastEditTime: 2022-04-19 10:29:09
  * @Description:
  */
 
@@ -49,11 +49,25 @@ export function finishedNoteF(_this) {
         placeholder: " "
       },
       {
-        label: "成品编号",
-        prop: "productNo",
-        tip: "Số lô nhuộm",
-        span: 6,
-        placeholder: " "
+        label: "选中集合",
+        prop: "pidNos",
+        // tip: "Số lô nhuộm",
+        span: 12,
+        placeholder: " ",
+        change: val => {
+          if (!val.value) {
+            return;
+          }
+          _this.$refs.proChoice.toggleSelection();
+          _this.$nextTick(() => {
+            val.value.split(",").forEach(item => {
+              let data = _this.crud[Number(item) - 1];
+              if (data) {
+                _this.$refs.proChoice.toggleRowSelection(data);
+              }
+            });
+          });
+        }
       }
     ]
   };
@@ -70,17 +84,14 @@ export function finishedNoteC(_this) {
     border: true,
     index: false,
     highlightCurrentRow: true,
-    height: "calc(100vh - 250px)",
+    height: "calc(100vh - 260px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
     labelWidth: 100,
     selection: true,
     menuTitle: "称重",
-    rowKey: "id",
-    tree: true,
-    defaultExpandAll: true,
-    expandLevel: 2,
+    rowKey: "cardId",
     showSummary: false,
     sumColumnList: [
       {
@@ -96,13 +107,13 @@ export function finishedNoteC(_this) {
       }
     ],
     column: [
-      {
-        label: "#",
-        prop: "index",
-        width: 50,
-        align: "center",
-        display: false
-      },
+      // {
+      //   label: "#",
+      //   prop: "index",
+      //   width: 50,
+      //   align: "center",
+      //   display: false
+      // },
       // {
       //   label: "载具编号",
       //   prop: "storeLoadCode",

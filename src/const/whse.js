@@ -4203,12 +4203,12 @@ export const PbDltbC = {
       prop: "prodNo",
       cell: true,
       width: 140,
-      type: "select",
-      dicData: getDicT(
-        "whseCalicoinDtla/v1.0/list",
-        "prodNo",
-        "whseCalicoinDtlaoid"
-      )
+      type: "select"
+      // dicData: getDicT(
+      //   "whseCalicoinDtla/v1.0/list",
+      //   "prodNo",
+      //   "whseCalicoinDtlaoid"
+      // )
     },
     {
       label: i18n.t("whseField.ph"),
@@ -4310,8 +4310,8 @@ export const PbDetaliC = {
       prop: "$whseCalicoinFk",
       cell: true,
       width: 150,
-      type: "select",
-      dicData: getDicT("whseCalicoin/v1.0/list", "yinId", "whseCalicoinoid")
+      type: "select"
+      // dicData: getDicT("whseCalicoin/v1.0/list", "yinId", "whseCalicoinoid")
     },
     {
       label: "入仓编号2",
@@ -4323,8 +4323,8 @@ export const PbDetaliC = {
       props: {
         label: "whseCalicoinFk",
         value: "whseCalicoinDtlaoid"
-      },
-      dicData: getXDicT("whseCalicoinDtla/v1.0/list")
+      }
+      // dicData: getXDicT("whseCalicoinDtla/v1.0/list")
     },
     {
       label: i18n.t("whseField.pbbh"),

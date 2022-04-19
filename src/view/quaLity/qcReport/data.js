@@ -172,7 +172,7 @@ export function mainCrud(_this) {
         width: 250,
         type: "textarea",
         overHidden: true,
-        span: 12
+        span: 24
       }
       // {
       //   label: "附件地址",

@@ -2,30 +2,11 @@
  * @Author: Lyl
  * @Date: 2021-02-24 08:12:20
  * @LastEditors: Lyl
- * @LastEditTime: 2022-03-03 08:56:05
+ * @LastEditTime: 2022-04-18 19:17:49
  * @Description: 
 -->
 <template>
   <div id="app">
-    <!-- <vue-particles
-      color="#fff"
-      :particleOpacity="0.3"
-      :particlesNumber="30"
-      shapeType="circle"
-      :particleSize="2"
-      linesColor="#dedede"
-      :linesWidth="0.2"
-      :lineLinked="true"
-      :lineOpacity="0.4"
-      :linesDistance="100"
-      :moveSpeed="3"
-      :hoverEffect="true"
-      hoverMode="repulse"
-      :clickEffect="false"
-      clickMode="repulse"
-      class="lizi"
-    >
-    </vue-particles> -->
     <router-view> </router-view>
   </div>
 </template>
@@ -33,7 +14,6 @@
 import { mapActions } from "vuex";
 import { webSocket } from "@/config/index.js";
 import axios from "axios";
-// import { getUcmlUser } from "@/const/whse.js";
 export default {
   name: "App",
   data() {

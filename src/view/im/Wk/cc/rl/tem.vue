@@ -85,7 +85,7 @@
   </div>
 </template>
 <script>
-import { rsxkr2C, rsxkr2F, sxForm, rsxkr3C, rcpb3C, planCrud } from "./data";
+import { rsxkr2C, rsxkr2F, rsxkr3C, planCrud } from "./data";
 import choice from "@/components/choice";
 import proChoice from "@/components/proMng/index";
 import {
@@ -136,7 +136,6 @@ export default {
       changeList: [],
       canLeave: false,
       ruleV: false,
-      sxformOp: sxForm(this),
       sxform: {},
       outform: {},
       outformOp: rsxkr2F(this),
@@ -144,7 +143,6 @@ export default {
       outcrud: [],
       sxcrud: [],
       sxpage: {},
-      rcOp: rcpb3C(this),
       rcData: [],
       sxloading: false,
       rcloading: false,
@@ -798,7 +796,6 @@ export default {
   },
   created() {},
   mounted() {
-    this.rcOp.height = "calc(100vh - 300px)";
     if (this.hide === "3" || this.hide === "4" || this.hide === "5") {
       this.mxOp = rsxkr3C(this);
     }

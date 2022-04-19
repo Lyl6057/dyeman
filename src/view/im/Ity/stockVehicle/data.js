@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-24 14:21:15
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-09 15:37:57
+ * @LastEditTime: 2022-04-14 13:53:46
  * @Description:
  */
 
@@ -90,6 +90,22 @@ export function crudOp(_this) {
         disabled: true,
         overHidden: true,
         fixed: true
+      },
+      {
+        label: "总疋数",
+        prop: "piiCount",
+        width: 80,
+        span: 6,
+        align: "right",
+        placeholder: " "
+      },
+      {
+        label: "疋号",
+        prop: "pidNos",
+        width: 160,
+        span: 6,
+        overHidden: true,
+        placeholder: " "
       },
       {
         label: "存储位置",

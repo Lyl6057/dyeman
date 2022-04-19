@@ -124,6 +124,15 @@ export function getInFinished(params) {
   });
 }
 
+// 查询成品布码卡称重记录 state = 1 已称重 2 已入仓
+export function getInFinishedByPage(params) {
+  return axios({
+    url: "/api/proFinalProductCard/page",
+    method: "get",
+    params: params
+  });
+}
+
 // 修改码卡记录
 export function updateFinished(data) {
   return axios({

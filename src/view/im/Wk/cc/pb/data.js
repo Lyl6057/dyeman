@@ -730,7 +730,6 @@ export function rsxkr3C(_this) {
         cell: false,
         width: 500,
         type: "select",
-        hide: false,
         props: {
           label: "whseCalicoinFk",
           value: "whseCalicoinDtlaoid"

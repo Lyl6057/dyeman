@@ -83,9 +83,7 @@ export function popupForm(_this) {
         disabled: false,
         dicData: getDIC("bas_colorclTepth"),
         change: () => {
-          if (_this.isAdd) {
-            _this.depth();
-          }
+          _this.depth();
         },
         rules: [
           {
@@ -190,6 +188,9 @@ export function popupForm(_this) {
         placeholder: "请选择颜色编号",
         disabled: !_this.isAdd,
         click: () => {
+          if (!_this.isAdd) {
+            return;
+          }
           _this.dlgWidth = "60%";
           _this.choiceV = !_this.choiceV;
           _this.choiceField = "colorBh";
@@ -254,6 +255,8 @@ export function popupForm(_this) {
         dicData: getDIC("sal_colorLights"),
         disabled: !_this.isAdd,
         change: () => {
+          // _this.form.deputyLights = "";
+          // _this.form.threeLights = "";
           _this.lights();
         },
         rules: [
@@ -295,12 +298,15 @@ export function popupForm(_this) {
       {
         label: "第二光源",
         prop: "deputyLights",
-        span: 12,
+        span: 6,
         placeholder: " ",
-        multiple: true,
         tags: false,
         type: "select",
         disabled: true,
+        change: () => {
+          // _this.form.threeLights = "";
+          _this.lights();
+        },
         dicData: getDIC("sal_colorLights"),
         rules: [
           {
@@ -309,9 +315,17 @@ export function popupForm(_this) {
             trigger: "blur"
           }
         ]
-        // change: () => {
-        //   _this.lights("2")
-        // }
+      },
+      {
+        label: "第三光源",
+        prop: "threeLights",
+        span: 6,
+        placeholder: " ",
+        tags: false,
+        type: "select",
+        disabled: true,
+        typeslot: true,
+        dicData: getDIC("sal_colorLights")
       },
       {
         label: "对色标准",
@@ -319,7 +333,7 @@ export function popupForm(_this) {
         span: 6,
         placeholder: "请选择对色标准",
         type: "select",
-        dicData: getDIC("sal_colorStandard"),
+        dicData: getDIC("Sal_contrastType"),
         rules: [
           {
             required: true,

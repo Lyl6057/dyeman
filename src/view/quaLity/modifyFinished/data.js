@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-05 10:39:18
+ * @LastEditTime: 2022-04-18 15:52:09
  * @Description:
  */
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
@@ -969,6 +969,191 @@ export function secondCrud(_this) {
         align: "center",
         // sortable: true,
         width: 200
+      }
+    ]
+  };
+}
+
+export function splitForm(_this) {
+  return {
+    submitBtn: false,
+    emptyBtn: false,
+    labelWidth: 120,
+    group: [
+      {
+        label: "原色布",
+        prop: "old",
+        icon: "el-icon-edit-outline",
+        column: [
+          {
+            label: "疋号",
+            prop: "pidNo",
+            span: 6,
+            placeholder: " ",
+            disabled: true
+          },
+
+          {
+            label: "净重(KG)",
+            prop: "netWeight",
+            span: 6,
+            placeholder: " ",
+            overHidden: true,
+            precision: 1,
+            clearable: false,
+            type: "number",
+            disabled: true,
+            minRows: 0
+            // change: val => {
+            //   _this.$nextTick(() => {
+            //     if (val.value >= _this.detail.netWeight) {
+            //       _this.splitF.netWeightNew = 0;
+            //       _this.splitF.netWeightNewLbs = 0;
+            //       _this.splitF.netWeight = _this.detail.netWeight;
+            //       _this.splitF.netWeightLbs = _this.splitF.netWeight * 2.2046;
+            //       return;
+            //     }
+            //     _this.splitF.netWeightNew = Number(
+            //       (_this.detail.netWeight - _this.splitF.netWeight).toFixed(1)
+            //     );
+            //     _this.splitF.netWeightNewLbs =
+            //       _this.splitF.netWeightNew * 2.2046;
+            //     _this.splitF.netWeightLbs = _this.splitF.netWeight * 2.2046;
+            //   });
+            // }
+          },
+          {
+            label: "净重(LBS)",
+            prop: "netWeightLbs",
+            span: 6,
+            placeholder: " ",
+            overHidden: true,
+            clearable: false,
+            type: "number",
+            precision: 1,
+            minRows: 0,
+            disabled: true,
+            change: val => {
+              // _this.$nextTick(() => {
+              //   if (val.value >= _this.detail.netWeight) {
+              //     _this.splitF.netWeightNew = 0;
+              //     _this.splitF.netWeight = _this.detail.netWeight;
+              //     return;
+              //   }
+              //   _this.splitF.netWeightNew = Number(
+              //     (_this.detail.netWeight - _this.splitF.netWeight).toFixed(1)
+              //   );
+              // });
+            }
+          },
+          {
+            label: "单位",
+            prop: "weightUnit",
+            span: 6,
+            placeholder: " ",
+            type: "select",
+            clearable: false,
+            dicData: [
+              {
+                label: "公斤",
+                value: "KG"
+              },
+              {
+                label: "磅",
+                value: "LBS"
+              }
+            ],
+            change: val => {
+              _this.$nextTick(() => {
+                if (!val.value) {
+                  return;
+                }
+                if (val.value == "KG") {
+                  _this.splitOp.group[1].column[2].disabled = true;
+                  _this.splitOp.group[1].column[1].disabled = false;
+                } else {
+                  _this.splitOp.group[1].column[2].disabled = false;
+                  _this.splitOp.group[1].column[1].disabled = true;
+                }
+              });
+            }
+          }
+        ]
+      },
+      {
+        label: "新色布",
+        prop: "new",
+        icon: "el-icon-edit-outline",
+        column: [
+          {
+            label: "疋号",
+            prop: "pidNoNew",
+            span: 6,
+            placeholder: " ",
+            disabled: true
+          },
+          {
+            label: "净重(KG)",
+            prop: "netWeightNew",
+            span: 6,
+            placeholder: " ",
+            precision: 1,
+            overHidden: true,
+            clearable: false,
+            disabled: false,
+            type: "number",
+            minRows: 0,
+            change: val => {
+              _this.$nextTick(() => {
+                if (_this.splitF.weightUnit == "LBS") {
+                  return;
+                }
+                if (val.value >= _this.detail.netWeight) {
+                  _this.splitF.netWeight = 0;
+                  _this.splitF.netWeightLbs = 0;
+                  _this.splitF.netWeightNew = _this.detail.netWeight;
+                  _this.splitF.netWeightNewLbs = _this.detail.netWeightLbs;
+                  return;
+                }
+                _this.splitF.netWeight = Number(
+                  (_this.detail.netWeight - val.value).toFixed(1)
+                );
+                _this.splitF.netWeightLbs = _this.splitF.netWeight * 2.2046;
+                _this.splitF.netWeightNewLbs = val.value * 2.2046;
+              });
+            }
+          },
+          {
+            label: "净重(LBS)",
+            prop: "netWeightNewLbs",
+            span: 6,
+            placeholder: " ",
+            overHidden: true,
+            clearable: false,
+            type: "number",
+            minRows: 0,
+            precision: 1,
+            change: val => {
+              _this.$nextTick(() => {
+                if (_this.splitF.weightUnit == "KG") {
+                  return;
+                }
+                if (val.value >= _this.detail.netWeightLbs) {
+                  _this.splitF.netWeight = 0;
+                  _this.splitF.netWeightLbs = 0;
+                  _this.splitF.netWeightNew = _this.detail.netWeight;
+                  _this.splitF.netWeightNewLbs = _this.detail.netWeightLbs;
+                  return;
+                }
+                _this.splitF.netWeightLbs = Number(
+                  (_this.detail.netWeightLbs - val.value).toFixed(1)
+                );
+                _this.splitF.netWeight = _this.splitF.netWeightLbs / 2.2046;
+                _this.splitF.netWeightNew = val.value / 2.2046;
+              });
+            }
+          }
+        ]
       }
     ]
   };

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-04-08 14:41:23
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-14 10:25:48
+ * @LastEditTime: 2022-04-16 14:57:12
  * @FilePath: \iot.vue\src\view\im\whseInOutKB\inWhse.vue
  * @Description: 
 -->
@@ -34,8 +34,14 @@
           <el-button type="success" slot="reference">保存</el-button>
         </el-popover>
         <el-button type="warning" @click="del">删除</el-button>
-        <el-button type="primary" @click="choiceV = true">选择成品布</el-button>
+        <el-button type="primary" @click="choiceHandle">选择货物</el-button>
         <el-button type="warning" @click="$emit('close')">关闭</el-button>
+        <el-input
+          v-model="scanIpt"
+          style="width: 15%; margin-left: 2rem"
+          placeholder="扫码请点此处"
+          @change="scanChange"
+        ></el-input>
       </div>
       <div class="crudBox">
         <avue-crud
@@ -69,7 +75,7 @@
       :choiceV="choiceV"
       :choiceTle="choiceTle"
       :choiceQ="choiceQ"
-      marginTop="5vh"
+      marginTop="3vh"
       dlgWidth="80%"
       @choiceData="choiceData"
       @close="choiceV = false"
@@ -88,6 +94,7 @@ import {
   addStorageLog,
   updateFinished,
   sendTaskNoin,
+  getInFinishedByPage,
 } from "./api";
 import { baseCodeSupply, baseCodeSupplyEx } from "@/api/index";
 import verifySubmit from "./verifySubmit.vue";
@@ -109,12 +116,13 @@ export default {
       choiceV: false,
       choiceTle: "选择成品布",
       choiceQ: {
-        clothState: 1,
+        r_clothState_r: "||1||3",
         cardType: 1,
         sortF: "productNo",
       },
       selectList: [],
       verifyVisible: false,
+      scanIpt: "",
     };
   },
   watch: {},
@@ -139,9 +147,18 @@ export default {
           isEmpty: 0, // 是否为空
           orderType: 1, // 出库/入库
           type: this.form.goodsType, // 物料类别
-          storageCode: list[0].storeLoadCode,
+          // storageCode: list[0].storeLoadCode,
         }).then((sendRes) => {
-          console.log(sendRes);
+          if (sendRes.data.code) {
+            this.$tip.error(sendRes.data.data);
+            this.loading = false;
+            return;
+          }
+          if (sendRes.data == "返回异常") {
+            this.$tip.error(sendRes.data);
+            this.loading = false;
+            return;
+          }
           baseCodeSupplyEx({ code: "whse_in" }).then((bat) => {
             baseCodeSupply({ code: "whse_in" }).then((bat) => {});
             let addList = this.group(list, "storeLoadCode");
@@ -167,7 +184,7 @@ export default {
                 }).then((log) => {
                   addInFinishedDtla({
                     carriageStorageLogFk: log.data.data,
-                    wmsTaskLogFk: sendRes.data.data,
+                    wmsTaskLogFk: sendRes.data,
                     whseFinishedclothinFk: res.data.data,
                     pidCount: item.data.length,
                     sumWeight: item.weight,
@@ -226,11 +243,11 @@ export default {
       this.verifyVisible = true;
     },
     choiceData(val) {
-      this.loading = true;
       if (!val.length) {
         this.choiceV = false;
         return;
       }
+      this.loading = true;
       this.crud = this.$unique(this.crud.concat(val), "productNo");
       this.crud.sort((a, b) => (a.productNo > b.productNo ? 1 : -1));
       this.crud.forEach((item, i) => {
@@ -241,6 +258,27 @@ export default {
       setTimeout(() => {
         this.loading = false;
       }, 200);
+    },
+    choiceHandle() {
+      this.choiceV = true;
+    },
+    scanChange() {
+      getInFinishedByPage({
+        cardType: 1,
+        productNo: this.scanIpt,
+        r_clothState_r: "||1||3",
+      }).then((res) => {
+        if (res.data.records) {
+          let note = res.data.records[0];
+          note.storeLoadCode = "";
+          note.index = this.crud.length + 1;
+          this.crud.push(note);
+          this.crud = this.$unique(this.crud, "cardId");
+          this.scanIpt = "";
+        } else {
+          this.$tip.warning("暂无数据!");
+        }
+      });
     },
     del() {
       this.selectList.forEach((item, i) => {

@@ -1,7 +1,7 @@
 <template>
   <div id="colorMng">
     <view-container
-      title="色号管理"
+      title="出库送货单"
       :element-loading-text="$t('public.loading')"
       v-loading="wLoading"
     >
@@ -15,6 +15,7 @@
         <el-button type="danger" @click="del">{{
           this.$t("public.del")
         }}</el-button>
+        <!-- <el-button type="primary" @click="importExcel">导入excel</el-button> -->
         <el-button type="primary" @click="query">{{
           this.$t("public.query")
         }}</el-button>
@@ -23,7 +24,7 @@
       <div class="formBox">
         <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
       </div>
-      <view-container title="色号资料">
+      <view-container title="出库送货单资料">
         <div class="crudBox" style="margin-top: 5px">
           <avue-crud
             ref="crud"
@@ -37,6 +38,17 @@
           ></avue-crud>
         </div>
       </view-container>
+      <form action id="myform">
+        <input
+          type="file"
+          name="myFile"
+          id="myFile"
+          accept=".csv, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+          style="display: none"
+          @change="fileChange"
+        />
+      </form>
+
       <el-dialog
         id="colorMng_Dlg"
         :visible.sync="dialogVisible"
@@ -62,12 +74,7 @@
 <script>
 import { mainForm, mainCrud } from "./data";
 import tem from "./tem";
-import {
-  getLabTapcolor,
-  addLabTapcolor,
-  updateLabTapcolor,
-  delLabTapcolor,
-} from "./api";
+import { get, del, uploadXlxs } from "./api";
 export default {
   name: "",
   components: {
@@ -94,21 +101,12 @@ export default {
   watch: {},
   methods: {
     query() {
-      this.loading = true;
-      for (var key in this.form) {
-        if (this.form[key] === "") {
-          delete this.form[key];
-        }
-      }
-      let queryData = JSON.parse(JSON.stringify(this.form));
-      queryData.colorNo = "!^%" + (queryData.colorNo || "");
-      queryData.colorBh = "%" + (queryData.colorBh || "");
-      queryData.colorChn = "%" + (queryData.colorChn || "");
-      queryData.colorEngName = "%" + (queryData.colorEngName || "");
-      queryData.custColorBh = "%" + (queryData.custColorBh || "");
-      queryData.fabricDesc = "%" + (queryData.fabricDesc || "");
-      getLabTapcolor(
-        Object.assign(queryData, {
+      this.wLoading = true;
+      get(
+        Object.assign({
+          outCode: "!^%" + (this.form.outCode || ""),
+          outDate: this.form.outDate,
+          applicant: this.form.applicant,
           rows: this.page.pageSize,
           start: this.page.currentPage,
         })
@@ -123,16 +121,16 @@ export default {
               this.$refs.crud.setCurrentRow();
               this.detail = {};
               setTimeout(() => {
-                this.loading = false;
+                this.wLoading = false;
               }, 200);
             }
           });
           if (this.crud.length === 0) {
-            this.loading = false;
+            this.wLoading = false;
           }
         })
         .catch((e) => {
-          this.loading = false;
+          this.wLoading = false;
         });
     },
     add() {
@@ -154,14 +152,14 @@ export default {
       }
       this.$tip
         .cofirm(
-          "是否确定删除色号为 【 " +
-            this.detail.colorNo +
+          "是否确定删除编号为 【 " +
+            this.detail.outCode +
             this.$t("iaoMng.delTle2"),
           this,
           {}
         )
         .then(() => {
-          delLabTapcolor(this.detail.labTapcoloroid)
+          del(this.detail.orderId)
             .then((res) => {
               if (res.data.code === 200) {
                 this.$tip.success(this.$t("public.sccg"));
@@ -177,6 +175,60 @@ export default {
         })
         .catch((err) => {
           this.$tip.warning(this.$t("public.qxcz"));
+        });
+    },
+    audit() {
+      if (Object.keys(this.detail).length === 0) {
+        this.$tip.error("请选择要审核的数据!");
+        return;
+      }
+      this.$tip
+        .cofirm(
+          "是否确定通过审核单号为 【 " +
+            this.detail.weaveJobCode +
+            this.$t("iaoMng.delTle2"),
+          this,
+          {}
+        )
+        .then(() => {
+          auditOne(this.detail.shipId)
+            .then((res) => {
+              this.$tip.success(res.data);
+              // if (res.data.code === 200) {
+
+              //   this.detail.isAudit = 1;
+              //   this.crud.splice(this.detail.index - 1, 1);
+              this.query();
+              // } else {
+              //   this.$tip.error(this.$t("public.bcsb"));
+              // }
+            })
+            .catch((err) => {
+              this.$tip.error(this.$t("public.bcsb"));
+            });
+        })
+        .catch((err) => {
+          this.$tip.warning(this.$t("public.qxcz"));
+        });
+    },
+    importExcel() {
+      document.getElementById("myFile").click();
+    },
+    fileChange(ev) {
+      this.wLoading = true;
+      let file = document.getElementById("myFile").files[0];
+      let formData = new FormData();
+      formData.append("file", file);
+      uploadXlxs(formData)
+        .then((res) => {
+          this.query();
+          setTimeout(() => {
+            this.$tip.success(res.data);
+          }, 200);
+        })
+        .catch((e) => {
+          this.wLoading = false;
+          this.$tip.error("上传失败!" + e);
         });
     },
     handleRowDBLClick(row) {

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-24 14:21:15
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-01 13:51:07
+ * @LastEditTime: 2022-04-19 10:02:05
  * @Description:
  */
 
@@ -336,7 +336,7 @@ export function finishedCrud(_this) {
       },
       {
         label: "客戶名称",
-        prop: "customerName",
+        prop: "custCode",
         width: 140,
         disabled: true,
         placeholder: " ",
@@ -349,11 +349,31 @@ export function finishedCrud(_this) {
 
       {
         label: "布类名称",
-        prop: "fabricName",
+        prop: "fabName",
         disabled: true,
         placeholder: " ",
         span: 6,
         width: 200,
+        overHidden: true,
+        hide: false
+      },
+      {
+        label: "颜色编号",
+        prop: "colorCode",
+        disabled: true,
+        placeholder: " ",
+        span: 6,
+        width: 120,
+        overHidden: true,
+        hide: false
+      },
+      {
+        label: "颜色名称",
+        prop: "colorName",
+        disabled: true,
+        placeholder: " ",
+        span: 6,
+        width: 140,
         overHidden: true,
         hide: false
       },

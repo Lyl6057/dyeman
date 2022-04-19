@@ -22,7 +22,7 @@
                 v-model="form"
                 style="height: calc(100vh - 165px); overflow: auto"
               >
-                <template  slot="weaveJobFk">
+                <template slot="weaveJobFk">
                   <el-select
                     v-model="form.weaveJobFk"
                     filterable
@@ -55,7 +55,10 @@
                 font-size: 22px;
               "
             >
-              <el-button type="primary" @click="query" :disabled="!form.weaveJobFk"
+              <el-button
+                type="primary"
+                @click="query"
+                :disabled="!form.weaveJobFk"
                 >查询</el-button
               >
               <el-button type="primary" :disabled="!form.vatNo" @click="preview"
@@ -162,8 +165,7 @@ import { webSocket } from "@/config/index.js";
 
 export default {
   name: "",
-  components: {
-  },
+  components: {},
   data() {
     return {
       formOp: mainForm(this),
@@ -171,7 +173,7 @@ export default {
         // realGramWeight: 0,
         // clothWidth: 0,
         // sideBreadthValue: 0,
-        eachNumber:1,
+        eachNumber: 1,
         netWeight: 0,
       },
       crudOp: mainCrud(this),
@@ -200,14 +202,13 @@ export default {
       options: [],
       vatLoading: false,
       dlgCtr: true,
-      spowerClient:null
+      spowerClient: null,
     };
   },
   created() {
     // this.setCz();
   },
-  mounted() {
-  },
+  mounted() {},
   beforeDestroy() {
     clearInterval(this.time);
   },
@@ -231,72 +232,73 @@ export default {
       this.form.custPoNo = "";
       this.form.custCode = "";
       this.form.styleNo = "";
-      this.form.mathineCode = ''
+      this.form.mathineCode = "";
       this.form.colorName = "";
       this.form.custColorNo = "";
       this.form.factoryColorNo = "";
       this.form.contractNo = "";
       this.form.etNo = "";
       // 先查询成品码卡是否存在记录
-      get({ weaveJobFk: this.form.weaveJobFk, eachNumber: this.form.eachNumber }).then(
-        (res) => {
-          console.log(res);
-          if (res.data.length) {
-            // 存在记录
-            this.form = res.data[0];
-            // this.getTemForCust();
-            setTimeout(() => {
-              this.wLoading = false;
-            }, 200);
-          } else {
-            // 不存在记录
-            getWeave({
-              weaveJobId: this.form.weaveJobFk,
-              rows: 1,
-              start: 1,
-            }).then((res) => {
-              if (res.data.records.length > 0) {
-                this.form = res.data.records[0];      
-                this.form.eachNumber = 1;
-                // this.form.weightUnit = "KG";
-                // this.getTemForCust();
-                getLoom({proWeaveJobFk:this.form.weaveJobId}).then(loom =>{
-                  if(loom.data.length){
-                    let data  = []
-                    loom.data.forEach((item) => {
-                      data.push({
-                        value: item.mathineCode,
-                        label: item.mathineCode,
-                      });
+      get({
+        weaveJobFk: this.form.weaveJobFk,
+        eachNumber: this.form.eachNumber,
+      }).then((res) => {
+        console.log(res);
+        if (res.data.length) {
+          // 存在记录
+          this.form = res.data[0];
+          // this.getTemForCust();
+          setTimeout(() => {
+            this.wLoading = false;
+          }, 200);
+        } else {
+          // 不存在记录
+          getWeave({
+            weaveJobId: this.form.weaveJobFk,
+            rows: 1,
+            start: 1,
+          }).then((res) => {
+            if (res.data.records.length > 0) {
+              this.form = res.data.records[0];
+              this.form.eachNumber = 1;
+              // this.form.weightUnit = "KG";
+              // this.getTemForCust();
+              getLoom({ proWeaveJobFk: this.form.weaveJobId }).then((loom) => {
+                if (loom.data.length) {
+                  let data = [];
+                  loom.data.forEach((item) => {
+                    data.push({
+                      value: item.mathineCode,
+                      label: item.mathineCode,
                     });
-                    this.crudOp.group[0].column[7].dicData = data
-                    this.form.mathineCode = loom.data[0].mathineCode;
-                    this.wLoading = false;
-                  }else{
-                    this.wLoading = false;
-                  }
-                })
-              } else {
-                this.form.poNo = "";
-                this.form.custCode = "";
-                this.form.fabName = "";
-                this.form.guestFabId = "";
-                this.form.guestComponents = "";
-                this.form.styleNo = "";
-                this.form.colorName = "";
-                this.form.gramWeight = "";
-                this.form.breadth = "";
-                this.form.yardLength = "";
-                this.form.grossWeight = "";
-                this.form.qcTakeOut = "";
-                this.form.netWeight = "";
-                this.$tip.warning("暂无此织单信息!");
-                this.wLoading = false;
-              }
-            });
-          }
+                  });
+                  this.crudOp.group[0].column[7].dicData = data;
+                  this.form.mathineCode = loom.data[0].mathineCode;
+                  this.wLoading = false;
+                } else {
+                  this.wLoading = false;
+                }
+              });
+            } else {
+              this.form.poNo = "";
+              this.form.custCode = "";
+              this.form.fabName = "";
+              this.form.guestFabId = "";
+              this.form.guestComponents = "";
+              this.form.styleNo = "";
+              this.form.colorName = "";
+              this.form.gramWeight = "";
+              this.form.breadth = "";
+              this.form.yardLength = "";
+              this.form.grossWeight = "";
+              this.form.qcTakeOut = "";
+              this.form.netWeight = "";
+              this.$tip.warning("暂无此织单信息!");
+              this.wLoading = false;
+            }
+          });
         }
-      );
+      });
     },
     preview() {
       if (!this.form.netWeight) {
@@ -551,7 +553,7 @@ export default {
         typeof obj === "undefined" ||
         obj === null ||
         obj === "" ||
-        obj === 'NaN'
+        obj === "NaN"
       ) {
         return true;
       } else {
@@ -562,15 +564,15 @@ export default {
       // this.czsocket = null;
       // this.prsocket = null;
       // webSocket.setClient(this);
-      this.spowerClient = this.$store.state.spowerClient
-      let _this = this
+      this.spowerClient = this.$store.state.spowerClient;
+      let _this = this;
       _this.spowerClient.onmessage = function (e) {
-        if(e.data.indexOf("scan") != -1 ){
-          _this.form.storeLoadCode = e.data.split("scan=")[1]
-        }else if(e.data.indexOf("weight") != -1){
-          let data = e.data.split("weight=")[1]
-           _this.form.netWeight = Number(data.split(":")[0])
-           _this.form.weightUnit = Number(data.split(":")[1])
+        if (e.data.indexOf("scan") != -1) {
+          _this.form.storeLoadCode = e.data.split("scan=")[1];
+        } else if (e.data.indexOf("weight") != -1) {
+          let data = e.data.split("weight=")[1];
+          _this.form.netWeight = Number(data.split(":")[0]);
+          _this.form.weightUnit = Number(data.split(":")[1]);
         }
       };
       console.log(this.spowerClient);
@@ -645,46 +647,32 @@ export default {
 };
 </script>
 <style lang="stylus">
-#finalCard {
-  .queryForm .avue-form .el-input--mini input {
-    height: 40px !important;
-    line-height: 40px !important;
-  }
-
-  .el-form-item__label {
-    padding: 0 5px 0 0 !important;
-    white-space: nowrap !important;
-  }
-
-  .queryForm .el-input__inner, .el-form-item__label {
-    font-size: 20px !important;
-    line-height: 40px !important;
-  }
-
-  .queryForm .el-input__inner {
-    font-size: 24px !important;
-  }
-
-  .queryForm .el-button, .el-button--mini.is-round {
-    padding: 8px 12px 8px 12px !important;
-    font-size: 20px !important;
-    margin-left: 20px;
-  }
-
-  .historyText {
-    font-size: 22px;
-    text-align: left;
+#finalCard
+  .queryForm .avue-form .el-input--mini input
+    height 40px !important
+    line-height 40px !important
+  .el-form-item__label
+    padding 0 5px 0 0 !important
+    white-space nowrap !important
+  .queryForm .el-input__inner, .el-form-item__label
+    font-size 20px !important
+    line-height 40px !important
+  .queryForm .el-input__inner
+    font-size 24px !important
+  .queryForm .el-button, .el-button--mini.is-round
+    padding 8px 12px 8px 12px !important
+    font-size 20px !important
+    margin-left 20px
+  .historyText
+    font-size 22px
+    text-align left
     // text-indent: 1em;
-    margin-left: 10px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    height: 46px;
-    line-height: 46px;
-  }
-
-  .item {
+    margin-left 10px
+    overflow hidden
+    text-overflow ellipsis
+    white-space nowrap
+    height 46px
+    line-height 46px
+  .item
     // margin-bottom: 18px;
-  }
-}
 </style>

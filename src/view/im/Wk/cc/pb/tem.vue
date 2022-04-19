@@ -134,7 +134,7 @@ import { rsxkr2C, rsxkr2F, sxForm, rsxkr3C, rcpb3C } from "./data";
 import choice from "@/components/choice";
 import { getUcmlUser } from "@/const/whse.js";
 import { baseCodeSupply, baseCodeSupplyEx } from "@/api/index";
-import { getPb, getPbDetali, getPbDetaliList, getPbPh } from "@/api/im/Wk/rc";
+import {  getPbDetaliList, getPbPh } from "@/api/im/Wk/rc";
 import {
   getPbDetalis,
   addPbDetali,

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-01 14:06:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-03-31 14:31:21
+ * @LastEditTime: 2022-04-18 13:56:36
  * @Description:
  */
 
@@ -13,6 +13,15 @@ export function updateFinished(data) {
   return axios({
     url: "/api/proFinalProductCard",
     method: "put",
+    params: data
+  });
+}
+
+// 修改
+export function addFinished(data) {
+  return axios({
+    url: "/api/proFinalProductCard",
+    method: "post",
     params: data
   });
 }
