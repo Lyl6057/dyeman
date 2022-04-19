@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:08:41
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-16 10:37:26
+ * @LastEditTime: 2022-04-19 10:49:00
  */
 import {
   getDIC,
@@ -66,7 +66,7 @@ export function whseInCrudOp(_this) {
         width: 100,
       },
       {
-        label: "退纱通知单编号",
+        label: "样纱通知单编号",
         prop: "registerNo",
         width: 150,
       },
@@ -120,7 +120,7 @@ export function whseInFormOp(_this) {
       type: "daterange",
       valueFormat: "yyyy-MM-dd",
     }, {
-      label: "退纱通知单编号",
+      label: "样纱通知单编号",
       prop: "registerNo",
       labelWidth: 160,
       span: 5,
@@ -130,30 +130,14 @@ export function whseInFormOp(_this) {
   }
 }
 
-export function retYarnNoticCrudOp(_this) {
+export function yarnForSampleCrudOp(_this) {
   return {
     ...mainCrudOpCommon,
     height: "calc(100vh - 185px)",
-    selection: true,
+    selection: true,  
     column: [{
-        label: "退纱通知单号",
-        prop: "withdrawalNo",
-        width: 120,
-      },
-      {
-        label: "外发厂",
-        prop: "extFactId",
-        width: 120,
-        hide: _this.imWkType == "4"
-      },
-      {
-        label: "退纱日期",
-        prop: "happenDate",
-        width: 100,
-      },
-      {
-        label: "织单号",
-        prop: "weaveJobCode",
+        label: "样纱通知单",
+        prop: "yarnforsampleNote",
         width: 120,
       },
       {
@@ -174,7 +158,7 @@ export function retYarnNoticCrudOp(_this) {
       },
       {
         label: "供应商批号",
-        prop: "suppBatNo",
+        prop: "suppBatId",
         width: 120,
         overHidden: true,
       },
@@ -184,7 +168,7 @@ export function retYarnNoticCrudOp(_this) {
         width: 100,
       },
       {
-        label: "回仓重量",
+        label: "样纱重量",
         prop: "weight",
         width: 100,
         type: "number",
@@ -198,20 +182,21 @@ export function retYarnNoticCrudOp(_this) {
         width: 100,
       },
       {
-        label: "件数",
-        prop: "cartonNumber",
+        label: "箱/件数",
+        prop: "cartonQty",
         width: 100,
         align: "right"
       },
       {
-        label: "包装规格",
-        prop: "packName",
+        label: "纱球数",
+        prop: "yarnBallqty",
         width: 100,
+        align: "right"
       },
       {
-        label: "备注",
-        prop: "remarks",
-        width: 100,
+        label: "计划送货日期",
+        prop: "planSenddate",
+        width: 140,
       },
 
     ]
@@ -236,7 +221,7 @@ export function whseYarnInFormOp(_this) {
       type: "date",
       valueFormat: "yyyy-MM-dd",
     }, {
-      label: "退纱通知单编号",
+      label: "样纱通知单号",
       prop: "registerNo",
       labelWidth: 160,
       span: 5,
@@ -250,6 +235,21 @@ export function whseYarnInFormOp(_this) {
       type: "select",
       dicData: examState
     }, {
+      label: "检验状态",
+      prop: "yinStatus",
+      span: 5,
+      placeholder: " ",
+      type: "select",
+      dicData: getDIC("whse_yinStatus")
+    },
+    {
+      label: "财务状态",
+      prop: "finStatus",
+      span: 5,
+      placeholder: " ",
+      type: "select",
+      dicData: getDIC("whse_finStatus")
+    },{
       label: "操作员",
       prop: "sysCreatedby",
       span: 5,
@@ -282,7 +282,7 @@ export function whseYarnInDtlCrudOp(_this) {
       width: 100
     }, {
       label: "供应商批号",
-      prop: "suppBatNo",
+      prop: "batId",
       width: 120,
       overHidden: true
     }, {
@@ -290,37 +290,30 @@ export function whseYarnInDtlCrudOp(_this) {
       prop: "batchNo",
       width: 100
     }, {
-      label: "退纱数量",
+      label: "重量",
       prop: "weight",
-      width: 100,
-      align: "right",
-      type: "number",
-      formatter: fillZero
-    }, {
-      label: "入仓数量",
-      prop: "inWeight",
       width: 100,
       align: "right",
       type: "number",
       formatter: (row,value) => {
         return row.aChildren.reduce((a,b) => a + +(b.weight || 0), 0).toFixed(2)
       },
-      // cell: true,
-    }, {
-      label: "单位",
+    },{
+      label: "重量单位",
       prop: "weightUnit",
       width: 100,
       type: "select",
       dicData: getDIC("bas_matUnit"),
-    }, {
-      label: "织单号",
-      prop: "weaveJobCode",
-      width: 120,
-    }, {
-      label: "备注",
-      prop: "remarks",
-      width: 100
-    }]
+    },
+    {
+      label: "箱/件数",
+      prop: "cartonNum",
+      width: 100,
+      align: "right",
+      formatter: (row,value) => {
+        return row.aChildren.reduce((a,b) => a + +(b.cartonNum || 0), 0).toFixed(2)
+      },
+    },]
   }
 }
 

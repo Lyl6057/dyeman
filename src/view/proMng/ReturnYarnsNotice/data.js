@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-08 17:26:12
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-16 08:18:31
+ * @LastEditTime: 2022-04-18 10:27:34
  */
 
 import {
@@ -87,35 +87,35 @@ export function dtlCrudOp(_this){
             {
                 label: "织单号",
                 prop: "weaveJobCode",
-                width: 120,
+                width: 150,
                 cell: true,
             },
             {
                 label: "纱线编号",
                 prop: "yarnsId",
-                width: 120,
+                width: 100,
             },
             {
                 label: "纱线名称",
                 prop: "yarnsName",
-                width: 150,
+                width: 350,
                 overHidden: true
             },
             {
                 label: "纱牌",
                 prop: "yarnsCard",
-                width: 120,
+                width: 80,
             },
             {
                 label: "供应商批号",
                 prop: "suppBatNo",
-                width: 120,
+                width: 180,
                 overHidden: true
             },
             {
                 label: "本厂批号",
                 prop: "batchNo",
-                width: 120,
+                width: 100,
             },
             {
                 label: "退纱数量",
@@ -134,14 +134,14 @@ export function dtlCrudOp(_this){
             {
                 label: "单位",
                 prop: "weightUnit",
-                width: 120,
+                width: 100,
                 type: "select",
                 dicData: getDIC("bas_matUnit"),
             },
             {
                 label: "件数",
                 prop: "cartonNumber",
-                width: 120,
+                width: 80,
                 type: "number",
                 cell: true,
             },
