@@ -137,16 +137,24 @@ export default {
             },
 
             // level_2
+            // {
+            //   click: () => {
+            //     this.toView("rc_sx", this.$t("iaoMng.krls") + "_1");
+            //   },
+            //   title: this.$t("iaoMng.krls"),
+            //   icon: "el-icon-user-solid",
+            //   color: "#409EFF",
+            //   // // content: "客人来纱看板",
+            // },
             {
               click: () => {
-                this.toView("rc_sx", this.$t("iaoMng.krls") + "_1");
+                this.toView("sampleYarnIn", this.$t("iaoMng.ysrc") + "_1");
               },
-              title: this.$t("iaoMng.krls"),
-              icon: "el-icon-user-solid",
+              title: this.$t("iaoMng.ysrc"),
+              icon: "el-icon-s-claim",
               color: "#409EFF",
-              // // content: "客人来纱看板",
+              // content: "样纱入仓",
             },
-
             // level_3
             {
               click: () => {
@@ -190,6 +198,7 @@ export default {
               color: "#409EFF",
               // content: "申购纱线入库看板",
             },
+            
             {
               click: () => {
                 this.toView("rc_manual", this.$t("iaoMng.sx") + "_0");

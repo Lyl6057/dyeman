@@ -155,6 +155,7 @@ export default {
     ystc: "本廠余紗退倉",
     wfts: "外發退紗",
     sgsx: "申購紗線",
+    ysrc: "样紗入倉",
     pbrc: "胚布入倉",
     krlp: "客人來胚",
     pb: "胚布",

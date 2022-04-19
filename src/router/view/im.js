@@ -175,6 +175,15 @@ export default [
           keepAlive: false
         }
       },
+      // 样纱入仓
+      {
+        path: "/sample_yarn_in",
+        name: "sampleYarnIn",
+        component: resolve => require(["@/view/im/Wk/rc/sampleYarnIn/index"], resolve),
+        meta: {
+          keepAlive: false
+        }
+      },
       //  胚布入仓
       {
         path: "/rc_pb",
