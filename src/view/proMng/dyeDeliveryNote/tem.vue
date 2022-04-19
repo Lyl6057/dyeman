@@ -142,6 +142,7 @@ export default {
         rows: this.page.pageSize,
         start: this.page.currentPage,
         outOrderFk: this.form.orderId,
+        productNo: "!^%",
       }).then((res) => {
         let records = res.data;
         this.page.total = records.total;

@@ -49,6 +49,7 @@ export function mainCrud(_this) {
     columnBtn: false,
     page: true,
     labelWidth: 120,
+
     column: [
       {
         label: "#",
@@ -163,15 +164,7 @@ export function noteCrud(_this) {
         align: "center",
         display: false
       },
-      {
-        label: "订单编号",
-        prop: "poNo",
-        width: 180,
-        overHidden: true,
-        cell: true,
-        placeholder: " ",
-        span: 6
-      },
+
       {
         label: "缸号",
         prop: "vatNo",
@@ -181,6 +174,16 @@ export function noteCrud(_this) {
         placeholder: " ",
         span: 6
       },
+      {
+        label: "订单编号",
+        prop: "poNo",
+        width: 180,
+        overHidden: true,
+        cell: true,
+        placeholder: " ",
+        span: 6
+      },
+
       {
         label: "产品编号",
         prop: "productNo",

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-04-08 14:41:23
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-16 14:57:12
+ * @LastEditTime: 2022-04-19 14:41:56
  * @FilePath: \iot.vue\src\view\im\whseInOutKB\inWhse.vue
  * @Description: 
 -->
@@ -116,7 +116,7 @@ export default {
       choiceV: false,
       choiceTle: "选择成品布",
       choiceQ: {
-        r_clothState_r: "||1||3",
+        r_clothState_r: "||1||2||3",
         cardType: 1,
         sortF: "productNo",
       },

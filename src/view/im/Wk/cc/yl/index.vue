@@ -13,9 +13,12 @@
             @click="handleRowDBLClick(chooseData)"
             >{{ this.$t("public.update") }}</el-button
           >
-          <el-button type="danger" @click="del">{{
-            this.$t("public.del")
-          }}</el-button>
+          <el-button
+            type="danger"
+            @click="del"
+            :disabled="chooseData.stockState == '1'"
+            >{{ this.$t("public.del") }}</el-button
+          >
 
           <!-- <el-button
             type="warning"
