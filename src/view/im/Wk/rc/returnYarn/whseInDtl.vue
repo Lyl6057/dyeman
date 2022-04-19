@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:18:51
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-16 10:40:04
+ * @LastEditTime: 2022-04-19 11:58:11
 -->
 <template>
   <div id="whse-yarn-in-dtl-container">
@@ -226,9 +226,7 @@ export default {
             packSize: aItem.packSize
           });
         });
-        return tDtlData;
-      });
-      // 明细数据
+         // 明细数据
         let tDtlData = {
           whseYarninDtloid: item.whseYarninDtloid,
           whseYarninFk: whseYarninOid,
@@ -244,6 +242,9 @@ export default {
           placeOrigin: item.weaveJobCode,
           colorName: item.remarks
         };
+        return tDtlData;
+      });
+     
       let dataListReqs = [
         batchSaveOrUpdateDtlDataList(dtlDataList),
         batchSaveOrUpdateDtlaDataList(dtlaDataList)
