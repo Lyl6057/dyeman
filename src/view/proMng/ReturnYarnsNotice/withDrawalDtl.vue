@@ -10,7 +10,7 @@
   <div class="with-drawal-dlt-container">
     <view-container title="退纱通知单信息维护" :element-loading-text="loadLabel" v-loading="loading">
       <div class="btnList">
-        <el-button type="primary" @click="handleSave">{{ this.$t("public.save") }}</el-button>
+        <el-button type="primary" :disabled="hasNotEdit" @click="handleSave">{{ this.$t("public.save") }}</el-button>
         <el-button type="warning" @click="handleCloseDtl">{{ this.$t("public.close") }}</el-button>
       </div>
       <div class="formBox">
@@ -19,9 +19,9 @@
       <el-tabs v-model="tabName" type="border-card">
         <el-tab-pane name="dtl" label="退纱通知单明细">
           <div class="btnList">
-            <el-button type="primary" @click="handleAddByRetYarn">从织单领纱记录新增</el-button>
-            <el-button type="primary" @click="handleAddByYarnStock">从库存表中新增</el-button>
-            <el-button type="danger" @click="handleDtlDelete">删除</el-button>
+            <el-button type="primary" :disabled="hasNotEdit" @click="handleAddByRetYarn">从织单领纱记录新增</el-button>
+            <el-button type="primary" :disabled="hasNotEdit" @click="handleAddByYarnStock">从库存表中新增</el-button>
+            <el-button type="danger" :disabled="hasNotEdit" @click="handleDtlDelete">删除</el-button>
           </div>
           <div class="crudBox">
             <avue-crud
@@ -101,6 +101,11 @@ export default {
       //  是否刷新
       hasRefresh: false,
     };
+  },
+  computed:{
+    hasNotEdit(){
+      return this.withDatalData.isInStock 
+    }
   },
   watch: {
     withDatalData: {

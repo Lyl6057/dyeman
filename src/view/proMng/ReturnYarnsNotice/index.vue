@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-08 17:19:47
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-16 08:38:22
+ * @LastEditTime: 2022-04-19 13:33:34
 -->
 <template>
   <div id="return-yarns-notice-container">
@@ -12,7 +12,7 @@
       <div class="btnList">
         <el-button type="primary" @click="handleAdd">{{ this.$t("public.add") }}</el-button>
         <el-button type="success" @click="handleUpdate">{{ this.$t("public.update") }}</el-button>
-        <el-button type="danger" @click="handleDelete">{{ this.$t("public.del") }}</el-button>
+        <el-button type="danger" :disabled="hasNotEdit" @click="handleDelete">{{ this.$t("public.del") }}</el-button>
         <el-button type="primary" @click="getDataList">{{ this.$t("public.query") }}</el-button>
       </div>
       <div class="formBox">
@@ -72,6 +72,11 @@ export default {
       curRowSelect: {},
       dltDialogVisible: false
     };
+  },
+  computed:{
+    hasNotEdit(){
+      return this.curRowSelect.isInStock
+    }
   },
   methods: {
     handleCellStyle({row,column}){
