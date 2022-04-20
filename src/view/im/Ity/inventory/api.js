@@ -1,11 +1,21 @@
 /*
  * @Author: Lyl
  * @Date: 2021-03-24 14:21:09
- * @LastEditors: Lyl
- * @LastEditTime: 2022-04-01 09:48:23
+ * @LastEditors: Symbol_Yang
+ * @LastEditTime: 2022-04-20 09:05:23
  * @Description:
  */
 import axios from "axios";
+
+
+// 根据纱线信息获取出入仓明细
+export function fetchWhseDtlDataByYarns(params){
+  return axios({
+    url: "/api/viewYarnStock/whseDtl/page",
+    method: "get",
+    params: params
+  });
+}
 
 // 判断当天是否已存在清单
 export function fetchCheckHasExistByNow(params) {

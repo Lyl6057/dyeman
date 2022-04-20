@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-03-24 14:15:12
- * @LastEditors: Lyl
- * @LastEditTime: 2022-04-19 10:08:11
+ * @LastEditors: Symbol_Yang
+ * @LastEditTime: 2022-04-20 10:49:17
  * @Description: 
 -->
 <template>
@@ -38,6 +38,15 @@
           @current-row-change="cellClick"
         ></avue-crud>
       </div>
+
+
+      <el-drawer
+        title="库存出入明细"
+        :visible.sync="drawerVisible"
+        append-to-body
+        >
+        <whse-dtl ref="whseDtlRef"></whse-dtl>
+      </el-drawer>
     </view-container>
   </div>
 </template>
@@ -68,10 +77,13 @@ import {
 import XlsxTemplate from "xlsx-template";
 import JSZipUtils from "jszip-utils";
 import saveAs from "file-saver";
+import WhseDtl from "./whseDtl.vue"
 import { fetchFineReportUrl } from "@/api/index";
 export default {
   name: "",
-  components: {},
+  components: {
+    "whse-dtl": WhseDtl
+  },
   data() {
     return {
       dialogVisible: false,
@@ -100,6 +112,8 @@ export default {
       typeObj: {
         sort: null,
       },
+      // 抽屉组件显示状态
+      drawerVisible: false,
     };
   },
   watch: {},
@@ -349,10 +363,25 @@ export default {
       this.isAdd = false;
       this.dialogVisible = true;
     },
-    handleRowDBLClick(val) {
-      this.isAdd = true;
-      this.detail = this.chooseData;
-      this.dialogVisible = true;
+    async handleRowDBLClick(row) {
+      let idxs = row.index.toString().split("-");
+      if(idxs.length == 1) return;
+      let type = this.form.type
+      if(!["SX"].includes(type)) return;
+      this.drawerVisible = true;
+      await this.$nextTick();
+      let params = {};
+      switch(type){
+        case "SX":
+           params = {
+            yarnsId: this.crud[idxs[0] - 1].yarnsId,
+            yarnsCard: row.yarnsCard,
+            batchNo: row.batchNo,
+            batId: row.batId,
+          };
+          break;
+      }
+      this.$refs.whseDtlRef.initData(type,params)
     },
     cellClick(val) {
       this.chooseData = val;

@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-03-24 14:21:15
- * @LastEditors: Lyl
- * @LastEditTime: 2022-04-19 10:02:05
+ * @LastEditors: Symbol_Yang
+ * @LastEditTime: 2022-04-20 11:05:18
  * @Description:
  */
 
@@ -690,3 +690,56 @@ export function noteCrud(_this) {
     ]
   };
 }
+
+
+
+// 出入仓明细数据表格配置
+export function whseDtlCrudOp(_this){
+  return {
+    menu: false,
+    addBtn: false,
+    cancelBtn: false,
+    editBtn: false,
+    delBtn: false,
+    menuWidth: 80,
+    border: true,
+    index: false,
+    highlightCurrentRow: true,
+    height: "calc(100vh - 187px)",
+    refreshBtn: false,
+    columnBtn: false,
+    page: true,
+    labelWidth: 100,
+    selection: false,
+    column: [{
+      label: "类型",
+      prop: "whseStatus",
+      align: "center",
+      width: 80,
+      formatter:(row,value) => {
+        return value == 'in' ? '入仓' : '出仓'
+      }
+    },{
+      label: "日期",
+      prop: "whseDate",
+      width: 100,
+    },{
+      label: "编号",
+      prop: "whseCode",
+      width: 140,
+    },{
+      label: "数量",
+      prop: "weight",
+      width: 120,
+      align: "right",
+      formatter: (row,value) => {
+        return (value || 0).toFixed(2);
+      }
+    },{
+      label: "方式",
+      prop: "whseType",
+      width: 100,
+    }]
+  }
+}
+
