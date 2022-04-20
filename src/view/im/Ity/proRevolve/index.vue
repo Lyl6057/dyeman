@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-05 08:35:14
+ * @LastEditTime: 2022-04-20 09:24:56
  * @Description: 
 -->
 <template>
@@ -179,6 +179,7 @@ import {
   del,
   getWeave,
   getNote,
+  getNoteByPage,
   addNote,
   updateInwhse,
   getInwhse,
@@ -321,25 +322,30 @@ export default {
     },
     noteChange(val) {
       this.dlgCrud = [];
-      if (val != "") {
-        val = Number(val);
-        this.loading = true;
-        let data = JSON.parse(JSON.stringify(this.history[val - 1]));
-        this.dlgChooseData = this.history[val - 1];
-        this.dlgForm.noteCode = val;
-        data.clothWeight = Number(
-          data.clothWeight - (this.weight - this.form.clothWeight)
-        ).toFixed(2); // 剩余
-        this.dlgForm.outWeight = Number(
-          this.history[val - 1].clothWeight - data.clothWeight
-        ).toFixed(2);
-        data.realWeight = data.clothWeight;
-        data.qcTakeOut = 0;
-        data.noteCode += "-A";
-        data.clothState = 3;
-        this.dlgCrud.push(data);
-        this.loading = false;
-      }
+      getNoteByPage({
+        noteCode: "%" + this.history[val - 1].noteCode,
+      }).then((res) => {
+        let splitNo = String.fromCharCode(res.data.total + 64);
+        if (val != "") {
+          val = Number(val);
+          this.loading = true;
+          let data = JSON.parse(JSON.stringify(this.history[val - 1]));
+          this.dlgChooseData = this.history[val - 1];
+          this.dlgForm.noteCode = val;
+          data.clothWeight = Number(
+            data.clothWeight - (this.weight - this.form.clothWeight)
+          ).toFixed(2); // 剩余
+          this.dlgForm.outWeight = Number(
+            this.history[val - 1].clothWeight - data.clothWeight
+          ).toFixed(2);
+          data.realWeight = data.clothWeight;
+          data.qcTakeOut = 0;
+          data.noteCode += `-${splitNo}`;
+          data.clothState = 3;
+          this.dlgCrud.push(data);
+          this.loading = false;
+        }
+      });
     },
     save2() {
       if (!this.history.length) {
@@ -420,6 +426,7 @@ export default {
             });
             updateNote({
               noteId: item.noteId,
+              realWeight: item.realWeight - this.dlgForm.outWeight,
               clothWeight: this.dlgForm.outWeight,
             }).then((res) => {}); //1.修改原布票重量
             // getInwhse({ custTicket: item.noteCode }).then((res) => {

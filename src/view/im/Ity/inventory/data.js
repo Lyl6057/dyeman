@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-03-24 14:21:15
- * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-20 11:05:18
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-04-20 10:12:58
  * @Description:
  */
 
@@ -25,19 +25,21 @@ export function formOp(_this) {
         dicData: kindId,
         change: val => {
           _this.$nextTick(() => {
-            if (val.value == "CPB") {
-              _this.formOp.column[4].display = true;
-              _this.formOp.column[5].display = false;
-              _this.formOp.column[6].display = false;
-            } else if (val.value == "PB") {
-              _this.formOp.column[4].display = false;
-              _this.formOp.column[5].display = true;
-              _this.formOp.column[6].display = true;
-            } else {
-              _this.formOp.column[4].display = false;
-              _this.formOp.column[5].display = false;
-              _this.formOp.column[6].display = false;
-            }
+            // if (val.value == "CPB") {
+            //   _this.formOp.column[4].display = true;
+            //   _this.formOp.column[5].display = false;
+            //   _this.formOp.column[6].display = false;
+            // } else if (val.value == "PB") {
+            //   _this.formOp.column[4].display = false;
+            //   _this.formOp.column[5].display = true;
+            //   _this.formOp.column[6].display = true;
+            // } else {
+            //   _this.formOp.column[4].display = false;
+            //   _this.formOp.column[5].display = false;
+            //   _this.formOp.column[6].display = false;
+            // }
+            _this.type = val.value;
+            _this.formOp = formOp(_this);
             if (!_this.loading) {
               _this.loading = true;
               _this.crud = [];
@@ -50,6 +52,12 @@ export function formOp(_this) {
       {
         label: _this.$t("whseField.clbh"),
         prop: "chemicalId",
+        placeholder: " ",
+        span: 6
+      },
+      {
+        label: _this.$t("whseField.clmc"),
+        prop: "chemicalName",
         placeholder: " ",
         span: 6
       },
@@ -72,27 +80,28 @@ export function formOp(_this) {
         prop: "vatNo",
         span: 6,
         placeholder: " ",
-        display: true
+        display: _this.type == "CPB" ? true : false
       },
       {
         label: "织单号",
         prop: "proName",
         span: 6,
         placeholder: " ",
-        display: true
+        display: _this.type == "PB" ? true : false
       },
       {
         label: "布飞编号",
         prop: "noteCode",
         span: 6,
         placeholder: " ",
-        display: true
+        display: _this.type == "PB" ? true : false
       },
       {
         label: "载具编号",
         prop: "storeLoadCode",
         span: 6,
-        placeholder: " "
+        placeholder: " ",
+        display: _this.type == "SX" ? false : true
       }
     ]
   };
@@ -691,10 +700,8 @@ export function noteCrud(_this) {
   };
 }
 
-
-
 // 出入仓明细数据表格配置
-export function whseDtlCrudOp(_this){
+export function whseDtlCrudOp(_this) {
   return {
     menu: false,
     addBtn: false,
@@ -711,35 +718,40 @@ export function whseDtlCrudOp(_this){
     page: true,
     labelWidth: 100,
     selection: false,
-    column: [{
-      label: "类型",
-      prop: "whseStatus",
-      align: "center",
-      width: 80,
-      formatter:(row,value) => {
-        return value == 'in' ? '入仓' : '出仓'
+    column: [
+      {
+        label: "类型",
+        prop: "whseStatus",
+        align: "center",
+        width: 80,
+        formatter: (row, value) => {
+          return value == "in" ? "入仓" : "出仓";
+        }
+      },
+      {
+        label: "日期",
+        prop: "whseDate",
+        width: 100
+      },
+      {
+        label: "编号",
+        prop: "whseCode",
+        width: 140
+      },
+      {
+        label: "数量",
+        prop: "weight",
+        width: 120,
+        align: "right",
+        formatter: (row, value) => {
+          return (value || 0).toFixed(2);
+        }
+      },
+      {
+        label: "方式",
+        prop: "whseType",
+        width: 100
       }
-    },{
-      label: "日期",
-      prop: "whseDate",
-      width: 100,
-    },{
-      label: "编号",
-      prop: "whseCode",
-      width: 140,
-    },{
-      label: "数量",
-      prop: "weight",
-      width: 120,
-      align: "right",
-      formatter: (row,value) => {
-        return (value || 0).toFixed(2);
-      }
-    },{
-      label: "方式",
-      prop: "whseType",
-      width: 100,
-    }]
-  }
+    ]
+  };
 }
-

@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-03-24 14:15:12
- * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-20 10:49:17
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-04-20 10:44:01
  * @Description: 
 -->
 <template>
@@ -39,12 +39,11 @@
         ></avue-crud>
       </div>
 
-
       <el-drawer
         title="库存出入明细"
         :visible.sync="drawerVisible"
         append-to-body
-        >
+      >
         <whse-dtl ref="whseDtlRef"></whse-dtl>
       </el-drawer>
     </view-container>
@@ -77,12 +76,12 @@ import {
 import XlsxTemplate from "xlsx-template";
 import JSZipUtils from "jszip-utils";
 import saveAs from "file-saver";
-import WhseDtl from "./whseDtl.vue"
+import WhseDtl from "./whseDtl.vue";
 import { fetchFineReportUrl } from "@/api/index";
 export default {
   name: "",
   components: {
-    "whse-dtl": WhseDtl
+    "whse-dtl": WhseDtl,
   },
   data() {
     return {
@@ -112,7 +111,7 @@ export default {
       typeObj: {
         sort: null,
       },
-      // 抽屉组件显示状态
+      type: "SX",
       drawerVisible: false,
     };
   },
@@ -203,11 +202,15 @@ export default {
       }
       let query = JSON.parse(JSON.stringify(this.form));
       query.yarnsId = "!^%" + (query.chemicalId || "");
-      query.proName = "!^%" + (query.proName || "");
+      // query.chemicalId = query.yarnsId;
+      query.yarnsName = "%" + (query.chemicalName || "");
+      // query.chemicalName = query.yarnsName;
+      query.fabricName = query.yarnsName;
+      query.fabName = query.yarnsName;
+      query.proName = "%" + (query.proName || "");
       query.vatNo = "!^%" + (query.vatNo || "");
-      query.noteCode = "!^%" + (query.noteCode || "");
-      query.storeLoadCode = "!^%" + (query.storeLoadCode || "");
-      // query.chemicalId = "!^%" + (query.chemicalId || "");
+      query.noteCode = "%" + (query.noteCode || "");
+      query.storeLoadCode = "%" + (query.storeLoadCode || "");
       this.getFun(
         Object.assign(query, {
           rows: this.page.pageSize,
@@ -365,15 +368,15 @@ export default {
     },
     async handleRowDBLClick(row) {
       let idxs = row.index.toString().split("-");
-      if(idxs.length == 1) return;
-      let type = this.form.type
-      if(!["SX"].includes(type)) return;
+      if (idxs.length == 1) return;
+      let type = this.form.type;
+      if (!["SX"].includes(type)) return;
       this.drawerVisible = true;
       await this.$nextTick();
       let params = {};
-      switch(type){
+      switch (type) {
         case "SX":
-           params = {
+          params = {
             yarnsId: this.crud[idxs[0] - 1].yarnsId,
             yarnsCard: row.yarnsCard,
             batchNo: row.batchNo,
@@ -381,7 +384,7 @@ export default {
           };
           break;
       }
-      this.$refs.whseDtlRef.initData(type,params)
+      this.$refs.whseDtlRef.initData(type, params);
     },
     cellClick(val) {
       this.chooseData = val;
