@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-03-24 14:21:15
- * @LastEditors: Lyl
- * @LastEditTime: 2022-04-20 10:12:58
+ * @LastEditors: Symbol_Yang
+ * @LastEditTime: 2022-04-20 15:23:11
  * @Description:
  */
 
@@ -700,6 +700,28 @@ export function noteCrud(_this) {
   };
 }
 
+
+
+// 明细统计配置
+export function whseDtlCountFormOp(_this){
+  return {
+    submitBtn: false,
+    emptyBtn: false,
+    labelWidth: 90,
+    column: [{
+      label: "入仓数量",
+      prop: "inWeight",
+      type: "number",
+      span: 12,
+    },{
+      label: "出仓数量",
+      prop: "outWeight",
+      type: "number",
+      span: 12,
+    }]
+  }
+}
+
 // 出入仓明细数据表格配置
 export function whseDtlCrudOp(_this) {
   return {
@@ -712,18 +734,15 @@ export function whseDtlCrudOp(_this) {
     border: true,
     index: false,
     highlightCurrentRow: true,
-    height: "calc(100vh - 187px)",
-    refreshBtn: false,
-    columnBtn: false,
+    height: "calc(100vh - 220px)",
     page: true,
-    labelWidth: 100,
-    selection: false,
+    selection: true,
     column: [
       {
         label: "类型",
         prop: "whseStatus",
         align: "center",
-        width: 80,
+        width: 70,
         formatter: (row, value) => {
           return value == "in" ? "入仓" : "出仓";
         }
@@ -750,7 +769,8 @@ export function whseDtlCrudOp(_this) {
       {
         label: "方式",
         prop: "whseType",
-        width: 100
+        width: 100,
+        overHidden: true
       }
     ]
   };
