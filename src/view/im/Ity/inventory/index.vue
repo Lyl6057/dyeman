@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-03-24 14:15:12
- * @LastEditors: Lyl
- * @LastEditTime: 2022-04-20 10:44:01
+ * @LastEditors: Symbol_Yang
+ * @LastEditTime: 2022-04-20 16:14:38
  * @Description: 
 -->
 <template>
@@ -381,6 +381,7 @@ export default {
             yarnsCard: row.yarnsCard,
             batchNo: row.batchNo,
             batId: row.batId,
+            locationCode: row.locationCode
           };
           break;
       }

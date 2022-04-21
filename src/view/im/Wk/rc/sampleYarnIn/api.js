@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:08:47
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-19 09:40:12
+ * @LastEditTime: 2022-04-21 08:34:31
  */
 
 import axios from "axios";
@@ -100,3 +100,15 @@ export function fetchWhseYarnInDtlAndDtlaData(params){
         params: params
     })
 }
+
+
+
+// 入仓审核检测
+export function fetchExamineValid(data){
+    return axios({
+        url: "/api/whseYarnin/v1.0/valid/examine",
+        method: "post",
+        data:data
+    })
+}
+

@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:18:23
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-15 10:41:21
+ * @LastEditTime: 2022-04-21 09:01:45
 -->
 <template>
   <div id="return-yarn-in-container">
@@ -33,7 +33,7 @@
 </template>
 <script>
 import {  whseInCrudOp, whseInFormOp } from "./data"
-import { fetchWhseYarnInDataListByPage,removeWhseYarnInData,updateWhseYarnInData } from "./api"
+import { fetchWhseYarnInDataListByPage,removeWhseYarnInData,fetchExamineValid } from "./api"
 export default {
   name: "returnYarnIn",
   props:{
@@ -112,13 +112,16 @@ export default {
     },
     // 审核
     handleExamine(){
-      let row = this.curSelectRow || {};
-      if(!row.whseYarninoid) return this.$tip.warning("请选择数据");
-      let whseYarninData = Object.assign({},row,{stockState: "1"});
+      let {whseYarninoid} = this.curSelectRow || {};
+      if(!whseYarninoid) return this.$tip.warning("请选择数据");
       this.loading = true;
-      updateWhseYarnInData(whseYarninData).then(res => {
-        this.$tip.success("审核成功");
-        this.getDataList();
+      fetchExamineValid(whseYarninoid).then(res => {
+        if(res.data.code == 200){
+          this.$tip.success("审核成功");
+          this.getDataList();
+        }else{
+          this.$tip.warning(res.data.msg)
+        }
       }).finally(() => {
         this.loading = false;
       });

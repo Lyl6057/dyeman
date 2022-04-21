@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:18:51
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-19 10:58:32
+ * @LastEditTime: 2022-04-21 09:02:43
 -->
 <template>
   <div id="whse-yarn-in-dtl-container">
@@ -176,7 +176,7 @@ export default {
               weight: item.cartonWei,
               weightUnit: item.weightUnit,
               yarnsCard: item.yarnsCard,
-              suppBatNo: item.batId,
+              batId: item.batId,
               weaveJobCode: item.placeOrigin,
               remarks: item.colorName,
               aChildren: item.dtlaChildren || []
@@ -242,7 +242,7 @@ export default {
           weight: inWeight,
           weightUnit: item.weightUnit,
           yarnsCard: item.yarnsCard,
-          batId: item.suppBatNo,
+          batId: item.batId,
           placeOrigin: item.weaveJobCode,
           colorName: item.remarks
         };
