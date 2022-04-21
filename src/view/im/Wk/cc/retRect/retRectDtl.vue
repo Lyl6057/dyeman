@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-12 10:34:33
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-18 16:22:41
+ * @LastEditTime: 2022-04-21 14:57:35
 -->
 <template>
   <div class="with-drawal-dlt-container">
@@ -72,7 +72,8 @@ import {
   fetchWhseYarninByRemeoNo,
   fetchRetReatDtlDataByOid,
   batchAddOrUpdateRetReatDtlaData,
-  batchRemoveDtlaById
+  batchRemoveDtlaById,
+  fetchValidOutWeight
 } from "./api";
 import { baseCodeSupplyEx, baseCodeSupply } from "@/api/index";
 import { timeConversion } from "@/config/util";
@@ -255,7 +256,9 @@ export default {
 
     // 保存
     async handleSave() {
-      if (!this.saveValid()) return;
+      let vaildRes = await this.saveValid();
+      console.log("vaildRes",vaildRes);
+      if (!vaildRes) return;
       this.loading = true;
       let oid = this.retReatFormData.whseRetreatoid;
       if (oid) {
@@ -299,9 +302,30 @@ export default {
       this.$tip.success("操作成功");
     },
     // 保存校验
-    saveValid() {
+    async saveValid() {
+      let dataList = [];
+      this.dtlCrudDataList.forEach(item => {
+         item.retreatDtlaList.forEach(aItem => {
+           dataList.push({
+             yarnsId: item.yarnsId,
+             yarnsCard: item.yarnsCard,
+             batchNo: item.batchNo,
+             batId: item.batId,
+             weight: aItem.retWeight || 0,
+             locationCode: aItem.locationCode
+           })
+         })
+      })
+      let validRes = await fetchValidOutWeight(dataList).then(res => res.data); 
+      if(!validRes.data.status){
+        let message = "";
+        validRes.data.resultList.forEach(item => {
+          message += `材料编号${item.yarnsId}的${item.locationName}货运位剩余库存数为${item.realStock};`
+        })
+        this.$tip.cofirm(message)
+      }
       // 检验条件
-      return true;
+      return validRes.data.status;
     },
     //
     handleCloseDtl() {
