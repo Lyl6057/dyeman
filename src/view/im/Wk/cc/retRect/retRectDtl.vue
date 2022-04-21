@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-12 10:34:33
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-21 14:57:35
+ * @LastEditTime: 2022-04-21 15:33:10
 -->
 <template>
   <div class="with-drawal-dlt-container">
@@ -257,7 +257,6 @@ export default {
     // 保存
     async handleSave() {
       let vaildRes = await this.saveValid();
-      console.log("vaildRes",vaildRes);
       if (!vaildRes) return;
       this.loading = true;
       let oid = this.retReatFormData.whseRetreatoid;
