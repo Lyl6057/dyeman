@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-02-23 08:11:26
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-19 09:13:55
+ * @LastEditTime: 2022-04-20 14:01:25
  * @FilePath: \iot.vue\src\view\proMng\dyeDeliveryNote\api.js
  * @Description:
  */
@@ -39,7 +39,7 @@ export function del(id) {
 
 export function getNote(params) {
   return axios({
-    url: "/api/proOutFactOrderDtl/page",
+    url: "/api/proOutFactOrderDtl",
     method: "get",
     params: params
   });
@@ -75,5 +75,28 @@ export function uploadXlxs(params) {
     headers: {
       "Content-Type": "application/x-www-form-urlencoded"
     }
+  });
+}
+
+export function getProOutFactOrderVat(params) {
+  return axios({
+    url: "/api/proOutFactOrderVat/page",
+    method: "get",
+    params: params
+  });
+}
+
+export function addProOutFactOrderVat(params) {
+  return axios({
+    url: "/api/proOutFactOrderVat",
+    method: "post",
+    params: params
+  });
+}
+
+export function delProOutFactOrderVat(id) {
+  return axios({
+    url: "/api/proOutFactOrderVat?dtlId=" + id,
+    method: "delete"
   });
 }

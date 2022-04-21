@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-09-30 13:48:13
+ * @LastEditTime: 2022-04-21 09:46:38
  * @Description: 
 -->
 <template>
@@ -108,28 +108,7 @@
       <div class="formBox">
         <avue-form ref="form" :option="formOp" v-model="form"> </avue-form>
       </div>
-      <!-- <view-container title="打印预览(仅供参考)">
-        <pre-view ref="preview" :detail="previewData"></pre-view>
-      </view-container> -->
     </view-container>
-    <!-- <el-tabs v-model="tabs">
-      <el-tab-pane :label="tabs" name="用纱明细">
-        <el-button @click="saveOther" type="success">{{
-          $t("public.save")
-        }}</el-button>
-        <el-button @click="add" type="primary">{{
-          $t("public.add")
-        }}</el-button>
-        <el-button
-          @click="del"
-          type="danger"
-          :disabled="Object.keys(chooseData).length == 0"
-          >{{ $t("public.del") }}</el-button
-        >
-      </el-tab-pane>
-      <el-tab-pane :label="tabs" name="洗後規格"></el-tab-pane>
-      <el-tab-pane :label="tabs" name="輸送張力"></el-tab-pane>
-    </el-tabs> -->
     <el-dialog
       :visible.sync="visible"
       fullscreen
@@ -258,7 +237,7 @@
   </div>
 </template>
 <script>
-import choice from "@/components/choice";
+import choice from "@/components/proMng/index";
 import {
   mainCrud,
   dlgForm,
@@ -344,7 +323,7 @@ export default {
       dlgLoading: false,
       dlgChoose: {},
       choiceV: false,
-      choiceTle: this.$t("choicDlg.xzsx"),
+      choiceTle: "选择纱线库存",
       choiceTarget: {},
       choiceField: "",
       choiceQ: {},
@@ -358,13 +337,7 @@ export default {
       canSave: true,
     };
   },
-  watch: {
-    // crud(n, o) {
-    //   if (this.tabs == "機號信息") {
-    //     this.getMachineList();
-    //   }
-    // },
-  },
+  watch: {},
   methods: {
     getData() {
       if (this.isAdd) {
@@ -585,7 +558,7 @@ export default {
         this.func.add = addLong;
         this.func.update = updateLong;
         this.dlgForm.proWeaveJobFk = this.form.weaveJobId;
-      } else if (this.tabs == "用纱明细") {
+      } else if (this.tabs == "用紗明细") {
         // this.func.get = getGroup;
         // this.func.del = delGroup;
         // this.func.add = addGroup;
@@ -628,7 +601,7 @@ export default {
             this.crud = res.data.rows;
           } else {
             this.crud = res.data.records;
-            if (this.tabs == "用纱明细") {
+            if (this.tabs == "用紗明细") {
               this.crud.sort((a, b) => {
                 return a.sn - b.sn;
               });
@@ -660,7 +633,7 @@ export default {
           this.$tip.error("紗長不能為空!");
           return;
         }
-        // if (this.tabs == "用纱明细") {
+        // if (this.tabs == "用紗明细") {
         //   if (!this.crud[i].groupName || !this.crud[i].changeBatchTime) {
         //     this.$tip.error("批次分組名稱/更換時間不能為空!");
         //     return;
@@ -771,7 +744,7 @@ export default {
       this.visible = true;
     },
     checkYarn() {
-      this.tabs = "用纱明细";
+      this.tabs = "用紗明细";
       this.crudOp = yarnCrud(this);
       this.visible = true;
     },
@@ -786,10 +759,10 @@ export default {
       this.visible = true;
     },
     add() {
-      // if (this.tabs == "用纱明细" && this.crud.length >= 1) {
-      //   this.$tip.warning("每个织单只允许存在一个用纱分组!");
-      //   return;
-      // }
+      if (this.tabs == "用紗明细") {
+        this.choiceV = true;
+        return;
+      }
       this.crud.push({
         index: this.crud.length + 1,
         $cellEdit: true,
@@ -837,7 +810,7 @@ export default {
             .del(
               this.tabs === "更改紗長"
                 ? this.chooseData.changedId
-                : this.tabs === "用纱明细"
+                : this.tabs === "用紗明细"
                 ? this.chooseData.useYarnId
                 : this.tabs === "洗後規格"
                 ? this.chooseData.washedId
@@ -931,7 +904,7 @@ export default {
       }
 
       // if (
-      //   this.tabs == "用纱明细" &&
+      //   this.tabs == "用紗明细" &&
       //   this.chooseData.list.length == 0 &&
       //   this.chooseData.useYarnId
       // ) {
@@ -1005,20 +978,60 @@ export default {
         this.choiceV = false;
         return;
       }
-      val.forEach((item, i) => {
-        this.chooseData.list.push({
-          yarnCode: item.yarnsId,
-          yarnName: item.yarnsName,
-          yarnBatch: item.batchNo,
-          yarnBrand: item.yarnsCard,
-          unit: "KG",
-          sn: this.chooseData.list.length + 1,
+      this.wLoading = true;
+      if (this.tabs == "用紗明细") {
+        if (!val.weight) {
+          this.$tip.warning("该纱库存为0,不能使用!");
+          this.wLoading = false;
+          return;
+        }
+        this.crud.push({
+          sn: this.crud.length + 1,
+          yarnCode: val.yarnsId,
+          yarnName: val.yarnsName,
+          yarnBatch: val.batId,
+          yarnBrand: val.yarnsCard,
+          factoryYarnBatch: val.batchNo,
+          unit: val.weightUnit,
           $cellEdit: true,
         });
-      });
-      // this.crud.forEach((item, i) => {
-      //   item.index = i + 1;
-      // });
+      } else {
+        this.form.custPoNo = val.custPoNo;
+        this.form.salPoNo = val.poNo;
+        this.form.productDate = val.poDate;
+        this.form.custCode = val.custBrandId;
+        this.form.colorName = val.custColorName;
+        this.form.colorCode = val.custColorNo;
+        this.form.custFabricCode = val.guestFabId;
+        this.form.seasonCode = val.season;
+        this.form.fiberComp = val.guestComponents;
+        this.form.fabricDesc = val.fabName;
+        this.form.otherRequire = val.finishingitem;
+        // getBom({ bomId: val.bomId }).then((res) => {
+        //   if (res.data.length) {
+        //     getBomDtlb({ salNewbomFk: res.data[0].salNewbomoid }).then(
+        //       (dtlb) => {
+        //         if (dtlb.data.length) {
+        //           getBomDtlbSpecs({
+        //             salNewbomDtlbFk: val.salNewbomDtlbFk,
+        //           }).then((dtlbSpecs) => {
+        //             this.setSpecs(dtlbSpecs.data);
+        //           });
+        //         } else {
+        //           getBomDtlaSpecs({
+        //             salNewbomDtlaFk: val.salNewbomDtlaFk,
+        //           }).then((dtlaSpecs) => {
+        //             this.setSpecs(dtlaSpecs.data);
+        //           });
+        //         }
+        //       }
+        //     );
+        //   } else {
+        //     this.wLoading = false;
+        //   }
+        // });
+      }
+      this.wLoading = false;
       this.choiceV = false;
     },
     close() {
@@ -1038,68 +1051,43 @@ export default {
 };
 </script>
 <style lang='stylus'>
-#proWeaveJob {
-  .avue-group__header {
-    height: 15px;
-    line-height: 15px;
-    margin-bottom: 10px;
-  }
-
-  .formBox {
-    height: 100vh !important;
-  }
-
-  .el-input-number__decrease, .el-input-number__increase {
-    display: none;
-  }
-
-  .el-input-number .el-input__inner {
-    text-align: left !important;
-  }
-
-  .el-input-number.is-controls-right .el-input__inner {
-    padding-left: 5px !important;
-  }
-}
-
-#colorMng_Dlg {
-  .is-fullscreen {
-    overflow: hidden !important;
-  }
-
-  .el-dialog__header {
-    padding: 0 !important;
-  }
-
-  .el-dialog__headerbtn {
-    top: 3px;
-    font-size: 18px;
-    font-weight: bold;
-    z-index: 9;
-  }
-
-  .el-dialog__headerbtn .el-dialog__close, #sxrcDlg .el-dialog__headerbtn .el-dialog__close, #wkDlg .el-dialog__headerbtn .el-dialog__close {
-    color: #000;
-    font-size: 24px;
-  }
-
-  .el-tag--mini {
-    height: 24px;
-    padding: 0 5px;
-    line-height: 24px;
-    font-size: 14px;
-  }
-
-  .el-select .el-tag__close.el-icon-close {
-    right: -5px;
-    height: 18px;
-    width: 18px;
-    line-height: 18px;
-  }
-
-  .avue-form .el-input--mini input {
-    height: 35px !important;
-    line-height: 35px;
-  }
-}
+#proWeaveJob
+  .avue-group__header
+    height 15px
+    line-height 15px
+    margin-bottom 10px
+  .formBox
+    height 100vh !important
+  .el-input-number__decrease, .el-input-number__increase
+    display none
+  .el-input-number .el-input__inner
+    text-align left !important
+  .el-input-number.is-controls-right .el-input__inner
+    padding-left 5px !important
+#colorMng_Dlg
+  .is-fullscreen
+    overflow hidden !important
+  .el-dialog__header
+    padding 0 !important
+  .el-dialog__headerbtn
+    top 3px
+    font-size 18px
+    font-weight bold
+    z-index 9
+  .el-dialog__headerbtn .el-dialog__close, #sxrcDlg .el-dialog__headerbtn .el-dialog__close, #wkDlg .el-dialog__headerbtn .el-dialog__close
+    color #000
+    font-size 24px
+  .el-tag--mini
+    height 24px
+    padding 0 5px
+    line-height 24px
+    font-size 14px
+  .el-select .el-tag__close.el-icon-close
+    right -5px
+    height 18px
+    width 18px
+    line-height 18px
+  .avue-form .el-input--mini input
+    height 35px !important
+    line-height 35px
 </style>

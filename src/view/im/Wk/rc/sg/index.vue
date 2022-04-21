@@ -255,6 +255,7 @@ import {
   // 行政
   getWhseOfficeUnin,
   getWhseEquInV2,
+  fetchExamineVaild,
 } from "./api";
 export default {
   name: "",
@@ -596,19 +597,34 @@ export default {
           {}
         )
         .then(() => {
-          this.everyThing
-            .update(Object.assign(this.chooseData, { stockState: "1" }))
-            .then((res) => {
-              if (res.data.code === 200) {
-                this.$tip.success("审核成功!");
-                this.getData();
-              } else {
-                this.$tip.error("审核失败!");
-              }
-            })
-            .catch((err) => {
-              this.$tip.error(this.$t("public.scsb"));
-            });
+          if (this.data === this.$t("iaoMng.sx")) {
+            fetchExamineVaild(this.chooseData.whseYarninoid)
+              .then((res) => {
+                if (res.data.code === 200) {
+                  this.$tip.success("审核成功!");
+                  this.getData();
+                } else {
+                  this.$tip.error(res.data.msg);
+                }
+              })
+              .catch((err) => {
+                this.$tip.error(err);
+              });
+          } else {
+            this.everyThing
+              .update(Object.assign(this.chooseData, { stockState: "1" }))
+              .then((res) => {
+                if (res.data.code === 200) {
+                  this.$tip.success("审核成功!");
+                  this.getData();
+                } else {
+                  this.$tip.error(res.data.msg);
+                }
+              })
+              .catch((err) => {
+                this.$tip.error(err);
+              });
+          }
         })
         .catch((err) => {
           this.$tip.warning(this.$t("public.qxcz"));

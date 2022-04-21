@@ -1,5 +1,14 @@
 import axios from "axios";
 
+// 入仓审核
+export function fetchExamineVaild(data) {
+  return axios({
+    url: "/api/whseYarnin/v1.0/valid/examine",
+    method: "post",
+    data: data
+  });
+}
+
 // 设备申购送货单视图
 export function getWhseEquInV2(params) {
   return axios({

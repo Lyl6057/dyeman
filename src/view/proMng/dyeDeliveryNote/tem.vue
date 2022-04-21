@@ -17,34 +17,59 @@
       <div class="formBox">
         <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
       </div>
-      <view-container title="成品布明细">
-        <div class="btnList">
-          <el-button type="primary" @click="add">{{
-            this.$t("public.add")
-          }}</el-button>
-          <el-button type="danger" @click="del">{{
-            this.$t("public.del")
-          }}</el-button>
-        </div>
-        <div class="crudBox" style="margin-top: 5px">
-          <avue-crud
-            ref="crud"
-            :option="crudOp"
-            :data="crud"
-            :page.sync="page"
-            v-loading="loading"
-            @on-load="getShipdetail"
-            @current-row-change="cellClick"
-          ></avue-crud>
-        </div>
-      </view-container>
+      <el-row>
+        <el-col :span="12"
+          ><view-container title="送货单缸号信息">
+            <div class="btnList">
+              <el-button type="primary" @click="add(0)">{{
+                this.$t("public.add")
+              }}</el-button>
+              <el-button type="danger" @click="del">{{
+                this.$t("public.del")
+              }}</el-button>
+            </div>
+            <div class="crudBox" style="margin-top: 5px">
+              <avue-crud
+                ref="vatcrud"
+                :option="crudOp"
+                :data="crud"
+                :page.sync="page"
+                v-loading="loading"
+                @on-load="getShipdetail"
+                @current-row-change="cellClick"
+              ></avue-crud>
+            </div> </view-container
+        ></el-col>
+        <el-col :span="12">
+          <view-container title="送货单缸号明细">
+            <div class="btnList">
+              <el-button type="primary" @click="add(1)">{{
+                this.$t("public.add")
+              }}</el-button>
+              <el-button type="danger" @click="delDtl">{{
+                this.$t("public.del")
+              }}</el-button>
+            </div>
+            <div class="crudBox" style="margin-top: 5px">
+              <avue-crud
+                ref="dltcrud"
+                :option="detailOp"
+                :data="chooseData.list"
+                v-loading="loading"
+                @current-row-change="cellDtlClick"
+              ></avue-crud>
+            </div>
+          </view-container>
+        </el-col>
+      </el-row>
     </view-container>
 
     <choice
       :choiceV="choiceV"
       :choiceTle="choiceTle"
       :choiceQ="choiceQ"
-      :dlgWidth="dlgWidth"
+      marginTop="5vh"
+      dlgWidth="80%"
       @choiceData="choiceData"
       @close="choiceV = false"
       v-if="choiceV"
@@ -52,7 +77,7 @@
   </div>
 </template>
 <script>
-import { mainCrud, noteCrud } from "./data";
+import { mainCrud, noteCrud, finishedCrud } from "./data";
 import {
   getCodeSupply,
   add,
@@ -62,6 +87,9 @@ import {
   delNote,
   updateNote,
   addNote,
+  addProOutFactOrderVat,
+  getProOutFactOrderVat,
+  delProOutFactOrderVat,
 } from "./api";
 import choice from "@/components/proMng/index";
 import { getDIC, getDicT, getXDicT, postDicT, preFixInt } from "@/config";
@@ -84,6 +112,7 @@ export default {
       form: {},
       crudOp: noteCrud(this),
       crud: [],
+      detailOp: finishedCrud(this),
       page: {
         pageSize: 50,
         currentPage: 1,
@@ -98,7 +127,8 @@ export default {
       choiceQ: {
         cardType: 1,
         r_clothState_r: "||1||2||3",
-        productNo: "^^%",
+        sortF: "productNo",
+        fuzzy: "poNo,vatNo",
       },
       chooseData: {},
       oldData: {},
@@ -107,6 +137,7 @@ export default {
       codeSupplyNum: 0,
       refresh: false,
       code: getDIC("bas_companyCode"),
+      cellDtlChoose: {},
     };
   },
   watch: {},
@@ -119,6 +150,11 @@ export default {
             outDate: this.$getNowTime("datetime"),
             outCode: res.data.data,
             applicant: this.$store.state.userOid,
+            creator: this.$store.state.userOid,
+            createDate: this.$getNowTime("datetime"),
+            modifier: this.$store.state.userOid,
+            modifyDate: this.$getNowTime("datetime"),
+            delFlag: 0,
           };
           this.wLoading = false;
         });
@@ -138,7 +174,7 @@ export default {
         this.wLoading = false;
         return;
       }
-      getNote({
+      getProOutFactOrderVat({
         rows: this.page.pageSize,
         start: this.page.currentPage,
         outOrderFk: this.form.orderId,
@@ -150,7 +186,7 @@ export default {
         this.crud.forEach((item, i) => {
           item.index = i + 1;
         });
-        if (this.crud.length) this.$refs.crud.setCurrentRow(this.crud[0]);
+        if (this.crud.length) this.$refs.vatcrud.setCurrentRow(this.crud[0]);
         setTimeout(() => {
           this.wLoading = false;
         }, 200);
@@ -160,19 +196,21 @@ export default {
       this.$refs.form.validate((valid, done) => {
         if (valid) {
           const func = (item, index) => {
-            if (!item.vatNo || !item.productNo) {
+            if (!item.vatNo) {
               return false;
             }
             return true;
           };
           if (!this.crud.every(func)) {
-            this.$tip.warning("缸号/成品布编号不能为空!");
+            this.$tip.warning("缸号不能为空!");
             done();
             return;
           }
           this.wLoading = true;
           try {
             if (this.form.orderId) {
+              this.form.modifier = this.$store.state.userOid;
+              this.form.modifyDate = this.$getNowTime("datetime");
               update(this.form)
                 .then((res) => {
                   this.refresh = true;
@@ -209,19 +247,38 @@ export default {
     saveNote() {
       if (this.crud.length) {
         this.crud.forEach((item, i) => {
-          if (item.dtlId) {
-            updateNote(item).then((res) => {});
+          if (item.vatRefId) {
+            // updateNote(item).then((res) => {});
+            if (item.list) {
+              item.list.forEach((list, i) => {
+                if (!list.dtlId) {
+                  list.proOutFactOrderVatFk = item.vatRefId;
+                  addNote(list).then((res) => {
+                    list.dtlId = res.data.data;
+                  });
+                }
+              });
+            }
           } else {
-            item.outOrderFk = this.form.orderId;
-            addNote(item).then((res) => {
-              item.orderId = res.data.data;
+            let data = JSON.parse(JSON.stringify(item));
+            data.list = "";
+            data.outOrderFk = this.form.orderId;
+            addProOutFactOrderVat(data).then((res) => {
+              item.vatRefId = res.data.data;
+              item.list.forEach((list, i) => {
+                list.proOutFactOrderVatFk = item.vatRefId;
+                addNote(list).then((res) => {
+                  list.dtlId = res.data.data;
+                });
+              });
             });
           }
           if (i == this.crud.length - 1) {
             setTimeout(() => {
               this.wLoading = false;
+              this.getShipdetail();
               this.$tip.success(this.$t("public.bccg"));
-            }, 200);
+            }, 500);
           }
         });
       } else {
@@ -229,7 +286,8 @@ export default {
         this.$tip.success(this.$t("public.bccg"));
       }
     },
-    add() {
+    add(val) {
+      this.choiceQ.vatNo = val ? this.chooseData.vatNo : "";
       this.choiceV = true;
     },
     del() {
@@ -237,26 +295,30 @@ export default {
         this.$tip.error(this.$t("public.delTle"));
         return;
       }
-      if (!this.chooseData.dtlId) {
+      if (this.chooseData.list.length) {
+        this.$tip.error("请先删除缸号明细资料!");
+        return;
+      }
+      if (!this.chooseData.vatRefId) {
         this.crud.splice(this.chooseData.index - 1, 1);
         this.crud.forEach((item, i) => {
           item.index = i + 1;
         });
         if (this.crud.length) {
-          this.$refs.crud.setCurrentRow(this.crud[0]);
+          this.$refs.vatcrud.setCurrentRow(this.crud[0]);
         }
         return;
       }
       this.$tip
         .cofirm(
-          "是否确定删除成品编号为 【 " +
-            this.chooseData.productNo +
+          "是否确定删除缸号为 【 " +
+            this.chooseData.vatNo +
             this.$t("iaoMng.delTle2"),
           this,
           {}
         )
         .then(() => {
-          delNote(this.chooseData.dtlId)
+          delNote(this.chooseData.vatRefId)
             .then((res) => {
               if (res.data.code === 200) {
                 this.$tip.success(this.$t("public.sccg"));
@@ -265,7 +327,55 @@ export default {
                   item.index = i + 1;
                 });
                 if (this.crud.length) {
-                  this.$refs.crud.setCurrentRow(this.crud[0]);
+                  this.$refs.vatcrud.setCurrentRow(this.crud[0]);
+                }
+              } else {
+                this.$tip.error(this.$t("public.scsb"));
+              }
+            })
+            .catch((err) => {
+              this.$tip.error(this.$t("public.scsb"));
+            });
+        })
+        .catch((err) => {
+          this.$tip.warning(this.$t("public.qxcz"));
+        });
+    },
+    delDtl() {
+      if (Object.keys(this.cellDtlChoose).length === 0) {
+        this.$tip.error(this.$t("public.delTle"));
+        return;
+      }
+      if (!this.cellDtlChoose.dtlId) {
+        this.chooseData.list.splice(this.cellDtlChoose.index - 1, 1);
+        this.chooseData.list.forEach((item, i) => {
+          item.index = i + 1;
+        });
+        if (this.chooseData.list.length) {
+          this.$refs.dltcrud.setCurrentRow(this.crud[0]);
+        }
+        return;
+      }
+      this.$tip
+        .cofirm(
+          "是否确定删除成品编号为 【 " +
+            this.cellDtlChoose.productNo +
+            this.$t("iaoMng.delTle2"),
+          this,
+          {}
+        )
+        .then(() => {
+          delNote(this.cellDtlChoose.dtlId)
+            .then((res) => {
+              console.log(res.data.code);
+              if (res.data.code == 200) {
+                this.$tip.success(this.$t("public.sccg"));
+                this.chooseData.list.splice(this.cellDtlChoose.index - 1, 1);
+                this.chooseData.list.forEach((item, i) => {
+                  item.index = i + 1;
+                });
+                if (this.chooseData.list.length) {
+                  this.$refs.dltcrud.setCurrentRow(this.chooseData.list[0]);
                 }
               } else {
                 this.$tip.error(this.$t("public.scsb"));
@@ -280,10 +390,25 @@ export default {
         });
     },
     cellClick(val) {
-      this.oldData.$cellEdit = false;
-      this.$set(val, "$cellEdit", true);
-      this.oldData = val;
       this.chooseData = val;
+      if (!val.list) {
+        this.loading = true;
+        getNote({
+          proOutFactOrderVatFk: this.chooseData.vatRefId,
+        }).then((res) => {
+          res.data.sort((a, b) => (a.productNo > b.productNo ? 1 : -1));
+          res.data.forEach((item, i) => {
+            item.index = i + 1;
+            item.pidNo = parseInt(item.productNo.slice(-3));
+          });
+          this.$set(val, "list", res.data);
+          val.list = res.data;
+          this.loading = false;
+        });
+      }
+    },
+    cellDtlClick(val) {
+      this.cellDtlChoose = val;
     },
     close() {
       if (this.refresh) {
@@ -299,16 +424,53 @@ export default {
         this.choiceV = false;
         return;
       }
-      this.crud = this.crud.concat(val);
-      this.crud = this.$unique(this.crud, "productNo");
-      this.crud.forEach((item, i) => {
-        item.index = i + 1;
-      });
+      for (let i = 0; i < val.length; i++) {
+        val[i].proFinalProductCardFk = val[i].cardId;
+        if (!this.crud.length) {
+          this.crud.push({
+            index: 1,
+            vatNo: val[i].vatNo,
+            poNo: val[i].poNo,
+            list: [{ ...val[i], index: 1 }],
+          });
+          continue;
+        }
+        for (let j = 0; j < this.crud.length; j++) {
+          if (this.crud[j].vatNo == val[i].vatNo) {
+            this.crud[j].list.push({
+              ...val[i],
+              index: this.crud[j].list.length + 1,
+            });
+            this.crud[j].list = this.$unique(
+              this.crud[j].list,
+              "proFinalProductCardFk"
+            );
+            break;
+          } else if (j == this.crud.length - 1) {
+            this.crud.push({
+              vatNo: val[i].vatNo,
+              poNo: val[i].poNo,
+              list: [{ ...val[i], index: 1 }],
+              index: this.crud.length + 1,
+            });
+          }
+        }
+      }
       this.choiceV = false;
       setTimeout(() => {
         this.wLoading = false;
       }, 200);
     },
+  },
+  updated() {
+    this.$nextTick(() => {
+      if (this.chooseData.list) {
+        this.$refs["dltcrud"].doLayout();
+      }
+      if (this.crud) {
+        this.$refs["vatcrud"].doLayout();
+      }
+    });
   },
   created() {},
   mounted() {
@@ -317,32 +479,4 @@ export default {
   beforeDestroy() {},
 };
 </script>
-<style lang='stylus'>
-#colorMng_Tem
-  .formBox
-    // height calc(100vh - 125px) !important
-#colorMng_Dlg
-  .el-dialog__header
-    padding 0 !important
-  .el-dialog__headerbtn
-    top 3px
-    font-size 18px
-    font-weight bold
-    z-index 9
-  .el-dialog__headerbtn .el-dialog__close, #sxrcDlg .el-dialog__headerbtn .el-dialog__close, #wkDlg .el-dialog__headerbtn .el-dialog__close
-    color #000
-    font-size 24px
-  .el-tag--mini
-    height 24px
-    padding 0 5px
-    line-height 24px
-    font-size 14px
-  .el-select .el-tag__close.el-icon-close
-    right -5px
-    height 18px
-    width 18px
-    line-height 18px
-  .avue-form .el-input--mini input
-    height 35px !important
-    line-height 35px
-</style>
+<style lang='stylus'></style>

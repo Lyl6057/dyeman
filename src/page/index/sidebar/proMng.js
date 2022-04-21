@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-04-01 13:39:35
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-19 07:53:34
+ * @LastEditTime: 2022-04-21 08:09:06
  * @Description:
  */
 
@@ -67,6 +67,10 @@ export function proMng(_this) {
         {
           menuName: "9.生产看板",
           index: "proRpt"
+        },
+        {
+          menuName: "10.出库送货单",
+          index: "dyeDeliveryNote"
         }
       ]
     },
@@ -129,10 +133,6 @@ export function proMng(_this) {
         {
           menuName: "4.行车监控",
           index: "proDriving"
-        },
-        {
-          menuName: "5.出库送货单",
-          index: "dyeDeliveryNote"
         }
 
         // {

@@ -152,8 +152,33 @@ export function noteCrud(_this) {
     sumColumnList: [
       {
         label: " ",
-        name: "poNo",
+        name: "vatNo",
         type: "count"
+      },
+      {
+        label: " ",
+        name: "pidNo",
+        type: "sum"
+      },
+      {
+        label: " ",
+        name: "netWeight",
+        type: "sum"
+      },
+      {
+        label: " ",
+        name: "netWeightLbs",
+        type: "sum"
+      },
+      {
+        label: " ",
+        name: "grossWeight",
+        type: "sum"
+      },
+      {
+        label: " ",
+        name: "yardLength",
+        type: "sum"
       }
     ],
     column: [
@@ -164,34 +189,179 @@ export function noteCrud(_this) {
         align: "center",
         display: false
       },
-
       {
         label: "缸号",
         prop: "vatNo",
-        width: 180,
+        width: 140,
         overHidden: true,
-        cell: true,
         placeholder: " ",
         span: 6
       },
       {
         label: "订单编号",
         prop: "poNo",
-        width: 180,
+        width: 140,
         overHidden: true,
-        cell: true,
         placeholder: " ",
         span: 6
       },
-
       {
-        label: "产品编号",
-        prop: "productNo",
-        width: 180,
-        overHidden: true,
+        label: "总匹號",
+        prop: "pidNo",
+        width: 80,
+        align: "right",
+        span: 6,
+        type: "number",
+        precision: 0
+      },
+      {
+        label: "总净重(KG)",
+        prop: "netWeight",
+        width: 120,
+        align: "right",
+        span: 6,
         cell: true,
         placeholder: " ",
-        span: 6
+        type: "number",
+        minRows: 0,
+        precision: 1
+      },
+      {
+        label: "总毛重(KG)",
+        prop: "grossWeight",
+        width: 120,
+        span: 8,
+        minRows: 0,
+        type: "number",
+        precision: 1,
+        align: "right",
+        placeholder: " "
+      },
+      {
+        label: "总码长",
+        prop: "yardLength",
+        width: 100,
+        span: 8,
+        minRows: 0,
+        type: "number",
+        precision: 1,
+        align: "right",
+        placeholder: " "
+      }
+    ]
+  };
+}
+
+export function finishedCrud(_this) {
+  return {
+    menu: false,
+    addBtn: false,
+    border: true,
+    highlightCurrentRow: true,
+    height: "calc(100vh - 284px)",
+    refreshBtn: false,
+    columnBtn: false,
+    page: false,
+    labelWidth: 120,
+    showSummary: true,
+    sumColumnList: [
+      {
+        label: " ",
+        name: "productNo",
+        type: "count"
+      },
+      {
+        label: " ",
+        name: "netWeight",
+        type: "sum"
+      },
+      {
+        label: " ",
+        name: "netWeightLbs",
+        type: "sum"
+      },
+      {
+        label: " ",
+        name: "grossWeight",
+        type: "sum"
+      },
+      {
+        label: " ",
+        name: "yardLength",
+        type: "sum"
+      }
+    ],
+    column: [
+      // {
+      //   label: "#",
+      //   prop: "index",
+      //   width: 50,
+      //   align: "center",
+      //   display: false
+      // },
+      {
+        label: "匹號",
+        prop: "pidNo",
+        width: 60,
+        align: "right",
+        // sortable: true,
+        span: 6,
+        type: "number",
+        precision: 0
+      },
+      {
+        label: "成品编号",
+        prop: "productNo",
+        width: 180,
+        span: 6,
+        placeholder: " ",
+        disabled: true,
+        overHidden: true
+      },
+      {
+        label: "净重(KG)",
+        prop: "netWeight",
+        width: 120,
+        align: "right",
+        span: 6,
+        cell: true,
+        placeholder: " ",
+        type: "number",
+        minRows: 0,
+        precision: 1
+      },
+      {
+        label: "净重(LBS)",
+        prop: "netWeightLbs",
+        width: 120,
+        span: 8,
+        minRows: 0,
+        type: "number",
+        precision: 1,
+        align: "right",
+        placeholder: " "
+      },
+      {
+        label: "毛重(KG)",
+        prop: "grossWeight",
+        width: 120,
+        span: 8,
+        minRows: 0,
+        type: "number",
+        precision: 1,
+        align: "right",
+        placeholder: " "
+      },
+      {
+        label: "码长",
+        prop: "yardLength",
+        width: 120,
+        span: 8,
+        minRows: 0,
+        type: "number",
+        precision: 1,
+        align: "right",
+        placeholder: " "
       }
     ]
   };

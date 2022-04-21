@@ -239,7 +239,11 @@ export default {
           queryData[this.choiceQ.sortF] =
             "^^%" + (queryData[this.choiceQ.sortF] || "");
         }
-
+        if (this.choiceQ.fuzzy) {
+          this.choiceQ.fuzzy.split(",").forEach((item) => {
+            queryData[item] = "%" + (queryData[item] || "");
+          });
+        }
         this.getData(
           Object.assign(queryData, this.choiceQ, {
             rows: this.page.pageSize,

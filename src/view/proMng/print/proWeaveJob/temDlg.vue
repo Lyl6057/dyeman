@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-02-25 16:54:26
+ * @LastEditTime: 2022-04-21 09:36:36
  * @Description: 
 -->
 <template>
@@ -85,20 +85,6 @@
           v-if="audit"
           >{{ form.auditState ? "取消审核" : "审核" }}</el-button
         >
-        <!-- <el-tooltip
-          class="item"
-          effect="dark"
-          content="xuất"
-          placement="top-start"
-        >
-          <el-button
-            type="primary"
-            @click="out"
-            v-if="canSave"
-            :disabled="!this.form.weaveJobId"
-            >导出excel</el-button
-          >
-        </el-tooltip> -->
         <el-tooltip
           class="item"
           effect="dark"
@@ -118,28 +104,8 @@
           </template>
         </avue-form>
       </div>
-      <!-- <view-container title="打印预览(仅供参考)">
-        <pre-view ref="preview" :detail="previewData"></pre-view>
-      </view-container> -->
     </view-container>
-    <!-- <el-tabs v-model="tabs">
-      <el-tab-pane :label="tabs" name="用紗明细">
-        <el-button @click="saveOther" type="success">{{
-          $t("public.save")
-        }}</el-button>
-        <el-button @click="add" type="primary">{{
-          $t("public.add")
-        }}</el-button>
-        <el-button
-          @click="del"
-          type="danger"
-          :disabled="Object.keys(chooseData).length == 0"
-          >{{ $t("public.del") }}</el-button
-        >
-      </el-tab-pane>
-      <el-tab-pane :label="tabs" name="洗後規格"></el-tab-pane>
-      <el-tab-pane :label="tabs" name="輸送張力"></el-tab-pane>
-    </el-tabs> -->
+
     <el-dialog
       :visible.sync="visible"
       fullscreen
@@ -243,48 +209,6 @@
               ></avue-crud>
             </div> </view-container
         ></el-col>
-        <!-- <el-col :span="18" v-if="tabs == '用紗明细'">
-          <view-container title="用紗明細">
-            <div class="btnList">
-              <el-tooltip
-                class="item"
-                effect="dark"
-                content="thêm mới "
-                placement="top-start"
-              >
-                <el-button
-                  @click="addDtl"
-                  type="primary"
-                  :disabled="Object.keys(chooseData).length == 0"
-                  >{{ $t("public.add") }}</el-button
-                >
-              </el-tooltip>
-              <el-tooltip
-                class="item"
-                effect="dark"
-                content="xóa"
-                placement="top-start"
-              >
-                <el-button
-                  @click="delDtl"
-                  type="danger"
-                  :disabled="Object.keys(chooseDtlData).length == 0"
-                  >{{ $t("public.del") }}</el-button
-                >
-              </el-tooltip>
-            </div>
-            <div class="formBox"></div>
-            <div class="crudBox">
-              <avue-crud
-                ref="yarnCrud"
-                :option="yarnCrud"
-                :data="chooseData.list"
-                @on-load="query"
-                @current-row-change="cellDtlClick"
-              ></avue-crud>
-            </div>
-          </view-container>
-        </el-col> -->
       </el-row>
     </el-dialog>
     <el-dialog
@@ -316,7 +240,7 @@
   </div>
 </template>
 <script>
-import choice from "@/components/proMng/salPo";
+import choice from "@/components/proMng/index";
 import {
   mainCrud,
   dlgForm,
@@ -365,9 +289,6 @@ import {
 } from "./api";
 import { baseCodeSupplyEx, baseCodeSupply } from "@/api/index";
 import preview from "./preview";
-import XlsxTemplate from "xlsx-template";
-import JSZipUtils from "jszip-utils";
-import saveAs from "file-saver";
 import { getBf } from "../clothFly/api";
 export default {
   name: "",
@@ -412,10 +333,13 @@ export default {
       dlgLoading: false,
       dlgChoose: {},
       choiceV: false,
-      choiceTle: "选择订单资料",
+      choiceTle: "选择纱线库存",
       choiceTarget: {},
       choiceField: "",
-      choiceQ: {},
+      choiceQ: {
+        fuzzy: "yarnsId,yarnsName,batchNo,locationCode",
+        sortF: "yarnsId",
+      },
       code: "",
       yarnCrud: yarnCrud(this),
       group: [],
@@ -998,6 +922,10 @@ export default {
       this.visible = true;
     },
     add() {
+      if (this.tabs == "用紗明细") {
+        this.choiceV = true;
+        return;
+      }
       this.crud.push({
         index: this.crud.length + 1,
         $cellEdit: true,
@@ -1228,40 +1156,59 @@ export default {
         return;
       }
       this.wLoading = true;
-      this.form.custPoNo = val.custPoNo;
-      this.form.salPoNo = val.poNo;
-      this.form.productDate = val.poDate;
-      this.form.custCode = val.custBrandId;
-      this.form.colorName = val.custColorName;
-      this.form.colorCode = val.custColorNo;
-
-      this.form.custFabricCode = val.guestFabId;
-      this.form.seasonCode = val.season;
-
-      this.form.fiberComp = val.guestComponents;
-      this.form.fabricDesc = val.fabName;
-      this.form.otherRequire = val.finishingitem;
-      getBom({ bomId: val.bomId }).then((res) => {
-        if (res.data.length) {
-          getBomDtlb({ salNewbomFk: res.data[0].salNewbomoid }).then((dtlb) => {
-            if (dtlb.data.length) {
-              getBomDtlbSpecs({
-                salNewbomDtlbFk: val.salNewbomDtlbFk,
-              }).then((dtlbSpecs) => {
-                this.setSpecs(dtlbSpecs.data);
-              });
-            } else {
-              getBomDtlaSpecs({
-                salNewbomDtlaFk: val.salNewbomDtlaFk,
-              }).then((dtlaSpecs) => {
-                this.setSpecs(dtlaSpecs.data);
-              });
-            }
-          });
-        } else {
+      if (this.tabs == "用紗明细") {
+        if (!val.weight) {
+          this.$tip.warning("该纱库存为0,不能使用!");
           this.wLoading = false;
+          return;
         }
-      });
+        this.crud.push({
+          sn: this.crud.length + 1,
+          yarnCode: val.yarnsId,
+          yarnName: val.yarnsName,
+          yarnBatch: val.batId,
+          yarnBrand: val.yarnsCard,
+          factoryYarnBatch: val.batchNo,
+          unit: val.weightUnit,
+          $cellEdit: true,
+        });
+      } else {
+        this.form.custPoNo = val.custPoNo;
+        this.form.salPoNo = val.poNo;
+        this.form.productDate = val.poDate;
+        this.form.custCode = val.custBrandId;
+        this.form.colorName = val.custColorName;
+        this.form.colorCode = val.custColorNo;
+        this.form.custFabricCode = val.guestFabId;
+        this.form.seasonCode = val.season;
+        this.form.fiberComp = val.guestComponents;
+        this.form.fabricDesc = val.fabName;
+        this.form.otherRequire = val.finishingitem;
+        getBom({ bomId: val.bomId }).then((res) => {
+          if (res.data.length) {
+            getBomDtlb({ salNewbomFk: res.data[0].salNewbomoid }).then(
+              (dtlb) => {
+                if (dtlb.data.length) {
+                  getBomDtlbSpecs({
+                    salNewbomDtlbFk: val.salNewbomDtlbFk,
+                  }).then((dtlbSpecs) => {
+                    this.setSpecs(dtlbSpecs.data);
+                  });
+                } else {
+                  getBomDtlaSpecs({
+                    salNewbomDtlaFk: val.salNewbomDtlaFk,
+                  }).then((dtlaSpecs) => {
+                    this.setSpecs(dtlaSpecs.data);
+                  });
+                }
+              }
+            );
+          } else {
+            this.wLoading = false;
+          }
+        });
+      }
+      this.wLoading = false;
       this.choiceV = false;
     },
     setSpecs(list) {

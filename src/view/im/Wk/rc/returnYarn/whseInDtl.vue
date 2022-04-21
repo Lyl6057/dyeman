@@ -3,22 +3,30 @@
  * @Version: 2.0
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:18:51
- * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-19 11:58:11
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-04-20 15:21:28
 -->
 <template>
   <div id="whse-yarn-in-dtl-container">
-    <view-container title="本厂余纱退纱" :element-loading-text="loadLabel" v-loading="loading">
+    <view-container
+      title="本厂余纱退纱"
+      :element-loading-text="loadLabel"
+      v-loading="loading"
+    >
       <div class="btnList">
-        <el-button
-          type="primary"
-          @click="handleSave"
-          :disabled="hasNotEdit"
-        >{{ this.$t("public.save") }}</el-button>
-        <el-button type="warning" @click="handleClose">{{ this.$t("public.close") }}</el-button>
+        <el-button type="primary" @click="handleSave" :disabled="hasNotEdit">{{
+          this.$t("public.save")
+        }}</el-button>
+        <el-button type="warning" @click="handleClose">{{
+          this.$t("public.close")
+        }}</el-button>
       </div>
       <div class="formBox">
-        <avue-form ref="form" :option="whseYarnInFormOp" v-model="whseYarnInFormData"></avue-form>
+        <avue-form
+          ref="form"
+          :option="whseYarnInFormOp"
+          v-model="whseYarnInFormData"
+        ></avue-form>
       </div>
       <el-row>
         <el-col :span="17">
@@ -44,12 +52,14 @@
                 type="primary"
                 :disabled="hasNotEdit"
                 @click="handleAddDtla"
-              >{{ this.$t("public.add") }}</el-button>
+                >{{ this.$t("public.add") }}</el-button
+              >
               <el-button
                 type="danger"
                 :disabled="hasNotEdit"
                 @click="handleDelDtla"
-              >{{ this.$t("public.del") }}</el-button>
+                >{{ this.$t("public.del") }}</el-button
+              >
             </div>
             <div class="crudBox">
               <avue-crud
@@ -69,7 +79,7 @@
 import {
   whseYarnInFormOp,
   whseYarnInDtlCrudOp,
-  whseYarnInDtlaCrudOp
+  whseYarnInDtlaCrudOp,
 } from "./data";
 import {
   fetchRetYarnNoticDataList,
@@ -78,7 +88,7 @@ import {
   batchSaveOrUpdateDtlDataList,
   batchSaveOrUpdateDtlaDataList,
   fetchWhseYarnInDtlAndDtlaData,
-  batchRemoveDtlaDataById
+  batchRemoveDtlaDataById,
 } from "./api";
 import { timeConversion } from "@/config/util";
 import { baseCodeSupplyEx, baseCodeSupply } from "@/api/index";
@@ -88,8 +98,8 @@ export default {
   props: {
     imWkType: {
       type: String,
-      default: () => ""
-    }
+      default: () => "",
+    },
   },
   data() {
     return {
@@ -108,7 +118,7 @@ export default {
       dtlaCurIdx: -1,
 
       // 货位明细删除oid集合
-      dtlaDelOids: []
+      dtlaDelOids: [],
     };
   },
   watch: {
@@ -121,24 +131,23 @@ export default {
         }
         if (value != -1) {
           this.dtlaCurIdx = -1;
-          this.whseYarnInDtlaDataList = this.whseYarnInDtlDataList[
-            value
-          ].aChildren;
+          this.whseYarnInDtlaDataList =
+            this.whseYarnInDtlDataList[value].aChildren;
         }
-      }
-    }
+      },
+    },
   },
   computed: {
     hasNotEdit() {
       return this.whseYarnInFormData.stockState == "1";
-    }
+    },
   },
   methods: {
     // 新增货位数据
     handleAddDtla() {
       this.whseYarnInDtlaDataList.push({
         isAdd: true,
-        whseYarninDtlaoid: v1()
+        whseYarninDtlaoid: v1(),
       });
     },
     // 删除货位明细数据
@@ -161,10 +170,10 @@ export default {
       this.whseYarnInFormData = whseYarnInData;
       this.initData();
       fetchWhseYarnInDtlAndDtlaData({
-        whseYarnInoid: whseYarnInData.whseYarninoid
+        whseYarnInoid: whseYarnInData.whseYarninoid,
       })
-        .then(res => {
-          this.whseYarnInDtlDataList = res.data.map(item => {
+        .then((res) => {
+          this.whseYarnInDtlDataList = res.data.map((item) => {
             return {
               whseYarninDtloid: item.whseYarninDtloid,
               whseYarninFk: item.whseYarninFk,
@@ -178,7 +187,7 @@ export default {
               suppBatNo: item.batId,
               weaveJobCode: item.placeOrigin,
               remarks: item.colorName,
-              aChildren: item.dtlaChildren || []
+              aChildren: item.dtlaChildren || [],
             };
           });
           this.whseYarnInDtlaDataList = [];
@@ -196,7 +205,7 @@ export default {
         await updateWhseYarnInData(this.whseYarnInFormData);
       } else {
         oid = await addWhseYarnInData(this.whseYarnInFormData).then(
-          res => res.data.data
+          (res) => res.data.data
         );
         // 流水号递增
         baseCodeSupply({ code: "whse_in" });
@@ -214,8 +223,8 @@ export default {
       let dtlDataList = this.whseYarnInDtlDataList.map((item, index) => {
         let inWeight = 0;
         // 货位数据
-        item.aChildren.forEach(aItem => {
-          inWeight += (aItem.weight || 0)
+        item.aChildren.forEach((aItem) => {
+          inWeight += aItem.weight || 0;
           dtlaDataList.push({
             whseYarninDtlaoid: aItem.whseYarninDtlaoid,
             whseYarninDtlFk: item.whseYarninDtloid,
@@ -223,10 +232,10 @@ export default {
             batId: item.batchNo,
             weight: aItem.weight,
             cartonNum: aItem.cartonNum,
-            packSize: aItem.packSize
+            packSize: aItem.packSize,
           });
         });
-         // 明细数据
+        // 明细数据
         let tDtlData = {
           whseYarninDtloid: item.whseYarninDtloid,
           whseYarninFk: whseYarninOid,
@@ -240,14 +249,14 @@ export default {
           yarnsCard: item.yarnsCard,
           batId: item.suppBatNo,
           placeOrigin: item.weaveJobCode,
-          colorName: item.remarks
+          colorName: item.remarks,
         };
         return tDtlData;
       });
-     
+
       let dataListReqs = [
         batchSaveOrUpdateDtlDataList(dtlDataList),
-        batchSaveOrUpdateDtlaDataList(dtlaDataList)
+        batchSaveOrUpdateDtlaDataList(dtlaDataList),
       ];
       if (this.dtlaDelOids.length > 0) {
         dataListReqs.push(batchRemoveDtlaDataById(this.dtlaDelOids));
@@ -294,9 +303,9 @@ export default {
         finStatus: "0",
         yinStatus: "0",
         yinDate: timeConversion(new Date()),
-        sysCreatedby: this.$store.state.userOid
+        sysCreatedby: this.$store.state.userOid,
       };
-      baseCodeSupplyEx({ code: "whse_in" }).then(res => {
+      baseCodeSupplyEx({ code: "whse_in" }).then((res) => {
         this.whseYarnInFormData.yinId = res.data.data;
       });
     },
@@ -305,11 +314,11 @@ export default {
       this.loading = true;
       let params = {
         typeOf: this.imWkType - 4,
-        withdrawalNo: withDrawalNo
+        withdrawalNo: withDrawalNo,
       };
       fetchRetYarnNoticDataList(params)
-        .then(res => {
-          this.whseYarnInDtlDataList = res.data.map(item => {
+        .then((res) => {
+          this.whseYarnInDtlDataList = res.data.map((item) => {
             let dtlOid = v1();
             item.whseYarninDtloid = dtlOid;
             item.inWeight = item.weight;
@@ -319,8 +328,8 @@ export default {
                 whseYarninDtlaoid: v1(),
                 weight: item.weight,
                 packSize: item.packSize,
-                cartonNum: item.cartonNumber
-              }
+                cartonNum: item.cartonNumber,
+              },
             ];
             return item;
           });
@@ -328,15 +337,13 @@ export default {
         .finally(() => {
           this.loading = false;
         });
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="stylus">
-#whse-yarn-in-dtl-containe {
-  .avue-crud__menu {
-    min-height: 5px !important;
-    height: 5px !important;
-  }
-}
+#whse-yarn-in-dtl-containe
+  .avue-crud__menu
+    min-height 5px !important
+    height 5px !important
 </style>

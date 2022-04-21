@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-05-03 13:03:03
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-19 10:29:09
+ * @LastEditTime: 2022-04-21 09:22:59
  * @Description:
  */
 
@@ -35,6 +35,12 @@ export function finishedNoteF(_this) {
     labelWidth: 100,
     column: [
       {
+        label: "订单号",
+        prop: "poNo",
+        span: 6,
+        placeholder: " "
+      },
+      {
         label: "缸号",
         prop: "vatNo",
         tip: "Số lô nhuộm",
@@ -52,7 +58,7 @@ export function finishedNoteF(_this) {
         label: "选中集合",
         prop: "pidNos",
         // tip: "Số lô nhuộm",
-        span: 12,
+        span: 6,
         placeholder: " ",
         change: val => {
           if (!val.value) {
@@ -61,7 +67,8 @@ export function finishedNoteF(_this) {
           _this.$refs.proChoice.toggleSelection();
           _this.$nextTick(() => {
             val.value.split(",").forEach(item => {
-              let data = _this.crud[Number(item) - 1];
+              let data = _this.crud.filter(val => val.pidNo == Number(item))[0];
+              // let data = _this.crud[Number(item) - 1];
               if (data) {
                 _this.$refs.proChoice.toggleRowSelection(data);
               }
@@ -124,6 +131,14 @@ export function finishedNoteC(_this) {
       //   sortable: true,
       //   width: 140
       // },
+      {
+        label: "订单号",
+        prop: "poNo",
+        span: 6,
+        placeholder: " ",
+        width: 150,
+        overHidden: true
+      },
       {
         label: "缸号",
         prop: "vatNo",
@@ -199,16 +214,6 @@ export function finishedNoteC(_this) {
         placeholder: " "
       },
 
-      {
-        label: "訂單號",
-        prop: "poNo",
-        width: 120,
-        span: 6,
-        placeholder: " ",
-        disabled: true,
-        overHidden: true,
-        hide: true
-      },
       {
         label: "客戶",
         prop: "custCode",
@@ -843,19 +848,26 @@ export function sxStockF(_this) {
     emptyBtn: false,
     labelWidth: 130,
     column: [
-      // {
-      //   label: "纱线编号",
-      //   prop: "yarnsId",
-      //   cell: false,
-      //   placeholder: " ",
-      //   span: 6
-      // },
       {
-        label: _this.$t("whseField.ph"),
+        label: "纱线编号",
+        prop: "yarnsId",
+        cell: false,
+        placeholder: " ",
+        span: 6
+      },
+      {
+        label: "纱线名称",
+        prop: "yarnsName",
+        cell: false,
+        placeholder: " ",
+        span: 6
+      },
+      {
+        label: "本厂批号",
         prop: "batchNo",
         cell: false,
         placeholder: " ",
-        disabled: true,
+        disabled: false,
         span: 6
       },
       {
@@ -879,15 +891,15 @@ export function sxStockC(_this) {
     columnBtn: false,
     showOverflowTooltip: true,
     excelBtn: true,
-    showSummary: true,
-    selection: true,
-    sumColumnList: [
-      {
-        label: " ",
-        name: "weight",
-        type: "sum"
-      }
-    ],
+    showSummary: false,
+    // selection: true,
+    // sumColumnList: [
+    //   {
+    //     label: " ",
+    //     name: "weight",
+    //     type: "sum"
+    //   }
+    // ],
     selectable: (row, index) => {
       return row.weight > 0;
     },
@@ -920,7 +932,21 @@ export function sxStockC(_this) {
         width: 400
       },
       {
-        label: _this.$t("whseField.ph"),
+        label: _this.$t("whseField.sp"),
+        prop: "yarnsCard",
+        type: "select",
+        overHidden: true,
+        width: 120
+      },
+      {
+        label: "供应商批号",
+        prop: "batId",
+        type: "select",
+        overHidden: true,
+        width: 120
+      },
+      {
+        label: "本厂纱批号",
         prop: "batchNo",
         cell: false,
         width: 180,

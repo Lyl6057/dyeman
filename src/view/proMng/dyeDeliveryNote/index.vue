@@ -15,10 +15,21 @@
         <el-button type="danger" @click="del">{{
           this.$t("public.del")
         }}</el-button>
-        <!-- <el-button type="primary" @click="importExcel">导入excel</el-button> -->
+
         <el-button type="primary" @click="query">{{
           this.$t("public.query")
         }}</el-button>
+        <el-dropdown style="margin-left: 10px" @command="outReport">
+          <el-button type="primary" @click="outReport('deliveryOrder')">
+            报表<i class="el-icon-arrow-down el-icon--right"></i>
+          </el-button>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item command="deliveryOrder">出货单</el-dropdown-item>
+            <el-dropdown-item command="deliveryOrderdeis"
+              >出货单明细</el-dropdown-item
+            >
+          </el-dropdown-menu>
+        </el-dropdown>
       </div>
 
       <div class="formBox">
@@ -38,17 +49,6 @@
           ></avue-crud>
         </div>
       </view-container>
-      <form action id="myform">
-        <input
-          type="file"
-          name="myFile"
-          id="myFile"
-          accept=".csv, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-          style="display: none"
-          @change="fileChange"
-        />
-      </form>
-
       <el-dialog
         id="colorMng_Dlg"
         :visible.sync="dialogVisible"
@@ -74,7 +74,7 @@
 <script>
 import { mainForm, mainCrud } from "./data";
 import tem from "./tem";
-import { get, del, uploadXlxs } from "./api";
+import { get, del } from "./api";
 export default {
   name: "",
   components: {
@@ -109,6 +109,7 @@ export default {
           applicant: this.form.applicant,
           rows: this.page.pageSize,
           start: this.page.currentPage,
+          delFlag: 0,
         })
       )
         .then((res) => {
@@ -137,6 +138,17 @@ export default {
       this.isAdd = true;
       this.dialogVisible = true;
     },
+    outReport(url) {
+      if (this.detail.orderId) {
+        const urlPath = process.env.API_HOST;
+        window.open(
+          urlPath + "/api/proOutFactOrder/" + url + "?id=" + this.detail.orderId
+        );
+      } else {
+        this.$tip.warning("请点击导出的数据");
+      }
+    },
+    outReportDetail() {},
     update() {
       if (Object.keys(this.detail).length === 0) {
         this.$tip.warning("请先选择要修改的数据!");
@@ -175,60 +187,6 @@ export default {
         })
         .catch((err) => {
           this.$tip.warning(this.$t("public.qxcz"));
-        });
-    },
-    audit() {
-      if (Object.keys(this.detail).length === 0) {
-        this.$tip.error("请选择要审核的数据!");
-        return;
-      }
-      this.$tip
-        .cofirm(
-          "是否确定通过审核单号为 【 " +
-            this.detail.weaveJobCode +
-            this.$t("iaoMng.delTle2"),
-          this,
-          {}
-        )
-        .then(() => {
-          auditOne(this.detail.shipId)
-            .then((res) => {
-              this.$tip.success(res.data);
-              // if (res.data.code === 200) {
-
-              //   this.detail.isAudit = 1;
-              //   this.crud.splice(this.detail.index - 1, 1);
-              this.query();
-              // } else {
-              //   this.$tip.error(this.$t("public.bcsb"));
-              // }
-            })
-            .catch((err) => {
-              this.$tip.error(this.$t("public.bcsb"));
-            });
-        })
-        .catch((err) => {
-          this.$tip.warning(this.$t("public.qxcz"));
-        });
-    },
-    importExcel() {
-      document.getElementById("myFile").click();
-    },
-    fileChange(ev) {
-      this.wLoading = true;
-      let file = document.getElementById("myFile").files[0];
-      let formData = new FormData();
-      formData.append("file", file);
-      uploadXlxs(formData)
-        .then((res) => {
-          this.query();
-          setTimeout(() => {
-            this.$tip.success(res.data);
-          }, 200);
-        })
-        .catch((e) => {
-          this.wLoading = false;
-          this.$tip.error("上传失败!" + e);
         });
     },
     handleRowDBLClick(row) {

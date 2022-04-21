@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-11-16 08:26:17
+ * @LastEditTime: 2022-04-21 09:41:23
  * @Description:
  */
 
@@ -1070,7 +1070,7 @@ export function yarnCrud(_this) {
         width: 80,
         align: "center",
         display: false,
-        cell: true,
+        cell: true, //audit ? false : _this.detail.auditState ? false : true,
         placeholder: " "
       },
       {
@@ -1078,49 +1078,22 @@ export function yarnCrud(_this) {
         prop: "yarnCode",
         width: 120,
         span: 6,
-        cell: true
+        cell: false // audit ? false : _this.detail.auditState ? false : true
       },
       {
         label: "纱线名称",
         prop: "yarnName",
         width: 300,
-        // overHidden: true,
+        overHidden: true,
         span: 6,
-        cell: true
+        cell: false //audit ? false : _this.detail.auditState ? false : true
       },
-      {
-        label: "实测纱支",
-        prop: "yarnActual",
-        width: 120,
-        // overHidden: true,
-        span: 6,
-        cell: true,
-        placeholder: " "
-      },
-      {
-        label: "用纱比例",
-        prop: "yarnRatio",
-        width: 100,
-        span: 6,
-        type: "number",
-        cell: true,
-        placeholder: " "
-      },
-      {
-        label: "批号",
-        prop: "yarnBatch",
-        width: 150,
-        span: 6,
-        cell: true,
-        placeholder: " "
-      },
-
       {
         label: "纱牌",
         prop: "yarnBrand",
         width: 150,
         span: 6,
-        cell: true,
+        cell: false, // audit ? false : _this.detail.auditState ? false : true,
         type: "select",
         dicData: getDIC("bas_yarnBrand"),
         filterable: true,
@@ -1129,13 +1102,40 @@ export function yarnCrud(_this) {
         placeholder: " "
       },
       {
-        label: "纱缸",
-        prop: "factoryYarnBatch",
-        width: 150,
+        label: "供应商批号",
+        prop: "yarnBatch",
+        width: 120,
         span: 6,
-        cell: true,
+        cell: false,
+        overHidden: true,
         placeholder: " "
       },
+      {
+        label: "本厂纱批号",
+        prop: "factoryYarnBatch",
+        width: 120,
+        span: 6,
+        cell: false,
+        placeholder: " "
+      },
+      {
+        label: "实测纱支",
+        prop: "yarnActual",
+        width: 120,
+        // overHidden: true,
+        span: 6,
+        cell: true //audit ? false : _this.detail.auditState ? false : true
+      },
+      {
+        label: "用纱比例",
+        prop: "yarnRatio",
+        width: 100,
+        span: 6,
+        type: "number",
+        cell: true, // audit ? false : _this.detail.auditState ? false : true,
+        placeholder: " "
+      },
+
       {
         label: "纱长",
         prop: "yarnLength",
@@ -1151,14 +1151,14 @@ export function yarnCrud(_this) {
         width: 120,
         span: 6,
         align: "right",
-        cell: true,
+        cell: true, // audit ? false : _this.detail.auditState ? false : true,
         placeholder: " "
       },
       {
         label: "输送张力",
         prop: "lineTension",
         width: 120,
-        cell: true,
+        cell: true, //audit ? false : _this.detail.auditState ? false : true,
         align: "right",
         span: 6,
         placeholder: " "
@@ -1170,14 +1170,14 @@ export function yarnCrud(_this) {
         align: "right",
         span: 6,
         placeholder: " ",
-        cell: true
+        cell: true //audit ? false : _this.detail.auditState ? false : true
       },
       {
         label: "单位",
         prop: "unit",
         width: 100,
         span: 6,
-        cell: true,
+        cell: true, // audit ? false : _this.detail.auditState ? false : true,
         placeholder: " ",
         type: "select",
         dicData: getDIC("bas_matUnit")

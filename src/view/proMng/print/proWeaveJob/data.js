@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-16 16:44:59
+ * @LastEditTime: 2022-04-21 09:33:43
  * @Description:
  */
 
@@ -1281,15 +1281,45 @@ export function yarnCrud(_this, audit) {
         prop: "yarnCode",
         width: 120,
         span: 6,
-        cell: true // audit ? false : _this.detail.auditState ? false : true
+        cell: false // audit ? false : _this.detail.auditState ? false : true
       },
       {
         label: "纱线名称",
         prop: "yarnName",
         width: 300,
-        // overHidden: true,
+        overHidden: true,
         span: 6,
-        cell: true //audit ? false : _this.detail.auditState ? false : true
+        cell: false //audit ? false : _this.detail.auditState ? false : true
+      },
+      {
+        label: "纱牌",
+        prop: "yarnBrand",
+        width: 150,
+        span: 6,
+        cell: false, // audit ? false : _this.detail.auditState ? false : true,
+        type: "select",
+        dicData: getDIC("bas_yarnBrand"),
+        filterable: true,
+        allowCreate: true,
+        defaultFirstOption: true,
+        placeholder: " "
+      },
+      {
+        label: "供应商批号",
+        prop: "yarnBatch",
+        width: 120,
+        span: 6,
+        cell: false,
+        overHidden: true,
+        placeholder: " "
+      },
+      {
+        label: "本厂纱批号",
+        prop: "factoryYarnBatch",
+        width: 120,
+        span: 6,
+        cell: false,
+        placeholder: " "
       },
       {
         label: "实测纱支",
@@ -1308,35 +1338,7 @@ export function yarnCrud(_this, audit) {
         cell: true, // audit ? false : _this.detail.auditState ? false : true,
         placeholder: " "
       },
-      {
-        label: "批号",
-        prop: "yarnBatch",
-        width: 150,
-        span: 6,
-        cell: true,
-        placeholder: " "
-      },
-      {
-        label: "纱牌",
-        prop: "yarnBrand",
-        width: 150,
-        span: 6,
-        cell: true, // audit ? false : _this.detail.auditState ? false : true,
-        type: "select",
-        dicData: getDIC("bas_yarnBrand"),
-        filterable: true,
-        allowCreate: true,
-        defaultFirstOption: true,
-        placeholder: " "
-      },
-      {
-        label: "纱缸",
-        prop: "factoryYarnBatch",
-        width: 150,
-        span: 6,
-        cell: true,
-        placeholder: " "
-      },
+
       {
         label: "纱长",
         prop: "yarnLength",
