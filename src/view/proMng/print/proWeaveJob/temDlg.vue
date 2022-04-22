@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-21 09:36:36
+ * @LastEditTime: 2022-04-21 13:40:07
  * @Description: 
 -->
 <template>
@@ -1157,20 +1157,17 @@ export default {
       }
       this.wLoading = true;
       if (this.tabs == "用紗明细") {
-        if (!val.weight) {
-          this.$tip.warning("该纱库存为0,不能使用!");
-          this.wLoading = false;
-          return;
-        }
-        this.crud.push({
-          sn: this.crud.length + 1,
-          yarnCode: val.yarnsId,
-          yarnName: val.yarnsName,
-          yarnBatch: val.batId,
-          yarnBrand: val.yarnsCard,
-          factoryYarnBatch: val.batchNo,
-          unit: val.weightUnit,
-          $cellEdit: true,
+        val.forEach((item) => {
+          this.crud.push({
+            sn: this.crud.length + 1,
+            yarnCode: item.yarnsId,
+            yarnName: item.yarnsName,
+            yarnBatch: item.batId,
+            yarnBrand: item.yarnsCard,
+            factoryYarnBatch: item.batchNo,
+            unit: item.weightUnit,
+            $cellEdit: true,
+          });
         });
       } else {
         this.form.custPoNo = val.custPoNo;

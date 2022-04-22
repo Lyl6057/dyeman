@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-21 09:41:23
+ * @LastEditTime: 2022-04-21 13:46:16
  * @Description:
  */
 
@@ -1058,7 +1058,7 @@ export function yarnCrud(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 112px)",
+    height: "calc(100vh - 135px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,

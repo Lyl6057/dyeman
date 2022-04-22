@@ -187,8 +187,8 @@ export default {
     getDetail() {
       this.loading = true;
       if (this.isAdd) {
-        this.form.sysCreatedby = this.$store.state.userOid;
         this.form = this.detail;
+        this.form.sysCreatedby = this.$store.state.userOid;
         this.loading = false;
         return;
       }

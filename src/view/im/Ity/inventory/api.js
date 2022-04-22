@@ -1,15 +1,14 @@
 /*
  * @Author: Lyl
  * @Date: 2021-03-24 14:21:09
- * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-20 09:05:23
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-04-21 16:40:10
  * @Description:
  */
 import axios from "axios";
 
-
 // 根据纱线信息获取出入仓明细
-export function fetchWhseDtlDataByYarns(params){
+export function fetchWhseDtlDataByYarns(params) {
   return axios({
     url: "/api/viewYarnStock/whseDtl/page",
     method: "get",
@@ -62,6 +61,54 @@ export function getRhlList(params) {
 export function getRhl(params) {
   return axios({
     url: "/api/viewChemicalStock/page",
+    method: "get",
+    params: params
+  });
+}
+
+export function getFl(params) {
+  return axios({
+    url: "/api/viewAccessoriesStock/page",
+    method: "get",
+    params: params
+  });
+}
+
+export function getFlList(params) {
+  return axios({
+    url: "/api/viewAccessoriesStock",
+    method: "get",
+    params: params
+  });
+}
+
+export function getXz(params) {
+  return axios({
+    url: "/api/viewOfficeStock/page",
+    method: "get",
+    params: params
+  });
+}
+
+export function getXzList(params) {
+  return axios({
+    url: "/api/viewOfficeStock",
+    method: "get",
+    params: params
+  });
+}
+
+export function getWj(params) {
+  return axios({
+    url: "/api/viewHardwareStock/page",
+    method: "get",
+    params: params
+  });
+}
+
+export function getWjList(params) {
+  return axios({
+    url: "/api/viewHardwareStock",
     method: "get",
     params: params
   });

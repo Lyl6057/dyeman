@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-03-24 14:15:12
- * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-20 16:14:38
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-04-21 16:43:51
  * @Description: 
 -->
 <template>
@@ -54,6 +54,12 @@ import {
   getSx,
   getSxList,
   getRhl,
+  getFl,
+  getWj,
+  getXz,
+  getFlList,
+  getWjList,
+  getXzList,
   getRll,
   getRhlList,
   getRllList,
@@ -195,6 +201,27 @@ export default {
           this.typeObj.sort = "noteCode";
           this.typeObj.outAdr = "./static/xlxsTemplate/inventory_cloth.xlsx";
           break;
+        case "FL":
+          this.getFun = getFl;
+          this.getList = getFlList;
+          this.crudOp = crudOp(this);
+          this.typeObj.sort = "batchNo";
+          this.typeObj.outAdr = "./static/xlxsTemplate/inventory.xlsx";
+          break;
+        case "WJ":
+          this.getFun = getWj;
+          this.getList = getWjList;
+          this.crudOp = crudOp(this);
+          this.typeObj.sort = "batchNo";
+          this.typeObj.outAdr = "./static/xlxsTemplate/inventory.xlsx";
+          break;
+        case "XZ":
+          this.getFun = getXz;
+          this.getList = getXzList;
+          this.crudOp = crudOp(this);
+          this.typeObj.sort = "batchNo";
+          this.typeObj.outAdr = "./static/xlxsTemplate/inventory.xlsx";
+          break;
         default:
           this.crud = [];
           this.loading = false;
@@ -228,7 +255,9 @@ export default {
             ? "vatNo"
             : this.form.type == "PB"
             ? "proName"
-            : "chemicalId"
+            : this.form.type == "RHL" || this.form.type == "RLL"
+            ? "chemicalId"
+            : "accessoriesId"
         );
         group.forEach((item, i) => {
           item.children.sort((a, b) =>
@@ -236,7 +265,10 @@ export default {
           );
           item.index = i + 1;
           item.yarnsName = item.children[0].yarnsName;
-          item.chemicalName = item.children[0].chemicalName;
+          item.chemicalId =
+            item.children[0].accessoriesId || item.children[0].chemicalId;
+          item.chemicalName =
+            item.children[0].accessoriesName || item.children[0].chemicalName;
           item.weightUnit = item.children[0].weightUnit;
           // item.custCode = item.children[0].custCode;
           // item.fabName = item.children[0].fabName;
@@ -319,19 +351,16 @@ export default {
         // Replacements take place on first sheet
         var sheetNumber = "Sheet1";
         // Set up some placeholder values matching the placeholders in the template
-        let data = {
-          chemicalId: "!^",
-          yarnsId: "!^",
-          productNo: "!^",
-        };
         this.getList().then((res) => {
           this.crud = res.data;
           this.crud.sort((a, b) =>
             a[this.typeObj.sort] > b[this.typeObj.sort] ? -1 : 1
           );
           this.crud.forEach((item, i) => {
-            item.chemicalId = item.chemicalId || item.yarnsId;
-            item.chemicalName = item.chemicalName || item.yarnsName;
+            item.chemicalId =
+              item.chemicalId || item.yarnsId || item.accessoriesId;
+            item.chemicalName =
+              item.chemicalName || item.yarnsName || item.accessoriesName;
             item.stock = item.weight || item.stock;
             item.index = i + 1;
           });
@@ -381,7 +410,7 @@ export default {
             yarnsCard: row.yarnsCard,
             batchNo: row.batchNo,
             batId: row.batId,
-            locationCode: row.locationCode
+            locationCode: row.locationCode,
           };
           break;
       }

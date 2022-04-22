@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-18 16:10:39
+ * @LastEditTime: 2022-04-21 15:52:09
  * @Description:
 -->
 <template>
@@ -379,13 +379,20 @@ export default {
       this.selectList = val;
     },
     splitNote() {
-      this.splitDlg = true;
-      this.splitF = Object.assign(this.detail, {
-        vatNoNew: this.detail.vatNo,
-        pidNoNew: this.detail.pidNo + 100,
-        productNoNew: this.detail.vatNo + (this.detail.pidNo + 100),
-        netWeightNew: 0,
-        netWeightNewLbs: 0,
+      this.splitLoading = true;
+      getFinish({
+        sourceCardId: this.detail.cardId,
+      }).then((res) => {
+        this.splitDlg = true;
+        this.splitF = Object.assign(this.detail, {
+          vatNoNew: this.detail.vatNo,
+          pidNoNew: this.detail.pidNo + 100 + res.data.total,
+          productNoNew:
+            this.detail.vatNo + (this.detail.pidNo + 100 + res.data.total),
+          netWeightNew: 0,
+          netWeightNewLbs: 0,
+        });
+        this.splitLoading = false;
       });
     },
     splitSubmit() {
@@ -394,12 +401,31 @@ export default {
         return;
       }
       this.splitLoading = true;
+      this.splitF.grossWeight -= this.splitF.netWeightNew;
+      this.splitF.grossWeightLbs -= this.splitF.netWeightNewLbs;
+      let oldYardLength = this.splitF.yardLength;
+      this.splitF.yardLength =
+        (this.splitF.netWeight /
+          (this.splitF.netWeight + this.splitF.netWeightNew)) *
+        oldYardLength;
       updateFinished(this.splitF).then((res) => {});
       let data = JSON.parse(JSON.stringify(this.splitF));
+      data.sourceCardId = this.splitF.cardId;
+      data.cardId = "";
       data.netWeight = data.netWeightNew;
       data.netWeightLbs = data.netWeightNewLbs;
+      data.grossWeight =
+        data.netWeight +
+        (data.weightUnit == "KG" ? data.paperTube : data.paperTube / 2.2046);
+      data.grossWeightLbs =
+        data.netWeightLbs +
+        (data.weightUnit == "KG" ? data.paperTube * 2.2046 : data.paperTube);
+      data.yardLength =
+        (data.netWeight / (this.splitF.netWeight + data.netWeight)) *
+        oldYardLength;
       data.productNo = data.productNoNew;
       data.pidNo = data.pidNoNew;
+      data.qcTakeOut = 0;
       addFinished(data).then((res) => {
         if (res.data.code == 200) {
           this.$tip.success("保存成功!");

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-20 09:24:56
+ * @LastEditTime: 2022-04-21 16:14:47
  * @Description: 
 -->
 <template>
@@ -331,6 +331,7 @@ export default {
           this.loading = true;
           let data = JSON.parse(JSON.stringify(this.history[val - 1]));
           this.dlgChooseData = this.history[val - 1];
+          this.dlgForm.clothLengthValue = data.clothLengthValue;
           this.dlgForm.noteCode = val;
           data.clothWeight = Number(
             data.clothWeight - (this.weight - this.form.clothWeight)
@@ -400,20 +401,14 @@ export default {
         });
         this.history.forEach((item, i) => {
           if (i == this.dlgForm.noteCode - 1) {
-            // 新增裁剪出仓的胚布
-            // if (item.noteCode.indexOf("-") != -1) {
-            //   this.dlgCrud[0].noteCode =
-            //     "-" + item.noteCode.split("-")[1] + "-A";
-            // } else if (item.noteCode.indexOf("k") != -1) {
-            //   this.dlgCrud[0].noteCode =
-            //     "k" + item.noteCode.split("k")[1] + "-A";
-            // } else {
-            //   this.dlgCrud[0].noteCode =
-            //     "K" + item.noteCode.split("K")[1] + "-A";
-            // }
+            let clothLengthValue = this.dlgForm.clothLengthValue;
             addNote(
               Object.assign(this.dlgCrud[0], {
                 sourceNoteId: item.noteId,
+                clothLengthValue:
+                  (this.dlgCrud[0].clothWeight /
+                    (this.dlgCrud[0].clothWeight + this.dlgForm.outWeight)) *
+                  clothLengthValue,
               })
             ).then((res) => {
               addCalico({
@@ -426,8 +421,12 @@ export default {
             });
             updateNote({
               noteId: item.noteId,
-              realWeight: item.realWeight - this.dlgForm.outWeight,
+              realWeight: item.realWeight - this.dlgCrud[0].clothWeight,
               clothWeight: this.dlgForm.outWeight,
+              clothLengthValue:
+                (this.dlgForm.outWeight /
+                  (this.dlgCrud[0].clothWeight + this.dlgForm.outWeight)) *
+                clothLengthValue,
             }).then((res) => {}); //1.修改原布票重量
             // getInwhse({ custTicket: item.noteCode }).then((res) => {
             //   if (res.data.length > 0) {

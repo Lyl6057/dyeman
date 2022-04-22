@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-18 15:52:09
+ * @LastEditTime: 2022-04-21 15:38:03
  * @Description:
  */
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
@@ -1069,11 +1069,11 @@ export function splitForm(_this) {
                   return;
                 }
                 if (val.value == "KG") {
-                  _this.splitOp.group[1].column[2].disabled = true;
                   _this.splitOp.group[1].column[1].disabled = false;
+                  _this.splitOp.group[1].column[2].disabled = true;
                 } else {
-                  _this.splitOp.group[1].column[2].disabled = false;
                   _this.splitOp.group[1].column[1].disabled = true;
+                  _this.splitOp.group[1].column[2].disabled = false;
                 }
               });
             }
@@ -1132,6 +1132,7 @@ export function splitForm(_this) {
             clearable: false,
             type: "number",
             minRows: 0,
+            disabled: false,
             precision: 1,
             change: val => {
               _this.$nextTick(() => {

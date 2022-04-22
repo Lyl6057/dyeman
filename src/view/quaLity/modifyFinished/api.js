@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-01 14:06:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-18 13:56:36
+ * @LastEditTime: 2022-04-21 15:45:01
  * @Description:
  */
 
@@ -26,7 +26,6 @@ export function addFinished(data) {
   });
 }
 
-// 查询织单
 export function getFinishList(params) {
   return axios({
     url: "/api/proFinalProductCard",
