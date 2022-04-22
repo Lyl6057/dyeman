@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-02-24 08:12:20
- * @LastEditors: Lyl
- * @LastEditTime: 2022-04-18 19:17:49
+ * @LastEditors: Symbol_Yang
+ * @LastEditTime: 2022-04-22 14:52:29
  * @Description: 
 -->
 <template>
@@ -25,6 +25,8 @@ export default {
     // parent.userID
     webSocket.setClient(this);
     this.setSpowerClient(this.spowerClient);
+    // 存储当前用户登录名
+    this.setLoginUser(parent.userID);
     axios({
       url: "/api/ucmlUser",
       method: "get",
@@ -33,6 +35,7 @@ export default {
       // 登錄用戶oid
       // this.$store.dispatch("setUsers", Res.data.ucmlUseroid);
       this.setUsers(Res.data[0].ucmlUseroid);
+      
       // this.$store.getters.getUser  --- this.$store.state.userOid
     });
     // 獲取多語言
@@ -48,7 +51,7 @@ export default {
     // window.sessionStorage.setItem("tagView", "[]");
   },
   methods: {
-    ...mapActions(["setUsers", "setLangs", "setSpowerClient"]),
+    ...mapActions(["setUsers", "setLangs", "setSpowerClient","setLoginUser"]),
   },
 };
 </script>

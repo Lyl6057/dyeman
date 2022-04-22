@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-01-23 08:03:49
- * @LastEditors: Lyl
- * @LastEditTime: 2022-02-23 15:43:00
+ * @LastEditors: Symbol_Yang
+ * @LastEditTime: 2022-04-22 14:56:13
  * @Description:
  */
 import axios from "axios";
@@ -79,7 +79,8 @@ axios.interceptors.request.use(config => {
   //   config.data = serialize(config.data);
   //   delete config.data.serialize;
   // }
-
+  // 请求头中加入操作用户数据
+  config.headers.UserName = parent.userID
   return config;
 }),
   error => {

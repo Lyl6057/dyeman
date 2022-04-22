@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-02-24 08:12:20
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-01-05 18:59:15
+ * @LastEditors: Symbol_Yang
+ * @LastEditTime: 2022-04-22 14:51:10
  * @Description:
  */
 import Vue from "vue";
@@ -25,7 +25,9 @@ const store = new VueX.Store({
     userOid: "",
     lang: "1",
     tagView: [],
-    spowerClient:null
+    spowerClient:null,
+    // 当前登录用户
+    loginUser: "",
   },
   getters: {
     //实时监听state值的变化
@@ -43,7 +45,8 @@ const store = new VueX.Store({
     },
     getTagView: state => {
       return state.tagView;
-    }
+    },
+    getLoginUser:  state => state.loginUser
   },
   mutations: {
     SET_SPOWERCLIENT(state, value){
@@ -51,6 +54,9 @@ const store = new VueX.Store({
     },
     setUser(state, value) {
       state.userOid = value;
+    },
+    SET_LOGIN_USER(state, value){
+      state.loginUser = value;
     },
     setLang(state, value) {
       state.lang = value;
@@ -110,6 +116,9 @@ const store = new VueX.Store({
     },
     setUsers(context, value) {
       context.commit("setUser", value);
+    },
+    setLoginUser({commit}, value){
+      commit("SET_LOGIN_USER",value)
     },
     setLangs(context, value) {
       context.commit("setLang", value);
