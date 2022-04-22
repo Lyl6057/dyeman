@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-12 10:09:35
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-18 09:52:49
+ * @LastEditTime: 2022-04-21 15:09:32
  */
 import axios from "axios";
 
@@ -98,5 +98,14 @@ export function batchRemoveDtlaById(oids){
         url: "/api/whseRetreatDtla/v1.0/batch/removeById",
         method: "post",
         data: oids
+    })
+}
+
+// 检验出仓数据
+export function fetchValidOutWeight(dataList){
+    return axios({
+        url: "/api/viewYarnStock/valid/outStock",
+        method: "post",
+        data: dataList
     })
 }

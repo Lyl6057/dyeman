@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-12 10:34:33
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-18 16:22:41
+ * @LastEditTime: 2022-04-21 17:16:36
 -->
 <template>
   <div class="with-drawal-dlt-container">
@@ -49,7 +49,7 @@
                 :disabled="hasEdit"
                 @click="handleDelDtla"
               >{{ this.$t("public.del") }}</el-button>
-            </div> -->
+            </div>-->
             <avue-crud
               ref="dtlaCrudRef"
               :option="retReatDtlaCrudOp"
@@ -72,7 +72,8 @@ import {
   fetchWhseYarninByRemeoNo,
   fetchRetReatDtlDataByOid,
   batchAddOrUpdateRetReatDtlaData,
-  batchRemoveDtlaById
+  batchRemoveDtlaById,
+  fetchValidOutWeight
 } from "./api";
 import { baseCodeSupplyEx, baseCodeSupply } from "@/api/index";
 import { timeConversion } from "@/config/util";
@@ -255,7 +256,8 @@ export default {
 
     // 保存
     async handleSave() {
-      if (!this.saveValid()) return;
+      let vaildRes = await this.saveValid();
+      if (!vaildRes) return;
       this.loading = true;
       let oid = this.retReatFormData.whseRetreatoid;
       if (oid) {
@@ -273,9 +275,11 @@ export default {
       let dataList = this.dtlCrudDataList.map(item => {
         // 货运位数据
         item.retreatDtlaList.forEach(dtlaItem => {
-          dtlaDataList.push(Object.assign(dtlaItem,{
-            whseRetreatDtlFk: item.whseRetreatDtloid,
-          }))
+          dtlaDataList.push(
+            Object.assign(dtlaItem, {
+              whseRetreatDtlFk: item.whseRetreatDtloid
+            })
+          );
         });
 
         return {
@@ -299,9 +303,35 @@ export default {
       this.$tip.success("操作成功");
     },
     // 保存校验
-    saveValid() {
+    async saveValid() {
+      let dataList = [];
+      this.dtlCrudDataList.forEach(item => {
+        item.retreatDtlaList.forEach(aItem => {
+          dataList.push({
+            yarnsId: item.yarnsId,
+            yarnsCard: item.yarnsCard,
+            batchNo: item.batchNo,
+            batId: item.batId,
+            weight: aItem.retWeight || 0,
+            locationCode: aItem.locationCode
+          });
+        });
+      });
+      let validRes = await fetchValidOutWeight(dataList).then(res => res.data);
+      if (!validRes.data.status) {
+        validRes.data.resultList.forEach((item, index) => {
+          let notifyData = {
+              title: "提示",
+              dangerouslyUseHTMLString: true,
+              message: `材料编号<strong>${item.yarnsId}</strong>的<strong>${item.locationName}</strong>货运位剩余库存数为<span style="color:red; font-size: 16px">${item.realStock.toFixed(2)}</span>;`,
+              type: "warning",
+              position: 'top-left'
+            }
+          setTimeout(() =>this.$notify(notifyData), 100 * index);
+        });
+      }
       // 检验条件
-      return true;
+      return validRes.data.status;
     },
     //
     handleCloseDtl() {

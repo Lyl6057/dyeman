@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-12 14:44:01
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-15 11:22:22
+ * @LastEditTime: 2022-04-21 16:43:35
 -->
 <template>
   <view-container title="退货（纱）通知单" :element-loading-text="loadLabel" v-loading="loading">
@@ -80,12 +80,9 @@ export default {
         });
     },
     handleSelection(rows, row) {
-      console.log("enter selection change", rows, row);
-
       let itemData = row;
       this.$refs.purReturnMemoCrudRef.selectClear();
       if (itemData && itemData.remeoNo != this.curSelRowRemeoNo) {
-        console.log("enter if");
         let remeoNo = itemData.remeoNo;
         this.crudDataList.forEach(item => {
           item.remeoNo == remeoNo &&
