@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-03-26 09:58:34
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-08 12:00:24
+ * @LastEditTime: 2022-04-23 09:31:54
  */
 
 
@@ -27,14 +27,6 @@ export function queryFormOp(_this) {
         placeholder: " ",
         type: "select",
         dicData: kindId,
-        change: () => {
-          //   _this.$nextTick(() => {
-          //     if (!_this.loading) {
-          //       _this.page.currentPage = 1;
-          //       _this.getData();
-          //     }
-          //   });
-        }
       },
       {
         label: "盘点类型",
@@ -43,14 +35,6 @@ export function queryFormOp(_this) {
         placeholder: " ",
         type: "select",
         dicData: invTypeDict,
-        change: () => {
-          //   _this.$nextTick(() => {
-          //     if (!_this.loading) {
-          //       _this.page.currentPage = 1;
-          //       _this.getData();
-          //     }
-          //   });
-        }
       },
     ]
   };
@@ -68,14 +52,6 @@ export function queryFormOp_log(_this) {
         placeholder: " ",
         type: "select",
         dicData: kindId,
-        change: () => {
-          //   _this.$nextTick(() => {
-          //     if (!_this.loading) {
-          //       _this.page.currentPage = 1;
-          //       _this.getData();
-          //     }
-          //   });
-        }
       },
     ]
   };
@@ -207,6 +183,17 @@ export function editFormOp(_this) {
 }
 
 
+function getQueryFieldName(type){
+  switch(type){
+    case "CPB" :
+      return "缸号";
+    case "PB" :
+      return "布飞编号";
+    default:
+      return "材料编号";
+  }
+}
+
 // 明细数据
 // 查询框
 export function dtlFormOp(_this,invType){
@@ -231,7 +218,7 @@ export function dtlFormOp(_this,invType){
         placeholder: " ",
       },
       {
-        label:  invType == "CPB" ? "缸号" : "材料编号",
+        label: getQueryFieldName(invType),
         prop: "matCode",
         span: 4,
         placeholder: " ",
@@ -492,3 +479,86 @@ export function cpbCrudOp(_this){
   }
 }
 
+
+// 胚布
+export function pbCrudOp(_this){
+  return {
+    ...commonOp,
+    column:[
+      {
+        label: "客户名称",
+        prop: "custName",
+        width: 100,
+        overHidden: true,
+      },
+      {
+        label: "布类名称",
+        prop: "fabricName",
+        width: 200,
+        overHidden: true,
+      },
+      {
+        label: "织单号",
+        prop: "weaveNo",
+        width: 100,
+        overHidden: true,
+      },
+      {
+        label: "疋號",
+        prop: "batchNo",
+        width: 80,
+        align: "right",
+      },
+      {
+        label: "布飞编号",
+        prop: "clothCode",
+        width: 100,
+        overHidden: true,
+      },
+      {
+        label: "载具编号",
+        prop: "storeLoadCode",
+        width: 100,
+        overHidden: true,
+      },
+      {
+        label: "重量",
+        prop: "stockQty",
+        width: 100,
+        align: "right",
+        type: "number",
+        precision: 2
+      },
+      {
+        label: "实际重量",
+        prop: "inventoryQty",
+        cell: true,
+        width: 120,
+        type: "number",
+        align: "right",
+        hide: !_this.hasOperate,
+      },
+      invResultCol(_this),
+      {
+        label: _this.$t("whseField.dw"),
+        prop: "unitName",
+        cell: false,
+        width: 80,
+      },
+      {
+        label: "货位码",
+        prop: "locationId",
+        width: 100,
+        overHidden: true,
+      },
+      {
+        label: "备注",
+        prop: "remarks",
+        cell: true,
+        width: 150,
+        placeholder: " ",
+        hide: !_this.hasOperate,
+      }
+    ]
+  }
+}

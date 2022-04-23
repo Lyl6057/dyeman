@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-03-29 10:05:29
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-08 11:40:14
+ * @LastEditTime: 2022-04-23 10:44:59
 -->
 
 <template>
@@ -16,7 +16,7 @@
             >
             <div class="btnList">
                 <el-button type='primary' v-if='hasOperate' :disabled="isEdit" @click="handleAllInput">一键录入</el-button>
-                <el-button type='primary' v-if='hasOperate' :disabled="isEdit" @click="handleInvConfirm">盘盈盘亏确认</el-button>
+                <el-button type='primary' v-if='hasOperate' :disabled="isEdit || operateDisabled" @click="handleInvConfirm">盘盈盘亏确认</el-button>
                 <el-button type='primary' @click='getDataList'>{{ $t("public.query") }}</el-button>
                 <el-button type='success' v-if='hasOperate' :disabled="isEdit || crudDataList.length == 0" @click='handleBatchSave'>{{ $t("public.save") }}</el-button>
                 <el-button type='warning' @click='handleClose'>{{ $t("public.close") }}</el-button>
@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import { dtlFormOp,sxCrudOp,pubCrudOp ,cpbCrudOp} from "./data";
+import { dtlFormOp,sxCrudOp,pubCrudOp ,cpbCrudOp, pbCrudOp} from "./data";
 import { fetchInvDtlDataByPage,validIsEditQty,fetchAllUpdateInvQty,fetchBatchUpdateInvQty,inventoryConfirm,validIsExistWhseIn } from "./api";
 export default {
     name: "inventoryDtl",
@@ -78,6 +78,9 @@ export default {
     computed:{
         isEdit(){
             return this.inventoryData.inventoryState == '4'
+        },
+        operateDisabled(){
+            return ["CPB","PB"].includes(this.inventoryData.materialClass)
         }
     },
     methods:{
@@ -89,6 +92,9 @@ export default {
                     break;
                 case "CPB":
                     this.crudOp = cpbCrudOp(this);
+                    break;
+                case "PB":
+                    this.crudOp = pbCrudOp(this);
                     break;
                 default:
                     this.crudOp = pubCrudOp(this);
