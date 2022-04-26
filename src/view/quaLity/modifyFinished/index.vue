@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-21 15:52:09
+ * @LastEditTime: 2022-04-23 14:49:22
  * @Description:
 -->
 <template>
@@ -359,6 +359,8 @@ export default {
         this.$tip.cofirm("是否确定删除选中的数据?").then(() => {
           this.wLoading = true;
           this.selectList.forEach((item, i) => {
+            item.delTime = this.$getNowTime("datetime");
+            item.delUser = this.$store.state.userOid;
             del(item.cardId).then((res) => {
               if (i == this.selectList.length - 1) {
                 this.$tip.success("删除成功！");
@@ -448,45 +450,73 @@ export default {
 };
 </script>
 <style lang='stylus'>
->>>.avue-group--header
-  display none
-.btn-right-title
-  font-size 17px
-  margin-left 1em
-#modifyFinished
-  .el-checkbox
-    margin-right 0px
-  .el-transfer-panel__list.is-filterable
-    height calc(100vh - 300px) !important
-    text-align left !important
-    text-indent 1em !important
-  .el-transfer-panel__body
-    height calc(100vh - 270px) !important
-  .el-transfer-panel
-    width 450px
-  .el-transfer-panel .el-checkbox__inner
-    height 18px
-    width 18px
-  .el-transfer-panel__item.el-checkbox .el-checkbox__label
-    padding-left 34px
-    line-height 35px
-  .el-transfer-panel__item
-    padding-left 0
-    text-indent 0.5em
-  .el-transfer-panel .el-checkbox__inner::after
-    height 8px
-    width 4px
-    left 6px
-  .el-transfer-panel__filter .el-input__inner
-    font-size 15px
-  .el-transfer-panel__filter
-    margin 5px
-  .el-tag--mini
-    height 28px !important
+>>>.avue-group--header {
+  display: none;
+}
+
+.btn-right-title {
+  font-size: 17px;
+  margin-left: 1em;
+}
+
+#modifyFinished {
+  .el-checkbox {
+    margin-right: 0px;
+  }
+
+  .el-transfer-panel__list.is-filterable {
+    height: calc(100vh - 300px) !important;
+    text-align: left !important;
+    text-indent: 1em !important;
+  }
+
+  .el-transfer-panel__body {
+    height: calc(100vh - 270px) !important;
+  }
+
+  .el-transfer-panel {
+    width: 450px;
+  }
+
+  .el-transfer-panel .el-checkbox__inner {
+    height: 18px;
+    width: 18px;
+  }
+
+  .el-transfer-panel__item.el-checkbox .el-checkbox__label {
+    padding-left: 34px;
+    line-height: 35px;
+  }
+
+  .el-transfer-panel__item {
+    padding-left: 0;
+    text-indent: 0.5em;
+  }
+
+  .el-transfer-panel .el-checkbox__inner::after {
+    height: 8px;
+    width: 4px;
+    left: 6px;
+  }
+
+  .el-transfer-panel__filter .el-input__inner {
+    font-size: 15px;
+  }
+
+  .el-transfer-panel__filter {
+    margin: 5px;
+  }
+
+  .el-tag--mini {
+    height: 28px !important;
     // padding: 0 5px;
-    line-height 28px !important
-    font-size 14px
-  .el-input--mini .el-input__inner
-    height 33px
-    line-height 33px
+    line-height: 28px !important;
+    font-size: 14px;
+  }
+
+  .el-input--mini .el-input__inner {
+    height: 33px;
+    line-height: 33px;
+  }
+}
 </style>

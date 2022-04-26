@@ -406,7 +406,8 @@ export function rhl2C(_this) {
         type:
           _this.datas === _this.$t("choicDlg.rl") ||
           _this.datas === _this.$t("choicDlg.wj") ||
-          _this.datas === _this.$t("iaoMng.sb")
+          _this.datas === _this.$t("iaoMng.sb") ||
+          _this.datas === _this.$t("choicDlg.xz")
             ? "select"
             : "",
         width: 180,
@@ -424,6 +425,8 @@ export function rhl2C(_this) {
             ? getDicT("basProductivesupplies", "chinName", "hardwareId")
             : _this.datas === _this.$t("choicDlg.wj")
             ? getDicT("basHardwarearticlesnew", "cnnamelong", "hardwareId")
+            : _this.datas === _this.$t("choicDlg.xz")
+            ? getDicT("basAdsuppliesarticles", "chinName", "hardwareId")
             : getDicT("basHardwarearticlesnew", "cnnamelong", "hardwareId")
       },
       {

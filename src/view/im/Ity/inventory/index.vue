@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-24 14:15:12
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-21 16:43:51
+ * @LastEditTime: 2022-04-26 16:08:22
  * @Description: 
 -->
 <template>
@@ -23,6 +23,10 @@
           @click="handleCreateInventory"
           >生成盘点清单</el-button
         >
+        <div style="display: inline; float: right; margin-right: 20px">
+          <span>过滤空库存</span>
+          <el-switch v-model="filterEmpty" @change="getData"> </el-switch>
+        </div>
       </div>
       <div class="formBox">
         <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
@@ -119,6 +123,7 @@ export default {
       },
       type: "SX",
       drawerVisible: false,
+      filterEmpty: true,
     };
   },
   watch: {},
@@ -229,15 +234,21 @@ export default {
       }
       let query = JSON.parse(JSON.stringify(this.form));
       query.yarnsId = "!^%" + (query.chemicalId || "");
-      // query.chemicalId = query.yarnsId;
+      query.batId = "!^%" + (query.batId || "");
+      query.chemicalId = query.yarnsId;
+      query.officeId = query.yarnsId;
+      query.accessoriesId = query.yarnsId;
       query.yarnsName = "%" + (query.chemicalName || "");
-      // query.chemicalName = query.yarnsName;
+      query.chemicalName = query.yarnsName;
+      query.officeName = query.yarnsName;
       query.fabricName = query.yarnsName;
+      query.accessoriesName = query.yarnsName;
       query.fabName = query.yarnsName;
       query.proName = "%" + (query.proName || "");
       query.vatNo = "!^%" + (query.vatNo || "");
       query.noteCode = "%" + (query.noteCode || "");
       query.storeLoadCode = "%" + (query.storeLoadCode || "");
+      query.batchNo = "%" + (query.batchNo || "");
       this.getFun(
         Object.assign(query, {
           rows: this.page.pageSize,
@@ -247,8 +258,13 @@ export default {
       ).then((res) => {
         this.page.total = res.data.total;
 
+        let data = this.filterEmpty
+          ? res.data.records.filter((item) => {
+              return item.weight || item.stock || item.clothWeight;
+            })
+          : res.data.records;
         let group = this.$grouping(
-          res.data.records,
+          data,
           this.form.type == "SX"
             ? "yarnsId"
             : this.form.type == "CPB"
@@ -266,9 +282,13 @@ export default {
           item.index = i + 1;
           item.yarnsName = item.children[0].yarnsName;
           item.chemicalId =
-            item.children[0].accessoriesId || item.children[0].chemicalId;
+            item.children[0].accessoriesId ||
+            item.children[0].chemicalId ||
+            item.children[0].officeId;
           item.chemicalName =
-            item.children[0].accessoriesName || item.children[0].chemicalName;
+            item.children[0].accessoriesName ||
+            item.children[0].chemicalName ||
+            item.children[0].officeName;
           item.weightUnit = item.children[0].weightUnit;
           // item.custCode = item.children[0].custCode;
           // item.fabName = item.children[0].fabName;
@@ -358,9 +378,15 @@ export default {
           );
           this.crud.forEach((item, i) => {
             item.chemicalId =
-              item.chemicalId || item.yarnsId || item.accessoriesId;
+              item.chemicalId ||
+              item.yarnsId ||
+              item.accessoriesId ||
+              item.officeId;
             item.chemicalName =
-              item.chemicalName || item.yarnsName || item.accessoriesName;
+              item.chemicalName ||
+              item.yarnsName ||
+              item.accessoriesName ||
+              item.officeName;
             item.stock = item.weight || item.stock;
             item.index = i + 1;
           });
@@ -494,13 +520,17 @@ export default {
 };
 </script>
 <style lang='stylus'>
-#ityInventory
-  .el-table__placeholder
-    display none
-  .el-dialog
-    margin-top 0 !important
-    height 100%
-    margin 0 !important
+#ityInventory {
+  .el-table__placeholder {
+    display: none;
+  }
+
+  .el-dialog {
+    margin-top: 0 !important;
+    height: 100%;
+    margin: 0 !important;
     // background-color: rgb(2, 26, 60);
-    overflow hidden !important
+    overflow: hidden !important;
+  }
+}
 </style>

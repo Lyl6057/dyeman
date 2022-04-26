@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-04-01 13:39:35
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-09 14:09:05
+ * @LastEditTime: 2022-04-25 14:13:46
  * @Description:
  */
 
@@ -100,6 +100,12 @@ export function whseMng(_this) {
       index: "whseInOutKB",
       icon: "el-icon-s-order",
       name: "whseInOutKB"
+    },
+    {
+      menuName: "六.QA验布看板", // '仓库管理',
+      index: "transferLoadQa",
+      icon: "el-icon-s-order",
+      name: "transferLoadQa"
     }
   ];
 }

@@ -660,6 +660,12 @@ export default {
             if (!this.mx[i].list[j].weight || !this.mx[i].list[j].weightUnit) {
               this.$tip.error(this.$t("iaoMng.saveTle17"));
               return;
+            } else if (
+              !this.mx[i].list[j].locationCode &&
+              !this.mx[i].list[j].storageNo
+            ) {
+              this.$tip.error("货位码不能为空!");
+              return;
             }
           }
         }
@@ -941,6 +947,7 @@ export default {
 };
 </script>
 <style lang='stylus'>
-#rcDetail, .el-table
-  overflow visible !important
+#rcDetail, .el-table {
+  overflow: visible !important;
+}
 </style>

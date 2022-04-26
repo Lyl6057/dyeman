@@ -6,6 +6,14 @@ export default [
     redirect: "/imWl"
   },
   {
+    path: "/transferLoadQa",
+    name: "QA验布看板",
+    component: resolve => require(["@/view/im/transferLoadQa/index"], resolve),
+    meta: {
+      keepAlive: true
+    }
+  },
+  {
     path: "/stockVehicle",
     name: "在库载具",
     component: resolve =>
@@ -170,7 +178,8 @@ export default [
       {
         path: "/fac_ret_yarn_in",
         name: "facRetYarnIn",
-        component: resolve => require(["@/view/im/Wk/rc/returnYarn/index"], resolve),
+        component: resolve =>
+          require(["@/view/im/Wk/rc/returnYarn/index"], resolve),
         meta: {
           keepAlive: false
         }
@@ -179,7 +188,8 @@ export default [
       {
         path: "/sample_yarn_in",
         name: "sampleYarnIn",
-        component: resolve => require(["@/view/im/Wk/rc/sampleYarnIn/index"], resolve),
+        component: resolve =>
+          require(["@/view/im/Wk/rc/sampleYarnIn/index"], resolve),
         meta: {
           keepAlive: false
         }
@@ -243,7 +253,8 @@ export default [
       {
         path: "/cc_ret_reat",
         name: "cc_ret_reat",
-        component: resolve => require(["@/view/im/Wk/cc/retRect/index"], resolve),
+        component: resolve =>
+          require(["@/view/im/Wk/cc/retRect/index"], resolve),
         meta: {
           keepAlive: false
         }

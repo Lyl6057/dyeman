@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-01-13 09:53:53
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-14 10:24:52
+ * @LastEditTime: 2022-04-25 16:26:27
  * @FilePath: \iot.vue\src\view\im\whseInOutKB\api.js
  * @Description:
  */
@@ -88,7 +88,6 @@ export function getTaskList(params) {
   });
 }
 
-// 查询布票称重记录 state = 1 已称重 2 已入仓
 export function getTask(params) {
   return axios({
     url: "/erp/page",

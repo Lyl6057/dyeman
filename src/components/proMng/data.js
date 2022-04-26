@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-05-03 13:03:03
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-21 09:22:59
+ * @LastEditTime: 2022-04-21 13:20:34
  * @Description:
  */
 
@@ -892,7 +892,7 @@ export function sxStockC(_this) {
     showOverflowTooltip: true,
     excelBtn: true,
     showSummary: false,
-    // selection: true,
+    selection: true,
     // sumColumnList: [
     //   {
     //     label: " ",
