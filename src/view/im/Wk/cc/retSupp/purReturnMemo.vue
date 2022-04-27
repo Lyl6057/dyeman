@@ -4,12 +4,12 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-12 14:44:01
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-25 17:09:56
+ * @LastEditTime: 2022-04-27 14:01:17
 -->
 <template>
   <view-container title="退货通知单" :element-loading-text="loadLabel" v-loading="loading">
     <div class="btnList">
-      <el-button type="success" @click="handleSelect">退纱出仓</el-button>
+      <el-button type="success" @click="handleSelect">退货出仓</el-button>
       <el-button type="primary" @click="handleQuery">{{ this.$t("public.query") }}</el-button>
       <el-button type="warning" @click="handleClose">{{ this.$t("public.close") }}</el-button>
     </div>

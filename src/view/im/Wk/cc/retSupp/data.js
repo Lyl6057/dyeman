@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-12 09:07:11
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-27 09:28:20
+ * @LastEditTime: 2022-04-27 14:01:10
  */
 import {
   getDIC,
@@ -118,7 +118,7 @@ export function crudOp(_this) {
         width: 160,
       },
       {
-        label: "退纱通知单编号",
+        label: "退货通知单编号",
         prop: "retMemo",
         width: 160,
       },
@@ -155,7 +155,7 @@ export function queryFormOp(_this) {
         valueFormat: "yyyy-MM-dd",
       },
       {
-        label: "退纱通知单编号",
+        label: "退货通知单编号",
         prop: "retMemo",
         span: 5,
         placeholder: " ",
@@ -187,7 +187,7 @@ export function retReatCrudOp(_this) {
     selection:true,
     index:false,
     column: [{
-        label: "退纱通知单编号",
+        label: "退货通知单编号",
         prop: "remeoNo",
         width: 150
       },
@@ -254,7 +254,7 @@ export function retReatFormOp(_this) {
         valueFormat: "yyyy-MM-dd",
       },
       {
-        label: "退纱通知单编号",
+        label: "退货通知单编号",
         prop: "retMemo",
         span: 5,
         placeholder: " ",
