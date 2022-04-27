@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-02-22 10:29:39
+ * @LastEditTime: 2022-04-26 16:32:56
  * @Description:
  */
 
@@ -197,14 +197,14 @@ export function mainCrud(_this) {
         disabled: true,
         align: "right",
         span: 6,
-        hide: true,
-        rules: [
-          {
-            required: true,
-            message: "请输入幅宽",
-            trigger: "blur"
-          }
-        ]
+        hide: true
+        // rules: [
+        //   {
+        //     required: true,
+        //     message: "请输入幅宽",
+        //     trigger: "blur"
+        //   }
+        // ]
       },
       {
         label: "克重",

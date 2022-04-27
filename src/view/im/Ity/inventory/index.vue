@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-24 14:15:12
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-26 16:08:22
+ * @LastEditTime: 2022-04-26 16:22:44
  * @Description: 
 -->
 <template>
@@ -273,6 +273,8 @@ export default {
             ? "proName"
             : this.form.type == "RHL" || this.form.type == "RLL"
             ? "chemicalId"
+            : this.form.type == "XZ"
+            ? "officeId"
             : "accessoriesId"
         );
         group.forEach((item, i) => {

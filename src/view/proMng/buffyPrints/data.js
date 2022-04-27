@@ -344,7 +344,6 @@ export function mainCrud(_this) {
         disabled: true,
         placeholder: " ",
         span: 6,
-        width: 100,
         width: 300,
         overHidden: true
       },

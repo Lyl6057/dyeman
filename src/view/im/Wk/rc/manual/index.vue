@@ -484,12 +484,14 @@ export default {
           delete this.form[key];
         }
       }
-      if (this.form.yinDate != "" && this.form.yinDate != undefined) {
-        this.form.yinDate += " 00:00:00";
-      }
+
+      let queryD = JSON.parse(JSON.stringify(this.form));
+      queryD.yinDate = queryD.yinDate ? queryD.yinDate + " 00:00:00" : "";
+      queryD.r_yinDate_r = "!^%" + queryD.yinDate;
+      queryD.yinId = "^^%" + (queryD.yinId || "");
       this.everyThing
         .get(
-          Object.assign(this.form, {
+          Object.assign(queryD, {
             rows: this.page.pageSize,
             start: this.page.currentPage,
             yinType: this.hide,
@@ -500,12 +502,12 @@ export default {
           this.page.total = records.total;
           this.changeList = [];
           this.crud = records.records;
-          this.crud.sort((a, b) => {
-            return (
-              b.yinId.substring(b.yinId.length - 6) -
-              a.yinId.substring(a.yinId.length - 6)
-            );
-          });
+          // this.crud.sort((a, b) => {
+          //   return (
+          //     b.yinId.substring(b.yinId.length - 6) -
+          //     a.yinId.substring(a.yinId.length - 6)
+          //   );
+          // });
           this.crud.forEach((item, index) => {
             item.finStatus = String(item.finStatus);
             item.index = index + 1;
@@ -692,10 +694,10 @@ export default {
       this.choiceTarget.custId = val.custCode;
       this.choiceTarget.custName = val.custCode;
       this.oldData.$cellEdit = true;
-      for (var key in val) {
+      for (let key in val) {
         delete val[key];
       }
-      for (var key in this.choiceQ) {
+      for (let key in this.choiceQ) {
         delete this.choiceQ[key];
       }
       this.choiceV = false;
@@ -732,20 +734,28 @@ export default {
 };
 </script>
 <style lang='stylus'>
-#rc, #rcDetail
-  .formBox
-    margin-bottom 0px
-  .avue-crud__menu
-    min-height 5px !important
-    height 5px !important
-  .el-tabs__item
-    font-size 18px
-    line-height 30px
-    height 30px
-  .el-table__header-wrapper, .el-form-item__label, .el-input--mini
-    font-size 16px !important
+#rc, #rcDetail {
+  .formBox {
+    margin-bottom: 0px;
+  }
+
+  .avue-crud__menu {
+    min-height: 5px !important;
+    height: 5px !important;
+  }
+
+  .el-tabs__item {
+    font-size: 18px;
+    line-height: 30px;
+    height: 30px;
+  }
+
+  .el-table__header-wrapper, .el-form-item__label, .el-input--mini {
+    font-size: 16px !important;
     // font-weight: 600 !important;
-    color #000
+    color: #000;
+  }
+
   // .avue-form__group {
   // background-color: #fff;
   // }
@@ -753,6 +763,8 @@ export default {
   // .el-table--mini td, .el-table--mini th {
   // padding: 2px 0 !important;
   // }
-  .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item
-    margin-bottom 10px
+  .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item {
+    margin-bottom: 10px;
+  }
+}
 </style>
