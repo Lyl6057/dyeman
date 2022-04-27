@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-12 10:34:33
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-27 09:39:23
+ * @LastEditTime: 2022-04-27 09:45:19
 -->
 <template>
   <div class="with-drawal-dlt-container">
@@ -237,7 +237,7 @@ export default {
               dangerouslyUseHTMLString: true,
               message: `批号为<strong>${item.batchNo}</strong>的材料编号<strong>${item.matCode}</strong>剩余库存数为<span style="color:red; font-size: 16px">${item.realStock.toFixed(2)}</span>;`,
               type: "warning",
-              position: 'top-left'
+              position: 'top-right'
             }
           setTimeout(() =>this.$notify(notifyData), 100 * index);
         });
