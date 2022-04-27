@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-12 10:09:35
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-26 08:58:49
+ * @LastEditTime: 2022-04-27 09:27:11
  */
 import axios from "axios";
 
@@ -90,9 +90,9 @@ export function batchAddOrUpdateRetReatDtlData(dataList,_this){
 }
 
 // 检验出仓数据
-export function fetchValidOutWeight(dataList){
+export function fetchValidOutWeight(dataList,_this){
     return axios({
-        url: "/api/viewYarnStock/valid/outStock",
+        url: `/api/${_this.moduleParams.stockKey}/valid/outStock`,
         method: "post",
         data: dataList
     })

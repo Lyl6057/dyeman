@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-12 10:34:33
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-26 09:10:23
+ * @LastEditTime: 2022-04-27 09:39:23
 -->
 <template>
   <div class="with-drawal-dlt-container">
@@ -58,6 +58,10 @@ export default {
     moduleParams:{
       type: Object,
       default: () => ({})
+    },
+    imWkType:{
+      type: String,
+      default: () => ""
     }
   },
   data() {
@@ -216,27 +220,22 @@ export default {
     },
     // 保存校验
     async saveValid() {
-      return true;
       let dataList = [];
       this.dtlCrudDataList.forEach(item => {
-        item.retreatDtlaList.forEach(aItem => {
-          dataList.push({
-            yarnsId: item.yarnsId,
-            yarnsCard: item.yarnsCard,
-            batchNo: item.batchNo,
-            batId: item.batId,
-            weight: aItem.retWeight || 0,
-            locationCode: aItem.locationCode
-          });
+        dataList.push({
+          matCode: item.matCode,
+          batchNo: item.batchNo,
+          retQty: item.retQty || 0,
         });
       });
-      let validRes = await fetchValidOutWeight(dataList).then(res => res.data);
+      let validRes = await fetchValidOutWeight(dataList,this).then(res => res.data);
       if (!validRes.data.status) {
+        this.$tip.warning("保存无效~");
         validRes.data.resultList.forEach((item, index) => {
           let notifyData = {
               title: "提示",
               dangerouslyUseHTMLString: true,
-              message: `材料编号<strong>${item.yarnsId}</strong>的<strong>${item.locationName}</strong>货运位剩余库存数为<span style="color:red; font-size: 16px">${item.realStock.toFixed(2)}</span>;`,
+              message: `批号为<strong>${item.batchNo}</strong>的材料编号<strong>${item.matCode}</strong>剩余库存数为<span style="color:red; font-size: 16px">${item.realStock.toFixed(2)}</span>;`,
               type: "warning",
               position: 'top-left'
             }

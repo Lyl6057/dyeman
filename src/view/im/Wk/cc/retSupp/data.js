@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-12 09:07:11
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-26 09:24:58
+ * @LastEditTime: 2022-04-27 09:28:20
  */
 import {
   getDIC,
@@ -29,6 +29,70 @@ const mainCrudOpCommon = {
   rowKey: "index",
   index: true,
   page: true,
+}
+
+  // 模块参数  辅料|五金|行政|染料|化工
+export const moduleParamsEnum = {
+  // 辅料
+  3: {
+    fieldLabel: "辅料",
+    unitLabel: "重量",
+    mainApiBaseKey: "whseRetsuppaccessories",
+    dtlApiBaseKey: "whseRetsuppaccessoriesDtl",
+    mainOidKey: "whseRetsuppaccessoriesoid",
+    mainOidFkKey: "whseRetsuppaccessoriesFk",
+    dtlOidFk: "whseRetsuppaccessoriesDtloid",
+    inDtlOidFk: "whseAccessoriesDtlFk",
+    stockKey: "viewAccessoriesStock"
+  },
+  // 五金
+  1: {
+    fieldLabel: "五金用品",
+    unitLabel: "重量",
+    mainApiBaseKey: "whseRetsupphardware",
+    dtlApiBaseKey: "whseRetsupphardwareDtl",
+    mainOidKey: "whseRetsupphardwareoid",
+    mainOidFkKey: "whseRetsupphardwareFk",
+    dtlOidFk: "whseRetsupphardwareDtloid",
+    inDtlOidFk: "whseHardwareDtlFk",
+    stockKey: "viewHardwareStock"
+  },
+  // 行政
+  2:{
+    fieldLabel: "行政用品",
+    unitLabel: "数量",
+    mainApiBaseKey: "whseRetsuppoffice",
+    dtlApiBaseKey: "whseRetsuppofficeDtl",
+    mainOidKey: "whseRetsuppofficeoid",
+    mainOidFkKey: "whseRetsuppofficeFk",
+    dtlOidFk: "whseRetsuppofficeDtloid",
+    inDtlOidFk: "whseOfficeDtlFk",
+    stockKey: "viewOfficeStock"
+  },
+  // 化工
+  5:{
+    fieldLabel: "原料",
+    unitLabel: "重量",
+    mainApiBaseKey: "whseRetsuppchemical",
+    dtlApiBaseKey: "whseRetsuppchemicalDtl",
+    mainOidKey: "whseRetsuppchemicaloid",
+    mainOidFkKey: "whseRetsuppchemicalFk",
+    dtlOidFk: "whseRetsuppchemicalDtloid",
+    inDtlOidFk: "whseChemicalinDtlbFk",
+    stockKey: "viewChemicalStock"
+  },
+  // 染料
+  8:{
+    fieldLabel: "染料",
+    unitLabel: "重量",
+    mainApiBaseKey: "whseRetsuppdyesal",
+    dtlApiBaseKey: "whseRetsuppdyesalDtl",
+    mainOidKey: "whseRetsuppdyesaloid",
+    mainOidFkKey: "whseRetsuppdyesalFk",
+    dtlOidFk: "whseRetsuppdyesalDtloid",
+    inDtlOidFk: "whseDyesainDtlaFk",
+    stockKey: "viewDyesalinStok"
+  },
 }
 
 
@@ -133,9 +197,10 @@ export function retReatCrudOp(_this) {
         width: 120
       },
       {
-        label: "辅料名称",
+        label: `${moduleParamsEnum[_this.imWkType].fieldLabel}名称`,
         prop: "chinName",
-        width: 200
+        width: 200,
+        overHidden: true
       },
       {
         label: "本厂批号",
@@ -143,7 +208,7 @@ export function retReatCrudOp(_this) {
         width: 120
       },
       {
-        label: "退货数量",
+        label: `退货${moduleParamsEnum[_this.imWkType].unitLabel}` ,
         prop: "returnQty",
         width: 120
       },
@@ -225,11 +290,11 @@ export function retReatDtlCrudOp(_this){
         prop: "yinId",
         width: 140
       },{
-        label: "辅料编号",
+        label: `${moduleParamsEnum[_this.imWkType].fieldLabel}编号`,
         prop: "matCode",
-        width: 100
+        width: 120
       },{
-        label: "辅料名称",
+        label: `${moduleParamsEnum[_this.imWkType].fieldLabel}名称`,
         prop: "matName",
         width: 200,
         overHidden: true
@@ -238,7 +303,7 @@ export function retReatDtlCrudOp(_this){
         prop: "batchNo",
         width: 120
       },{
-        label: "入仓重量",
+        label: `入仓${moduleParamsEnum[_this.imWkType].unitLabel}`,
         prop: "inWeight",
         width: 120,
         type: "number",
@@ -248,7 +313,7 @@ export function retReatDtlCrudOp(_this){
           return value && value.toFixed(2)
         }
       },{ 
-        label: "退货重量",
+        label: `退货${moduleParamsEnum[_this.imWkType].unitLabel}`,
         prop: "retQty",
         width: 120,
         cell: true,

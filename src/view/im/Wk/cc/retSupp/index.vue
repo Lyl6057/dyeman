@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-12 09:03:40
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-26 17:20:59
+ * @LastEditTime: 2022-04-27 08:35:58
 -->
 <template>
   <div id="ret-reat-container">
@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import { crudOp, queryFormOp } from "./data";
+import { crudOp, queryFormOp, moduleParamsEnum } from "./data";
 import { fetchRetRectDataByPage, removeRetRectById, updateRetRectData } from "./api";
 import RetRectDtl from "./retRectDtl.vue";
 import PurReturnMemo from "./purReturnMemo.vue";
@@ -84,54 +84,6 @@ export default {
         type: ""
       },
 
-      // 模块参数  辅料|五金|行政|染料|化工
-      moduleParamsEnum: {
-        // 辅料
-        3: {
-          mainApiBaseKey: "whseRetsuppaccessories",
-          dtlApiBaseKey: "whseRetsuppaccessoriesDtl",
-          mainOidKey: "whseRetsuppaccessoriesoid",
-          mainOidFkKey: "whseRetsuppaccessoriesFk",
-          dtlOidFk: "whseRetsuppaccessoriesDtloid",
-          inDtlOidFk: "whseAccessoriesDtlFk"
-        },
-        // 五金
-        1: {
-          mainApiBaseKey: "whseRetsupphardware",
-          dtlApiBaseKey: "whseRetsupphardwareDtl",
-          mainOidKey: "whseRetsupphardwareoid",
-          mainOidFkKey: "whseRetsupphardwareFk",
-          dtlOidFk: "whseRetsupphardwareDtloid",
-          inDtlOidFk: "whseHardwareDtlFk"
-        },
-        // 行政
-        2:{
-          mainApiBaseKey: "whseRetsuppoffice",
-          dtlApiBaseKey: "whseRetsuppofficeDtl",
-          mainOidKey: "whseRetsuppofficeoid",
-          mainOidFkKey: "whseRetsuppofficeFk",
-          dtlOidFk: "whseRetsuppofficeDtloid",
-          inDtlOidFk: "whseOfficeDtlFk"
-        },
-        // 化工
-        5:{
-          mainApiBaseKey: "whseRetsuppchemical",
-          dtlApiBaseKey: "whseRetsuppchemicalDtl",
-          mainOidKey: "whseRetsuppchemicaloid",
-          mainOidFkKey: "whseRetsuppchemicalFk",
-          dtlOidFk: "whseRetsuppchemicalDtloid",
-          inDtlOidFk: "whseChemicalinDtlbFk"
-        },
-        // 染料
-        8:{
-          mainApiBaseKey: "whseRetsuppdyesal",
-          dtlApiBaseKey: "whseRetsuppdyesalDtl",
-          mainOidKey: "whseRetsuppdyesaloid",
-          mainOidFkKey: "whseRetsuppdyesalFk",
-          dtlOidFk: "whseRetsuppdyesalDtloid",
-          inDtlOidFk: "whseDyesainDtlaFk"
-        },
-      },
       moduleParams:{}
 
     };
@@ -155,7 +107,7 @@ export default {
         type: tImWkData[1]
       });
       // 参数赋值
-      this.moduleParams = this.moduleParamsEnum[tImWkData[1]];
+      this.moduleParams = moduleParamsEnum[tImWkData[1]];
     },
     // 关闭
     handleClose(){
