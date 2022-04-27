@@ -900,7 +900,8 @@ export default {
             {
               id: "4-7",
               click: () => {
-                this.toView("cc_scfl", this.$t("iaoMng.tgysflcc") + "_4");
+                // this.toView("cc_scfl", this.$t("iaoMng.tgysflcc") + "_4");
+                this.toView("ret_supp", this.$t("iaoMng.tgysflcc") + "_3");
               },
               title: this.$t("iaoMng.tgysflcc"),
               icon: "el-icon-s-claim",
@@ -961,6 +962,17 @@ export default {
               color: "#409EFF",
               // content: "领用出库看板",
             },
+            {
+              id: "5-3",
+              click: () => {
+                // this.toView("cc_scfl", this.$t("iaoMng.tgysflcc") + "_4");
+                this.toView("ret_supp", this.$t("iaoMng.tgyshgylcc") + "_5");
+              },
+              title: this.$t("iaoMng.tgyshgylcc"),
+              icon: "el-icon-s-claim",
+              color: "#409EFF",
+              // content: "退供应商出库看板",
+            },
           ],
         },
         {
@@ -985,6 +997,17 @@ export default {
               icon: "el-icon-s-claim",
               color: "#409EFF",
               // content: "领用出库看板",
+            },
+            {
+              id: "6-3",
+              click: () => {
+                // this.toView("cc_scfl", this.$t("iaoMng.tgysflcc") + "_4");
+                this.toView("ret_supp", this.$t("iaoMng.tgysylcc") + "_8");
+              },
+              title: this.$t("iaoMng.tgysylcc"),
+              icon: "el-icon-s-claim",
+              color: "#409EFF",
+              // content: "退供应商出库看板",
             },
           ],
         },
@@ -1014,7 +1037,8 @@ export default {
             {
               id: "7-3",
               click: () => {
-                this.toView("cc_wj", this.$t("iaoMng.tgyswjcc") + "_4");
+                // this.toView("cc_wj", this.$t("iaoMng.tgyswjcc") + "_4");
+                this.toView("ret_supp", this.$t("iaoMng.tgyswjcc") + "_1");
               },
               title: this.$t("iaoMng.tgyswjcc"),
               icon: "el-icon-s-claim",
@@ -1061,7 +1085,8 @@ export default {
             {
               id: "7-8",
               click: () => {
-                this.toView("cc_xz", this.$t("iaoMng.tgysxzcc") + "_4");
+                // this.toView("cc_xz", this.$t("iaoMng.tgysxzcc") + "_4");
+                this.toView("ret_supp", this.$t("iaoMng.tgysxzcc") + "_2");
               },
               title: this.$t("iaoMng.tgysxzcc"),
               icon: "el-icon-s-claim",
@@ -1852,7 +1877,8 @@ export default {
             },
             {
               click: () => {
-                this.toView("cc_scfl", this.$t("iaoMng.tgysflcc") + "_4");
+                this.toView("ret_supp", this.$t("iaoMng.tgysflcc") + "_3");
+                // this.toView("ret_supp", this.$t("iaoMng.tgysflcc") + "_4");
               },
               title: this.$t("iaoMng.tgysflcc"),
               icon: "el-icon-s-claim",
@@ -1903,6 +1929,16 @@ export default {
               icon: "el-icon-s-claim",
               color: "#409EFF",
               // content: "领用出库看板",
+            },
+            {
+              click: () => {
+                this.toView("ret_supp", this.$t("iaoMng.tgyswjcc") + "_5");
+                // this.toView("cc_wj", this.$t("iaoMng.tgyswjcc") + "_4");
+              },
+              title: this.$t("iaoMng.tgyswjcc"),
+              icon: "el-icon-s-claim",
+              color: "#409EFF",
+              // content: "退供应商出库看板",
             },
             // {
             //   click: () => {
@@ -1967,6 +2003,16 @@ export default {
               color: "#409EFF",
               // content: "领用出库看板",
             },
+            {
+              click: () => {
+                this.toView("ret_supp", this.$t("iaoMng.tgyswjcc") + "_8");
+                // this.toView("cc_wj", this.$t("iaoMng.tgyswjcc") + "_4");
+              },
+              title: this.$t("iaoMng.tgyswjcc"),
+              icon: "el-icon-s-claim",
+              color: "#409EFF",
+              // content: "退供应商出库看板",
+            },
             // {
             //   click: () => {
             //     this.toView("cc_manual", this.$t("iaoMng.yl") + "_0");
@@ -1996,7 +2042,8 @@ export default {
             },
             {
               click: () => {
-                this.toView("cc_wj", this.$t("iaoMng.tgyswjcc") + "_4");
+                this.toView("ret_supp", this.$t("iaoMng.tgyswjcc") + "_1");
+                // this.toView("cc_wj", this.$t("iaoMng.tgyswjcc") + "_4");
               },
               title: this.$t("iaoMng.tgyswjcc"),
               icon: "el-icon-s-claim",
@@ -2036,7 +2083,8 @@ export default {
             },
             {
               click: () => {
-                this.toView("cc_xz", this.$t("iaoMng.tgysxzcc") + "_4");
+                this.toView("ret_supp", this.$t("iaoMng.tgysflcc") + "_2");
+                // this.toView("cc_xz", this.$t("iaoMng.tgysxzcc") + "_4");
               },
               title: this.$t("iaoMng.tgysxzcc"),
               icon: "el-icon-s-claim",

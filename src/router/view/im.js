@@ -286,6 +286,15 @@ export default [
           keepAlive: false
         }
       },
+       //  辅料|化工|行政|五金|染料退供应商出仓
+      {
+        path: "/ret_supp",
+        name: "ret_supp",
+        component: resolve => require(["@/view/im/Wk/cc/retSupp/index"], resolve),
+        meta: {
+          keepAlive: false
+        }
+      },
       // //  生产辅料出仓
       {
         path: "/cc_scfl",
