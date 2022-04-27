@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-12 09:03:40
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-27 08:35:58
+ * @LastEditTime: 2022-04-27 16:15:04
 -->
 <template>
   <div id="ret-reat-container">
@@ -50,7 +50,7 @@
 
 <script>
 import { crudOp, queryFormOp, moduleParamsEnum } from "./data";
-import { fetchRetRectDataByPage, removeRetRectById, updateRetRectData } from "./api";
+import { fetchRetRectDataByPage, removeRetRectById, updateRetRectData,fetchExamineDataById } from "./api";
 import RetRectDtl from "./retRectDtl.vue";
 import PurReturnMemo from "./purReturnMemo.vue";
 export default {
@@ -119,16 +119,19 @@ export default {
       if(!whseRetOid) return this.$tip.warning("请选择数据");
       let isComfirm =  await this.$tip.cofirm(`是否确认审核出仓编号为【${this.curRowSelect.retCode}】的数据项`).then(res => true).catch(err => false);
       if(!isComfirm) return ;
-      let retReatData = Object.assign(this.curRowSelect,{stockState: "1"});
       this.loading = true;
-      updateRetRectData(retReatData,this).then(res => {
+      fetchExamineDataById(whseRetOid,this).then(res => {
+        if(res.data.data){
           this.$tip.success("审核成功");
           this.page.currentPage = 1;
           this.getDataList();
+        }else{
+          this.$tip.warning("存在出仓数量大于库存量，请检查。")
+        }
       }).finally(() => {
         this.loading = false;
       })
-      
+
     },
     // 选中回调
     async handlePurReturnMemoSelect(remeoNo){

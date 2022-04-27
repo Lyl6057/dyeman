@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-12 09:03:40
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-13 10:04:28
+ * @LastEditTime: 2022-04-27 16:41:50
 -->
 <template>
   <div id="ret-reat-container">
@@ -48,7 +48,7 @@
 
 <script>
 import { crudOp, queryFormOp } from "./data";
-import { fetchRetRectDataByPage, removeRetRectById, updateRetRectData } from "./api";
+import { fetchRetRectDataByPage, removeRetRectById, fetchExamineDataById } from "./api";
 import RetRectDtl from "./retRectDtl.vue";
 import PurReturnMemo from "./purReturnMemo.vue";
 export default {
@@ -91,15 +91,19 @@ export default {
     },
     // 审核
     async handleExamine(){
-      if(!this.curRowSelect.whseRetreatoid) return this.$tip.warning("请选择数据");
-      let isComfirm =  await this.$tip.cofirm(`是否确认审核出仓编号为【${this.curRowSelect.retCode}】的数据项`).then(res => true).catch(err => false);
+      let {whseRetreatoid,retCode} = this.curRowSelect
+      if(!whseRetreatoid) return this.$tip.warning("请选择数据");
+      let isComfirm =  await this.$tip.cofirm(`是否确认审核出仓编号为【${retCode}】的数据项`).then(res => true).catch(err => false);
       if(!isComfirm) return ;
-      let retReatData = Object.assign(this.curRowSelect,{retState: "1"});
       this.loading = true;
-      updateRetRectData(retReatData).then(res => {
+      fetchExamineDataById(whseRetreatoid).then(res => {
+        if(res.data.data){
           this.$tip.success("审核成功");
           this.page.currentPage = 1;
           this.getDataList();
+        }else{
+          this.$tip.warning("存在出仓数量大于库存量，请检查。")
+        }
       }).finally(() => {
         this.loading = false;
       })

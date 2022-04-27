@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-12 10:09:35
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-21 15:09:32
+ * @LastEditTime: 2022-04-27 16:42:13
  */
 import axios from "axios";
 
@@ -107,5 +107,14 @@ export function fetchValidOutWeight(dataList){
         url: "/api/viewYarnStock/valid/outStock",
         method: "post",
         data: dataList
+    })
+}
+
+// 审核数据
+export function fetchExamineDataById(id,_this){
+    return axios({
+        url: `/api/whseRetreat/valid/data/${id}`,
+        method: "put",
+      
     })
 }
