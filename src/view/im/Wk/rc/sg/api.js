@@ -62,6 +62,14 @@ export function addRlAlloc(params) {
   });
 }
 
+export function createOutOrder(id) {
+  return axios({
+    url: "/api/whseRetyarnin/create/retYarn/byYarnInOid/" + id,
+    method: "get"
+    // params: params
+  });
+}
+
 // 纱线
 export function getviPuryarnNostock(params) {
   return axios({

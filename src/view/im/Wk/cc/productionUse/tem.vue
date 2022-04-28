@@ -107,7 +107,13 @@ import { rsxkr2C, rsxkr2F, rcpb3C } from "./data";
 import choice from "@/components/choice";
 import { baseCodeSupply, updatePurApp } from "@/api/index";
 import proChoice from "@/components/proMng/index";
-import { getLydmx, getSglydmx, updateSglyd, getHgylStock } from "./api";
+import {
+  getLydmx,
+  getSglydmx,
+  updateSglyd,
+  getHgylStock,
+  fetchValidOutWeight,
+} from "./api";
 export default {
   props: {
     type: String,
@@ -520,7 +526,7 @@ export default {
     close() {
       this.$emit("close", this.saved);
     },
-    save() {
+    async save() {
       if (this.form.retCode == "" || this.form.retDate == null) {
         this.$tip.error("出仓编号/日期不能为空!");
         return;
@@ -560,6 +566,8 @@ export default {
             ? Number((this.mx[i].weight - this.mx[i].applyNum).toFixed(2))
             : 0;
       }
+      let vaildRes = await this.saveValid();
+      if (!vaildRes) return;
       this.outloading = true;
       this.modified = true;
       if (this.form.yinDate != "" && this.form.yinDate != undefined) {
@@ -733,6 +741,41 @@ export default {
           });
         });
       }
+    },
+    // 保存校验
+    async saveValid() {
+      let dataList = [];
+      this.mx.forEach((item) => {
+        dataList.push({
+          yarnsId: item.yarnsId,
+          yarnsCard: item.yarnsCard,
+          batchNo: item.batchNo,
+          batId: item.batId,
+          weight: item.weight,
+          locationCode: item.list[0].locationCode,
+        });
+      });
+      let validRes = await fetchValidOutWeight(dataList).then(
+        (res) => res.data
+      );
+      if (!validRes.data.status) {
+        validRes.data.resultList.forEach((item, index) => {
+          let notifyData = {
+            title: "提示",
+            dangerouslyUseHTMLString: true,
+            message: `材料编号<strong>${item.yarnsId}</strong>的<strong>${
+              item.locationName
+            }</strong>货运位剩余库存数为<span style="color:red; font-size: 16px">${item.realStock.toFixed(
+              2
+            )}</span>;`,
+            type: "warning",
+            position: "top-left",
+          };
+          setTimeout(() => this.$notify(notifyData), 100 * index);
+        });
+      }
+      // 检验条件
+      return validRes.data.status;
     },
     choiceData(val) {
       if (Object.keys(val).length === 0) {
@@ -1081,22 +1124,36 @@ export default {
 };
 </script>
 <style lang='stylus'>
-.el-table
-  overflow visible !important
-.el-card__body
-  padding 20px 20px 50px 20px
-#sxPlanDlg
-  .el-dialog__header
-    padding 0
-  .el-card
-    border none
-  .el-dialog__body
-    padding 0 !important
-  .el-dialog__header
-    padding 0px
-    background-color rgb(2, 26, 60)
-  .formBox
-    margin-bottom 0px
+.el-table {
+  overflow: visible !important;
+}
+
+.el-card__body {
+  padding: 20px 20px 50px 20px;
+}
+
+#sxPlanDlg {
+  .el-dialog__header {
+    padding: 0;
+  }
+
+  .el-card {
+    border: none;
+  }
+
+  .el-dialog__body {
+    padding: 0 !important;
+  }
+
+  .el-dialog__header {
+    padding: 0px;
+    background-color: rgb(2, 26, 60);
+  }
+
+  .formBox {
+    margin-bottom: 0px;
+  }
+
   // .el-button--mini, .el-button--small {
   // font-size: 16px;
   // }
@@ -1104,22 +1161,30 @@ export default {
   // .el-button--mini, .el-button--mini.is-round {
   // padding: 5px 10px;
   // }
-  .avue-crud__menu
-    min-height 5px !important
-    height 5px !important
-  .el-tabs__item
-    font-size 18px
-    line-height 30px
-    height 30px
-  .el-table__header-wrapper, .el-form-item__label, .el-input--mini
+  .avue-crud__menu {
+    min-height: 5px !important;
+    height: 5px !important;
+  }
+
+  .el-tabs__item {
+    font-size: 18px;
+    line-height: 30px;
+    height: 30px;
+  }
+
+  .el-table__header-wrapper, .el-form-item__label, .el-input--mini {
     // font-size: 16px !important;
     // font-weight: 600 !important;
     // color: #000;
-  .el-dialog
-    margin-top 0 !important
-    height 100%
-    margin 0 !important
-    background-color rgb(2, 26, 60)
+  }
+
+  .el-dialog {
+    margin-top: 0 !important;
+    height: 100%;
+    margin: 0 !important;
+    background-color: rgb(2, 26, 60);
+  }
+
   // .avue-form__group {
   // background-color: #fff;
   // }
@@ -1127,15 +1192,23 @@ export default {
   // .el-table--mini td, .el-table--mini th {
   // padding: 2px 0 !important;
   // }
-  .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item
-    margin-bottom 10px
-  .avue-crud__tip
-    display none
-  .el-dialog__header
-    padding 0px
-  .el-dialog__headerbtn
-    top 5px
-    color #000
-    font-size 22px
-    z-index 999
+  .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item {
+    margin-bottom: 10px;
+  }
+
+  .avue-crud__tip {
+    display: none;
+  }
+
+  .el-dialog__header {
+    padding: 0px;
+  }
+
+  .el-dialog__headerbtn {
+    top: 5px;
+    color: #000;
+    font-size: 22px;
+    z-index: 999;
+  }
+}
 </style>

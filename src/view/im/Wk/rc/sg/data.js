@@ -833,7 +833,8 @@ export function planCrud(_this) {
             : _this.$t("whseField.xh"),
         prop: "model",
         cell: false,
-        width: 170
+        width: 120,
+        overHidden: true
         // hide: _this.data === _this.$t("iaoMng.sx")
       },
       {
@@ -872,11 +873,31 @@ export function planCrud(_this) {
       },
       {
         label:
-          _this.data === _this.$t("iaoMng.sx") ? "本厂纱批号" : "供应商编号",
+          _this.data === _this.$t("iaoMng.sx") ? "本厂纱批号" : "供应商批号",
         prop: "batNo",
         cell: false,
         width: 160,
         overHidden: true
+      },
+      {
+        label: "生成出仓单",
+        prop: "andOut",
+        type: "switch",
+        dicData: [
+          {
+            label: " ",
+            value: false
+          },
+          {
+            label: " ",
+            value: true
+          }
+        ],
+        cell: true,
+        align: "center",
+        width: 110,
+        overHidden: true,
+        change: (val, row) => {}
       },
       {
         label: "备注",

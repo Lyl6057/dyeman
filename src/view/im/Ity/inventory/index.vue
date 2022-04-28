@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-24 14:15:12
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-26 16:22:44
+ * @LastEditTime: 2022-04-28 11:15:42
  * @Description: 
 -->
 <template>
@@ -390,6 +390,7 @@ export default {
               item.accessoriesName ||
               item.officeName;
             item.stock = item.weight || item.stock;
+            item.locationCode = item.locationCode || item.storageNo;
             item.index = i + 1;
           });
           var values = {

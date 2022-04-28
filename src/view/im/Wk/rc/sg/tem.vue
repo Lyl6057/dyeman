@@ -103,6 +103,7 @@ import {
   baseCodeSupply,
   baseCodeSupplyEx,
 } from "@/api/index";
+import { createOutOrder } from "./api.js";
 export default {
   props: {
     datas: String,
@@ -154,9 +155,14 @@ export default {
   watch: {},
   methods: {
     getDetail() {
+      this.form = this.detail;
       if (this.isAdd) {
         this.screenLoading = true;
         this.mx = JSON.parse(JSON.stringify(this.addList));
+        this.form.andOut = this.mx.some((item) => {
+          // 是否生成出库单
+          return item.andOut;
+        });
         // this.form.stockState = 0;
         if (!this.mx.length) {
           this.screenLoading = false;
@@ -613,16 +619,7 @@ export default {
       if (!this.chooseData.list) {
         this.chooseData.list = [];
       }
-      // if (
-      //   this.datas === this.$t("iaoMng.hgyl") ||
-      //   this.datas === this.$t("iaoMng.yl")
-      // ) {
       this.getPh();
-      // }
-      // this.allocPage.total = this.chooseData.alloc.length
-      //   ? this.chooseData.alloc.length
-      //   : 0;
-      // this.getAlloc();
     },
     cellPhClick(val) {
       this.oldPhData.$cellEdit = false;
@@ -630,7 +627,7 @@ export default {
       this.oldPhData = val;
       this.choosePhData = val;
     },
-    saveAll() {
+    async saveAll() {
       if (this.form.purNo === "" || this.form.deliNo === "") {
         this.$tip.error(this.$t("whseMng.saveTle7"));
         return;
@@ -796,12 +793,15 @@ export default {
               if (i === this.mx.length - 1) {
                 // this.getDetail();
                 this.$tip.success(this.$t("public.bccg"));
+                setTimeout(() => {
+                  this.screenLoading = false;
+                }, 200);
               }
             }
           });
         });
       } else {
-        this.form.stockState = "0";
+        this.form.stockState = this.form.andOut ? "1" : "0";
         this.everyThing.add(this.form).then((res) => {
           if (this.mx.length === 0) {
             this.$tip.success(this.$t("public.bccg"));
@@ -920,16 +920,18 @@ export default {
                 });
               }
               if (i === this.mx.length - 1) {
-                // this.getDetail();
-                this.$tip.success(this.$t("public.bccg"));
+                if (this.datas === this.$t("iaoMng.sx") && this.form.andOut) {
+                  createOutOrder(this.form.whseYarninoid).then((res) => {});
+                }
+                setTimeout(() => {
+                  this.$tip.success(this.$t("public.bccg"));
+                  this.screenLoading = false;
+                }, 200);
               }
             }
           });
         });
       }
-      setTimeout(() => {
-        this.screenLoading = false;
-      }, 500);
     },
     close() {
       this.$emit("close");
@@ -940,7 +942,6 @@ export default {
   },
   created() {},
   mounted() {
-    this.form = this.detail;
     // this.getDetail();
   },
   beforeDestroy() {},

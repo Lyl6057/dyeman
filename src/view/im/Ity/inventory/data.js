@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-03-24 14:21:15
- * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-20 15:23:11
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-04-28 11:12:26
  * @Description:
  */
 
@@ -240,6 +240,22 @@ export function crudOp(_this) {
         width: 80,
         type: "select",
         dicData: matUnit
+      },
+      {
+        label: _this.$t("whseField.hwm"),
+        prop: "storageNo",
+        cell: false,
+        width: 120
+      },
+      {
+        label: _this.$t("whseField.jyzt"),
+        prop: "yinStatus",
+        span: 6,
+        placeholder: " ",
+        width: 100,
+        type: "select",
+        dicData: getDIC("whse_yinStatus"),
+        disabled: true
       }
     ]
   };
@@ -700,26 +716,27 @@ export function noteCrud(_this) {
   };
 }
 
-
-
 // 明细统计配置
-export function whseDtlCountFormOp(_this){
+export function whseDtlCountFormOp(_this) {
   return {
     submitBtn: false,
     emptyBtn: false,
     labelWidth: 90,
-    column: [{
-      label: "入仓数量",
-      prop: "inWeight",
-      type: "number",
-      span: 12,
-    },{
-      label: "出仓数量",
-      prop: "outWeight",
-      type: "number",
-      span: 12,
-    }]
-  }
+    column: [
+      {
+        label: "入仓数量",
+        prop: "inWeight",
+        type: "number",
+        span: 12
+      },
+      {
+        label: "出仓数量",
+        prop: "outWeight",
+        type: "number",
+        span: 12
+      }
+    ]
+  };
 }
 
 // 出入仓明细数据表格配置

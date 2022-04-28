@@ -106,7 +106,7 @@ export default {
             item.check = false;
             item.purNo = item.poNo || item.purNo;
             item.batNo = item.batchNo || item.batNo;
-            item.$cellEdit = true;
+            // item.$cellEdit = true;
             item.deliQty = Number(item.deliQty).toFixed(2);
             if (index === this.crud.length - 1) {
               setTimeout(() => {
@@ -125,6 +125,7 @@ export default {
     },
     selectionChange(val) {
       if (val.length === 1) {
+        val[0].$cellEdit = true;
         this.selected.push(val[0]);
         this.crud.forEach((item, i) => {
           if (
@@ -132,6 +133,7 @@ export default {
             item.deliNo === val[0].deliNo &&
             item.index != val[0].index
           ) {
+            // item.$cellEdit = true;
             this.selected.push(item);
             this.$refs.crud.toggleSelection([item]);
           }
@@ -178,6 +180,9 @@ export default {
       } else if (this.selected.length != val.length) {
         this.$refs.crud.toggleSelection();
         this.selected = [];
+        this.crud.forEach((item) => {
+          item.$cellEdit = false;
+        });
         this.$nextTick(() => {
           for (
             let i = 0;
@@ -205,9 +210,13 @@ export default {
 };
 </script>
 <style lang='stylus'>
-#deliOutPlan
-  .el-input.is-disabled .el-input__inner
-    color #606266
-  .el-tag--mini
-    display none
+#deliOutPlan {
+  .el-input.is-disabled .el-input__inner {
+    color: #606266;
+  }
+
+  .el-tag--mini {
+    display: none;
+  }
+}
 </style>
