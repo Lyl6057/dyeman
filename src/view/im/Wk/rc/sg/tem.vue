@@ -860,6 +860,7 @@ export default {
             return addDtla(item, i);
           });
           Promise.all(promiseArr).then((res) => {
+            let reqArrs = [];
             for (let i = 0; i < this.mx.length; i++) {
               if (this.mx[i].list) {
                 this.mx[i].list.forEach((item) => {
@@ -880,7 +881,7 @@ export default {
                     !item.whseAccessoriesDtlaoid &&
                     !item.whseEquipmentDtlaoid
                   ) {
-                    this.everyThing.addPh(item).then((res) => {
+                    let addSyncFn = this.everyThing.addPh(item).then((res) => {
                       item.whseChemicalinDtlboid = res.data.data;
                       item.whseDyesainDtlboid = res.data.data;
                       item.whseYarninDtlaoid = res.data.data;
@@ -888,8 +889,10 @@ export default {
                       item.whseAccessoriesDtlaoid = res.data.data;
                       item.whseEquipmentDtlaoid = res.data.data;
                     });
+                    reqArrs.push(addSyncFn)
                   } else {
-                    this.everyThing.updatePh(item).then((res) => {});
+                    let updateSyncFn = this.everyThing.updatePh(item).then((res) => {});
+                    reqArrs.push(updateSyncFn)
                   }
                   // }
                 });
@@ -910,25 +913,34 @@ export default {
                   ) {
                     item.allocMain = item.appId;
                     item.allocQty = item.applyNum;
-                    this.everyThing.addAlloc(item).then((res) => {
+                    let addAllocSyncFn =  this.everyThing.addAlloc(item).then((res) => {
                       item.whseAccessoriesinAllocoid = res.data.data;
                       item.whseChemicalinAllocoid = res.data.data;
                       item.whseYarninAllocoid = res.data.data;
                       item.whseDyesainAllocoid = res.data.data;
                     });
+                    reqArrs.push(addAllocSyncFn)
                   }
                 });
               }
-              if (i === this.mx.length - 1) {
-                if (this.datas === this.$t("iaoMng.sx") && this.form.andOut) {
-                  createOutOrder(this.form.whseYarninoid).then((res) => {});
-                }
-                setTimeout(() => {
-                  this.$tip.success(this.$t("public.bccg"));
-                  this.screenLoading = false;
-                }, 200);
-              }
+              // if (i === this.mx.length - 1) {
+              //   if (this.datas === this.$t("iaoMng.sx") && this.form.andOut) {
+              //     createOutOrder(this.form.whseYarninoid).then((res) => {});
+              //   }
+              //   setTimeout(() => {
+              //     this.$tip.success(this.$t("public.bccg"));
+              //     this.screenLoading = false;
+              //   }, 200);
+              // }
             }
+            return Promise.all(reqArrs);
+          }).then(res => {
+              if (this.datas === this.$t("iaoMng.sx") && this.form.andOut) {
+                createOutOrder(this.form.whseYarninoid).then((res) => {});
+              }
+          }).finally(() => {
+              this.$tip.success(this.$t("public.bccg"));
+              this.screenLoading = false;
           });
         });
       }
