@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-01-12 11:21:44
+ * @LastEditTime: 2022-04-29 16:35:37
  * @Description: 
 -->
 <template>
@@ -2405,68 +2405,103 @@ export default {
 };
 </script>
 <style lang='stylus'>
-.el-tag--mini
-  height 28px !important
+.el-tag--mini {
+  height: 28px !important;
   // padding: 0 5px;
-  line-height 28px !important
-  font-size 14px
-.scope-input
-  height 28px
-  line-height 28px
-  -webkit-appearance none
-  background-color #FFF
-  background-image none
-  border-radius 4px
-  border 1px solid #DCDFE6
-  box-sizing border-box
-  color #606266
-  display inline-block
-  font-size inherit
-  outline 0
-  padding 0 5px !important
-  width 100%
-.avue-crud__tip
-  display none !important
-#dyeing
-  .el-input-number__decrease, .el-input-number__increase
-    display none
-  .avue-group__header
-    margin-bottom 10px
-    height 30px
-  .avue-form__row
-    padding 0 !important
-  .formBox
-    height 100vh !important
-  .el-input-number__decrease, .el-input-number__increase
-    display none
-  .el-input-number .el-input__inner
-    text-align left !important
-  .el-input-number.is-controls-right .el-input__inner
-    padding-left 5px !important
-#colorMng_Dlg
-  .is-fullscreen
-    overflow hidden !important
-  .el-dialog__header
-    padding 0 !important
-  .el-dialog__headerbtn
-    top 3px
-    font-size 18px
-    font-weight bold
-    z-index 9
-  .el-dialog__headerbtn .el-dialog__close, #sxrcDlg .el-dialog__headerbtn .el-dialog__close, #wkDlg .el-dialog__headerbtn .el-dialog__close
-    color #000
-    font-size 24px
-  .el-tag--mini
-    height 24px
-    padding 0 5px
-    line-height 24px
-    font-size 14px
-  .el-select .el-tag__close.el-icon-close
-    right -5px
-    height 18px
-    width 18px
-    line-height 18px
-  .avue-form .el-input--mini input
-    height 35px !important
-    line-height 35px
+  line-height: 28px !important;
+  font-size: 14px;
+}
+
+.scope-input {
+  height: 28px;
+  line-height: 28px;
+  -webkit-appearance: none;
+  background-color: #FFF;
+  background-image: none;
+  border-radius: 4px;
+  border: 1px solid #DCDFE6;
+  box-sizing: border-box;
+  color: #606266;
+  display: inline-block;
+  font-size: inherit;
+  outline: 0;
+  padding: 0 5px !important;
+  width: 100%;
+}
+
+.avue-crud__tip {
+  display: none !important;
+}
+
+#dyeing {
+  .el-input-number__decrease, .el-input-number__increase {
+    display: none;
+  }
+
+  .avue-group__header {
+    margin-bottom: 10px;
+    height: 30px;
+  }
+
+  .avue-form__row {
+    padding: 0 !important;
+  }
+
+  .formBox {
+    height: 100vh !important;
+  }
+
+  .el-input-number__decrease, .el-input-number__increase {
+    display: none;
+  }
+
+  .el-input-number .el-input__inner {
+    text-align: left !important;
+  }
+
+  .el-input-number.is-controls-right .el-input__inner {
+    padding-left: 5px !important;
+  }
+}
+
+#colorMng_Dlg {
+  .is-fullscreen {
+    overflow: hidden !important;
+  }
+
+  .el-dialog__header {
+    padding: 0 !important;
+  }
+
+  .el-dialog__headerbtn {
+    top: 3px;
+    font-size: 18px;
+    font-weight: bold;
+    z-index: 9;
+  }
+
+  .el-dialog__headerbtn .el-dialog__close, #sxrcDlg .el-dialog__headerbtn .el-dialog__close, #wkDlg .el-dialog__headerbtn .el-dialog__close {
+    color: #000;
+    font-size: 24px;
+  }
+
+  .el-tag--mini {
+    height: 24px;
+    padding: 0 5px;
+    line-height: 24px;
+    font-size: 14px;
+  }
+
+  .el-select .el-tag__close.el-icon-close {
+    right: -5px;
+    height: 18px;
+    width: 18px;
+    line-height: 18px;
+  }
+
+  .avue-form .el-input--mini input {
+    height: 35px !important;
+    line-height: 35px;
+  }
+}
 </style>

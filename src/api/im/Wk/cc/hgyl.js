@@ -147,30 +147,30 @@ export function delHgylDtl(id) {
   });
 }
 
-export function getHgylDtlb(params) {
+export function getHgylDtla(params) {
   return axios({
-    url: "/api/whseChemicalDlb",
+    url: "/api/whseChemicalOutdtla",
     method: "get",
     params: params
   });
 }
-export function addHgylDtlb(params) {
+export function addHgylDtla(params) {
   return axios({
-    url: "/api/whseChemicalDlb",
+    url: "/api/whseChemicalOutdtla",
     method: "post",
     params: params
   });
 }
-export function updateHgylDtlb(params) {
+export function updateHgylDtla(params) {
   return axios({
-    url: "/api/whseChemicalDlb",
+    url: "/api/whseChemicalOutdtla",
     method: "put",
     params: params
   });
 }
-export function delHgylDtlb(id) {
+export function delHgylDtla(id) {
   return axios({
-    url: "/api/whseChemicalDlb?whseChemicalDlboid=" + id,
+    url: "/api/whseChemicalOutdtla?retyarninDtlaId=" + id,
     method: "delete"
   });
 }

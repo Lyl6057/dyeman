@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-07-21 18:22:24
  * @LastEditors: Lyl
- * @LastEditTime: 2021-07-21 18:26:23
+ * @LastEditTime: 2022-04-29 16:26:07
  * @Description:五金用品
  */
 import axios from "axios";
@@ -58,6 +58,34 @@ export function updateWjDtl(params) {
 export function delWjDtl(id) {
   return axios({
     url: "/api/whseHardwareOutDtl?whseHardwareOutDtlId=" + id,
+    method: "delete"
+  });
+}
+
+export function getHardwareOutDtla(params) {
+  return axios({
+    url: "/api/whseHardwareOutDtla",
+    method: "get",
+    params: params
+  });
+}
+export function addHardwareOutDtla(params) {
+  return axios({
+    url: "/api/whseHardwareOutDtla",
+    method: "post",
+    params: params
+  });
+}
+export function updateHardwareOutDtla(params) {
+  return axios({
+    url: "/api/whseHardwareOutDtla",
+    method: "put",
+    params: params
+  });
+}
+export function delHardwareOutDtla(id) {
+  return axios({
+    url: "/api/whseHardwareOutDtla?dtlaId=" + id,
     method: "delete"
   });
 }

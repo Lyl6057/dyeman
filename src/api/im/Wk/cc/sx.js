@@ -57,7 +57,7 @@ export function delSxDetali(id) {
 
 export function getSxDtlb(params) {
   return axios({
-    url: "/api/whseRetyarninDtla/page",
+    url: "/api/whseRetyarninDtla",
     method: "get",
     params: params
   });

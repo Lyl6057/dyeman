@@ -592,44 +592,13 @@ export default {
         this.choiceV = false;
         return;
       }
-      this.loading = true;
+      // this.loading = true;
       if (this.choiceTle === this.$t("choicDlg.xzsgd")) {
         // this.form.appId = val.appId;
         // this.form.purSingleoid = val.purSingleoid;
         this.form.appId = val.appId;
         this.form.purSingleoid = val.purSingleoid;
         this.purApp = val;
-        getSglydmx({
-          applyState: 3,
-          collectSucceed: 0,
-          purCategory: 3,
-          purSingleFk: this.form.purSingleoid,
-        }).then((res) => {
-          let val = res.data.records;
-          // val.forEach((item, i) => {
-          //   // item.$cellEdit = true;
-          //   item.yarnsId = item.materialNum;
-          //   item.yarnsName = item.chinName;
-          //   item.yarnBrand = item.yarnsCard;
-          //   item.weightUnit = item.company;
-          //   item.weight = 0;
-          // });
-          // this.mx = this.mx.concat(val);
-          this.mx.push(val);
-          console.log(this.mx);
-          this.page.total = this.mx.length;
-          if (this.mx.length) {
-            this.$refs.dlgcrud.setCurrentRow(this.mx[0]);
-          }
-          this.mx.forEach((e, index) => {
-            e.index = index + 1;
-            if (index == this.mx.length - 1) {
-              setTimeout(() => {
-                this.loading = false;
-              }, 200);
-            }
-          });
-        });
       } else if (this.choiceTle === this.$t("choicDlg.xzlyr")) {
         this.form.leader = val.perPersonoid;
       } else if (this.choiceTle === this.$t("choicDlg.xzsgdzl")) {

@@ -104,16 +104,6 @@ export function rsxkr2F(_this) {
         type: "select",
         dicData: user
       },
-
-      // {
-      //   label: _this.$t("whseField.cwzt"),
-      //   prop: "finStatus",
-      //   span: 6,
-      //   placeholder: " ",
-      //   type: "select",
-      //   dicData: getDIC("whse_finStatus"),
-      //   disabled: true
-      // },
       {
         label: "出仓方式",
         prop: "stockType",
@@ -132,13 +122,9 @@ export function rsxkr2F(_this) {
         prop: "appId",
         span: 6,
         click: () => {
-          _this.$nextTick(() => {
-            console.log(_this.form.stockType);
-          });
           if (_this.form.stockType === "2") {
             return;
           }
-
           _this.choiceField = "spNo";
           _this.oldData = _this.chooseData;
           _this.choiceTarget = _this.oldData;
@@ -149,10 +135,14 @@ export function rsxkr2F(_this) {
               _this.type == _this.$t("iaoMng.sx") ? "4" : "5";
             _this.choiceTle = _this.$t("choicDlg.xzsgd");
           } else {
-            _this.choiceQ.type =
-              _this.type == _this.$t("iaoMng.sx") ? "4" : "5";
-            _this.choiceQ.applyState = "3";
-            _this.choiceQ.collectSucceed = 0;
+            // _this.choiceQ.type =
+            //   _this.type == _this.$t("iaoMng.sx")
+            //     ? "4"
+            //     : _this.type == _this.$t("iaoMng.scfl")
+            //     ? "3"
+            //     : "3";
+            // _this.choiceQ.applyState = "3";
+            // _this.choiceQ.collectSucceed = 0;
             _this.choiceTle = _this.$t("choicDlg.xzsqlyd");
           }
         },
@@ -230,15 +220,16 @@ export function rsxkr1C(_this) {
         format: "yyyy-MM-dd",
         valueFormat: "yyyy-MM-dd",
         align: "center",
-        width: 200
+        width: 140
       },
 
       {
         label: "领用人",
         prop: "leader",
         cell: true,
-        width: 140,
+        width: 160,
         type: "select",
+        overHidden: true,
         dicData: user
       },
       {
@@ -247,6 +238,7 @@ export function rsxkr1C(_this) {
         cell: true,
         width: 140,
         type: "select",
+        overHidden: true,
         dicData: user
       },
       {
@@ -268,7 +260,7 @@ export function rsxkr2C(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 320px)",
+    height: "calc(100vh - 321px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
@@ -297,34 +289,53 @@ export function rsxkr2C(_this) {
         prop: "weaveJobCode",
         cell: false,
         width: 140,
-        overHidden: true
+        overHidden: true,
+        hide: _this.type === _this.$t("iaoMng.sx") ? false : true
       },
       {
         label: "材料編號",
-        prop: "yarnsId",
+        prop: _this.type === _this.$t("iaoMng.sx") ? "yarnsId" : "materialId",
         cell: false,
         width: 100
+        // hide: _this.type === _this.$t("iaoMng.sx") ? false : true
       },
       {
         label: "材料名稱",
-        prop: "yarnsName",
+        prop:
+          _this.type === _this.$t("iaoMng.sx") ? "yarnsName" : "materialName",
         cell: false,
         width: 280,
         overHidden: true
+        // hide: _this.type === _this.$t("iaoMng.sx") ? false : true
       },
+      // {
+      //   label: "材料編號",
+      //   prop: "materialId",
+      //   cell: false,
+      //   width: 100,
+      //   hide: _this.type != _this.$t("iaoMng.sx") ? false : true
+      // },
+      // {
+      //   label: "材料名稱",
+      //   prop: "materialName",
+      //   cell: false,
+      //   width: 280,
+      //   overHidden: true,
+      //   hide: _this.type != _this.$t("iaoMng.sx") ? false : true
+      // },
       {
         label: "纱牌",
         prop: "yarnBrand",
-        hide: false,
         width: 120,
-        overHidden: true
+        overHidden: true,
+        hide: _this.type === _this.$t("iaoMng.sx") ? false : true
       },
       {
         label: "供应商批号",
         prop: "suppBatchNo",
-        hide: false,
         width: 120,
-        overHidden: true
+        overHidden: true,
+        hide: _this.type === _this.$t("iaoMng.sx") ? false : true
       },
       {
         label: _this.$t("whseField.ph"),
@@ -347,8 +358,8 @@ export function rsxkr2C(_this) {
         cell: false,
         width: 100,
         align: "right",
-        placeholder: " "
-        // hide: _this.datas === _this.$t("iaoMng.sx") ? false : true
+        placeholder: " ",
+        hide: _this.type === _this.$t("iaoMng.sx") ? false : true
       },
       {
         label: "出货数量",
@@ -387,14 +398,10 @@ export function rcpb3C(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height:
-      _this.hide === "1" || _this.hide === "2"
-        ? "calc(100vh - 320px)"
-        : "calc(100vh - 285px)",
+    height: "calc(100vh - 285px)",
     refreshBtn: false,
     columnBtn: false,
-    page: true,
-    roykey: "whseCalicoinDtlbOid",
+    page: false,
     showSummary: true,
     sumColumnList: [
       {
@@ -428,16 +435,17 @@ export function rcpb3C(_this) {
         prop: "cartonNum",
         cell: true,
         width: 100,
-        align: "right"
+        align: "right",
+        hide: _this.type === _this.$t("iaoMng.sx") ? false : true
       },
       {
         label: "包装规格",
         prop: "packSize",
-        hide: false,
         width: 90,
         cell: true,
         type: "select",
-        dicData: getDIC("bas_yarnPackUnit")
+        dicData: getDIC("bas_yarnPackUnit"),
+        hide: _this.type === _this.$t("iaoMng.sx") ? false : true
       },
       {
         label: _this.$t("whseField.hwm"),

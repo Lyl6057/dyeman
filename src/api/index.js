@@ -2,10 +2,18 @@
  * @Author: Lyl
  * @Date: 2021-03-10 13:20:43
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-28 16:52:31
+ * @LastEditTime: 2022-04-29 09:21:05
  * @Description:
  */
 import axios from "axios";
+
+export function getPurApplicationDtl(params) {
+  return axios({
+    url: "/api/purApplicationDtl",
+    method: "get",
+    params: params
+  });
+}
 
 export function getSglydmx(params) {
   return axios({

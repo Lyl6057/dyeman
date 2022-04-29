@@ -880,8 +880,8 @@ export default {
               id: "4-2",
               click: () => {
                 // this.toView("cc_scfl", "生产领用_1");
-                this.toView("cc_scfl", this.$t("iaoMng.sclyflcc") + "_1");
-                //  this.toView("cc_productionUse", this.$t("iaoMng.scfl") + "_1");
+                // this.toView("cc_scfl", this.$t("iaoMng.sclyflcc") + "_1");
+                this.toView("cc_productionUse", this.$t("iaoMng.scfl") + "_1");
               },
               title: this.$t("iaoMng.sclyflcc"),
               icon: "el-icon-s-claim",
@@ -956,7 +956,8 @@ export default {
             {
               id: "5-2",
               click: () => {
-                this.toView("cc_hgyl", this.$t("iaoMng.sclyhgylcc") + "_1");
+                // this.toView("cc_hgyl", this.$t("iaoMng.sclyhgylcc") + "_1");
+                this.toView("cc_productionUse", this.$t("iaoMng.hgyl") + "_1");
               },
               title: this.$t("iaoMng.sclyhgylcc"),
               icon: "el-icon-s-claim",
@@ -993,6 +994,7 @@ export default {
               id: "6-2",
               click: () => {
                 this.toView("cc_yl", this.$t("iaoMng.sclyylcc") + "_1");
+                this.toView("cc_productionUse", this.$t("iaoMng.yl") + "_1");
               },
               title: this.$t("iaoMng.sclyylcc"),
               icon: "el-icon-s-claim",
@@ -1028,7 +1030,8 @@ export default {
             {
               id: "7-2",
               click: () => {
-                this.toView("cc_wj", this.$t("iaoMng.sclywjcc") + "_1");
+                // this.toView("cc_wj", this.$t("iaoMng.sclywjcc") + "_1");
+                this.toView("cc_productionUse", this.$t("choicDlg.wj") + "_1");
               },
               title: this.$t("iaoMng.sclywjcc"),
               icon: "el-icon-s-claim",

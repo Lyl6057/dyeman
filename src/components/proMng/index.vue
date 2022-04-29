@@ -120,6 +120,9 @@ import {
   finishedNoteC,
   finishedNoteF,
   getFinishedNote,
+  scflStockC,
+  scflStockF,
+  getScflStock,
 } from "./data";
 
 export default {
@@ -334,6 +337,11 @@ export default {
   },
   created() {
     switch (this.choiceTle) {
+      case "选择生产辅料库存":
+        this.choiceC = scflStockC(this);
+        this.choiceF = scflStockF(this);
+        this.getData = getScflStock;
+        break;
       case "选择成品布":
         this.choiceC = finishedNoteC(this);
         this.choiceF = finishedNoteF(this);
@@ -460,23 +468,35 @@ export default {
 };
 </script>
 <style lang='stylus'>
-#choiceDlg
-  .el-radio, .el-radio--medium.is-bordered .el-radio__label, .el-radio__label
-    font-size 16px
-    height 30px
-  .el-dialog__body
-    padding 0 !important
-  .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item
-    margin-bottom 10px
-  .el-dialog__header
-    padding 0px
-  .el-dialog__headerbtn
-    top 5px
-    color #000
-    font-size 22px
-    z-index 999
-  .formBox
-    margin-bottom 0px
+#choiceDlg {
+  .el-radio, .el-radio--medium.is-bordered .el-radio__label, .el-radio__label {
+    font-size: 16px;
+    height: 30px;
+  }
+
+  .el-dialog__body {
+    padding: 0 !important;
+  }
+
+  .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item {
+    margin-bottom: 10px;
+  }
+
+  .el-dialog__header {
+    padding: 0px;
+  }
+
+  .el-dialog__headerbtn {
+    top: 5px;
+    color: #000;
+    font-size: 22px;
+    z-index: 999;
+  }
+
+  .formBox {
+    margin-bottom: 0px;
+  }
+
   // .el-button--mini, .el-button--small {
   // font-size: 16px;
   // }
@@ -484,15 +504,23 @@ export default {
   // .el-button--mini, .el-button--mini.is-round {
   // padding: 5px 10px;
   // }
-  .avue-crud__menu
-    min-height 0 !important
-    height 0 !important
-  .el-tabs__item
-    font-size 18px
-    line-height 30px
-    height 30px
-  .el-tag--mini
-    display none
-  .el-dialog.is-fullscreen
-    overflow hidden !important
+  .avue-crud__menu {
+    min-height: 0 !important;
+    height: 0 !important;
+  }
+
+  .el-tabs__item {
+    font-size: 18px;
+    line-height: 30px;
+    height: 30px;
+  }
+
+  .el-tag--mini {
+    display: none;
+  }
+
+  .el-dialog.is-fullscreen {
+    overflow: hidden !important;
+  }
+}
 </style>
