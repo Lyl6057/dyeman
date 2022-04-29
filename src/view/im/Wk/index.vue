@@ -881,6 +881,7 @@ export default {
               click: () => {
                 // this.toView("cc_scfl", "生产领用_1");
                 this.toView("cc_scfl", this.$t("iaoMng.sclyflcc") + "_1");
+                //  this.toView("cc_productionUse", this.$t("iaoMng.scfl") + "_1");
               },
               title: this.$t("iaoMng.sclyflcc"),
               icon: "el-icon-s-claim",

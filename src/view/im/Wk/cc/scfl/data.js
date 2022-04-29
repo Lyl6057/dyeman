@@ -1,5 +1,7 @@
 import { getDIC, getDicT, postDicT, getXDicT, getDbDicT } from "@/config";
 
+let rsxkr3CDic = getXDicT("whseAccessoriesDtl");
+let basScfl = getXDicT("basProductivesupplies");
 let matUnit = getDIC("bas_matUnit");
 export function rsxkr1F(_this) {
   return {
@@ -102,6 +104,7 @@ export function rsxkr2F(_this) {
           } else {
             _this.choiceQ.type = "5";
             _this.choiceQ.applyState = "3";
+            _this.choiceQ.applyCategory = "3";
             _this.choiceQ.collectSucceed = 0;
             _this.choiceTle = _this.$t("choicDlg.xzsqlyd");
           }
@@ -391,8 +394,50 @@ export function rsxkr2C(_this) {
   };
 }
 
-let rsxkr3CDic = getXDicT("whseAccessoriesDtl");
-let basScfl = getXDicT("basProductivesupplies");
+export function dtlaCrud(_this) {
+  return {
+    menu: false,
+    addBtn: false,
+    border: true,
+    highlightCurrentRow: true,
+    height: "calc(100vh - 285px)",
+    refreshBtn: false,
+    columnBtn: false,
+    page: true,
+    showSummary: true,
+    sumColumnList: [
+      {
+        label: " ",
+        name: "weight",
+        type: "sum"
+      }
+    ],
+    column: [
+      {
+        label: "#",
+        prop: "index",
+        width: 50,
+        align: "center"
+      },
+      {
+        label: "数量",
+        prop: "weight",
+        cell: true,
+        width: 100,
+        align: "right"
+      },
+      {
+        label: _this.$t("whseField.hwm"),
+        prop: "locationCode",
+        cell: false,
+        width: 140,
+        type: "select",
+        dicData: getDicT("whseLocation", "locationCode", "locationCode")
+      }
+    ]
+  };
+}
+
 // 退供应商、客人明细
 export function rsxkr3C(_this) {
   return {

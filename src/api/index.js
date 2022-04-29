@@ -2,10 +2,18 @@
  * @Author: Lyl
  * @Date: 2021-03-10 13:20:43
  * @LastEditors: Lyl
- * @LastEditTime: 2022-03-22 14:20:38
+ * @LastEditTime: 2022-04-28 16:52:31
  * @Description:
  */
 import axios from "axios";
+
+export function getSglydmx(params) {
+  return axios({
+    url: "/api/purSingleDtl",
+    method: "get",
+    params: params
+  });
+}
 
 // 获取fineReport路径接口
 export function fetchFineReportUrl(params) {

@@ -862,7 +862,7 @@ export default {
           Promise.all(promiseArr).then((res) => {
             for (let i = 0; i < this.mx.length; i++) {
               if (this.mx[i].list) {
-                this.mx[i].list.forEach((item) => {
+                this.mx[i].list.forEach((item, j) => {
                   item.whseChemicalinDtlaFk = this.mx[i].whseChemicalinDtlaoid;
                   item.energyDtloid = this.mx[i].energyDtloid;
                   item.energyDtlFk = this.mx[i].energyDtloid;
@@ -891,7 +891,12 @@ export default {
                   } else {
                     this.everyThing.updatePh(item).then((res) => {});
                   }
-                  // }
+                  if (
+                    i === this.mx.length - 1 &&
+                    j == this.mx[i].list.length - 1
+                  ) {
+                    this.saveBefore();
+                  }
                 });
               }
               if (this.mx[i].alloc) {
@@ -919,19 +924,22 @@ export default {
                   }
                 });
               }
-              if (i === this.mx.length - 1) {
-                if (this.datas === this.$t("iaoMng.sx") && this.form.andOut) {
-                  createOutOrder(this.form.whseYarninoid).then((res) => {});
-                }
-                setTimeout(() => {
-                  this.$tip.success(this.$t("public.bccg"));
-                  this.screenLoading = false;
-                }, 200);
+              if (!this.mx[i].list.length) {
+                this.saveBefore();
               }
             }
           });
         });
       }
+    },
+    saveBefore() {
+      if (this.datas === this.$t("iaoMng.sx") && this.form.andOut) {
+        createOutOrder(this.form.whseYarninoid).then((res) => {});
+      }
+      setTimeout(() => {
+        this.$tip.success(this.$t("public.bccg"));
+        this.screenLoading = false;
+      }, 200);
     },
     close() {
       this.$emit("close");
