@@ -859,91 +859,119 @@ export default {
           let promiseArr = this.mx.map((item, i) => {
             return addDtla(item, i);
           });
-          Promise.all(promiseArr).then((res) => {
-            let reqArrs = [];
-            for (let i = 0; i < this.mx.length; i++) {
-              if (this.mx[i].list) {
-                this.mx[i].list.forEach((item) => {
-                  item.whseChemicalinDtlaFk = this.mx[i].whseChemicalinDtlaoid;
-                  item.energyDtloid = this.mx[i].energyDtloid;
-                  item.energyDtlFk = this.mx[i].energyDtloid;
-                  item.whseAccessoriesDtlFk = this.mx[i].whseAccessoriesDtloid;
-                  item.whseDyesainDtlaFk = this.mx[i].whseDyesainDtlaoid;
-                  item.whseYarninDtlFk = this.mx[i].whseYarninDtloid;
-                  item.whseAccessoriesDtloid = this.mx[i].whseAccessoriesDtloid;
-                  item.whseOfficeDtlFk = this.mx[i].whseAccessoriesDtloid;
-                  item.whseEquipmentDtlFk = this.mx[i].whseEquipmentDtloid;
-                  if (
-                    !item.whseChemicalinDtlboid &&
-                    !item.whseDyesainDtlboid &&
-                    !item.whseYarninDtlaoid &&
-                    !item.whseEnergyDtlaId &&
-                    !item.whseAccessoriesDtlaoid &&
-                    !item.whseEquipmentDtlaoid
-                  ) {
-                    let addSyncFn = this.everyThing.addPh(item).then((res) => {
-                      item.whseChemicalinDtlboid = res.data.data;
-                      item.whseDyesainDtlboid = res.data.data;
-                      item.whseYarninDtlaoid = res.data.data;
-                      item.whseEnergyDtlaId = res.data.data;
-                      item.whseAccessoriesDtlaoid = res.data.data;
-                      item.whseEquipmentDtlaoid = res.data.data;
-                    });
-                    reqArrs.push(addSyncFn)
-                  } else {
-                    let updateSyncFn = this.everyThing.updatePh(item).then((res) => {});
-                    reqArrs.push(updateSyncFn)
-                  }
-                  // }
-                });
+          Promise.all(promiseArr)
+            .then((res) => {
+              let reqArrs = [];
+              for (let i = 0; i < this.mx.length; i++) {
+                if (this.mx[i].list) {
+                  this.mx[i].list.forEach((item, j) => {
+                    item.whseChemicalinDtlaFk =
+                      this.mx[i].whseChemicalinDtlaoid;
+                    item.energyDtloid = this.mx[i].energyDtloid;
+                    item.energyDtlFk = this.mx[i].energyDtloid;
+                    item.whseAccessoriesDtlFk =
+                      this.mx[i].whseAccessoriesDtloid;
+                    item.whseDyesainDtlaFk = this.mx[i].whseDyesainDtlaoid;
+                    item.whseYarninDtlFk = this.mx[i].whseYarninDtloid;
+                    item.whseAccessoriesDtloid =
+                      this.mx[i].whseAccessoriesDtloid;
+                    item.whseOfficeDtlFk = this.mx[i].whseAccessoriesDtloid;
+                    item.whseEquipmentDtlFk = this.mx[i].whseEquipmentDtloid;
+                    if (
+                      !item.whseChemicalinDtlboid &&
+                      !item.whseDyesainDtlboid &&
+                      !item.whseYarninDtlaoid &&
+                      !item.whseEnergyDtlaId &&
+                      !item.whseAccessoriesDtlaoid &&
+                      !item.whseEquipmentDtlaoid
+                    ) {
+                      let addSyncFn = this.everyThing
+                        .addPh(item)
+                        .then((res) => {
+                          item.whseChemicalinDtlboid = res.data.data;
+                          item.whseDyesainDtlboid = res.data.data;
+                          item.whseYarninDtlaoid = res.data.data;
+                          item.whseEnergyDtlaId = res.data.data;
+                          item.whseAccessoriesDtlaoid = res.data.data;
+                          item.whseEquipmentDtlaoid = res.data.data;
+                        });
+                      reqArrs.push(addSyncFn);
+                    } else {
+                      let updateSyncFn = this.everyThing
+                        .updatePh(item)
+                        .then((res) => {});
+                      reqArrs.push(updateSyncFn);
+                    }
+                    if (
+                      i === this.mx.length - 1 &&
+                      j == this.mx[i].list.length - 1
+                    ) {
+                      this.saveBefore();
+                    }
+                  });
+                }
+                if (this.mx[i].alloc) {
+                  this.mx[i].alloc.forEach((item) => {
+                    item.whseChemicalinDtlaFk =
+                      this.mx[i].whseChemicalinDtlaoid;
+                    item.energyDtloid = this.mx[i].energyDtloid;
+                    item.energyDtlFk = this.mx[i].energyDtloid;
+                    item.whseAccessoriesDtlFk =
+                      this.mx[i].whseAccessoriesDtloid;
+                    item.whseYarninDtlaFk = this.mx[i].whseYarninDtloid;
+                    item.whseDyesainDtlaFk = this.mx[i].whseDyesainDtlaoid;
+                    if (
+                      !item.whseAccessoriesinAllocoid &&
+                      !item.whseChemicalinAllocoid &&
+                      !item.whseYarninAllocoid &&
+                      !item.whseDyesainAllocoid
+                    ) {
+                      item.allocMain = item.appId;
+                      item.allocQty = item.applyNum;
+                      let addAllocSyncFn = this.everyThing
+                        .addAlloc(item)
+                        .then((res) => {
+                          item.whseAccessoriesinAllocoid = res.data.data;
+                          item.whseChemicalinAllocoid = res.data.data;
+                          item.whseYarninAllocoid = res.data.data;
+                          item.whseDyesainAllocoid = res.data.data;
+                        });
+                      reqArrs.push(addAllocSyncFn);
+                    }
+                  });
+                }
+                // if (i === this.mx.length - 1) {
+                //   if (this.datas === this.$t("iaoMng.sx") && this.form.andOut) {
+                //     createOutOrder(this.form.whseYarninoid).then((res) => {});
+                //   }
+                //   setTimeout(() => {
+                //     this.$tip.success(this.$t("public.bccg"));
+                //     this.screenLoading = false;
+                //   }, 200);
+                // }
               }
-              if (this.mx[i].alloc) {
-                this.mx[i].alloc.forEach((item) => {
-                  item.whseChemicalinDtlaFk = this.mx[i].whseChemicalinDtlaoid;
-                  item.energyDtloid = this.mx[i].energyDtloid;
-                  item.energyDtlFk = this.mx[i].energyDtloid;
-                  item.whseAccessoriesDtlFk = this.mx[i].whseAccessoriesDtloid;
-                  item.whseYarninDtlaFk = this.mx[i].whseYarninDtloid;
-                  item.whseDyesainDtlaFk = this.mx[i].whseDyesainDtlaoid;
-                  if (
-                    !item.whseAccessoriesinAllocoid &&
-                    !item.whseChemicalinAllocoid &&
-                    !item.whseYarninAllocoid &&
-                    !item.whseDyesainAllocoid
-                  ) {
-                    item.allocMain = item.appId;
-                    item.allocQty = item.applyNum;
-                    let addAllocSyncFn =  this.everyThing.addAlloc(item).then((res) => {
-                      item.whseAccessoriesinAllocoid = res.data.data;
-                      item.whseChemicalinAllocoid = res.data.data;
-                      item.whseYarninAllocoid = res.data.data;
-                      item.whseDyesainAllocoid = res.data.data;
-                    });
-                    reqArrs.push(addAllocSyncFn)
-                  }
-                });
-              }
-              // if (i === this.mx.length - 1) {
-              //   if (this.datas === this.$t("iaoMng.sx") && this.form.andOut) {
-              //     createOutOrder(this.form.whseYarninoid).then((res) => {});
-              //   }
-              //   setTimeout(() => {
-              //     this.$tip.success(this.$t("public.bccg"));
-              //     this.screenLoading = false;
-              //   }, 200);
-              // }
-            }
-            return Promise.all(reqArrs);
-          }).then(res => {
+              return Promise.all(reqArrs);
+            })
+            .then((res) => {
               if (this.datas === this.$t("iaoMng.sx") && this.form.andOut) {
                 createOutOrder(this.form.whseYarninoid).then((res) => {});
               }
-          }).finally(() => {
+            })
+            .finally(() => {
               this.$tip.success(this.$t("public.bccg"));
               this.screenLoading = false;
-          });
+            });
         });
       }
+    },
+    saveBefore() {
+      if (this.datas === this.$t("iaoMng.sx") && this.form.andOut) {
+        createOutOrder(this.form.whseYarninoid).then((res) => {});
+      }
+      setTimeout(() => {
+        this.$tip.success(this.$t("public.bccg"));
+        this.screenLoading = false;
+      }, 200);
     },
     close() {
       this.$emit("close");

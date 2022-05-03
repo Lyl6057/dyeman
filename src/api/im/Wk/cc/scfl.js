@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-23 08:03:49
  * @LastEditors: Lyl
- * @LastEditTime: 2021-07-21 18:00:51
+ * @LastEditTime: 2022-04-29 10:39:33
  * @Description:
  */
 import axios from "axios";
@@ -58,6 +58,34 @@ export function updateScflDetali(params) {
 export function delScflDetali(id) {
   return axios({
     url: "/api/whseAccessoriesOutDtl?whseAccessoriesoutDtloid=" + id,
+    method: "delete"
+  });
+}
+
+export function getScflDtla(params) {
+  return axios({
+    url: "/api/whseAccessoriesOutDtla/page",
+    method: "get",
+    params: params
+  });
+}
+export function addScflDtla(params) {
+  return axios({
+    url: "/api/whseAccessoriesOutDtla",
+    method: "post",
+    params: params
+  });
+}
+export function updateScflDtla(params) {
+  return axios({
+    url: "/api/whseAccessoriesOutDtla",
+    method: "put",
+    params: params
+  });
+}
+export function delScflDtla(id) {
+  return axios({
+    url: "/api/whseAccessoriesOutDtla?dtlaId=" + id,
     method: "delete"
   });
 }

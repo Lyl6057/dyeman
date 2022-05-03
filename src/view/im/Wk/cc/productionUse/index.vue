@@ -134,6 +134,20 @@ import {
   delSxDtlb,
 } from "@/api/im/Wk/cc/sx";
 import {
+  getScfl,
+  addScfl,
+  updateScfl,
+  delScfl,
+  getScflDetali,
+  addScflDetali,
+  updateScflDetali,
+  delScflDetali,
+  getScflDtla,
+  addScflDtla,
+  updateScflDtla,
+  delScflDtla,
+} from "@/api/im/Wk/cc/scfl";
+import {
   baseCodeSupply,
   baseCodeSupplyEx,
   getPurApplication,
@@ -141,7 +155,85 @@ import {
   fetchFineReportUrl,
 } from "@/api/index";
 import { rsxkr1F, rsxkr1C, rsxkr2C, rsxkr2F } from "./data";
-import { getHgyl, addHgyl, delHgyl, updateHgyl } from "@/api/im/Wk/cc/hgyl";
+import {
+  getHgyl,
+  addHgyl,
+  delHgyl,
+  updateHgyl,
+  getHgylDtl,
+  addHgylDtl,
+  updateHgylDtl,
+  delHgylDtl,
+  getHgylDtla,
+  addHgylDtla,
+  updateHgylDtla,
+  delHgylDtla,
+} from "@/api/im/Wk/cc/hgyl";
+import {
+  getYl,
+  addYl,
+  delYl,
+  updateYl,
+  getYlDtl,
+  addYlDtl,
+  updateYlDtl,
+  delYlDtl,
+  getYlDtla,
+  addYlDtla,
+  updateYlDtla,
+  delYlDtla,
+} from "@/api/im/Wk/cc/yl";
+import {
+  getWj,
+  addWj,
+  delWj,
+  updateWj,
+  getWjDtl,
+  addWjDtl,
+  updateWjDtl,
+  delWjDtl,
+  getHardwareOutDtla,
+  addHardwareOutDtla,
+  updateHardwareOutDtla,
+  delHardwareOutDtla,
+} from "@/api/im/Wk/cc/wj";
+import {
+  getXz,
+  addXz,
+  delXz,
+  updateXz,
+  getXzDtl,
+  addXzDtl,
+  updateXzDtl,
+  delXzDtl,
+  getOfficeDtla,
+  addOfficeDtla,
+  updateOfficeDtla,
+  delOfficeDtla,
+} from "@/api/im/Wk/cc/xz";
+import {
+  getRl,
+  addRl,
+  delRl,
+  updateRl,
+  getRlDtl,
+  addRlDtl,
+  updateRlDtl,
+  delRlDtl,
+  getEnergDtla,
+  addEnergDtla,
+  updateEnergDtla,
+  delEnergDtla,
+} from "@/api/im/Wk/cc/rl";
+import {
+  fetchYarnValidOutWeight,
+  fetchAccessoricesValidOutWeight,
+  fetchChemicalValidOutWeight,
+  fetchDyesalValidOutWeight,
+  fetchHardwareValidOutWeight,
+  fetchOfficeValidOutWeight,
+  fetchEnergValidOutWeight,
+} from "./api";
 export default {
   name: "",
   components: {
@@ -189,15 +281,12 @@ export default {
           delete this.form[key];
         }
       }
-      // if (this.form.stockDate && this.form.stockDate.indexOf(" ") == -1) {
-      //   this.form.stockDate += " 00:00:00";
-      // }
-      // if (this.form.retDate && this.form.retDate.indexOf(" ") == -1) {
-      //   this.form.retDate += " 00:00:00";
-      // }
       let queryData = JSON.parse(JSON.stringify(this.form));
-      // queryData.retCode = "^^%" + (queryData.retCode || "");
-      queryData.r_retDate_r = "!^%";
+      queryData.retCode = "^^%" + (queryData.retCode || "");
+      queryData.stockId = "!^%" + (queryData.retCode || "");
+      queryData.r_retDate_r = "^^%" + (queryData.retDate || "");
+      queryData.stockDate = queryData.retDate;
+      // queryData.r_stockDate_r = queryData.r_retDate_r;
       this.attributeObj
         .get(
           Object.assign(queryData, {
@@ -213,17 +302,11 @@ export default {
           if (this.crud.length === 0) {
             this.loading = false;
           }
-          if (this.type == this.$t("iaoMng.sx")) {
-            this.crud.sort((a, b) => {
-              return (
-                b.retCode.substring(b.retCode.length - 6) -
-                a.retCode.substring(a.retCode.length - 6)
-              );
-            });
-          }
           this.crud.forEach((item, index) => {
             item.finStatus = String(item.finStatus);
             item.index = index + 1;
+            item.retCode = item.retCode || item.stockId;
+            item.retDate = item.stockDate || item.retDate;
             if (index === this.crud.length - 1) {
               setTimeout(() => {
                 this.loading = false;
@@ -264,14 +347,7 @@ export default {
         this.$tip.error(this.$t("public.delTle"));
         return;
       }
-      if (
-        !this.chooseData.whseRetyarninoid &&
-        !this.chooseData.whseCalicoselloutoid &&
-        !this.chooseData.whseRetsuppcalicooid &&
-        !this.chooseData.whseRetguestcalicooid &&
-        !this.chooseData.whseTransfercalicooid &&
-        !this.chooseData.whseChemicalOutId
-      ) {
+      if (!this.chooseData[this.attributeObj.uuid[0]]) {
         this.crud.splice(this.chooseData.index - 1, 1);
         if (this.crud.length) {
           this.$refs.mainCrud.setCurrentRow(this.crud[0]);
@@ -289,7 +365,7 @@ export default {
         )
         .then(() => {
           this.attributeObj
-            .del(this.chooseData.whseRetyarninoid)
+            .del(this.chooseData[this.attributeObj.uuid[0]])
             .then((res) => {
               if (res.data.code === 200) {
                 getPurApplication({
@@ -382,26 +458,11 @@ export default {
       this.choiceV = false;
     },
     handleRowDBLClick(row) {
-      // if (
-      //   this.chooseData.whseCalicoselloutoid ||
-      //   this.chooseData.whseMaterialoid ||
-      //   this.chooseData.whseRetsuppcalicooid ||
-      //   this.chooseData.whseRetguestcalicooid ||
-      //   this.chooseData.whseTransfercalicooid
-      // ) {
       this.detail = row;
       this.isAdd = false;
       this.temV = true;
-      // } else {
-      //   this.$tip.warning("请先保存该出仓数据!");
-      // }
-      // this.$refs.temDlg.detail = row;
-      // this.$refs.temDlg.getDetail();
     },
     cellClick(val) {
-      // this.oldData.$cellEdit = false;
-      // this.$set(val, "$cellEdit", true);
-      // this.oldData = val;
       this.detail = val;
       this.chooseData = val;
     },
@@ -432,7 +493,136 @@ export default {
           addDtlb: addSxDtlb,
           updateDtlb: updateSxDtlb,
           delDtlb: delSxDtlb,
+          choiceTle: "选择纱线库存",
+          validOutWeight: fetchYarnValidOutWeight,
+          uuid: ["whseRetyarninoid", "whseRetyarninDtloid", "retyarninDtlaId"],
+          applyCategory: 4,
         };
+        break;
+      case this.$t("iaoMng.scfl"):
+        this.attributeObj = {
+          get: getScfl,
+          add: addScfl,
+          del: delScfl,
+          update: updateScfl,
+          getDtla: getScflDetali,
+          addDtla: addScflDetali,
+          updateDtla: updateScflDetali,
+          delDtla: delScflDetali,
+          getDtlb: getScflDtla,
+          addDtlb: addScflDtla,
+          updateDtlb: updateScflDtla,
+          delDtlb: delScflDtla,
+          choiceTle: "选择生产辅料库存",
+          validOutWeight: fetchAccessoricesValidOutWeight,
+          uuid: ["whseAccessoriesoutoid", "whseAccessoriesoutDtloid", "dtlaId"],
+          applyCategory: 3,
+        };
+        break;
+      case this.$t("iaoMng.hgyl"):
+        this.attributeObj = {
+          get: getHgyl,
+          add: addHgyl,
+          del: delHgyl,
+          update: updateHgyl,
+          getDtla: getHgylDtl,
+          addDtla: addHgylDtl,
+          updateDtla: updateHgylDtl,
+          delDtla: delHgylDtl,
+          getDtlb: getHgylDtla,
+          addDtlb: addHgylDtla,
+          updateDtlb: updateHgylDtla,
+          delDtlb: delHgylDtla,
+          choiceTle: "选择化工原料库存",
+          validOutWeight: fetchChemicalValidOutWeight,
+          uuid: [
+            "whseChemicalOutId",
+            "whseChemicalOutdtlId",
+            "whseChemicalOutDtlaId",
+          ],
+          applyCategory: 5,
+        };
+        break;
+      case this.$t("iaoMng.yl"):
+        this.attributeObj = {
+          get: getYl,
+          add: addYl,
+          del: delYl,
+          update: updateYl,
+          getDtla: getYlDtl,
+          addDtla: addYlDtl,
+          updateDtla: updateYlDtl,
+          delDtla: delYlDtl,
+          getDtlb: getYlDtla,
+          addDtlb: addYlDtla,
+          updateDtlb: updateYlDtla,
+          delDtlb: delYlDtla,
+          choiceTle: "选择颜料库存",
+          validOutWeight: fetchDyesalValidOutWeight,
+          uuid: ["dyesalOutId", "energyOutDtlId", "dyesalOutDtl"],
+          applyCategory: 8,
+        };
+        break;
+      case this.$t("choicDlg.wj"):
+        this.attributeObj = {
+          get: getWj,
+          add: addWj,
+          del: delWj,
+          update: updateWj,
+          getDtla: getWjDtl,
+          addDtla: addWjDtl,
+          updateDtla: updateWjDtl,
+          delDtla: delWjDtl,
+          getDtlb: getHardwareOutDtla,
+          addDtlb: addHardwareOutDtla,
+          updateDtlb: updateHardwareOutDtla,
+          delDtlb: delHardwareOutDtla,
+          choiceTle: "选择五金用品库存",
+          validOutWeight: fetchHardwareValidOutWeight,
+          uuid: ["whseHardwareOutId", "whseHardwareOutDtlId", "dtlaId"],
+          applyCategory: 1,
+        };
+        break;
+      case this.$t("choicDlg.xz"):
+        this.attributeObj = {
+          get: getXz,
+          add: addXz,
+          del: delXz,
+          update: updateXz,
+          getDtla: getXzDtl,
+          addDtla: addXzDtl,
+          updateDtla: updateXzDtl,
+          delDtla: delXzDtl,
+          getDtlb: getOfficeDtla,
+          addDtlb: addOfficeDtla,
+          updateDtlb: updateOfficeDtla,
+          delDtlb: delOfficeDtla,
+          choiceTle: "选择行政用品库存",
+          validOutWeight: fetchOfficeValidOutWeight,
+          uuid: ["whseOfficeOutId", "officeOutDtlId", "dtlaId"],
+          applyCategory: 2,
+        };
+        break;
+      case this.$t("choicDlg.rl"):
+        this.attributeObj = {
+          get: getRl,
+          add: addRl,
+          del: delRl,
+          update: updateRl,
+          getDtla: getRlDtl,
+          addDtla: addRlDtl,
+          updateDtla: updateRlDtl,
+          delDtla: delRlDtl,
+          getDtlb: getEnergDtla,
+          addDtlb: addEnergDtla,
+          updateDtlb: updateEnergDtla,
+          delDtlb: delEnergDtla,
+          choiceTle: "选择能源库存",
+          validOutWeight: fetchEnergValidOutWeight,
+          uuid: ["whseOfficeOutId", "officeOutDtlId", "dtlaId"],
+          applyCategory: 2,
+        };
+        break;
     }
   },
   mounted() {},
@@ -440,9 +630,11 @@ export default {
 };
 </script>
 <style lang='stylus'>
-#rc, #rcDetail
-  .formBox
-    margin-bottom 0px
+#rc, #rcDetail {
+  .formBox {
+    margin-bottom: 0px;
+  }
+
   // .el-button--mini, .el-button--small {
   // font-size: 16px;
   // }
@@ -450,17 +642,23 @@ export default {
   // .el-button--mini, .el-button--mini.is-round {
   // padding: 5px 10px;
   // }
-  .avue-crud__menu
-    min-height 5px !important
-    height 5px !important
-  .el-tabs__item
-    font-size 18px
-    line-height 30px
-    height 30px
-  .el-table__header-wrapper, .el-form-item__label, .el-input--mini
-    font-size 16px !important
+  .avue-crud__menu {
+    min-height: 5px !important;
+    height: 5px !important;
+  }
+
+  .el-tabs__item {
+    font-size: 18px;
+    line-height: 30px;
+    height: 30px;
+  }
+
+  .el-table__header-wrapper, .el-form-item__label, .el-input--mini {
+    font-size: 16px !important;
     // font-weight: 600 !important;
-    color #000
+    color: #000;
+  }
+
   // .avue-form__group {
   // background-color: #fff;
   // }
@@ -468,6 +666,8 @@ export default {
   // .el-table--mini td, .el-table--mini th {
   // padding: 2px 0 !important;
   // }
-  .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item
-    margin-bottom 10px
+  .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item {
+    margin-bottom: 10px;
+  }
+}
 </style>

@@ -18,23 +18,19 @@
         <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
       </div>
       <el-row>
-        <el-col :span="24">
+        <el-col :span="16">
           <view-container :title="datas.type.split('_')[0] + '出库明细'">
             <div
               class="btnList"
               style="margin-bottom: 2px"
               v-if="!isPlan && hide != '2'"
             >
-              <!-- <el-button type="primary" @click="getDetail">{{this.$t("public.query")}}</el-button> -->
               <el-button type="primary" @click="add" v-if="canSave">{{
                 this.$t("public.add")
               }}</el-button>
               <el-button type="danger" @click="del" v-if="canSave">{{
                 this.$t("public.del")
               }}</el-button>
-
-              <!-- <el-button type="warning" @click="getDetail">取消</el-button>
-       -->
             </div>
             <avue-crud
               ref="dlgcrud"
@@ -46,6 +42,33 @@
               @on-load="getDetail"
             ></avue-crud> </view-container
         ></el-col>
+        <el-col :span="8">
+          <view-container title="生产领用批号资料">
+            <div class="btnList" style="margin-bottom: 2px">
+              <el-button
+                type="primary"
+                @click="dtlaAdd"
+                v-if="canSave"
+                :disabled="detail.stockState == '1'"
+                >{{ this.$t("public.add") }}</el-button
+              >
+              <el-button
+                type="danger"
+                @click="dtlaDel"
+                v-if="canSave"
+                :disabled="detail.stockState == '1'"
+                >{{ this.$t("public.del") }}</el-button
+              >
+            </div>
+            <avue-crud
+              ref="dlgPhcrud"
+              :option="dtlaOp"
+              v-loading="dtlaloading"
+              :data="chooseData.list"
+              @current-row-change="cellPhClick"
+            ></avue-crud>
+          </view-container>
+        </el-col>
       </el-row>
     </view-container>
     <choice
@@ -69,7 +92,7 @@
 </template>
 <script>
 import bas_dyestuff from "@/components/bas_dyestuff/index";
-import { rsxkr2C, rsxkr2F, rsxkr3C } from "./data";
+import { dtlaCrud, rsxkr2C, rsxkr2F, rsxkr3C } from "./data";
 import choice from "@/components/choice";
 import { getPb, getPbDetali, getPbDetaliList, getPbPh } from "@/api/im/Wk/rc";
 import {
@@ -97,7 +120,7 @@ import {
   getRetmaterialsDtl,
 } from "@/api/im/Wk/cc/scfl";
 import { getUcmlUser } from "@/const/whse.js";
-import { baseCodeSupply } from "@/api/index";
+import { baseCodeSupply, getSglydmx } from "@/api/index";
 export default {
   props: {
     datas: Object,
@@ -121,39 +144,16 @@ export default {
         currentPage: 1,
         total: 0,
       },
-      rcPage: {
-        pageSize: 10,
-        currentPage: 1,
-        total: 0,
-      },
       formOp: rsxkr2F(this),
       mxOp: rsxkr2C(this),
       mx: [],
-      other: [],
       form: {},
       oldData: {},
       chooseData: {},
-      changeList: [],
-      canLeave: false,
-      ruleV: false,
-      sxform: {},
-      outform: {},
-      outformOp: rsxkr2F(this),
-      outcrudOp: rsxkr2C(this),
-      outcrud: [],
-      sxcrud: [],
-      sxpage: {},
-      rcData: [],
-      sxloading: false,
-      rcloading: false,
-      sxcheckList: [],
-      planData: {},
       func: {},
       dlgTle: "選擇紗線配料",
       choosePh: {},
-      isPh: false,
       canSave: true,
-      outloading: false,
       choiceV: false,
       choiceTle: "选择订单胚布资料",
       choiceTarget: {},
@@ -163,6 +163,8 @@ export default {
       sysCreatedby: "",
       otherV: false,
       purApp: {},
+      dtlaOp: dtlaCrud(this),
+      dtlaloading: false,
     };
   },
   watch: {},
@@ -174,14 +176,12 @@ export default {
         this.func.delDetail = delScflDetali;
         this.func.updateDetail = updateScflDetali;
         this.func.addDetail = addScflDetali;
-        // this.mxOp = rsxkr3C(this);
       }
       if (this.hide === "2") {
         this.func.getDetail = getRetmaterialsDtl;
         this.func.delDetail = delRetmaterialsDtl;
         this.func.updateDetail = updateRetmaterialsDtl;
         this.func.addDetail = addRetmaterialsDtl;
-        // this.mxOp = rsxkr3C(this);
       } else if (this.hide === "4" || this.hide === "3") {
         this.func.getDetail = getRetsupDtl;
         this.func.delDetail = delRetsupDtl;
@@ -206,7 +206,6 @@ export default {
       }
       if (this.isAdd) {
         this.form = this.detail;
-        // this.form.retType = "1";
         if (this.hide === "4" || this.hide === "3") {
           this.$nextTick(() => {
             this.$set(this.mxOp.column[3], "hide", true);
@@ -215,9 +214,6 @@ export default {
         return;
       }
       this.loading = true;
-      // if (this.hide === "4") {
-      //   this.$set(this.mxOp.column[3], "hide", false);
-      // }
       this.form = this.detail;
       this.form.appId = this.detail.appId;
       if (Object.keys(this.detail).length === 0) {
@@ -396,6 +392,8 @@ export default {
     cellClick(val) {
       this.chooseData = val;
     },
+    dtlaAdd() {},
+    dtlaDel() {},
     close() {
       this.$emit("close", this.saved);
     },
@@ -583,14 +581,24 @@ export default {
         });
       }
     },
+    cellPhClick(val) {
+      this.oldphData.$cellEdit = false;
+      this.$set(val, "$cellEdit", true);
+      this.oldphData = val;
+      this.choosePh = val;
+    },
     choiceData(val) {
       if (Object.keys(val).length === 0 || val.length === 0 || val === null) {
         this.choiceV = false;
         return;
       }
+      // this.loading = true;
       if (this.choiceTle === this.$t("choicDlg.xzsgd")) {
+        // this.form.appId = val.appId;
+        // this.form.purSingleoid = val.purSingleoid;
         this.form.appId = val.appId;
         this.form.purSingleoid = val.purSingleoid;
+        this.purApp = val;
       } else if (this.choiceTle === this.$t("choicDlg.xzlyr")) {
         this.form.leader = val.perPersonoid;
       } else if (this.choiceTle === this.$t("choicDlg.xzsgdzl")) {
@@ -639,7 +647,6 @@ export default {
 
         this.mx = this.mx.concat(val);
         this.mx = this.unique(this.mx, "whseAccessoriesDtlFk");
-        // this.changeList.push(data);
       } else if (this.choiceTle === this.$t("choicDlg.xzsqlyd")) {
         this.form.appId = val.applyCode;
         this.form.purApplicationoid = val.purApplicationoid;
@@ -717,20 +724,32 @@ export default {
 };
 </script>
 <style lang='stylus'>
-#sxPlanDlg
-  .el-dialog__header
-    padding 0
-  .el-card
-    border none
-  .el-dialog__body
-    padding 0 !important
-  .el-dialog__header
-    padding 0px
-    background-color rgb(2, 26, 60)
-  .el-dialog.is-fullscreen
-    overflow hidden
-  .formBox
-    margin-bottom 0px
+#sxPlanDlg {
+  .el-dialog__header {
+    padding: 0;
+  }
+
+  .el-card {
+    border: none;
+  }
+
+  .el-dialog__body {
+    padding: 0 !important;
+  }
+
+  .el-dialog__header {
+    padding: 0px;
+    background-color: rgb(2, 26, 60);
+  }
+
+  .el-dialog.is-fullscreen {
+    overflow: hidden;
+  }
+
+  .formBox {
+    margin-bottom: 0px;
+  }
+
   // .el-button--mini, .el-button--small {
   // font-size: 16px;
   // }
@@ -738,22 +757,30 @@ export default {
   // .el-button--mini, .el-button--mini.is-round {
   // padding: 5px 10px;
   // }
-  .avue-crud__menu
-    min-height 5px !important
-    height 5px !important
-  .el-tabs__item
-    font-size 18px
-    line-height 30px
-    height 30px
-  .el-table__header-wrapper, .el-form-item__label, .el-input--mini
+  .avue-crud__menu {
+    min-height: 5px !important;
+    height: 5px !important;
+  }
+
+  .el-tabs__item {
+    font-size: 18px;
+    line-height: 30px;
+    height: 30px;
+  }
+
+  .el-table__header-wrapper, .el-form-item__label, .el-input--mini {
     // font-size: 16px !important;
     // font-weight: 600 !important;
     // color: #000;
-  .el-dialog
-    margin-top 0 !important
-    height 100%
-    margin 0 !important
-    background-color rgb(2, 26, 60)
+  }
+
+  .el-dialog {
+    margin-top: 0 !important;
+    height: 100%;
+    margin: 0 !important;
+    background-color: rgb(2, 26, 60);
+  }
+
   // .avue-form__group {
   // background-color: #fff;
   // }
@@ -761,15 +788,23 @@ export default {
   // .el-table--mini td, .el-table--mini th {
   // padding: 2px 0 !important;
   // }
-  .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item
-    margin-bottom 10px
-  .avue-crud__tip
-    display none
-  .el-dialog__header
-    padding 0px
-  .el-dialog__headerbtn
-    top 5px
-    color #000
-    font-size 22px
-    z-index 999
+  .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item {
+    margin-bottom: 10px;
+  }
+
+  .avue-crud__tip {
+    display: none;
+  }
+
+  .el-dialog__header {
+    padding: 0px;
+  }
+
+  .el-dialog__headerbtn {
+    top: 5px;
+    color: #000;
+    font-size: 22px;
+    z-index: 999;
+  }
+}
 </style>

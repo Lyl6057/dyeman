@@ -1243,18 +1243,19 @@ export function rhl3C(_this) {
         width: 50,
         align: "center"
       },
-      {
-        label: "本厂批号",
-        prop: "batchNo",
-        cell: false,
-        width: 220
-      },
+      // {
+      //   label: "本厂批号",
+      //   prop: "batchNo",
+      //   cell: false,
+      //   width: 220
+      // },
       {
         label: _this.$t("energy.dj"),
         prop: "price",
         cell: true,
         type: "number",
-        width: 120
+        width: 120,
+        hide: _this.datas === _this.$t("iaoMng.sx") ? false : true
       },
       {
         label: _this.$t("whseField.cd"),
@@ -1262,7 +1263,8 @@ export function rhl3C(_this) {
         cell: true,
         width: 120,
         type: "select",
-        dicData: getDIC("bas_yarnorigin")
+        dicData: getDIC("bas_yarnorigin"),
+        hide: _this.datas === _this.$t("iaoMng.sx") ? false : true
       },
       {
         label: _this.$t("energy.sl"),
@@ -1271,6 +1273,38 @@ export function rhl3C(_this) {
         width: 120,
         align: "right",
         type: "number"
+      },
+      {
+        label: _this.$t("whseField.hwm"), //"貨位碼",
+        prop: "storageNo",
+        cell: true,
+        type: "select",
+        filterable: true,
+        allowCreate: true,
+        defaultFirstOption: true,
+        dicData: getDicNS(
+          "whseLocation?warehouseType=" +
+            (_this.datas == _this.$t("iaoMng.sx")
+              ? "0"
+              : _this.datas == _this.$t("iaoMng.pb")
+              ? "1"
+              : _this.datas == _this.$t("iaoMng.hgyl")
+              ? "3"
+              : _this.datas == _this.$t("iaoMng.scfl")
+              ? "5"
+              : _this.datas == _this.$t("choicDlg.wj")
+              ? "6"
+              : _this.datas == _this.$t("choicDlg.xz")
+              ? "7"
+              : _this.datas == _this.$t("choicDlg.rl")
+              ? "8"
+              : _this.datas == _this.$t("choicDlg.sb")
+              ? "9"
+              : "4"),
+          "locationCode",
+          "locationCode"
+        ),
+        width: 180
       }
       // {
       //   label: _this.$t("whseField.dw"),

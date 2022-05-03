@@ -202,62 +202,6 @@
             </div>
           </view-container></el-col
         >
-        <el-col
-          :span="9"
-          v-if="
-            datas === this.$t('iaoMng.hgyl') ||
-            datas === this.$t('iaoMng.yl') ||
-            datas === this.$t('choicDlg.wj') ||
-            datas === this.$t('choicDlg.xz') ||
-            datas === this.$t('choicDlg.scfl') ||
-            datas === this.$t('choicDlg.rl')
-          "
-        >
-          <el-tabs v-model="tabs" type="border-card">
-            <el-tab-pane
-              :label="datas + this.$t('iaoMng.rcmxhw')"
-              name="loc"
-              v-if="
-                datas != this.$t('choicDlg.wj') &&
-                datas != this.$t('choicDlg.xz') &&
-                datas != this.$t('choicDlg.scfl') &&
-                datas != this.$t('choicDlg.rl')
-              "
-            >
-              <loction
-                ref="loc"
-                :inData="chooseData"
-                :api="everyThing"
-                :form="form"
-                :type="datas"
-              ></loction>
-            </el-tab-pane>
-            <el-tab-pane
-              :label="datas + this.$t('iaoMng.rcphzl')"
-              name="ph"
-              v-if="datas != this.$t('iaoMng.yl')"
-            >
-              <div class="btnList">
-                <el-button type="primary" @click="addPh">{{
-                  this.$t("public.add")
-                }}</el-button>
-                <el-button type="danger" @click="delPh">{{
-                  this.$t("public.del")
-                }}</el-button>
-              </div>
-              <div class="crudBox">
-                <avue-crud
-                  ref="count"
-                  id="count"
-                  v-loading="ctLoading"
-                  :option="countOp"
-                  :data="chooseData.list"
-                  @current-row-change="cellPhClick"
-                ></avue-crud>
-              </div>
-            </el-tab-pane>
-          </el-tabs>
-        </el-col>
         <el-col :span="9" v-if="datas === this.$t('iaoMng.sx')">
           <view-container :title="datas + this.$t('iaoMng.rcmxhw')">
             <loction
@@ -278,6 +222,41 @@
               :form="form"
               :loc="false"
             ></inwhse-ph>
+          </view-container>
+        </el-col>
+        <el-col :span="9" v-else>
+          <view-container :title="datas + this.$t('iaoMng.rcphzl')">
+            <!-- <el-tabs v-model="tabs" type="border-card">
+            <el-tab-pane :label="datas + this.$t('iaoMng.rcmxhw')" name="loc">
+              <loction
+                ref="loc"
+                :inData="chooseData"
+                :api="everyThing"
+                :form="form"
+                :type="datas"
+              ></loction>
+            </el-tab-pane>
+            <el-tab-pane name="ph" v-if="datas != this.$t('iaoMng.yl')"> -->
+            <div class="btnList">
+              <el-button type="primary" @click="addPh">{{
+                this.$t("public.add")
+              }}</el-button>
+              <el-button type="danger" @click="delPh">{{
+                this.$t("public.del")
+              }}</el-button>
+            </div>
+            <div class="crudBox">
+              <avue-crud
+                ref="count"
+                id="count"
+                v-loading="ctLoading"
+                :option="countOp"
+                :data="chooseData.list"
+                @current-row-change="cellPhClick"
+              ></avue-crud>
+            </div>
+            <!-- </el-tab-pane>
+          </el-tabs> -->
           </view-container>
         </el-col>
       </el-row>
@@ -360,7 +339,7 @@ export default {
       planV: false,
       wloading: false,
       sheetV: false,
-      tabs: "loc",
+      tabs: "ph",
       wj: getDicTs(
         "basHardwarearticlesnew",
         this.$store.state.lang == "1" ? "cnnamelong" : "ennamelong",
@@ -505,7 +484,9 @@ export default {
             if (index === data.length - 1) {
               this.chooseData.list = data;
               this.countOp.showSummary = true;
-              this.ctLoading = false;
+              setTimeout(() => {
+                this.ctLoading = false;
+              }, 200);
             }
           });
         });
@@ -745,7 +726,6 @@ export default {
         });
     },
     delPh() {
-      console.log(this.chooseData);
       if (
         Object.keys(this.choosePhData === undefined || this.choosePhData)
           .length === 0 ||
@@ -754,7 +734,6 @@ export default {
         this.$tip.error(this.$t("public.delTle"));
         return;
       }
-      this.ctLoading = true;
       if (
         !this.choosePhData.whseChemicalinDtlboid &&
         !this.choosePhData.whseDyesainDtlboid &&
@@ -768,7 +747,6 @@ export default {
           item.index = i + 1;
         });
         this.$refs.count.setCurrentRow(this.chooseData.list[0] || {});
-        this.ctLoading = false;
         return;
       }
       this.$tip
@@ -791,17 +769,14 @@ export default {
                 this.chooseData.list.forEach((item, i) => {
                   item.index = i + 1;
                 });
-                this.ctLoading = false;
                 this.getPh();
                 // this.choosePhData = {};
               } else {
                 this.$tip.error(this.$t("public.scsb"));
-                this.ctLoading = false;
               }
             })
             .catch((err) => {
               this.$tip.error(this.$t("public.scsb"));
-              this.ctLoading = false;
             });
         })
         .catch((err) => {
@@ -1322,12 +1297,12 @@ export default {
   },
   created() {},
   mounted() {
-    this.datas === this.$t("choicDlg.wj") ||
-    this.datas === this.$t("choicDlg.xz") ||
-    this.datas === this.$t("choicDlg.scfl") ||
-    this.datas === this.$t("choicDlg.rl")
-      ? ((this.tabs = "ph"), (this.countOp = wjxz3C(this)))
-      : (this.tabs = "loc");
+    // this.datas === this.$t("choicDlg.wj") ||
+    // this.datas === this.$t("choicDlg.xz") ||
+    // this.datas === this.$t("choicDlg.scfl") ||
+    // this.datas === this.$t("choicDlg.rl")
+    //   ? ((this.tabs = "ph"), (this.countOp = wjxz3C(this)))
+    //   : (this.tabs = "loc");
     this.wj = this.wj.sort((a, b) => {
       return a.value > b.value ? 1 : -1;
     });
@@ -1349,9 +1324,13 @@ export default {
 };
 </script>
 <style lang='stylus'>
-#rcDetail
-  .el-table
-    overflow visible !important
-  .customize-select .el-input__inner
-    border none
+#rcDetail {
+  .el-table {
+    overflow: visible !important;
+  }
+
+  .customize-select .el-input__inner {
+    border: none;
+  }
+}
 </style>

@@ -2,7 +2,7 @@
  * @Author: LRl
  * @Date: 2021-07-21 08:37:13
  * @LastEditors: Lyl
- * @LastEditTime: 2021-07-22 17:32:17
+ * @LastEditTime: 2022-05-03 13:41:22
  * @Description:
  */
 import axios from "axios";
@@ -59,6 +59,34 @@ export function updateRlDtl(params) {
 export function delRlDtl(id) {
   return axios({
     url: "/api/whseEnergyOutDtl?whseAccessoriesoutDtloid=" + id,
+    method: "delete"
+  });
+}
+
+export function getEnergDtla(params) {
+  return axios({
+    url: "/api/whseEnergyOutDtla",
+    method: "get",
+    params: params
+  });
+}
+export function addEnergDtla(params) {
+  return axios({
+    url: "/api/whseEnergyOutDtla",
+    method: "post",
+    params: params
+  });
+}
+export function updateEnergDtla(params) {
+  return axios({
+    url: "/api/whseEnergyOutDtla",
+    method: "put",
+    params: params
+  });
+}
+export function delEnergDtla(id) {
+  return axios({
+    url: "/api/whseEnergyOutDtla?dtlaId=" + id,
     method: "delete"
   });
 }
