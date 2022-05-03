@@ -1079,7 +1079,8 @@ export default {
             {
               id: "7-7",
               click: () => {
-                this.toView("cc_xz", this.$t("iaoMng.sclyxzcc") + "_1");
+                // this.toView("cc_xz", this.$t("iaoMng.sclyxzcc") + "_1");
+                this.toView("cc_productionUse", this.$t("choicDlg.xz") + "_1");
               },
               title: this.$t("iaoMng.sclyxzcc"),
               icon: "el-icon-s-claim",

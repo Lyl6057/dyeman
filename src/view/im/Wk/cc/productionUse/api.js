@@ -2,12 +2,30 @@
  * @Author: Lyl
  * @Date: 2021-11-16 10:39:54
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-29 16:38:10
+ * @LastEditTime: 2022-05-03 13:48:59
  * @Description:
  */
 import axios from "axios";
 
-// 检验颜料出仓数据
+// 检验行政出仓数据
+export function fetchEnergValidOutWeight(dataList) {
+  return axios({
+    url: "/api/viewOfficeStock/valid/outStock",
+    method: "post",
+    data: dataList
+  });
+}
+
+// 检验行政出仓数据
+export function fetchOfficeValidOutWeight(dataList) {
+  return axios({
+    url: "/api/viewOfficeStock/valid/outStock",
+    method: "post",
+    data: dataList
+  });
+}
+
+// 检验五金出仓数据
 export function fetchHardwareValidOutWeight(dataList) {
   return axios({
     url: "/api/viewHardwareStock/valid/outStock",

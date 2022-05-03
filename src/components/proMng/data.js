@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-05-03 13:03:03
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-29 14:30:05
+ * @LastEditTime: 2022-05-03 13:11:57
  * @Description:
  */
 
@@ -20,6 +20,202 @@ let basChemical = getXDicT("BasChemicalmatNew");
 let basPigment = getXDicT("basPigment");
 let basProductivesupplies = getXDicT("basProductivesupplies");
 let basFuel = getXDicT("basFuel");
+
+export function officeStockF(_this) {
+  return {
+    submitBtn: false,
+    emptyBtn: false,
+    labelWidth: 130,
+    column: [
+      {
+        label: _this.$t("whseField.ph"),
+        prop: "batchNo",
+        cell: false,
+        placeholder: " ",
+        span: 6
+      }
+    ]
+  };
+}
+export function officeStockC(_this) {
+  return {
+    menu: false,
+    addBtn: false,
+    border: true,
+    highlightCurrentRow: true,
+    height: "calc(100vh - 200px)",
+    refreshBtn: false,
+    columnBtn: false,
+    showOverflowTooltip: true,
+    excelBtn: true,
+    showSummary: true,
+    selection: true,
+    sumColumnList: [
+      {
+        label: " ",
+        name: "stock",
+        type: "sum"
+      }
+    ],
+    selectable: (row, index) => {
+      return row.stock > 0;
+    },
+    page: true,
+    column: [
+      {
+        label: "#",
+        prop: "index",
+        width: 50,
+        align: "center"
+      },
+      {
+        label: _this.$t("whseField.clbh"),
+        prop: "officeId",
+        width: 140
+      },
+      {
+        label: _this.$t("whseField.clmc"),
+        prop: "officeName",
+        type: "select",
+        overHidden: true,
+        width: 180
+      },
+      {
+        label: _this.$t("whseField.ph"),
+        prop: "batchNo",
+        cell: false,
+        width: 180
+      },
+      {
+        label: "库存数量",
+        prop: "stock",
+        cell: false,
+        width: 120,
+        align: "right"
+      },
+      {
+        label: _this.$t("whseField.dw"),
+        prop: "weightUnit",
+        cell: false,
+        width: 80,
+        type: "select",
+        dicData: matUnit
+      },
+      {
+        label: _this.$t("whseField.hwm"),
+        prop: "storageNo",
+        cell: false,
+        overHidden: true,
+        width: 140
+      }
+    ]
+  };
+}
+export function getOfficeStock(params) {
+  return axios({
+    url: "/api/viewOfficeStock/page",
+    method: "get",
+    params: params
+  });
+}
+
+export function hardwareStockF(_this) {
+  return {
+    submitBtn: false,
+    emptyBtn: false,
+    labelWidth: 130,
+    column: [
+      {
+        label: _this.$t("whseField.ph"),
+        prop: "batchNo",
+        cell: false,
+        placeholder: " ",
+        span: 6
+      }
+    ]
+  };
+}
+export function hardwareStockC(_this) {
+  return {
+    menu: false,
+    addBtn: false,
+    border: true,
+    highlightCurrentRow: true,
+    height: "calc(100vh - 200px)",
+    refreshBtn: false,
+    columnBtn: false,
+    showOverflowTooltip: true,
+    excelBtn: true,
+    showSummary: true,
+    selection: true,
+    sumColumnList: [
+      {
+        label: " ",
+        name: "stock",
+        type: "sum"
+      }
+    ],
+    selectable: (row, index) => {
+      return row.stock > 0;
+    },
+    page: true,
+    column: [
+      {
+        label: "#",
+        prop: "index",
+        width: 50,
+        align: "center"
+      },
+      {
+        label: _this.$t("whseField.clbh"),
+        prop: "accessoriesId",
+        width: 140
+      },
+      {
+        label: _this.$t("whseField.clmc"),
+        prop: "accessoriesName",
+        type: "select",
+        overHidden: true,
+        width: 180
+      },
+      {
+        label: _this.$t("whseField.ph"),
+        prop: "batchNo",
+        cell: false,
+        width: 180
+      },
+      {
+        label: "库存数量",
+        prop: "stock",
+        cell: false,
+        width: 120,
+        align: "right"
+      },
+      {
+        label: _this.$t("whseField.dw"),
+        prop: "weightUnit",
+        cell: false,
+        width: 80,
+        type: "select",
+        dicData: matUnit
+      },
+      {
+        label: _this.$t("whseField.hwm"),
+        prop: "storageNo",
+        cell: false,
+        overHidden: true,
+        width: 140
+      }
+    ]
+  };
+}
+export function getHardwareStock(params) {
+  return axios({
+    url: "/api/viewHardwareStock/page",
+    method: "get",
+    params: params
+  });
+}
 
 export function scflStockF(_this) {
   return {

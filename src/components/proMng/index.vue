@@ -123,6 +123,12 @@ import {
   scflStockC,
   scflStockF,
   getScflStock,
+  hardwareStockC,
+  hardwareStockF,
+  getHardwareStock,
+  officeStockC,
+  officeStockF,
+  getOfficeStock,
 } from "./data";
 
 export default {
@@ -337,6 +343,16 @@ export default {
   },
   created() {
     switch (this.choiceTle) {
+      case "选择行政用品库存":
+        this.choiceC = officeStockC(this);
+        this.choiceF = officeStockF(this);
+        this.getData = getOfficeStock;
+        break;
+      case "选择五金用品库存":
+        this.choiceC = hardwareStockC(this);
+        this.choiceF = hardwareStockF(this);
+        this.getData = getHardwareStock;
+        break;
       case "选择生产辅料库存":
         this.choiceC = scflStockC(this);
         this.choiceF = scflStockF(this);

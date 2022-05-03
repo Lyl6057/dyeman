@@ -181,7 +181,7 @@ export default {
       choiceQ: {
         applyCategory: this.attributeObj.applyCategory,
         applyState: 3,
-        // collectSucceed:0
+        collectSucceed: 0,
       },
       saved: false,
       sysCreatedby: "",
@@ -227,6 +227,8 @@ export default {
           whseChemicalOutFk: this.detail.whseChemicalOutId,
           whseRetyarninFk: this.detail.whseRetyarninoid,
           whseDyesalOutFk: this.detail.dyesalOutId,
+          whseHardwareOutFk: this.detail.whseHardwareOutId,
+          whseOfficeOutFk: this.detail.whseOfficeOutId,
           // batchNo: "!^",
         })
         .then((res) => {
@@ -272,6 +274,8 @@ export default {
           retyarninDtlFk: val.whseRetyarninDtloid,
           whseChemicalOutdtlFk: val.whseChemicalOutdtlId,
           dyesalOutDtlFk: val.energyOutDtlId,
+          whseHardwareOutDtlFk: val.whseHardwareOutDtlId,
+          whseOfficeOutDtlFk: val.officeOutDtlId,
         })
         .then((res) => {
           let records = res.data;
@@ -279,6 +283,7 @@ export default {
           this.chooseData.list = records;
           if (this.chooseData.list.length === 0) {
             this.rcloading = false;
+            return;
           }
           this.chooseData.list = this.chooseData.list.sort((a, b) => {
             return b.batchNo - a.batchNo;
@@ -411,7 +416,7 @@ export default {
         this.chooseData.list.forEach((item, i) => {
           item.index = i + 1;
         });
-        this.$refs.dlgPhcrud.setCurrentRow();
+        this.$refs.dlgPhcrud.setCurrentRow(this.chooseData.list[0] || {});
         return;
       }
       let tip = "";
@@ -552,6 +557,8 @@ export default {
                 data.whseAccessoriesDtlFk = this.detail.whseAccessoriesoutoid;
                 data.whseChemicalOutFk = this.detail.whseChemicalOutId;
                 data.whseDyesalOutFk = this.detail.dyesalOutId;
+                data.whseHardwareOutFk = this.detail.whseHardwareOutId;
+                data.whseOfficeOutFk = this.detail.whseOfficeOutId;
                 this.attributeObj.addDtla(data).then((res) => {
                   item[this.attributeObj.uuid[1]] = res.data.data;
                   resolve();
@@ -571,6 +578,8 @@ export default {
                   item.retyarninDtlFk = this.mx[i].whseRetyarninDtloid;
                   item.whseChemicalOutdtlFk = this.mx[i].whseChemicalOutdtlId;
                   item.dyesalOutDtlFk = this.mx[i].energyOutDtlId;
+                  item.whseHardwareOutDtlFk = this.mx[i].whseHardwareOutDtlId;
+                  item.whseOfficeOutDtlFk = this.mx[i].officeOutDtlId;
                   if (!item[this.attributeObj.uuid[2]]) {
                     this.attributeObj.addDtlb(item).then((res) => {
                       item[this.attributeObj.uuid[2]] = res.data.data;
@@ -628,6 +637,8 @@ export default {
                 data.whseAccessoriesDtlFk = this.form.whseAccessoriesoutoid;
                 data.whseChemicalOutFk = this.form.whseChemicalOutId;
                 data.whseDyesalOutFk = this.form.dyesalOutId;
+                data.whseHardwareOutFk = this.form.whseHardwareOutId;
+                data.whseOfficeOutFk = this.form.whseOfficeOutId;
                 this.attributeObj.addDtla(data).then((res) => {
                   item[this.attributeObj.uuid[1]] = res.data.data;
                   resolve();
@@ -647,6 +658,8 @@ export default {
                   item.retyarninDtlFk = this.mx[i].whseRetyarninDtloid;
                   item.whseChemicalOutdtlFk = this.mx[i].whseChemicalOutdtlId;
                   item.dyesalOutDtlFk = this.mx[i].energyOutDtlId;
+                  item.whseHardwareOutDtlFk = this.mx[i].whseHardwareOutDtlId;
+                  item.whseOfficeOutDtlFk = this.mx[i].officeOutDtlId;
                   if (!item[this.attributeObj.uuid[2]]) {
                     this.attributeObj.addDtlb(item).then((res) => {
                       item[this.attributeObj.uuid[2]] = res.data.data;
@@ -678,6 +691,8 @@ export default {
           accessoriesName: item.accessoriesName,
           chemicalId: item.chemicalId || item.materialId,
           chemicalName: item.chemicalName || item.materialName,
+          officeId: item.chemicalId || item.materialId,
+          officeName: item.chemicalName || item.materialName,
           batchNo: item.batchNo,
           batId: item.batId,
           weight: item.weight,
@@ -1011,7 +1026,6 @@ export default {
         if (this.form.stockType == 2) {
           val.forEach((item, i) => {
             item.$cellEdit = true;
-            item.whseYarninDtlaFk = item.whseYarninDtlaoid;
             item.list = [JSON.parse(JSON.stringify(item))];
             item.applyNum = item.weight;
             this.mx.push(item);
@@ -1026,7 +1040,80 @@ export default {
           });
           val.forEach((item, i) => {
             // item.weight = item.stock;
-            item.whseYarninDtlaFk = item.whseYarninDtlaoid;
+            item.locationCode = item.locationCode || item.storageNo;
+            item.$cellEdit = true;
+          });
+          for (let i = 0; i < val.length; i++) {
+            if (sum + val[i].weight <= this.chooseData.applyNum) {
+              this.chooseData.list.push(val[i]);
+              sum += Number(val[i].weight);
+            } else if (this.chooseData.applyNum - sum > 0) {
+              val[i].weight = this.chooseData.applyNum - sum;
+              sum += Number(val[i].weight);
+              this.chooseData.list.push(val[i]);
+              break;
+            }
+          }
+          this.chooseData.weight = Number(sum);
+          this.chooseData.list.forEach((item, i) => {
+            item.index = i + 1;
+          });
+        }
+      } else if (this.proChoiceTle === "选择五金用品库存") {
+        if (this.form.stockType == 2) {
+          val.forEach((item, i) => {
+            item.$cellEdit = true;
+            item.list = [JSON.parse(JSON.stringify(item))];
+            item.applyNum = item.weight;
+            this.mx.push(item);
+          });
+          if (this.mx.length) {
+            this.$refs.dlgcrud.setCurrentRow(this.mx[this.mx.length - 1]);
+          }
+        } else {
+          let sum = 0;
+          this.chooseData.list.forEach((item, i) => {
+            sum += Number(item.weight);
+          });
+          val.forEach((item, i) => {
+            // item.weight = item.stock;
+            item.locationCode = item.locationCode || item.storageNo;
+            item.$cellEdit = true;
+          });
+          for (let i = 0; i < val.length; i++) {
+            if (sum + val[i].weight <= this.chooseData.applyNum) {
+              this.chooseData.list.push(val[i]);
+              sum += Number(val[i].weight);
+            } else if (this.chooseData.applyNum - sum > 0) {
+              val[i].weight = this.chooseData.applyNum - sum;
+              sum += Number(val[i].weight);
+              this.chooseData.list.push(val[i]);
+              break;
+            }
+          }
+          this.chooseData.weight = Number(sum);
+          this.chooseData.list.forEach((item, i) => {
+            item.index = i + 1;
+          });
+        }
+      } else if (this.proChoiceTle === "选择行政用品库存") {
+        if (this.form.stockType == 2) {
+          val.forEach((item, i) => {
+            item.$cellEdit = true;
+            item.list = [JSON.parse(JSON.stringify(item))];
+            item.applyNum = item.weight;
+            this.mx.push(item);
+          });
+          if (this.mx.length) {
+            this.$refs.dlgcrud.setCurrentRow(this.mx[this.mx.length - 1]);
+          }
+        } else {
+          let sum = 0;
+          this.chooseData.list.forEach((item, i) => {
+            sum += Number(item.weight);
+          });
+          val.forEach((item, i) => {
+            // item.weight = item.stock;
             item.locationCode = item.locationCode || item.storageNo;
             item.$cellEdit = true;
           });

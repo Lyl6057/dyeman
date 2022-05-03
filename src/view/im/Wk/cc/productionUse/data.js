@@ -23,7 +23,7 @@ export function rsxkr1F(_this) {
         type: "date",
         display: _this.hide === "6" ? false : true,
         format: "yyyy-MM-dd",
-        valueFormat: "yyyy-MM-dd"
+        valueFormat: "yyyy-MM-dd HH:mm:ss"
       },
 
       {

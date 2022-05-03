@@ -198,11 +198,41 @@ import {
   delHardwareOutDtla,
 } from "@/api/im/Wk/cc/wj";
 import {
+  getXz,
+  addXz,
+  delXz,
+  updateXz,
+  getXzDtl,
+  addXzDtl,
+  updateXzDtl,
+  delXzDtl,
+  getOfficeDtla,
+  addOfficeDtla,
+  updateOfficeDtla,
+  delOfficeDtla,
+} from "@/api/im/Wk/cc/xz";
+import {
+  getRl,
+  addRl,
+  delRl,
+  updateRl,
+  getRlDtl,
+  addRlDtl,
+  updateRlDtl,
+  delRlDtl,
+  getEnergDtla,
+  addEnergDtla,
+  updateEnergDtla,
+  delEnergDtla,
+} from "@/api/im/Wk/cc/rl";
+import {
   fetchYarnValidOutWeight,
   fetchAccessoricesValidOutWeight,
   fetchChemicalValidOutWeight,
   fetchDyesalValidOutWeight,
   fetchHardwareValidOutWeight,
+  fetchOfficeValidOutWeight,
+  fetchEnergValidOutWeight,
 } from "./api";
 export default {
   name: "",
@@ -253,9 +283,10 @@ export default {
       }
       let queryData = JSON.parse(JSON.stringify(this.form));
       queryData.retCode = "^^%" + (queryData.retCode || "");
-      queryData.stockId = "!^%" + (queryData.stockId || "");
+      queryData.stockId = "!^%" + (queryData.retCode || "");
       queryData.r_retDate_r = "^^%" + (queryData.retDate || "");
-      queryData.r_stockDate_r = queryData.r_retDate_r;
+      queryData.stockDate = queryData.retDate;
+      // queryData.r_stockDate_r = queryData.r_retDate_r;
       this.attributeObj
         .get(
           Object.assign(queryData, {
@@ -541,7 +572,7 @@ export default {
           getDtla: getWjDtl,
           addDtla: addWjDtl,
           updateDtla: updateWjDtl,
-          delDtla: delYlDtl,
+          delDtla: delWjDtl,
           getDtlb: getHardwareOutDtla,
           addDtlb: addHardwareOutDtla,
           updateDtlb: updateHardwareOutDtla,
@@ -550,6 +581,46 @@ export default {
           validOutWeight: fetchHardwareValidOutWeight,
           uuid: ["whseHardwareOutId", "whseHardwareOutDtlId", "dtlaId"],
           applyCategory: 1,
+        };
+        break;
+      case this.$t("choicDlg.xz"):
+        this.attributeObj = {
+          get: getXz,
+          add: addXz,
+          del: delXz,
+          update: updateXz,
+          getDtla: getXzDtl,
+          addDtla: addXzDtl,
+          updateDtla: updateXzDtl,
+          delDtla: delXzDtl,
+          getDtlb: getOfficeDtla,
+          addDtlb: addOfficeDtla,
+          updateDtlb: updateOfficeDtla,
+          delDtlb: delOfficeDtla,
+          choiceTle: "选择行政用品库存",
+          validOutWeight: fetchOfficeValidOutWeight,
+          uuid: ["whseOfficeOutId", "officeOutDtlId", "dtlaId"],
+          applyCategory: 2,
+        };
+        break;
+      case this.$t("choicDlg.rl"):
+        this.attributeObj = {
+          get: getRl,
+          add: addRl,
+          del: delRl,
+          update: updateRl,
+          getDtla: getRlDtl,
+          addDtla: addRlDtl,
+          updateDtla: updateRlDtl,
+          delDtla: delRlDtl,
+          getDtlb: getEnergDtla,
+          addDtlb: addEnergDtla,
+          updateDtlb: updateEnergDtla,
+          delDtlb: delEnergDtla,
+          choiceTle: "选择能源库存",
+          validOutWeight: fetchEnergValidOutWeight,
+          uuid: ["whseOfficeOutId", "officeOutDtlId", "dtlaId"],
+          applyCategory: 2,
         };
         break;
     }
