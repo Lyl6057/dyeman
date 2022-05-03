@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-01-23 08:03:49
- * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-20 08:24:10
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-05-03 16:04:15
  * @Description:
  */
 import Vue from "vue";
@@ -16,8 +16,8 @@ import store from "@/store/index";
 // import pro from "@/router/view/pro";
 // import re from '@/router/view/re'
 // import iq from '@/router/view/iq'
-import whseMng from "@/router/view/im";
-// import quaLity from "@/router/view/quaLity";
+// import whseMng from "@/router/view/im";
+import quaLity from "@/router/view/quaLity";
 // import laboratory from "./view/laboratory";
 // import proMng from "./view/proMng";
 // import energy from "./view/energy";
@@ -56,8 +56,8 @@ const router = new Router({
         // ...pro,
         // ...re,
         // ...iq,
-        ...whseMng
-        // ...quaLity
+        // ...whseMng
+        ...quaLity
         // ...laboratory
         // ...proMng
         // ...energy

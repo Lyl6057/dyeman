@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-10 13:20:44
  * @LastEditors: Lyl
- * @LastEditTime: 2022-03-30 16:00:47
+ * @LastEditTime: 2022-05-03 16:10:32
  * @Description:
  */
 export default [
@@ -20,6 +20,15 @@ export default [
   //     keepAlive: true
   //   }
   // },
+  {
+    path: "/qaCheckPlan",
+    name: "QA验布计划",
+    component: resolve =>
+      require(["@/view/quaLity/qaCheckPlan/index"], resolve),
+    meta: {
+      keepAlive: true
+    }
+  },
   {
     path: "/modifyFinished",
     name: "拆缸",
