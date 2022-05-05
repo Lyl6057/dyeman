@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-05-03 16:09:29
  * @LastEditors: Lyl
- * @LastEditTime: 2022-05-05 10:37:01
+ * @LastEditTime: 2022-05-05 13:23:31
  * @FilePath: \iot.vue\src\view\quaLity\qaCheckPlan\index.vue
  * @Description: 
 -->
@@ -11,17 +11,17 @@
   <div class="qcCheckPlan">
     <view-container title="QA验布计划">
       <el-row class="btnList">
-        <el-button type="success" @click="update">{{this.$t("public.update")}}</el-button>
-        <el-button type="primary" @click="add">{{this.$t("public.add")}}</el-button>
-        <el-button type="danger" @click="del">{{this.$t("public.del")}}</el-button>
-        <el-button type="primary" @click="query">{{this.$t("public.query")}}</el-button>
-        
+        <el-button type="success" @click="update"> {{this.$t("public.update")}} </el-button>
+        <el-button type="primary" @click="add"> {{this.$t("public.add")}} </el-button>
+        <el-button type="danger" @click="del"> {{this.$t("public.del")}} </el-button>
+        <el-button type="primary" @click="query"> {{this.$t("public.query")}} </el-button>
       </el-row>
       <el-row class="formBox">
         <avue-form ref="form" :option="formOp" v-model="form"> </avue-form>
       </el-row>
       <el-row class="crudBox">
-        <avue-crud ref="crud" 
+        <avue-crud 
+          ref="crud" 
           :option="crudOp" 
           :data="crud" 
           :page.sync="page" 

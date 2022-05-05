@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-05-03 16:29:13
  * @LastEditors: Lyl
- * @LastEditTime: 2022-05-05 11:29:51
+ * @LastEditTime: 2022-05-05 13:18:56
  * @FilePath: \iot.vue\src\view\quaLity\qaCheckPlan\tem.vue
  * @Description: 
 -->
@@ -163,12 +163,12 @@ export default {
     },   
     handleSave(){
       this.$refs.qcCheckPlanForm.validate(async(valid, done) =>{
-        this.loading = true;
         try {
           if(!valid){
             this.$tip.error("请补充查布计划表信息!");
             return;
           }
+           this.loading = true;
           let planId = this.qcCheckPlanFormData.planId;
           if (planId) {
             updateQcCheckPlanData(this.qcCheckPlanFormData).then();
