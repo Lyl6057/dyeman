@@ -188,7 +188,10 @@ export default {
             this.formOp.column[2].maxRows = 100;
             break;
         }
-
+        if (  !this.form.colorDepth ) {
+          return
+        }
+      
         getDepth({
           codeId: this.form.colorDepth,
           codeTableId: "bas_colorclTepth",

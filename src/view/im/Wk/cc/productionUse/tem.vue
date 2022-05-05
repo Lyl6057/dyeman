@@ -515,7 +515,7 @@ export default {
           this.$tip.error("数量不能为空!");
           return;
         }
-        if (this.tyep === this.$t("iaoMng.sx")) {
+        if (this.type === this.$t("iaoMng.sx")) {
           this.mx[i].debitQty =
             this.mx[i].weight > this.mx[i].applyNum
               ? Number((this.mx[i].weight - this.mx[i].applyNum).toFixed(2))
