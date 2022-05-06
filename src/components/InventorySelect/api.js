@@ -4,15 +4,15 @@
  * @Author: Symbol_Yang
  * @Date: 2022-05-03 10:43:58
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-05-04 13:55:19
+ * @LastEditTime: 2022-05-05 14:02:59
  */
 
 import axios from "axios";
+import { matTypeEnum } from "./data"
 
-
-export function fetchInventoryDataByPage(params, data){
+export function fetchInventoryDataByPage(params, data, type){
     return axios({
-        url: "/api/viewYarnStock/filter/page",
+        url: `/api/${matTypeEnum[type].stockTableName}/filter/page`,
         method: "post",
         params: params,
         data: data,

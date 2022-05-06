@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-05-03 09:16:40
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-05-05 11:37:40
+ * @LastEditTime: 2022-05-06 16:49:00
 -->
 <template>
   <div class="whse-seit-location-dlt-container">
@@ -86,6 +86,7 @@
       </el-row>
       <inv-sel 
         ref="invSelRef"
+        :matType="curMatTypeVal"
         @data-select="handleInvDataSelect"
         ></inv-sel>
     </view-container>
@@ -99,6 +100,7 @@ import {
   seitLocDtlbCrudOp,
   getLocCodeDictData
 } from "./data";
+import { matTypeEnum } from "@/components/inventorySelect/data"
 import { baseCodeSupplyEx, baseCodeSupply } from "@/api/index";
 import { saveSeitLocData, updateSeitLocData, batchSaveOrUpdateDtla,batchSaveOrUpdateDtlb, batchRemoveDtla, batchRemoveDtlb, fetchDtlDataListByOid, fetchValidOutWeight,fetchLocationConfirm } from "./api"
 import { timeConversion } from "@/config/util";
@@ -142,6 +144,8 @@ export default {
           handler(val){
             if(!val) return
             this.curMatTypeVal = val;
+            this.seitLocDtlaCrudOp = seitLocDtlaCrudOp(this);
+            this.seitLocDtlbCrudOp = seitLocDtlbCrudOp(this);
             this.locCodeDictData = getLocCodeDictData(val);
           },
           immediate: true
@@ -167,25 +171,36 @@ export default {
     },
     // 确认前检验
     async confrimValid() {
-      let dataList = [];
-      this.seitLocDtlaDataList.forEach(aItem => {
-          dataList.push({
-            yarnsId: aItem.materialId,
-            yarnsCard: aItem.materialBrand,
-            batchNo: aItem.batchNo,
-            batId: aItem.suppBatId,
-            weight: aItem.dtlBChildren.reduce((a,b) => a + Number(b.weight), 0),
-            locationCode: aItem.sourceLocation
-          });
-       
+      let dataList = this.seitLocDtlaDataList.map(aItem => {
+          let  validData = {}
+          if(this.curMatTypeVal == "0"){
+              validData = {
+                yarnsId: aItem.materialId,
+                yarnsCard: aItem.materialBrand,
+                batchNo: aItem.batchNo,
+                batId: aItem.suppBatId,
+                weight: aItem.dtlBChildren.reduce((a,b) => a + Number(b.weight), 0),
+                locationCode: aItem.sourceLocation
+              }
+          }else{
+              validData = {
+                matCode: aItem.materialId,
+                batchNo: aItem.batchNo,
+                retQty: aItem.dtlBChildren.reduce((a,b) => a + Number(b.weight), 0),
+                locationCode: aItem.sourceLocation
+              }
+          }
+          return validData;
       });
-      let validRes = await fetchValidOutWeight(dataList).then(res => res.data);
+      let validRes = await fetchValidOutWeight(dataList, matTypeEnum[this.curMatTypeVal].stockTableName).then(res => res.data);
       if (!validRes.data.status) {
         validRes.data.resultList.forEach((item, index) => {
+          let matCodeKey = this.curMatTypeVal == "0" ? 'yarnsId': "matCode";      
+          let locCodeKey = this.curMatTypeVal == "0" ? 'locationName': "storageNo";      
           let notifyData = {
               title: "提示",
               dangerouslyUseHTMLString: true,
-              message: `材料编号<strong>${item.yarnsId}</strong>的<strong>${item.locationName}</strong>货运位剩余库存数为<span style="color:red; font-size: 16px">${item.realStock.toFixed(2)}</span>;`,
+              message: `材料编号<strong>${item[matCodeKey]}</strong>的<strong>${item[locCodeKey]}</strong>货运位剩余库存数为<span style="color:red; font-size: 16px">${item.realStock.toFixed(2)}</span>;`,
               type: "warning",
               position: 'top-left'
             }
@@ -218,35 +233,37 @@ export default {
     },
     //   库存选择回调
     handleInvDataSelect(rows){
+        let {materialIdKey,materialNameKey,locationCodeKey,weightKey} = matTypeEnum[this.curMatTypeVal]
         let tarDataList =  rows.map(item => {
             return {
                 isAdd: true,
                 whseSeitlocationDtlaoid: v1(),
-                materialId: item.yarnsId,
-                materialName: item.yarnsName,
+                materialId: item[materialIdKey],
+                materialName: item[materialNameKey],
                 materialBrand: item.yarnsCard,
                 suppBatId: item.batId,
                 batchNo: item.batchNo,
-                sourceLocation: item.locationCode,
+                sourceLocation: item[locationCodeKey],
                 weightUnit: item.weightUnit,
-                weight: item.weight,
+                weight: item[weightKey],
                 // 货位明细数据
                 dtlBChildren: [
                     {
                         whseSeitlocationDtlboid: v1(),
                         isAdd: true,
                         $cellEdit: true,
-                        weight: item.weight,
+                        weight: item[weightKey],
                         destLocation: ""
                     }
                 ]
             }
         });
         this.seitLocDtlaDataList.push(...tarDataList);
+        this.seitLocDtlbDataList = this.seitLocDtlaDataList[0].dtlBChildren;
     },
     // 保存
     async handleSave() {
-        let validRes = this.validAfter2Save();
+        let validRes = await this.validAfter2Save();
         if(!validRes) return;
         let { whseSeitlocationoid } = this.seitLocFormData;
         this.loading = true;
@@ -254,7 +271,8 @@ export default {
             await updateSeitLocData(this.seitLocFormData);
         }else{
            whseSeitlocationoid = await saveSeitLocData(this.seitLocFormData).then(res => res.data.data);
-           baseCodeSupply({code: "whse_seit_loc"})
+           Object.assign(this.seitLocFormData,{whseSeitlocationoid})
+           baseCodeSupply({code: "whse_seit_loc"});
         };
 
         let dtlaDataList = [];
@@ -290,7 +308,7 @@ export default {
 
     },
     // 保存前检验
-    validAfter2Save(){
+    async validAfter2Save(){
         if(this.seitLocDtlaDataList.length <= 0){
             this.$tip.warning("不能保存明细数据为空的整理单");
             return false;
@@ -301,11 +319,12 @@ export default {
             })
         });
         if(!hasDtlbData){
-            this.$tip.warning("存在货位数据为空，请检查!");
+            this.$tip.warning("存在货位数据为空或库存数量有误，请检查!");
             return false;
         }
 
-        return true;
+        let vaildValue = await this.confrimValid();
+        return vaildValue
     },
        // 设置赋值
     setSeitLocData(row){
@@ -351,7 +370,7 @@ export default {
         if(!this.seitLocFormData.materialType){
             return this.$tip.warning("请选择材料类型");
         }
-        // 纱线
+        // 获取待过滤数据
         this.$refs.invSelRef.filterIds = this.seitLocDtlaDataList.map(item => {
            return {
                 materialId: item.materialId,

@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-05-03 10:43:46
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-05-04 14:01:21
+ * @LastEditTime: 2022-05-05 17:33:59
 -->
 <template>
     <div class="all-inventory-container">
@@ -40,6 +40,13 @@ import { fetchInventoryDataByPage } from "./api"
 import { queryFormOp, invCrudOp } from "./data"
 export default {
     name: "inventorySelect",
+    props:{
+        // 材料类型
+        matType: {
+            type: String,
+            default: () => "0"
+        }
+    },
     data(){
         return {
             invSelDiaVisible: false,
@@ -64,12 +71,18 @@ export default {
     watch:{
         invSelDiaVisible:{
             handler(value){
+                this.initCrud();
                 value && this.getDataList();
             },
             immediate: false,
         }
     },
     methods:{
+        // 初始化
+        initCrud(){
+            this.queryFormOp = queryFormOp(this);
+            this.invCrudOp = invCrudOp(this);
+        },
         // 选择明细
         handleSelectRow(rows){
             this.curSelRows = rows;
@@ -99,7 +112,7 @@ export default {
                 data.filterParams = this.filterIds
             }
             this.loading = true;
-            fetchInventoryDataByPage(params,data).then(res => {
+            fetchInventoryDataByPage(params,data,this.matType).then(res => {
                 this.invDataList = res.data.records;
                 this.page.total = res.data.total;
             }).finally(() => {

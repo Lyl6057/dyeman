@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-05-03 08:20:55
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-05-04 15:12:55
+ * @LastEditTime: 2022-05-06 17:18:34
  */
 import {
     getDIC,
@@ -34,7 +34,11 @@ let locCodeDictEnum = {};
 // 获取货位码字段数
 export function getLocCodeDictData(code){
     if(!locCodeDictEnum[code]){
-        locCodeDictEnum[code] = getDicNS(`whseLocation?warehouseType=${code}`, "locationCode", "locationCode");
+        locCodeDictEnum[code] = getDicNS(`whseLocation?warehouseType=${code}`, "locationCode", "locationCode",{},false, () => {
+            if(locCodeDictEnum[code].length == 0){
+                locCodeDictEnum[code].push({})
+            }
+        });
     }
     return locCodeDictEnum[code];
 }
@@ -145,12 +149,14 @@ export function seitLocDtlaCrudOp(_this) {
       label: "纱牌",
       prop: "materialBrand",
       width: 100,
-      overHidden: true
+      overHidden: true,
+      hide: _this.curMatTypeVal != "0"
     }, {
       label: "供应商批号",
       prop: "suppBatId",
       width: 120,
-      overHidden: true
+      overHidden: true,
+      hide: _this.curMatTypeVal != "0"
     }, {
       label: "原货位码",
       prop: "sourceLocation",
@@ -173,7 +179,7 @@ export function seitLocDtlaCrudOp(_this) {
       prop: "weightUnit",
       width: 120,
       type: "select",
-      dicData: getDIC("whse_matUnit")
+      dicData: getDIC("bas_matUnit")
     }]
   }
 }
@@ -192,7 +198,7 @@ export function seitLocDtlbCrudOp(_this){
             cell: true,
             placeholder: " ",
             type: "select",
-            dicData: getLocCodeDictData('0')
+            dicData: getLocCodeDictData(_this.curMatTypeVal)
         }, {
             label: "重量",
             prop: "weight",

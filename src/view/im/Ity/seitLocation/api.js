@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-05-03 16:43:52
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-05-05 09:42:18
+ * @LastEditTime: 2022-05-06 10:31:05
  */
 
 import axios from "axios";
@@ -99,9 +99,9 @@ export function fetchLocationConfirm(type = '0', seitLocId){
 
 
 // 检验出仓数据
-export function fetchValidOutWeight(dataList){
+export function fetchValidOutWeight(dataList, controllerName){
     return axios({
-        url: "/api/viewYarnStock/valid/outStock",
+        url: `/api/${controllerName}/valid/outStock`,
         method: "post",
         data: dataList
     })

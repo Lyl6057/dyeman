@@ -4,15 +4,62 @@
  * @Author: Symbol_Yang
  * @Date: 2022-05-03 10:43:53
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-05-04 11:57:22
+ * @LastEditTime: 2022-05-05 17:42:20
  */
-
+import {
+    getDIC,
+  } from "@/config/index";
 
 export const matTypeEnum = {
     // 纱线
-    1: {
-
+    0: {
+        stockTableName: "viewYarnStock",
+        materialIdKey: "yarnsId",
+        materialNameKey: "yarnsName",
+        locationCodeKey: "locationCode",
+        weightKey: "weight"
+    },
+    // 化工
+    3: {
+        stockTableName: "viewChemicalStock",
+        materialIdKey: "chemicalId",
+        materialNameKey: "chemicalName",
+        locationCodeKey: "storageNo",
+        weightKey: "stock"
+    },
+    // 染料
+    4: {
+        stockTableName: "viewDyesalinStok",
+        materialIdKey: "chemicalId",
+        materialNameKey: "chemicalName",
+        locationCodeKey: "storageNo",
+        weightKey: "weight"
+    },
+    // 辅料
+    5: {
+        stockTableName: "viewAccessoriesStock",
+        materialIdKey: "accessoriesId",
+        materialNameKey: "accessoriesName",
+        locationCodeKey: "storageNo",
+        weightKey: "stock"
+    },
+    // 五金
+    6: {
+        stockTableName: "viewHardwareStock",
+        materialIdKey: "accessoriesId",
+        materialNameKey: "accessoriesName",
+        locationCodeKey: "storageNo",
+        weightKey: "stock"
+    },
+     // 行政
+    7: {
+        stockTableName: "viewOfficeStock",
+        materialIdKey: "officeId",
+        materialNameKey: "officeName",
+        locationCodeKey: "storageNo",
+        weightKey: "stock"
     }
+
 }
 
 
@@ -42,7 +89,7 @@ export function queryFormOp(_this) {
     column:[
         {
             label: "材料名称",
-            prop: "yarnsName",
+            prop: matTypeEnum[_this.matType].materialNameKey,
             placeholder: " ",
             span: 6
         },
@@ -50,13 +97,15 @@ export function queryFormOp(_this) {
             label: "纱牌",
             prop: "yarnsCard",
             placeholder: " ",
-            span: 6
+            span: 6,
+            display: _this.matType != '0'
         },
         {
             label: "供应商批号",
             prop: "batId",
             placeholder: " ",
-            span: 6
+            span: 6,
+            display: _this.matType == '0'
         },
         {
             label: "本厂批号",
@@ -66,7 +115,7 @@ export function queryFormOp(_this) {
         },
         {
             label: "货位码",
-            prop: "locationCode",
+            prop: matTypeEnum[_this.matType].locationCodeKey,
             placeholder: " ",
             span: 6
         }
@@ -82,13 +131,13 @@ export function invCrudOp(_this){
         column:[
             {
                 label: "材料编号",
-                prop:  'yarnsId', //"matCode",
+                prop: matTypeEnum[_this.matType].materialIdKey,
                 width: 100,
                 overHidden: true
             },
             {
                 label: "材料名称",
-                prop:  "yarnsName", // "matName",
+                prop: matTypeEnum[_this.matType].materialNameKey,
                 width: 200,
                 overHidden: true
             },
@@ -102,30 +151,34 @@ export function invCrudOp(_this){
                 label: "纱牌",
                 prop: "yarnsCard",
                 width: 100,
-                overHidden: true
+                overHidden: true,
+                hide: _this.matType != '0'
             },
             {
                 label: "供应商批号",
                 prop: "batId",
                 width: 120,
-                overHidden: true
+                overHidden: true,
+                hide: _this.matType != '0'
             },
             {
                 label: "库存数",
-                prop: "weight",
+                prop: matTypeEnum[_this.matType].weightKey,
                 align: "right",
                 width: 100,
                 overHidden: true
             },
             {
-                label: "重量",
+                label: "单位",
                 prop: "weightUnit",
                 width: 100,
-                overHidden: true
+                overHidden: true,
+                type: "select",
+                dicData: getDIC("bas_matUnit")
             },
             {
                 label: "货位码",
-                prop: "locationCode",
+                prop: matTypeEnum[_this.matType].locationCodeKey,
                 width: 100,
                 overHidden: true
             }

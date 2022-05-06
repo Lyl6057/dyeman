@@ -4,15 +4,15 @@
  * @Author: Symbol_Yang
  * @Date: 2022-05-03 08:10:51
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-05-04 11:08:59
+ * @LastEditTime: 2022-05-06 08:31:07
 -->
 <template>
     <div class="seit-location-container">
         <view-container title="货位整理记录" :element-loading-text="loadLabel" v-loading="loading">
             <div class="btnList">
                 <el-button type="primary" @click="handleAdd">{{ this.$t("public.add") }}</el-button>
-                <el-button type="warning" @click="handleUpdate" :disabled="hasEdit" >{{ this.$t("public.update") }}</el-button>
-                <!-- <el-button type="danger" @click="handleDelete" :disabled="hasEdit">{{ this.$t("public.del") }}</el-button> -->
+                <el-button type="warning" @click="handleUpdate" >{{ this.$t("public.update") }}</el-button>
+                <el-button type="danger" @click="handleDelete" :disabled="hasEdit">{{ this.$t("public.del") }}</el-button>
                 <el-button type="primary" @click="handleQuery">{{ this.$t("public.query") }}</el-button>
             </div>
             <div class="formBox">
@@ -39,7 +39,7 @@
     </div>
 </template>
 <script>
-import { fetchSeitLocData } from "./api"
+import { fetchSeitLocData, removeSeitLocData } from "./api"
 import { queryFormOp, mainCrudOp } from "./data";
 import SeitLocDtl from "./seitLocDtl.vue"
 export default {
@@ -69,10 +69,27 @@ export default {
     },
     computed: {
         hasEdit(){
-            return false;
+            return this.curSelRow.seitlocationState == "2";
         }
     },
     methods:{
+        // 数据删除
+        async handleDelete(){
+            let {whseSeitlocationoid:id, seitlocationNo } = this.curSelRow
+            if(!id) return this.$tip.warning("请选择数据");
+            let confirmRes = await this.$tip.cofirm(`是否确认删除整理编号为${seitlocationNo}的数据`).then(_ => true).catch(_ => false);
+            if(!confirmRes) return false;
+            this.loading = true;
+            removeSeitLocData({id}).then(res => {
+                if(res.data.code == 200){
+                    this.$tip.success("删除成功");
+                    this.getDataList();
+                }
+            }).finally(_ => {
+                this.loading = false;
+            })
+            
+        },
         async handleAdd(){
             this.dtlDialogVisible = true;
             await this.$nextTick();
