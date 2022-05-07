@@ -149,7 +149,7 @@ export function popupForm(_this) {
         placeholder: " ",
         type: "date",
         format: "yyyy-MM-dd",
-        valueFormat: "yyyy-MM-dd",
+        valueFormat: "yyyy-MM-dd HH:mm:ss",
         align: "center"
       },
       {
@@ -360,6 +360,14 @@ export function popupForm(_this) {
         ]
       },
       {
+        label: "RGB颜色",
+        prop: "colorRgb",
+        span: 6,
+        type: "color",
+        formslot: true,
+        placeholder: " ",
+      },
+      {
         label: "档案编号",
         prop: "recN0",
         span: 6,
@@ -375,7 +383,7 @@ export function popupForm(_this) {
       {
         label: _this.$t("energy.bz"),
         prop: "remarks",
-        span: 18
+        span: 12
       }
     ]
   };

@@ -2,14 +2,14 @@
  * @Author: Lyl
  * @Date: 2022-04-25 14:03:51
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-25 16:34:07
+ * @LastEditTime: 2022-05-06 11:25:07
  * @FilePath: \iot.vue\src\view\im\transferLoadQa\index.vue
  * @Description: 
 -->
 <template>
   <div class="transferLoad">
     <el-tabs v-model="tabs" type="border-card">
-      <el-tab-pane label="QA验布看板" name="kanban">
+      <el-tab-pane label="手动验布移库" name="manual">
         <el-row class="btnList">
           <el-button type="primary" @click="query">{{
             this.$t("public.query")
@@ -87,6 +87,9 @@
           </el-row>
         </view-container>
       </el-tab-pane>
+      <el-tab-pane label="QA验布计划看板" name="plan">
+        <qc-plan></qc-plan>
+      </el-tab-pane>
     </el-tabs>
   </div>
 </template>
@@ -94,8 +97,11 @@
 <script>
 import { formOp, crudOp, inExit, taskForm, taskCrud } from "./data";
 import { fetchStockVehicleByPage, sendTask, getTask } from "./api";
+import qcPlan from './qcPlan'
 export default {
-  components: {},
+  components: {
+    qcPlan
+  },
   props: {},
   data() {
     return {
@@ -126,7 +132,7 @@ export default {
       taskForm: {},
       taskCrudOp: taskCrud(this),
       task: [],
-      tabs: "kanban",
+      tabs: "manual",
     };
   },
   watch: {},

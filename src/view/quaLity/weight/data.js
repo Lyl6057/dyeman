@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-02-26 10:47:00
+ * @LastEditTime: 2022-05-06 08:10:22
  * @Description:
  */
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
@@ -36,13 +36,7 @@ export function mainForm(_this) {
         placeholder: " ",
         tip: "Mã vải"
       },
-      {
-        label: "机號",
-        prop: "loomNo",
-        span: 6,
-        placeholder: " ",
-        tip: "Mã máy"
-      },
+      
       // {
       //   label: "匹號",
       //   prop: "eachNumber",
@@ -97,6 +91,24 @@ export function mainForm(_this) {
             _this.query();
           });
         }
+      },
+      {
+        label: "是否外发",
+        prop: "outworkFlag",
+        span: 6,
+        placeholder: " ",
+        type: "select",
+        dicData: [
+          {
+            label: "是",
+            value: true
+          },
+          {
+            label: "否",
+            value: false
+          },
+          
+        ],
       },
       {
         label: "验布时间",

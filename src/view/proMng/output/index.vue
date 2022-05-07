@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-04-23 08:32:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-24 10:38:27
+ * @LastEditTime: 2022-05-05 15:14:03
  * @Description: 
 -->
 <template>
@@ -12,27 +12,14 @@
     :element-loading-text="$t('public.loading')"
   >
     <view-container title="生产日产量">
-      <!-- <div class="btnList">
-        <el-button type="success" @click="save">{{
-          $t("public.save")
-        }}</el-button>
-        <el-button
-          type="danger"
-          @click="del"
-          :disabled="Object.keys(chooseData).length == 0"
-          >{{ $t("public.del") }}</el-button
-        >
-      </div> -->
       <div class="btnList" style="margin-top: 10px !important">
         <el-row>
           <el-col :span="20">
             <avue-form ref="form" :option="formOp" v-model="form"></avue-form
           ></el-col>
           <el-col :span="4">
-            <el-button type="primary" @click="query" style="margin-top: 4px">{{
-              $t("public.query")
-            }}</el-button></el-col
-          >
+            <el-button type="primary" @click="query" style="margin: 10px 20px"> {{$t("public.query")}}</el-button>
+          </el-col>
         </el-row>
       </div>
       <div class="crudBox">
@@ -47,15 +34,6 @@
               @on-load="query"
             ></avue-crud>
           </el-col>
-          <!-- <el-col :span="10">
-            <avue-crud
-              ref="crud"
-              :option="crudOp1"
-              :data="crud"
-              :page.sync="page"
-              @on-load="query"
-            ></avue-crud>
-          </el-col> -->
         </el-row>
       </div>
     </view-container>
@@ -64,29 +42,15 @@
         <div id="zzt" v-if="echatsV"></div>
       </el-tab-pane>
     </el-tabs>
-    <el-dialog
-      id="colorMng_Dlg"
-      :visible.sync="dialogVisible"
-      fullscreen
-      width="100%"
-      append-to-body
-      :close-on-click-modal="false"
-      :close-on-press-escape="false"
-      v-if="dialogVisible"
-    >
-      <po-no @close="dialogVisible = false" @check="check"> </po-no>
-    </el-dialog>
   </div>
 </template>
 <script>
-import { mainForm, mainCrud, mainCrud1 } from "./data";
-import { get, add, del, update, getPoDtla, getPoColor } from "./api";
+import { mainForm, mainCrud } from "./data";
+import { get } from "./api";
 import { getYearAndMonthAndDay, getDay } from "@/config/util";
-import poNo from "./poNo";
 export default {
   name: "prowovenOutput",
   components: {
-    poNo: poNo,
   },
   data() {
     return {
@@ -94,8 +58,6 @@ export default {
       form: {},
       crudOp: mainCrud(this),
       crud: [],
-      crudOp1: mainCrud1(this),
-      cruds: [],
       loading: false,
       page: {
         pageSize: 20,
@@ -104,7 +66,6 @@ export default {
       },
       chooseData: {},
       oldData: {},
-      dialogVisible: false,
       tab: "zzt",
       echatsV: true,
     };
@@ -368,37 +329,6 @@ export default {
       option && myChart.setOption(option, true);
       this.loading = false;
     },
-    cellClick(val) {
-      // this.oldData.$cellEdit = false;
-      // this.$set(val, "$cellEdit", true);
-      // this.oldData = val;
-      this.chooseData = val;
-    },
-    save() {
-      for (let i = 0; i < this.crud.length; i++) {
-        if (!this.crud[i].gatherDate || !this.crud[i].output) {
-          this.$tip.error("日期和产量不能为空!");
-          return;
-        }
-      }
-      this.loading = true;
-      try {
-        this.crud.forEach((item, i) => {
-          item.gatherDate = item.gatherDate + " 00:00:00";
-          update(item).then((res) => {});
-
-          if (i == this.crud.length - 1) {
-            this.$tip.success("保存成功!");
-            this.query();
-            // this.loading = false;
-          }
-        });
-      } catch (error) {
-        this.$tip.error("保存失败!" + e);
-        this.loading = false;
-      }
-    },
-    del() {},
   },
   created() {},
   mounted() {

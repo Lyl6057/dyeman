@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-18 09:52:36
+ * @LastEditTime: 2022-05-06 09:39:43
  * @Description: 
 -->
 <template>
@@ -146,6 +146,7 @@ export default {
       form: {
         weaveJobFk: "",
         clothState: 0,
+        outworkFlag: false
       },
       dlgOp: dlgForm(this),
       crudOp: mainCrud(this),
@@ -207,7 +208,7 @@ export default {
         Object.assign(data, {
           rows: this.page.pageSize,
           start: this.page.currentPage,
-          isPrinted: true,
+          // isPrinted: true,
         }),
         r_clothCheckTime_r
       )

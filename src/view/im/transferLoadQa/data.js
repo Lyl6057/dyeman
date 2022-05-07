@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-04-25 14:09:54
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-25 16:31:41
+ * @LastEditTime: 2022-05-07 08:43:57
  * @FilePath: \iot.vue\src\view\im\transferLoadQa\data.js
  * @Description:
  */
@@ -49,6 +49,7 @@ export const inExit = [
     value: 10
   }
 ];
+
 const outExit = [
   {
     label: "A出入库口(7001扫码)",
@@ -83,6 +84,110 @@ const outExit = [
     value: "G"
   }
 ];
+
+const crudCommonConfig = {
+  menu: false,
+    addBtn: false,
+    cancelBtn: false,
+    editBtn: false,
+    delBtn: false,
+    menuWidth: 180,
+    border: true,
+    stripe: true,
+    index: false,
+    highlightCurrentRow: true,
+    refreshBtn: false,
+    columnBtn: false,
+    labelWidth: 100,
+    page: false,
+}
+export function inCheckListOp(_this) {
+  return {
+    ...crudCommonConfig,
+    height: "calc(100vh - 360px)",
+    column: [
+      {
+        label: "货位号",
+        prop: "index",
+        width: 100,
+        align: "center",
+        display: false,
+        fixed: true
+      },
+      {
+        label: "载具编号",
+        prop: "palletCode",
+        span: 8,
+        placeholder: " ",
+        cell: true,
+        overHidden: true,
+        width: 140,
+      },
+      {
+        label: "缸号",
+        prop: "vatNo",
+        width: 180,
+        span: 6,
+        placeholder: " ",
+        disabled: true,
+        overHidden: true,
+      },
+      {
+        label: "疋数",
+        prop: "piiCount",
+        width: 80,
+        span: 6,
+        align: "right",
+        placeholder: " "
+      },
+      {
+        label: "到位时间",
+        prop: "workDate",
+        width: 120,
+        span: 6,
+        type: "time",
+        align: "center",
+        format: "HH:mm:ss",
+        valueFormat: "HH:mm:ss"
+      },
+    ]
+  };
+}
+export function waitCheckListOp(_this) {
+  return {
+    ...crudCommonConfig,
+    index: true,
+    height: "calc(100vh - 125px)",
+    column: [
+      {
+        label: "载具编号",
+        prop: "palletCode",
+        span: 8,
+        placeholder: " ",
+        cell: true,
+        overHidden: true,
+        width: 140,
+      },
+      {
+        label: "缸号",
+        prop: "vatNo",
+        width: 160,
+        span: 6,
+        placeholder: " ",
+        disabled: true,
+        overHidden: true,
+      },
+      {
+        label: "疋数",
+        prop: "piiCount",
+        width: 80,
+        span: 6,
+        align: "right",
+        placeholder: " "
+      },
+    ]
+  };
+}
 
 export function formOp(_this) {
   return {

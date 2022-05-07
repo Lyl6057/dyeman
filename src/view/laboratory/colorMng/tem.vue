@@ -15,20 +15,14 @@
       </div>
 
       <div class="formBox">
-        <avue-form ref="form" :option="formOp" v-model="form"> </avue-form>
+        <avue-form ref="form" :option="formOp" v-model="form">
+          <template slot="colorRgb">
+             <el-input v-model="form.colorRgb" readonly>
+               <el-color-picker slot="append" v-model="form.colorRgb"></el-color-picker>
+             </el-input>
+          </template>
+        </avue-form>
       </div>
-      <!-- <view-container title="色号资料">
-        <div class="crudBox" style="margin-top: 5px">
-          <avue-crud
-            ref="crud"
-            :option="crudOp"
-            :data="crud"
-            :page.sync="page"
-            v-loading="loading"
-            @on-load="query"
-          ></avue-crud>
-        </div>
-      </view-container> -->
     </view-container>
     <choice
       :choiceV="choiceV"
@@ -65,7 +59,8 @@ export default {
     return {
       wLoading: false,
       formOp: popupForm(this),
-      form: {},
+      form: {
+      },
       page: {
         pageSize: 10,
         currentPage: 1,
@@ -91,10 +86,10 @@ export default {
       this.wLoading = true;
       if (this.isAdd) {
         getCodeSupply().then((res) => {
-          this.codeSupplyNum = preFixInt(Number(res.data.maxSn) + 1, 6);
+          this.codeSupplyNum = preFixInt(Number(res.data.maxSn) + 1, 5);
           this.form = {
             salColorfresh: "1",
-            colorDate: this.getNowTime(),
+            colorDate: this.$getNowTime("datetime"),
             colorState: false,
             doubleFlag: false,
           };

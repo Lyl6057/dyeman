@@ -21,7 +21,7 @@
       </div>
 
       <div class="formBox">
-        <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
+        <avue-form ref="form" :option="formOp" v-model="form"> </avue-form>
       </div>
       <view-container title="色号资料">
         <div class="crudBox" style="margin-top: 5px">

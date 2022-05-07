@@ -13,6 +13,12 @@ export function mainForm(_this) {
         placeholder: " "
       },
       {
+        label: "货柜编号",
+        prop: "containNo",
+        span: 6,
+        placeholder: " "
+      },
+      {
         label: "申请人",
         prop: "applicant",
         span: 6,
@@ -85,7 +91,14 @@ export function mainCrud(_this) {
           }
         ]
       },
-
+      {
+        label: "货柜编号",
+        prop: "containNo",
+        width: 130,
+        disabled: false,
+        overHidden: true,
+        span: 6
+      },
       {
         label: "申请人",
         prop: "applicant",

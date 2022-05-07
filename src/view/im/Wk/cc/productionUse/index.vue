@@ -282,9 +282,9 @@ export default {
         }
       }
       let queryData = JSON.parse(JSON.stringify(this.form));
-      queryData.retCode = "^^%" + (queryData.retCode || "");
+      queryData.retCode = "!^%" + (queryData.retCode || "");
       queryData.stockId = "!^%" + (queryData.retCode || "");
-      queryData.r_retDate_r = "^^%" + (queryData.retDate || "");
+      queryData.r_retDate_r = "!^%" + (queryData.retDate || "");
       queryData.stockDate = queryData.retDate;
       // queryData.r_stockDate_r = queryData.r_retDate_r;
       this.attributeObj
