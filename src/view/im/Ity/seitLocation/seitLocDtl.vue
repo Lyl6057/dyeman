@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-05-03 09:16:40
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-05-06 16:49:00
+ * @LastEditTime: 2022-05-07 09:07:49
 -->
 <template>
   <div class="whse-seit-location-dlt-container">
@@ -100,7 +100,7 @@ import {
   seitLocDtlbCrudOp,
   getLocCodeDictData
 } from "./data";
-import { matTypeEnum } from "@/components/inventorySelect/data"
+import { matTypeEnum } from "@/components/InventorySelect/data"
 import { baseCodeSupplyEx, baseCodeSupply } from "@/api/index";
 import { saveSeitLocData, updateSeitLocData, batchSaveOrUpdateDtla,batchSaveOrUpdateDtlb, batchRemoveDtla, batchRemoveDtlb, fetchDtlDataListByOid, fetchValidOutWeight,fetchLocationConfirm } from "./api"
 import { timeConversion } from "@/config/util";

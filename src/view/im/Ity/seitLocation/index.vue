@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-05-03 08:10:51
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-05-06 08:31:07
+ * @LastEditTime: 2022-05-07 10:09:39
 -->
 <template>
     <div class="seit-location-container">
@@ -101,10 +101,18 @@ export default {
             this.getDataList();
         },
         getDataList(){
+             let { materialType, seitLocationDate } = this.queryForm;
              let params = {
                 rows: this.page.pageSize,
-                start: this.page.currentPage,
+                start: this.page.currentPage
             };
+            if(materialType){
+                params.materialType = materialType
+            }
+            if(seitLocationDate && seitLocationDate.length == 2){
+                params.seitLocSDate = seitLocationDate[0];
+                params.seitLocEDate = seitLocationDate[1];
+            }
             this.loading = true;
             fetchSeitLocData(params).then(res => {
                 this.mainCrudDataList = res.data.records;
