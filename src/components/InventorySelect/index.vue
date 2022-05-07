@@ -1,10 +1,10 @@
 <!--
- * @Description: 
+ * @Description: 库存查询表
  * @Version: 2.0
  * @Author: Symbol_Yang
  * @Date: 2022-05-03 10:43:46
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-05-07 10:57:00
+ * @LastEditTime: 2022-05-07 10:59:02
 -->
 <template>
     <div class="all-inventory-container">
