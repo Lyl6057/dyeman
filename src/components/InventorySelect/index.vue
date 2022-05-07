@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-05-03 10:43:46
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-05-05 17:33:59
+ * @LastEditTime: 2022-05-07 10:57:00
 -->
 <template>
     <div class="all-inventory-container">
@@ -28,6 +28,7 @@
                         v-loading="loading"
                         @on-load="getDataList"
                         @select='handleSelectRow'
+                        @select-all='handleSelectRow'
                     ></avue-crud>
                 </div>
             </view-container>

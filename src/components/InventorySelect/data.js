@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-05-03 10:43:53
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-05-05 17:42:20
+ * @LastEditTime: 2022-05-07 10:55:39
  */
 import {
     getDIC,
@@ -128,6 +128,7 @@ export function invCrudOp(_this){
     return {
         ...mainCrudOpCommon,
         selection: true,
+        height: "calc(100vh - 235px)",
         column:[
             {
                 label: "材料编号",
