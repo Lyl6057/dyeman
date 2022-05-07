@@ -235,7 +235,7 @@ export function getDicT(url, label, value, form = {}, sort) {
   }
 }
 // 获取字典表
-export function getDicNS(url, label, value, form = {}, sort) {
+export function getDicNS(url, label, value, form = {}, sort,done) {
   // let resultMap = _this.$store.getters.getDic(codeTableId);
   let resultMap = [];
   axios({
@@ -269,6 +269,7 @@ export function getDicNS(url, label, value, form = {}, sort) {
         value: item[value]
       });
     });
+    done && done();
   });
   return resultMap;
 }

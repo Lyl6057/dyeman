@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-04-01 13:39:35
- * @LastEditors: Lyl
- * @LastEditTime: 2022-04-25 14:13:46
+ * @LastEditors: Symbol_Yang
+ * @LastEditTime: 2022-05-03 08:12:23
  * @Description:
  */
 
@@ -68,6 +68,10 @@ export function whseMng(_this) {
         {
           menuName: "4.在库载具",
           index: "stockVehicle"
+        },
+        {
+          menuName: "5.库存整理",
+          index: "seitLocation"
         }
         // {
         //   menuName: "2.生产运转出仓", //'2.生产运转'

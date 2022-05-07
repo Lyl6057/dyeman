@@ -87,6 +87,15 @@ export default [
     }
   },
   {
+    path: "/seitLocation",
+    name: "库存整理",
+    component: resolve =>
+      require(["@/view/im/Ity/seitLocation/index"], resolve),
+    meta: {
+      keepAlive: true
+    }
+  },
+  {
     path: "/whseVehicle",
     name: "仓库载具管理",
     component: resolve => require(["@/view/im/Ity/vehicle/index"], resolve),
