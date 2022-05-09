@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-04-25 14:03:51
  * @LastEditors: Lyl
- * @LastEditTime: 2022-05-06 11:25:07
+ * @LastEditTime: 2022-05-07 14:45:33
  * @FilePath: \iot.vue\src\view\im\transferLoadQa\index.vue
  * @Description: 
 -->
@@ -42,9 +42,7 @@
                   </el-option>
                 </el-select>
                 <div style="text-align: left; margin-top: 10px">
-                  <el-button type="primary" size="mini" @click="submit(scope)"
-                    >提交</el-button
-                  >
+                  <el-button type="primary" size="mini" @click="submit(scope)">提交</el-button>
                 </div>
                 <el-button
                   type="text"
@@ -54,7 +52,6 @@
                   >验布</el-button
                 >
               </el-popover>
-
               <el-button type="text" icon="el-icon-refresh-right" size="mini"
                 >回仓</el-button
               >

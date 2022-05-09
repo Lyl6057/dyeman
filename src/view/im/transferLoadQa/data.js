@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-04-25 14:09:54
  * @LastEditors: Lyl
- * @LastEditTime: 2022-05-07 08:43:57
+ * @LastEditTime: 2022-05-07 14:45:18
  * @FilePath: \iot.vue\src\view\im\transferLoadQa\data.js
  * @Description:
  */
@@ -101,6 +101,7 @@ const crudCommonConfig = {
     labelWidth: 100,
     page: false,
 }
+
 export function inCheckListOp(_this) {
   return {
     ...crudCommonConfig,
@@ -153,6 +154,7 @@ export function inCheckListOp(_this) {
     ]
   };
 }
+
 export function waitCheckListOp(_this) {
   return {
     ...crudCommonConfig,

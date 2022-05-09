@@ -686,7 +686,7 @@ export default {
       this.mx.forEach((item) => {
         dataList.push({
           yarnsId: item.yarnsId,
-          yarnsCard: item.yarnsCard,
+          yarnsCard: item.yarnsCard || "",
           accessoriesId: item.accessoriesId,
           accessoriesName: item.accessoriesName,
           chemicalId: item.chemicalId || item.materialId,
@@ -694,7 +694,7 @@ export default {
           officeId: item.chemicalId || item.materialId,
           officeName: item.chemicalName || item.materialName,
           batchNo: item.batchNo,
-          batId: item.batId,
+          batId: item.batId || "",
           weight: item.weight,
           locationCode: item.list[0].locationCode,
         });
