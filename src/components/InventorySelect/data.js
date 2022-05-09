@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-05-03 10:43:53
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-05-07 10:55:39
+ * @LastEditTime: 2022-05-09 13:49:06
  */
 import {
     getDIC,
@@ -29,11 +29,11 @@ export const matTypeEnum = {
     },
     // 染料
     4: {
-        stockTableName: "viewDyesalinStok",
+        stockTableName: "viewDyestuffStock",
         materialIdKey: "chemicalId",
         materialNameKey: "chemicalName",
         locationCodeKey: "storageNo",
-        weightKey: "weight"
+        weightKey: "stock"
     },
     // 辅料
     5: {
