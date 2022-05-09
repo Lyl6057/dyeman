@@ -3,8 +3,8 @@
  * @Version: 2.0
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:18:51
- * @LastEditors: Lyl
- * @LastEditTime: 2022-04-20 15:21:28
+ * @LastEditors: Symbol_Yang
+ * @LastEditTime: 2022-05-09 08:51:19
 -->
 <template>
   <div id="whse-yarn-in-dtl-container">
@@ -301,7 +301,7 @@ export default {
         stockState: "0",
         registerNo: withDrawalNo,
         finStatus: "0",
-        yinStatus: "0",
+        yinStatus: "1",
         yinDate: timeConversion(new Date()),
         sysCreatedby: this.$store.state.userOid,
       };
