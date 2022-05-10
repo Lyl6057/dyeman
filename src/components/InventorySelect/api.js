@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-05-03 10:43:58
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-05-05 14:02:59
+ * @LastEditTime: 2022-05-10 15:06:44
  */
 
 import axios from "axios";
@@ -19,3 +19,11 @@ export function fetchInventoryDataByPage(params, data, type){
     })
 }
 
+// 检验出仓数据
+export function fetchValidOutWeight(dataList, type){
+    return axios({
+        url: `/api/${matTypeEnum[type].stockTableName}/valid/outStock`,
+        method: "post",
+        data: dataList
+    })
+}

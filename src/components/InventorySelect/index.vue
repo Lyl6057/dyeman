@@ -1,10 +1,10 @@
 <!--
- * @Description: 库存查询表
+ * @Description: 材料库存查询表
  * @Version: 2.0
  * @Author: Symbol_Yang
  * @Date: 2022-05-03 10:43:46
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-05-07 10:59:02
+ * @LastEditTime: 2022-05-10 13:54:00
 -->
 <template>
     <div class="all-inventory-container">
@@ -38,7 +38,7 @@
 
 <script>
 import { fetchInventoryDataByPage } from "./api"
-import { queryFormOp, invCrudOp } from "./data"
+import { queryFormOp, invCrudOp, matTypeEnum } from "./data"
 export default {
     name: "inventorySelect",
     props:{
@@ -46,7 +46,20 @@ export default {
         matType: {
             type: String,
             default: () => "0"
-        }
+        },
+        // 统一其返回的格式
+        unifiedFormat: {
+            type: Boolean,
+            default: () => false
+        },
+        formatPorp: {
+            type: Object,
+            default: () => ({
+                id: "materialId",
+                name: "materialName",
+                weight: "weight"
+            })
+        } 
     },
     data(){
         return {
@@ -122,7 +135,24 @@ export default {
         },
         // 选择
         handleSelect(){
-            this.$emit("data-select",this.curSelRows);
+            let selRows = [];
+            if(this.unifiedFormat){
+                let { materialIdKey,materialNameKey,weightKey } = matTypeEnum[this.matType];
+                let {id, name, weight}  = this.formatPorp;
+                selRows = this.curSelRows.map(item => {
+                    let tData = Object.assign({}, item, {
+                        [id]: item[materialIdKey],
+                        [name]: item[materialNameKey],
+                        [weight]: item[weightKey],
+                    });
+                    delete tData[materialIdKey];
+                    delete tData[materialNameKey];
+                    return tData
+                })
+            }else{
+                selRows = this.curSelRows
+            }
+            this.$emit("data-select",selRows);
             this.handleClose();
         },
         // 关闭
