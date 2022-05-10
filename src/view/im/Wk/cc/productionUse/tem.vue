@@ -687,14 +687,10 @@ export default {
         dataList.push({
           yarnsId: item.yarnsId,
           yarnsCard: item.yarnsCard || "",
-          accessoriesId: item.accessoriesId,
-          accessoriesName: item.accessoriesName,
-          chemicalId: item.chemicalId || item.materialId,
-          chemicalName: item.chemicalName || item.materialName,
-          officeId: item.chemicalId || item.materialId,
-          officeName: item.chemicalName || item.materialName,
+          matCode: item.chemicalId || item.materialId || item.accessoriesId ,
           batchNo: item.batchNo,
           batId: item.batId || "",
+          retQty: item.weight,
           weight: item.weight,
           locationCode: item.list[0].locationCode,
         });
@@ -708,9 +704,9 @@ export default {
             title: "提示",
             dangerouslyUseHTMLString: true,
             message: `材料编号<strong>${
-              item.yarnsId || item.accessoriesId || item.chemicalId
+              item.matCode
             }</strong>的<strong>${
-              item.locationName
+              item.storageNo
             }</strong>货运位剩余库存数为<span style="color:red; font-size: 16px">${item.realStock.toFixed(
               2
             )}</span>;`,

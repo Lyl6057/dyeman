@@ -902,12 +902,12 @@ export default {
                         .then((res) => {});
                       reqArrs.push(updateSyncFn);
                     }
-                    if (
-                      i === this.mx.length - 1 &&
-                      j == this.mx[i].list.length - 1
-                    ) {
-                      this.saveBefore();
-                    }
+                    // if (
+                    //   i === this.mx.length - 1 &&
+                    //   j == this.mx[i].list.length - 1
+                    // ) {
+                    //   this.saveBefore();
+                    // }
                   });
                 }
                 if (this.mx[i].alloc) {
@@ -940,15 +940,6 @@ export default {
                     }
                   });
                 }
-                // if (i === this.mx.length - 1) {
-                //   if (this.datas === this.$t("iaoMng.sx") && this.form.andOut) {
-                //     createOutOrder(this.form.whseYarninoid).then((res) => {});
-                //   }
-                //   setTimeout(() => {
-                //     this.$tip.success(this.$t("public.bccg"));
-                //     this.screenLoading = false;
-                //   }, 200);
-                // }
               }
               return Promise.all(reqArrs);
             })

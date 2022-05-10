@@ -129,6 +129,9 @@ import {
   officeStockC,
   officeStockF,
   getOfficeStock,
+  getInWhseStore,
+  inWhseStoreC,
+  inWhseStoreF
 } from "./data";
 
 export default {
@@ -343,6 +346,11 @@ export default {
   },
   created() {
     switch (this.choiceTle) {
+      case "选择在库载具":
+        this.choiceC = inWhseStoreC(this);
+        this.choiceF = inWhseStoreF(this);
+        this.getData = getInWhseStore;
+        break;
       case "选择行政用品库存":
         this.choiceC = officeStockC(this);
         this.choiceF = officeStockF(this);

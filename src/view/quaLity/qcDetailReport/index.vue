@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-04 16:59:56
+ * @LastEditTime: 2022-05-09 09:44:55
  * @Description:
 -->
 <template>
@@ -149,6 +149,7 @@ export default {
       }).then((res) => {
         if (res.data.records.length) {
           let vatData = res.data.records[0]; // 当前缸号信息
+          console.log(vatData);
           let checkData = {
             vatNo: vatData.vatNo,
             fabricName: vatData.fabName,
@@ -258,10 +259,14 @@ export default {
           start: 1,
           page: 1,
         }).then((vatList) => {
-          vatList.data.records[0].divdCw = res.data[sVatNo]; // 获取拆缸重量
-          updateRunJob(vatList.data.records[0]).then((res) => {
+          if (vatList.data.total) {
+            vatList.data.records[0].divdCw = res.data[sVatNo]; // 获取拆缸重量
+            updateRunJob(vatList.data.records[0]).then((res) => {
+              this.outReport();
+            }); // 更新原缸拆缸重量
+          }else{
             this.outReport();
-          }); // 更新原缸拆缸重量
+          }
         });
       });
     },

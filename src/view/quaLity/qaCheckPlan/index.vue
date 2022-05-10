@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-05-03 16:09:29
  * @LastEditors: Lyl
- * @LastEditTime: 2022-05-05 13:23:31
+ * @LastEditTime: 2022-05-10 16:32:06
  * @FilePath: \iot.vue\src\view\quaLity\qaCheckPlan\index.vue
  * @Description: 
 -->
@@ -74,7 +74,11 @@ export default {
   methods: {
     query() {
       this.loading = true;
-      fetchQcCheckPlanByPage(this.form).then( res => {
+      let params = {
+        vatNo: "%" + (this.form.vatNo || ''),
+        r_planStart_r: "!^%" + (this.form.planStart || ''),
+      }
+      fetchQcCheckPlanByPage(params).then( res => {
         let { records, total } = res.data;
         this.crud = records;
         this.page.total = total;

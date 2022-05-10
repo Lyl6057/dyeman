@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-11-16 10:39:54
  * @LastEditors: Lyl
- * @LastEditTime: 2022-05-03 13:48:59
+ * @LastEditTime: 2022-05-09 15:42:34
  * @Description:
  */
 import axios from "axios";
@@ -37,7 +37,7 @@ export function fetchHardwareValidOutWeight(dataList) {
 // 检验颜料出仓数据
 export function fetchDyesalValidOutWeight(dataList) {
   return axios({
-    url: "/api/viewDyesalinStok/valid/outStock",
+    url: "/api/viewDyestuffStock/valid/outStock",
     method: "post",
     data: dataList
   });

@@ -2,11 +2,12 @@
  * @Author: Lyl
  * @Date: 2022-05-03 16:09:34
  * @LastEditors: Lyl
- * @LastEditTime: 2022-05-05 11:23:13
+ * @LastEditTime: 2022-05-10 16:31:33
  * @FilePath: \iot.vue\src\view\quaLity\qaCheckPlan\data.js
  * @Description:
  */
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
+import { log } from "three";
 
 function fillZero(row, value) {
   return value && value.toFixed(2);
@@ -48,8 +49,8 @@ export function mainForm(_this) {
         placeholder: " "
       },
       {
-        label: "查布日期",
-        prop: "planDate",
+        label: "计划开始",
+        prop: "planStart",
         type: "date",
         format: "yyyy-MM-dd",
         valueFormat: "yyyy-MM-dd",
@@ -109,7 +110,7 @@ export function mainCrud(_this) {
         type: "datetime",
         format: "yyyy-MM-dd HH:mm:ss",
         valueFormat: "yyyy-MM-dd HH:mm:ss",
-        width: 150,
+        width: 160,
         sortable: true,
         overHidden:true,
         span: 6,
@@ -128,7 +129,7 @@ export function mainCrud(_this) {
         format: "yyyy-MM-dd HH:mm:ss",
         valueFormat: "yyyy-MM-dd HH:mm:ss",
         overHidden:true,
-        width: 150,
+        width: 160,
         span: 6,
         rules: [
           {
@@ -221,6 +222,27 @@ export function mainCrud(_this) {
         type: "number",
         overHidden: true
       },
+      {
+        label: "在库",
+        prop: "inFlag",
+        disabled: true,
+        placeholder: " ",
+        span: 6,
+        width: 120,
+        overHidden: true,
+        type: "select",
+        display: false,
+        dicData:[
+          {
+            label:"否",
+            value:false,
+          },
+          {
+            label:"是",
+            value:true,
+          }
+        ],
+      },
     ]
   };
 }
@@ -254,11 +276,13 @@ export function qcCheckStorePlanCrud(_this) {
       {
         label: "出库完成",
         prop: "outFlag",
-        disabled: true,
+        cell: true,
+        disabled: false,
         placeholder: " ",
         span: 6,
         width: 120,
         type:"switch",
+        align: "center",
         dicData:[
           {
             label:"否",
@@ -269,12 +293,24 @@ export function qcCheckStorePlanCrud(_this) {
             value:true,
           }
         ],
-        overHidden: true
+        overHidden: true,
+        change: (val) => {
+          _this.$nextTick(() =>{
+            setTimeout(() => {
+              if (!_this.dtlCurIdx) return;
+              val.value ? 
+              _this.qcCheckStorePlanList[_this.dtlCurIdx - 1].outTime = _this.$getNowTime("datetime") 
+              : _this.qcCheckStorePlanList[_this.dtlCurIdx - 1].outTime = ""
+            });
+          })
+        }
       },
       {
         label: "出库日期",
         prop: "outTime",
         type: "datetime",
+        cell: true,
+        width: 180,
         format: "yyyy-MM-dd HH:mm:ss",
         valueFormat: "yyyy-MM-dd HH:mm:ss",
         span: 6,
@@ -283,11 +319,13 @@ export function qcCheckStorePlanCrud(_this) {
       {
         label: "是否回仓",
         prop: "returnFlag",
-        disabled: true,
+        disabled: false,
         placeholder: " ",
         span: 6,
         width: 120,
         type:"switch",
+        align: "center",
+        cell: true,
         dicData:[
           {
             label:"否",
@@ -298,7 +336,17 @@ export function qcCheckStorePlanCrud(_this) {
             value:true,
           }
         ],
-        overHidden: true
+        overHidden: true,
+        change: (val) => {
+          _this.$nextTick(() =>{
+            setTimeout(() => {
+              if (!_this.dtlCurIdx) return;
+              val.value ? 
+              _this.qcCheckStorePlanList[_this.dtlCurIdx - 1].returnTime = _this.$getNowTime("datetime") 
+              : _this.qcCheckStorePlanList[_this.dtlCurIdx - 1].returnTime = ""
+            });
+          })
+        }
       },
       {
         label: "回仓日期",
@@ -307,7 +355,28 @@ export function qcCheckStorePlanCrud(_this) {
         format: "yyyy-MM-dd HH:mm:ss",
         valueFormat: "yyyy-MM-dd HH:mm:ss",
         span: 6,
+        width: 180,
+        cell: true,
         placeholder: " "
+      },
+      {
+        label: "总疋数",
+        prop: "pidCount",
+        placeholder: " ",
+        span: 6,
+        width: 90,
+        cell: false,
+        align: "right",
+        overHidden: true
+      },
+      {
+        label: "疋号",
+        prop: "piNos",
+        placeholder: " ",
+        span: 6,
+        // width: 200,
+        cell: false,
+        overHidden: true
       },
     ]
   };
