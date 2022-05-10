@@ -4,11 +4,11 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-08 17:19:47
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-19 13:33:34
+ * @LastEditTime: 2022-05-10 17:00:50
 -->
 <template>
   <div id="return-yarns-notice-container">
-    <view-container title="退纱通知单" :element-loading-text="loadLabel" v-loading="loading">
+    <view-container title="退料通知单" :element-loading-text="loadLabel" v-loading="loading">
       <div class="btnList">
         <el-button type="primary" @click="handleAdd">{{ this.$t("public.add") }}</el-button>
         <el-button type="success" @click="handleUpdate">{{ this.$t("public.update") }}</el-button>
@@ -36,16 +36,18 @@
     <!-- 明细 -->
     <el-dialog :visible.sync="dltDialogVisible" fullscreen append-to-body>
       <with-drawal-dtl
+        v-if='dltDialogVisible'
         ref="withDrawalDtlRef"
         :withDatalData="withDatalData"
         @dtlClose="handleDtlClose"
+        :matType="matType"
       ></with-drawal-dtl>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { crudOp, queryFormOp } from "./data";
+import { crudOp, queryFormOp ,dataTyptEnum } from "./data";
 import { fetchWithDrawalListByPage, removeWithDrawalById } from "./api";
 import WithDrawalDtl from "./withDrawalDtl.vue";
 export default {
@@ -55,6 +57,8 @@ export default {
   },
   data() {
     return {
+      viewTitle: "",
+      matType: "3",
       loadLabel: "加载中...",
       loading: false,
       page: {
@@ -73,12 +77,33 @@ export default {
       dltDialogVisible: false
     };
   },
+  created(){
+    this.getCurMatType();
+  },
+  watch:{
+    "$route"(to,from){
+      console.count("enter")
+      if(to.path.includes("withDrawal") || from.path.includes("withDrawal")){
+        this.reload();
+      } 
+    }
+  },
   computed:{
     hasNotEdit(){
       return this.curRowSelect.isInStock
     }
   },
   methods: {
+    reload(){
+      this.getCurMatType();
+      this.page.currentPage = 1;
+      this.getDataList();
+    },
+    // 获取当前退货的物料类型
+    getCurMatType(){
+      this.matType = this.$route.meta.matType;
+      this.viewTitle = dataTyptEnum[this.matType].viewTitle;
+    },
     handleCellStyle({row,column}){
       if(column.property == 'isInStock'){
         return {
@@ -99,7 +124,7 @@ export default {
         .cofirm(`是否确认删除【${withdrawalNo}】退纱通知单数据`)
         .then(res => {
           this.loading = true;
-          removeWithDrawalById(proYarnsWithdrawaloid)
+          removeWithDrawalById(proYarnsWithdrawaloid,this.matType)
             .then(res => {
               if (res.data.code == 200) {
                 this.$tip.success("删除成功");
@@ -132,7 +157,7 @@ export default {
         typeOf: this.form.typeOf
       };
       this.loading = true;
-      fetchWithDrawalListByPage(params)
+      fetchWithDrawalListByPage(params,this.matType)
         .then(res => {
           this.page.total = res.data.total;
           this.crudDataList = res.data.records;

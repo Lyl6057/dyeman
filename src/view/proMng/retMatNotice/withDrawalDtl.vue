@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-09 09:06:25
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-05-10 15:13:33
+ * @LastEditTime: 2022-05-10 16:15:06
 -->
 <template>
   <div class="with-drawal-dlt-container">
@@ -147,7 +147,7 @@ export default {
     getWithDrawalDtlDataList(oid) {
       this.loading = true;
       let { dtlFkKey } = dataTyptEnum[this.matType];
-      fetchWithDrwarlDtlDataList({ [dtlFkKey]: oid })
+      fetchWithDrwarlDtlDataList({ [dtlFkKey]: oid },this.matType)
         .then(res => {
           this.crudDataList = res.data.map(item => {
             item.$cellEdit = true;
@@ -209,9 +209,9 @@ export default {
       let { oidKey,dtlFkKey,dtlOidKey,materialIdKey } = dataTyptEnum[this.matType];
       let oid = this.withDrawalFormData[oidKey];
       if (oid) {
-        await updateWithDrawal(this.withDrawalFormData);
+        await updateWithDrawal(this.withDrawalFormData,this.matType);
       } else {
-        oid = await addWithDrawal(this.withDrawalFormData).then(
+        oid = await addWithDrawal(this.withDrawalFormData,this.matType).then(
           res => res.data.data
         );
         // 流水号递增
@@ -227,9 +227,9 @@ export default {
           weight: item.weight
         }
       });
-      await batchAddOrUpdateDtl(dataList);
+      await batchAddOrUpdateDtl(dataList,this.matType);
       if (this.delOidList.length > 0) {
-        await batchDelDtlDataById(this.delOidList);
+        await batchDelDtlDataById(this.delOidList,this.matType);
       }
       this.loading = false;
       this.hasRefresh = true;

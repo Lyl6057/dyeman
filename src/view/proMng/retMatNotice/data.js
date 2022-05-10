@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-08 17:26:12
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-05-10 14:20:44
+ * @LastEditTime: 2022-05-10 17:00:04
  */
 
 import {
@@ -16,11 +16,24 @@ let typeOfDict = getDIC("pro_typeOf")
 
 export const dataTyptEnum = {
     3: {
+        viewTitle: "化工原料退货通知单",
+        tableName: "proChemicalWithdrawal",
+        dtlTableName: "proChemicalWithdrawalDtl",
         oidKey: "proChemicalWithdrawaloid",
         materialIdKey: "chemicalId",
         materialNameKey: "chemicalName",
         dtlOidKey: "proChemicalWithdrawalDtloid",
         dtlFkKey: "proChemicalWithdrawalFk",
+    },
+    4: {
+        viewTitle: "染料退货通知单",
+        tableName: "proDyesaWithdrawal",
+        dtlTableName: "proDyesaWithdrawalDtl",
+        oidKey: "proDyesaWithdrawaloid",
+        materialIdKey: "dyesaId",
+        materialNameKey: "dyesaName",
+        dtlOidKey: "proDyesaWithdrawalDtloid",
+        dtlFkKey: "proDyesaWithdrawalFk", 
     }
 }
 

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-29 14:14:56
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-05-10 08:37:29
+ * @LastEditTime: 2022-05-10 16:16:49
  * @Description:
  */
 export default [
@@ -295,7 +295,8 @@ export default [
     name: "化工原料退货通知单",
     component: resolve => require(["@/view/proMng/retMatNotice/index"], resolve),
     meta: {
-      keepAlive: true
+      keepAlive: true,
+      matType: "3"
     }
   },
   {
@@ -303,7 +304,8 @@ export default [
     name: "染料退货通知单",
     component: resolve => require(["@/view/proMng/retMatNotice/index"], resolve),
     meta: {
-      keepAlive: true
+      keepAlive: true,
+      matType: "4"
     }
   },
   {
