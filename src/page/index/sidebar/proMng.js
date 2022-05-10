@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-04-01 13:39:35
- * @LastEditors: Lyl
- * @LastEditTime: 2022-04-21 08:09:06
+ * @LastEditors: Symbol_Yang
+ * @LastEditTime: 2022-05-10 08:39:27
  * @Description:
  */
 
@@ -133,8 +133,15 @@ export function proMng(_this) {
         {
           menuName: "4.行车监控",
           index: "proDriving"
-        }
-
+        },
+        {
+          menuName: "5.化工原料退货通知单",
+          index: "withDrawal2Chiemical"
+        },
+        {
+          menuName: "6.染料退货通知单",
+          index: "withDrawal2Dyesa" 
+        },
         // {
         //   menuName: "3.布飞打印",
         //   index: "/proSalSchedule"

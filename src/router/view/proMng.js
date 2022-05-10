@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-01-29 14:14:56
- * @LastEditors: Lyl
- * @LastEditTime: 2022-04-19 07:53:24
+ * @LastEditors: Symbol_Yang
+ * @LastEditTime: 2022-05-10 08:37:29
  * @Description:
  */
 export default [
@@ -286,6 +286,22 @@ export default [
     path: "/proDriving",
     name: "行车监控",
     component: resolve => require(["@/view/proMng/driving/index"], resolve),
+    meta: {
+      keepAlive: true
+    }
+  },
+  {
+    path: "/withDrawal2Chiemical",
+    name: "化工原料退货通知单",
+    component: resolve => require(["@/view/proMng/retMatNotice/index"], resolve),
+    meta: {
+      keepAlive: true
+    }
+  },
+  {
+    path: "/withDrawal2Dyesa",
+    name: "染料退货通知单",
+    component: resolve => require(["@/view/proMng/retMatNotice/index"], resolve),
     meta: {
       keepAlive: true
     }
