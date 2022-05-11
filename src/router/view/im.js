@@ -221,6 +221,15 @@ export default [
           keepAlive: false
         }
       },
+      // 外发退纱入仓 （化工原料|染料）
+      {
+        path: "/ret_mat",
+        name: "ret_mat",
+        component: resolve => require(["@/view/im/Wk/rc/returnMater/index"], resolve),
+        meta: {
+          keepAlive: false
+        }
+      },
       //  染化料入仓
       {
         path: "/rc_rhl",
