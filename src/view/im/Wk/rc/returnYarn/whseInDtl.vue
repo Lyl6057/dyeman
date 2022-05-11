@@ -4,12 +4,12 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:18:51
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-05-09 08:51:19
+ * @LastEditTime: 2022-05-11 08:35:57
 -->
 <template>
   <div id="whse-yarn-in-dtl-container">
     <view-container
-      title="本厂余纱退纱"
+      :title="dtlTitle"
       :element-loading-text="loadLabel"
       v-loading="loading"
     >
@@ -141,6 +141,9 @@ export default {
     hasNotEdit() {
       return this.whseYarnInFormData.stockState == "1";
     },
+    dtlTitle(){
+      return (this.imWkType == 4 ? '本厰' : "外發") + "余纱退纱"
+    }
   },
   methods: {
     // 新增货位数据
