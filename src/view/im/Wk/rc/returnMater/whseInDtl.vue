@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:18:51
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-05-11 08:35:57
+ * @LastEditTime: 2022-05-11 16:28:25
 -->
 <template>
   <div id="whse-yarn-in-dtl-container">
@@ -24,8 +24,8 @@
       <div class="formBox">
         <avue-form
           ref="form"
-          :option="whseYarnInFormOp"
-          v-model="whseYarnInFormData"
+          :option="whseMaterInFormOp"
+          v-model="whseMaterInFormData"
         ></avue-form>
       </div>
       <el-row>
@@ -38,8 +38,8 @@
             <div class="crudBox">
               <avue-crud
                 ref="whseInDtlRef"
-                :option="whseYarnInDtlCrudOp"
-                :data="whseYarnInDtlDataList"
+                :option="whseMaterInDtlCrudOp"
+                :data="whseMaterInDtlDataList"
                 @row-click="handleDtlRowClick"
               ></avue-crud>
             </div>
@@ -64,8 +64,8 @@
             <div class="crudBox">
               <avue-crud
                 ref="whseInDtlaRef"
-                :option="whseYarnInDtlaCrudOp"
-                :data="whseYarnInDtlaDataList"
+                :option="whseMaterInDtlaCrudOp"
+                :data="whseMaterInDtlaDataList"
                 @row-click="handleDtlaRowClick"
               ></avue-crud>
             </div>
@@ -77,17 +77,18 @@
 </template>
 <script>
 import {
-  whseYarnInFormOp,
-  whseYarnInDtlCrudOp,
-  whseYarnInDtlaCrudOp,
+  whseMaterInFormOp,
+  whseMaterInDtlCrudOp,
+  whseMaterInDtlaCrudOp,
+  dataPropEnum
 } from "./data";
 import {
-  fetchRetYarnNoticDataList,
-  addWhseYarnInData,
-  updateWhseYarnInData,
+  fetchRetMaterNoticDataList,
+  addWhseMaterInData,
+  updateWhseMaterInData,
   batchSaveOrUpdateDtlDataList,
   batchSaveOrUpdateDtlaDataList,
-  fetchWhseYarnInDtlAndDtlaData,
+  fetchWhseMaterInDtlAndDtlaData,
   batchRemoveDtlaDataById,
 } from "./api";
 import { timeConversion } from "@/config/util";
@@ -105,12 +106,12 @@ export default {
     return {
       loading: false,
       loadLabel: "正在数据请求...",
-      whseYarnInFormOp: whseYarnInFormOp(this),
-      whseYarnInFormData: {},
-      whseYarnInDtlCrudOp: whseYarnInDtlCrudOp(this),
-      whseYarnInDtlDataList: [],
-      whseYarnInDtlaCrudOp: whseYarnInDtlaCrudOp(this),
-      whseYarnInDtlaDataList: [],
+      whseMaterInFormOp: whseMaterInFormOp(this),
+      whseMaterInFormData: {},
+      whseMaterInDtlCrudOp: whseMaterInDtlCrudOp(this),
+      whseMaterInDtlDataList: [],
+      whseMaterInDtlaCrudOp: whseMaterInDtlaCrudOp(this),
+      whseMaterInDtlaDataList: [],
       hasRefresh: false,
       // 当前选中明细索引
       dtlCurIdx: -1,
@@ -125,40 +126,42 @@ export default {
     dtlCurIdx: {
       handler(value, oValue) {
         if (oValue != -1 && this.dtlaCurIdx != -1) {
-          this.whseYarnInDtlDataList[oValue].aChildren[
+          this.whseMaterInDtlDataList[oValue].dtlBChildren[
             this.dtlaCurIdx
           ].$cellEdit = false;
         }
         if (value != -1) {
           this.dtlaCurIdx = -1;
-          this.whseYarnInDtlaDataList =
-            this.whseYarnInDtlDataList[value].aChildren;
+          this.whseMaterInDtlaDataList =
+            this.whseMaterInDtlDataList[value].dtlBChildren;
         }
       },
     },
   },
   computed: {
     hasNotEdit() {
-      return this.whseYarnInFormData.stockState == "1";
+      return this.whseMaterInFormData.stockState == "1";
     },
     dtlTitle(){
-      return (this.imWkType == 4 ? '本厰' : "外發") + "余纱退纱"
+      return "外發退料"
     }
   },
   methods: {
     // 新增货位数据
     handleAddDtla() {
-      this.whseYarnInDtlaDataList.push({
+      let { materDtlbOidKey } = dataPropEnum[this.imWkType];
+      this.whseMaterInDtlaDataList.push({
         isAdd: true,
-        whseYarninDtlaoid: v1(),
+        [materDtlbOidKey]: v1(),
       });
     },
     // 删除货位明细数据
     handleDelDtla() {
       if (this.dtlaCurIdx == -1) return this.$tip.warning("请选择数据");
-      let delRow = this.whseYarnInDtlaDataList.splice(this.dtlaCurIdx, 1)[0];
+      let { materDtlbOidKey } = dataPropEnum[this.imWkType];
+      let delRow = this.whseMaterInDtlaDataList.splice(this.dtlaCurIdx, 1)[0];
       if (delRow && !delRow.isAdd) {
-        this.dtlaDelOids.push(delRow.whseYarninDtlaoid);
+        this.dtlaDelOids.push(delRow[materDtlbOidKey]);
       }
     },
     // 初始化数据
@@ -167,33 +170,18 @@ export default {
       this.dtlaCurIdx = -1;
       this.dtlaDelOids = [];
     },
-    // 获取纱线入仓明细数据
-    getWhseYarnInData(whseYarnInData) {
+    // 获取物料入仓明细数据
+    getWhseMaterInData(whseMaterInData) {
+      let { materFkKey,materOidKey } = dataPropEnum[this.imWkType];
       this.loading = true;
-      this.whseYarnInFormData = whseYarnInData;
+      this.whseMaterInFormData = whseMaterInData;
       this.initData();
-      fetchWhseYarnInDtlAndDtlaData({
-        whseYarnInoid: whseYarnInData.whseYarninoid,
-      })
+      fetchWhseMaterInDtlAndDtlaData({
+        [materFkKey]: whseMaterInData[materOidKey],
+      },this.imWkType)
         .then((res) => {
-          this.whseYarnInDtlDataList = res.data.map((item) => {
-            return {
-              whseYarninDtloid: item.whseYarninDtloid,
-              whseYarninFk: item.whseYarninFk,
-              inWeight: item.whseNum,
-              yarnsId: item.yarnsId,
-              yarnsName: item.yarnsName,
-              batchNo: item.batchNo,
-              weight: item.cartonWei,
-              weightUnit: item.weightUnit,
-              yarnsCard: item.yarnsCard,
-              suppBatNo: item.batId,
-              weaveJobCode: item.placeOrigin,
-              remarks: item.colorName,
-              aChildren: item.dtlaChildren || [],
-            };
-          });
-          this.whseYarnInDtlaDataList = [];
+          this.whseMaterInDtlDataList = res.data;
+          this.whseMaterInDtlaDataList = [];
         })
         .finally(() => {
           this.loading = false;
@@ -201,19 +189,20 @@ export default {
     },
     // 保存数据
     async handleSave() {
+      let { materFkKey,materOidKey } = dataPropEnum[this.imWkType];
       this.loading = true;
       // 保存主数据
-      let oid = this.whseYarnInFormData.whseYarninoid;
+      let oid = this.whseMaterInFormData[materOidKey];
       if (oid) {
-        await updateWhseYarnInData(this.whseYarnInFormData);
+        await updateWhseMaterInData(this.whseMaterInFormData,this.imWkType);
       } else {
-        oid = await addWhseYarnInData(this.whseYarnInFormData).then(
+        oid = await addWhseMaterInData(this.whseMaterInFormData,this.imWkType).then(
           (res) => res.data.data
         );
         // 流水号递增
         baseCodeSupply({ code: "whse_in" });
       }
-      Object.assign(this.whseYarnInFormData, { whseYarninoid: oid });
+      Object.assign(this.whseMaterInFormData, { [materOidKey]: oid });
       // 保存明细数据
       await this.saveDtlData(oid);
       this.loading = false;
@@ -221,48 +210,43 @@ export default {
       this.$tip.success("保存成功");
     },
     // 保存明细数据
-    saveDtlData(whseYarninOid) {
+    saveDtlData(whseMaterInOid) {
+      let { materFkKey,materDtlaOidKey,materDtlaFKKey,materDtlbOidKey,materIdKey,materNameKey } = dataPropEnum[this.imWkType];
       let dtlaDataList = [];
-      let dtlDataList = this.whseYarnInDtlDataList.map((item, index) => {
+      let dtlDataList = this.whseMaterInDtlDataList.map((item, index) => {
         let inWeight = 0;
         // 货位数据
-        item.aChildren.forEach((aItem) => {
+        item.dtlBChildren.forEach((aItem) => {
           inWeight += aItem.weight || 0;
           dtlaDataList.push({
-            whseYarninDtlaoid: aItem.whseYarninDtlaoid,
-            whseYarninDtlFk: item.whseYarninDtloid,
-            locationCode: aItem.locationCode,
-            batId: item.batchNo,
+            [materDtlbOidKey]: aItem[materDtlbOidKey],
+            [materDtlaFKKey]: item[materDtlaOidKey],
+            storageNo: aItem.storageNo,
             weight: aItem.weight,
-            cartonNum: aItem.cartonNum,
-            packSize: aItem.packSize,
+            batchNo: item.batchNo,
+            weightUnit: item.weightUnit,
           });
         });
         // 明细数据
         let tDtlData = {
-          whseYarninDtloid: item.whseYarninDtloid,
-          whseYarninFk: whseYarninOid,
-          whseNum: inWeight,
-          seqQty: index + 1,
-          yarnsId: item.yarnsId,
-          batchNo: item.batchNo,
-          cartonWei: item.weight,
+          [materDtlaOidKey]: item[materDtlaOidKey],
+          [materFkKey]: whseMaterInOid,
           weight: inWeight,
+          seqQty: index + 1,
+          [materIdKey]: item[materIdKey],
+          [materNameKey]: item[materNameKey],
+          batchNo: item.batchNo,
           weightUnit: item.weightUnit,
-          yarnsCard: item.yarnsCard,
-          batId: item.suppBatNo,
-          placeOrigin: item.weaveJobCode,
-          colorName: item.remarks,
         };
         return tDtlData;
       });
 
       let dataListReqs = [
-        batchSaveOrUpdateDtlDataList(dtlDataList),
-        batchSaveOrUpdateDtlaDataList(dtlaDataList),
+        batchSaveOrUpdateDtlDataList(dtlDataList,this.imWkType),
+        batchSaveOrUpdateDtlaDataList(dtlaDataList,this.imWkType),
       ];
       if (this.dtlaDelOids.length > 0) {
-        dataListReqs.push(batchRemoveDtlaDataById(this.dtlaDelOids));
+        dataListReqs.push(batchRemoveDtlaDataById(this.dtlaDelOids,this.imWkType));
       }
       return Promise.all(dataListReqs);
     },
@@ -270,7 +254,7 @@ export default {
     handleDtlRowClick(row) {
       if (!this.hasNotEdit) {
         if (this.dtlCurIdx > -1) {
-          this.whseYarnInDtlDataList[this.dtlCurIdx].$cellEdit = false;
+          this.whseMaterInDtlDataList[this.dtlCurIdx].$cellEdit = false;
         }
         row.$cellEdit = true;
       }
@@ -280,7 +264,7 @@ export default {
     handleDtlaRowClick(row) {
       if (!this.hasNotEdit) {
         if (this.dtlaCurIdx > -1) {
-          this.whseYarnInDtlaDataList[this.dtlaCurIdx].$cellEdit = false;
+          this.whseMaterInDtlaDataList[this.dtlaCurIdx].$cellEdit = false;
         }
         row.$cellEdit = true;
       }
@@ -293,14 +277,15 @@ export default {
     // 新增数据初始化
     addAndCreateData(withDrawalNo) {
       this.initData();
-      this.createWhseYarnInData(withDrawalNo);
+      this.createWhseMaterInData(withDrawalNo);
       this.extractData(withDrawalNo);
     },
     // 生成主表数据
-    createWhseYarnInData(withDrawalNo) {
-      this.whseYarnInFormData = {
-        whseYarninoid: "",
-        yinType: this.imWkType, // 4 本厂 | 5 外厂
+    createWhseMaterInData(withDrawalNo) {
+      let { materOidKey } = dataPropEnum[this.imWkType];
+      this.whseMaterInFormData = {
+        [materOidKey]: "",
+        yinType: "5",
         stockState: "0",
         registerNo: withDrawalNo,
         finStatus: "0",
@@ -309,29 +294,26 @@ export default {
         sysCreatedby: this.$store.state.userOid,
       };
       baseCodeSupplyEx({ code: "whse_in" }).then((res) => {
-        this.whseYarnInFormData.yinId = res.data.data;
+        this.whseMaterInFormData.yinId = res.data.data;
       });
     },
     // 数据抽取
     extractData(withDrawalNo) {
       this.loading = true;
-      let params = {
-        typeOf: this.imWkType - 4,
-        withdrawalNo: withDrawalNo,
-      };
-      fetchRetYarnNoticDataList(params)
+      fetchRetMaterNoticDataList(withDrawalNo,this.imWkType)
         .then((res) => {
-          this.whseYarnInDtlDataList = res.data.map((item) => {
+          let { materDtlaOidKey,materDtlaFKKey,materDtlbOidKey } = dataPropEnum[this.imWkType];
+          this.whseMaterInDtlDataList = res.data.map((item) => {
             let dtlOid = v1();
-            item.whseYarninDtloid = dtlOid;
-            item.inWeight = item.weight;
-            item.aChildren = [
+            item[materDtlaOidKey] = dtlOid;
+            item.retWeight = item.weight;
+            item.dtlBChildren = [
               {
-                whseYarninDtlFk: dtlOid,
-                whseYarninDtlaoid: v1(),
+                [materDtlaFKKey]: dtlOid,
+                [materDtlbOidKey]: v1(),
                 weight: item.weight,
-                packSize: item.packSize,
-                cartonNum: item.cartonNumber,
+                storageNo: "",
+                weightUnit: item.weightUnit,
               },
             ];
             return item;
