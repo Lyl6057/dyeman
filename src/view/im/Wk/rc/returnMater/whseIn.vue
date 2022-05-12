@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:18:23
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-05-11 16:28:51
+ * @LastEditTime: 2022-05-12 11:19:00
 -->
 <template>
   <div id="return-yarn-in-container">
@@ -78,8 +78,8 @@ export default {
       };
       if(yinDate && yinDate.length == 2){
         Object.assign(params,{
-          yinSDate: yinDate[0],
-          yinEDate: yinDate[1]
+          yinDate_begin: yinDate[0],
+          yinDate_end: yinDate[1]
         })
       }
       fetchWhseMaterInDataListByPage(params,this.imWkType).then(res => {
