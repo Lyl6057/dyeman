@@ -2,13 +2,13 @@
  * @Author: Lyl
  * @Date: 2022-05-03 16:29:13
  * @LastEditors: Lyl
- * @LastEditTime: 2022-05-10 15:27:27
+ * @LastEditTime: 2022-05-12 13:20:51
  * @FilePath: \iot.vue\src\view\quaLity\qaCheckPlan\tem.vue
  * @Description: 
 -->
 <template>
   <div class="qcChcekPlanTem">
-    <view-container title="QA查布计划表" element-loading-text="正在拼命加载中..." v-loading="loading">
+    <view-container title="QA计划进度管理" element-loading-text="正在拼命加载中..." v-loading="loading">
       <div class="btnList">
         <el-button type="success" @click="handleSave">{{this.$t("public.save")}}</el-button>
         <el-button type="warning" @click="handleClose">{{this.$t("public.close")}}</el-button>
@@ -23,7 +23,7 @@
           </template>
         </avue-form>
       </div>
-      <view-container title="载具出库计划进度 ">
+      <view-container title="计划进度载具信息 ">
         <div class="btnList">
           <el-button type="primary" @click="handleStoreAdd">{{ this.$t("public.add") }}</el-button>
           <el-button type="danger" @click="handleStoreDel">{{ this.$t("public.del") }}</el-button>
@@ -45,7 +45,7 @@ import {
   removeQcCheckStoreData,
   addQcCheckPlanData,
   updateQcCheckPlanData,
-  fetchQcCheckStorePlanByPage,
+  fetchQcCheckStorePlan,
   addQcCheckStorePlanData,
   updateQcCheckStorePlanData,
   fetchInWhseStore,
@@ -74,11 +74,9 @@ export default {
   },
   watch: {
     qcCheckStorePlanList(val, old) {
-      this.loading = true;
       val.forEach((item, i) => {
         item.waitOutSn = i + 1;
       });
-      this.loading = false;
     },
   },
   computed: {},
@@ -93,13 +91,15 @@ export default {
         .then(async (res) => {
           res.data.total && (this.qcCheckPlanFormData = res.data.records[0]);
           this.qcCheckStorePlanList = [];
-          let storeRes = await fetchQcCheckStorePlanByPage({
+          let storeRes = await fetchQcCheckStorePlan({
             qcCheckPlanFk: this.qcCheckPlanFormData.planId,
           });
-          if (storeRes.data.total) {
-            this.qcCheckStorePlanList = storeRes.data.records
+          if (storeRes.data.length) {
+            this.qcCheckStorePlanList = storeRes.data
               .sort((a, b) => a.waitOutSn - b.waitOutSn)
               .map((item) => Object.assign(item, { $cellEdit: true }));
+            await this.$nextTick();
+            this.$refs["qcCheckStorePlanCrud"].doLayout();
           }
           this.dtlCurIdx = null;
         })
@@ -125,6 +125,13 @@ export default {
         samplCount: 0,
         vatNo: "",
         planId: null,
+        sumNw: null,
+        planRate: null,
+        overQty: null,
+        overPidCount: null,
+        pidNos: null,
+        exceptQty: null,
+        exceptDesc: "",
         inFlag: false,
       };
       this.qcCheckStorePlanList = [];
@@ -191,13 +198,11 @@ export default {
             this.qcCheckPlanFormData.planId = planId;
           }
           this.hasRefresh = true;
+          this.$tip.success("保存成功!");
           await this.saveCheckStorePlan();
           await this.initData(planId);
-          this.$tip.success("保存成功!");
-          setTimeout(() => {
-            this.loading = false;
-            done();
-          }, 200);
+          this.loading = true;
+          done();
         } catch (err) {
           this.loading = false;
           this.$tip.error(err);

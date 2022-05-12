@@ -371,7 +371,7 @@ export function popupForm(_this) {
         label: "档案编号",
         prop: "recN0",
         span: 6,
-        disabled: !_this.isAdd,
+        // disabled: !_this.isAdd,
         rules: [
           {
             required: true,

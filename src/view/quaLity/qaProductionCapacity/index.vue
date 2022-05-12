@@ -2,14 +2,14 @@
  * @Author: Lyl
  * @Date: 2022-05-03 16:09:29
  * @LastEditors: Lyl
- * @LastEditTime: 2022-05-12 13:13:45
- * @FilePath: \iot.vue\src\view\quaLity\qaCheckPlan\index.vue
+ * @LastEditTime: 2022-05-12 09:21:28
+ * @FilePath: \iot.vue\src\view\quaLity\qaProductionCapacity\index.vue
  * @Description: 
 -->
 
 <template>
   <div class="qcCheckPlan">
-    <view-container title="QA计划进度">
+    <view-container title="QA产能统计">
       <el-row class="btnList">
         <el-button type="success" @click="update"> {{this.$t("public.update")}} </el-button>
         <el-button type="primary" @click="add"> {{this.$t("public.add")}} </el-button>
@@ -42,7 +42,7 @@
 
 <script>
 import temDlg from "./tem.vue";
-import { fetchQcCheckPlanByPage, removeQcCheckPlanData } from './api.js'
+import { fetchQaDayOutputByPage, removeQaDayOutputData } from './api.js'
 import { mainForm, mainCrud } from "./data.js";
 export default {
   components: {
@@ -64,7 +64,7 @@ export default {
       wloading: false,
       loading: false,
       dialogVisible: false,
-      planId: {},
+      outId: {},
     };
   },
   watch: {},
@@ -78,7 +78,7 @@ export default {
         vatNo: "%" + (this.form.vatNo || ''),
         r_planStart_r: "!^%" + (this.form.planStart || ''),
       }
-      fetchQcCheckPlanByPage(params).then( res => {
+      fetchQaDayOutputByPage(params).then( res => {
         let { records, total } = res.data;
         this.crud = records;
         this.page.total = total;
@@ -97,7 +97,7 @@ export default {
       } 
       this.dialogVisible = true;
       await this.$nextTick();
-      this.$refs.qcCheckPlanTem.addAndcreateData(this.crud[this.curIdx - 1].planId);
+      this.$refs.qcCheckPlanTem.addAndcreateData(this.crud[this.curIdx - 1].outId);
     },
     async add() {
       this.dialogVisible = true;
@@ -110,7 +110,7 @@ export default {
       let cofResult = await this.$tip.cofirm("是否确定删除缸号为【 " +  this.crud[idx].vatNo  + " 】的数据?").then(() => {return true}).catch((e) => {return false});
       if(!cofResult) return false;
       this.loading = true;
-      removeQcCheckPlanData(this.crud[idx].planId).then(res =>{
+      removeQaDayOutputData(this.crud[idx].outId).then(res =>{
         this.query();
         this.$tip.success("删除成功");
       }).finally(()=>{ this.loading = false });

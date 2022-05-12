@@ -229,6 +229,7 @@ export default {
           whseDyesalOutFk: this.detail.dyesalOutId,
           whseHardwareOutFk: this.detail.whseHardwareOutId,
           whseOfficeOutFk: this.detail.whseOfficeOutId,
+          accessoriesOutFk: this.detail.accessoriesOutId,
           // batchNo: "!^",
         })
         .then((res) => {
@@ -276,6 +277,7 @@ export default {
           dyesalOutDtlFk: val.energyOutDtlId,
           whseHardwareOutDtlFk: val.whseHardwareOutDtlId,
           whseOfficeOutDtlFk: val.officeOutDtlId,
+          whseAccessoriesOutDtlFk: val.whseAccessoriesoutDtloid,
         })
         .then((res) => {
           let records = res.data;
@@ -554,11 +556,11 @@ export default {
               } else {
                 // 新增
                 data.whseRetyarninFk = this.detail.whseRetyarninoid;
-                data.whseAccessoriesDtlFk = this.detail.whseAccessoriesoutoid;
                 data.whseChemicalOutFk = this.detail.whseChemicalOutId;
                 data.whseDyesalOutFk = this.detail.dyesalOutId;
                 data.whseHardwareOutFk = this.detail.whseHardwareOutId;
                 data.whseOfficeOutFk = this.detail.whseOfficeOutId;
+                data.accessoriesOutFk = this.detail.accessoriesOutId;
                 this.attributeObj.addDtla(data).then((res) => {
                   item[this.attributeObj.uuid[1]] = res.data.data;
                   resolve();
@@ -634,11 +636,11 @@ export default {
               } else {
                 // 新增
                 data.whseRetyarninFk = this.form.whseRetyarninoid;
-                data.whseAccessoriesDtlFk = this.form.whseAccessoriesoutoid;
                 data.whseChemicalOutFk = this.form.whseChemicalOutId;
                 data.whseDyesalOutFk = this.form.dyesalOutId;
                 data.whseHardwareOutFk = this.form.whseHardwareOutId;
                 data.whseOfficeOutFk = this.form.whseOfficeOutId;
+                data.accessoriesOutFk = this.form.accessoriesOutId;
                 this.attributeObj.addDtla(data).then((res) => {
                   item[this.attributeObj.uuid[1]] = res.data.data;
                   resolve();
@@ -704,9 +706,9 @@ export default {
             title: "提示",
             dangerouslyUseHTMLString: true,
             message: `材料编号<strong>${
-              item.matCode
+              item.matCode || item.yarnsId
             }</strong>的<strong>${
-              item.storageNo
+              item.storageNo ||  item.locationCode
             }</strong>货运位剩余库存数为<span style="color:red; font-size: 16px">${item.realStock.toFixed(
               2
             )}</span>;`,
@@ -825,6 +827,8 @@ export default {
                 }, 200);
               }
             });
+          }else{
+            this.loading = false;
           }
         });
       } else if (this.choiceTle === this.$t("choicDlg.xzsqlydmx")) {

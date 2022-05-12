@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-10 13:20:44
  * @LastEditors: Lyl
- * @LastEditTime: 2022-05-03 16:10:32
+ * @LastEditTime: 2022-05-12 13:13:57
  * @Description:
  */
 export default [
@@ -20,9 +20,19 @@ export default [
   //     keepAlive: true
   //   }
   // },
+  
+  {
+    path: "/qaProductionCapacity",
+    name: "QA产能统计",
+    component: resolve =>
+      require(["@/view/quaLity/qaProductionCapacity/index"], resolve),
+    meta: {
+      keepAlive: true
+    }
+  },
   {
     path: "/qaCheckPlan",
-    name: "QA验布计划",
+    name: "QA计划进度",
     component: resolve =>
       require(["@/view/quaLity/qaCheckPlan/index"], resolve),
     meta: {

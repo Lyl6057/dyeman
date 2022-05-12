@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-05-03 16:09:39
  * @LastEditors: Lyl
- * @LastEditTime: 2022-05-10 13:46:49
+ * @LastEditTime: 2022-05-12 11:23:51
  * @FilePath: \iot.vue\src\view\quaLity\qaCheckPlan\api.js
  * @Description:
  */
@@ -72,9 +72,9 @@ export function removeQcCheckPlanData(id){
   })
 }
 
-export function fetchQcCheckStorePlanByPage(params){
+export function fetchQcCheckStorePlan(params){
   return axios({
-    url:"/api/qcCheckStorePlan/page",
+    url:"/api/qcCheckStorePlan",
     params: params,
     method: "get"
   })

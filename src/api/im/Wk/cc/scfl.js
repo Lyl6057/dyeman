@@ -2,38 +2,39 @@
  * @Author: Lyl
  * @Date: 2021-01-23 08:03:49
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-29 10:39:33
+ * @LastEditTime: 2022-05-11 16:24:14
  * @Description:
  */
 import axios from "axios";
 // ---- 生产辅料
 export function getScfl(params) {
   return axios({
-    url: "/api/whseAccessoriesout/page",
+    url: "/api/whseAccessoriesOut/page",
     method: "get",
     params: params
   });
 }
 export function addScfl(params) {
   return axios({
-    url: "/api/whseAccessoriesout",
+    url: "/api/whseAccessoriesOut",
     method: "post",
     params: params
   });
 }
 export function updateScfl(params) {
   return axios({
-    url: "/api/whseAccessoriesout",
+    url: "/api/whseAccessoriesOut",
     method: "put",
     params: params
   });
 }
 export function delScfl(id) {
   return axios({
-    url: "/api/whseAccessoriesout?whseAccessoriesoutoid=" + id,
+    url: "/api/whseAccessoriesOut?whseAccessoriesoutoid=" + id,
     method: "delete"
   });
 }
+
 export function getScflDetali(params) {
   return axios({
     url: "/api/whseAccessoriesOutDtl/page",
@@ -64,11 +65,12 @@ export function delScflDetali(id) {
 
 export function getScflDtla(params) {
   return axios({
-    url: "/api/whseAccessoriesOutDtla/page",
+    url: "/api/whseAccessoriesOutDtla",
     method: "get",
     params: params
   });
 }
+
 export function addScflDtla(params) {
   return axios({
     url: "/api/whseAccessoriesOutDtla",
@@ -76,6 +78,7 @@ export function addScflDtla(params) {
     params: params
   });
 }
+
 export function updateScflDtla(params) {
   return axios({
     url: "/api/whseAccessoriesOutDtla",
@@ -83,6 +86,7 @@ export function updateScflDtla(params) {
     params: params
   });
 }
+
 export function delScflDtla(id) {
   return axios({
     url: "/api/whseAccessoriesOutDtla?dtlaId=" + id,

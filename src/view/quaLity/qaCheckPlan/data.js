@@ -2,12 +2,11 @@
  * @Author: Lyl
  * @Date: 2022-05-03 16:09:34
  * @LastEditors: Lyl
- * @LastEditTime: 2022-05-10 16:31:33
+ * @LastEditTime: 2022-05-12 13:06:36
  * @FilePath: \iot.vue\src\view\quaLity\qaCheckPlan\data.js
  * @Description:
  */
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
-import { log } from "three";
 
 function fillZero(row, value) {
   return value && value.toFixed(2);
@@ -169,7 +168,7 @@ export function mainCrud(_this) {
       //   overHidden: true
       // },
       {
-        label: "抽样数量",
+        label: "抽样疋数",
         prop: "samplCount",
         placeholder: " ",
         span: 6,
@@ -177,6 +176,7 @@ export function mainCrud(_this) {
         align: "right",
         type: "number",
         overHidden: true,
+        // formatter: fillZero,
         rules: [
           {
             required: true,
@@ -184,6 +184,28 @@ export function mainCrud(_this) {
             trigger: "blur",
           },
         ],
+      },
+      {
+        label: "净重",
+        prop: "sumNw",
+        placeholder: " ",
+        span: 6,
+        width: 130,
+        align: "right",
+        type: "number",
+        overHidden: true
+        // formatter: fillZero
+      },
+      {
+        label: "完成比例(%)",
+        prop: "planRate",
+        // disabled: true,
+        placeholder: " ",
+        span: 6,
+        width: 120,
+        align: "right",
+        type: "number",
+        overHidden: true
       },
       // {
       //   label: "抽样布笼",
@@ -202,8 +224,19 @@ export function mainCrud(_this) {
       // },
       {
         label: "完成数量",
-        prop: "lossRate",
-        disabled: true,
+        prop: "overQty",
+        // disabled: true,
+        placeholder: " ",
+        span: 6,
+        width: 120,
+        align: "right",
+        type: "number",
+        // formatter: fillZero,
+        overHidden: true
+      },
+      {
+        label: "完成疋数",
+        prop: "overPidCount",
         placeholder: " ",
         span: 6,
         width: 120,
@@ -212,15 +245,30 @@ export function mainCrud(_this) {
         overHidden: true
       },
       {
-        label: "完成比例(%)",
-        prop: "fabricLength",
-        disabled: true,
+        label: "完成疋号",
+        prop: "pidNos",
+        placeholder: " ",
+        span: 6,
+        width: 120,
+        overHidden: true
+      },
+      
+      {
+        label: "异常数量",
+        prop: "exceptQty",
         placeholder: " ",
         span: 6,
         width: 120,
         align: "right",
         type: "number",
         overHidden: true
+      },
+      {
+        label: "异常描述",
+        prop: "exceptDesc",
+        placeholder: " ",
+        span: 24,
+        width: 120,
       },
       {
         label: "在库",
@@ -250,8 +298,22 @@ export function mainCrud(_this) {
 export function qcCheckStorePlanCrud(_this) {
   return {
     ...mainCrudOpCommon,
-    height: "calc(100vh - 310px)",
+    height: "calc(100vh - 370px)",
     index: false,
+    page: false,
+    showSummary: true,
+    sumColumnList: [
+      {
+        label: " ",
+        name: "pidCount",
+        type: "sum"
+      },
+      {
+        label: " ",
+        name: "storeLoadCode",
+        type: "count"
+      },
+    ],
     column: [
       {
         label: "序号",

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-01-12 15:46:05
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-14 09:38:41
+ * @LastEditTime: 2022-05-11 09:34:34
  * @FilePath: \iot.vue\src\view\im\whseInOutKB\data.js
  * @Description:
  */
@@ -203,17 +203,25 @@ export function formOp(_this) {
         width: 125,
         sortable: true,
         overHidden: true
+      },
+      {
+        label: "层数",
+        prop: "layer",
+        span: 6,
+        placeholder: " ",
+        width: 125,
+        type: "select",
+        dicData: [
+          {
+            label: "一层",
+            value: 1
+          },
+          {
+            label: "二层",
+            value: 2
+          }
+        ]
       }
-
-      // {
-      //   label: "入仓员工号",
-      //   prop: "clothChecker",
-      //   span: 6,
-      //   placeholder: " ",
-      //   width: 125,
-      //   sortable: true,
-      //   overHidden: true
-      // }
     ]
   };
 }

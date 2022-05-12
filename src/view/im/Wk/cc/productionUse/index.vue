@@ -34,6 +34,7 @@
           <el-button
             type="primary"
             :disabled="Object.keys(chooseData).length === 0"
+            v-if="type == $t('iaoMng.sx')"
             @click="handleOpenRpt"
           >
             {{ this.$t("public.report") }}
@@ -515,7 +516,7 @@ export default {
           delDtlb: delScflDtla,
           choiceTle: "选择生产辅料库存",
           validOutWeight: fetchAccessoricesValidOutWeight,
-          uuid: ["whseAccessoriesoutoid", "whseAccessoriesoutDtloid", "dtlaId"],
+          uuid: ["accessoriesOutId", "whseAccessoriesoutDtloid", "dtlaId"],
           applyCategory: 3,
         };
         break;
