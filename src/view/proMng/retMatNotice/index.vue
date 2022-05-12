@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-08 17:19:47
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-05-10 17:00:50
+ * @LastEditTime: 2022-05-12 15:08:46
 -->
 <template>
   <div id="return-yarns-notice-container">
@@ -119,12 +119,13 @@ export default {
     },
     //  删除
     handleDelete() {
-      let { proYarnsWithdrawaloid, withdrawalNo } = this.curRowSelect;
+      let { oidKey } = dataTyptEnum[this.matType];
+      let { withdrawalNo } = this.curRowSelect;
       this.$tip
         .cofirm(`是否确认删除【${withdrawalNo}】退纱通知单数据`)
         .then(res => {
           this.loading = true;
-          removeWithDrawalById(proYarnsWithdrawaloid,this.matType)
+          removeWithDrawalById(this.curRowSelect[oidKey],this.matType)
             .then(res => {
               if (res.data.code == 200) {
                 this.$tip.success("删除成功");
