@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-05-03 10:43:46
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-05-10 13:54:00
+ * @LastEditTime: 2022-05-12 17:26:20
 -->
 <template>
     <div class="all-inventory-container">
@@ -59,6 +59,14 @@ export default {
                 name: "materialName",
                 weight: "weight"
             })
+        },
+        filterZeroStock:{
+            type: Boolean,
+            default: () => true
+        },
+        hideOtherCol:{
+            type: Boolean,
+            default: () => false
         } 
     },
     data(){
@@ -121,7 +129,9 @@ export default {
                     params[key] = '%' + value
                 }
             })
-            let data = {};
+            let data = {
+                filterZeroStock: this.filterZeroStock,
+            };
             if(this.filterIds.length > 0){
                 data.filterParams = this.filterIds
             }

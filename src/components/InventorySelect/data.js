@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-05-03 10:43:53
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-05-09 13:49:06
+ * @LastEditTime: 2022-05-12 17:26:25
  */
 import {
     getDIC,
@@ -167,7 +167,8 @@ export function invCrudOp(_this){
                 prop: matTypeEnum[_this.matType].weightKey,
                 align: "right",
                 width: 100,
-                overHidden: true
+                overHidden: true,
+                hide: _this.hideOtherCol
             },
             {
                 label: "单位",
@@ -175,13 +176,15 @@ export function invCrudOp(_this){
                 width: 100,
                 overHidden: true,
                 type: "select",
-                dicData: getDIC("bas_matUnit")
+                dicData: getDIC("bas_matUnit"),
+                hide: _this.hideOtherCol
             },
             {
                 label: "货位码",
                 prop: matTypeEnum[_this.matType].locationCodeKey,
                 width: 100,
-                overHidden: true
+                overHidden: true,
+                hide: _this.hideOtherCol
             }
         ]
     }
