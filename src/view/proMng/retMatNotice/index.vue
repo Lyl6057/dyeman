@@ -4,11 +4,11 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-08 17:19:47
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-05-12 15:08:46
+ * @LastEditTime: 2022-05-12 16:04:37
 -->
 <template>
   <div id="return-yarns-notice-container">
-    <view-container title="退料通知单" :element-loading-text="loadLabel" v-loading="loading">
+    <view-container :title="viewTitle" :element-loading-text="loadLabel" v-loading="loading">
       <div class="btnList">
         <el-button type="primary" @click="handleAdd">{{ this.$t("public.add") }}</el-button>
         <el-button type="success" @click="handleUpdate">{{ this.$t("public.update") }}</el-button>
@@ -91,7 +91,10 @@ export default {
   computed:{
     hasNotEdit(){
       return this.curRowSelect.isInStock
-    }
+    },
+    viewTitle(){
+      return dataTyptEnum[this.matType]
+    },
   },
   methods: {
     reload(){

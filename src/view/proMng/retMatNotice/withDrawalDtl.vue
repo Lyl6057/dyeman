@@ -4,11 +4,11 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-09 09:06:25
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-05-10 16:15:06
+ * @LastEditTime: 2022-05-12 17:26:32
 -->
 <template>
   <div class="with-drawal-dlt-container">
-    <view-container title="退纱通知单信息维护" :element-loading-text="loadLabel" v-loading="loading">
+    <view-container :title="viewTitle" :element-loading-text="loadLabel" v-loading="loading">
       <div class="btnList">
         <el-button type="primary" :disabled="hasNotEdit" @click="handleSave">{{ this.$t("public.save") }}</el-button>
         <el-button type="warning" @click="handleCloseDtl">{{ this.$t("public.close") }}</el-button>
@@ -17,7 +17,7 @@
         <avue-form ref="form" :option="withDrawalFormOp" v-model="withDrawalFormData"></avue-form>
       </div>
       <el-tabs v-model="tabName" type="border-card">
-        <el-tab-pane name="dtl" label="退纱通知单明细">
+        <el-tab-pane name="dtl" :label="paneLabel">
           <div class="btnList">
             <el-button type="primary" :disabled="hasNotEdit" @click="handleAddByYarnStock">从库存表中新增</el-button>
             <el-button type="danger" :disabled="hasNotEdit" @click="handleDtlDelete">删除</el-button>
@@ -40,6 +40,8 @@
       ref="invSelectRef" 
       @data-select="handleInvSelect"
       :matType="matType"
+      :filterZeroStock="false"
+      :hideOtherCol="true"
       :unifiedFormat='true'
     ></inv-select>
   </div>
@@ -101,6 +103,12 @@ export default {
   computed:{
     hasNotEdit(){
       return this.withDatalData.isInStock 
+    },
+    viewTitle(){
+      return dataTyptEnum[this.matType].viewTitle + "数据维护"
+    },
+    paneLabel(){
+      return dataTyptEnum[this.matType].viewTitle + "明细"
     }
   },
   watch: {
@@ -186,6 +194,7 @@ export default {
         item[materialIdKey] = item.materialId;
         item[materialNameKey] = item.materialName;
         item[dtlOidKey] = v1()
+        item.weight = 0
         return item;
       });
     },
