@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:18:23
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-05-11 15:57:08
+ * @LastEditTime: 2022-05-11 16:28:51
 -->
 <template>
   <div id="return-yarn-in-container">
@@ -82,7 +82,7 @@ export default {
           yinEDate: yinDate[1]
         })
       }
-      fetchWhseMaterInDataListByPage(params).then(res => {
+      fetchWhseMaterInDataListByPage(params,this.imWkType).then(res => {
         this.page.total = res.data.total;
         this.crudDataList = res.data.records.map(item => {
           item.finStatus = item.finStatus.toString();
@@ -100,7 +100,7 @@ export default {
       this.loading = true;
       let isComfirn = await this.$tip.cofirm(`是否确认删除编号【${yinId}】的数据`).then(res => true).catch(err => false);
       if(!isComfirn) return false;
-      removeWhseMaterInData({id:whseMaterInoid}).then(res => {
+      removeWhseMaterInData({id:whseMaterInoid},this.imWkType).then(res => {
         this.$tip.success("删除成功");
         this.getDataList();
       }).finally(() => {
@@ -119,7 +119,7 @@ export default {
       let whseMaterInoid = ( this.curSelectRow || {})[materOidKey];
       if(!whseMaterInoid) return this.$tip.warning("请选择数据");
       this.loading = true;
-      fetchExamineValid(whseMaterInoid).then(res => {
+      fetchExamineValid(whseMaterInoid,this.imWkType).then(res => {
         if(res.data.code == 200 && res.data.data == true){
           this.$tip.success("审核成功");
           this.getDataList();

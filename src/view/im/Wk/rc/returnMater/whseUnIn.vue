@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:18:36
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-05-11 10:39:25
+ * @LastEditTime: 2022-05-11 16:28:26
 -->
 <template>
   <div id="whse-unIn-container">
@@ -71,7 +71,7 @@ export default {
             page: this.page.currentPage,
             rows: this.page.pageSize,
         }
-        fetchRetMaterNoticDataListByPage(params).then(res => {
+        fetchRetMaterNoticDataListByPage(params,this.imWkType).then(res => {
             this.page.total = res.data.total;
             this.crudDataList = res.data.records;
         }).finally(() => {

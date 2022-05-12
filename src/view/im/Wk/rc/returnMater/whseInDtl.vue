@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:18:51
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-05-11 16:01:01
+ * @LastEditTime: 2022-05-11 16:28:25
 -->
 <template>
   <div id="whse-yarn-in-dtl-container">
@@ -178,7 +178,7 @@ export default {
       this.initData();
       fetchWhseMaterInDtlAndDtlaData({
         [materFkKey]: whseMaterInData[materOidKey],
-      })
+      },this.imWkType)
         .then((res) => {
           this.whseMaterInDtlDataList = res.data;
           this.whseMaterInDtlaDataList = [];
@@ -194,9 +194,9 @@ export default {
       // 保存主数据
       let oid = this.whseMaterInFormData[materOidKey];
       if (oid) {
-        await updateWhseMaterInData(this.whseMaterInFormData);
+        await updateWhseMaterInData(this.whseMaterInFormData,this.imWkType);
       } else {
-        oid = await addWhseMaterInData(this.whseMaterInFormData).then(
+        oid = await addWhseMaterInData(this.whseMaterInFormData,this.imWkType).then(
           (res) => res.data.data
         );
         // 流水号递增
@@ -242,11 +242,11 @@ export default {
       });
 
       let dataListReqs = [
-        batchSaveOrUpdateDtlDataList(dtlDataList),
-        batchSaveOrUpdateDtlaDataList(dtlaDataList),
+        batchSaveOrUpdateDtlDataList(dtlDataList,this.imWkType),
+        batchSaveOrUpdateDtlaDataList(dtlaDataList,this.imWkType),
       ];
       if (this.dtlaDelOids.length > 0) {
-        dataListReqs.push(batchRemoveDtlaDataById(this.dtlaDelOids));
+        dataListReqs.push(batchRemoveDtlaDataById(this.dtlaDelOids,this.imWkType));
       }
       return Promise.all(dataListReqs);
     },
@@ -300,7 +300,7 @@ export default {
     // 数据抽取
     extractData(withDrawalNo) {
       this.loading = true;
-      fetchRetMaterNoticDataList(withDrawalNo)
+      fetchRetMaterNoticDataList(withDrawalNo,this.imWkType)
         .then((res) => {
           let { materDtlaOidKey,materDtlaFKKey,materDtlbOidKey } = dataPropEnum[this.imWkType];
           this.whseMaterInDtlDataList = res.data.map((item) => {

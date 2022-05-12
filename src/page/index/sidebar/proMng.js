@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-04-01 13:39:35
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-05-10 08:39:27
+ * @LastEditTime: 2022-05-11 17:24:44
  * @Description:
  */
 
@@ -135,11 +135,11 @@ export function proMng(_this) {
           index: "proDriving"
         },
         {
-          menuName: "5.化工原料退货通知单",
+          menuName: "5.化工原料退仓通知单",
           index: "withDrawal2Chiemical"
         },
         {
-          menuName: "6.染料退货通知单",
+          menuName: "6.染料退仓通知单",
           index: "withDrawal2Dyesa" 
         },
         // {

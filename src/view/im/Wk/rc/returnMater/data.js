@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:08:41
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-05-11 16:12:08
+ * @LastEditTime: 2022-05-11 17:30:25
  */
 import {
   getDIC,
@@ -31,7 +31,28 @@ export const dataPropEnum = {
     materDtlaOidKey: "whseChemicalinDtlaoid",
     materDtlaFKKey: "whseChemicalinDtlaFk",
     materDtlbOidKey: "whseChemicalinDtlboid",
-  }
+    // API Name
+    proMatWithDtlApiName: "proChemicalWithdrawalDtl",
+    whseInApiName: "whseChemicalin",
+    whseInDtlaApiName: "whseChemicalinDtla",
+    whseInDtlbApiName: "whseChemicalinDtlb"
+  },
+  4: {
+    materIdLabel: "染料编号",
+    materNameLabel: "染料名称",
+    materIdKey: "chemicalId",  
+    materNameKey: "chemicalName",
+    materOidKey: "whseDyesalinoid",
+    materFkKey: "whseDyesalinFk",
+    materDtlaOidKey: "whseDyesainDtlaoid",
+    materDtlaFKKey: "whseDyesainDtlaFk",
+    materDtlbOidKey: "whseDyesainDtlboid",
+    // API Name
+    proMatWithDtlApiName: "proDyesaWithdrawalDtl",
+    whseInApiName: "whseDyesalin",
+    whseInDtlaApiName: "whseDyesalInDtla",
+    whseInDtlbApiName: "whseDyesalInDtlb"
+  }, 
 }
 
 // 表格通用配置
@@ -157,7 +178,8 @@ export function retMatNoticCrudOp(_this) {
       {
         label: "外发厂",
         prop: "extFactId",
-        width: 120,
+        overHidden: true,
+        width: 140,
       },
       {
         label: "退料日期",

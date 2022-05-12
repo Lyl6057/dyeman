@@ -432,8 +432,7 @@ export default {
             {
               id: "5-2",
               click: () => {
-                // this.toView("rc_yl", this.$t("iaoMng.krlyl") + "_1");
-                this.toView("ret_mat", this.$t("iaoMng.krlyl") + "_4");
+                this.toView("rc_yl", this.$t("iaoMng.krlyl") + "_1");
               },
               title: this.$t("iaoMng.krlyl"),
               icon: "el-icon-user-solid",
@@ -451,7 +450,8 @@ export default {
             {
               id: "5-4",
               click: () => {
-                this.toView("rc_yl", this.$t("iaoMng.wfcth") + "_5");
+                // this.toView("rc_yl", this.$t("iaoMng.wfcth") + "_5");
+                this.toView("ret_mat", this.$t("iaoMng.wfcth") + "_4");
               },
               title: this.$t("iaoMng.wfcth"),
               icon: "el-icon-s-home",
