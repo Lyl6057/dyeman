@@ -4,12 +4,12 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:18:51
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-05-11 16:28:25
+ * @LastEditTime: 2022-05-13 09:05:07
 -->
 <template>
   <div id="whse-yarn-in-dtl-container">
     <view-container
-      :title="dtlTitle"
+      :title="imWkName"
       :element-loading-text="loadLabel"
       v-loading="loading"
     >
@@ -30,7 +30,7 @@
       </div>
       <el-row>
         <el-col :span="17">
-          <view-container title="纱线入仓货位明细资料">
+          <view-container :title="imWkName + '明细资料'">
             <div class="btnList">
               <!-- <el-button type="primary">{{ this.$t("public.save") }}</el-button>
               <el-button type="warning">{{ this.$t("public.close") }}</el-button>-->
@@ -101,6 +101,10 @@ export default {
       type: String,
       default: () => "",
     },
+    imWkName: {
+      type: String,
+      default: () => ""
+    }
   },
   data() {
     return {
@@ -142,9 +146,6 @@ export default {
     hasNotEdit() {
       return this.whseMaterInFormData.stockState == "1";
     },
-    dtlTitle(){
-      return "外發退料"
-    }
   },
   methods: {
     // 新增货位数据

@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:08:41
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-05-11 17:30:25
+ * @LastEditTime: 2022-05-13 08:57:51
  */
 import {
   getDIC,
@@ -101,7 +101,7 @@ export function whseInCrudOp(_this) {
         width: 100,
       },
       {
-        label: "退料通知单编号",
+        label: "返仓通知单编号",
         prop: "registerNo",
         width: 150,
       },
@@ -155,7 +155,7 @@ export function whseInFormOp(_this) {
       type: "daterange",
       valueFormat: "yyyy-MM-dd",
     }, {
-      label: "退料通知单编号",
+      label: "返仓通知单编号",
       prop: "registerNo",
       labelWidth: 160,
       span: 5,
@@ -171,7 +171,7 @@ export function retMatNoticCrudOp(_this) {
     height: "calc(100vh - 185px)",
     selection: true,
     column: [{
-        label: "退料通知单号",
+        label: "返仓通知单号",
         prop: "withdrawalNo",
         width: 120,
       },
@@ -182,7 +182,7 @@ export function retMatNoticCrudOp(_this) {
         width: 140,
       },
       {
-        label: "退料日期",
+        label: "返仓日期",
         prop: "happenDate",
         width: 100,
         type: "date",
@@ -243,7 +243,7 @@ export function whseMaterInFormOp(_this) {
       type: "date",
       valueFormat: "yyyy-MM-dd",
     }, {
-      label: "退料通知单编号",
+      label: "返仓通知单编号",
       prop: "registerNo",
       labelWidth: 160,
       span: 5,
@@ -270,7 +270,8 @@ export function whseMaterInFormOp(_this) {
 }
 
 // 明细数据
-export function whseMaterInDtlCrudOp(_this, type = '3') {
+export function whseMaterInDtlCrudOp(_this) {
+  let type = _this.imWkType;
   let {materIdLabel,materNameLabel,materIdKey,materNameKey} = dataPropEnum[type];
   return {
     ...mainCrudOpCommon,
@@ -290,7 +291,7 @@ export function whseMaterInDtlCrudOp(_this, type = '3') {
       prop: "batchNo",
       width: 100
     }, {
-      label: "退料重量",
+      label: "返仓重量",
       prop: "retWeight",
       width: 100,
       align: "right",

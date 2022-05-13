@@ -391,9 +391,9 @@ export default {
             {
               click: () => {
                 // this.toView("rc_rhl", this.$t("iaoMng.wfcth") + "_5");
-                this.toView("ret_mat", this.$t("iaoMng.wfcth") + "_3");
+                this.toView("ret_mat", this.$t("iaoMng.hgylylfc") + "_3");
               },
-              title: this.$t("iaoMng.wfcth"),
+              title: this.$t("iaoMng.ylfc"),
               icon: "el-icon-s-home",
               color: "#409EFF",
             },
@@ -451,9 +451,9 @@ export default {
               id: "5-4",
               click: () => {
                 // this.toView("rc_yl", this.$t("iaoMng.wfcth") + "_5");
-                this.toView("ret_mat", this.$t("iaoMng.wfcth") + "_4");
+                this.toView("ret_mat", this.$t("iaoMng.rlylfc") + "_4");
               },
-              title: this.$t("iaoMng.wfcth"),
+              title: this.$t("iaoMng.ylfc"),
               icon: "el-icon-s-home",
               color: "#409EFF",
             },
