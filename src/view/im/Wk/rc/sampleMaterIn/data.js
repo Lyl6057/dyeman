@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:08:41
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-05-16 13:39:12
+ * @LastEditTime: 2022-05-16 14:53:01
  */
 import {
   getDIC,
@@ -37,7 +37,24 @@ export const dataPropEnum = {
     whseTableName: "whseChemicalin",
     whseDtlaTableName: "whseChemicalinDtla",
     whseDtlbTableName: "whseChemicalinDtlb",
-
+  },
+  4: {
+    samNoteKey: "dyesaforsampleNote",
+    samIdKey: "chemicalId",
+    samNameKey: "chemicalName",
+    // 入仓字段字典
+    matOidKey: "whseDyesalinoid",
+    matFkKey: "whseDyesalinFk",
+    matDtlaOidKey: "whseDyesainDtlaoid",
+    matDtlaFkKey: "whseDyesainDtlaFk",
+    matDtlbOidKey: "whseDyesainDtlboid",
+    matCodeKey: "chemicalId",
+    matNameKey: "chemicalName",
+    // 表名字典
+    purSamDtlaTableName: "purDyesaforsampleDtl",
+    whseTableName: "whseDyesalin",
+    whseDtlaTableName: "whseDyesalInDtla",
+    whseDtlbTableName: "whseDyesalInDtlb",
   }
 }
 
@@ -181,7 +198,7 @@ export function unStockSampleCrudOp(_this) {
   let { samIdKey,samNameKey,samNoteKey } = dataPropEnum[_this.imWkType];
   return {
     ...mainCrudOpCommon,
-    height: "calc(100vh - 185px)",
+    height: "calc(100vh - 225px)",
     selection: true,  
     column: [{
         label: "样品通知单",

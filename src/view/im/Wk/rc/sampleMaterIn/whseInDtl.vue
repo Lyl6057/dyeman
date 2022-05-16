@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:18:51
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-05-16 13:46:59
+ * @LastEditTime: 2022-05-16 14:54:18
 -->
 <template>
   <div id="whse-yarn-in-dtl-container">
@@ -137,9 +137,10 @@ export default {
   methods: {
     // 新增货位数据
     handleAddDtla() {
+      let { matDtlbOidKey } = dataPropEnum[this.imWkType]; 
       this.whseMaterInDtlbDataList.push({
         isAdd: true,
-        whseYarninDtlaoid: v1()
+        [matDtlbOidKey]: v1()
       });
     },
     // 删除货位明细数据
@@ -209,7 +210,7 @@ export default {
           dtlaDataList.push({
             [matDtlbOidKey]: aItem[matDtlbOidKey],
             [matDtlaFkKey]: item[matDtlaOidKey],
-            locationCode: aItem.locationCode,
+            storageNo: aItem.storageNo,
             batchNo: item.batchNo,
             weight: aItem.weight,
           });
