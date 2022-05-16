@@ -175,6 +175,8 @@ export default {
     // 化工原料
     hgylrc: "化工原料入倉",
     krlhgyl: "客人來原料",
+    yprc: "樣品入倉",
+    hgylyprc: "化工原料樣品入倉",
     hgyl: "化工原料",
     ylcg1: "原料採購",
     wfcth: "外發廠退回",
@@ -184,6 +186,7 @@ export default {
     // 顏料入倉
     ylrc: "顏料入倉",
     krlyl: "客人來顏料",
+    ylyprc: "顔料樣品入倉",
     yl: "顏料",
     ylcg: "顏料採購",
     sgyl: "申購顏料",
