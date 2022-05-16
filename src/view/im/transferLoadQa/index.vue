@@ -2,68 +2,45 @@
  * @Author: Lyl
  * @Date: 2022-04-25 14:03:51
  * @LastEditors: Lyl
- * @LastEditTime: 2022-05-07 14:45:33
+ * @LastEditTime: 2022-05-12 16:59:47
  * @FilePath: \iot.vue\src\view\im\transferLoadQa\index.vue
  * @Description: 
 -->
 <template>
   <div class="transferLoad">
     <el-tabs v-model="tabs" type="border-card">
-      <el-tab-pane label="手动验布移库" name="manual">
+      <el-tab-pane label="手动验布出库" name="manual">
         <el-row class="btnList">
-          <el-button type="primary" @click="query">{{
-            this.$t("public.query")
-          }}</el-button>
+          <el-button type="primary" @click="query">{{this.$t("public.query")}}</el-button>
         </el-row>
         <el-row class="formBox">
           <avue-form ref="form" :option="formOp" v-model="form"> </avue-form>
         </el-row>
         <div class="crudBox">
-          <avue-crud
-            ref="crud"
-            :option="crudOp"
-            :data="crud"
-            :page.sync="page"
-            :element-loading-text="$t('public.loading')"
-            v-loading="wloading"
-            @cell-click="cellClick"
-            @on-load="query"
-          >
+          <avue-crud ref="crud" :option="crudOp" :data="crud" :page.sync="page" :element-loading-text="$t('public.loading')" v-loading="wloading" @cell-click="cellClick" @on-load="query">
             <template slot-scope="scope" slot="menu">
               <el-popover placement="left" width="160" trigger="click">
                 <p>请选择验布口</p>
                 <el-select v-model="exit" placeholder="请选择验布口">
-                  <el-option
-                    v-for="item in inExit"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
-                  >
+                  <el-option v-for="item in inExit" :key="item.value" :label="item.label" :value="item.value">
                   </el-option>
                 </el-select>
                 <div style="text-align: left; margin-top: 10px">
-                  <el-button type="primary" size="mini" @click="submit(scope)">提交</el-button>
+                  <el-button type="primary" size="mini" @click="handleOutWhse(scope)">提交</el-button>
                 </div>
-                <el-button
-                  type="text"
-                  icon="el-icon-view"
-                  size="mini"
-                  slot="reference"
-                  >验布</el-button
-                >
+                <el-button type="text" icon="el-icon-view" size="mini" slot="reference">验布</el-button>
               </el-popover>
-              <el-button type="text" icon="el-icon-refresh-right" size="mini"
-                >回仓</el-button
-              >
+              <el-button type="text" icon="el-icon-refresh-right" size="mini">回仓</el-button>
             </template>
           </avue-crud>
         </div>
       </el-tab-pane>
+      <el-tab-pane label="QA验布计划看板" name="plan">
+        <qc-plan></qc-plan>
+      </el-tab-pane>
       <el-tab-pane label="任务管理" name="task">
         <el-row class="btnList">
-          <el-button type="primary" @click="queryTask">{{
-            this.$t("public.query")
-          }}</el-button>
+          <el-button type="primary" @click="queryTask">{{this.$t("public.query")}}</el-button>
         </el-row>
         <el-row class="formBox">
           <avue-form ref="form" :option="taskFormOp" v-model="taskForm">
@@ -71,21 +48,9 @@
         </el-row>
         <view-container title="任务信息">
           <el-row class="crudBox" style="margin-top: 5px">
-            <avue-crud
-              ref="task"
-              :option="taskCrudOp"
-              :page.sync="taskpage"
-              :data="task"
-              :element-loading-text="$t('public.loading')"
-              v-loading="wloading"
-              @on-load="queryTask"
-              @current-row-change="cellClick"
-            ></avue-crud>
+            <avue-crud ref="task" :option="taskCrudOp" :page.sync="taskpage" :data="task" :element-loading-text="$t('public.loading')" v-loading="wloading" @on-load="queryTask" @current-row-change="cellClick"></avue-crud>
           </el-row>
         </view-container>
-      </el-tab-pane>
-      <el-tab-pane label="QA验布计划看板" name="plan">
-        <qc-plan></qc-plan>
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -94,10 +59,10 @@
 <script>
 import { formOp, crudOp, inExit, taskForm, taskCrud } from "./data";
 import { fetchStockVehicleByPage, sendTask, getTask } from "./api";
-import qcPlan from './qcPlan'
+import qcPlan from "./qcPlan";
 export default {
   components: {
-    qcPlan
+    qcPlan,
   },
   props: {},
   data() {
@@ -198,12 +163,25 @@ export default {
     cellClick(val) {
       this.detail = val;
     },
-    submit(val) {
+    handleOutWhse({ row }) {
+      if (!row) {
+        this.$tip.error("请先选择要出库的载具!");
+        return;
+      }
       if (!this.exit) {
-        this.$tip.error("请先选择验布口");
+        this.$tip.error("请先选择验布出口");
         return;
       }
       this.wloading = true;
+      let taskParams = {
+        barCode: row.palletCode, // 载具
+        entrance: this.exit, // 验布出口
+        isEmpty: false,
+        type: 2, //0原材料,1五金件,2成品
+        orderType: 3, // 3 => 验布出库， 4 => 验布入库
+      };
+      alert("请求参数" + JSON.stringify(taskParams));
+      console.info("sendParams", taskParams);
       sendTask()
         .then((res) => {
           if (res.status === 200) {
@@ -216,8 +194,36 @@ export default {
           this.wloading = false;
         });
     },
-    cancel(val) {
-      val.row.visible = false;
+    handleInWhse({ row }) {
+      if (!row) {
+        this.$tip.error("请先选择要出库的载具!");
+        return;
+      }
+      if (!this.exit) {
+        this.$tip.error("请先选择验布出口");
+        return;
+      }
+      this.wloading = true;
+      let taskParams = {
+        barCode: row.palletCode, // 载具
+        entrance: this.exit, // 验布出口
+        isEmpty: false,
+        type: 2, //0原材料,1五金件,2成品
+        orderType: 3, // 3 => 验布出库， 4 => 验布入库
+      };
+      alert("请求参数" + JSON.stringify(taskParams));
+      console.info("sendParams", taskParams);
+      sendTask()
+        .then((res) => {
+          if (res.status === 200) {
+            this.$tip.success("提交成功!");
+          } else {
+            this.$tip.error(res.msg);
+          }
+        })
+        .finally(() => {
+          this.wloading = false;
+        });
     },
   },
 };
@@ -230,6 +236,10 @@ export default {
 .transferLoad {
   >>>.el-table__fixed-right {
     z-index: 99;
+  }
+
+  >>>.el-icon-view {
+    font-size: 16px;
   }
 }
 </style>

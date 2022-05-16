@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-05-03 16:29:13
  * @LastEditors: Lyl
- * @LastEditTime: 2022-05-12 09:26:47
+ * @LastEditTime: 2022-05-13 09:40:45
  * @FilePath: \iot.vue\src\view\quaLity\qaProductionCapacity\tem.vue
  * @Description: 
 -->
@@ -10,7 +10,7 @@
   <div class="qcChcekPlanTem">
     <view-container title="QA产能统计管理" element-loading-text="正在拼命加载中..." v-loading="loading">
       <div class="btnList">
-        <el-button type="success" @click="handleSave">{{this.$t("public.save")}}</el-button>
+        <!-- <el-button type="success" @click="handleSave">{{this.$t("public.save")}}</el-button> -->
         <el-button type="warning" @click="handleClose">{{this.$t("public.close")}}</el-button>
       </div>
       <div class="formBox">

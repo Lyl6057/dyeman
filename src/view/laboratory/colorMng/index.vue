@@ -193,4 +193,8 @@ export default {
   beforeDestroy() {},
 };
 </script>
-<style lang='stylus'></style>
+<style lang='stylus' scoped>
+>>>.avue-crud .el-table--mini .avue-crud__color{
+  width: 3.75rem
+}
+</style>

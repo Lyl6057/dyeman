@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-05-03 16:09:34
  * @LastEditors: Lyl
- * @LastEditTime: 2022-05-12 09:25:53
+ * @LastEditTime: 2022-05-13 09:35:14
  * @FilePath: \iot.vue\src\view\quaLity\qaProductionCapacity\data.js
  * @Description:
  */
@@ -86,7 +86,7 @@ export function mainCrud(_this) {
       {
         label: "日期",
         prop: "dayId",
-        width: 80,
+        width: 120,
         span: 6,
         placeholder: " ",
         overHidden: true,

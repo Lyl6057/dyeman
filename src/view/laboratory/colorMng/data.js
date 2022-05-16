@@ -407,6 +407,14 @@ export function mainCrud(_this) {
         align: "center"
       },
       {
+        label: "RGB颜色",
+        prop: "colorRgb",
+        width: 100,
+        type: "color",
+        formslot: true,
+        placeholder: " ",
+      },
+      {
         label: "色号",
         prop: "colorNo",
         width: 130

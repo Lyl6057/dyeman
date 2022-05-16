@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-04-08 14:41:23
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-19 14:41:56
+ * @LastEditTime: 2022-05-12 14:50:41
  * @FilePath: \iot.vue\src\view\im\whseInOutKB\inWhse.vue
  * @Description: 
 -->
@@ -146,6 +146,7 @@ export default {
           entrance: this.form.exit, // 入库口
           isEmpty: 0, // 是否为空
           orderType: 1, // 出库/入库
+          layer: this.form.layer,
           type: this.form.goodsType, // 物料类别
           // storageCode: list[0].storeLoadCode,
         }).then((sendRes) => {

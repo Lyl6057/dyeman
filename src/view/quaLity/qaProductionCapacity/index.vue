@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-05-03 16:09:29
  * @LastEditors: Lyl
- * @LastEditTime: 2022-05-12 09:21:28
+ * @LastEditTime: 2022-05-14 08:42:55
  * @FilePath: \iot.vue\src\view\quaLity\qaProductionCapacity\index.vue
  * @Description: 
 -->
@@ -11,10 +11,17 @@
   <div class="qcCheckPlan">
     <view-container title="QA产能统计">
       <el-row class="btnList">
-        <el-button type="success" @click="update"> {{this.$t("public.update")}} </el-button>
-        <el-button type="primary" @click="add"> {{this.$t("public.add")}} </el-button>
-        <el-button type="danger" @click="del"> {{this.$t("public.del")}} </el-button>
+        <!-- <el-button type="success" @click="update"> {{this.$t("public.update")}} </el-button> -->
+        <!-- <el-button type="primary" @click="add"> {{this.$t("public.add")}} </el-button> -->
+        <!-- <el-button type="danger" @click="del"> {{this.$t("public.del")}} </el-button> -->
         <el-button type="primary" @click="query"> {{this.$t("public.query")}} </el-button>
+        <el-button type="primary" @click="getLatestData"> 更新数据 </el-button>
+        <el-dropdown size="small" split-button type="primary" style="margin-left: 10px" @command="handleReport">
+          报表
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item v-for="item in 12" :key="item" :command="item">{{item + ' 月'}}</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
       </el-row>
       <el-row class="formBox">
         <avue-form ref="form" :option="formOp" v-model="form"> </avue-form>
@@ -42,7 +49,7 @@
 
 <script>
 import temDlg from "./tem.vue";
-import { fetchQaDayOutputByPage, removeQaDayOutputData } from './api.js'
+import { fetchQaDayOutputByPage, removeQaDayOutputData, upadQareport } from './api.js'
 import { mainForm, mainCrud } from "./data.js";
 export default {
   components: {
@@ -78,11 +85,13 @@ export default {
         vatNo: "%" + (this.form.vatNo || ''),
         r_planStart_r: "!^%" + (this.form.planStart || ''),
       }
-      fetchQaDayOutputByPage(params).then( res => {
+      fetchQaDayOutputByPage(params).then(async res => {
         let { records, total } = res.data;
         this.crud = records;
         this.page.total = total;
         this.$refs.crud.setCurrentRow();
+        await this.$nextTick();
+        this.$refs["crud"].doLayout();
         this.curIdx = null;
       }).finally(() =>{
         setTimeout(() => {
@@ -98,6 +107,15 @@ export default {
       this.dialogVisible = true;
       await this.$nextTick();
       this.$refs.qcCheckPlanTem.addAndcreateData(this.crud[this.curIdx - 1].outId);
+    },
+    async getLatestData(){
+      let res =  await upadQareport();
+      if (res.data.code == 200) {
+        this.$tip.success("更新成功!");
+        this.query()
+      }else{
+        this.$tip.error("更新失败!" + res.data.msg);
+      }
     },
     async add() {
       this.dialogVisible = true;
@@ -120,12 +138,22 @@ export default {
     },
     handleRowDBLClick(row){
       this.curIdx = row.$index + 1;
-      this.update()
+      // this.update()
     },
     temClose(hasRefresh){
       this.dialogVisible = false;
       hasRefresh && this.query();
-    }
+    },
+    handleReport(command){
+      let dayId = new Date().getFullYear() + '' + (command < 10 ? '0' + command : command);
+      let name = encodeURI(
+      "http:" +
+        process.env.API_HOST.split(":")[1] +
+        ":92/api/qaDayOutput/qareport?dayId=" + dayId
+      );
+      window.open(name);
+      this.wloading = false;
+      }
   },
 };
 </script>

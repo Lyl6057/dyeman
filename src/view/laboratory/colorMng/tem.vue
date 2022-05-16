@@ -296,32 +296,19 @@ export default {
   beforeDestroy() {},
 };
 </script>
-<style lang='stylus'>
-#colorMng_Tem
-  .formBox
-    height calc(100vh - 125px) !important
-#colorMng_Dlg
-  .el-dialog__header
-    padding 0 !important
-  .el-dialog__headerbtn
-    top 3px
-    font-size 18px
-    font-weight bold
-    z-index 9
-  .el-dialog__headerbtn .el-dialog__close, #sxrcDlg .el-dialog__headerbtn .el-dialog__close, #wkDlg .el-dialog__headerbtn .el-dialog__close
-    color #000
-    font-size 24px
-  .el-tag--mini
-    height 24px
-    padding 0 5px
-    line-height 24px
-    font-size 14px
-  .el-select .el-tag__close.el-icon-close
-    right -5px
-    height 18px
-    width 18px
-    line-height 18px
-  .avue-form .el-input--mini input
-    height 35px !important
-    line-height 35px
+<style lang='stylus' scoped>
+#colorMng_Tem {
+  >>>.el-form-item--mini .el-color-picker--mini .el-color-picker__trigger, .el-form-item--mini .el-color-picker--mini{
+    width: 70px;
+    height: 29px;
+  }
+  >>>.el-input-group__append{
+    padding: 0 10px;
+    line-height: 5px;
+  }
+  .formBox{
+    height: calc(100vh - 125px) !important
+  }
+    
+}
 </style>

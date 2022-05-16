@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-04-01 14:08:13
  * @LastEditors: Lyl
- * @LastEditTime: 2022-05-12 08:43:48
+ * @LastEditTime: 2022-05-13 09:52:13
  * @Description:
  */
 
@@ -73,7 +73,7 @@ export function quality(_this) {
           index: "qcDetailReport"
         },
         {
-          menuName: "9.QA验布计划",
+          menuName: "9.QA计划进度",
           index: "qaCheckPlan"
         },
         {

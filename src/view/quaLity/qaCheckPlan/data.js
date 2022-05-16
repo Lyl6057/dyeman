@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-05-03 16:09:34
  * @LastEditors: Lyl
- * @LastEditTime: 2022-05-12 13:06:36
+ * @LastEditTime: 2022-05-14 11:29:04
  * @FilePath: \iot.vue\src\view\quaLity\qaCheckPlan\data.js
  * @Description:
  */
@@ -168,6 +168,17 @@ export function mainCrud(_this) {
       //   overHidden: true
       // },
       {
+        label: "总重量",
+        prop: "sumNw",
+        placeholder: " ",
+        span: 6,
+        width: 130,
+        align: "right",
+        type: "number",
+        overHidden: true
+        // formatter: fillZero
+      },
+      {
         label: "抽样疋数",
         prop: "samplCount",
         placeholder: " ",
@@ -185,17 +196,7 @@ export function mainCrud(_this) {
           },
         ],
       },
-      {
-        label: "净重",
-        prop: "sumNw",
-        placeholder: " ",
-        span: 6,
-        width: 130,
-        align: "right",
-        type: "number",
-        overHidden: true
-        // formatter: fillZero
-      },
+     
       {
         label: "完成比例(%)",
         prop: "planRate",
@@ -223,16 +224,30 @@ export function mainCrud(_this) {
       //   ],
       // },
       {
-        label: "完成数量",
-        prop: "overQty",
-        // disabled: true,
+        label: "完成疋号",
+        prop: "pidNos",
         placeholder: " ",
-        span: 6,
+        span: 18,
         width: 120,
-        align: "right",
-        type: "number",
-        // formatter: fillZero,
-        overHidden: true
+        type: "select",
+        dicData: [],
+        overHidden: true,
+        multiple: true,
+        dataType: "String",
+        filterable: true,
+        change: (val) =>{
+          _this.qcCheckPlanFormData.overQty = 0;
+          if (!val.value.length) {
+            return;
+          } 
+          _this.qcCheckPlanFormData.overPidCount =  val.value instanceof Array ?  val.value.length : val.value.split(",").length;
+          _this.noteList.forEach( (item) => {
+            if (val.value.includes(item.pidNo+'')) {
+              _this.qcCheckPlanFormData.overQty += item.netWeight;
+            }
+          });
+          _this.qcCheckPlanFormData.overQty = _this.qcCheckPlanFormData.overQty.toFixed(2);
+        }
       },
       {
         label: "完成疋数",
@@ -245,14 +260,27 @@ export function mainCrud(_this) {
         overHidden: true
       },
       {
-        label: "完成疋号",
-        prop: "pidNos",
+        label: "完成数量",
+        prop: "overQty",
+        // disabled: true,
         placeholder: " ",
         span: 6,
         width: 120,
+        align: "right",
+        type: "number",
+        // formatter: fillZero,
         overHidden: true
       },
-      
+      {
+        label: "异常疋数",
+        prop: "exceptPidCount",
+        placeholder: " ",
+        span: 6,
+        width: 120,
+        align: "right",
+        type: "number",
+        overHidden: true
+      },
       {
         label: "异常数量",
         prop: "exceptQty",
@@ -267,7 +295,7 @@ export function mainCrud(_this) {
         label: "异常描述",
         prop: "exceptDesc",
         placeholder: " ",
-        span: 24,
+        span: 6,
         width: 120,
       },
       {
@@ -298,7 +326,7 @@ export function mainCrud(_this) {
 export function qcCheckStorePlanCrud(_this) {
   return {
     ...mainCrudOpCommon,
-    height: "calc(100vh - 370px)",
+    height: "calc(100vh - 400px)",
     index: false,
     page: false,
     showSummary: true,
@@ -330,8 +358,8 @@ export function qcCheckStorePlanCrud(_this) {
         prop: "storeLoadCode",
         placeholder: " ",
         span: 6,
-        width: 200,
-        cell: true,
+        width: 160,
+        cell: false,
         overHidden: true
       },
       

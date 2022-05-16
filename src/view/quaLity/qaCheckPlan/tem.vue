@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-05-03 16:29:13
  * @LastEditors: Lyl
- * @LastEditTime: 2022-05-12 13:20:51
+ * @LastEditTime: 2022-05-14 18:00:34
  * @FilePath: \iot.vue\src\view\quaLity\qaCheckPlan\tem.vue
  * @Description: 
 -->
@@ -25,7 +25,7 @@
       </div>
       <view-container title="计划进度载具信息 ">
         <div class="btnList">
-          <el-button type="primary" @click="handleStoreAdd">{{ this.$t("public.add") }}</el-button>
+          <!-- <el-button type="primary" @click="handleStoreAdd">{{ this.$t("public.add") }}</el-button> -->
           <el-button type="danger" @click="handleStoreDel">{{ this.$t("public.del") }}</el-button>
           <el-button type="primary" @click="handleStoreImport"> 导入载具 </el-button>
         </div>
@@ -70,18 +70,23 @@ export default {
       hasRefresh: false,
       choiceV: false,
       choiceTle: "选择在库载具",
+      noteList: []
     };
   },
   watch: {
-    qcCheckStorePlanList(val, old) {
-      val.forEach((item, i) => {
+    qcCheckStorePlanList(n, o) {
+      n.forEach((item, i) => {
         item.waitOutSn = i + 1;
       });
+      this.qcCheckPlanFormOp.column[8].dicData = n.reduce((pre,cur) =>{
+         return pre.concat(cur.piNos.split(",").map(item =>{ return { label: item, value: item }}));
+      },[])
     },
   },
   computed: {},
   created() {},
-  mounted() {},
+  mounted() {
+  },
   methods: {
     async initData(planId) {
       this.loading = true;
@@ -133,6 +138,7 @@ export default {
         exceptQty: null,
         exceptDesc: "",
         inFlag: false,
+        exceptPidCount: null
       };
       this.qcCheckStorePlanList = [];
     },
@@ -162,12 +168,12 @@ export default {
         start: 1,
       })
         .then(async (res) => {
-          // 查询总疋数
+          // 总疋数,总重量
           this.vatList = res.data.records;
-          let params = { vatNo: this.qcCheckPlanFormData.vatNo };
-          this.qcCheckPlanFormData.sumPid = await fetchFinishedNote(
-            params
-          ).then((res) => res.data.length);
+          let params = { vatNo: this.qcCheckPlanFormData.vatNo, cardType: 1 };
+          this.noteList = await fetchFinishedNote(params).then(res =>{ return res.data });
+          this.qcCheckPlanFormData.sumPid = this.noteList.length;
+          this.qcCheckPlanFormData.sumNw = (this.noteList.reduce((pre,cur)=>{ return pre + cur.netWeight },0)).toFixed(2)
         })
         .finally(() => {
           setTimeout(() => {
@@ -187,6 +193,7 @@ export default {
           }
           this.loading = true;
           let planId = this.qcCheckPlanFormData.planId;
+          this.qcCheckPlanFormData.pidNos = this.qcCheckPlanFormData.pidNos.toString();
           if (planId) {
             updateQcCheckPlanData(this.qcCheckPlanFormData).then();
           } else {
@@ -306,7 +313,5 @@ export default {
   },
 };
 </script>
-<style lang="stylus" scoped>
-.qcChcekPlanTem {
-}
+<style lang="stylus">
 </style>
