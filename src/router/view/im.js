@@ -230,6 +230,15 @@ export default [
           keepAlive: false
         }
       },
+      // 样品入仓
+      {
+        path: "/sam_mat",
+        name: "sam_mat",
+        component: resolve => require(["@/view/im/Wk/rc/sampleMaterIn/index"], resolve),
+        meta: {
+          keepAlive: false
+        }
+      },
       //  染化料入仓
       {
         path: "/rc_rhl",

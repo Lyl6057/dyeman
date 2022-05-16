@@ -374,9 +374,11 @@ export default {
 
             {
               click: () => {
-                this.toView("rc_rhl", this.$t("iaoMng.krlhgyl") + "_1");
+                // this.toView("rc_rhl", this.$t("iaoMng.krlhgyl") + "_1");
+                this.toView("sam_mat", this.$t("iaoMng.hgylyprc") + "_3");
               },
-              title: this.$t("iaoMng.krlhgyl"),
+              // title: this.$t("iaoMng.krlhgyl"),
+              title: this.$t("iaoMng.yprc"),
               icon: "el-icon-user-solid",
               color: "#409EFF",
             },
@@ -432,9 +434,10 @@ export default {
             {
               id: "5-2",
               click: () => {
-                this.toView("rc_yl", this.$t("iaoMng.krlyl") + "_1");
+                // this.toView("rc_yl", this.$t("iaoMng.krlyl") + "_1");
+                this.toView("sam_mat", this.$t("iaoMng.ylyprc") + "_4");
               },
-              title: this.$t("iaoMng.krlyl"),
+              title: this.$t("iaoMng.yprc"),
               icon: "el-icon-user-solid",
               color: "#409EFF",
             },
