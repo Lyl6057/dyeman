@@ -498,7 +498,7 @@ export default {
         this.$tip.error("申购单不能为空!");
         return;
       } else if (this.form.stockType == "3" && this.form.appId == "") {
-        this.$tip.error("申购领用单不能为空!");
+        this.$tip.error("领料申请单号不能为空!");
         return;
       }
       for (let i = 0; i < this.mx.length; i++) {
@@ -1165,7 +1165,7 @@ export default {
           return;
         }
         this.formOp.column[4].disabled = false;
-        this.formOp.column[4].label = "申购领用单";
+        this.formOp.column[4].label = "领料申请单号";
       }
       this.form.appId = "";
     },

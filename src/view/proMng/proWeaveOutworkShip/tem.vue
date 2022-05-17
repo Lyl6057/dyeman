@@ -167,15 +167,16 @@ export default {
               this.$tip.warning("布票号不能为空!");
               done();
               return;
-            } else if (!this.crud[i].rw) {
-              this.$tip.warning("布票实收重量不能为空!");
-              done();
-              return;
-            }
+            } 
+            // else if (!this.crud[i].rw) {
+            //   this.$tip.warning("布票实收重量不能为空!");
+            //   done();
+            //   return;
+            // }
           }
           this.wLoading = true;
           try {
-            this.form.deliQty = weight;
+            // this.form.deliQty = weight;
             if (this.form.shipId) {
               // update
               update(this.form)
@@ -204,7 +205,6 @@ export default {
           }
         } else {
           this.wLoading = false;
-          done();
           this.$tip.error("请补充报告信息!");
         }
       });

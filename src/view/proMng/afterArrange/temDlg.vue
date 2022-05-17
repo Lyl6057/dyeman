@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-12 10:37:44
+ * @LastEditTime: 2022-05-17 14:25:54
  * @Description: 
 -->
 <template>
@@ -130,7 +130,9 @@ export default {
       choiceTle: "选择染整工单",
       choiceTarget: {},
       choiceField: "",
-      choiceQ: {},
+      choiceQ: {
+        sortF: "vatNo"
+      },
       code: "",
       group: [],
       chooseDtlData: {},

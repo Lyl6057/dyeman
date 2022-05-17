@@ -83,6 +83,7 @@ export function mainCrud(_this) {
         prop: "weaveJobCode",
         width: 130,
         overHidden: true,
+        disabled: true,
         span: 6,
         rules: [
           {
@@ -97,6 +98,7 @@ export function mainCrud(_this) {
         prop: "deliCode",
         width: 150,
         overHidden: true,
+        disabled: true,
         span: 6,
         rules: [
           {
@@ -118,13 +120,13 @@ export function mainCrud(_this) {
           "basProcessingUnitoid"
         ),
         span: 6,
-        rules: [
-          {
-            required: true,
-            message: "請选择加工单位",
-            trigger: "blur"
-          }
-        ]
+        // rules: [
+        //   {
+        //     required: true,
+        //     message: "請选择加工单位",
+        //     trigger: "blur"
+        //   }
+        // ]
       },
 
       {
@@ -215,7 +217,7 @@ export function noteCrud(_this) {
         prop: "noteCode",
         width: 180,
         overHidden: true,
-        cell: true,
+        cell: false,
         placeholder: " ",
         span: 6,
         rules: [
