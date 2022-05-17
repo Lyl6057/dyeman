@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:18:36
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-15 10:09:18
+ * @LastEditTime: 2022-05-17 15:17:38
 -->
 <template>
   <div id="whse-unIn-container">
@@ -68,7 +68,7 @@ export default {
         this.loading = true;
         this.curSelectWithDrawalNo = ""
         let params = {
-            page: this.page.currentPage,
+            start: this.page.currentPage,
             rows: this.page.pageSize,
             typeOf: this.imWkType - 4
         }

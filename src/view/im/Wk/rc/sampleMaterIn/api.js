@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:08:47
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-05-16 13:32:58
+ * @LastEditTime: 2022-05-17 14:07:36
  */
 
 import axios from "axios";
@@ -56,7 +56,7 @@ export function updateWhseYarnInData(data,type){
 
 export function removeWhseYarnInData(params,type){
     return axios({
-        url: `/api/${dataPropEnum[type].whseTableName}/v1.0/removeById`,
+        url: `/api/${dataPropEnum[type].whseTableName}/v1.0/removeByIds`,
         method: "delete",
         params: params,
     })

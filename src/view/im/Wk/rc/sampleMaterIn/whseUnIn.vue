@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:18:36
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-05-16 09:23:44
+ * @LastEditTime: 2022-05-17 15:14:21
 -->
 <template>
   <div id="whse-unIn-container">
@@ -68,7 +68,7 @@ export default {
         this.loading = true;
         this.curMaterForSampleNote = ""
         let params = {
-            page: this.page.currentPage,
+            start: this.page.currentPage,
             rows: this.page.pageSize,
         }
         Object.entries(this.queryForm).forEach(item => {

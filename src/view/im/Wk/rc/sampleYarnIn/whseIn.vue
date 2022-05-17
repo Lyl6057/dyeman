@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:18:23
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-21 16:48:30
+ * @LastEditTime: 2022-05-17 15:15:36
 -->
 <template>
   <div id="return-yarn-in-container">
@@ -69,7 +69,7 @@ export default {
       this.loading = true;
       let { yinId, registerNo, yinDate } = this.queryForm;
       let params = {
-        page: this.page.currentPage,
+        start: this.page.currentPage,
         rows: this.page.pageSize,
         yinType: this.imWkType, 
         yinId: "%" + (yinId || ""),
