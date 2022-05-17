@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:08:41
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-05-16 14:53:01
+ * @LastEditTime: 2022-05-17 16:29:49
  */
 import {
   getDIC,
@@ -32,6 +32,8 @@ export const dataPropEnum = {
     matDtlbOidKey: "whseChemicalinDtlboid",
     matCodeKey: "chemicalId",
     matNameKey: "chemicalName",
+    matCodeLabel: "化工原料编号",
+    matNameLabel: "化工原料名称",
     // 表名字典
     purSamDtlaTableName: "purChemicalforsampleDtl",
     whseTableName: "whseChemicalin",
@@ -50,6 +52,8 @@ export const dataPropEnum = {
     matDtlbOidKey: "whseDyesainDtlboid",
     matCodeKey: "chemicalId",
     matNameKey: "chemicalName",
+    matCodeLabel: "染料编号",
+    matNameLabel: "染料名称",
     // 表名字典
     purSamDtlaTableName: "purDyesaforsampleDtl",
     whseTableName: "whseDyesalin",
@@ -315,18 +319,18 @@ export function whseYarnInFormOp(_this) {
 
 // 明细数据
 export function whseYarnInDtlCrudOp(_this) {
-  let { matCodeKey,matNameKey } = dataPropEnum[_this.imWkType];
+  let { matCodeKey,matNameKey,matCodeLabel, matNameLabel } = dataPropEnum[_this.imWkType];
   return {
     ...mainCrudOpCommon,
     page: false,
     column: [{
-      label: "纱线编号",
+      label: matCodeLabel,
       prop: matCodeKey,
-      width: 100
+      width: 120
     }, {
-      label: "纱线名称",
+      label: matNameLabel,
       prop: matNameKey,
-      width: 200,
+      width: 250,
       overHidden: true
     }, {
       label: "本厂批号",

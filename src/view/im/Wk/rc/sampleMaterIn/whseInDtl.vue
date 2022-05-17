@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:18:51
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-05-17 16:07:56
+ * @LastEditTime: 2022-05-17 16:13:01
 -->
 <template>
   <div id="whse-yarn-in-dtl-container">
@@ -22,7 +22,7 @@
       </div>
       <el-row>
         <el-col :span="17">
-          <view-container title="料入仓货位明细资料">
+          <view-container :title="imWkName + '明细'">
             <div class="btnList">
               <!-- <el-button type="primary">{{ this.$t("public.save") }}</el-button>
               <el-button type="warning">{{ this.$t("public.close") }}</el-button>-->
