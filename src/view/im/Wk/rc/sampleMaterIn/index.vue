@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:08:31
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-05-14 11:56:47
+ * @LastEditTime: 2022-05-17 16:08:17
 -->
 <template>
   <div id="return-yarn-container">
@@ -23,7 +23,7 @@
       append-to-body
       :modal-append-to-body="false"
     >
-      <whse-in-dtl ref="whseInDtlRef"  :imWkType="imWkData.type" @close="handleDtlClose"></whse-in-dtl>
+      <whse-in-dtl ref="whseInDtlRef"  :imWkType="imWkData.type" :imWkName="imWkData.name" @close="handleDtlClose"></whse-in-dtl>
     </el-dialog>
   </div>
 </template>
