@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:18:36
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-19 10:58:55
+ * @LastEditTime: 2022-05-17 15:15:45
 -->
 <template>
   <div id="whse-unIn-container">
@@ -62,7 +62,7 @@ export default {
         this.loading = true;
         this.curYarnForSampleNote = ""
         let params = {
-            page: this.page.currentPage,
+            start: this.page.currentPage,
             rows: this.page.pageSize,
         }
         fetchPurYarnForSampleDataListByPage(params).then(res => {

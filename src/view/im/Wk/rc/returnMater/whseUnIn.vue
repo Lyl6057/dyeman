@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:18:36
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-05-11 16:28:26
+ * @LastEditTime: 2022-05-17 15:18:00
 -->
 <template>
   <div id="whse-unIn-container">
@@ -68,7 +68,7 @@ export default {
         this.loading = true;
         this.curSelectWithDrawalNo = ""
         let params = {
-            page: this.page.currentPage,
+            start: this.page.currentPage,
             rows: this.page.pageSize,
         }
         fetchRetMaterNoticDataListByPage(params,this.imWkType).then(res => {
