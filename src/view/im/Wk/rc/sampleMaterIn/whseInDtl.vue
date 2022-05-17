@@ -4,11 +4,11 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:18:51
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-05-16 14:54:18
+ * @LastEditTime: 2022-05-17 16:07:56
 -->
 <template>
   <div id="whse-yarn-in-dtl-container">
-    <view-container title="本厂余纱退纱" :element-loading-text="loadLabel" v-loading="loading">
+    <view-container :title="imWkName" :element-loading-text="loadLabel" v-loading="loading">
       <div class="btnList">
         <el-button
           type="primary"
@@ -89,6 +89,10 @@ export default {
   props: {
     imWkType: {
       type: String | Number,
+      default: () => ""
+    },
+    imWkName: {
+      type: String,
       default: () => ""
     }
   },
