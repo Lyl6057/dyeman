@@ -506,7 +506,7 @@ export default {
             {
               id: "6-3",
               click: () => {
-                this.toView("rc_cg", this.$t("iaoMng.scfl") + "_2");
+                // this.toView("rc_cg", this.$t("iaoMng.scfl") + "_2");
               },
               title: this.$t("iaoMng.scflcg"),
               icon: "el-icon-shopping-cart-2",
@@ -516,9 +516,11 @@ export default {
             {
               id: "6-4",
               click: () => {
-                this.toView("rc_scfl", this.$t("iaoMng.wfcylhc") + "_6");
+                // this.toView("rc_scfl", this.$t("iaoMng.wfcylhc") + "_6");
+                this.toView("ret_mat", this.$t("iaoMng.scflylfc") + "_5");
               },
-              title: this.$t("iaoMng.wfcylhc"),
+              // title: this.$t("iaoMng.wfcylhc"),
+              title: this.$t("iaoMng.ylfc"),
               icon: "el-icon-s-home",
               color: "#409EFF",
               // content: "外发余料回仓看板",
