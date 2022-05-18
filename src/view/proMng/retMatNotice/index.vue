@@ -92,9 +92,6 @@ export default {
     hasNotEdit(){
       return this.curRowSelect.isInStock
     },
-    viewTitle(){
-      return dataTyptEnum[this.matType]
-    },
   },
   methods: {
     reload(){
