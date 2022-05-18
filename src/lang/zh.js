@@ -196,6 +196,7 @@ export default {
     krlfl: "客人來輔料",
     scfl: "生產輔料",
     scflcg: "生產輔料採購",
+    scflylfc: "生產輔料餘料返倉",
     wfcylhc: "外發廠餘料回倉",
     fl: "輔料",
     sgscfl: "申購生產輔料",

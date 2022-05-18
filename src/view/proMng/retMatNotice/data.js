@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-08 17:26:12
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-05-10 17:00:04
+ * @LastEditTime: 2022-05-18 11:18:26
  */
 
 import {
@@ -34,6 +34,16 @@ export const dataTyptEnum = {
         materialNameKey: "dyesaName",
         dtlOidKey: "proDyesaWithdrawalDtloid",
         dtlFkKey: "proDyesaWithdrawalFk", 
+    },
+    5: {
+        viewTitle: "生产辅料退货通知单",
+        tableName: "proAccessoriesWithdrawal",
+        dtlTableName: "proAccessoriesWithdrawalDtl",
+        oidKey: "proAccessoriesWithdrawaloid",
+        materialIdKey: "accessoriesId",
+        materialNameKey: "accessoriesName",
+        dtlOidKey: "proAccessoriesWithdrawalDtloid",
+        dtlFkKey: "proAccessoriesWithdrawalFk", 
     }
 }
 

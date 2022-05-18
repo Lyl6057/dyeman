@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-04-01 13:39:35
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-05-11 17:24:44
+ * @LastEditTime: 2022-05-18 11:23:51
  * @Description:
  */
 
@@ -141,6 +141,10 @@ export function proMng(_this) {
         {
           menuName: "6.染料退仓通知单",
           index: "withDrawal2Dyesa" 
+        },
+        {
+          menuName: "7.生产辅料退仓通知单",
+          index: "withDrawal2Access" 
         },
         // {
         //   menuName: "3.布飞打印",

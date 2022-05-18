@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-29 14:14:56
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-05-10 16:16:49
+ * @LastEditTime: 2022-05-18 11:17:52
  * @Description:
  */
 export default [
@@ -306,6 +306,15 @@ export default [
     meta: {
       keepAlive: true,
       matType: "4"
+    }
+  },
+  {
+    path: "/withDrawal2Access",
+    name: "生产辅料退货通知单",
+    component: resolve => require(["@/view/proMng/retMatNotice/index"], resolve),
+    meta: {
+      keepAlive: true,
+      matType: "5"
     }
   },
   {

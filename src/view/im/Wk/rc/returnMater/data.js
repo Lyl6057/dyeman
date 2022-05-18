@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:08:41
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-05-13 08:57:51
+ * @LastEditTime: 2022-05-18 16:40:03
  */
 import {
   getDIC,
@@ -22,8 +22,8 @@ let opreator = getDicT("ucmlUser", "employeename", "ucmlUseroid");
 
 export const dataPropEnum = {
   3: {
-    materIdLabel: "化工原料编号",
-    materNameLabel: "化工原料名称",
+    materIdLabel: "化工原料編號",
+    materNameLabel: "化工原料名稱",
     materIdKey: "chemicalId",  
     materNameKey: "chemicalName",
     materOidKey: "whseChemicalinoid",
@@ -31,15 +31,17 @@ export const dataPropEnum = {
     materDtlaOidKey: "whseChemicalinDtlaoid",
     materDtlaFKKey: "whseChemicalinDtlaFk",
     materDtlbOidKey: "whseChemicalinDtlboid",
+    weightUnitKey: "weightUnit",
+    weightKey: "weight",
     // API Name
     proMatWithDtlApiName: "proChemicalWithdrawalDtl",
     whseInApiName: "whseChemicalin",
     whseInDtlaApiName: "whseChemicalinDtla",
-    whseInDtlbApiName: "whseChemicalinDtlb"
+    whseInDtlbApiName: "whseChemicalinDtlb",
   },
   4: {
-    materIdLabel: "染料编号",
-    materNameLabel: "染料名称",
+    materIdLabel: "染料编號",
+    materNameLabel: "染料名稱",
     materIdKey: "chemicalId",  
     materNameKey: "chemicalName",
     materOidKey: "whseDyesalinoid",
@@ -47,12 +49,32 @@ export const dataPropEnum = {
     materDtlaOidKey: "whseDyesainDtlaoid",
     materDtlaFKKey: "whseDyesainDtlaFk",
     materDtlbOidKey: "whseDyesainDtlboid",
+    weightUnitKey: "weightUnit",
+    weightKey: "weight",
     // API Name
     proMatWithDtlApiName: "proDyesaWithdrawalDtl",
     whseInApiName: "whseDyesalin",
     whseInDtlaApiName: "whseDyesalInDtla",
     whseInDtlbApiName: "whseDyesalInDtlb"
   }, 
+  5: {
+    materIdLabel: "生產輔料編號",
+    materNameLabel: "生產輔料名稱",
+    materIdKey: "materialNum",  
+    materNameKey: "materialName",
+    materOidKey: "whseAccessoriesinoid",
+    materFkKey: "whseAccessoriesInFk",
+    materDtlaOidKey: "whseAccessoriesDtloid",
+    materDtlaFKKey: "whseAccessoriesDtlFk",
+    materDtlbOidKey: "whseAccessoriesDtlaoid",
+    weightUnitKey: "unitQty",
+    weightKey: "poQty",
+    // API Name
+    proMatWithDtlApiName: "proAccessoriesWithdrawalDtl",
+    whseInApiName: "whseAccessoriesIn",
+    whseInDtlaApiName: "whseAccessoriesDtl",
+    whseInDtlbApiName: "whseAccessoriesDtla"
+  }
 }
 
 // 表格通用配置
@@ -216,7 +238,7 @@ export function retMatNoticCrudOp(_this) {
       },
       {
         label: "单位",
-        prop: "weightUnit",
+        prop: dataPropEnum[3].weightUnitKey,
         type: "select",
         dicData: getDIC("bas_matUnit"),
         width: 100,
@@ -272,7 +294,7 @@ export function whseMaterInFormOp(_this) {
 // 明细数据
 export function whseMaterInDtlCrudOp(_this) {
   let type = _this.imWkType;
-  let {materIdLabel,materNameLabel,materIdKey,materNameKey} = dataPropEnum[type];
+  let {materIdLabel,materNameLabel,materIdKey,materNameKey,weightUnitKey, weightKey} = dataPropEnum[type];
   return {
     ...mainCrudOpCommon,
     page: false,
@@ -299,7 +321,7 @@ export function whseMaterInDtlCrudOp(_this) {
       formatter: fillZero
     }, {
       label: "入仓重量",
-      prop: "weight",
+      prop: weightKey,
       width: 100,
       align: "right",
       type: "number",
@@ -309,7 +331,7 @@ export function whseMaterInDtlCrudOp(_this) {
       // cell: true,
     }, {
       label: "单位",
-      prop: "weightUnit",
+      prop: weightUnitKey,
       width: 100,
       type: "select",
       dicData: getDIC("bas_matUnit"),

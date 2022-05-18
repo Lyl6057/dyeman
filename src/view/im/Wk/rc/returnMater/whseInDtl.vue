@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:18:51
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-05-13 09:05:07
+ * @LastEditTime: 2022-05-18 17:09:45
 -->
 <template>
   <div id="whse-yarn-in-dtl-container">
@@ -212,7 +212,7 @@ export default {
     },
     // 保存明细数据
     saveDtlData(whseMaterInOid) {
-      let { materFkKey,materDtlaOidKey,materDtlaFKKey,materDtlbOidKey,materIdKey,materNameKey } = dataPropEnum[this.imWkType];
+      let { materFkKey,materDtlaOidKey,materDtlaFKKey,materDtlbOidKey,materIdKey,materNameKey,weightKey,weightUnitKey } = dataPropEnum[this.imWkType];
       let dtlaDataList = [];
       let dtlDataList = this.whseMaterInDtlDataList.map((item, index) => {
         let inWeight = 0;
@@ -232,12 +232,12 @@ export default {
         let tDtlData = {
           [materDtlaOidKey]: item[materDtlaOidKey],
           [materFkKey]: whseMaterInOid,
-          weight: inWeight,
+          [weightKey]: inWeight,
           seqQty: index + 1,
           [materIdKey]: item[materIdKey],
           [materNameKey]: item[materNameKey],
           batchNo: item.batchNo,
-          weightUnit: item.weightUnit,
+          [weightUnitKey]: item[weightUnitKey],
         };
         return tDtlData;
       });
@@ -303,16 +303,16 @@ export default {
       this.loading = true;
       fetchRetMaterNoticDataList(withDrawalNo,this.imWkType)
         .then((res) => {
-          let { materDtlaOidKey,materDtlaFKKey,materDtlbOidKey } = dataPropEnum[this.imWkType];
+          let { materDtlaOidKey,materDtlaFKKey,materDtlbOidKey,weightKey } = dataPropEnum[this.imWkType];
           this.whseMaterInDtlDataList = res.data.map((item) => {
             let dtlOid = v1();
             item[materDtlaOidKey] = dtlOid;
-            item.retWeight = item.weight;
+            item.retWeight = item[weightKey];
             item.dtlBChildren = [
               {
                 [materDtlaFKKey]: dtlOid,
                 [materDtlbOidKey]: v1(),
-                weight: item.weight,
+                weight: item[weightKey],
                 storageNo: "",
                 weightUnit: item.weightUnit,
               },
