@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-05-03 16:09:34
  * @LastEditors: Lyl
- * @LastEditTime: 2022-05-13 09:35:14
+ * @LastEditTime: 2022-05-18 10:12:06
  * @FilePath: \iot.vue\src\view\quaLity\qaProductionCapacity\data.js
  * @Description:
  */
@@ -95,11 +95,11 @@ export function mainCrud(_this) {
         align: "center"
       },
       {
-        label: "成品数量",
+        label: "成品数量(kg)",
         prop: "productQty",
         placeholder: " ",
         span: 6,
-        width: 100,
+        width: 120,
         type: "number",
         align: "right"
       },
@@ -122,7 +122,7 @@ export function mainCrud(_this) {
         align: "right"
       },
       {
-        label: "持单量",
+        label: "持单量(kg)",
         prop: "receivedQty",
         placeholder: " ",
         span: 6,
@@ -131,7 +131,7 @@ export function mainCrud(_this) {
         align: "right"
       },
       {
-        label: "完成量",
+        label: "完成量(kg)",
         prop: "outQty",
         placeholder: " ",
         span: 6,
@@ -140,7 +140,7 @@ export function mainCrud(_this) {
         align: "right"
       },
       {
-        label: "异常数量(疋)",
+        label: "异常数量(kg)",
         prop: "exceptQty",
         placeholder: " ",
         span: 6,
