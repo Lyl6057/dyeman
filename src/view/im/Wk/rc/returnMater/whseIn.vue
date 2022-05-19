@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:18:23
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-05-17 15:17:54
+ * @LastEditTime: 2022-05-19 10:07:01
 -->
 <template>
   <div id="return-yarn-in-container">
@@ -74,7 +74,7 @@ export default {
         yinType: "5",
         yinId: "%" + (yinId || ""),
         registerNo: "%" + (registerNo || ""),
-        dateOrder: true,
+        dataSortRules: "yinDate|desc,yinId"
       };
       if(yinDate && yinDate.length == 2){
         Object.assign(params,{
