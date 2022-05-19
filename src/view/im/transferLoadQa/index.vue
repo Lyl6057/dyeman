@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-04-25 14:03:51
  * @LastEditors: Lyl
- * @LastEditTime: 2022-05-12 16:59:47
+ * @LastEditTime: 2022-05-19 08:40:39
  * @FilePath: \iot.vue\src\view\im\transferLoadQa\index.vue
  * @Description: 
 -->
@@ -86,7 +86,7 @@ export default {
         currentPage: 1,
         total: 0,
       },
-      exit: 1,
+      exit: "Q1",
       inExit,
       visible: true,
       detail: {},
@@ -176,13 +176,13 @@ export default {
       let taskParams = {
         barCode: row.palletCode, // 载具
         entrance: this.exit, // 验布出口
-        isEmpty: false,
+        isEmpty: 0,
         type: 2, //0原材料,1五金件,2成品
         orderType: 3, // 3 => 验布出库， 4 => 验布入库
       };
       alert("请求参数" + JSON.stringify(taskParams));
       console.info("sendParams", taskParams);
-      sendTask()
+      sendTask(taskParams)
         .then((res) => {
           if (res.status === 200) {
             this.$tip.success("提交成功!");

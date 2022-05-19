@@ -2,51 +2,51 @@
  * @Author: Lyl
  * @Date: 2022-04-25 14:09:54
  * @LastEditors: Lyl
- * @LastEditTime: 2022-05-07 14:45:18
+ * @LastEditTime: 2022-05-19 08:19:21
  * @FilePath: \iot.vue\src\view\im\transferLoadQa\data.js
  * @Description:
  */
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
 export const inExit = [
   {
-    label: 1,
-    value: 1
+    label: "Q1",
+    value: "Q1"
   },
   {
-    label: 2,
-    value: 2
+    label: "Q2",
+    value: "Q2"
   },
   {
-    label: 3,
-    value: 3
+    label: "Q3",
+    value: "Q3"
   },
   {
-    label: 4,
-    value: 4
+    label: "Q4",
+    value: 'Q4'
   },
   {
-    label: 5,
-    value: 5
+    label: "Q5",
+    value: "Q5"
   },
   {
-    label: 6,
-    value: 6
+    label: "Q6",
+    value: "Q6"
   },
   {
-    label: 7,
-    value: 7
+    label: "Q7",
+    value: 'Q7'
   },
   {
-    label: 8,
-    value: 8
+    label: 'Q8',
+    value: 'Q8'
   },
   {
-    label: 9,
-    value: 9
+    label: 'Q9',
+    value: 'Q9'
   },
   {
-    label: 10,
-    value: 10
+    label: "Q10",
+    value: "Q10"
   }
 ];
 
