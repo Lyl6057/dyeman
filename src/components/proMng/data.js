@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-05-03 13:03:03
  * @LastEditors: Lyl
- * @LastEditTime: 2022-05-10 09:44:45
+ * @LastEditTime: 2022-05-19 19:48:54
  * @Description:
  */
 
@@ -565,9 +565,9 @@ export function finishedNoteF(_this) {
         tip: "Số lô nhuộm",
         span: 6,
         placeholder: " ",
-        type: "select",
-        dicData: getDicT("proBleadyeRunJob","vatNo","vatNo"),
-        filterable: true
+        // type: "select",
+        // dicData: getDicT("proBleadyeRunJob","vatNo","vatNo"),
+        // filterable: true
       },
       {
         label: "疋号",

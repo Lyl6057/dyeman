@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-04-08 14:41:23
  * @LastEditors: Lyl
- * @LastEditTime: 2022-05-12 14:50:41
+ * @LastEditTime: 2022-05-19 19:49:28
  * @FilePath: \iot.vue\src\view\im\whseInOutKB\inWhse.vue
  * @Description: 
 -->
@@ -118,7 +118,7 @@ export default {
       choiceQ: {
         r_clothState_r: "||1||2||3",
         cardType: 1,
-        sortF: "productNo",
+        sortF: "vatNo",
       },
       selectList: [],
       verifyVisible: false,
