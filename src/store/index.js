@@ -2,18 +2,19 @@
  * @Author: Lyl
  * @Date: 2021-02-24 08:12:20
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-22 14:51:10
+ * @LastEditTime: 2022-05-19 17:04:00
  * @Description:
  */
 import Vue from "vue";
 import VueX from "vuex";
 import getters from "./getters";
 import DIC from "./modules/dic";
-
+import whse from "./modules/whse"
 Vue.use(VueX);
 const store = new VueX.Store({
   modules: {
-    DIC
+    DIC,
+    whse
   },
   state: {
     //要设置的全局访问的state对象,设置初始值
@@ -30,6 +31,7 @@ const store = new VueX.Store({
     loginUser: "",
   },
   getters: {
+    ...getters,
     //实时监听state值的变化
     getSpowerClient(state) {
       return state.spowerClient;
