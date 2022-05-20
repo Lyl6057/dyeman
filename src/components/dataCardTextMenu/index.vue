@@ -24,7 +24,7 @@
         >
           <div @click="list.click" :style="{ color: list.color }">
             <i :class="list.icon"></i>
-            <el-badge :value="list.badge">
+            <el-badge  :value="list.badge">
               <span :style="{ color: list.color }"> {{ list.title }}</span>
             </el-badge>
           </div>
