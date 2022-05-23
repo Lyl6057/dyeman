@@ -236,7 +236,7 @@ export default {
             label: this.$t("ProWorkflowInfo.flid"),
             prop: "categoryId",
             type: "select",
-            dicData: postDicT(
+            dicData: getDicT(
               "baseEquipmentCategoryList",
               "categoryId",
               "categoryId"

@@ -9,6 +9,15 @@ export function fetchExamineVaild(data) {
   });
 }
 
+export function whseDyesalinExamine(data) {
+  return axios({
+    url: "/api/whseDyesalin/valid/examine",
+    method: "post",
+    data: data
+  });
+}
+
+
 // 设备申购送货单视图
 export function getWhseEquInV2(params) {
   return axios({

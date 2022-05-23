@@ -611,8 +611,13 @@ export default {
                 this.$tip.error(err);
               });
           } else {
+            let params = {
+              ...this.chooseData,
+              stockState: "1",
+              yinDate : this.chooseData.yinDate + ' 00:00:00',
+            }
             this.everyThing
-              .update(Object.assign(this.chooseData, { stockState: "1" }))
+              .update(params)
               .then((res) => {
                 if (res.data.code === 200) {
                   this.$tip.success("审核成功!");

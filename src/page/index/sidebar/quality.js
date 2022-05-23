@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-04-01 14:08:13
  * @LastEditors: Lyl
- * @LastEditTime: 2022-05-13 09:52:13
+ * @LastEditTime: 2022-05-23 08:05:49
  * @Description:
  */
 
@@ -79,6 +79,10 @@ export function quality(_this) {
         {
           menuName: "10.QA产能统计",
           index: "qaProductionCapacity"
+        },
+        {
+          menuName: "11.Excel细码表",
+          index: "qcDetailReportByExcel"
         }
       ]
     },

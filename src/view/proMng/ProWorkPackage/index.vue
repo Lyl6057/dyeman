@@ -193,7 +193,7 @@ export default {
             label: this.$t("ProWorkflowInfo.sbxh"),
             prop: "equModel",
             type: "select",
-            dicData: postDicT(
+            dicData: getDicT(
               "baseEquipmentCategoryList",
               "categoryCode",
               "categoryId"

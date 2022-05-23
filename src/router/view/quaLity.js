@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-10 13:20:44
  * @LastEditors: Lyl
- * @LastEditTime: 2022-05-12 13:13:57
+ * @LastEditTime: 2022-05-23 08:06:24
  * @Description:
  */
 export default [
@@ -44,6 +44,16 @@ export default [
     name: "拆缸",
     component: resolve =>
       require(["@/view/quaLity/modifyFinished/index"], resolve),
+    meta: {
+      keepAlive: true
+    }
+  },
+  
+  {
+    path: "/qcDetailReportByExcel",
+    name: "Excel成品明细报表",
+    component: resolve =>
+      require(["@/view/quaLity/qcDetailReportByExcel/index"], resolve),
     meta: {
       keepAlive: true
     }

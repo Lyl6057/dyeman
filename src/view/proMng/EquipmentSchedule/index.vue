@@ -388,7 +388,7 @@ export default {
     },
     getData() {
       //设备类型
-      this.$http.post("/api/baseEquipmentCategoryList").then((res) => {
+      this.$http.get("/api/baseEquipmentCategoryList").then((res) => {
         this.eqData = res.data;
       });
       //设备排期信息

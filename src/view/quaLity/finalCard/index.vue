@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-08-07 07:57:44
  * @LastEditors: Lyl
- * @LastEditTime: 2022-01-17 16:30:16
+ * @LastEditTime: 2022-05-20 12:31:42
  * @Description: 
 -->
 <template>
@@ -421,7 +421,7 @@ export default {
         this.$tip.error("成品重量不能为0!");
         return;
       }
-      getBleadye({ vatNo: this.form.vatNo }).then((dye) => {
+      getRevolve({ vatNo: this.form.vatNo }).then((dye) => {
         if (!dye.data.length) {
           this.$tip.error("暂无此缸号数据!");
         } else {

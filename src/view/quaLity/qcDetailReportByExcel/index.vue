@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-05-23 08:03:33
+ * @LastEditTime: 2022-05-23 08:07:54
  * @Description:
 -->
 <template>
@@ -11,14 +11,14 @@
     :element-loading-text="$t('public.loading')"
     v-loading="wloading"
   >
-    <view-container title="成品码卡报表">
+    <view-container title="Excel成品明细报表">
       <el-row class="btnList">
         <el-button type="primary" @click="query">{{
           this.$t("public.query")
         }}</el-button>
         <el-button
           type="primary"
-          @click="updateDivdWeight"
+          @click="outReport"
           :disabled="!form.vatNo"
           >{{ this.$t("public.report") }}</el-button
         >
@@ -215,7 +215,8 @@ export default {
                       ":92/api/proFinalProductCard/warehousingdetails?vatNo=" +
                       this.form.vatNo +
                       "&units=" +
-                      this.form.wmUnit
+                      this.form.wmUnit + 
+                      "&filType=xlsx"
                   );
                   window.open(name);
                   this.wloading = false;
@@ -235,7 +236,8 @@ export default {
                       ":92/api/proFinalProductCard/warehousingdetails?vatNo=" +
                       this.form.vatNo +
                       "&units=" +
-                      this.form.wmUnit
+                      this.form.wmUnit+ 
+                      "&filType=xlsx"
                   );
                   window.open(name);
                   this.wloading = false;
@@ -246,28 +248,6 @@ export default {
         } else {
           this.$tip.warning("无此缸号信息！");
         }
-      });
-    },
-    updateDivdWeight() {
-      let sIndex = this.form.vatNo.search("[AWR]");
-      let sVatNo =
-        sIndex > 0 ? this.form.vatNo.substring(0, sIndex) : this.form.vatNo; // 筛选原缸号
-      getDismantleVatno(sVatNo).then((res) => {
-        getRunJobByPage({
-          vatNo: sVatNo,
-          rows: 10,
-          start: 1,
-          page: 1,
-        }).then((vatList) => {
-          if (vatList.data.total) {
-            vatList.data.records[0].divdCw = res.data[sVatNo]; // 获取拆缸重量
-            updateRunJob(vatList.data.records[0]).then((res) => {
-              this.outReport();
-            }); // 更新原缸拆缸重量
-          }else{
-            this.outReport();
-          }
-        });
       });
     },
     cellClick(val) {

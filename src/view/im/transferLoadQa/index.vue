@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-04-25 14:03:51
  * @LastEditors: Lyl
- * @LastEditTime: 2022-05-19 08:40:39
+ * @LastEditTime: 2022-05-23 07:54:59
  * @FilePath: \iot.vue\src\view\im\transferLoadQa\index.vue
  * @Description: 
 -->
@@ -22,7 +22,7 @@
               <el-popover placement="left" width="160" trigger="click">
                 <p>请选择验布口</p>
                 <el-select v-model="exit" placeholder="请选择验布口">
-                  <el-option v-for="item in inExit" :key="item.value" :label="item.label" :value="item.value">
+                  <el-option v-for="item in outExit" :key="item.value" :label="item.label" :value="item.value">
                   </el-option>
                 </el-select>
                 <div style="text-align: left; margin-top: 10px">
@@ -30,7 +30,17 @@
                 </div>
                 <el-button type="text" icon="el-icon-view" size="mini" slot="reference">验布</el-button>
               </el-popover>
-              <el-button type="text" icon="el-icon-refresh-right" size="mini">回仓</el-button>
+              <el-popover placement="left" width="160" trigger="click">
+                <p>请选择入库口</p>
+                <el-select v-model="exit" placeholder="请选择入库口">
+                  <el-option v-for="item in outExit" :key="item.value" :label="item.label" :value="item.value">
+                  </el-option>
+                </el-select>
+                <div style="text-align: left; margin-top: 10px">
+                  <el-button type="primary" size="mini" @click="handleInWhse(scope)">提交</el-button>
+                </div>
+                <el-button type="text" icon="el-icon-refresh-right" size="mini" slot="reference">回仓</el-button>
+              </el-popover>
             </template>
           </avue-crud>
         </div>
@@ -57,7 +67,7 @@
 </template>
 
 <script>
-import { formOp, crudOp, inExit, taskForm, taskCrud } from "./data";
+import { formOp, crudOp, outExit, taskForm, taskCrud } from "./data";
 import { fetchStockVehicleByPage, sendTask, getTask } from "./api";
 import qcPlan from "./qcPlan";
 export default {
@@ -87,7 +97,7 @@ export default {
         total: 0,
       },
       exit: "Q1",
-      inExit,
+      outExit,
       visible: true,
       detail: {},
       taskFormOp: taskForm(this),
@@ -178,7 +188,7 @@ export default {
         entrance: this.exit, // 验布出口
         isEmpty: 0,
         type: 2, //0原材料,1五金件,2成品
-        orderType: 3, // 3 => 验布出库， 4 => 验布入库
+        orderType: 5, // 3 => 验布出库， 4 => 验布入库
       };
       alert("请求参数" + JSON.stringify(taskParams));
       console.info("sendParams", taskParams);

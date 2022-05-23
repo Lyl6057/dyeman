@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-01-12 15:39:08
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-18 13:51:07
+ * @LastEditTime: 2022-05-21 14:21:44
  * @FilePath: \iot.vue\src\view\im\whseInOutKB\index.vue
  * @Description: 
 -->
@@ -228,6 +228,10 @@ export default {
           label: "G出入库口(7004扫码)",
           value: "G",
         },
+        {
+          label: "S12",
+          value: "S12",
+        },
       ],
       outExit: [
         {
@@ -261,6 +265,10 @@ export default {
         {
           label: "G出入库口(7004扫码)",
           value: "G",
+        },
+        {
+          label: "S12",
+          value: "S12",
         },
       ],
       taskFormOp: taskForm(this),

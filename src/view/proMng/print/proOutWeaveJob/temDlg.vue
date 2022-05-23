@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-21 13:41:02
+ * @LastEditTime: 2022-05-20 16:24:33
  * @Description: 
 -->
 <template>
@@ -326,7 +326,9 @@ export default {
       choiceTle: "选择纱线库存",
       choiceTarget: {},
       choiceField: "",
-      choiceQ: {},
+      choiceQ: {
+        isOut: true
+      },
       code: "",
       yarnCrud: yarnCrud(this),
       group: [],

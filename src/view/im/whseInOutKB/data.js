@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-01-12 15:46:05
  * @LastEditors: Lyl
- * @LastEditTime: 2022-05-11 09:34:34
+ * @LastEditTime: 2022-05-21 16:19:13
  * @FilePath: \iot.vue\src\view\im\whseInOutKB\data.js
  * @Description:
  */
@@ -36,6 +36,10 @@ const inExit = [
   {
     label: "G出入库口(7004扫码)",
     value: "G"
+  },
+  {
+    label: "S12",
+    value: "S12"
   }
 ];
 const outExit = [
@@ -70,6 +74,10 @@ const outExit = [
   {
     label: "G出入库口(7004扫码)",
     value: "G"
+  },
+  {
+    label: "S12",
+    value: "S12"
   }
 ];
 
@@ -91,12 +99,28 @@ export function formOp(_this) {
         clearable: false,
         dicData: [
           {
-            label: "入库",
+            label: "正常入库",
             value: 1
           },
           {
-            label: "出库",
+            label: "正常出库",
             value: 2
+          },
+          {
+            label: "验布出库",
+            value: 3
+          },
+          {
+            label: "验布入库",
+            value: 4
+          },
+          {
+            label: "松布出库",
+            value: 5
+          },
+          {
+            label: "松布入库",
+            value: 6
           }
         ],
         change: val => {
@@ -1034,14 +1058,30 @@ export function taskForm(_this) {
         type: "select",
         dicData: [
           {
-            label: "入库",
+            label: "正常入库",
             value: 1
           },
           {
-            label: "出库",
+            label: "正常出库",
             value: 2
+          },
+          {
+            label: "验布出库",
+            value: 3
+          },
+          {
+            label: "验布入库",
+            value: 4
+          },
+          {
+            label: "松布出库",
+            value: 5
+          },
+          {
+            label: "松布入库",
+            value: 6
           }
-        ]
+        ],
       },
       {
         label: "物料类别",
@@ -1159,14 +1199,30 @@ export function taskCrud(_this) {
         type: "select",
         dicData: [
           {
-            label: "入库",
+            label: "正常入库",
             value: 1
           },
           {
-            label: "出库",
+            label: "正常出库",
             value: 2
+          },
+          {
+            label: "验布出库",
+            value: 3
+          },
+          {
+            label: "验布入库",
+            value: 4
+          },
+          {
+            label: "松布出库",
+            value: 5
+          },
+          {
+            label: "松布入库",
+            value: 6
           }
-        ]
+        ],
       },
       {
         label: "物料类别",

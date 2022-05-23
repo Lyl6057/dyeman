@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-04-22 08:37:12
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-22 13:15:15
+ * @LastEditTime: 2022-05-20 10:16:29
  * @FilePath: \iot.vue\src\components\dataCardTextMenu\index.vue
  * @Description: 
 -->
@@ -22,12 +22,12 @@
           :key="list.id"
           :style="{ backgroundColor: list.bgColor }"
         >
-          <div @click="list.click" :style="{ color: list.color }">
-            <i :class="list.icon"></i>
-            <el-badge  :value="list.badge">
+          <el-badge  :value="list.badge" style="width: 88%">
+            <div @click="list.click" :style="{ color: list.color }">
+              <i :class="list.icon"></i>
               <span :style="{ color: list.color }"> {{ list.title }}</span>
-            </el-badge>
-          </div>
+            </div>
+          </el-badge>
         </el-card>
       </el-col>
     </el-row>
@@ -58,7 +58,7 @@ export default {
 <style lang="stylus" scoped>
 >>>.el-badge__content.is-fixed {
   top: 10px !important;
-  right: -5px !important;
+  // right: -5px !important;
 }
 
 .dataCardTextMenu {

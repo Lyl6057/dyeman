@@ -153,7 +153,7 @@ export function rhl1C(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 278px)",
+    height: "calc(100vh - 285px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,

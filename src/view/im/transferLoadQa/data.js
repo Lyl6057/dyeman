@@ -2,12 +2,12 @@
  * @Author: Lyl
  * @Date: 2022-04-25 14:09:54
  * @LastEditors: Lyl
- * @LastEditTime: 2022-05-19 08:19:21
+ * @LastEditTime: 2022-05-21 16:20:35
  * @FilePath: \iot.vue\src\view\im\transferLoadQa\data.js
  * @Description:
  */
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
-export const inExit = [
+export const outExit = [
   {
     label: "Q1",
     value: "Q1"
@@ -47,10 +47,14 @@ export const inExit = [
   {
     label: "Q10",
     value: "Q10"
+  },
+  {
+    label: "S12",
+    value: "S12"
   }
 ];
 
-const outExit = [
+const inExit = [
   {
     label: "A出入库口(7001扫码)",
     value: "A"
@@ -476,14 +480,30 @@ export function taskForm(_this) {
         type: "select",
         dicData: [
           {
-            label: "入库",
+            label: "正常入库",
             value: 1
           },
           {
-            label: "出库",
+            label: "正常出库",
             value: 2
+          },
+          {
+            label: "验布出库",
+            value: 3
+          },
+          {
+            label: "验布入库",
+            value: 4
+          },
+          {
+            label: "松布出库",
+            value: 5
+          },
+          {
+            label: "松布入库",
+            value: 6
           }
-        ]
+        ],
       },
       {
         label: "物料类别",
@@ -601,14 +621,30 @@ export function taskCrud(_this) {
         type: "select",
         dicData: [
           {
-            label: "入库",
+            label: "正常入库",
             value: 1
           },
           {
-            label: "出库",
+            label: "正常出库",
             value: 2
+          },
+          {
+            label: "验布出库",
+            value: 3
+          },
+          {
+            label: "验布入库",
+            value: 4
+          },
+          {
+            label: "松布出库",
+            value: 5
+          },
+          {
+            label: "松布入库",
+            value: 6
           }
-        ]
+        ],
       },
       {
         label: "物料类别",

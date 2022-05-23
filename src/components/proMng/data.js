@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-05-03 13:03:03
  * @LastEditors: Lyl
- * @LastEditTime: 2022-05-19 19:48:54
+ * @LastEditTime: 2022-05-20 16:25:42
  * @Description:
  */
 
@@ -1429,7 +1429,7 @@ export function sxStockC(_this) {
     //   }
     // ],
     selectable: (row, index) => {
-      return row.weight > 0;
+      return _this.choiceQ.isOut ? true :  row.weight > 0;
     },
     page: true,
     column: [
