@@ -48,7 +48,7 @@
 </template>
 <script>
 import dataCardTextMenu from "@/components/dataCardTextMenu/index";
-import { mapGetters } from "vuex"
+import { fetchUnOutStockCountData, fetchUnInStockCountData } from "@/api/im/Wk/index"
 export default {
   name: "",
   components: {
@@ -645,7 +645,8 @@ export default {
       outList: [
         {
           id: "1",
-          label: "list1",
+          label: "纱线",
+          name: "SX",
           span: 3,
           data: [
             {
@@ -659,33 +660,39 @@ export default {
             {
               id: "1-2",
               click: () => {
-                this.toView("cc_productionUse", this.$t("iaoMng.sx") + "_1");
+                this.toView("cc_productionUse", this.$t("iaoMng.sx") + "_1", "SX");
               },
               title: this.$t("iaoMng.sclycc"),
               icon: "el-icon-s-claim",
               color: "#409EFF",
               date: "1天前",
+              badgeKey: "applyCount",
+              badge: ""
               // content: "生产领用出库看板",
             },
             {
               id: "1-3",
               click: () => {
-                this.toView("cc_sx", this.$t("iaoMng.wfjgscc") + "_2");
+                this.toView("cc_sx", this.$t("iaoMng.wfjgscc") + "_2", "SX");
               },
               title: this.$t("iaoMng.wfjgscc"),
               icon: "el-icon-s-home",
               color: "#409EFF",
+              badgeKey: "outsideCount",
+              badge: ""
               // content: "外发加工出库看板",
             },
             {
               id: "1-4",
               click: () => {
                 // this.toView("cc_sx", this.$t("iaoMng.tgysscc") + "_4");
-                this.toView("cc_ret_reat", this.$t("iaoMng.tgysscc") + "_4");
+                this.toView("cc_ret_reat", this.$t("iaoMng.tgysscc") + "_4", "SX");
               },
               title: this.$t("iaoMng.tgysscc"),
               icon: "el-icon-s-claim",
               color: "#409EFF",
+              badgeKey: "memoCount",
+              badge: ""
               // content: "退供应商纱出库看板",
             },
             {
@@ -721,7 +728,7 @@ export default {
         },
         {
           id: "2",
-          label: "list2",
+          label: "胚布",
           span: 3,
           data: [
             {
@@ -814,7 +821,7 @@ export default {
         },
         {
           id: "3",
-          label: "list3",
+          label: "成品布",
           span: 3,
           data: [
             {
@@ -857,7 +864,8 @@ export default {
         },
         {
           id: "4",
-          label: "list4",
+          label: "辅料",
+          name: "FL",
           span: 3,
           data: [
             {
@@ -873,32 +881,38 @@ export default {
               click: () => {
                 // this.toView("cc_scfl", "生产领用_1");
                 // this.toView("cc_scfl", this.$t("iaoMng.sclyflcc") + "_1");
-                this.toView("cc_productionUse", this.$t("iaoMng.scfl") + "_1");
+                this.toView("cc_productionUse", this.$t("iaoMng.scfl") + "_1", "FL");
               },
               title: this.$t("iaoMng.sclyflcc"),
               icon: "el-icon-s-claim",
               color: "#409EFF",
+              badgeKey: "applyCount",
+              badge: ""
               // content: "领用出库看板",
             },
             {
               id: "4-3",
               click: () => {
-                this.toView("cc_scfl", this.$t("iaoMng.wfjgflcc") + "_2");
+                this.toView("cc_scfl", this.$t("iaoMng.wfjgflcc") + "_2", "FL");
               },
               title: this.$t("iaoMng.wfjgflcc"),
               icon: "el-icon-s-home",
               color: "#409EFF",
+              badgeKey: "outsideCount",
+              badge: ""
               // content: "外发加工出库看板",
             },
             {
               id: "4-7",
               click: () => {
                 // this.toView("cc_scfl", this.$t("iaoMng.tgysflcc") + "_4");
-                this.toView("ret_supp", this.$t("iaoMng.tgysflcc") + "_3");
+                this.toView("ret_supp", this.$t("iaoMng.tgysflcc") + "_3", "FL");
               },
               title: this.$t("iaoMng.tgysflcc"),
               icon: "el-icon-s-claim",
               color: "#409EFF",
+              badgeKey: "memoCount",
+              badge: ""
               // content: "退供应商出库看板",
             },
             {
@@ -934,7 +948,8 @@ export default {
         },
         {
           id: "5",
-          label: "list5",
+          label: "化工原料",
+          name: "HRL",
           span: 3,
           data: [
             {
@@ -949,29 +964,34 @@ export default {
               id: "5-2",
               click: () => {
                 // this.toView("cc_hgyl", this.$t("iaoMng.sclyhgylcc") + "_1");
-                this.toView("cc_productionUse", this.$t("iaoMng.hgyl") + "_1");
+                this.toView("cc_productionUse", this.$t("iaoMng.hgyl") + "_1", "HRL");
               },
               title: this.$t("iaoMng.sclyhgylcc"),
               icon: "el-icon-s-claim",
               color: "#409EFF",
+              badgeKey: "applyCount",
+              badge: ""
               // content: "领用出库看板",
             },
             {
               id: "5-3",
               click: () => {
                 // this.toView("cc_scfl", this.$t("iaoMng.tgysflcc") + "_4");
-                this.toView("ret_supp", this.$t("iaoMng.tgyshgylcc") + "_5");
+                this.toView("ret_supp", this.$t("iaoMng.tgyshgylcc") + "_5", "HRL");
               },
               title: this.$t("iaoMng.tgyshgylcc"),
               icon: "el-icon-s-claim",
               color: "#409EFF",
+              badgeKey: "memoCount",
+              badge: ""
               // content: "退供应商出库看板",
             },
           ],
         },
         {
           id: "6",
-          label: "list6",
+          label: "染料",
+          name: "RLL",
           span: 3,
           data: [
             {
@@ -986,33 +1006,39 @@ export default {
               id: "6-2",
               click: () => {
                 this.toView("cc_yl", this.$t("iaoMng.sclyylcc") + "_1");
-                this.toView("cc_productionUse", this.$t("iaoMng.yl") + "_1");
+                this.toView("cc_productionUse", this.$t("iaoMng.yl") + "_1", "RLL");
               },
               title: this.$t("iaoMng.sclyylcc"),
               icon: "el-icon-s-claim",
               color: "#409EFF",
+              badgeKey: "applyCount",
+              badge: ""
               // content: "领用出库看板",
             },
             {
               id: "6-3",
               click: () => {
                 // this.toView("cc_scfl", this.$t("iaoMng.tgysflcc") + "_4");
-                this.toView("ret_supp", this.$t("iaoMng.tgysylcc") + "_8");
+                this.toView("ret_supp", this.$t("iaoMng.tgysylcc") + "_8", "RLL");
               },
               title: this.$t("iaoMng.tgysylcc"),
               icon: "el-icon-s-claim",
               color: "#409EFF",
+              badgeKey: "memoCount",
+              badge: ""
               // content: "退供应商出库看板",
             },
           ],
         },
         {
           id: "7",
-          label: "list7",
+          label: "五金",
+          name: "WJ|XZ",
           span: 3,
           data: [
             {
               click: () => {},
+              name: "WJ",
               id: "7-1",
               title: this.$t("iaoMng.wjcc"), //"五金出库",
               icon: "el-icon-s-claim",
@@ -1021,28 +1047,35 @@ export default {
             },
             {
               id: "7-2",
+              name: "WJ",
               click: () => {
                 // this.toView("cc_wj", this.$t("iaoMng.sclywjcc") + "_1");
-                this.toView("cc_productionUse", this.$t("choicDlg.wj") + "_1");
+                this.toView("cc_productionUse", this.$t("choicDlg.wj") + "_1", "WJ");
               },
               title: this.$t("iaoMng.sclywjcc"),
               icon: "el-icon-s-claim",
               color: "#409EFF",
+              badgeKey: "applyCount",
+              badge: ""
               // content: "领用出库看板",
             },
             {
               id: "7-3",
+              name: "WJ",
               click: () => {
                 // this.toView("cc_wj", this.$t("iaoMng.tgyswjcc") + "_4");
-                this.toView("ret_supp", this.$t("iaoMng.tgyswjcc") + "_1");
+                this.toView("ret_supp", this.$t("iaoMng.tgyswjcc") + "_1", "WJ");
               },
               title: this.$t("iaoMng.tgyswjcc"),
               icon: "el-icon-s-claim",
               color: "#409EFF",
+              badgeKey: "memoCount",
+              badge: ""
               // content: "退供应商出库看板",
             },
             {
               id: "7-4",
+              name: "WJ",
               click: () => {
                 this.toView("cc_wj", this.$t("iaoMng.wjtc") + "_5");
               },
@@ -1053,6 +1086,7 @@ export default {
             },
             {
               id: "7-5",
+              name: "WJ",
               click: () => {
                 this.toView("cc_manual", this.$t("choicDlg.wj") + "_0");
               },
@@ -1063,6 +1097,7 @@ export default {
             {
               click: () => {},
               id: "7-6",
+              label: "行政",
               title: this.$t("iaoMng.xzcc"),
               icon: "el-icon-s-claim",
               color: "#606266",
@@ -1070,28 +1105,35 @@ export default {
             },
             {
               id: "7-7",
+              name: "XZ",
               click: () => {
                 // this.toView("cc_xz", this.$t("iaoMng.sclyxzcc") + "_1");
-                this.toView("cc_productionUse", this.$t("choicDlg.xz") + "_1");
+                this.toView("cc_productionUse", this.$t("choicDlg.xz") + "_1", "XZ");
               },
               title: this.$t("iaoMng.sclyxzcc"),
               icon: "el-icon-s-claim",
               color: "#409EFF",
+              badgeKey: "applyCount",
+              badge: ""
               // content: "领用出库看板",
             },
             {
               id: "7-8",
+              name: "XZ",
               click: () => {
                 // this.toView("cc_xz", this.$t("iaoMng.tgysxzcc") + "_4");
-                this.toView("ret_supp", this.$t("iaoMng.tgysxzcc") + "_2");
+                this.toView("ret_supp", this.$t("iaoMng.tgysxzcc") + "_2", "XZ");
               },
               title: this.$t("iaoMng.tgysxzcc"),
               icon: "el-icon-s-claim",
               color: "#409EFF",
+              badgeKey: "memoCount",
+              badge: ""
               // content: "退供应商出库看板",
             },
             {
               id: "7-9",
+              name: "XZ",
               click: () => {
                 this.toView("cc_xz", this.$t("iaoMng.xzdc") + "_5");
               },
@@ -1102,6 +1144,7 @@ export default {
             },
             {
               id: "7-10",
+              name: "XZ",
               click: () => {
                 this.toView("cc_manual", this.$t("choicDlg.xz") + "_0");
               },
@@ -1113,7 +1156,8 @@ export default {
         },
         {
           id: "8",
-          label: "list8",
+          label: "能源",
+          name: "ENG",
           span: 3,
           data: [
             {
@@ -1135,11 +1179,13 @@ export default {
             {
               id: "8-2",
               click: () => {
-                this.toView("cc_rl", this.$t("iaoMng.sclyrhcc") + "_1");
+                this.toView("cc_rl", this.$t("iaoMng.sclyrhcc") + "_1", "ENG");
               },
               title: this.$t("iaoMng.sclyrhcc"),
               icon: "el-icon-s-claim",
               color: "#409EFF",
+              badgeKey: "applyCount",
+              badge: ""
               // content: "领用出库看板",
             },
           ],
@@ -1149,63 +1195,65 @@ export default {
       curWhseType: "",
     };
   },
-  computed:{
-    ...mapGetters([
-      "yarnInCountData",
-      "chemicalInCountData",
-      "dyesInCountData",
-      "accInCountData",
-      "hardInCountData",
-      "officeInCountData",
-      "engInCountData",
-      "equInCountData",
-    ])
-  },
-  watch: {
-    yarnInCountData(valData){
-      this.arrList[0].data.forEach(item => {
-        item.badge = valData[item.badgeKey] || ""
-      })
-    },
-    chemicalInCountData(valData){
-      this.arrList[3].data.forEach(item => {
-        item.badge = valData[item.badgeKey] || ""
-      })
-    },
-    dyesInCountData(valData){
-      this.arrList[4].data.forEach(item => {
-        item.badge = valData[item.badgeKey] || ""
-      })
-    },
-    accInCountData(valData){
-      this.arrList[5].data.forEach(item => {
-        item.badge = valData[item.badgeKey] || ""
-      })
-    },
-    hardInCountData(valData){
-      this.arrList[6].data.filter(item => item.name == 'WJ')
-      .forEach(item => {
-        item.badge = valData[item.badgeKey] || ""
-      })
-    },
-    officeInCountData(valData){
-      this.arrList[6].data.filter(item => item.name == 'XZ')
-      .forEach(item => {
-        item.badge = valData[item.badgeKey] || ""
-      })
-    },
-    engInCountData(valData){
-      this.arrList[7].data.filter(item => item.name == 'ENG').forEach(item => {
-        item.badge = valData[item.badgeKey] || ""
-      })
-    },
-    equInCountData(valData){
-      this.arrList[7].data.filter(item => item.name == 'EQU').forEach(item => {
-        item.badge = valData[item.badgeKey] || ""
-      })
-    }
-  },
+
+
   methods: {
+    // 获取未入仓统计数据
+    getUnInStockCountData(refreshAll = false){
+      let types = [];
+      if(refreshAll){
+        types = ["SX","HRL","RLL", "FL", "WJ", "XZ", "ENG"];
+      }else{
+        this.curWhseType && types.push(this.curWhseType);
+      }
+      if(types.length == 0) return;
+      types = types.join(",");
+      fetchUnInStockCountData(types).then(res => {
+        return res.data;
+      }).then(resData => {
+        resData.forEach(countItem => {
+          let existMut = ["WJ","XZ"].includes(countItem.type);
+          let whseInMenuItem = this.arrList.find(menuIten => (menuIten.name || "").includes(countItem.type));
+          if(whseInMenuItem){
+            let tDataList = whseInMenuItem.data;
+            if(existMut){
+              tDataList = tDataList.filter(cItem => cItem.name == countItem.type);
+            }
+            tDataList.forEach(cItem => {
+              cItem.badge = countItem[cItem.badgeKey] || ""
+            })
+          }
+        })
+      })
+    },
+    // 获取未出仓统计数据
+    getUnOutStockCountData(refreshAll = false){
+      let types = [];
+      if(refreshAll){
+        types = ["SX","HRL","RLL", "FL", "WJ", "XZ", "ENG"];
+      }else{
+        this.curWhseType && types.push(this.curWhseType);
+      }
+      if(types.length == 0) return;
+      types = types.join(",");
+      fetchUnOutStockCountData(types).then(res => {
+        return res.data;
+      }).then(resData => {
+        resData.forEach(countItem => {
+          let existMut = ["WJ","XZ"].includes(countItem.type);
+          let whseOutMenuItem = this.outList.find(menuIten => (menuIten.name || "").includes(countItem.type));
+          if(whseOutMenuItem){
+            let tDataList = whseOutMenuItem.data;
+            if(existMut){
+              tDataList = tDataList.filter(cItem => cItem.name == countItem.type);
+            } 
+            tDataList.forEach(cItem => {
+              cItem.badge = countItem[cItem.badgeKey] || ""
+            })
+          }
+        })
+      })
+    },
     toView(val, type, whseType) {
       type ? (this.kanban = false) : (this.kanban = true);
       let data = {
@@ -1228,12 +1276,21 @@ export default {
       done();
     },
     refreshCountData(){
-      this.$store.dispatch("whse/RefreshWhseUnInStockCount", this.curWhseType);
+      switch(this.tabs){
+        case "rc": 
+          this.getUnInStockCountData();
+          break;
+        case "cc" :
+          this.getUnOutStockCountData();
+          break;
+        default:; break;
+      }
     },
   },
   
   created() {
-    this.$store.dispatch("whse/GetAllWhseUnInStockCount")
+    this.getUnInStockCountData(true);
+    this.getUnOutStockCountData(true);
   },
   mounted() {},
   beforeDestroy() {},

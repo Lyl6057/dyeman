@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-10 13:20:44
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-05-20 10:03:43
+ * @LastEditTime: 2022-05-23 09:03:21
  * @Description:
  */
 const getters = {
@@ -17,5 +17,8 @@ const getters = {
   officeInCountData: state => state.whse.officeInCountData || {},
   engInCountData: state => state.whse.engInCountData || {},
   equInCountData: state => state.whse.equInCountData || {},
+
+  unOutCountData: state => state.whse.unOutCountDataList || [],
+
 };
 export default getters
