@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-05-19 16:34:01
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-05-20 10:49:31
+ * @LastEditTime: 2022-05-23 09:02:29
  */
 import axios from "axios";
 
@@ -19,6 +19,8 @@ export default {
         officeInCountData: {},
         engInCountData: {},
         equInCountData: {},
+
+        unOutCountDataList: [],
     },
     mutations:{
         SET_YARN_UN_IN_STOCK(state, data){
@@ -45,8 +47,15 @@ export default {
         SET_EQU_UN_IN_STOCK(state, data){
             state.equInCountData = data;
         },
+        SET_UN_OUT_COUNT_DATA_LIST(state, dataList){
+            state.unOutCountDataList = dataList;
+        }
     },
     actions: {
+        async GetUnOutCountDataList({commit}){
+            let res = await axios.get("/api/whseManage/unOutCount");
+            commit("SET_UN_OUT_COUNT_DATA_LIST",res.data);
+        },
         // 纱线
         async GetYarnUnInStockCount({commit}){
             let resData = await axios.get("/api/whseYarnin/unInStock/count");
