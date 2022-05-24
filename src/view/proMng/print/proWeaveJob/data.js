@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-21 13:46:28
+ * @LastEditTime: 2022-05-23 13:03:07
  * @Description:
  */
 
@@ -190,13 +190,13 @@ export function mainCrud(_this, audit) {
           ? true
           : false,
         overHidden: true,
-        rules: [
-          {
-            required: true,
-            message: "请選擇訂單編號",
-            trigger: "blur"
-          }
-        ]
+        // rules: [
+        //   {
+        //     required: true,
+        //     message: "请選擇訂單編號",
+        //     trigger: "blur"
+        //   }
+        // ]
         // click: () => {
         //   _this.visible = true
         // }
@@ -741,7 +741,14 @@ export function mainCrud(_this, audit) {
           : false,
         placeholder: " "
       },
-
+      {
+        label: "其他要求",
+        prop: "otherRequire",
+        tip: "Yêu cầu khác",
+        placeholder: " ",
+        hide: true,
+        span: 12
+      },
       {
         label: "织单状态",
         tip: "state",
@@ -880,14 +887,7 @@ export function mainCrud(_this, audit) {
             type: "number"
           },
 
-          {
-            label: "其他要求",
-            prop: "otherRequire",
-            tip: "Yêu cầu khác",
-            placeholder: " ",
-            hide: true,
-            span: 12
-          },
+          
           {
             label: "針寸數",
             prop: "needleInch",

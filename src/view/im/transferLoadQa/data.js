@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-04-25 14:09:54
  * @LastEditors: Lyl
- * @LastEditTime: 2022-05-21 16:20:35
+ * @LastEditTime: 2022-05-24 14:23:07
  * @FilePath: \iot.vue\src\view\im\transferLoadQa\data.js
  * @Description:
  */
@@ -47,6 +47,53 @@ export const outExit = [
   {
     label: "Q10",
     value: "Q10"
+  }
+];
+
+export const sbExit = [
+  {
+    label: "S1",
+    value: "S1"
+  },
+  {
+    label: "S2",
+    value: "S2"
+  },
+  {
+    label: "S3",
+    value: "S3"
+  },
+  {
+    label: "S4",
+    value: 'S4'
+  },
+  {
+    label: "S5",
+    value: "S5"
+  },
+  {
+    label: "S6",
+    value: "S6"
+  },
+  {
+    label: "S7",
+    value: 'S7'
+  },
+  {
+    label: 'S8',
+    value: 'S8'
+  },
+  {
+    label: 'S9',
+    value: 'S9'
+  },
+  {
+    label: "S10",
+    value: "S10"
+  },
+  {
+    label: "S11",
+    value: "S11"
   },
   {
     label: "S12",
@@ -267,7 +314,7 @@ export function crudOp(_this) {
     cancelBtn: false,
     editBtn: false,
     delBtn: false,
-    menuWidth: 180,
+    menuWidth: 200,
     border: true,
     stripe: true,
     index: false,

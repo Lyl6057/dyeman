@@ -279,7 +279,7 @@ export default {
               this.mx.forEach((item, index) => {
                 item.index = index + 1;
                 item.chinName = item.materialNum;
-                item.yarnsName = item.yarnsId;
+                // item.yarnsName = item.yarnsId;
                 if (!item.materialName) item.materialName = item.materialNum;
                 if (this.datas == this.$t("iaoMng.sx")) {
                   item.batchNos = item.batchNo;

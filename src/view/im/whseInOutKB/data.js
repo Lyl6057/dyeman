@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-01-12 15:46:05
  * @LastEditors: Lyl
- * @LastEditTime: 2022-05-21 16:19:13
+ * @LastEditTime: 2022-05-23 13:43:54
  * @FilePath: \iot.vue\src\view\im\whseInOutKB\data.js
  * @Description:
  */
@@ -106,22 +106,22 @@ export function formOp(_this) {
             label: "正常出库",
             value: 2
           },
-          {
-            label: "验布出库",
-            value: 3
-          },
-          {
-            label: "验布入库",
-            value: 4
-          },
-          {
-            label: "松布出库",
-            value: 5
-          },
-          {
-            label: "松布入库",
-            value: 6
-          }
+          // {
+          //   label: "验布出库",
+          //   value: 3
+          // },
+          // {
+          //   label: "验布入库",
+          //   value: 4
+          // },
+          // {
+          //   label: "松布出库",
+          //   value: 5
+          // },
+          // {
+          //   label: "松布入库",
+          //   value: 6
+          // }
         ],
         change: val => {
           _this.typeChange(val.value);

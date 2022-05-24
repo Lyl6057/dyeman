@@ -230,6 +230,8 @@ export default {
           whseHardwareOutFk: this.detail.whseHardwareOutId,
           whseOfficeOutFk: this.detail.whseOfficeOutId,
           accessoriesOutFk: this.detail.accessoriesOutId,
+          whseEquipmentOutFk: this.detail.whseEquipmentOutoid,
+          whseEnergyOutFk: this.detail.energyOutId
           // batchNo: "!^",
         })
         .then((res) => {
@@ -241,9 +243,9 @@ export default {
           this.mx.forEach((item, index) => {
             item.$cellEdit = true;
             item.index = index + 1;
-            item.weight = (item.weight || item.stockQty).toFixed(2);
+            item.weight = (Number(item.weight || item.stockQty)).toFixed(2);
             item.weightUnit = item.weightUnit || item.stockUnit;
-            item.applyNum = item.applyNum.toFixed(2);
+            item.applyNum = Number(item.applyNum).toFixed(2);
             // item.weight = item.weight.toFixed(2);
             if (index === this.mx.length - 1) {
               setTimeout(() => {
@@ -278,6 +280,8 @@ export default {
           whseHardwareOutDtlFk: val.whseHardwareOutDtlId,
           whseOfficeOutDtlFk: val.officeOutDtlId,
           whseAccessoriesOutDtlFk: val.whseAccessoriesoutDtloid,
+          whseEquipmentOutDtlFk: val.whseEquipmentOutDtloid,
+          whseEnergyOutDtlFk: val.energyOutDtlId
         })
         .then((res) => {
           let records = res.data;
@@ -295,7 +299,7 @@ export default {
           }
           this.chooseData.list.forEach((item, index) => {
             item.weightUnit = this.chooseData.weightUnit;
-            item.weight = item.weight.toFixed(2);
+            item.weight = Number(item.weight).toFixed(2);
             item.index = index + 1;
             if (index === this.chooseData.list.length - 1) {
               this.rcOp.showSummary = true;
@@ -422,7 +426,7 @@ export default {
         return;
       }
       let tip = "";
-      tip = "是否确定删除批号为 【" + this.choosePh.batchNo + " 】的数据？";
+      tip = "是否确定删除选中的数据？";
       this.$tip
         .cofirm(tip, this, {})
         .then(() => {
@@ -561,6 +565,8 @@ export default {
                 data.whseHardwareOutFk = this.detail.whseHardwareOutId;
                 data.whseOfficeOutFk = this.detail.whseOfficeOutId;
                 data.accessoriesOutFk = this.detail.accessoriesOutId;
+                data.whseEquipmentOutFk = this.detail.whseEquipmentOutoid;
+                data.whseEnergyOutFk = this.detail.energyOutId
                 this.attributeObj.addDtla(data).then((res) => {
                   item[this.attributeObj.uuid[1]] = res.data.data;
                   resolve();
@@ -582,6 +588,8 @@ export default {
                   item.dyesalOutDtlFk = this.mx[i].energyOutDtlId;
                   item.whseHardwareOutDtlFk = this.mx[i].whseHardwareOutDtlId;
                   item.whseOfficeOutDtlFk = this.mx[i].officeOutDtlId;
+                  item.whseEquipmentOutDtlFk =  this.mx[i].whseEquipmentOutDtloid;
+                  item.whseEnergyOutDtlFk =  this.mx[i].energyOutDtlId
                   if (!item[this.attributeObj.uuid[2]]) {
                     this.attributeObj.addDtlb(item).then((res) => {
                       item[this.attributeObj.uuid[2]] = res.data.data;
@@ -641,6 +649,8 @@ export default {
                 data.whseHardwareOutFk = this.form.whseHardwareOutId;
                 data.whseOfficeOutFk = this.form.whseOfficeOutId;
                 data.accessoriesOutFk = this.form.accessoriesOutId;
+                data.whseEquipmentOutFk = this.form.whseEquipmentOutoid;
+                data.whseEnergyOutFk = this.form.energyOutId
                 this.attributeObj.addDtla(data).then((res) => {
                   item[this.attributeObj.uuid[1]] = res.data.data;
                   resolve();
@@ -662,6 +672,8 @@ export default {
                   item.dyesalOutDtlFk = this.mx[i].energyOutDtlId;
                   item.whseHardwareOutDtlFk = this.mx[i].whseHardwareOutDtlId;
                   item.whseOfficeOutDtlFk = this.mx[i].officeOutDtlId;
+                  item.whseEquipmentOutDtlFk =  this.mx[i].whseEquipmentOutDtloid
+                  item.whseEnergyOutDtlFk =  this.mx[i].energyOutDtlId
                   if (!item[this.attributeObj.uuid[2]]) {
                     this.attributeObj.addDtlb(item).then((res) => {
                       item[this.attributeObj.uuid[2]] = res.data.data;
@@ -1114,6 +1126,42 @@ export default {
           });
           val.forEach((item, i) => {
             // item.weight = item.stock;
+            item.locationCode = item.locationCode || item.storageNo;
+            item.$cellEdit = true;
+          });
+          for (let i = 0; i < val.length; i++) {
+            if (sum + val[i].weight <= this.chooseData.applyNum) {
+              this.chooseData.list.push(val[i]);
+              sum += Number(val[i].weight);
+            } else if (this.chooseData.applyNum - sum > 0) {
+              val[i].weight = this.chooseData.applyNum - sum;
+              sum += Number(val[i].weight);
+              this.chooseData.list.push(val[i]);
+              break;
+            }
+          }
+          this.chooseData.weight = Number(sum);
+          this.chooseData.list.forEach((item, i) => {
+            item.index = i + 1;
+          });
+        }
+      } else if (this.proChoiceTle === "选择设备库存") {
+        if (this.form.stockType == 2) {
+          val.forEach((item, i) => {
+            item.$cellEdit = true;
+            item.list = [JSON.parse(JSON.stringify(item))];
+            item.applyNum = item.weight;
+            this.mx.push(item);
+          });
+          if (this.mx.length) {
+            this.$refs.dlgcrud.setCurrentRow(this.mx[this.mx.length - 1]);
+          }
+        } else {
+          let sum = 0;
+          this.chooseData.list.forEach((item, i) => {
+            sum += Number(item.weight);
+          });
+          val.forEach((item, i) => {
             item.locationCode = item.locationCode || item.storageNo;
             item.$cellEdit = true;
           });

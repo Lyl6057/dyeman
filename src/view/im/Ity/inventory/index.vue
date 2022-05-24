@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-24 14:15:12
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-28 11:15:42
+ * @LastEditTime: 2022-05-24 11:10:20
  * @Description: 
 -->
 <template>
@@ -71,6 +71,8 @@ import {
   getCpbList,
   getNote,
   getNoteList,
+  getEquipment,
+  getEquipmentList,
   fetchCheckHasExistByNow,
   createSnapshot2StockType,
 } from "./api";
@@ -227,6 +229,13 @@ export default {
           this.typeObj.sort = "batchNo";
           this.typeObj.outAdr = "./static/xlxsTemplate/inventory.xlsx";
           break;
+        case "SB":
+          this.getFun = getEquipment;
+          this.getList = getEquipmentList;
+          this.crudOp = crudOp(this);
+          this.typeObj.sort = "batchNo";
+          this.typeObj.outAdr = "./static/xlxsTemplate/inventory.xlsx";
+          break;
         default:
           this.crud = [];
           this.loading = false;
@@ -257,7 +266,6 @@ export default {
         })
       ).then((res) => {
         this.page.total = res.data.total;
-
         let data = this.filterEmpty
           ? res.data.records.filter((item) => {
               return item.weight || item.stock || item.clothWeight;
@@ -275,7 +283,8 @@ export default {
             ? "chemicalId"
             : this.form.type == "XZ"
             ? "officeId"
-            : "accessoriesId"
+            :this.form.type == "SB"
+            ? "equipmentId" : "accessoriesId"
         );
         group.forEach((item, i) => {
           item.children.sort((a, b) =>
@@ -286,14 +295,12 @@ export default {
           item.chemicalId =
             item.children[0].accessoriesId ||
             item.children[0].chemicalId ||
-            item.children[0].officeId;
+            item.children[0].officeId|| item.children[0].equipmentId
           item.chemicalName =
             item.children[0].accessoriesName ||
             item.children[0].chemicalName ||
-            item.children[0].officeName;
+            item.children[0].officeName|| item.children[0].equipmentName
           item.weightUnit = item.children[0].weightUnit;
-          // item.custCode = item.children[0].custCode;
-          // item.fabName = item.children[0].fabName;
           item.proName = item.children[0].proName;
           item.clothWeight = 0;
           if (!item.weight) item.weight = 0;
@@ -310,8 +317,6 @@ export default {
             child.yarnsName = "";
             child.chemicalId = "";
             child.chemicalName = "";
-            // child.custCode = "";
-            // child.fabName = "";
             child.proName = "";
             item.weight += Number(child.weight) || Number(child.stock);
             item.clothWeight += Number(child.clothWeight || 0);
@@ -321,16 +326,12 @@ export default {
           item.clothWeight = item.clothWeight.toFixed(2);
         });
         this.crud = group;
-        this.crud.length === 0 ? (this.loading = false) : "";
         this.crud.forEach((item, i) => {
           item.index = i + 1;
-          if (this.crud.length - 1 === i) {
-            setTimeout(() => {
-              this.loading = false;
-            }, 500);
-          }
         });
-      });
+      }).finally(() =>{
+        this.loading = false;
+      })
     },
     outTransit() {
       switch (this.form.type) {
@@ -383,12 +384,13 @@ export default {
               item.chemicalId ||
               item.yarnsId ||
               item.accessoriesId ||
-              item.officeId;
+              item.officeId||
+              item.equipmentId;
             item.chemicalName =
               item.chemicalName ||
               item.yarnsName ||
               item.accessoriesName ||
-              item.officeName;
+              item.officeName || item.equipmentName
             item.stock = item.weight || item.stock;
             item.locationCode = item.locationCode || item.storageNo;
             item.index = i + 1;
@@ -410,12 +412,14 @@ export default {
             fun1().then((res) => {
               setTimeout(() => {
                 this.$tip.success("导出成功!");
-                this.loading = false;
+                
                 this.getData();
               }, 1000);
             });
           });
-        });
+        }).finally(() =>{
+          this.loading = false;
+        })
       } catch (e) {
         console.log(e);
       }

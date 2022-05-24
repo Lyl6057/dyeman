@@ -1168,14 +1168,6 @@ export default {
               color: "#606266",
               bgColor: "#ccc",
             },
-            // {
-            //   click: () => {
-            //     this.toView("cc_manual", this.$t("choicDlg.rl") + "_0");
-            //   },
-            //   title:this.$t("iaoMng.sgcc"),
-            //   icon: "el-icon-thumb",
-            //   color: "#409EFF",
-            // },
             {
               id: "8-2",
               click: () => {
@@ -1186,7 +1178,25 @@ export default {
               color: "#409EFF",
               badgeKey: "applyCount",
               badge: ""
-              // content: "领用出库看板",
+            },
+            {
+              click: () => {},
+              id: "8-3",
+              title: this.$t("iaoMng.sbcc"),
+              icon: "yx-icf-cailiaogongcheng",
+              color: "#606266",
+              bgColor: "#ccc",
+            },
+            {
+              id: "8-4",
+              click: () => {
+                this.toView("cc_productionUse", this.$t("iaoMng.sb") + "_1", "SB");
+              },
+              title: this.$t("iaoMng.sclysbcc"),
+              icon: "el-icon-s-claim",
+              color: "#409EFF",
+              badgeKey: "applyCount",
+              badge: ""
             },
           ],
         },
@@ -1283,7 +1293,7 @@ export default {
         case "cc" :
           this.getUnOutStockCountData();
           break;
-        default:; break;
+        default: break;
       }
     },
   },

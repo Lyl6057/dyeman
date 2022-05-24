@@ -226,6 +226,21 @@ import {
   updateEnergDtla,
   delEnergDtla,
 } from "@/api/im/Wk/cc/rl";
+
+import { 
+  getEquipmentOut,
+  addEquipmentOut,
+  updateEquipmentOut,
+  delEquipmentOut,
+  getEquipmentOutDtl,
+  addEquipmentOutDtl,
+  updateEquipmentOutDtl,
+  delEquipmentOutDtl,
+  getEquipmentOutDtla,
+  addEquipmentOutDtla,
+  updateEquipmentOutDtla,
+  delEquipmentOutDtla}
+  from "@/api/im/wk/cc/equipment";
 import {
   fetchYarnValidOutWeight,
   fetchAccessoricesValidOutWeight,
@@ -234,6 +249,7 @@ import {
   fetchHardwareValidOutWeight,
   fetchOfficeValidOutWeight,
   fetchEnergValidOutWeight,
+  fetchEquipmentValidOutWeight
 } from "./api";
 export default {
   name: "",
@@ -330,8 +346,8 @@ export default {
         retCode: "",
         woOutno: "",
         stockState: "0",
-        stockDate: this.$getNowTime("date") + " 00:00:00",
-        retDate: this.$getNowTime("date") + " 00:00:00",
+        stockDate: this.$getNowTime("datetime"),
+        retDate: this.$getNowTime("datetime"),
         stockType: "3",
       };
       baseCodeSupplyEx({ code: "whse_out" }).then((res) => {
@@ -620,8 +636,28 @@ export default {
           delDtlb: delEnergDtla,
           choiceTle: "选择能源库存",
           validOutWeight: fetchEnergValidOutWeight,
-          uuid: ["whseOfficeOutId", "officeOutDtlId", "dtlaId"],
-          applyCategory: 2,
+          uuid: ["energyOutId", "energyOutDtlId", "dtlaId"],
+          applyCategory: 9,
+        };
+        break;
+      case this.$t("iaoMng.sb"):
+        this.attributeObj = {
+          get: getEquipmentOut,
+          add: addEquipmentOut,
+          del: delEquipmentOut,
+          update: updateEquipmentOut,
+          getDtla: getEquipmentOutDtl,
+          addDtla: addEquipmentOutDtl,
+          updateDtla: updateEquipmentOutDtl,
+          delDtla: delEquipmentOutDtl,
+          getDtlb: getEquipmentOutDtla,
+          addDtlb: addEquipmentOutDtla,
+          updateDtlb: updateEquipmentOutDtla,
+          delDtlb: delEquipmentOutDtla,
+          choiceTle: "选择设备库存",
+          validOutWeight: fetchEquipmentValidOutWeight,
+          uuid: ["whseEquipmentOutoid", "whseEquipmentOutDtloid", "whseEquipmentOutDtlaoid"],
+          applyCategory: 10,
         };
         break;
     }

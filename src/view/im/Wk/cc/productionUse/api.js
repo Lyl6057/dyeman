@@ -2,12 +2,22 @@
  * @Author: Lyl
  * @Date: 2021-11-16 10:39:54
  * @LastEditors: Lyl
- * @LastEditTime: 2022-05-09 15:42:34
+ * @LastEditTime: 2022-05-24 14:39:57
  * @Description:
  */
 import axios from "axios";
 
-// 检验行政出仓数据
+
+// 检验设备出仓数据
+export function fetchEquipmentValidOutWeight(dataList) {
+  return axios({
+    url: "/api/viewEquipmentStock/valid/outStock",
+    method: "post",
+    data: dataList
+  });
+}
+
+// 检验能源出仓数据
 export function fetchEnergValidOutWeight(dataList) {
   return axios({
     url: "/api/viewOfficeStock/valid/outStock",

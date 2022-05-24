@@ -2,14 +2,14 @@
  * @Author: Lyl
  * @Date: 2022-04-25 14:03:51
  * @LastEditors: Lyl
- * @LastEditTime: 2022-05-23 07:54:59
+ * @LastEditTime: 2022-05-24 15:01:44
  * @FilePath: \iot.vue\src\view\im\transferLoadQa\index.vue
  * @Description: 
 -->
 <template>
   <div class="transferLoad">
     <el-tabs v-model="tabs" type="border-card">
-      <el-tab-pane label="手动验布出库" name="manual">
+      <el-tab-pane label="松布/验布出库" name="manual">
         <el-row class="btnList">
           <el-button type="primary" @click="query">{{this.$t("public.query")}}</el-button>
         </el-row>
@@ -19,34 +19,31 @@
         <div class="crudBox">
           <avue-crud ref="crud" :option="crudOp" :data="crud" :page.sync="page" :element-loading-text="$t('public.loading')" v-loading="wloading" @cell-click="cellClick" @on-load="query">
             <template slot-scope="scope" slot="menu">
-              <el-popover placement="left" width="160" trigger="click">
+              <el-popover placement="left" width="160" trigger="focus">
                 <p>请选择验布口</p>
                 <el-select v-model="exit" placeholder="请选择验布口">
                   <el-option v-for="item in outExit" :key="item.value" :label="item.label" :value="item.value">
                   </el-option>
                 </el-select>
                 <div style="text-align: left; margin-top: 10px">
-                  <el-button type="primary" size="mini" @click="handleOutWhse(scope)">提交</el-button>
+                  <el-button type="primary" size="mini" @click="handleOutWhse(scope,'3')">提交</el-button>
                 </div>
-                <el-button type="text" icon="el-icon-view" size="mini" slot="reference">验布</el-button>
+                <el-button type="text" size="mini" slot="reference" @click="exit = 'Q1'">验布</el-button>
               </el-popover>
               <el-popover placement="left" width="160" trigger="click">
-                <p>请选择入库口</p>
-                <el-select v-model="exit" placeholder="请选择入库口">
-                  <el-option v-for="item in outExit" :key="item.value" :label="item.label" :value="item.value">
+                <p>请选择验布口</p>
+                <el-select v-model="exit" placeholder="请选择验布口">
+                  <el-option v-for="item in sbExit" :key="item.value" :label="item.label" :value="item.value">
                   </el-option>
                 </el-select>
                 <div style="text-align: left; margin-top: 10px">
-                  <el-button type="primary" size="mini" @click="handleInWhse(scope)">提交</el-button>
+                  <el-button type="primary" size="mini" @click="handleOutWhse(scope,'5')">提交</el-button>
                 </div>
-                <el-button type="text" icon="el-icon-refresh-right" size="mini" slot="reference">回仓</el-button>
+                <el-button type="text"  size="mini" slot="reference" @click="exit = 'S1'">松布</el-button>
               </el-popover>
             </template>
           </avue-crud>
         </div>
-      </el-tab-pane>
-      <el-tab-pane label="QA验布计划看板" name="plan">
-        <qc-plan></qc-plan>
       </el-tab-pane>
       <el-tab-pane label="任务管理" name="task">
         <el-row class="btnList">
@@ -62,12 +59,15 @@
           </el-row>
         </view-container>
       </el-tab-pane>
+      <el-tab-pane label="QA验布计划看板" name="plan">
+        <qc-plan></qc-plan>
+      </el-tab-pane>
     </el-tabs>
   </div>
 </template>
 
 <script>
-import { formOp, crudOp, outExit, taskForm, taskCrud } from "./data";
+import { formOp, crudOp, outExit,sbExit, taskForm, taskCrud } from "./data";
 import { fetchStockVehicleByPage, sendTask, getTask } from "./api";
 import qcPlan from "./qcPlan";
 export default {
@@ -98,6 +98,7 @@ export default {
       },
       exit: "Q1",
       outExit,
+      sbExit,
       visible: true,
       detail: {},
       taskFormOp: taskForm(this),
@@ -173,7 +174,7 @@ export default {
     cellClick(val) {
       this.detail = val;
     },
-    handleOutWhse({ row }) {
+    handleOutWhse({ row },orderType) {
       if (!row) {
         this.$tip.error("请先选择要出库的载具!");
         return;
@@ -188,9 +189,8 @@ export default {
         entrance: this.exit, // 验布出口
         isEmpty: 0,
         type: 2, //0原材料,1五金件,2成品
-        orderType: 5, // 3 => 验布出库， 4 => 验布入库
+        orderType // 3 => 验布出库， 4 => 验布入库 5 => 松布出库
       };
-      alert("请求参数" + JSON.stringify(taskParams));
       console.info("sendParams", taskParams);
       sendTask(taskParams)
         .then((res) => {

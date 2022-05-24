@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-26 16:32:56
+ * @LastEditTime: 2022-05-23 13:05:11
  * @Description:
  */
 
@@ -90,13 +90,13 @@ export function mainCrud(_this) {
         span: 6,
         placeholder: "请選擇訂單編號",
         sortable: true,
-        rules: [
-          {
-            required: true,
-            message: "请選擇訂單編號",
-            trigger: "blur"
-          }
-        ]
+        // rules: [
+        //   {
+        //     required: true,
+        //     message: "请選擇訂單編號",
+        //     trigger: "blur"
+        //   }
+        // ]
         // click: () => {
         //   _this.visible = true
         // }

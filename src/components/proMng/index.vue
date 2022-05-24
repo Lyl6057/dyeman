@@ -131,7 +131,13 @@ import {
   getOfficeStock,
   getInWhseStore,
   inWhseStoreC,
-  inWhseStoreF
+  inWhseStoreF,
+  equipmentStockC,
+  equipmentStockF,
+  getEquipmentStock,
+  energeStockC,
+  energeStockF,
+  getEnergStock
 } from "./data";
 
 export default {
@@ -350,6 +356,16 @@ export default {
         this.choiceC = inWhseStoreC(this);
         this.choiceF = inWhseStoreF(this);
         this.getData = getInWhseStore;
+        break;
+      case "选择设备库存":
+        this.choiceC = equipmentStockC(this);
+        this.choiceF = equipmentStockF(this);
+        this.getData = getEquipmentStock;
+        break;
+      case "选择能源库存":
+        this.choiceC = energStockC(this);
+        this.choiceF = energeStockF(this);
+        this.getData = getEnergStock;
         break;
       case "选择行政用品库存":
         this.choiceC = officeStockC(this);

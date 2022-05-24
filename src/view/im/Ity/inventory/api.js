@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-24 14:21:09
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-21 16:40:10
+ * @LastEditTime: 2022-05-24 11:11:52
  * @Description:
  */
 import axios from "axios";
@@ -33,6 +33,24 @@ export function createSnapshot2StockType(params) {
     params: params
   });
 }
+
+
+export function getEquipmentList(params) {
+  return axios({
+    url: "/api/viewEquipmentStock/list",
+    method: "get",
+    params: params
+  });
+}
+
+export function getEquipment(params) {
+  return axios({
+    url: "/api/viewEquipmentStock/page",
+    method: "get",
+    params: params
+  });
+}
+
 
 export function getSxList(params) {
   return axios({

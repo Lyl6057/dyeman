@@ -141,6 +141,8 @@ export default {
     xzdc: "行政用品调仓",
     rlcc: "能源出仓",
     sclyrhcc: "生产领用能源出仓",
+    sbcc: "设备出仓",
+    sclysbcc: "生产领用设备出仓",
 
     sgrc: " Manual warehousing",
     wjrc: "五金用品入倉",

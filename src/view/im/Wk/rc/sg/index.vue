@@ -255,7 +255,14 @@ import {
   // 行政
   getWhseOfficeUnin,
   getWhseEquInV2,
-  fetchExamineVaild,
+  fetchChemicalExamineVaild,
+  fetchDyesalinExamineVaild,
+  fetchAccessoriesExamineVaild,
+  fetchEquipmentExamineVaild,
+  fetchYarnExamineVaild,
+  fetchHardwareExamineVaild,
+  fetcheOfficeExamineVaild,
+  fetcheEnergyExamineVaild
 } from "./api";
 export default {
   name: "",
@@ -325,7 +332,9 @@ export default {
           this.everyThing.addPh = addSxDtla;
           this.everyThing.updatePh = updateSxDtla;
           this.everyThing.delPh = delSxDtla;
+          this.everyThing.examine = fetchYarnExamineVaild;
           this.everyThing.batCode = "sx_in_whse";
+          this.everyThing.uuid = ['whseYarninoid']
           break;
         case this.$t("iaoMng.fl"):
           this.everyThing.get = getScfl;
@@ -341,7 +350,9 @@ export default {
           this.everyThing.addPh = addScflLoc;
           this.everyThing.updatePh = updateScflLoc;
           this.everyThing.delPh = delScflLoc;
+          this.everyThing.examine = fetchAccessoriesExamineVaild;
           this.everyThing.batCode = "scfl_in_whse";
+          this.everyThing.uuid = ['whseAccessoriesinoid']
           break;
         case this.$t("choicDlg.wj"):
           this.everyThing.get = getWj;
@@ -358,6 +369,8 @@ export default {
           this.everyThing.updatePh = updateWjLoc;
           this.everyThing.delPh = delWjLoc;
           this.everyThing.batCode = "wj_in_whse";
+          this.everyThing.examine = fetchHardwareExamineVaild;
+          this.everyThing.uuid = ['whseAccessoriesinoid']
           break;
         case this.$t("choicDlg.xz"):
           this.everyThing.get = getXz;
@@ -374,6 +387,8 @@ export default {
           this.everyThing.updatePh = updateXzLoc;
           this.everyThing.delPh = delXzLoc;
           this.everyThing.batCode = "xz_in_whse";
+          this.everyThing.examine = fetcheOfficeExamineVaild;
+          this.everyThing.uuid = ['whseAccessoriesinoid']
           break;
         case this.$t("iaoMng.hgyl"):
           this.everyThing.get = getRhl;
@@ -391,7 +406,9 @@ export default {
           this.everyThing.delPh = delRhlPhDetali;
           this.everyThing.getAlloc = getChemicalinAlloc;
           this.everyThing.addAlloc = addChemicalinAlloc;
+          this.everyThing.examine = fetchChemicalExamineVaild;
           this.everyThing.batCode = "hgyl_in_whse";
+          this.everyThing.uuid = ['whseChemicalinoid']
           break;
         case this.$t("iaoMng.yl"):
           this.everyThing.get = getYl;
@@ -410,6 +427,8 @@ export default {
           this.everyThing.getAlloc = getDyesainAlloc;
           this.everyThing.batCode = "yl_in_whse";
           this.everyThing.addAlloc = addDyesainAlloc;
+          this.everyThing.examine = fetchDyesalinExamineVaild;
+          this.everyThing.uuid = ['whseDyesalinoid']
           break;
         case this.$t("iaoMng.sb"):
           this.everyThing.get = getEqu;
@@ -426,6 +445,8 @@ export default {
           this.everyThing.updatePh = updateEquDtlb;
           this.everyThing.delPh = delEquDtlb;
           this.everyThing.batCode = "equ_in_whse";
+          this.everyThing.examine = fetchEquipmentExamineVaild;
+          this.everyThing.uuid = ['whseEquipmentInoid']
           break;
         case this.$t("choicDlg.rl"):
           this.everyThing.getPlan = getWhseEnergyInV2;
@@ -444,6 +465,8 @@ export default {
           this.everyThing.getAlloc = getRlAlloc;
           this.everyThing.addAlloc = addRlAlloc;
           this.everyThing.batCode = "rl_in_whse";
+          this.everyThing.examine = fetcheEnergyExamineVaild;
+          this.everyThing.uuid = ['energyInId']
           break;
         default:
           break;
@@ -597,39 +620,39 @@ export default {
           {}
         )
         .then(() => {
-          if (this.data === this.$t("iaoMng.sx")) {
-            fetchExamineVaild(this.chooseData.whseYarninoid)
+          // if (this.data === this.$t("iaoMng.sx")) {
+            this.everyThing.examine(this.chooseData[this.everyThing.uuid[0]])
               .then((res) => {
-                if (res.data.code === 200) {
+                if (res.data.data) {
                   this.$tip.success("审核成功!");
                   this.getData();
                 } else {
-                  this.$tip.error(res.data.msg);
+                  this.$tip.warning(res.data.msg);
                 }
               })
               .catch((err) => {
                 this.$tip.error(err);
               });
-          } else {
-            let params = {
-              ...this.chooseData,
-              stockState: "1",
-              yinDate : this.chooseData.yinDate + ' 00:00:00',
-            }
-            this.everyThing
-              .update(params)
-              .then((res) => {
-                if (res.data.code === 200) {
-                  this.$tip.success("审核成功!");
-                  this.getData();
-                } else {
-                  this.$tip.error(res.data.msg);
-                }
-              })
-              .catch((err) => {
-                this.$tip.error(err);
-              });
-          }
+          // } else {
+          //   let params = {
+          //     ...this.chooseData,
+          //     stockState: "1",
+          //     yinDate : this.chooseData.yinDate + ' 00:00:00',
+          //   }
+          //   this.everyThing
+          //     .update(params)
+          //     .then((res) => {
+          //       if (res.data.code === 200) {
+          //         this.$tip.success("审核成功!");
+          //         this.getData();
+          //       } else {
+          //         this.$tip.error(res.data.msg);
+          //       }
+          //     })
+          //     .catch((err) => {
+          //       this.$tip.error(err);
+          //     });
+          // }
         })
         .catch((err) => {
           this.$tip.warning(this.$t("public.qxcz"));

@@ -171,6 +171,7 @@ export default {
         goodsType: 2,
         exit: "C",
         storageState: 1,
+        layer: 1
       },
       page: {
         pageSize: 20,

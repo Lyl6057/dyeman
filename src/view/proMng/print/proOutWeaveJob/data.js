@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-21 13:46:16
+ * @LastEditTime: 2022-05-23 13:30:11
  * @Description:
  */
 
@@ -215,7 +215,6 @@ export function mainCrud(_this) {
         label: "开单日期",
         prop: "billDate",
         width: 120,
-        placeholder: " ",
         span: 6,
         type: "date",
         tip: "Ngày lên đơn",

@@ -1,17 +1,70 @@
 import axios from "axios";
 
-// 入仓审核
-export function fetchExamineVaild(data) {
+// 能源入仓审核
+export function fetcheEnergyExamineVaild(id) {
   return axios({
-    url: "/api/whseYarnin/v1.0/valid/examine",
-    method: "post",
-    data: data
+    url: "/api/whseEnergyIn/valid/examine/" + id,
+    method: "get",
   });
 }
 
-export function whseDyesalinExamine(data) {
+// 行政入仓审核
+export function fetcheOfficeExamineVaild(id) {
   return axios({
-    url: "/api/whseDyesalin/valid/examine",
+    url: "/api/whseOfficeIn/valid/examine/" + id,
+    method: "get",
+  });
+}
+
+// 五金入仓审核
+export function fetchHardwareExamineVaild(id) {
+  return axios({
+    url: "/api/whseHardwareIn/valid/examine/" + id,
+    method: "get"
+  });
+}
+
+// 化工原料入仓审核
+export function fetchChemicalExamineVaild(id) {
+  return axios({
+    url: "/api/whseChemicalin/valid/examine/" + id,
+    method: "get",
+    // data: data
+  });
+}
+
+
+// 颜料入仓审核
+export function fetchDyesalinExamineVaild(id) {
+  return axios({
+    url: "/api/whseDyesalin/valid/examine/" + id,
+    method: "get",
+  });
+}
+
+
+// 辅料入仓审核
+export function fetchAccessoriesExamineVaild(id) {
+  return axios({
+    url: "/api/whseAccessoriesIn/valid/examine/" + id,
+    method: "get",
+  });
+}
+
+
+// 设备入仓审核
+export function fetchEquipmentExamineVaild(id) {
+  return axios({
+    url: "/api/whseEquipmentIn/valid/examine/" + id,
+    method: "get",
+  });
+}
+
+
+// 纱线入仓审核
+export function fetchYarnExamineVaild(data) {
+  return axios({
+    url: "/api/whseYarnin/v1.0/valid/examine",
     method: "post",
     data: data
   });

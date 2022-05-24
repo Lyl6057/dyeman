@@ -403,13 +403,13 @@ export function rhl2C(_this) {
         label: _this.$t("whseField.clmc"),
         prop: "materialName",
         cell: false,
-        type:
-          _this.datas === _this.$t("choicDlg.rl") ||
-          _this.datas === _this.$t("choicDlg.wj") ||
-          _this.datas === _this.$t("iaoMng.sb") ||
-          _this.datas === _this.$t("choicDlg.xz")
-            ? "select"
-            : "",
+        // type:
+        //   _this.datas === _this.$t("choicDlg.rl") ||
+        //   _this.datas === _this.$t("choicDlg.wj") ||
+        //   _this.datas === _this.$t("iaoMng.sb") ||
+        //   _this.datas === _this.$t("choicDlg.xz")
+        //     ? "select"
+        //     : "",
         width: 180,
         overHidden: true,
         hide:
@@ -420,14 +420,14 @@ export function rhl2C(_this) {
           _this.datas === _this.$t("iaoMng.sb")
             ? false
             : true,
-        dicData:
-          _this.datas === _this.$t("iaoMng.fl")
-            ? getDicT("basProductivesupplies", "chinName", "hardwareId")
-            : _this.datas === _this.$t("choicDlg.wj")
-            ? getDicT("basHardwarearticlesnew", "cnnamelong", "hardwareId")
-            : _this.datas === _this.$t("choicDlg.xz")
-            ? getDicT("basAdsuppliesarticles", "chinName", "hardwareId")
-            : getDicT("basHardwarearticlesnew", "cnnamelong", "hardwareId")
+        // dicData:
+        //   _this.datas === _this.$t("iaoMng.fl")
+        //     ? getDicT("basProductivesupplies", "chinName", "hardwareId")
+        //     : _this.datas === _this.$t("choicDlg.wj")
+        //     ? getDicT("basHardwarearticlesnew", "cnnamelong", "hardwareId")
+        //     : _this.datas === _this.$t("choicDlg.xz")
+        //     ? getDicT("basAdsuppliesarticles", "chinName", "hardwareId")
+        //     : getDicT("basHardwarearticlesnew", "cnnamelong", "hardwareId")
       },
       {
         label: _this.$t("whseField.sxbh"),
@@ -444,8 +444,8 @@ export function rhl2C(_this) {
         width: 400,
         overHidden: true,
         hide: _this.datas != _this.$t("iaoMng.sx"),
-        type: "select",
-        dicData: getDicT("basYarnsData", "yarnsName", "yarnsId")
+        // type: "select",
+        // dicData: getDicT("basYarnsData", "yarnsName", "yarnsId")
       },
       {
         label: _this.$t("whseField.sp"),
@@ -640,7 +640,7 @@ export function rhl3C(_this) {
       {
         label: _this.$t("whseField.hwm"),
         prop:
-          _this.datas == _this.$t("iaoMng.sx") ? "locationCode" : "storageNo",
+          _this.datas == _this.$t("iaoMng.sx") ? "locationCode" : _this.datas == _this.$t("iaoMng.sb") ? "boxCarId": "storageNo",
         cell: true,
         width: 140,
         type: "select", //Whse_warehouse_type
