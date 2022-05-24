@@ -517,7 +517,7 @@ export default {
         {
           id: "8",
           lael: "五金用品",
-          name: "WJ",
+          name: "WJ|XZ",
           span: 3,
           data: [
             {
@@ -585,7 +585,7 @@ export default {
         {
           id: "9",
           label: "能源",
-          name: "ENG",
+          name: "ENG|EQU",
           span: 3,
           data: [
             {
@@ -1157,7 +1157,7 @@ export default {
         {
           id: "8",
           label: "能源",
-          name: "ENG",
+          name: "ENG|EQU",
           span: 3,
           data: [
             {
@@ -1202,7 +1202,7 @@ export default {
     getUnInStockCountData(refreshAll = false){
       let types = [];
       if(refreshAll){
-        types = ["SX","HRL","RLL", "FL", "WJ", "XZ", "ENG"];
+        types = ["SX","HRL","RLL", "FL", "WJ", "XZ", "ENG","EQU"];
       }else{
         this.curWhseType && types.push(this.curWhseType);
       }
@@ -1212,7 +1212,7 @@ export default {
         return res.data;
       }).then(resData => {
         resData.forEach(countItem => {
-          let existMut = ["WJ","XZ"].includes(countItem.type);
+          let existMut = ["WJ","XZ","ENG","EQU"].includes(countItem.type);
           let whseInMenuItem = this.arrList.find(menuIten => (menuIten.name || "").includes(countItem.type));
           if(whseInMenuItem){
             let tDataList = whseInMenuItem.data;
