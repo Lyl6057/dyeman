@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:08:41
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-05-18 16:40:03
+ * @LastEditTime: 2022-05-25 09:31:19
  */
 import {
   getDIC,
@@ -104,7 +104,7 @@ const formOpCommon = {
 export function whseInCrudOp(_this) {
   return {
     ...mainCrudOpCommon,
-    height: "calc(100vh - 185px)",
+    height: "calc(100vh - 225px)",
     column: [{
         label: "入仓编号",
         prop: "yinId",
@@ -190,7 +190,7 @@ export function whseInFormOp(_this) {
 export function retMatNoticCrudOp(_this) {
   return {
     ...mainCrudOpCommon,
-    height: "calc(100vh - 185px)",
+    height: "calc(100vh - 225px)",
     selection: true,
     column: [{
         label: "返仓通知单号",

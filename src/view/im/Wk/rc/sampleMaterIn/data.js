@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:08:41
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-05-17 16:29:49
+ * @LastEditTime: 2022-05-25 09:34:53
  */
 import {
   getDIC,
@@ -91,7 +91,7 @@ const formOpCommon = {
 export function whseInCrudOp(_this) {
   return {
     ...mainCrudOpCommon,
-    height: "calc(100vh - 185px)",
+    height: "calc(100vh - 225px)",
     column: [{
         label: "入仓编号",
         prop: "yinId",
@@ -202,7 +202,7 @@ export function unStockSampleCrudOp(_this) {
   let { samIdKey,samNameKey,samNoteKey } = dataPropEnum[_this.imWkType];
   return {
     ...mainCrudOpCommon,
-    height: "calc(100vh - 225px)",
+    height: "calc(100vh - 265px)",
     selection: true,  
     column: [{
         label: "样品通知单",
