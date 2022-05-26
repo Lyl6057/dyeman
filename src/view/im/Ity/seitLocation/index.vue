@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-05-03 08:10:51
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-05-07 10:09:39
+ * @LastEditTime: 2022-05-26 08:15:59
 -->
 <template>
     <div class="seit-location-container">
@@ -101,10 +101,12 @@ export default {
             this.getDataList();
         },
         getDataList(){
-             let { materialType, seitLocationDate } = this.queryForm;
+             let { materialType, seitLocationDate, batchNo } = this.queryForm;
              let params = {
                 rows: this.page.pageSize,
-                start: this.page.currentPage
+                start: this.page.currentPage,
+                includeBatchNo: true,
+                batchNo
             };
             if(materialType){
                 params.materialType = materialType

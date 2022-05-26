@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-05-03 08:20:55
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-05-06 17:18:34
+ * @LastEditTime: 2022-05-25 17:57:34
  */
 import {
     getDIC,
@@ -64,6 +64,11 @@ export function queryFormOp(_this) {
       placeholder: " ",
       type: "daterange",
       valueFormat: "yyyy-MM-dd",
+    },{
+      label: "本厂批号",
+      prop: "batchNo",
+      span: 5,
+      placeholder: " ",
     }, ]
   };
 }
@@ -87,6 +92,11 @@ export function mainCrudOp(_this) {
       prop: "seitlocationDate",
       width: 100,
     }, {
+      label: "本厂批号",
+      overHidden: true,
+      prop: "batchNo",
+      width: 200,
+    },{
       label: "整理状态",
       prop: "seitlocationState",
       width: 100,
@@ -121,7 +131,7 @@ export function seitLocFormDataOp(_this) {
       placeholder: " ",
       type: "select",
       dicData: getDIC("whse_seitLoc_matType")
-    }]
+    },]
   };
 }
 
