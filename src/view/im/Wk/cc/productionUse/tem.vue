@@ -1,19 +1,8 @@
 <template>
   <div id="rcDetail">
-    <view-container
-      :title="type + '生产领用资料'"
-      v-loading="outloading"
-      element-loading-text="正在拼命加载..."
-      element-loading-spinner="el-icon-loading"
-      element-loading-background="rgba(255, 255, 255, 0.8)"
-    >
+    <view-container :title="type + '生产领用资料'" v-loading="outloading" element-loading-text="正在拼命加载..." element-loading-spinner="el-icon-loading" element-loading-background="rgba(255, 255, 255, 0.8)">
       <div class="btnList">
-        <el-button
-          type="success"
-          @click="save"
-          :disabled="detail.stockState == '1'"
-          >{{ this.$t("public.save") }}</el-button
-        >
+        <el-button type="success" @click="save" :disabled="detail.stockState == '1'">{{ this.$t("public.save") }}</el-button>
         <el-button type="warning" @click="close">{{
           this.$t("public.close")
         }}</el-button>
@@ -25,80 +14,25 @@
         <el-col :span="16">
           <view-container :title="type + '生产领用明细'">
             <div class="btnList" style="margin-bottom: 2px">
-              <el-button
-                type="primary"
-                @click="add"
-                v-if="canSave"
-                :disabled="detail.stockState == '1'"
-                >{{ this.$t("public.add") }}</el-button
-              >
-              <el-button
-                type="danger"
-                @click="del"
-                v-if="canSave"
-                :disabled="detail.stockState == '1'"
-                >{{ this.$t("public.del") }}</el-button
-              >
+              <el-button type="primary" @click="add" v-if="canSave" :disabled="detail.stockState == '1'">{{ this.$t("public.add") }}</el-button>
+              <el-button type="danger" @click="del" v-if="canSave" :disabled="detail.stockState == '1'">{{ this.$t("public.del") }}</el-button>
             </div>
-            <avue-crud
-              ref="dlgcrud"
-              :option="mxOp"
-              v-loading="loading"
-              :data="mx"
-              :page.sync="page"
-              @current-row-change="cellClick"
-              @on-load="getDetail"
-            ></avue-crud> </view-container
-        ></el-col>
+            <avue-crud ref="dlgcrud" :option="mxOp" v-loading="loading" :data="mx" :page.sync="page" @current-row-change="cellClick" @on-load="getDetail"></avue-crud>
+          </view-container>
+        </el-col>
         <el-col :span="8">
           <view-container :title="type + '生产领用批号资料'">
             <div class="btnList" style="margin-bottom: 2px">
-              <el-button
-                type="primary"
-                @click="addPh"
-                v-if="canSave"
-                :disabled="detail.stockState == '1'"
-                >{{ this.$t("public.add") }}</el-button
-              >
-              <el-button
-                type="danger"
-                @click="delPh"
-                v-if="canSave"
-                :disabled="detail.stockState == '1'"
-                >{{ this.$t("public.del") }}</el-button
-              >
+              <el-button type="primary" @click="addPh" v-if="canSave" :disabled="detail.stockState == '1'">{{ this.$t("public.add") }}</el-button>
+              <el-button type="danger" @click="delPh" v-if="canSave" :disabled="detail.stockState == '1'">{{ this.$t("public.del") }}</el-button>
             </div>
-            <avue-crud
-              ref="dlgPhcrud"
-              :option="rcOp"
-              v-loading="rcloading"
-              :data="chooseData.list"
-              @current-row-change="cellPhClick"
-            ></avue-crud>
+            <avue-crud ref="dlgPhcrud" :option="rcOp" v-loading="rcloading" :data="chooseData.list" @current-row-change="cellPhClick"></avue-crud>
           </view-container>
         </el-col>
       </el-row>
     </view-container>
-    <choice
-      ref="choice"
-      :choiceV="choiceV"
-      :choiceTle="choiceTle"
-      :choiceQ="choiceQ"
-      dlgWidth="100%"
-      @choiceData="choiceData"
-      @close="choiceV = false"
-      v-if="choiceV"
-    ></choice>
-    <pro-choice
-      ref="proChoice"
-      :choiceV="proChoiceV"
-      :choiceTle="attributeObj.choiceTle"
-      :choiceQ="proChoiceQ"
-      dlgWidth="100%"
-      @choiceData="proChoiceData"
-      @close="proChoiceV = false"
-      v-if="proChoiceV"
-    ></pro-choice>
+    <choice ref="choice" :choiceV="choiceV" :choiceTle="choiceTle" :choiceQ="choiceQ" dlgWidth="100%" @choiceData="choiceData" @close="choiceV = false" v-if="choiceV"></choice>
+    <pro-choice ref="proChoice" :choiceV="proChoiceV" :choiceTle="attributeObj.choiceTle" :choiceQ="proChoiceQ" dlgWidth="100%" @choiceData="proChoiceData" @close="proChoiceV = false" v-if="proChoiceV"></pro-choice>
   </div>
 </template>
 <script>
@@ -231,7 +165,7 @@ export default {
           whseOfficeOutFk: this.detail.whseOfficeOutId,
           accessoriesOutFk: this.detail.accessoriesOutId,
           whseEquipmentOutFk: this.detail.whseEquipmentOutoid,
-          whseEnergyOutFk: this.detail.energyOutId
+          whseEnergyOutFk: this.detail.energyOutId,
           // batchNo: "!^",
         })
         .then((res) => {
@@ -243,7 +177,7 @@ export default {
           this.mx.forEach((item, index) => {
             item.$cellEdit = true;
             item.index = index + 1;
-            item.weight = (Number(item.weight || item.stockQty)).toFixed(2);
+            item.weight = Number(item.weight || item.stockQty || 0);
             item.weightUnit = item.weightUnit || item.stockUnit;
             item.applyNum = Number(item.applyNum).toFixed(2);
             // item.weight = item.weight.toFixed(2);
@@ -281,7 +215,7 @@ export default {
           whseOfficeOutDtlFk: val.officeOutDtlId,
           whseAccessoriesOutDtlFk: val.whseAccessoriesoutDtloid,
           whseEquipmentOutDtlFk: val.whseEquipmentOutDtloid,
-          whseEnergyOutDtlFk: val.energyOutDtlId
+          whseEnergyOutDtlFk: val.energyOutDtlId,
         })
         .then((res) => {
           let records = res.data;
@@ -506,8 +440,12 @@ export default {
         return;
       }
       for (let i = 0; i < this.mx.length; i++) {
+        if (!this.mx[i].weight || this.mx[i].weight == 'NaN') {
+          this.$tip.error("数量不能为空!");
+          return;
+        }
         if (!this.mx[i].list) {
-          break;
+          continue;
         }
         this.mx[i].weight = 0;
         for (let j = 0; j < this.mx[i].list.length; j++) {
@@ -515,11 +453,7 @@ export default {
             this.$tip.error("数量不能为空!");
             return;
           }
-          this.mx[i].weight += Number(this.mx[i].list[j].weight);
-        }
-        if (!this.mx[i].weight) {
-          this.$tip.error("数量不能为空!");
-          return;
+          this.mx[i].weight += Number(this.mx[i].list[j].weight) || 0;
         }
         if (this.type === this.$t("iaoMng.sx")) {
           this.mx[i].debitQty =
@@ -566,7 +500,7 @@ export default {
                 data.whseOfficeOutFk = this.detail.whseOfficeOutId;
                 data.accessoriesOutFk = this.detail.accessoriesOutId;
                 data.whseEquipmentOutFk = this.detail.whseEquipmentOutoid;
-                data.whseEnergyOutFk = this.detail.energyOutId
+                data.whseEnergyOutFk = this.detail.energyOutId;
                 this.attributeObj.addDtla(data).then((res) => {
                   item[this.attributeObj.uuid[1]] = res.data.data;
                   resolve();
@@ -588,8 +522,9 @@ export default {
                   item.dyesalOutDtlFk = this.mx[i].energyOutDtlId;
                   item.whseHardwareOutDtlFk = this.mx[i].whseHardwareOutDtlId;
                   item.whseOfficeOutDtlFk = this.mx[i].officeOutDtlId;
-                  item.whseEquipmentOutDtlFk =  this.mx[i].whseEquipmentOutDtloid;
-                  item.whseEnergyOutDtlFk =  this.mx[i].energyOutDtlId
+                  item.whseEquipmentOutDtlFk =
+                    this.mx[i].whseEquipmentOutDtloid;
+                  item.whseEnergyOutDtlFk = this.mx[i].energyOutDtlId;
                   if (!item[this.attributeObj.uuid[2]]) {
                     this.attributeObj.addDtlb(item).then((res) => {
                       item[this.attributeObj.uuid[2]] = res.data.data;
@@ -650,7 +585,7 @@ export default {
                 data.whseOfficeOutFk = this.form.whseOfficeOutId;
                 data.accessoriesOutFk = this.form.accessoriesOutId;
                 data.whseEquipmentOutFk = this.form.whseEquipmentOutoid;
-                data.whseEnergyOutFk = this.form.energyOutId
+                data.whseEnergyOutFk = this.form.energyOutId;
                 this.attributeObj.addDtla(data).then((res) => {
                   item[this.attributeObj.uuid[1]] = res.data.data;
                   resolve();
@@ -672,8 +607,9 @@ export default {
                   item.dyesalOutDtlFk = this.mx[i].energyOutDtlId;
                   item.whseHardwareOutDtlFk = this.mx[i].whseHardwareOutDtlId;
                   item.whseOfficeOutDtlFk = this.mx[i].officeOutDtlId;
-                  item.whseEquipmentOutDtlFk =  this.mx[i].whseEquipmentOutDtloid
-                  item.whseEnergyOutDtlFk =  this.mx[i].energyOutDtlId
+                  item.whseEquipmentOutDtlFk =
+                    this.mx[i].whseEquipmentOutDtloid;
+                  item.whseEnergyOutDtlFk = this.mx[i].energyOutDtlId;
                   if (!item[this.attributeObj.uuid[2]]) {
                     this.attributeObj.addDtlb(item).then((res) => {
                       item[this.attributeObj.uuid[2]] = res.data.data;
@@ -698,16 +634,21 @@ export default {
     async saveValid() {
       let dataList = [];
       this.mx.forEach((item) => {
-        dataList.push({
-          yarnsId: item.yarnsId,
-          yarnsCard: item.yarnsCard || "",
-          matCode: item.chemicalId || item.materialId || item.accessoriesId ,
-          batchNo: item.batchNo,
-          batId: item.batId || "",
-          retQty: item.weight,
-          weight: item.weight,
-          locationCode: item.list[0].locationCode,
-        });
+        if (item.list) {
+          dataList.push({
+            yarnsId: item.yarnsId,
+            yarnsName: item.yarnsName,
+            yarnsCard: item.yarnBrand || "",
+            matCode: item.chemicalId || item.materialId || item.accessoriesId,
+            batchNo: item.batchNo,
+            batId: item.suppBatchNo || "",
+            retQty: item.weight,
+            weight: item.weight,
+            weightUnit: item.weightUnit,
+            locationCode: item.list.length ? item.list[0].locationCode : "",
+            locationName: item.list.length ? item.list[0].locationCode : "",
+          });
+        }
       });
       let validRes = await this.attributeObj
         .validOutWeight(dataList)
@@ -720,7 +661,7 @@ export default {
             message: `材料编号<strong>${
               item.matCode || item.yarnsId
             }</strong>的<strong>${
-              item.storageNo ||  item.locationCode
+              item.storageNo || item.locationCode || item.locationName
             }</strong>货运位剩余库存数为<span style="color:red; font-size: 16px">${item.realStock.toFixed(
               2
             )}</span>;`,
@@ -839,7 +780,7 @@ export default {
                 }, 200);
               }
             });
-          }else{
+          } else {
             this.loading = false;
           }
         });

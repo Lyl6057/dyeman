@@ -2,16 +2,12 @@
  * @Author: Lyl
  * @Date: 2022-01-12 15:39:08
  * @LastEditors: Lyl
- * @LastEditTime: 2022-05-21 14:21:44
+ * @LastEditTime: 2022-05-26 13:54:07
  * @FilePath: \iot.vue\src\view\im\whseInOutKB\index.vue
  * @Description: 
 -->
 <template>
-  <div
-    class="whseInOutKB"
-    :element-loading-text="$t('public.loading')"
-    v-loading="wLoading"
-  >
+  <div class="whseInOutKB" :element-loading-text="$t('public.loading')" v-loading="wLoading">
     <el-tabs v-model="tabs" type="border-card">
       <el-tab-pane label="出入库看板" name="kanban">
         <el-row class="btnList">
@@ -35,17 +31,10 @@
         </el-row>
         <view-container title="布笼物品信息">
           <el-row class="crudBox" style="margin-top: 5px">
-            <avue-crud
-              ref="crud"
-              :option="crudOp"
-              :page.sync="mainPage"
-              :data="crud"
-              v-loading="loading"
-              @on-load="query"
-              @row-dblclick="handleRowDBLClick"
-            ></avue-crud>
-          </el-row> </view-container
-      ></el-tab-pane>
+            <avue-crud ref="crud" :option="crudOp" :page.sync="mainPage" :data="crud" v-loading="loading" @on-load="query" @row-dblclick="handleRowDBLClick"></avue-crud>
+          </el-row>
+        </view-container>
+      </el-tab-pane>
       <el-tab-pane label="任务管理" name="task">
         <el-row class="btnList">
           <el-button type="primary" @click="queryTask">{{
@@ -58,51 +47,16 @@
         </el-row>
         <view-container title="任务信息">
           <el-row class="crudBox" style="margin-top: 5px">
-            <avue-crud
-              ref="task"
-              :option="taskCrudOp"
-              :page.sync="page"
-              :data="task"
-              v-loading="loading"
-              @on-load="queryTask"
-              @current-row-change="cellClick"
-            ></avue-crud>
+            <avue-crud ref="task" :option="taskCrudOp" :page.sync="page" :data="task" v-loading="loading" @on-load="queryTask" @current-row-change="cellClick"></avue-crud>
           </el-row>
         </view-container>
       </el-tab-pane>
     </el-tabs>
-    <el-dialog
-      id="colorMng_Dlg"
-      :visible.sync="dialogVisible"
-      fullscreen
-      width="70%"
-      append-to-body
-      :close-on-click-modal="false"
-      :close-on-press-escape="false"
-    >
-      <updatenote-com
-        v-if="dialogVisible"
-        ref="tem"
-        :noteList="crud"
-        :noteType="tabs"
-        @close="diaClose"
-      ></updatenote-com>
+    <el-dialog id="colorMng_Dlg" :visible.sync="dialogVisible" fullscreen width="70%" append-to-body :close-on-click-modal="false" :close-on-press-escape="false">
+      <updatenote-com v-if="dialogVisible" ref="tem" :noteList="crud" :noteType="tabs" @close="diaClose"></updatenote-com>
     </el-dialog>
-    <el-dialog
-      id="colorMng_Dlg"
-      :visible.sync="inVisible"
-      fullscreen
-      width="70%"
-      append-to-body
-      :close-on-click-modal="false"
-      :close-on-press-escape="false"
-    >
-      <inwhse-com
-        v-if="inVisible"
-        ref="inwhse"
-        :form="form"
-        @close="inVisible = false"
-      ></inwhse-com>
+    <el-dialog id="colorMng_Dlg" :visible.sync="inVisible" fullscreen width="70%" append-to-body :close-on-click-modal="false" :close-on-press-escape="false">
+      <inwhse-com v-if="inVisible" ref="inwhse" :form="form" @close="inVisible = false"></inwhse-com>
     </el-dialog>
   </div>
 </template>
@@ -146,6 +100,7 @@ import {
   getOutFinishedWhse,
   updateOutFinishedWhse,
   sendTask,
+  sendTaskNoin,
   getTaskList,
   getStorageLog,
   updateStorageLog,
@@ -171,7 +126,7 @@ export default {
         goodsType: 2,
         exit: "C",
         storageState: 1,
-        layer: 1
+        layer: 1,
       },
       page: {
         pageSize: 20,
@@ -834,7 +789,7 @@ export default {
             //   (res) => {
             // let list = this.group(this.selectList, "storeLoadCode");
             // list.forEach((item, i) => {
-            sendTask({
+            sendTaskNoin({
               barCode: this.form.storeLoadCode,
               createTime: this.$getNowTime("datetime"),
               entrance: this.form.exit, // 入库口
@@ -844,15 +799,20 @@ export default {
               // finishStatus: 0,
               storageCode: this.form.storeLoadCode,
             }).then((sendRes) => {
-              if (sendRes.data.code == 0) {
-                this.$tip.success("任务提交成功!");
-                this.query();
-                this.queryTask();
-                // this.successAfter(res.data);
-              } else {
-                this.$tip.error("任务提交失败," + sendRes.data.message + "!");
-                this.wLoading = false;
+              if (sendRes.data.code) {
+                this.$tip.error(sendRes.data.data);
+                this.loading = false;
+                return;
               }
+              if (sendRes.data == "返回异常") {
+                this.$tip.error(sendRes.data);
+                this.loading = false;
+                return;
+              }
+              this.$tip.success("任务提交成功!");
+              this.query();
+              this.queryTask();
+              // this.successAfter(res.data);
               // });
             });
             // });
@@ -1368,12 +1328,15 @@ export default {
 };
 </script>
 <style lang="stylus">
-.whseInOutKB
-  width 100%
-  height 100vh
-  color #fff
+.whseInOutKB {
+  width: 100%;
+  height: 100vh;
+  color: #fff;
   // background-color rgb(2, 26, 60)
   // border 2px solid #fff
-.avue-crud .el-tag--mini
-  display none !important
+}
+
+.avue-crud .el-tag--mini {
+  display: none !important;
+}
 </style>

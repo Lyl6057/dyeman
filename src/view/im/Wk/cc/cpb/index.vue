@@ -13,18 +13,6 @@
           <el-button type="danger" @click="del">{{
             this.$t("public.del")
           }}</el-button>
-          <!-- <el-button
-            type="success"
-            :disabled="changeList.length === 0"
-            @click="save"
-            >{{ this.$t("public.save") }}</el-button
-          > -->
-          <!-- <el-button
-            type="warning"
-            @click="ruleV = true"
-            v-if="hide != '1' && hide != '2'"
-            >編號規則配置</el-button
-          > -->
           <el-button type="primary" @click="getData">{{
             this.$t("public.query")
           }}</el-button>
@@ -41,7 +29,6 @@
         </div>
         <el-row class="crudBox">
           <el-col :span="24">
-            <!-- <view-container :title="data.type.split('_')[0] + '出库资料'"> -->
             <avue-crud
               ref="mainCrud"
               id="mainCrud"
@@ -54,18 +41,7 @@
               @current-row-change="cellClick"
               @row-dblclick="handleRowDBLClick"
             ></avue-crud>
-            <!-- </view-container> -->
           </el-col>
-          <!-- <el-col :span="hide === '1' ? 0 : 14" v-if="hide != '1'">
-            <view-container :title="data.type.split('_')[0] + '出库明细'">
-              <tem-dlg
-                ref="tem"
-                :datas="data"
-                :everyThing="everyThing"
-                :hide="hide"
-                :isPlan="false"
-              ></tem-dlg></view-container
-          ></el-col> -->
         </el-row>
       </el-tab-pane>
     </el-tabs>
@@ -185,9 +161,15 @@ export default {
         }
       }
       // let queryData = Object.assign({},this.form);
+      let params = {
+        woOutno: '!^%' + (this.form.woOutno || ''),
+        woDate: this.form.woDate,
+        wms: this.form.wms,
+        spNo:  '%' + (this.form.spNo ||"")
+      }
       this.everyThing
         .func(
-          Object.assign(this.form, {
+          Object.assign(params, {
             rows: this.page.pageSize,
             start: this.page.currentPage,
             retType: JSON.parse(localStorage.getItem("imWk")).type.split(

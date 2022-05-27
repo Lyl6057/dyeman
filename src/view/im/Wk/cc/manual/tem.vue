@@ -265,15 +265,10 @@
 <script>
 import { rhl2C, rhl2F, rhl3C, rhl4C, wjxz3C, cpb3C } from "./data";
 import { getDicTs, getDicT, getXDicT, postDicT } from "@/config";
-import { getSubscribe } from "@/const/whse";
 import outwhseph from "@/components/calico/outwhse_ph";
 import choice from "@/components/proMng/index";
 import {
-  getHardwarearticles,
-  getAdsuppliesarticles,
-  getProductivesupplies,
   baseCodeSupply,
-  baseCodeSupplyEx,
 } from "@/api/index";
 import { getHgylInDtl } from "./api";
 export default {

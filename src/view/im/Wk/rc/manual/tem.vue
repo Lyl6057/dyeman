@@ -279,9 +279,6 @@ import loction from "@/components/location/index";
 import inwhseph from "@/components/calico/inwhse_ph";
 import insSheet from "@/components/insSheet/index";
 import {
-  getHardwarearticles,
-  getAdsuppliesarticles,
-  getProductivesupplies,
   baseCodeSupply,
   baseCodeSupplyEx,
 } from "@/api/index";
