@@ -7,7 +7,7 @@ export default [
   },
   {
     path: "/transferLoadQa",
-    name: "QA验布看板",
+    name: "松布/验布出库",
     component: resolve => require(["@/view/im/transferLoadQa/index"], resolve),
     meta: {
       keepAlive: true

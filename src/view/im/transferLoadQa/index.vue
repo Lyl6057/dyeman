@@ -2,14 +2,14 @@
  * @Author: Lyl
  * @Date: 2022-04-25 14:03:51
  * @LastEditors: Lyl
- * @LastEditTime: 2022-05-24 15:01:44
+ * @LastEditTime: 2022-05-24 16:27:59
  * @FilePath: \iot.vue\src\view\im\transferLoadQa\index.vue
  * @Description: 
 -->
 <template>
   <div class="transferLoad">
     <el-tabs v-model="tabs" type="border-card">
-      <el-tab-pane label="松布/验布出库" name="manual">
+      <el-tab-pane label="出库" name="out">
         <el-row class="btnList">
           <el-button type="primary" @click="query">{{this.$t("public.query")}}</el-button>
         </el-row>
@@ -19,7 +19,7 @@
         <div class="crudBox">
           <avue-crud ref="crud" :option="crudOp" :data="crud" :page.sync="page" :element-loading-text="$t('public.loading')" v-loading="wloading" @cell-click="cellClick" @on-load="query">
             <template slot-scope="scope" slot="menu">
-              <el-popover placement="left" width="160" trigger="focus">
+              <el-popover placement="left" width="160" trigger="click">
                 <p>请选择验布口</p>
                 <el-select v-model="exit" placeholder="请选择验布口">
                   <el-option v-for="item in outExit" :key="item.value" :label="item.label" :value="item.value">
@@ -44,6 +44,9 @@
             </template>
           </avue-crud>
         </div>
+      </el-tab-pane>
+      <el-tab-pane label="入仓" name="in">
+        <in-whse></in-whse>
       </el-tab-pane>
       <el-tab-pane label="任务管理" name="task">
         <el-row class="btnList">
@@ -70,9 +73,11 @@
 import { formOp, crudOp, outExit,sbExit, taskForm, taskCrud } from "./data";
 import { fetchStockVehicleByPage, sendTask, getTask } from "./api";
 import qcPlan from "./qcPlan";
+import inWhse from "./inWhse";
 export default {
   components: {
     qcPlan,
+    inWhse
   },
   props: {},
   data() {
@@ -105,7 +110,7 @@ export default {
       taskForm: {},
       taskCrudOp: taskCrud(this),
       task: [],
-      tabs: "manual",
+      tabs: "out",
     };
   },
   watch: {},

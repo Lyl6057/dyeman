@@ -2,11 +2,11 @@
  * @Author: Lyl
  * @Date: 2022-04-25 14:09:54
  * @LastEditors: Lyl
- * @LastEditTime: 2022-05-24 14:23:07
+ * @LastEditTime: 2022-05-26 15:43:07
  * @FilePath: \iot.vue\src\view\im\transferLoadQa\data.js
  * @Description:
  */
-import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
+import { getDIC } from '@/config/index'
 export const outExit = [
   {
     label: "Q1",
@@ -307,6 +307,48 @@ export function formOp(_this) {
   };
 }
 
+export function inWhseFormOp(_this) {
+  return {
+    submitBtn: false,
+    emptyBtn: false,
+    labelWidth: 90,
+    column: [
+      {
+        label: "载具编号",
+        prop: "code",
+        span: 6,
+        placeholder: " "
+      },
+      {
+        label: "库口编号",
+        prop: "entrance",
+        span: 6,
+        placeholder: " ",
+        type: 'select',
+        dicData: outExit.concat(sbExit)
+      },
+      {
+        label: "层数",
+        prop: "layer",
+        span: 6,
+        placeholder: " ",
+        width: 125,
+        type: "select",
+        dicData: [
+          {
+            label: "一层",
+            value: 1
+          },
+          {
+            label: "二层",
+            value: 2
+          }
+        ]
+      }
+    ]
+  };
+}
+
 export function crudOp(_this) {
   return {
     menu: true,
@@ -508,6 +550,90 @@ export function crudOp(_this) {
     ]
   };
 }
+
+export function inWhseCrudOp(_this) {
+  return {
+    menu: false,
+    addBtn: false,
+    cancelBtn: false,
+    editBtn: false,
+    delBtn: false,
+    menuWidth: 200,
+    border: true,
+    stripe: true,
+    index: false,
+    highlightCurrentRow: true,
+    height: "calc(100vh - 208px)",
+    refreshBtn: false,
+    columnBtn: false,
+    page: false,
+    labelWidth: 100,
+    selection: false,
+    column: [
+      {
+        label: "#",
+        prop: "index",
+        width: 50,
+        align: "center",
+        display: false,
+        fixed: true
+      },
+
+      {
+        label: "载具编号",
+        prop: "storeLoadCode",
+        span: 8,
+        placeholder: " ",
+        cell: true,
+        overHidden: true,
+        width: 120,
+        fixed: true
+      },
+      {
+        label: "缸号",
+        prop: "prodNo",
+        width: 140,
+        span: 6,
+        placeholder: " ",
+        disabled: true,
+        overHidden: true,
+        fixed: true
+      },
+      {
+        label: "疋号",
+        prop: "countingNo",
+        width: 100,
+        span: 6,
+        overHidden: true,
+        placeholder: " "
+      },
+      {
+        label: "成品编号",
+        prop: "productNo",
+        cell: false,
+        width: 160,
+        overHidden: true,
+        placeholder: " "
+      },
+      {
+        label:"重量",
+        prop: "woWeights",
+        cell: false,
+        width: 100,
+        align: "right"
+      },
+      {
+        label:"单位",
+        prop: "woUnit",
+        cell: false,
+        width: 100,
+        type: "select",
+        dicData: getDIC("bas_matUnit"),
+      }
+    ]
+  };
+}
+
 
 export function taskForm(_this) {
   return {
