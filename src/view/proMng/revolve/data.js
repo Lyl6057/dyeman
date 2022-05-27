@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-18 13:10:23
+ * @LastEditTime: 2022-05-25 15:02:27
  * @Description:
  */
 
@@ -819,7 +819,7 @@ export function mainCrud(_this) {
         disabled: false,
         prop: "firstOrOther",
         width: 100,
-        type: "switch",
+        type: "radio",
         dicData: [
           {
             label: "头缸",
@@ -828,6 +828,10 @@ export function mainCrud(_this) {
           {
             label: "缸差",
             value: "2"
+          },
+          {
+            label: "翻单头缸",
+            value: "3"
           }
         ],
         hide: false,

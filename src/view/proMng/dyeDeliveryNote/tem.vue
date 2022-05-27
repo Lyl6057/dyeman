@@ -318,7 +318,7 @@ export default {
           {}
         )
         .then(() => {
-          delNote(this.chooseData.vatRefId)
+          delProOutFactOrderVat(this.chooseData.vatRefId)
             .then((res) => {
               if (res.data.code === 200) {
                 this.$tip.success(this.$t("public.sccg"));

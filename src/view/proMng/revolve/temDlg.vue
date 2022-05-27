@@ -1534,6 +1534,8 @@ export default {
 // top: 60px !important;
 // }
 #revolve
+  .el-radio-group
+    line-height: 20px
   .el-radio__label
     font-size 15px
   .avue-group__header

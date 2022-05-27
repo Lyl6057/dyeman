@@ -363,7 +363,7 @@ export default {
         this.getData = getEquipmentStock;
         break;
       case "选择能源库存":
-        this.choiceC = energStockC(this);
+        this.choiceC = energeStockC(this);
         this.choiceF = energeStockF(this);
         this.getData = getEnergStock;
         break;

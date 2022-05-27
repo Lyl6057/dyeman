@@ -1,10 +1,6 @@
 <template>
   <div id="colorMng_Tem">
-    <view-container
-      title="外发加工送货单管理"
-      :element-loading-text="$t('public.loading')"
-      v-loading="wLoading"
-    >
+    <view-container title="外发加工送货单管理" :element-loading-text="$t('public.loading')" v-loading="wLoading">
       <div class="btnList">
         <el-button type="success" @click="save">{{
           this.$t("public.save")
@@ -25,30 +21,32 @@
           <el-button type="danger" @click="del">{{
             this.$t("public.del")
           }}</el-button>
+          <el-popover placement="top" width="160" v-model="visible" style="margin: 0 8px">
+            <p>请输入要新的载具编号</p>
+            <el-input v-model="newLoad"></el-input>
+            <div style="text-align: center; margin-top: 10px">
+              <el-button size="mini" type="text" @click="visible = false">取消</el-button>
+              <el-button type="primary" size="mini" @click="changeLoad(newLoad,'storeLoadCode')">确定</el-button>
+            </div>
+            <el-button type="primary" slot="reference" :disabled="!selectList.length">修改载具</el-button>
+          </el-popover>
+          <el-popover placement="top" width="160" v-model="visible1" style="margin: 0 8px">
+            <p>请输入要新的货位号</p>
+            <el-input v-model="newStore"></el-input>
+            <div style="text-align: center; margin-top: 10px">
+              <el-button size="mini" type="text" @click="visible1 = false">取消</el-button>
+              <el-button type="primary" size="mini" @click="changeLoad(newStore,'storeSiteCode')">确定</el-button>
+            </div>
+            <el-button type="primary" slot="reference" :disabled="!selectList.length">修改载具</el-button>
+          </el-popover>
         </div>
         <div class="crudBox" style="margin-top: 5px">
-          <avue-crud
-            ref="crud"
-            :option="crudOp"
-            :data="crud"
-            :page.sync="page"
-            v-loading="loading"
-            @on-load="getShipdetail"
-            @current-row-change="cellClick"
-          ></avue-crud>
+          <avue-crud ref="crud" :option="crudOp" :data="crud" :page.sync="page" v-loading="loading" @on-load="getShipdetail" @current-row-change="cellClick" @selection-change="selectionChange"></avue-crud>
         </div>
       </view-container>
     </view-container>
 
-    <choice
-      :choiceV="choiceV"
-      :choiceTle="choiceTle"
-      :choiceQ="choiceQ"
-      :dlgWidth="dlgWidth"
-      @choiceData="choiceData"
-      @close="choiceV = false"
-      v-if="choiceV"
-    ></choice>
+    <choice :choiceV="choiceV" :choiceTle="choiceTle" :choiceQ="choiceQ" :dlgWidth="dlgWidth" @choiceData="choiceData" @close="choiceV = false" v-if="choiceV"></choice>
   </div>
 </template>
 <script>
@@ -65,7 +63,6 @@ import {
 } from "./api";
 import choice from "@/components/choice";
 import { getDIC, getDicT, getXDicT, postDicT, preFixInt } from "@/config";
-import { baseCodeSupply, baseCodeSupplyEx } from "@/api/index";
 // import XLSX from "xlsx";
 export default {
   name: "",
@@ -78,6 +75,7 @@ export default {
   },
   data() {
     return {
+      visible: false,
       wLoading: false,
       loading: false,
       formOp: mainCrud(this),
@@ -85,7 +83,7 @@ export default {
       crudOp: noteCrud(this),
       crud: [],
       page: {
-        pageSize: 10,
+        pageSize: 50,
         currentPage: 1,
         total: 0,
       },
@@ -103,6 +101,10 @@ export default {
       codeSupplyNum: 0,
       refresh: false,
       code: getDIC("bas_companyCode"),
+      selectList: [],
+      newLoad: '',
+      newStore: '',
+      visible1: false
     };
   },
   watch: {},
@@ -167,7 +169,7 @@ export default {
               this.$tip.warning("布票号不能为空!");
               done();
               return;
-            } 
+            }
             // else if (!this.crud[i].rw) {
             //   this.$tip.warning("布票实收重量不能为空!");
             //   done();
@@ -239,54 +241,50 @@ export default {
       this.$refs.crud.setCurrentRow(this.crud[this.crud.length - 1]);
     },
     del() {
-      if (Object.keys(this.chooseData).length === 0) {
+      if (!this.selectList.length) {
         this.$tip.error(this.$t("public.delTle"));
         return;
       }
-      if (!this.chooseData.noteId) {
-        this.$tip.success(this.$t("public.sccg"));
-        this.crud.splice(this.chooseData.index - 1, 1);
-        this.crud.forEach((item, i) => {
-          item.index = i + 1;
-        });
-        if (this.crud.length) {
-          this.$refs.crud.setCurrentRow(this.crud[0]);
-        }
-        return;
-      }
       this.$tip
-        .cofirm(
-          "是否确定删除布票号为 【 " +
-            this.chooseData.noteCode +
-            this.$t("iaoMng.delTle2"),
-          this,
-          {}
-        )
+        .cofirm("是否确定删除选中的数据", this, {})
         .then(() => {
-          delNote(this.chooseData.noteId)
-            .then((res) => {
-              if (res.data.code === 200) {
-                this.$tip.success(this.$t("public.sccg"));
-                this.crud.splice(this.chooseData.index - 1, 1);
-                this.crud.forEach((item, i) => {
-                  item.index = i + 1;
-                });
-                if (this.crud.length) {
-                  this.$refs.crud.setCurrentRow(this.crud[0]);
-                }
-              } else {
-                this.$tip.error(this.$t("public.scsb"));
-              }
-            })
-            .catch((err) => {
-              this.$tip.error(this.$t("public.scsb"));
-            });
+          this.wLoading = true;
+          this.selectList.forEach((item, i) => {
+            if (item.noteId) {
+              delNote(item.noteId).then((res) => {
+                this.crud.splice(item.index - 1, 1);
+              });
+            } else {
+              this.crud.splice(item.index - 1, 1);
+            }
+            if (i == this.selectList.length - 1) {
+              this.$tip.success(this.$t("public.sccg"));
+              this.getData();
+            }
+          });
         })
         .catch((err) => {
           this.$tip.warning(this.$t("public.qxcz"));
         });
     },
-
+    selectionChange(val) {
+      this.selectList = val;
+    },
+    changeLoad(val,type){
+      if (!this.selectList.length) {
+        this.$tip.error("请选择要修改的数据!");
+        return;
+      }
+      this.wLoading = true
+      this.selectList.forEach((item,i) =>{
+        item[type] = val;
+        if(i == this.selectList.length - 1){
+          this.visible = false
+          this.visible1 = false
+          this.wLoading = false
+        }
+      })
+    },
     cellClick(val) {
       this.oldData.$cellEdit = false;
       this.$set(val, "$cellEdit", true);
@@ -336,31 +334,46 @@ export default {
 };
 </script>
 <style lang='stylus'>
-#colorMng_Tem
-  .formBox
+#colorMng_Tem {
+  .formBox {
     // height calc(100vh - 125px) !important
-#colorMng_Dlg
-  .el-dialog__header
-    padding 0 !important
-  .el-dialog__headerbtn
-    top 3px
-    font-size 18px
-    font-weight bold
-    z-index 9
-  .el-dialog__headerbtn .el-dialog__close, #sxrcDlg .el-dialog__headerbtn .el-dialog__close, #wkDlg .el-dialog__headerbtn .el-dialog__close
-    color #000
-    font-size 24px
-  .el-tag--mini
-    height 24px
-    padding 0 5px
-    line-height 24px
-    font-size 14px
-  .el-select .el-tag__close.el-icon-close
-    right -5px
-    height 18px
-    width 18px
-    line-height 18px
-  .avue-form .el-input--mini input
-    height 35px !important
-    line-height 35px
+  }
+}
+
+#colorMng_Dlg {
+  .el-dialog__header {
+    padding: 0 !important;
+  }
+
+  .el-dialog__headerbtn {
+    top: 3px;
+    font-size: 18px;
+    font-weight: bold;
+    z-index: 9;
+  }
+
+  .el-dialog__headerbtn .el-dialog__close, #sxrcDlg .el-dialog__headerbtn .el-dialog__close, #wkDlg .el-dialog__headerbtn .el-dialog__close {
+    color: #000;
+    font-size: 24px;
+  }
+
+  .el-tag--mini {
+    height: 24px;
+    padding: 0 5px;
+    line-height: 24px;
+    font-size: 14px;
+  }
+
+  .el-select .el-tag__close.el-icon-close {
+    right: -5px;
+    height: 18px;
+    width: 18px;
+    line-height: 18px;
+  }
+
+  .avue-form .el-input--mini input {
+    height: 35px !important;
+    line-height: 35px;
+  }
+}
 </style>

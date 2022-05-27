@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-04-01 13:39:35
- * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-05-03 08:12:23
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-05-24 15:56:32
  * @Description:
  */
 
@@ -106,7 +106,7 @@ export function whseMng(_this) {
       name: "whseInOutKB"
     },
     {
-      menuName: "六.QA验布看板", // '仓库管理',
+      menuName: "六.松布/验布出库", // '仓库管理',
       index: "transferLoadQa",
       icon: "el-icon-s-order",
       name: "transferLoadQa"

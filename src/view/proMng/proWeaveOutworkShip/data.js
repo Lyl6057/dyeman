@@ -186,11 +186,12 @@ export function noteCrud(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 320px)",
+    height: "calc(100vh - 360px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
     labelWidth: 120,
+    selection: true,
     showSummary: true,
     sumColumnList: [
       {
