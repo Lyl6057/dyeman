@@ -1170,6 +1170,7 @@ export default {
             },
             {
               id: "8-2",
+              name: "ENG",
               click: () => {
                 this.toView("cc_rl", this.$t("iaoMng.sclyrhcc") + "_1", "ENG");
               },
@@ -1189,6 +1190,7 @@ export default {
             },
             {
               id: "8-4",
+              name: "EQU",
               click: () => {
                 this.toView("cc_productionUse", this.$t("iaoMng.sb") + "_1", "SB");
               },
@@ -1222,11 +1224,10 @@ export default {
         return res.data;
       }).then(resData => {
         resData.forEach(countItem => {
-          let existMut = ["WJ","XZ","ENG","EQU"].includes(countItem.type);
           let whseInMenuItem = this.arrList.find(menuIten => (menuIten.name || "").includes(countItem.type));
           if(whseInMenuItem){
             let tDataList = whseInMenuItem.data;
-            if(existMut){
+            if(whseInMenuItem.name.includes("|")){
               tDataList = tDataList.filter(cItem => cItem.name == countItem.type);
             }
             tDataList.forEach(cItem => {
@@ -1240,7 +1241,7 @@ export default {
     getUnOutStockCountData(refreshAll = false){
       let types = [];
       if(refreshAll){
-        types = ["SX","HRL","RLL", "FL", "WJ", "XZ", "ENG"];
+        types = ["SX","HRL","RLL", "FL", "WJ", "XZ", "ENG","EQU"];
       }else{
         this.curWhseType && types.push(this.curWhseType);
       }
@@ -1250,11 +1251,10 @@ export default {
         return res.data;
       }).then(resData => {
         resData.forEach(countItem => {
-          let existMut = ["WJ","XZ"].includes(countItem.type);
           let whseOutMenuItem = this.outList.find(menuIten => (menuIten.name || "").includes(countItem.type));
           if(whseOutMenuItem){
             let tDataList = whseOutMenuItem.data;
-            if(existMut){
+            if(whseOutMenuItem.name.includes("|")){
               tDataList = tDataList.filter(cItem => cItem.name == countItem.type);
             } 
             tDataList.forEach(cItem => {
@@ -1262,7 +1262,8 @@ export default {
             })
           }
         })
-      })
+      });
+      console.log("outList",this.outList)
     },
     toView(val, type, whseType) {
       type ? (this.kanban = false) : (this.kanban = true);
