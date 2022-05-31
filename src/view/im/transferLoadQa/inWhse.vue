@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-05-24 16:08:51
  * @LastEditors: Lyl
- * @LastEditTime: 2022-05-26 13:41:25
+ * @LastEditTime: 2022-05-30 09:38:27
  * @FilePath: \iot.vue\src\view\im\transferLoadQa\inWhse.vue
  * @Description: 
 -->
@@ -115,18 +115,20 @@ export default {
         layer: layer,
         type: 2, // 物料类别
       };
-      alert(JSON.stringify(params));
       let list = this.crud;
+      let weight = this.crud.reduce((pre, cur) => {
+        return pre + Number(cur.woWeights);
+      }, 0);
       try {
         sendTaskNoin(params).then((sendRes) => {
           if (sendRes.data.code) {
             this.$tip.error(sendRes.data.data);
-            this.loading = false;
+            this.wloading = false;
             return;
           }
           if (sendRes.data == "返回异常") {
             this.$tip.error(sendRes.data);
-            this.loading = false;
+            this.wloading = false;
             return;
           }
           baseCodeSupplyEx({ code: "whse_in" }).then((bat) => {
@@ -140,7 +142,7 @@ export default {
               finStatus: 0,
               sysCreateBy: this.$store.state.userOid,
               stockState: 0,
-              custCode: list[0].custCode,
+              custCode: list[0].custCode || '',
             }).then((res) => {
               addStorageLog({
                 whsCarriageStorageFk: code,
@@ -150,62 +152,46 @@ export default {
                 businessId: list[0].vatNo,
                 deleteFlag: 0,
               }).then((log) => {
-                list.forEach((item, i) => {
-                  addInFinishedDtla({
-                    carriageStorageLogFk: log.data.data,
-                    wmsTaskLogFk: sendRes.data,
-                    whseFinishedclothinFk: res.data.data,
-                    pidCount: item.data.length,
-                    sumWeight: item.weight,
-                    weightUnit: "KG",
-                    storeLoadCode: item.storeLoadCode,
-                    outFlag: 0,
-                  }).then((dtla) => {
-                    item.data.forEach((dtlb, j) => {
-                      addInFinishedDtlb({
-                        pidNo: dtlb.pidNo,
-                        productDtlFk: dtla.data.data,
-                        productNo: dtlb.productNo,
-                        vatNo: dtlb.vatNo,
-                        weight:
-                          dtlb.weightUnit == "KG"
-                            ? dtlb.netWeight
-                            : dtlb.netWeightLbs,
-                        weightUnit: dtlb.weightUnit,
-                        productId: dtlb.cardId,
-                      }).then((dtlbRes) => {
-                        if (
-                          j == item.data.length - 1 &&
-                          i == list.length - 1
-                        ) {
-                          this.finishedAfter(list);
-                        }
-                      });
+                addInFinishedDtla({
+                  carriageStorageLogFk: log.data.data,
+                  wmsTaskLogFk: sendRes.data,
+                  whseFinishedclothinFk: res.data.data,
+                  pidCount: list.length,
+                  sumWeight: weight,
+                  weightUnit: "KG",
+                  storeLoadCode: code,
+                  outFlag: 0,
+                }).then((dtla) => {
+                  list.forEach((item, i) => {
+                    // item.forEach((dtlb, j) => {
+                    addInFinishedDtlb({
+                      pidNo: item.countingNo,
+                      productDtlFk: dtla.data.data,
+                      productNo: item.productNo,
+                      vatNo: item.prodNo,
+                      weight: item.woWeights,
+                      weightUnit: item.woUnit,
+                      productId: item.cardId || '',
+                    }).then((dtlbRes) => {
+                      if (i === list.length - 1) {
+                        this.$tip.success("任务提交成功!");
+                      }
                     });
+                    // });
                   });
-                });
+                }).finally(() =>{
+                  this.wloading = false;
+                })
               });
             });
           });
         });
       } catch (error) {
-        this.loading = false;
+        this.wloading = false;
         console.error(error);
       }
     },
     finishedAfter(list) {
-      list.forEach((item, i) => {
-        item.clothState = 2;
-        updateFinished(item).then((res) => {
-          if (i == list.length - 1) {
-            setTimeout(() => {
-              this.$emit("close");
-              this.loading = false;
-              this.$tip.success("任务提交成功!");
-            }, 200);
-          }
-        });
-      });
     },
     cellClick(val) {
       this.detail = val;

@@ -1263,7 +1263,6 @@ export default {
           }
         })
       });
-      console.log("outList",this.outList)
     },
     toView(val, type, whseType) {
       type ? (this.kanban = false) : (this.kanban = true);

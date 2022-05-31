@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-04-25 14:34:24
  * @LastEditors: Lyl
- * @LastEditTime: 2022-05-24 16:24:33
+ * @LastEditTime: 2022-05-27 15:44:59
  * @FilePath: \iot.vue\src\view\im\transferLoadQa\api.js
  * @Description:
  */
@@ -26,10 +26,10 @@ export function fetchStockVehicleByPage(params) {
   });
 }
 
-// 发送任务
+// 发送任务sendTask
 export function sendTask(data) {
   return axios({
-    url: "/erp/sendWmsIns",
+    url: "/erp/sendWmsInsEx",
     method: "post",
     data: data
   });

@@ -228,12 +228,10 @@ export function rhl1C(_this) {
       },
       {
         label: _this.$t("whseField.gysmc"),
-        prop: "$suppId",
+        prop: "suppName",
         cell: false,
         width: 280,
         overHidden: true,
-        type: "select",
-        dicData: getDicT("basSupplier", "suppName", "suppId")
       },
       {
         label: _this.$t("whseField.shdh"),

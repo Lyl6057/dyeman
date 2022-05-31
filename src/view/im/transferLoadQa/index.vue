@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-04-25 14:03:51
  * @LastEditors: Lyl
- * @LastEditTime: 2022-05-24 16:27:59
+ * @LastEditTime: 2022-05-30 16:33:52
  * @FilePath: \iot.vue\src\view\im\transferLoadQa\index.vue
  * @Description: 
 -->
@@ -88,6 +88,7 @@ export default {
       formOp: formOp(this),
       form: {
         type: 1,
+        layer: 1
       },
       page: {
         pageSizes: [10, 50, 100, 200, 500],
@@ -194,16 +195,19 @@ export default {
         entrance: this.exit, // 验布出口
         isEmpty: 0,
         type: 2, //0原材料,1五金件,2成品
-        orderType // 3 => 验布出库， 4 => 验布入库 5 => 松布出库
+        orderType : Number(orderType) // 3 => 验布出库， 4 => 验布入库 5 => 松布出库
       };
-      console.info("sendParams", taskParams);
       sendTask(taskParams)
-        .then((res) => {
-          if (res.status === 200) {
-            this.$tip.success("提交成功!");
-          } else {
-            this.$tip.error(res.msg);
+        .then((sendRes) => {
+          if (sendRes.data.code) {
+            this.$tip.error(sendRes.data.data);
+            return;
           }
+          if (sendRes.data == "返回异常") {
+            this.$tip.error(sendRes.data);
+            return;
+          }
+          this.$tip.success("出库成功!");
         })
         .finally((res) => {
           this.wloading = false;

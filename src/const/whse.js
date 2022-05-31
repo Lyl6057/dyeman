@@ -2491,7 +2491,7 @@ export function getPurChemicalpo2(params) {
 }
 export function getPurChemicalpo(params) {
   return axios({
-    url: "/api/purSinglepo/purSinglepoDtl",
+    url: "/api/purSinglepo/purSinglepoDtl/page",
     method: "get",
     params: params
   });

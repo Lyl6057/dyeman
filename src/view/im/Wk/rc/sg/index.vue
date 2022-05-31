@@ -484,12 +484,16 @@ export default {
       queryData.yinId = "!^%" + (queryData.yinId ? queryData.yinId : "");
       queryData.purNo = "%" + (queryData.purNo ? queryData.purNo : "");
       queryData.deliNo = "%" + (queryData.deliNo ? queryData.deliNo : "");
+      // queryData.batchNo = "%" + (queryData.batchNo ? queryData.batchNo : "");
       this.everyThing
         .get(
           Object.assign(queryData, {
             rows: this.page.pageSize,
             start: this.page.currentPage,
             yinType: this.hide,
+            includeBatchNo: true,
+            includeSuppId: true,
+            includeSuppName: true
           })
         )
         .then((res) => {
@@ -497,7 +501,7 @@ export default {
           this.page.total = records.total;
           this.crud = records.records;
           this.crud.forEach((item, index) => {
-            item.suppId = item.purNo;
+            // item.suppId = item.purNo;
             item.finStatus = String(item.finStatus);
             item.index = index + 1;
             item.stockState += "";
