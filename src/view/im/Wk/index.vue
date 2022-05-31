@@ -302,7 +302,7 @@ export default {
         {
           id: "4",
           label: "化工原料",
-          name: "RHL",
+          name: "HRL",
           span: 3,
           data: [
             {
