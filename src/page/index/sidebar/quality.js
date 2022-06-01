@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-04-01 14:08:13
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-01 13:09:58
+ * @LastEditTime: 2022-06-01 13:37:29
  * @Description:
  */
 
@@ -85,7 +85,7 @@ export function quality(_this) {
           index: "qcDetailReportByExcel"
         },
         {
-          menuName: "13.异常报告总表",
+          menuName: "12.异常报告总表",
           index: "qcAbnormalDaily"
         }
       ]

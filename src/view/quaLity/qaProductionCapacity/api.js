@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-05-03 16:09:39
  * @LastEditors: Lyl
- * @LastEditTime: 2022-05-18 10:11:13
+ * @LastEditTime: 2022-06-01 13:30:35
  * @FilePath: \iot.vue\src\view\quaLity\qaProductionCapacity\api.js
  * @Description:
  */
@@ -11,7 +11,8 @@ import axios from 'axios'
 export function upadQareport(params){
   return axios({
     url:"/api/qaDayOutput/upadQareport",
-    method: "get"
+    method: "get",
+    params: params,
   })
 }
 

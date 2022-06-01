@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-05-03 16:09:29
  * @LastEditors: Lyl
- * @LastEditTime: 2022-05-14 08:42:55
+ * @LastEditTime: 2022-06-01 14:18:26
  * @FilePath: \iot.vue\src\view\quaLity\qaProductionCapacity\index.vue
  * @Description: 
 -->
@@ -15,8 +15,14 @@
         <!-- <el-button type="primary" @click="add"> {{this.$t("public.add")}} </el-button> -->
         <!-- <el-button type="danger" @click="del"> {{this.$t("public.del")}} </el-button> -->
         <el-button type="primary" @click="query"> {{this.$t("public.query")}} </el-button>
-        <el-button type="primary" @click="getLatestData"> 更新数据 </el-button>
-        <el-dropdown size="small" split-button type="primary" style="margin-left: 10px" @command="handleReport">
+        <!-- <el-button type="primary" @click="getLatestData">  </el-button> -->
+        <el-dropdown size="small" split-button type="primary" style="margin-left: 10px" @command="getLatestData" @click="getLatestData(new Date().getMonth() + 1)">
+          更新数据
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item v-for="item in 12" :key="item" :command="item">{{item + ' 月'}}</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+        <el-dropdown size="small" split-button type="primary" style="margin-left: 10px" @command="handleReport" @click="handleReport(new Date().getMonth() + 1)">
           报表
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item v-for="item in 12" :key="item" :command="item">{{item + ' 月'}}</el-dropdown-item>
@@ -83,7 +89,8 @@ export default {
       this.loading = true;
       let params = {
         vatNo: "%" + (this.form.vatNo || ''),
-        r_planStart_r: "!^%" + (this.form.planStart || ''),
+        dataSortRules: 'dayId|desc',
+        dayId: "%" + (this.form.dayId || ''),
       }
       fetchQaDayOutputByPage(params).then(async res => {
         let { records, total } = res.data;
@@ -108,8 +115,9 @@ export default {
       await this.$nextTick();
       this.$refs.qcCheckPlanTem.addAndcreateData(this.crud[this.curIdx - 1].outId);
     },
-    async getLatestData(){
-      let res =  await upadQareport();
+    async getLatestData(command){
+      let dayId = new Date().getFullYear() + '' + (command < 10 ? '0' + command : command);
+      let res =  await upadQareport({dayId});
       if (res.data.code == 200) {
         this.$tip.success("更新成功!");
         this.query()
