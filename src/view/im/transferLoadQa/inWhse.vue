@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-05-24 16:08:51
  * @LastEditors: Lyl
- * @LastEditTime: 2022-05-30 09:38:27
+ * @LastEditTime: 2022-05-31 14:39:16
  * @FilePath: \iot.vue\src\view\im\transferLoadQa\inWhse.vue
  * @Description: 
 -->
@@ -180,6 +180,7 @@ export default {
                     // });
                   });
                 }).finally(() =>{
+                  this.visible = false
                   this.wloading = false;
                 })
               });

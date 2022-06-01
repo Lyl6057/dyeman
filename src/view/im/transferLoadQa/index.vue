@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-04-25 14:03:51
  * @LastEditors: Lyl
- * @LastEditTime: 2022-05-30 16:33:52
+ * @LastEditTime: 2022-05-31 08:48:05
  * @FilePath: \iot.vue\src\view\im\transferLoadQa\index.vue
  * @Description: 
 -->
@@ -210,6 +210,7 @@ export default {
           this.$tip.success("出库成功!");
         })
         .finally((res) => {
+          
           this.wloading = false;
         });
     },
