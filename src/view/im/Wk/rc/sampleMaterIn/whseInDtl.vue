@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:18:51
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-05-17 16:13:01
+ * @LastEditTime: 2022-06-01 16:19:03
 -->
 <template>
   <div id="whse-yarn-in-dtl-container">
@@ -229,7 +229,8 @@ export default {
           batchNo: item.batchNo,
           weight: inWeight,
           weightUnit: item.weightUnit,
-          batId: this.whseMaterInFormData.suppId
+          batId: this.whseMaterInFormData.suppId,
+          checkStatus: item.checkStatus,
         };
         return tDtlData;
       });
@@ -296,12 +297,12 @@ export default {
       fetchWhseInDataListBySamNote(samNote,this.imWkType)
         .then(res => {
           this.whseMaterInDtlaDataList = res.data.map(dtlaItem => {
+            dtlaItem.checkStatus = "1";
             dtlaItem.dtlBChildren.forEach(dtlbItem => {
               dtlbItem.$cellEdit = false; 
             })
             return dtlaItem
           });
-          console.log(this.whseMaterInDtlaDataList)
         })
         .finally(() => {
           this.loading = false;
