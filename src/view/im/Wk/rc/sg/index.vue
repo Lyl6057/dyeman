@@ -484,7 +484,7 @@ export default {
       queryData.yinId = "!^%" + (queryData.yinId ? queryData.yinId : "");
       queryData.purNo = "%" + (queryData.purNo ? queryData.purNo : "");
       queryData.deliNo = "%" + (queryData.deliNo ? queryData.deliNo : "");
-      // queryData.batchNo = "%" + (queryData.batchNo ? queryData.batchNo : "");
+      queryData.batchNo = "%" + (queryData.batchNo ? queryData.batchNo : "");
       this.everyThing
         .get(
           Object.assign(queryData, {
