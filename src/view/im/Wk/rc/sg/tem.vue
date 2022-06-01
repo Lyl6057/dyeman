@@ -176,6 +176,7 @@ export default {
             item.yarnsId = item.materialNum;
             item.yarnsName = item.chinName;
             item.materialName = item.chinName;
+            item.checkStatus = "1"
             if (this.datas != this.$t("iaoMng.sx")) {
               item.batId = item.batNo;
               item.batchNo = this.code;

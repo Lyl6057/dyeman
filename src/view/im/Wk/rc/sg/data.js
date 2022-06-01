@@ -48,14 +48,14 @@ export function rhl1F(_this) {
         placeholder: " ",
         overHidden: true
       },
-      {
-        label: _this.$t("whseField.jyzt"),
-        prop: "yinStatus",
-        span: 6,
-        placeholder: " ",
-        type: "select",
-        dicData: getDIC("whse_yinstatus")
-      },
+      // {
+      //   label: _this.$t("whseField.jyzt"),
+      //   prop: "yinStatus",
+      //   span: 6,
+      //   placeholder: " ",
+      //   type: "select",
+      //   dicData: getDIC("whse_yinstatus")
+      // },
 
       {
         label: _this.$t("whseField.cwzt"),
@@ -114,16 +114,16 @@ export function rhl2F(_this) {
         placeholder: " ",
         disabled: true
       },
-      {
-        label: _this.$t("whseField.jyzt"),
-        prop: "yinStatus",
-        span: 6,
-        placeholder: " ",
-        type: "select",
-        disabled: false,
-        display: true,
-        dicData: getDIC("whse_yinstatus")
-      },
+      // {
+      //   label: _this.$t("whseField.jyzt"),
+      //   prop: "yinStatus",
+      //   span: 6,
+      //   placeholder: " ",
+      //   type: "select",
+      //   disabled: false,
+      //   display: true,
+      //   dicData: getDIC("whse_yinstatus")
+      // },
       {
         label: _this.$t("whseField.cwzt"),
         prop: "finStatus",
@@ -247,14 +247,14 @@ export function rhl1C(_this) {
         overHidden: true
       },
 
-      {
-        label: _this.$t("whseField.jyzt"),
-        prop: "yinStatus",
-        cell: false,
-        width: 120,
-        type: "select",
-        dicData: getDIC("whse_yinstatus")
-      },
+      // {
+      //   label: _this.$t("whseField.jyzt"),
+      //   prop: "yinStatus",
+      //   cell: false,
+      //   width: 120,
+      //   type: "select",
+      //   dicData: getDIC("whse_yinstatus")
+      // },
       {
         label: _this.$t("whseField.cwzt"),
         prop: "finStatus",
@@ -549,7 +549,15 @@ export function rhl2C(_this) {
         cell: true,
         width: 140,
         hide: _this.datas != _this.$t("iaoMng.sx")
-      }
+      },
+      {
+        label: _this.$t("whseField.jyzt"),
+        prop: "checkStatus",
+        cell: true,
+        width: 120,
+        type: "select",
+        dicData: getDIC("whse_yinstatus")
+      },
     ]
   };
 }
