@@ -112,8 +112,7 @@ export default {
 
     //下载Debug插件
     download() {
-      // window.open("http://172.20.51.156:8080/debug/setup.exe");
-      window.open("../../vuePackage/proMng/setup.msi");
+      window.open("../../vuePackage/proMng/setup.exe");
     },
     fn_getquery() {
       let url = window.location.search;
