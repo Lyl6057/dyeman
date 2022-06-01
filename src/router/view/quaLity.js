@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-03-10 13:20:44
- * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-06-01 08:28:40
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-06-01 09:27:14
  * @Description:
  */
 export default [
@@ -249,9 +249,18 @@ export default [
   },
   {
     path: "/qcProBleadyeRunJob",
-    name: "送板码卡打印",
+    name: "运转单备布统计",
     component: resolve =>
       require(["@/view/quaLity/qcProBleadyeRunJob/index"], resolve),
+    meta: {
+      keepAlive: true
+    }
+  },
+  {
+    path: "/qcAbnormalDaily",
+    name: "异常报告总表",
+    component: resolve =>
+      require(["@/view/quaLity/abnormalDaily/index"], resolve),
     meta: {
       keepAlive: true
     }
