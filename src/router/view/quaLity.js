@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-10 13:20:44
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-06-01 08:28:40
+ * @LastEditTime: 2022-06-01 14:03:06
  * @Description:
  */
 export default [
@@ -243,15 +243,6 @@ export default [
     name: "送板码卡打印",
     component: resolve =>
       require(["@/view/quaLity/finalCardGd/index"], resolve),
-    meta: {
-      keepAlive: true
-    }
-  },
-  {
-    path: "/qcProBleadyeRunJob",
-    name: "送板码卡打印",
-    component: resolve =>
-      require(["@/view/quaLity/qcProBleadyeRunJob/index"], resolve),
     meta: {
       keepAlive: true
     }
