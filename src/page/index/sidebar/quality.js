@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-04-01 14:08:13
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-01 09:26:47
+ * @LastEditTime: 2022-06-01 13:09:58
  * @Description:
  */
 
@@ -83,10 +83,6 @@ export function quality(_this) {
         {
           menuName: "11.Excel细码表",
           index: "qcDetailReportByExcel"
-        },
-        {
-          menuName: "12.运转单备布统计",
-          index: "qcProBleadyeRunJob"
         },
         {
           menuName: "13.异常报告总表",

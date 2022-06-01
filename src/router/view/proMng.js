@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-29 14:14:56
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-05-18 11:17:52
+ * @LastEditTime: 2022-06-01 14:05:09
  * @Description:
  */
 export default [
@@ -321,6 +321,15 @@ export default [
     path: "/orderReview",
     name: "工单审核",
     component: resolve => require(["@/view/proMng/orderReview/index"], resolve),
+    meta: {
+      keepAlive: true
+    }
+  },
+  {
+    path: "/proBleadyeRunJob",
+    name: "运转单备布统计",
+    component: resolve =>
+      require(["@/view/quaLity/qcProBleadyeRunJob/index"], resolve),
     meta: {
       keepAlive: true
     }
