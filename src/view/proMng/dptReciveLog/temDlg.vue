@@ -2,34 +2,20 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-06 19:17:04
+ * @LastEditTime: 2022-06-01 15:55:13
  * @Description: 
 -->
 <template>
   <div id="techCodeTem">
-    <view-container
-      title="新增日志"
-      :element-loading-text="$t('public.loading')"
-      v-loading="wLoading"
-      class="not-number-icon"
-    >
+    <view-container title="新增日志" :element-loading-text="$t('public.loading')" v-loading="wLoading" class="not-number-icon">
       <div class="btnList">
-        <el-tooltip
-          class="item"
-          effect="dark"
-          content="Bảo tồn"
-          placement="top-start"
-        >
-          <el-button type="success" @click="save" :loading="wLoading">{{
+        <el-tooltip class="item" effect="dark" content="Bảo tồn" placement="top-start">
+          <el-button type="success" @click="save(0)" :loading="wLoading">{{
             $t("public.save")
           }}</el-button>
         </el-tooltip>
-        <el-tooltip
-          class="item"
-          effect="dark"
-          content="đóng"
-          placement="top-start"
-        >
+        <el-button type="success" @click="save(1)" :loading="wLoading">保存并继续新增</el-button>
+        <el-tooltip class="item" effect="dark" content="đóng" placement="top-start">
           <el-button type="warning" @click="close">{{
             $t("public.close")
           }}</el-button>
@@ -39,46 +25,14 @@
       <div class="formBox">
         <avue-form ref="form" :option="formOp" v-model="form">
           <template slot-scope="scope" slot="runJobFk">
-            <el-select
-              v-model="form.runJobFk"
-              filterable
-              remote
-              reserve-keyword
-              clearable
-              default-first-option
-              placeholder="请输入缸号"
-              :remote-method="remoteMethod"
-              :loading="vatLoading"
-              @change="getLogWeight"
-            >
-              <el-option
-                v-for="item in options"
-                :key="item.runJobId"
-                :label="item.vatNo"
-                :value="item.runJobId"
-              >
+            <el-select v-model="form.runJobFk" filterable remote reserve-keyword clearable default-first-option placeholder="请输入缸号" :remote-method="remoteMethod" :loading="vatLoading" @change="getLogWeight">
+              <el-option v-for="item in options" :key="item.runJobId" :label="item.vatNo" :value="item.runJobId">
               </el-option>
             </el-select>
           </template>
           <template slot-scope="scope" slot="weaveJobId">
-            <el-select
-              v-model="form.weaveJobId"
-              filterable
-              remote
-              reserve-keyword
-              clearable
-              default-first-option
-              placeholder="请输入织单号"
-              :remote-method="remoteMethod"
-              :loading="vatLoading"
-              @change="getLogWeight"
-            >
-              <el-option
-                v-for="item in options"
-                :key="item.weaveJobId"
-                :label="item.weaveJobCode"
-                :value="item.weaveJobId"
-              >
+            <el-select v-model="form.weaveJobId" filterable remote reserve-keyword clearable default-first-option placeholder="请输入织单号" :remote-method="remoteMethod" :loading="vatLoading" @change="getLogWeight">
+              <el-option v-for="item in options" :key="item.weaveJobId" :label="item.weaveJobCode" :value="item.weaveJobId">
               </el-option>
             </el-select>
           </template>
@@ -168,7 +122,7 @@ export default {
           });
           this.form.planOutput = list[0].realOutput || 0;
           this.form.realOutput = list[0].realOutput || 0;
-          this.lastLog = list[0]
+          this.lastLog = list[0];
           if (this.form.dispathReceive == 1) {
             this.form.sendProcessFk = this.lastLog.sendProcessFk;
           }
@@ -213,7 +167,7 @@ export default {
       this.form.realOutput = 0;
       this.form.dispathReceive = 1;
     },
-    save() {
+    save(isContinue) {
       this.$refs.form.validate((valid, done) => {
         if (valid) {
           try {
@@ -228,7 +182,9 @@ export default {
                 this.wLoading = false;
                 this.$tip.success(this.$t("public.bccg"));
                 this.$emit("refresh");
-                this.$emit("close");
+                if(!isContinue){
+                  this.$emit("close");
+                }
               } else {
                 this.$tip.error(this.$t("public.bcsb"));
               }
@@ -285,68 +241,101 @@ export default {
 };
 </script>
 <style lang='stylus'>
-#imgDlg
-  overflow auto !important
-.image-remove
-  position absolute
-  color red
-  font-size 24px
-  width 30px
-  height 30px
-  text-align center
-  top 5px
-  left calc(100% - 50px)
-  cursor pointer
-#techCodeTem
-  .watermark
-    position absolute
-    bottom 0
-    left 0
-    font-size 48px
-    font-weight 700
-    color #ccc
-    height 200px
-    width 100%
-    line-height 200px
-    text-align center
-    z-index 1
-  .img
-    cursor pointer
-    z-index 100
-  .el-input-number__decrease, .el-input-number__increase
-    display none
-  .avue-form__row
-    padding 0 !important
-  .el-input-number__decrease, .el-input-number__increase
-    display none
-  .el-input-number .el-input__inner
-    text-align right !important
-  .el-input-number.is-controls-right .el-input__inner
-    padding-left 5px !important
-#colorMng_Dlg
-  .is-fullscreen
-    overflow hidden !important
-  .el-dialog__header
-    padding 0 !important
-  .el-dialog__headerbtn
-    top 3px
-    font-size 18px
-    font-weight bold
-    z-index 9
-  .el-dialog__headerbtn .el-dialog__close, #sxrcDlg .el-dialog__headerbtn .el-dialog__close, #wkDlg .el-dialog__headerbtn .el-dialog__close
-    color #000
-    font-size 24px
-  .el-tag--mini
-    height 24px
-    padding 0 5px
-    line-height 24px
-    font-size 14px
-  .el-select .el-tag__close.el-icon-close
-    right -5px
-    height 18px
-    width 18px
-    line-height 18px
-  .avue-form .el-input--mini input
-    height 35px !important
-    line-height 35px
+#imgDlg {
+  overflow: auto !important;
+}
+
+.image-remove {
+  position: absolute;
+  color: red;
+  font-size: 24px;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  top: 5px;
+  left: calc(100% - 50px);
+  cursor: pointer;
+}
+
+#techCodeTem {
+  .watermark {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    font-size: 48px;
+    font-weight: 700;
+    color: #ccc;
+    height: 200px;
+    width: 100%;
+    line-height: 200px;
+    text-align: center;
+    z-index: 1;
+  }
+
+  .img {
+    cursor: pointer;
+    z-index: 100;
+  }
+
+  .el-input-number__decrease, .el-input-number__increase {
+    display: none;
+  }
+
+  .avue-form__row {
+    padding: 0 !important;
+  }
+
+  .el-input-number__decrease, .el-input-number__increase {
+    display: none;
+  }
+
+  .el-input-number .el-input__inner {
+    text-align: right !important;
+  }
+
+  .el-input-number.is-controls-right .el-input__inner {
+    padding-left: 5px !important;
+  }
+}
+
+#colorMng_Dlg {
+  .is-fullscreen {
+    overflow: hidden !important;
+  }
+
+  .el-dialog__header {
+    padding: 0 !important;
+  }
+
+  .el-dialog__headerbtn {
+    top: 3px;
+    font-size: 18px;
+    font-weight: bold;
+    z-index: 9;
+  }
+
+  .el-dialog__headerbtn .el-dialog__close, #sxrcDlg .el-dialog__headerbtn .el-dialog__close, #wkDlg .el-dialog__headerbtn .el-dialog__close {
+    color: #000;
+    font-size: 24px;
+  }
+
+  .el-tag--mini {
+    height: 24px;
+    padding: 0 5px;
+    line-height: 24px;
+    font-size: 14px;
+  }
+
+  .el-select .el-tag__close.el-icon-close {
+    right: -5px;
+    height: 18px;
+    width: 18px;
+    line-height: 18px;
+  }
+
+  .avue-form .el-input--mini input {
+    height: 35px !important;
+    line-height: 35px;
+  }
+}
 </style>
