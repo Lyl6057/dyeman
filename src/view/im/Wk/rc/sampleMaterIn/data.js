@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:08:41
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-05-25 09:34:53
+ * @LastEditTime: 2022-06-01 16:22:32
  */
 import {
   getDIC,
@@ -117,13 +117,13 @@ export function whseInCrudOp(_this) {
         prop: "suppName",
         width: 150,
       },
-      {
-        label: "检验状态",
-        prop: "yinStatus",
-        width: 100,
-        type: "select",
-        dicData: getDIC("whse_yinStatus")
-      },
+      // {
+      //   label: "检验状态",
+      //   prop: "yinStatus",
+      //   width: 100,
+      //   type: "select",
+      //   dicData: getDIC("whse_yinStatus")
+      // },
       {
         label: "财务状态",
         prop: "finStatus",
@@ -290,14 +290,15 @@ export function whseYarnInFormOp(_this) {
       type: "select",
       dicData: examState,
       disabled: true,
-    }, {
-      label: "检验状态",
-      prop: "yinStatus",
-      span: 5,
-      placeholder: " ",
-      type: "select",
-      dicData: getDIC("whse_yinStatus"),
-    },
+    }, 
+    // {
+    //   label: "检验状态",
+    //   prop: "yinStatus",
+    //   span: 5,
+    //   placeholder: " ",
+    //   type: "select",
+    //   dicData: getDIC("whse_yinStatus"),
+    // },
     {
       label: "财务状态",
       prop: "finStatus",
@@ -351,7 +352,16 @@ export function whseYarnInDtlCrudOp(_this) {
       width: 100,
       type: "select",
       dicData: getDIC("bas_matUnit"),
-    },
+    },{
+      label: "检验状态",
+      prop: "checkStatus",
+      width: 100,
+      type: "select",
+      dicData: getDIC("whse_yinStatus"),
+      default: 1,
+      cell: true,
+    }
+    
    ]
   }
 }
