@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:08:41
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-06-01 16:23:17
+ * @LastEditTime: 2022-06-06 09:08:05
  */
 import {
   getDIC,
@@ -233,7 +233,8 @@ export function whseYarnInFormOp(_this) {
       span: 5,
       placeholder: " ",
       type: "select",
-      dicData: examState
+      dicData: examState,
+      disabled: true,
     }, 
     // {
     //   label: "检验状态",
