@@ -1,12 +1,34 @@
 /*
  * @Author: Lyl
  * @Date: 2021-02-01 14:06:25
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-01-07 09:54:18
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-06-03 13:58:16
  * @Description:
  */
 
 import axios from "axios";
+
+
+// 查询设备信息
+export function fetchEquipmentInfo(params) {
+  return axios({
+    url: "/api/baseEquipment/list",
+    method: "get",
+    params: params
+  });
+}
+
+
+
+// 新增设备排期表数据
+export function addProEquipmentSchedule(params) {
+  return axios({
+    url: "/api/proEquipmentSchedule",
+    method: "post",
+    params: params
+  });
+}
+
 
 // 查询 织单布票已生产总重量
 export function getNoteSum(params) {

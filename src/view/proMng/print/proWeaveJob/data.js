@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-05-23 13:03:07
+ * @LastEditTime: 2022-06-03 14:18:10
  * @Description:
  */
 
@@ -1551,21 +1551,22 @@ export function machineCrud(_this) {
         span: 6
       },
       {
+        label: "开机时间",
+        prop: "recordTime",
+        width: 160,
+        cell: true,
+        span: 6,
+        type: "datetime",
+        format: "yyyy-MM-dd HH:mm:ss",
+        valueFormat: "yyyy-MM-dd HH:mm:ss"
+      },
+      {
         label: "记录人",
         prop: "userName",
         width: 140,
         cell: false,
         span: 6
       },
-      {
-        label: "记录时间",
-        prop: "recordTime",
-        width: 160,
-        cell: false,
-        span: 6,
-        format: "yyyy-MM-dd HH:mm:ss",
-        valueFormat: "yyyy-MM-dd HH:mm:ss"
-      }
     ]
   };
 }

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-21 13:40:07
+ * @LastEditTime: 2022-06-03 14:12:46
  * @Description: 
 -->
 <template>
@@ -286,6 +286,8 @@ import {
   getBomDtlaSpecs,
   getNoteSum,
   get,
+  addProEquipmentSchedule,
+  fetchEquipmentInfo
 } from "./api";
 import { baseCodeSupplyEx, baseCodeSupply } from "@/api/index";
 import preview from "./preview";
@@ -738,13 +740,6 @@ export default {
           this.$tip.error("紗長不能為空!");
           return;
         }
-        // if (this.tabs == "用紗明细") {
-        //   if (!this.crud[i].yarnRatio) {
-        //     this.$tip.error("用纱比例不能為空!");
-        //     return;
-        //   }
-        // }
-
         if (this.tabs == "洗後規格" && !this.crud[i].weight) {
           this.$tip.error("重量不能為空!");
           return;
@@ -779,12 +774,14 @@ export default {
           } else {
             // 新增
             data.proWeaveJobFk = this.form.weaveJobId;
-            this.func.add(data).then((res) => {
+            data.createTime = this.$getNowTime("datetime")
+            this.func.add(data).then(async (res) => {
               item.changedId = res.data.data;
               item.groupId = res.data.data;
               item.washedId = res.data.data;
               item.strainId = res.data.data;
               item.useId = res.data.data;
+              this.tabs == "機號信息" && await this.addEquipmentSchedule(item)
               resolve();
             });
           }
@@ -795,18 +792,6 @@ export default {
       });
       Promise.all(promiseArr).then((res) => {
         for (let i = 0; i < this.crud.length; i++) {
-          // if (this.crud[i].list && this.crud[i].list.length > 0) {
-          //   this.crud[i].list.forEach((item) => {
-          //     item.proWeaveJobGroupFk = this.crud[i].groupId;
-          //     if (!item.useYarnId) {
-          //       addYarn(item).then((res) => {
-          //         item.useYarnId = res.data.data;
-          //       });
-          //     } else {
-          //       updateYarn(item).then((res) => {});
-          //     }
-          //   });
-          // }
           if (i === this.crud.length - 1) {
             // this.getDetail();
             setTimeout(() => {
@@ -817,30 +802,6 @@ export default {
           }
         }
       });
-      // this.crud.forEach((item, index) => {
-      //   if (
-      //     item.changedId ||
-      //     item.useYarnId ||
-      //     item.washedId ||
-      //     item.strainId
-      //   ) {
-      //     // update
-      //     this.func.update(item).then((res) => {});
-      //   } else {
-      //     //add
-      //     item.proWeaveJobFk = this.form.weaveJobId;
-      //     this.func.add(item).then((res) => {
-      //       item.changedId = res.data.data;
-      //       item.useYarnId = res.data.data;
-      //       item.washedId = res.data.data;
-      //       item.strainId = res.data.data;
-      //     });
-      //   }
-      //   if (index == this.crud.length - 1) {
-      //     this.$tip.success(this.$t("public.bccg"));
-      //     this.dlgLoading = false;
-      //   }
-      // });
     },
     saveYarn() {
       this.dlgLoading = true;
@@ -900,7 +861,31 @@ export default {
           });
       }
     },
-    saveDtl() {},
+    async addEquipmentSchedule(row) {
+      let equRes = await fetchEquipmentInfo({equipmentCode: row.mathineCode })
+      if(!equRes.data.length) return
+      const equInfo = equRes.data[0]
+      let params = {
+        equId: equInfo.equId,
+        equModel: equInfo.equModel,
+        planStart: row.recordTime,
+        proSpeed: equInfo.equSpeed,
+        proNeedleCount: equInfo.needleCount,
+        proWayCount: equInfo.wayCount,
+        proDiaBarrel: equInfo.equDiaBarrel,
+        proNeedleSpace: equInfo.equNeedleSpace,
+        equipmentName: equInfo.equipmentName,
+        equipmentCode: equInfo.equipmentCode,
+        productOrderNo: this.form.weaveJobCode,
+        proTemperature: equInfo.equProTemperature,
+        unit: equInfo.unit,
+        measureMethod: equInfo.measureMethod,
+        maxOutput: equInfo.maxOutput,
+        equState: equInfo.equState
+      }
+      addProEquipmentSchedule(params).then(res =>{
+      })
+    },
     checkOrder() {
       this.choiceV = true;
       // this.crudOp = dlgCrud(this);
@@ -1063,9 +1048,6 @@ export default {
     cellClick(val) {
       this.chooseData = val;
       this.chooseDtlData = {};
-      if (!this.chooseData.list) {
-        this.chooseData.list = [];
-      }
       // if (
       //   this.tabs == "用紗明细" &&
       //   this.chooseData.list.length == 0 &&
