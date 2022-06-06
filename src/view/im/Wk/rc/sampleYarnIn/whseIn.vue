@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:18:23
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-05-17 15:15:36
+ * @LastEditTime: 2022-06-06 09:12:03
 -->
 <template>
   <div id="return-yarn-in-container">
@@ -112,7 +112,9 @@ export default {
       this.curSelectRow = row;
     },
     // 审核
-    handleExamine(){
+    async handleExamine(){
+      let hasConfirm = await this.$tip.cofirm("是否确认审核").then(_ => true).catch(_ => false);
+      if(!hasConfirm) return;
       let {whseYarninoid} = this.curSelectRow || {};
       if(!whseYarninoid) return this.$tip.warning("请选择数据");
       this.loading = true;
