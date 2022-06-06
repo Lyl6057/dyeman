@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-05 09:15:58
+ * @LastEditTime: 2022-06-02 16:26:02
  * @Description: 
 -->
 <template>
@@ -322,32 +322,34 @@ export default {
             _this.tabs = "zd";
             getWeave({
               weaveJobCode: scanData,
-            }).then((res) => {
+            }).then(async (res) => {
               _this.dialogVisible = true;
-              setTimeout(() => {
+              await _this.$nextTick()
+              // setTimeout(() => {
                 if (res.data.records.length) {
                   _this.$refs.tem.remoteMethod(
-                    res.data.records[0].weaveJobCode
+                    res.data.records[0].weaveJobCode, _this.dialogVisible
                   );
                 } else {
                   _this.$tip.error("暂无该织单信息!");
                 }
-              }, 200);
+              // }, 200);
             });
           } else {
             _this.tabs = "rd";
             getRunJob({
               vatNo: scanData,
-            }).then((res) => {
+            }).then(async (res) => {
               _this.dialogVisible = true;
-              setTimeout(() => {
+              await _this.$nextTick()
+              // setTimeout(() => {
                 if (res.data.length) {
-                  _this.$refs.tem.remoteMethod(res.data[0].vatNo);
+                  _this.$refs.tem.remoteMethod(res.data[0].vatNo, _this.dialogVisible);
                   // _this.detail.runJobFk = res.data[0].runJobId;
                 } else {
                   _this.$tip.error("暂无该缸号信息!");
                 }
-              }, 200);
+              // }, 200);
             });
           }
         });

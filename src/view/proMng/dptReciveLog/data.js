@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-06 19:17:11
+ * @LastEditTime: 2022-06-02 16:14:12
  * @Description:
  */
 var baseUrl = "http://192.168.5.1:91";
@@ -83,6 +83,13 @@ export function dlgForm(_this) {
         type: "select",
         clearable: false,
         tip: "nhận đơn / gửi đơn",
+        rules: [
+          {
+            required: true,
+            message: "請选择收/发单",
+            trigger: "blur"
+          }
+        ],
         dicData: [
           {
             value: 1,
@@ -462,8 +469,9 @@ export function dlgCrud(_this) {
         tip: "bộ phận gửi đơn",
         placeholder: " ",
         type: "select",
+        overHidden: true,
         dicData: getDicT("proDptworkProcess", "dptName", "dptCode", {}, "sn"),
-        width: 100
+        width: 120
       },
       {
         label: "发单人",
@@ -487,7 +495,8 @@ export function dlgCrud(_this) {
         placeholder: " ",
         tipPlacement: "right",
         type: "select",
-        width: 100,
+        width: 120,
+        overHidden: true,
         dicData: getDicT("proDptworkProcess", "dptName", "dptCode", {}, "sn"),
         rules: [
           {

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-01 15:55:13
+ * @LastEditTime: 2022-06-02 16:30:53
  * @Description: 
 -->
 <template>
@@ -76,24 +76,28 @@ export default {
   },
   watch: {},
   methods: {
-    remoteMethod(val) {
+    remoteMethod(val, scanSave) {
       this.vatLoading = true;
+      this.wLoading = true;
       if (this.tabs == "rd") {
         getRunJobByPage({
-          vatNo: "!^%" + val,
+          vatNo:"!^%" +  val,
           rows: 10,
           start: 1,
           page: 1,
         }).then((res) => {
           this.options = res.data.records;
-          this.vatLoading = false;
           this.$nextTick(() => {
             if (res.data.records.length == 1) {
               this.form.runJobFk = res.data.records[0].runJobId;
               this.form.clothWeight = res.data.records[0].clothWeight;
+              scanSave && this.save(1)
             }
           });
-        });
+        }).finally(() =>{
+          this.vatLoading = false;
+          this.wLoading = false;
+        })
       } else {
         getWeave({
           weaveJobCode: "!^%" + val,
@@ -104,12 +108,16 @@ export default {
           this.options = res.data.records;
           this.vatLoading = false;
           this.$nextTick(() => {
-            if (res.data.records.length == 1) {
+            if (res.data.records.length) {
               this.form.weaveJobId = res.data.records[0].weaveJobId;
               this.form.clothWeight = res.data.records[0].clothWeight;
+              scanSave && this.save(1)
             }
           });
-        });
+        }).finally(() =>{
+          this.vatLoading = false;
+          this.wLoading = false;
+        })
       }
     },
     getLogWeight(id) {
@@ -182,9 +190,8 @@ export default {
                 this.wLoading = false;
                 this.$tip.success(this.$t("public.bccg"));
                 this.$emit("refresh");
-                if(!isContinue){
-                  this.$emit("close");
-                }
+                !isContinue && this.$emit("close");
+                
               } else {
                 this.$tip.error(this.$t("public.bcsb"));
               }
