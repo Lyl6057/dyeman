@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-04-01 13:39:35
- * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-06-01 14:01:38
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-06-02 08:24:30
  * @Description:
  */
 
@@ -146,6 +146,10 @@ export function proMng(_this) {
           menuName: "7.生产辅料退仓通知单",
           index: "withDrawal2Access" 
         },
+        {
+          menuName: "8.运转单备布统计",
+          index: "proBleadyeRunJob"
+        }
         // {
         //   menuName: "3.布飞打印",
         //   index: "/proSalSchedule"
@@ -195,17 +199,14 @@ export function proMng(_this) {
         // },
       ]
     },
-    {
-      menuName: "六.染单管理",
-      index: "bleadyeMng",
-      icon: "el-icon-edit-outline",
-      children: [
-        {
-          menuName: "1.运转单备布统计",
-          index: "proBleadyeRunJob"
-        }
-      ]
-    },
+    // {
+    //   menuName: "六.染单管理",
+    //   index: "bleadyeMng",
+    //   icon: "el-icon-edit-outline",
+    //   children: [
+        
+    //   ]
+    // },
     // {
     //   menuName: "六.報表",
     //   index: "proReport",
