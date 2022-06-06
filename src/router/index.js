@@ -1,13 +1,15 @@
 /*
  * @Author: Lyl
  * @Date: 2021-01-23 08:03:49
- * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-06-01 14:28:56
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-06-03 11:08:05
  * @Description:
  */
 import Vue from "vue";
 import Router from "vue-router";
 import store from "@/store/index";
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
 // import cs from '@/router/view/cs'
 // import da from '@/router/view/da'
 // import em from '@/router/view/em'
@@ -16,11 +18,14 @@ import store from "@/store/index";
 // import pro from "@/router/view/pro";
 // import re from '@/router/view/re'
 // import iq from '@/router/view/iq'
-import whseMng from "@/router/view/im";
+// import whseMng from "@/router/view/im";
 // import quaLity from "@/router/view/quaLity";
 // import laboratory from "./view/laboratory";
-// import proMng from "./view/proMng";
+import proMng from "./view/proMng";
 // import energy from "./view/energy";
+
+NProgress.configure({ showSpinner: false })
+
 Vue.use(Router);
 const originalPush = Router.prototype.push;
 
@@ -56,10 +61,10 @@ const router = new Router({
         // ...pro,
         // ...re,
         // ...iq,
-        ...whseMng
+        // ...whseMng
         // ...quaLity
         // ...laboratory
-        // ...proMng
+        ...proMng
         // ...energy
       ]
     },
@@ -79,10 +84,15 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
   //to去哪里    from从哪来   next放行
   // document.title = to.meta.title
+  NProgress.start()
   handleTagViewAndKeeplive(to);
   next();
+  NProgress.done()
 });
 
+router.afterEach(() => {
+  NProgress.done()
+})
 export default router;
 
 /**
