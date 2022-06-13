@@ -224,7 +224,7 @@
             ></inwhse-ph>
           </view-container>
         </el-col>
-        <el-col :span="9" v-else>
+        <el-col :span="9" v-if="datas != this.$t('iaoMng.pb') && datas != this.$t('iaoMng.sx')">
           <view-container :title="datas + this.$t('iaoMng.rcphzl')">
             <!-- <el-tabs v-model="tabs" type="border-card">
             <el-tab-pane :label="datas + this.$t('iaoMng.rcmxhw')" name="loc">
@@ -237,7 +237,7 @@
               ></loction>
             </el-tab-pane>
             <el-tab-pane name="ph" v-if="datas != this.$t('iaoMng.yl')"> -->
-            <div class="btnList">
+           <div class="btnList">
               <el-button type="primary" @click="addPh">{{
                 this.$t("public.add")
               }}</el-button>
@@ -629,6 +629,7 @@ export default {
             locationCode: this.mx[this.mx.length - 1].locationCode,
             batchNo: this.mx[this.mx.length - 1].batchNo,
             etSn: this.mx[this.mx.length - 1].etSn,
+            checkStatus: "1"
           });
         } else {
           this.mx.push({
@@ -636,6 +637,7 @@ export default {
             weightUnit: "KG",
             $cellEdit: true,
             countingNo: 1,
+            checkStatus: "1"
           });
         }
       } else {
@@ -648,6 +650,7 @@ export default {
           batchNo: this.code,
           batchNos:
             this.datas == this.$t("iaoMng.sx") ? this.code : this.code.slice(2),
+          checkStatus: "1"
         });
         if (this.datas == this.$t("iaoMng.sx")) {
           this.code =

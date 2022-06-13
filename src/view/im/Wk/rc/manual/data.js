@@ -39,19 +39,19 @@ export function rhl1F(_this) {
         span: 6,
         placeholder: " "
       },
-      {
-        label: _this.$t("whseField.jyzt"),
-        prop: "yinStatus",
-        span: 6,
-        placeholder: " ",
-        type: "select",
-        dicData: getDIC("whse_yinstatus"),
-        change: () => {
-          _this.$nextTick(() => {
-            _this.getData();
-          });
-        }
-      },
+      // {
+      //   label: _this.$t("whseField.jyzt"),
+      //   prop: "yinStatus",
+      //   span: 6,
+      //   placeholder: " ",
+      //   type: "select",
+      //   dicData: getDIC("whse_yinstatus"),
+      //   change: () => {
+      //     _this.$nextTick(() => {
+      //       _this.getData();
+      //     });
+      //   }
+      // },
 
       {
         label: _this.$t("whseField.cwzt"),
@@ -108,16 +108,16 @@ export function rhl2F(_this) {
         placeholder: " ",
         disabled: false
       },
-      {
-        label: _this.$t("whseField.jyzt"),
-        prop: "yinStatus",
-        span: 6,
-        placeholder: " ",
-        type: "select",
-        disabled: false,
-        display: true,
-        dicData: getDIC("whse_yinstatus")
-      },
+      // {
+      //   label: _this.$t("whseField.jyzt"),
+      //   prop: "yinStatus",
+      //   span: 6,
+      //   placeholder: " ",
+      //   type: "select",
+      //   disabled: false,
+      //   display: true,
+      //   dicData: getDIC("whse_yinstatus")
+      // },
       {
         label: _this.$t("whseField.cwzt"),
         prop: "finStatus",
@@ -221,14 +221,14 @@ export function rhl1C(_this) {
         hide: _this.data == _this.$t("whseField.cpb"),
         width: 140
       },
-      {
-        label: _this.$t("whseField.jyzt"),
-        prop: "yinStatus",
-        cell: false,
-        width: 120,
-        type: "select",
-        dicData: getDIC("whse_yinstatus")
-      },
+      // {
+      //   label: _this.$t("whseField.jyzt"),
+      //   prop: "yinStatus",
+      //   cell: false,
+      //   width: 120,
+      //   type: "select",
+      //   dicData: getDIC("whse_yinstatus")
+      // },
       {
         label: _this.$t("whseField.cwzt"),
         prop: "finStatus",
@@ -303,7 +303,7 @@ export function rhl2C(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 310px)",
+    height: "calc(100vh - 320px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
@@ -499,7 +499,15 @@ export function rhl2C(_this) {
           _this.datas != _this.$t("iaoMng.yl")
             ? false
             : true
-      }
+      },
+      {
+        label: _this.$t("whseField.jyzt"),
+        prop: "checkStatus",
+        cell: true,
+        width: 120,
+        type: "select",
+        dicData: getDIC("whse_yinstatus")
+      },
     ]
   };
 }
@@ -509,7 +517,7 @@ export function sx2C(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 311px)",
+    height: "calc(100vh - 320px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
@@ -653,7 +661,15 @@ export function sx2C(_this) {
         overHidden: true,
         dicData: getDIC("bas_yarnorigin"),
         width: 120
-      }
+      },
+      {
+        label: _this.$t("whseField.jyzt"),
+        prop: "checkStatus",
+        cell: true,
+        width: 120,
+        type: "select",
+        dicData: getDIC("whse_yinstatus")
+      },
     ]
   };
 }
@@ -663,7 +679,7 @@ export function pb2C(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 311px)",
+    height: "calc(100vh - 320px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
@@ -748,7 +764,15 @@ export function pb2C(_this) {
         type: "number",
         width: 90,
         align: "right"
-      }
+      },
+      {
+        label: _this.$t("whseField.jyzt"),
+        prop: "checkStatus",
+        cell: true,
+        width: 120,
+        type: "select",
+        dicData: getDIC("whse_yinstatus")
+      },
     ]
   };
 }
@@ -760,7 +784,7 @@ export function cpb2C(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 311px)",
+    height: "calc(100vh - 320px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
@@ -861,7 +885,15 @@ export function cpb2C(_this) {
         prop: "whseFinishedclothinFk",
         hide: true,
         width: 100
-      }
+      },
+      {
+        label: _this.$t("whseField.jyzt"),
+        prop: "checkStatus",
+        cell: true,
+        width: 120,
+        type: "select",
+        dicData: getDIC("whse_yinstatus")
+      },
     ]
   };
 }
@@ -872,7 +904,7 @@ export function hgyl2C(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 310px)",
+    height: "calc(100vh - 320px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
@@ -955,7 +987,7 @@ export function hgyl2C(_this) {
         width: 120,
         type: "select",
         dicData: getDIC("whse_money_type")
-      }
+      },
       // {
       //   label: _this.$t("whseField.xh"),
       //   prop: "modeltype",
@@ -980,6 +1012,14 @@ export function hgyl2C(_this) {
       //   type: "select",
       //   dicData: basChemicalmat
       // }
+      {
+        label: _this.$t("whseField.jyzt"),
+        prop: "checkStatus",
+        cell: true,
+        width: 120,
+        type: "select",
+        dicData: getDIC("whse_yinstatus")
+      },
     ]
   };
 }
@@ -990,7 +1030,7 @@ export function yl2C(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 310px)",
+    height: "calc(100vh - 320px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
@@ -1078,7 +1118,15 @@ export function yl2C(_this) {
         width: 120,
         type: "select",
         dicData: getDIC("whse_money_type")
-      }
+      },
+      {
+        label: _this.$t("whseField.jyzt"),
+        prop: "checkStatus",
+        cell: true,
+        width: 120,
+        type: "select",
+        dicData: getDIC("whse_yinstatus")
+      },
       // {
       //   label: _this.$t("whseField.ywmc"),
       //   prop: "ennamelong",
@@ -1126,7 +1174,7 @@ export function yjxz2C(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 310px)",
+    height: "calc(100vh - 320px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
@@ -1212,7 +1260,15 @@ export function yjxz2C(_this) {
         width: 100,
         align: "right",
         type: "number"
-      }
+      },
+      {
+        label: _this.$t("whseField.jyzt"),
+        prop: "checkStatus",
+        cell: true,
+        width: 120,
+        type: "select",
+        dicData: getDIC("whse_yinstatus")
+      },
     ]
   };
 }
@@ -1223,7 +1279,7 @@ export function rhl3C(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 274px)",
+    height: "calc(100vh - 280px)",
     refreshBtn: false,
     columnBtn: false,
     page: false,
@@ -1324,7 +1380,7 @@ export function wjxz3C(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 274px)",
+    height: "calc(100vh - 280px)",
     refreshBtn: false,
     columnBtn: false,
     page: false,
