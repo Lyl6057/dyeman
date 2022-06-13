@@ -15,6 +15,12 @@ export function mainForm(_this) {
         dicData: getDicT("basCustomer", "custName", "custCode")
       },
       {
+        label: "色号",
+        prop: "colorNo",
+        span: 6,
+        placeholder: " "
+      },
+      {
         label: "颜色编号",
         prop: "colorBh",
         span: 6,
@@ -44,12 +50,7 @@ export function mainForm(_this) {
         span: 12,
         placeholder: " "
       },
-      {
-        label: "色号",
-        prop: "colorNo",
-        span: 6,
-        placeholder: " "
-      }
+      
     ]
   };
 }
@@ -308,13 +309,13 @@ export function popupForm(_this) {
           _this.lights();
         },
         dicData: getDIC("sal_colorLights"),
-        rules: [
-          {
-            required: true,
-            message: "請选择第二光源",
-            trigger: "blur"
-          }
-        ]
+        // rules: [
+        //   {
+        //     required: true,
+        //     message: "請选择第二光源",
+        //     trigger: "blur"
+        //   }
+        // ]
       },
       {
         label: "第三光源",

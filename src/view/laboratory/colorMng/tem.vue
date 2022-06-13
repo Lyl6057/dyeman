@@ -92,6 +92,7 @@ export default {
             colorDate: this.$getNowTime("datetime"),
             colorState: false,
             doubleFlag: false,
+            sn: 5869
           };
           this.wLoading = false;
         });
@@ -110,6 +111,14 @@ export default {
           this.wLoading = true;
           if (this.form.labTapcoloroid) {
             // update
+            // this.form.sysLastUpd = this.$getNowTime("datetime")
+            // this.form.sysLastUpdBy = this.$store.state.userOid
+            delete this.form['sn']
+            for(let key in this.form){
+              if(key.indexOf("$")!= -1){
+                delete this.form[key]
+              }
+            }
             updateLabTapcolor(this.form)
               .then((res) => {
                 this.wLoading = false;
@@ -121,6 +130,13 @@ export default {
                 this.$tip.error("保存失败!" + err);
               });
           } else {
+            // this.form.sysCreated = this.$getNowTime("datetime")
+            // this.form.sysCreatedby = this.$store.state.userOid
+            for(let key in this.form){
+              if(key.indexOf("$")!= -1){
+                delete this.form[key]
+              }
+            }
             addLabTapcolor(this.form)
               .then((res) => {
                 baseCodeSupply({ code: "color_num" }).then((res) => {});
@@ -130,6 +146,7 @@ export default {
                 this.$tip.success(this.$t("public.bccg"));
               })
               .catch((err) => {
+                 done();
                 this.wLoading = false;
                 this.$tip.error("保存失败!" + err);
               });
