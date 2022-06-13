@@ -103,7 +103,7 @@ export default {
         this.$tip.warning("请先输入载具编号和库口!");
         return;
       }
-      let orderType = entrance.indexOf("S") ? 6 : 4;
+      let orderType = entrance.indexOf("S") != -1 ? 6 : 4;
       // 生成入库记录
       this.wloading = true;
       let params = {
