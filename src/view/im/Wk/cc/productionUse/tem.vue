@@ -440,7 +440,7 @@ export default {
         return;
       }
       for (let i = 0; i < this.mx.length; i++) {
-        if (!this.mx[i].weight || this.mx[i].weight == 'NaN') {
+        if (!this.mx[i].weight || this.mx[i].weight == "NaN") {
           this.$tip.error("数量不能为空!");
           return;
         }
@@ -635,18 +635,20 @@ export default {
       let dataList = [];
       this.mx.forEach((item) => {
         if (item.list) {
-          dataList.push({
-            yarnsId: item.yarnsId,
-            yarnsName: item.yarnsName,
-            yarnsCard: item.yarnBrand || "",
-            matCode: item.chemicalId || item.materialId || item.accessoriesId,
-            batchNo: item.batchNo,
-            batId: item.suppBatchNo || "",
-            retQty: item.weight,
-            weight: item.weight,
-            weightUnit: item.weightUnit,
-            locationCode: item.list.length ? item.list[0].locationCode : "",
-            locationName: item.list.length ? item.list[0].locationCode : "",
+          item.list.forEach((list) => {
+            dataList.push({
+              yarnsId: item.yarnsId,
+              yarnsName: item.yarnsName,
+              yarnsCard: item.yarnBrand || "",
+              matCode: item.chemicalId || item.materialId || item.accessoriesId,
+              batchNo: item.batchNo,
+              batId: item.suppBatchNo || "",
+              retQty: list.weight,
+              weight: list.weight,
+              weightUnit: item.weightUnit,
+              locationCode: list.locationCode,
+              locationName: list.locationCode,
+            });
           });
         }
       });

@@ -2,6 +2,11 @@ import { getDIC, getDicT, postDicT, getXDicT } from "@/config/index";
 let matUnit = getDIC("bas_matUnit");
 let rlData = getXDicT("BasChemicalmatNew");
 let user = getDicT("ucmlUser", "employeename", "ucmlUseroid");
+
+function fillZero(row, value) {
+  return value && value.toFixed(2);
+}
+
 export function rsxkr1F(_this) {
   return {
     submitBtn: false,
@@ -350,7 +355,9 @@ export function rsxkr2C(_this) {
         hide: false,
         width: 120,
         align: "right",
-        precision: 2
+        precision: 2,
+        formatter: fillZero
+
       },
       {
         label: "借纱数量",
@@ -359,7 +366,8 @@ export function rsxkr2C(_this) {
         width: 100,
         align: "right",
         placeholder: " ",
-        hide: _this.type === _this.$t("iaoMng.sx") ? false : true
+        hide: _this.type === _this.$t("iaoMng.sx") ? false : true,
+        formatter: fillZero
       },
       {
         label: "出货数量",
@@ -370,6 +378,7 @@ export function rsxkr2C(_this) {
         align: "right",
         // type: "number",
         precision: 1,
+        formatter: fillZero,
         placeholder: " ",
         change: val => {
           if (val.value > _this.chooseData.applyNum) {
