@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-03 14:18:10
+ * @LastEditTime: 2022-06-11 08:33:22
  * @Description:
  */
 
@@ -252,6 +252,29 @@ export function mainCrud(_this, audit) {
         ]
       },
       {
+        label: "BOM编号",
+        prop: "bomId",
+        tip: "bom code",
+        span: 6,
+        width: 120,
+        disabled: audit
+          ? false
+          : _this.detail.auditState && !_this.isAdd
+          ? true
+          : false,
+        overHidden: true,
+        placeholder: " ",
+        click: () => {
+          if (_this.detail.auditState) {
+            return
+          }
+          _this.choiceQ.sortF = 'custId'
+          _this.choiceQ.fuzzy = "brandId,guestFabId"
+          _this.choiceTle = "选择BOM资料";
+          _this.choiceV = true;
+        }
+      },
+      {
         label: "营销单号",
         prop: "marketOrder",
         tip: "Mã số dệt bộ phận Sales",
@@ -302,28 +325,6 @@ export function mainCrud(_this, audit) {
           // });
         }
       },
-      // {
-      //   label: "客戶編號",
-      //   prop: "custCode",
-      //   overHidden: true,
-      //   tip: "Khách hàng",
-      //   disabled: audit
-      //     ? false
-      //     : _this.detail.auditState && !_this.isAdd
-      //     ? true
-      //     : false,
-      //   width: 120,
-      //   span: 6,
-      //   placeholder: "请選擇客戶名稱",
-      //   rules: [
-      //     {
-      //       required: true,
-      //       message: "请選擇客戶名稱",
-      //       trigger: "blur"
-      //     }
-      //   ]
-      // },
-
       {
         label: "開機日期",
         prop: "startDate",
@@ -400,49 +401,7 @@ export function mainCrud(_this, audit) {
           : false,
         hide: true
       },
-      {
-        label: "季节",
-        prop: "seasonCode",
-        span: 6,
-        width: 120,
-        placeholder: " ",
-        tip: "Mùa hàng",
-        disabled: audit
-          ? false
-          : _this.detail.auditState && !_this.isAdd
-          ? true
-          : false,
-        hide: true
-        // row: true
-      },
-
-      // {
-      //   label: "纱牌",
-      //   prop: "yarnBrand",
-      //   span: 6,
-      //   width: 120,
-      //   placeholder: " ",
-      //   tip: "Nhà cung cấp sợi",
-      //   hide: true
-      // },
-      // {
-      //   label: "纱批",
-      //   prop: "yarnBatchNo",
-      //   span: 6,
-      //   width: 120,
-      //   placeholder: " ",
-      //   tip: "Lót sợi",
-      //   hide: true
-      // },
-      // {
-      //   label: "纱缸",
-      //   prop: "yarnCylinder",
-      //   span: 6,
-      //   width: 120,
-      //   placeholder: " ",
-      //   tip: "Lô sợi nhà máy",
-      //   hide: true
-      // },
+      
       {
         label: "合同数量",
         prop: "contractAmount",
@@ -480,22 +439,6 @@ export function mainCrud(_this, audit) {
         align: "left",
         tip: "Số lượng vải mộc"
       },
-
-      {
-        label: "纤维成份比例",
-        prop: "fiberComp",
-        placeholder: " ",
-        overHidden: true,
-        width: 250,
-        tip: "Tỷ lệ sơ sợi",
-        span: 12,
-        disabled: audit
-          ? false
-          : _this.detail.auditState && !_this.isAdd
-          ? true
-          : false,
-        hide: true
-      },
       {
         label: "纱线数量",
         prop: "yarnAmount",
@@ -511,6 +454,38 @@ export function mainCrud(_this, audit) {
           : false,
         tip: " Số lượng sợi "
       },
+      {
+        label: "季节",
+        prop: "seasonCode",
+        span: 6,
+        width: 120,
+        placeholder: " ",
+        tip: "Mùa hàng",
+        disabled: audit
+          ? false
+          : _this.detail.auditState && !_this.isAdd
+          ? true
+          : false,
+        hide: true
+        // row: true
+      },
+      {
+        label: "纤维成份比例",
+        prop: "fiberComp",
+        placeholder: " ",
+        overHidden: true,
+        width: 250,
+        tip: "Tỷ lệ sơ sợi",
+        span: 12,
+        disabled: audit
+          ? false
+          : _this.detail.auditState && !_this.isAdd
+          ? true
+          : false,
+        hide: true
+      },
+      
+      
 
       {
         label: "布類描述",
@@ -522,7 +497,7 @@ export function mainCrud(_this, audit) {
           ? true
           : false,
         width: 250,
-        span: 18,
+        span: 12,
         placeholder: "请選擇布類描述",
         rules: [
           {
@@ -857,13 +832,6 @@ export function mainCrud(_this, audit) {
                 _this.$tip.warning("请先保存织单信息!");
               }
             }
-            // rules: [
-            //   {
-            //     required: true,
-            //     message: "请輸入機號",
-            //     trigger: "blur"
-            //   }
-            // ]
           },
 
           {

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-03 14:12:46
+ * @LastEditTime: 2022-06-11 08:43:22
  * @Description: 
 -->
 <template>
@@ -887,6 +887,7 @@ export default {
       })
     },
     checkOrder() {
+      this.choiceTle =  "选择订单资料"
       this.choiceV = true;
       // this.crudOp = dlgCrud(this);
       // this.visible = true;
@@ -1151,6 +1152,34 @@ export default {
             $cellEdit: true,
           });
         });
+      }else if (this.choiceTle == "选择BOM资料") {
+        this.form.custCode = val.custId;
+        this.form.custFabricCode = val.guestFabId;
+        this.form.seasonCode = val.season;
+        this.form.fiberComp = val.guestComponents;
+        this.form.fabricDesc = val.guestFabNames;
+        this.form.bomId = val.$salNewbomFk
+        // getBom({ bomId: val.bomId }).then((res) => {
+        //   if (res.data.length) {
+        //     getBomDtlb({ salNewbomFk: res.data[0].salNewbomoid }).then(
+        //       (dtlb) => {
+        //         if (dtlb.data.length) {
+        //           getBomDtlbSpecs({
+        //             salNewbomDtlbFk: val.salNewbomDtlbFk,
+        //           }).then((dtlbSpecs) => {
+        //             this.setSpecs(dtlbSpecs.data);
+        //           });
+        //         } else {
+        //           getBomDtlaSpecs({
+        //             salNewbomDtlaFk: val.salNewbomDtlaFk,
+        //           }).then((dtlaSpecs) => {
+        //             this.setSpecs(dtlaSpecs.data);
+        //           });
+        //         }
+        //       }
+        //     );
+        //   }
+        // })
       } else {
         this.form.custPoNo = val.custPoNo;
         this.form.salPoNo = val.poNo;
