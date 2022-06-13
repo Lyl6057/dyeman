@@ -137,7 +137,10 @@ import {
   getEquipmentStock,
   energeStockC,
   energeStockF,
-  getEnergStock
+  getEnergStock,
+  fetchBomData,
+  bomDataC,
+  bomDataF
 } from "./data";
 
 export default {
@@ -352,6 +355,11 @@ export default {
   },
   created() {
     switch (this.choiceTle) {
+      case "选择BOM资料":
+        this.choiceC = bomDataC(this);
+        this.choiceF = bomDataF(this);
+        this.getData = fetchBomData;
+        break;
       case "选择在库载具":
         this.choiceC = inWhseStoreC(this);
         this.choiceF = inWhseStoreF(this);

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-05-03 13:03:03
  * @LastEditors: Lyl
- * @LastEditTime: 2022-05-24 15:20:06
+ * @LastEditTime: 2022-06-11 08:31:50
  * @Description:
  */
 
@@ -15,6 +15,171 @@ let basChemical = getXDicT("BasChemicalmatNew");
 let basPigment = getXDicT("basPigment");
 let basProductivesupplies = getXDicT("basProductivesupplies");
 let basFuel = getXDicT("basFuel");
+
+export function fetchBomData(params) {
+  return axios({
+    url: "/api/salNewbomDtla/page",
+    method: "get",
+    params: params
+  });
+}
+export function bomDataF(_this) {
+  return {
+    submitBtn: false,
+    emptyBtn: false,
+    labelWidth: 150,
+    column: [
+      {
+        label: "BOM编号",
+        prop: "bomId",
+        span: 6,
+        placeholder: " ",
+        type: "select",
+        dicData: getDicT("salNewbom", "bomId", "salNewbomoid",{}, "bomId"),
+        filterable: true,
+      },
+      // {
+      //   label: "BOM状态",
+      //   prop: "salPoNo",
+      //   span: 6,
+      //   placeholder: " ",
+      //   type: "select",
+      //   dicData: getDIC("sal_bomState")
+      //   // dicData: getDicT("basCustomer", "custName", "custCode")
+      // },
+      {
+        label: "客戶名稱",
+        prop: "custId",
+        span: 6,
+        placeholder: " ",
+        type: "select",
+        dicData: cust
+      },
+      {
+        label: "品牌",
+        prop: "brandId",
+        overHidden: true,
+        disabled: false,
+        width: 120,
+        span: 6,
+      },
+      {
+        label: "客布编号",
+        prop: "guestFabId",
+        span: 6,
+        placeholder: " "
+      },
+    ]
+  };
+}
+
+export function bomDataC(_this) {
+  return {
+    menu: false,
+    addBtn: false,
+    border: true,
+    highlightCurrentRow: true,
+    height: "calc(100vh - 210px)",
+    refreshBtn: false,
+    columnBtn: false,
+    page: true,
+    selection: false,
+    labelWidth: 130,
+    column: [
+      {
+        label: "#",
+        prop: "index",
+        width: 50,
+        align: "center",
+        display: false
+      },
+      {
+        label: "客戶名称",
+        prop: "custId",
+        overHidden: true,
+        disabled: false,
+        width: 160,
+        span: 6,
+        type: "select",
+        dicData: getDicT("basCustomer", "custName", "custCode")
+      },
+      {
+        label: "品牌",
+        prop: "brandId",
+        overHidden: true,
+        disabled: false,
+        width: 120,
+        span: 6,
+      },
+      {
+        label: "客布编号",
+        prop: "guestFabId",
+        overHidden: true,
+        width: 120,
+      },
+      {
+        label: "BOM编号",
+        prop: "salNewbomFk",
+        overHidden: true,
+        width: 120,
+        span: 6,
+        sortable: true,
+        type: "select",
+        dicData: getDicT("salNewbom", "bomId", "salNewbomoid")
+      },
+      {
+        label: "客人成分要求",
+        prop: "guestComponents",
+        width: 250,
+        span: 6,
+        overHidden: true
+      },
+      {
+        label: "客布布名",
+        prop: "guestFabNames",
+        overHidden: true,
+        width: 250,
+      },
+      {
+        label: "客人布料描述",
+        prop: "guestFabName",
+        overHidden: true,
+        width: 250,
+      },
+      
+      {
+        label: "布名称",
+        prop: "fabName",
+        overHidden: true,
+        width: 250,
+      },
+      
+      {
+        label: "针距",
+        prop: "needleDistance",
+        width: 80,
+        span: 6,
+        placeholder: " "
+      },
+      {
+        label: "筒径",
+        prop: "syringeDiameter",
+        width: 80,
+        span: 6,
+        placeholder: " "
+      },
+      {
+        label: "縂針數",
+        prop: "totalNeedle",
+        width: 80,
+        placeholder: " ",
+        type: "number",
+        span: 6,
+      },
+    ]
+  };
+}
+
 
 export function energeStockF(_this) {
   return {
@@ -1349,7 +1514,7 @@ export function salPoC(_this) {
 }
 export function getSalPo(params) {
   return axios({
-    url: "/api/salNewpo/pages",
+    url: "/api/salNewpo/page", //pages
     method: "get",
     params: params
   });
@@ -4074,6 +4239,7 @@ export function clothNoteC(_this) {
     ]
   };
 }
+
 export function getWeaveJob(params) {
   return axios({
     url: "/api/proWeaveJob/page",

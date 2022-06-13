@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-02-24 08:12:20
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-01-04 16:07:22
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-06-06 13:38:33
  * @Description:
  */
 import { getDIC,getDicNS } from "@/config";
@@ -90,7 +90,7 @@ export function loc1C(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 275px)",
+    height: "calc(100vh - 280px)",
     refreshBtn: false,
     columnBtn: false,
     page: false,
