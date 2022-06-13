@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-08-07 07:57:44
  * @LastEditors: Lyl
- * @LastEditTime: 2022-05-20 12:31:42
+ * @LastEditTime: 2022-06-10 09:54:39
  * @Description: 
 -->
 <template>
@@ -20,7 +20,7 @@
                 ref="form"
                 :option="crudOp"
                 v-model="form"
-                style="height: calc(100vh - 165px); overflow: auto"
+                style="height: calc(100vh - 265px); overflow: auto"
               >
                 <template slot="vatNo">
                   <el-select
@@ -514,7 +514,7 @@ export default {
         this.$tip.error("成品重量不能为0!");
         return;
       }
-      getBleadye({ vatNo: this.form.vatNo }).then((dye) => {
+      getRevolve({ vatNo: this.form.vatNo }).then((dye) => {
         if (!dye.data.length) {
           this.$tip.error("暂无此缸号数据!");
         } else {
