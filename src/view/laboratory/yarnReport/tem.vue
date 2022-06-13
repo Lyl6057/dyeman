@@ -98,6 +98,8 @@ export default {
       if (this.isAdd) {
         //  baseCodeSupplyEx({ code: "dye_batch" }).then((res) => {
         this.form = {
+          yarnQty: 0,
+          takeSample: 0,
           yarnDate: this.$getNowTime("datetime"),
         };
         this.wLoading = false;
