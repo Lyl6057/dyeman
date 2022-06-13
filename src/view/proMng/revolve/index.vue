@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-14 15:55:07
+ * @LastEditTime: 2022-06-10 08:36:05
  * @Description:
 -->
 <template>
@@ -227,6 +227,7 @@ export default {
       copyC: false,
       selectList: [],
       splitType: "A",
+      hasFinied: 0
     };
   },
   watch: {},
