@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-29 14:14:56
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-06-01 14:05:09
+ * @LastEditTime: 2022-06-14 09:12:15
  * @Description:
  */
 export default [
@@ -52,6 +52,14 @@ export default [
     path: "/proRpt",
     name: "生产看板",
     component: resolve => require(["@/view/proMng/ProRpt/index"], resolve),
+    meta: {
+      keepAlive: false
+    }
+  },
+  {
+    path: "/proWeaveJobSummary",
+    name: "织单用纱汇总",
+    component: resolve => require(["@/view/proMng/ProWeaveJobSummary/index"], resolve),
     meta: {
       keepAlive: false
     }

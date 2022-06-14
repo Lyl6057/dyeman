@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-04-01 13:39:35
- * @LastEditors: Lyl
- * @LastEditTime: 2022-06-02 08:24:30
+ * @LastEditors: Symbol_Yang
+ * @LastEditTime: 2022-06-14 10:33:02
  * @Description:
  */
 
@@ -110,6 +110,10 @@ export function proMng(_this) {
         {
           menuName: "8.退纱通知单",
           index: "returnYarnsNotice"
+        },
+        {
+          menuName: "9.织单用纱汇总",
+          index: "proWeaveJobSummary"
         }
       ]
     },

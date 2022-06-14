@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-03-26 09:58:34
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-23 09:31:54
+ * @LastEditTime: 2022-06-06 16:18:10
  */
 
 
@@ -334,6 +334,13 @@ export function sxCrudOp(_this){
         width: 120
       },
       {
+        label: "检验状态",
+        prop: "yinStatus",
+        width: 120,
+        type: "select",
+        dicData: getDIC("whse_yinstatus")
+      },
+      {
         label: "备注",
         prop: "remarks",
         cell: true,
@@ -394,6 +401,13 @@ export function pubCrudOp(_this){
         prop: "unitName",
         cell: false,
         width: 80,
+      },
+      {
+        label: "检验状态",
+        prop: "yinStatus",
+        width: 120,
+        type: "select",
+        dicData: getDIC("whse_yinstatus")
       },
       {
         label: "备注",
