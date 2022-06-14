@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-11 08:33:22
+ * @LastEditTime: 2022-06-14 09:12:57
  * @Description:
  */
 
@@ -252,6 +252,20 @@ export function mainCrud(_this, audit) {
         ]
       },
       {
+        label: "营销单号",
+        prop: "marketOrder",
+        tip: "Mã số dệt bộ phận Sales",
+        span: 6,
+        width: 200,
+        disabled: audit
+          ? false
+          : _this.detail.auditState && !_this.isAdd
+          ? true
+          : false,
+        overHidden: true,
+        placeholder: " "
+      },
+      {
         label: "BOM编号",
         prop: "bomId",
         tip: "bom code",
@@ -274,20 +288,7 @@ export function mainCrud(_this, audit) {
           _this.choiceV = true;
         }
       },
-      {
-        label: "营销单号",
-        prop: "marketOrder",
-        tip: "Mã số dệt bộ phận Sales",
-        span: 6,
-        width: 200,
-        disabled: audit
-          ? false
-          : _this.detail.auditState && !_this.isAdd
-          ? true
-          : false,
-        overHidden: true,
-        placeholder: " "
-      },
+      
       {
         label: "客人訂單編號",
         prop: "custPoNo",

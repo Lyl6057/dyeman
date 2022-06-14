@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-10 08:38:55
+ * @LastEditTime: 2022-06-14 14:04:48
  * @Description:
 -->
 <template>
@@ -243,10 +243,6 @@ export default {
     };
   },
   watch: {
-    // "form.bf": {
-    //   handler(n, o) {
-    //   },
-    // },
   },
   methods: {
     remoteMethod(val) {
@@ -907,6 +903,7 @@ export default {
       data.remark = data.remark.replace(/^办单,/, "");
       data.remark = data.remark.replace(/^缸差,/, "");
       data.remark = data.remark.replace(/^头缸,/, "");
+      data.remark = data.remark.replace(/^翻单头缸,/, "");
 
       if (data.salType == "sample") {
         // 判断备注开头是否有办布字样
@@ -919,9 +916,12 @@ export default {
         if (data.firstOrOther == "1") {
           const nReg = /^头缸/;
           if (!nReg.test(data.remark)) addText += "头缸,";
-        } else {
+        }else if(data.firstOrOther == "2") {
           const nReg = /^缸差/;
           if (!nReg.test(data.remark)) addText += "缸差,";
+        }else{
+          const nReg = /^翻单头缸/;
+          if (!nReg.test(data.remark)) addText += "翻单头缸,";
         }
       }
 

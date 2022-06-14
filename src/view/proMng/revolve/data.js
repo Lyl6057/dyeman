@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-10 08:43:06
+ * @LastEditTime: 2022-06-14 13:58:49
  * @Description:
  */
 
@@ -805,9 +805,9 @@ export function mainCrud(_this) {
       //   placeholder: " "
       // },
       {
-        label: "代码",
+        label: "季节",
         prop: "custStyleCode",
-        tip: "MÃ CODE VẢI XUẤT HÀNG 代码",
+        // tip: "MÃ CODE VẢI XUẤT HÀNG 代码",
         span: 5,
         hide: true,
         width: 60,
