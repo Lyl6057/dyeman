@@ -2,23 +2,14 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-14 09:58:29
+ * @LastEditTime: 2022-06-14 15:03:47
  * @Description:
 -->
 <template>
-  <div
-    id="clothFlyWeight"
-    :element-loading-text="$t('public.loading')"
-    v-loading="wLoading"
-  >
+  <div id="clothFlyWeight" :element-loading-text="$t('public.loading')" v-loading="wLoading">
     <view-container title="胚布信息">
       <el-row class="btnList">
-        <el-button
-          type="success"
-          @click="pass"
-          :disabled="!selectList.length || this.form.clothState === 2"
-          >审核</el-button
-        >
+        <el-button type="success" @click="pass" :disabled="!selectList.length || this.form.clothState === 2">审核</el-button>
         <!-- <el-button
           type="success"
           @click="setInWhse"
@@ -29,10 +20,7 @@
           this.$t("public.query")
         }}</el-button>
         <el-button type="primary" @click="outExcel">导出</el-button>
-        <span
-          v-if="crud.length && weightSum > 0"
-          style="float: right; margin-right: 10px"
-          >【 {{ crud[0].weaveJobCode }} 】织胚数量:{{ crud[0].amount }} KG,
+        <span v-if="crud.length && weightSum > 0" style="float: right; margin-right: 10px">【 {{ crud[0].weaveJobCode }} 】织胚数量:{{ crud[0].amount }} KG,
           已织数量: {{ weightSum }} KG, 剩余数量:
           {{
             (crud[0].amount - weightSum > 0
@@ -40,43 +28,23 @@
               : 0
             ).toFixed(1)
           }}
-          KG</span
-        >
+          KG</span>
       </el-row>
       <el-row class="formBox">
         <avue-form ref="form" :option="formOp" v-model="form"> </avue-form>
       </el-row>
       <el-row class="crudBox">
-        <avue-crud
-          ref="crud"
-          :option="crudOp"
-          :data="crud"
-          :page.sync="page"
-          v-loading="loading"
-          @on-load="query"
-          @row-dblclick="handleRowDBLClick"
-          @current-row-change="cellClick"
-          :summary-method="summaryMethod"
-          @selection-change="selectionChange"
-          @sort-change="sortChange"
-        >
+        <avue-crud ref="crud" :option="crudOp" :data="crud" :page.sync="page" v-loading="loading" @on-load="query" @row-dblclick="handleRowDBLClick" @current-row-change="cellClick" :summary-method="summaryMethod" @selection-change="selectionChange" @sort-change="sortChange">
           <template slot="menu">
-            <el-button
-              size="small"
-              type="primary"
-              @click="passOne"
-              :disabled="this.form.clothState != '1'"
-              >通过</el-button
-            >
-          </template></avue-crud
-        >
+            <el-button size="small" type="primary" @click="passOne" :disabled="this.form.clothState != '1'">通过</el-button>
+          </template>
+        </avue-crud>
       </el-row>
     </view-container>
   </div>
 </template>
 <script>
 import { mainForm, mainCrud } from "./data";
-import { webSocket } from "@/config/index.js";
 import {
   get,
   add,
@@ -90,7 +58,6 @@ import {
 } from "./api";
 import { getNowWeight } from "../weight/api";
 import { baseCodeSupply, baseCodeSupplyEx } from "@/api/index";
-import qs from "qs";
 export default {
   name: "",
   components: {},
@@ -128,35 +95,24 @@ export default {
   methods: {
     query() {
       this.wLoading = true;
-      let { prop, order } = this.sort;
-      for (let key in this.form) {
-        if (!this.form[key]) {
-          delete this.form[key];
-        }
-      }
       let r_clothCheckTime_r = "";
       if (this.form.clothCheckTime && this.form.clothCheckTime.length) {
         r_clothCheckTime_r = `!%5E%5b${this.form.clothCheckTime[0]} 07:30:00~${this.form.clothCheckTime[1]} 07:30:00%5d`;
       } else {
         r_clothCheckTime_r = "!%5E";
       }
-      // order
-      //   ? (this.form.sort = prop + (order == "descending" ? ",1" : ",0"))
-      //   : (this.form.sort = "storeLoadCode,1");
-      // this.form.storeLoadCode = "%" + (this.form.storeLoadCode ? this.form.storeLoadCode : "");
-      this.form.weaveJobCode =
-        "%" + (this.form.weaveJobCode ? this.form.weaveJobCode : "");
-      // this.form.clothCheckTime = "%" + (this.form.clothCheckTime ? this.form.clothCheckTime : "");
-      this.form.noteCode = "%" + (this.form.noteCode ? this.form.noteCode : "");
-      let data = JSON.parse(JSON.stringify(this.form));
-      data.clothCheckTime = null;
       get(
-        Object.assign(data, {
+        {
+          weaveJobCode: "%" + (this.form.weaveJobCode || ""),
+          noteCode: "%" + (this.form.noteCode || ""),
+          storeLoadCode: this.form.storeLoadCode,
+          outworkFlag: this.form.outworkFlag,
+          eachNumber: this.form.eachNumber,
           rows: this.page.pageSize,
           start: this.page.currentPage,
-          isPrinted: true,
+          // isPrinted: true,
           clothState: this.form.clothState || 1,
-        }),
+        },
         r_clothCheckTime_r
       ).then((res) => {
         this.crud = res.data.records;
@@ -399,9 +355,13 @@ export default {
 };
 </script>
 <style lang='stylus'>
-#clothFlyWeight
-  .el-table
-    overflow visible !important
-  .el-tag--mini
-    display none !important
+#clothFlyWeight {
+  .el-table {
+    overflow: visible !important;
+  }
+
+  .el-tag--mini {
+    display: none !important;
+  }
+}
 </style>

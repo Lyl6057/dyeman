@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-01-06 16:34:23
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-06-14 15:04:10
  * @Description:
  */
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
@@ -11,7 +11,7 @@ export function mainForm(_this) {
   return {
     submitBtn: false,
     emptyBtn: false,
-    labelWidth: 120,
+    labelWidth: 100,
     column: [
       {
         label: "载具编号",
@@ -32,6 +32,24 @@ export function mainForm(_this) {
         // slot: true,
         // type: "select",
         tip: "MS đơn sản xuất bp Dệt"
+      },
+      {
+        label: "是否外发",
+        prop: "outworkFlag",
+        span: 6,
+        placeholder: " ",
+        type: "select",
+        dicData: [
+          {
+            label: "是",
+            value: true
+          },
+          {
+            label: "否",
+            value: false
+          },
+          
+        ],
       },
       // {
       //   label: "訂單號",
