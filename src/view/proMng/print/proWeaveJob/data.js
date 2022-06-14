@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-14 09:12:57
+ * @LastEditTime: 2022-06-14 14:21:28
  * @Description:
  */
 
@@ -1340,6 +1340,7 @@ export function yarnCrud(_this, audit) {
         prop: "amount",
         width: 120,
         align: "right",
+        type: "number",
         span: 6,
         placeholder: " ",
         cell: true //audit ? false : _this.detail.auditState ? false : true

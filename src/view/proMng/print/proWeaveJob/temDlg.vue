@@ -2,62 +2,25 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-11 08:43:22
+ * @LastEditTime: 2022-06-14 14:20:23
  * @Description: 
 -->
 <template>
   <div id="proWeaveJob">
-    <view-container
-      :title="(isAdd ? '新增' : '修改') + '織造通知單'"
-      :element-loading-text="$t('public.loading')"
-      v-loading="wLoading"
-    >
+    <view-container :title="(isAdd ? '新增' : '修改') + '織造通知單'" :element-loading-text="$t('public.loading')" v-loading="wLoading">
       <div class="btnList">
-        <el-tooltip
-          class="item"
-          effect="dark"
-          content="Bảo tồn"
-          placement="top-start"
-        >
+        <el-tooltip class="item" effect="dark" content="Bảo tồn" placement="top-start">
           <el-button type="success" @click="save" title="save" v-if="canSave">{{
             $t("public.save")
           }}</el-button>
         </el-tooltip>
 
-        <el-button
-          type="primary"
-          @click="checkOrder"
-          title="checkOrder"
-          v-if="canSave"
-          >选择订单号</el-button
-        >
-        <el-tooltip
-          class="item"
-          effect="dark"
-          content="Yarn detail"
-          placement="top-start"
-        >
-          <el-button
-            type="primary"
-            @click="checkYarn"
-            :disabled="!this.form.weaveJobId"
-            v-if="canSave"
-            >用紗明細</el-button
-          >
+        <el-button type="primary" @click="checkOrder" title="checkOrder" v-if="canSave">选择订单号</el-button>
+        <el-tooltip class="item" effect="dark" content="Yarn detail" placement="top-start">
+          <el-button type="primary" @click="checkYarn" :disabled="!this.form.weaveJobId" v-if="canSave">用紗明細</el-button>
         </el-tooltip>
-        <el-tooltip
-          class="item"
-          effect="dark"
-          content="After washing"
-          placement="top-start"
-        >
-          <el-button
-            type="primary"
-            @click="checkCalico"
-            :disabled="!this.form.weaveJobId"
-            v-if="canSave"
-            >洗後規格</el-button
-          >
+        <el-tooltip class="item" effect="dark" content="After washing" placement="top-start">
+          <el-button type="primary" @click="checkCalico" :disabled="!this.form.weaveJobId" v-if="canSave">洗後規格</el-button>
         </el-tooltip>
         <!-- <el-button
           type="primary"
@@ -65,32 +28,11 @@
           :disabled="!this.form.weaveJobId"
           >輸送張力</el-button
         > -->
-        <el-tooltip
-          class="item"
-          effect="dark"
-          content="in"
-          placement="top-start"
-        >
-          <el-button
-            type="primary"
-            @click="print"
-            :disabled="!this.form.weaveJobId || form.auditState === 0"
-            v-if="canSave"
-            >打印</el-button
-          >
+        <el-tooltip class="item" effect="dark" content="in" placement="top-start">
+          <el-button type="primary" @click="print" :disabled="!this.form.weaveJobId || form.auditState === 0" v-if="canSave">打印</el-button>
         </el-tooltip>
-        <el-button
-          type="primary"
-          @click="auditHandle(form.auditState ? 0 : 1)"
-          v-if="audit"
-          >{{ form.auditState ? "取消审核" : "审核" }}</el-button
-        >
-        <el-tooltip
-          class="item"
-          effect="dark"
-          content="đóng"
-          placement="top-start"
-        >
+        <el-button type="primary" @click="auditHandle(form.auditState ? 0 : 1)" v-if="audit">{{ form.auditState ? "取消审核" : "审核" }}</el-button>
+        <el-tooltip class="item" effect="dark" content="đóng" placement="top-start">
           <el-button type="warning" @click="close">{{
             this.$t("public.close")
           }}</el-button>
@@ -106,137 +48,51 @@
       </div>
     </view-container>
 
-    <el-dialog
-      :visible.sync="visible"
-      fullscreen
-      append-to-body
-      id="viewDlg"
-      :element-loading-text="$t('public.loading')"
-      v-loading="dlgLoading"
-      v-if="visible"
-    >
+    <el-dialog :visible.sync="visible" fullscreen append-to-body id="viewDlg" :element-loading-text="$t('public.loading')" v-loading="dlgLoading" v-if="visible">
       <el-row>
         <el-col :span="24">
           <view-container :title="tabs">
             <div class="btnList">
-              <el-button
-                @click="check"
-                type="success"
-                v-if="tabs == '選擇訂單' || tabs == '更改紗長'"
-                >{{ $t("public.choose") }}</el-button
-              >
-              <el-tooltip
-                class="item"
-                effect="dark"
-                content="Bảo tồn"
-                placement="top-start"
-              >
-                <el-button
-                  @click="saveOther"
-                  type="success"
-                  v-if="tabs != '選擇訂單'"
-                  >{{ $t("public.save") }}</el-button
-                >
+              <el-button @click="check" type="success" v-if="tabs == '選擇訂單' || tabs == '更改紗長'">{{ $t("public.choose") }}</el-button>
+              <el-tooltip class="item" effect="dark" content="Bảo tồn" placement="top-start">
+                <el-button @click="saveOther" type="success" v-if="tabs != '選擇訂單'">{{ $t("public.save") }}</el-button>
               </el-tooltip>
-              <el-tooltip
-                class="item"
-                effect="dark"
-                content="thêm mới "
-                placement="top-start"
-              >
+              <el-tooltip class="item" effect="dark" content="thêm mới " placement="top-start">
                 <!--  :disabled="
                     !audit && form.auditState == 1 && tabs != '機號信息'
                   " -->
-                <el-button
-                  @click="add"
-                  type="primary"
-                  v-if="tabs != '選擇訂單'"
-                  >{{ $t("public.add") }}</el-button
-                >
+                <el-button @click="add" type="primary" v-if="tabs != '選擇訂單'">{{ $t("public.add") }}</el-button>
               </el-tooltip>
-              <el-tooltip
-                class="item"
-                effect="dark"
-                content="xóa"
-                placement="top-start"
-              >
+              <el-tooltip class="item" effect="dark" content="xóa" placement="top-start">
                 <!--  :disabled="
                     Object.keys(chooseData).length == 0 ||
                     (!audit && form.auditState == 1 && tabs != '機號信息')
                   " -->
-                <el-button
-                  @click="del"
-                  type="danger"
-                  v-if="tabs != '選擇訂單'"
-                  >{{ $t("public.del") }}</el-button
-                >
+                <el-button @click="del" type="danger" v-if="tabs != '選擇訂單'">{{ $t("public.del") }}</el-button>
               </el-tooltip>
-              <el-button
-                @click="query"
-                type="primary"
-                v-if="tabs == '選擇訂單'"
-                >{{ $t("public.query") }}</el-button
-              >
-              <el-tooltip
-                class="item"
-                effect="dark"
-                content="đóng"
-                placement="top-start"
-              >
+              <el-button @click="query" type="primary" v-if="tabs == '選擇訂單'">{{ $t("public.query") }}</el-button>
+              <el-tooltip class="item" effect="dark" content="đóng" placement="top-start">
                 <el-button @click="visible = false" type="warning">{{
                   $t("public.close")
                 }}</el-button>
               </el-tooltip>
             </div>
             <div class="formBox">
-              <avue-form
-                v-if="tabs == '選擇訂單'"
-                ref="dlgform"
-                :option="dlgFormOp"
-                v-model="dlgForm"
-              ></avue-form>
+              <avue-form v-if="tabs == '選擇訂單'" ref="dlgform" :option="dlgFormOp" v-model="dlgForm"></avue-form>
             </div>
             <div class="crudBox">
-              <avue-crud
-                ref="crud"
-                :option="crudOp"
-                :data="crud"
-                :page.sync="page"
-                v-loading="loading"
-                @on-load="query"
-                @row-dblclick="handleRowDBLClick"
-                @current-row-change="cellClick"
-              ></avue-crud>
-            </div> </view-container
-        ></el-col>
+              <avue-crud ref="crud" :option="crudOp" :data="crud" :page.sync="page" v-loading="loading" @on-load="query" @row-dblclick="handleRowDBLClick" @current-row-change="cellClick"></avue-crud>
+            </div>
+          </view-container>
+        </el-col>
       </el-row>
     </el-dialog>
-    <el-dialog
-      id="colorMng_Dlg"
-      :visible.sync="pdfDlg"
-      fullscreen
-      width="100%"
-      append-to-body
-      :close-on-click-modal="false"
-      :close-on-press-escape="false"
-    >
+    <el-dialog id="colorMng_Dlg" :visible.sync="pdfDlg" fullscreen width="100%" append-to-body :close-on-click-modal="false" :close-on-press-escape="false">
       <view-container title="打印預覽">
-        <embed
-          id="pdf"
-          style="width: 100vw; height: calc(100vh - 80px)"
-          :src="pdfUrl"
-        />
+        <embed id="pdf" style="width: 100vw; height: calc(100vh - 80px)" :src="pdfUrl" />
       </view-container>
     </el-dialog>
-    <choice
-      :choiceV="choiceV"
-      :choiceTle="choiceTle"
-      :choiceQ="choiceQ"
-      dlgWidth="100%"
-      @choiceData="choiceData"
-      @close="choiceV = false"
-      v-if="choiceV"
-    ></choice>
+    <choice :choiceV="choiceV" :choiceTle="choiceTle" :choiceQ="choiceQ" dlgWidth="100%" @choiceData="choiceData" @close="choiceV = false" v-if="choiceV"></choice>
   </div>
 </template>
 <script>
@@ -287,7 +143,7 @@ import {
   getNoteSum,
   get,
   addProEquipmentSchedule,
-  fetchEquipmentInfo
+  fetchEquipmentInfo,
 } from "./api";
 import { baseCodeSupplyEx, baseCodeSupply } from "@/api/index";
 import preview from "./preview";
@@ -774,14 +630,15 @@ export default {
           } else {
             // 新增
             data.proWeaveJobFk = this.form.weaveJobId;
-            data.createTime = this.$getNowTime("datetime")
+            data.createTime = this.$getNowTime("datetime");
             this.func.add(data).then(async (res) => {
               item.changedId = res.data.data;
               item.groupId = res.data.data;
               item.washedId = res.data.data;
               item.strainId = res.data.data;
               item.useId = res.data.data;
-              this.tabs == "機號信息" && await this.addEquipmentSchedule(item)
+              this.tabs == "機號信息" &&
+                (await this.addEquipmentSchedule(item));
               resolve();
             });
           }
@@ -804,6 +661,13 @@ export default {
       });
     },
     saveYarn() {
+      for (let i = 0; i < this.crud.length; i++) {
+        console.log(this.crud[i].amount);
+        if (this.tabs == "用紗明细" && !this.crud[i].amount) {
+          this.$tip.error("数量不能為空!");
+          return;
+        }
+      }
       this.dlgLoading = true;
       // 判断是否存在分组
       if (this.form.groupId) {
@@ -862,9 +726,9 @@ export default {
       }
     },
     async addEquipmentSchedule(row) {
-      let equRes = await fetchEquipmentInfo({equipmentCode: row.mathineCode })
-      if(!equRes.data.length) return
-      const equInfo = equRes.data[0]
+      let equRes = await fetchEquipmentInfo({ equipmentCode: row.mathineCode });
+      if (!equRes.data.length) return;
+      const equInfo = equRes.data[0];
       let params = {
         equId: equInfo.equId,
         equModel: equInfo.equModel,
@@ -881,13 +745,12 @@ export default {
         unit: equInfo.unit,
         measureMethod: equInfo.measureMethod,
         maxOutput: equInfo.maxOutput,
-        equState: equInfo.equState
-      }
-      addProEquipmentSchedule(params).then(res =>{
-      })
+        equState: equInfo.equState,
+      };
+      addProEquipmentSchedule(params).then((res) => {});
     },
     checkOrder() {
-      this.choiceTle =  "选择订单资料"
+      this.choiceTle = "选择订单资料";
       this.choiceV = true;
       // this.crudOp = dlgCrud(this);
       // this.visible = true;
@@ -1152,13 +1015,13 @@ export default {
             $cellEdit: true,
           });
         });
-      }else if (this.choiceTle == "选择BOM资料") {
+      } else if (this.choiceTle == "选择BOM资料") {
         this.form.custCode = val.custId;
         this.form.custFabricCode = val.guestFabId;
         this.form.seasonCode = val.season;
         this.form.fiberComp = val.guestComponents;
         this.form.fabricDesc = val.guestFabNames;
-        this.form.bomId = val.$salNewbomFk
+        this.form.bomId = val.$salNewbomFk;
         // getBom({ bomId: val.bomId }).then((res) => {
         //   if (res.data.length) {
         //     getBomDtlb({ salNewbomFk: res.data[0].salNewbomoid }).then(
@@ -1267,40 +1130,63 @@ export default {
 };
 </script>
 <style lang='stylus'>
-#proWeaveJob
-  .formBox
-    height calc(100vh - 70px) !important
-    overflow auto
-  .el-input-number__decrease, .el-input-number__increase
-    display none
-  .el-input-number .el-input__inner
-    text-align left !important
-  .el-input-number.is-controls-right .el-input__inner
-    padding-left 5px !important
-#colorMng_Dlg
-  .is-fullscreen
-    overflow hidden !important
-  .el-dialog__header
-    padding 0 !important
-  .el-dialog__headerbtn
-    top 3px
-    font-size 18px
-    font-weight bold
-    z-index 9
-  .el-dialog__headerbtn .el-dialog__close, #sxrcDlg .el-dialog__headerbtn .el-dialog__close, #wkDlg .el-dialog__headerbtn .el-dialog__close
-    color #000
-    font-size 24px
-  .el-tag--mini
-    height 24px
-    padding 0 5px
-    line-height 24px
-    font-size 14px
-  .el-select .el-tag__close.el-icon-close
-    right -5px
-    height 18px
-    width 18px
-    line-height 18px
-  .avue-form .el-input--mini input
-    height 35px !important
-    line-height 35px
+#proWeaveJob {
+  .formBox {
+    height: calc(100vh - 70px) !important;
+    overflow: auto;
+  }
+
+  .el-input-number__decrease, .el-input-number__increase {
+    display: none;
+  }
+
+  .el-input-number .el-input__inner {
+    text-align: left !important;
+  }
+
+  .el-input-number.is-controls-right .el-input__inner {
+    padding-left: 5px !important;
+  }
+}
+
+#colorMng_Dlg {
+  .is-fullscreen {
+    overflow: hidden !important;
+  }
+
+  .el-dialog__header {
+    padding: 0 !important;
+  }
+
+  .el-dialog__headerbtn {
+    top: 3px;
+    font-size: 18px;
+    font-weight: bold;
+    z-index: 9;
+  }
+
+  .el-dialog__headerbtn .el-dialog__close, #sxrcDlg .el-dialog__headerbtn .el-dialog__close, #wkDlg .el-dialog__headerbtn .el-dialog__close {
+    color: #000;
+    font-size: 24px;
+  }
+
+  .el-tag--mini {
+    height: 24px;
+    padding: 0 5px;
+    line-height: 24px;
+    font-size: 14px;
+  }
+
+  .el-select .el-tag__close.el-icon-close {
+    right: -5px;
+    height: 18px;
+    width: 18px;
+    line-height: 18px;
+  }
+
+  .avue-form .el-input--mini input {
+    height: 35px !important;
+    line-height: 35px;
+  }
+}
 </style>
