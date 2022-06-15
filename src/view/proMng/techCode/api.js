@@ -2,11 +2,29 @@
  * @Author: Lyl
  * @Date: 2021-02-01 14:06:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-05-17 10:01:39
+ * @LastEditTime: 2022-06-13 08:48:43
  * @Description:
  */
 
 import axios from 'axios';
+
+export function getBasChemicalByPage(params) {
+  return axios({
+    url: '/api/BasChemicalmatNew/page',
+    method: 'get',
+    params: params
+  })
+}
+
+export function getBasPigmentByPage(params) {
+  return axios({
+    url: '/api/basPigment/page',
+    method: 'get',
+    params: params
+  })
+}
+
+
 
 export function getImg(id) {
   return axios({

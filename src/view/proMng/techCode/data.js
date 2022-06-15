@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-24 10:43:42
+ * @LastEditTime: 2022-06-14 15:58:08
  * @Description:
  */
 
@@ -262,6 +262,7 @@ export function dlgCrud(_this) {
         span: 6,
         cell: true,
         type: "select",
+        clearable: false,
         dicData: [
           {
             label: "增加助剂",
@@ -275,21 +276,30 @@ export function dlgCrud(_this) {
             label: "运行",
             value: "run"
           }
-        ]
+        ],
+        change:(val)=>{
+          if (val == 'run') {
+            return
+          }
+          _this.$nextTick(() =>{
+            _this.remoteMethod(_this.chooseData.basMateId)
+          })
+        }
       },
-      {
-        label: "材料代碼",
-        prop: "basMateId",
-        // overHidden: true,
-        width: 120,
-        span: 6,
-        cell: true
-      },
+      // {
+      //   label: "材料代碼",
+      //   prop: "basMateId",
+      //   width: 120,
+      //   span: 6,
+      //   formslot: true,
+      //   cell: false
+      // },
       {
         label: "材料名称",
         prop: "mateName",
         width: 300,
         span: 6,
+        slot: true,
         // overHidden: true,
         cell: true
       },

@@ -2,142 +2,70 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-09-15 10:10:57
+ * @LastEditTime: 2022-06-14 16:00:12
  * @Description: 
 -->
 <template>
   <div id="techCodeTem">
-    <view-container
-      :title="(isAdd ? '新增' : '修改') + '漂染工艺'"
-      :element-loading-text="$t('public.loading')"
-      v-loading="wLoading"
-      class="not-number-icon"
-    >
+    <view-container :title="(isAdd ? '新增' : '修改') + '漂染工艺'" :element-loading-text="$t('public.loading')" v-loading="wLoading" class="not-number-icon">
       <div class="btnList">
-        <el-tooltip
-          class="item"
-          effect="dark"
-          content="Bảo tồn"
-          placement="top-start"
-        >
-          <el-button type="success" @click="save" :loading="wLoading">{{
-            $t("public.save")
-          }}</el-button>
+        <el-tooltip class="item" effect="dark" content="Bảo tồn" placement="top-start">
+          <el-button type="success" @click="save" :loading="wLoading">{{$t("public.save")}}</el-button>
         </el-tooltip>
-        <el-tooltip
-          class="item"
-          effect="dark"
-          content="thêm mới "
-          placement="top-start"
-        >
-          <el-button type="primary" @click="add">{{
-            $t("public.add")
-          }}</el-button>
+        <el-tooltip class="item" effect="dark" content="thêm mới " placement="top-start">
+          <el-button type="primary" @click="add">{{ $t("public.add")}}</el-button>
         </el-tooltip>
-        <el-tooltip
-          class="item"
-          effect="dark"
-          content="xóa"
-          placement="top-start"
-        >
-          <el-button type="danger" @click="del">{{
-            $t("public.del")
-          }}</el-button>
+        <el-tooltip class="item" effect="dark" content="xóa" placement="top-start">
+          <el-button type="danger" @click="del">{{$t("public.del") }}</el-button>
         </el-tooltip>
-        <el-button
-          @click="up"
-          type="primary"
-          :disabled="Object.keys(chooseData).length == 0"
-          >上移</el-button
-        >
-        <el-button
-          @click="down"
-          type="primary"
-          :disabled="Object.keys(chooseData).length == 0"
-          >下移</el-button
-        >
-        <el-tooltip
-          class="item"
-          effect="dark"
-          content="đóng"
-          placement="top-start"
-        >
-          <el-button type="warning" @click="close">{{
-            $t("public.close")
-          }}</el-button>
+        <el-button @click="up" type="primary" :disabled="Object.keys(chooseData).length == 0">上移</el-button>
+        <el-button @click="down" type="primary" :disabled="Object.keys(chooseData).length == 0">下移</el-button>
+        <el-tooltip class="item" effect="dark" content="đóng" placement="top-start">
+          <el-button type="warning" @click="close">{{ $t("public.close") }}</el-button>
         </el-tooltip>
-        <!-- <el-button type="primary" @click="checkOrder">选择订单号</el-button> -->
       </div>
       <div class="formBox">
-        <avue-form ref="form" :option="formOp" v-model="form"> </avue-form>
+        <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
       </div>
       <div class="crudBox">
-        <avue-crud
-          ref="crud"
-          id="mainCrud"
-          :option="crudOp"
-          :data="crud"
-          :page.sync="page"
-          v-loading="loading"
-          @on-load="query"
-          @row-dblclick="handleRowDBLClick"
-          @current-row-change="cellClick"
-        ></avue-crud>
+        <avue-crud ref="crud" id="mainCrud" :option="crudOp" :data="crud" :page.sync="page" v-loading="loading" @on-load="query" @row-dblclick="handleRowDBLClick" @current-row-change="cellClick">
+          <template slot="mateName" slot-scope="scope">
+            <el-select v-if="scope.row.bleadyeType != 'run' && scope.row.$cellEdit" 
+              v-model="scope.row.mateName" 
+              remote
+              filterable
+              reserve-keyword 
+              clearable 
+              default-first-option 
+              placeholder="请输入材料信息" 
+              :loading="vatLoading" 
+              :remote-method="remoteMethod" 
+              @change="handleMatNameChange">
+              <el-option v-for="item in options" :key="item.bcCode" :label="`${item.bcCode}——${item.cnnamelong}`" :value="`${item.bcCode}——${item.cnnamelong}`">
+              </el-option>
+            </el-select>
+            <el-input v-else-if="scope.row.bleadyeType == 'run' && scope.row.$cellEdit" v-model="scope.row.mateName"></el-input>
+            <span v-else>{{scope.row.mateName}}</span>
+          </template>
+        </avue-crud>
       </div>
-      <div
-        style="
+      <div style="
           width: 100%;
           height: 240px;
           border: 1px solid #eee;
           position: relative;
-        "
-        v-on:paste="handlePaste"
-      >
+        " v-on:paste="handlePaste">
         <el-image :src="imgUrl" v-if="imgUrl" :preview-src-list="[imgUrl]">
         </el-image>
-        <!-- <img
-          class="img"
-          :src="imgUrl"
-          alt=""
-          height="240px"
-          @click="showImg"
-          style="border: 1px solid #ccc"
-        /> -->
         <span class="image-remove" @click="removeImg" v-if="imgUrl">X</span>
         <div class="watermark" v-if="!imgUrl">单击此处后 Ctr + V 复制图片</div>
-        <input
-          id="input"
-          ref="input"
-          type="file"
-          accept="image/*"
-          capture="camera"
-          style="display: none"
-          @change="imgChange"
-        />
+        <input id="input" ref="input" type="file" accept="image/*" capture="camera" style="display: none" @change="imgChange" />
       </div>
-      <el-dialog
-        id="colorMng_Dlg imgDlg"
-        :visible.sync="imgVisi"
-        append-to-body
-        top="5vh"
-      >
-        <img
-          @click="imgVisi = false"
-          :src="imgUrl"
-          alt=""
-          style="border: 1px solid #ccc"
-        />
+      <el-dialog id="colorMng_Dlg imgDlg" :visible.sync="imgVisi" append-to-body top="5vh">
+        <img @click="imgVisi = false" :src="imgUrl" alt="" style="border: 1px solid #ccc" />
       </el-dialog>
     </view-container>
-    <choice
-      :choiceV="choiceV"
-      :choiceTle="choiceTle"
-      :choiceQ="choiceQ"
-      dlgWidth="100%"
-      @choiceData="choiceData"
-      @close="choiceV = false"
-      v-if="choiceV"
-    ></choice>
+    <choice :choiceV="choiceV" :choiceTle="choiceTle" :choiceQ="choiceQ" dlgWidth="100%" @choiceData="choiceData" @close="choiceV = false" v-if="choiceV"></choice>
   </div>
 </template>
 <script>
@@ -154,6 +82,8 @@ import {
   delDtl,
   upload,
   getImg,
+  getBasChemicalByPage,
+  getBasPigmentByPage,
 } from "./api";
 export default {
   name: "techCodeTem",
@@ -167,6 +97,7 @@ export default {
   data() {
     return {
       wLoading: false,
+      options: [],
       formOp: mainCrud(this),
       form: {},
       page: {
@@ -179,6 +110,7 @@ export default {
       crudOp: dlgCrud(this),
       crud: [],
       chooseData: {},
+      oldData: {},
       tabs: "選擇訂單",
       choiceV: false,
       choiceTle: "选择漂染工藝",
@@ -188,10 +120,31 @@ export default {
       chooseDtlData: {},
       imgUrl: "",
       imgVisi: false,
+      searchLoading: false,
     };
   },
   watch: {},
   methods: {
+    handleMatNameChange(val) {
+      this.chooseData.basMateId = val.split("——")[0];
+      // this.chooseData.mateName = val.split("-")[1];
+    },
+    remoteMethod(val) {
+      if (this.chooseData.bleadyeType == "run") {
+        return;
+      }
+      this.vatLoading = true;
+      let fetchF = null;
+      if (this.chooseData.bleadyeType == "add_chemicalmat") {
+        fetchF = getBasChemicalByPage;
+      } else {
+        fetchF = getBasPigmentByPage;
+      }
+      fetchF({ fillTextSeach: val}).then((res) => {
+        this.options = res.data.records;
+        this.vatLoading = false;
+      });
+    },
     getData() {
       this.wLoading = true;
       this.form = {};
@@ -262,12 +215,6 @@ export default {
                     } else {
                       this.$tip.error(this.$t("public.bcsb"));
                     }
-                    // setTimeout(() => {
-                    //   this.wLoading = false;
-                    //   this.$emit("refresh");
-                    //   // this.saveOther();
-                    //   done();
-                    // }, 200);
                   });
                 }
                 setTimeout(() => {
@@ -330,8 +277,9 @@ export default {
               item[key] = undefined;
             }
           }
-          item.$cellEdit = true;
+          // item.$cellEdit = true;
           item.index = i + 1;
+          item.mateName = item.basMateId + '——' + item.mateName
         });
         this.page.total = res.data.total;
         setTimeout(() => {
@@ -355,6 +303,7 @@ export default {
             }
           }
           let data = JSON.parse(JSON.stringify(item));
+          data.mateName = data.mateName.split("——")[1]
           if (data.bleadyeType == "add_chemicalmat") {
             data.formulaUnit = "KG";
           } else if (data.bleadyeType == "add_pigment") {
@@ -430,7 +379,8 @@ export default {
       // if (this.tabs != "生產項目") {
       let data = {
         index: this.crud.length + 1,
-        $cellEdit: true,
+        // $cellEdit: true,
+        bleadyeType: "add_chemicalmat",
         // sn: this.crud.length > 0 ? this.crud[this.crud.length - 1].sn + 1 : 1,
       };
       if (this.chooseData.index) {
@@ -496,7 +446,13 @@ export default {
       // this.visible = false;
     },
     cellClick(val) {
+      this.oldData.$cellEdit = false;
+      this.$set(val, "$cellEdit", true);
+      this.oldData = val;
       this.chooseData = val;
+      if(this.chooseData.basMateId){
+        this.remoteMethod(this.chooseData.basMateId)
+      }
       if (!this.chooseData.list) {
         this.chooseData.list = [];
       }
@@ -697,9 +653,6 @@ export default {
   },
   created() {},
   mounted() {
-    // document
-    //   .getElementsByClassName("el-upload el-upload--text")[0]
-    //   .getElementsByTagName("span")[0].innerHTML = "选择图片";
     this.getData();
   },
   beforeDestroy() {},
