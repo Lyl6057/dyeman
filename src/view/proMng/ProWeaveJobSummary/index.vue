@@ -2,7 +2,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-06-14 10:25:49
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-06-14 10:25:49
+ * @LastEditTime: 2022-06-15 15:35:04
  * @Description:
 -->
 <template>
@@ -16,6 +16,7 @@
         <el-button type="primary" @click="handleQuery">{{
           this.$t("public.query")
         }}</el-button>
+         <el-button type="primary" @click="handleExport">导出</el-button>
       </el-row>
       <el-row class="formBox">
         <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
@@ -36,7 +37,7 @@
 </template>
 <script>
 import { mainForm, mainCrud } from "./data";
-import { fetchProBleadyeRunJobByPage } from "./api";
+import {fetchFineReportUrl, fetchProBleadyeRunJobByPage } from "./api";
 export default {
   name: "pro-weave-job-summary-container",
   components: {},
@@ -60,6 +61,31 @@ export default {
   },
   watch: {},
   methods: {
+    // 导出
+    handleExport(){
+      let queryData = {
+        module: "PRO",
+        id: "PRO_WEAVE_JOB_YARN",
+      };
+      fetchFineReportUrl(queryData).then((res) => {
+        if (res.data) {
+          let url = res.data.url;
+          // 参数枚举
+          let paramsKeys = ['weaveJobCode','salPoNo','yarnName','factoryYarnBatch'];
+          paramsKeys.forEach(key => {
+            url += `&${key}=${this.form[key]}`;
+          })
+          
+          let oA = document.createElement("a");
+          oA.href = url;
+          oA.target = "_blank";
+          oA.click();
+        } else {
+          warning("报表不存在");
+        }
+      })
+    },
+    // 查询
     handleQuery(){
       this.loading = true ;
       let formData = this.formOp.column.reduce((a,b) => {
