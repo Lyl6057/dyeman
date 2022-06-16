@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-03-02 13:56:42
+ * @LastEditTime: 2022-06-15 08:27:56
  * @Description:
  */
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
@@ -47,7 +47,15 @@ export function mainForm(_this) {
         click: () => {
           _this.type = "pb";
         }
-      }
+      },
+      {
+        label: "",
+        prop: "button",
+        span: 3,
+        labelWidth: 0 ,
+        formslot: true,
+        align: 'left',
+      },
       // {
       //   label: "载具编号",
       //   prop: "storeLoadCodes",

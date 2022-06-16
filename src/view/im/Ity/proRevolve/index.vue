@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-21 16:14:47
+ * @LastEditTime: 2022-06-15 09:58:15
  * @Description: 
 -->
 <template>
@@ -21,7 +21,13 @@
         >
       </div>
       <el-row class="formBox" style="margin-top: 5px">
-        <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
+        <avue-form ref="form" :option="formOp" v-model="form">
+          <template slot="button">
+              <el-button type="primary" style="margin: 10px 0 0 -10px" @click="handleChooseNote">
+                选择胚布
+              </el-button>
+          </template>
+        </avue-form>
       </el-row>
       <el-row class="crudBox">
         <el-col :span="14">
@@ -105,7 +111,7 @@
                 <!-- <el-divider style="margin: 0"></el-divider> -->
               </div>
             </el-card>
-            <div style="text-align: left; padding: 10px; font-size: 22px">
+            <div style="text-align: left; padding: 5px; font-size: 22px">
               <span>疋数: {{ history.length }}, </span
               ><span>合计重量: {{ weight }}</span>
             </div>
@@ -168,9 +174,20 @@
         </view-container>
       </view-container>
     </el-dialog>
+    <choice 
+      :choiceV="choiceV" 
+      :choiceTle="choiceTle" 
+      :choiceQ="choiceQ" 
+      dlgWidth="100%" 
+      @choiceData="choiceData" 
+      @close="choiceV = false;" 
+      v-if="choiceV"
+    >
+    </choice>
   </div>
 </template>
 <script>
+import choice from "@/components/proMng/index";
 import { mainForm, mainCrud, dlgForm, dlgCrud } from "./data";
 import {
   get,
@@ -193,6 +210,9 @@ import {
 import { baseCodeSupplyEx, baseCodeSupply } from "@/api/index";
 export default {
   name: "",
+  components:{
+    choice
+  },
   data() {
     return {
       formOp: mainForm(this),
@@ -219,6 +239,12 @@ export default {
       wLoading: false,
       dLoading: false,
       dlgChooseData: {},
+      choiceV: false,
+      choiceTle: '选择胚布信息',
+      choiceQ: {
+        clothState: 2
+      }
+      
     };
   },
   watch: {
@@ -598,6 +624,28 @@ export default {
           }, 200);
         }
       );
+    },
+    handleChooseNote(){
+      if (!this.form.vatNo || !this.form.weaveJobCode) {
+        this.$tip.warning("请先输入缸号信息")
+        return
+      }
+      console.log(this.form);
+      this.choiceQ.weaveJobCode = this.form.weaveJobCode;
+      this.choiceQ.weaveJobFk = this.form.weaveJobId
+      this.choiceV = true;
+    },
+    choiceData(val){
+      if(val.length == 0){
+        this.choiceV = false;
+        return;
+      }
+      val.forEach((item) =>{
+        item.clothWeight = item.clothWeight ? item.clothWeight  : item.realWeight
+      })
+      this.history = this.history.concat(val)
+      this.history = this.$unique(this.history, "noteId");
+      this.choiceV = false;
     },
     cancelNote(val) {
       this.history.splice(val.index - 1, 1);
