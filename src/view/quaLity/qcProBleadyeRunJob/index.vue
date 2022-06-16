@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-06-01 09:31:53
+ * @LastEditTime: 2022-06-16 09:01:00
  * @Description:
 -->
 <template>
@@ -16,6 +16,7 @@
         <el-button type="primary" @click="handleQuery">{{
           this.$t("public.query")
         }}</el-button>
+        <el-button type="primary" @click="handleExport">导出</el-button>
       </el-row>
       <el-row class="formBox">
         <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
@@ -27,7 +28,7 @@
           :data="crudDataList"
           :page.sync="page"
           v-loading="loading"
-          @on-load="handleQuery"
+          @on-load="handleLoadData"
         >
         </avue-crud>
       </el-row>
@@ -36,7 +37,7 @@
 </template>
 <script>
 import { mainForm, mainCrud } from "./data";
-import { fetchProBleadyeRunJobByPage } from "./api";
+import { fetchProBleadyeRunJobByPage, fetchFineReportUrl } from "./api";
 export default {
   name: "qcDeatilReport",
   components: {},
@@ -60,7 +61,37 @@ export default {
   },
   watch: {},
   methods: {
+    // 导出
+    handleExport(){
+      let queryData = {
+        module: "PRO",
+        id: "PRO_BLEADYE_RUN_SUMMARY",
+      };
+      fetchFineReportUrl(queryData).then((res) => {
+        if (res.data) {
+          let url = res.data.url;
+          // 参数枚举
+          let paramsKeys = ['vatNo','weaveJobCode','salPoNo'];
+          paramsKeys.forEach(key => {
+            url += `&${key}=${this.form[key]}`;
+          })
+          
+          let oA = document.createElement("a");
+          oA.href = url;
+          oA.target = "_blank";
+          oA.click();
+        } else {
+          warning("报表不存在");
+        }
+      })
+    },
+    // 查询
     handleQuery(){
+      this.page.currentPage = 1;
+      this.handleLoadData();
+    },
+    // 获取数据
+    handleLoadData(){
       this.loading = true ;
       let formData = this.formOp.column.reduce((a,b) => {
         let value = this.form[b.prop]
@@ -73,12 +104,23 @@ export default {
           rows: this.page.pageSize,
           start: this.page.currentPage,
           includeDtlCount: true,
+          includeDtl: true,
           dataSortRules: "vatNo,weaveJobCode"
       },formData)
       
       fetchProBleadyeRunJobByPage(params).then(res => {
           this.page.total = res.data.total;
-          this.crudDataList = res.data.records
+          
+          this.crudDataList = res.data.records.map((item,index) => {
+            if(item.children){
+              item.id = index + 1;
+              item.children.sort((a,b) => a.sn - b.sn).forEach((cItem,cIndex) => {
+                cItem.id = `${index}-${cIndex}`;
+                cItem.pidCount = cItem.sn
+              })
+            };
+            return item;
+          })
       }).finally(_ => {
           this.loading = false;
       })
