@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-03-23 10:36:15
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-06-01 09:08:56
+ * @LastEditTime: 2022-06-16 09:07:23
  */
 
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
@@ -31,7 +31,7 @@ export function mainForm(_this) {
       },
       {
         label: "订单号",
-        prop: "custPoNo",
+        prop: "salPoNo",
         span: 6,
         placeholder: " ",
       },
@@ -49,7 +49,7 @@ const  crudOption = {
   border: true,
   index: true,
   highlightCurrentRow: true,
-  height: "calc(100vh - 235px)",
+  height: "calc(100vh - 245px)",
   refreshBtn: false,
   columnBtn: false,
   page: true,
@@ -91,18 +91,15 @@ export function mainCrud(_this) {
       },
       {
         label: "订单号",
-        prop: "custPoNo",
+        prop: "salPoNo",
         width: 150,
         overHidden: true,
       },
       {
-        label: "备布重量",
-        prop: "clothWeight",
+        label: "布票号",
+        prop: "clothNoteCode",
         width: 150,
-        align: "right",
-        formatter: (row, value) => {
-          return value || "0"
-        }
+        overHidden: true,
       },
       {
         label: "疋数",
@@ -113,6 +110,16 @@ export function mainCrud(_this) {
           return value || "0"
         }
       },
+      {
+        label: "备布重量",
+        prop: "clothWeight",
+        width: 150,
+        align: "right",
+        formatter: (row, value) => {
+          return value || "0"
+        }
+      },
+      
     ]
   };
 }
