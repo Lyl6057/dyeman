@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-05-03 13:03:03
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-11 08:31:50
+ * @LastEditTime: 2022-06-15 10:01:38
  * @Description:
  */
 
@@ -3938,7 +3938,7 @@ export function clothNoteC(_this) {
     border: true,
     index: false,
     highlightCurrentRow: true,
-    height: "calc(100vh - 170px)",
+    height: "calc(100vh - 210px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
@@ -3949,7 +3949,7 @@ export function clothNoteC(_this) {
     sumColumnList: [
       {
         label: " ",
-        name: "proBatchNumber",
+        name: "weaveJobCode",
         type: "count"
       },
       {
@@ -3968,7 +3968,7 @@ export function clothNoteC(_this) {
       },
       {
         label: "織單號(MS đơn sản xuất bp Dệt)",
-        prop: "proBatchNumber",
+        prop: "weaveJobCode",
         width: 150,
         span: 6,
         placeholder: " ",
@@ -4106,17 +4106,17 @@ export function clothNoteC(_this) {
         type: "number",
         precision: 0
       },
-      // {
-      //   label: "毛重(trọng lượng cả b)",
-      //   prop: "realWeight",
-      //   width: 120,
-      //   align: "right",
-      //   span: 6,
-      //   cell: false,
-      //   placeholder: " "
-      //   // type: "number",
-      //   // precision: 1
-      // },
+      {
+        label: "毛重(trọng lượng cả b)",
+        prop: "realWeight",
+        width: 120,
+        align: "right",
+        span: 6,
+        cell: false,
+        placeholder: " "
+        // type: "number",
+        // precision: 1
+      },
       {
         label: _this.$t("whseField.zl") + "(trọng lượng)",
         prop: "clothWeight",
