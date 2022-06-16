@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-29 16:35:37
+ * @LastEditTime: 2022-06-15 11:27:06
  * @Description: 
 -->
 <template>
@@ -429,6 +429,25 @@
                 @on-load="query"
                 @current-row-change="cellDtlClick"
               >
+                <template slot="mateName" slot-scope="scope">
+                  <el-select v-if="scope.row.bleadyeType != 'run' && scope.row.$cellEdit" 
+                    v-model="scope.row.mateName" 
+                    remote
+                    filterable
+                    reserve-keyword 
+                    clearable 
+                    default-first-option 
+                    placeholder="请输入材料信息" 
+                    :loading="vatLoading" 
+                    :remote-method="remoteMate" 
+                    @change="handleMatNameChange"
+                    @focus="mateFocus(scope.row)">
+                    <el-option v-for="item in mateOption" :key="item.bcCode" :label="item.cnnamelong" :value="`${item.bcCode}——${item.cnnamelong}`">
+                    </el-option>
+                  </el-select>
+                  <el-input v-else-if="scope.row.bleadyeType == 'run' && scope.row.$cellEdit" v-model="scope.row.mateName"></el-input>
+                  <span v-else>{{scope.row.mateName}}</span>
+                </template>
                 <template slot="formulaUnit" slot-scope="scope">
                   <!-- {{ scope.row.dataStyle }} -->
                   <div v-if="scope.row.measureType === 'g/L'">
@@ -595,7 +614,7 @@
 </template>
 <script>
 import choice from "@/components/proMng/index";
-import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
+import { getBasChemicalByPage, getBasPigmentByPage} from "../../techCode/api"
 import {
   mainCrud,
   dlgForm,
@@ -678,8 +697,10 @@ export default {
         total: 0,
       },
       vatLoading: false,
+      searchLoading: false,
       choiceP: false,
       vatOptions: [],
+      mateOption: [],
       dlgWidth: "60%",
       codeSupplyNum: 0,
       previewData: {},
@@ -763,6 +784,30 @@ export default {
   },
   watch: {},
   methods: {
+    mateFocus(val){
+      this.$refs.yarnCrud.setCurrentRow(val);
+      this.remoteMate(val.mateName)
+    },
+    handleMatNameChange(val) {
+      this.chooseDtlData.mateCode = val.split("——")[0];
+      // this.chooseData.mateName = val.split("-")[1];
+    },
+    remoteMate(val){
+      if (this.chooseDtlData.bleadyeType == "run") {
+        return;
+      }
+      this.vatLoading = true;
+      let fetchF = null;
+      if (this.chooseDtlData.bleadyeType == "add_chemicalmat") {
+        fetchF = getBasChemicalByPage;
+      } else {
+        fetchF = getBasPigmentByPage;
+      }
+      fetchF({ fillTextSeach: val}).then((res) => {
+        this.mateOption = res.data.records;
+        this.vatLoading = false;
+      });
+    },
     remoteMethod(val) {
       this.vatLoading = true;
       getRunJob({ vatNo: val }).then((res) => {

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-01-12 15:19:09
+ * @LastEditTime: 2022-06-15 11:05:08
  * @Description:
  */
 
@@ -1398,7 +1398,7 @@ export function techargueCrud(_this) {
         label: "工艺名稱",
         prop: "bleadyeName",
         width: 180,
-        cell: true,
+        cell: false,
         overHidden:true,
         span: 6,
         props: {
@@ -1407,14 +1407,14 @@ export function techargueCrud(_this) {
         },
         type: "select",
         dicData: bleadyeCode,
-        change: () => {
-          _this.$nextTick(() => {
-            _this.chooseData.proBleadyeTechCodeFk =
-              _this.chooseData.bleadyeName;
-            // _this.chooseData.proBleadyeTechCodeFk = _this.chooseData.bleadyeName
-            // console.log(_this.chooseData);
-          });
-        }
+        // change: () => {
+        //   _this.$nextTick(() => {
+        //     _this.chooseData.proBleadyeTechCodeFk =
+        //       _this.chooseData.bleadyeName;
+        //     // _this.chooseData.proBleadyeTechCodeFk = _this.chooseData.bleadyeName
+        //     // console.log(_this.chooseData);
+        //   });
+        // }
       },
 
       {
@@ -1659,6 +1659,7 @@ export function codeItemCrud(_this) {
         cell: true,
         span: 6,
         overHidden: true,
+        slot: true,
         // slot: true,
         placeholder: " "
       },
