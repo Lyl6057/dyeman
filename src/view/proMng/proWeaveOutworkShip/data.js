@@ -69,6 +69,7 @@ export function mainCrud(_this) {
     refreshBtn: false,
     columnBtn: false,
     page: true,
+    selection: true,
     labelWidth: 120,
     column: [
       {
@@ -155,7 +156,8 @@ export function mainCrud(_this) {
         width: 120,
         overHidden: true,
         type: "number",
-        span: 6
+        span: 6,
+        align:"right"
       },
       {
         label: "审核状态",
@@ -186,7 +188,7 @@ export function noteCrud(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 360px)",
+    height: "calc(100vh - 320px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
@@ -237,7 +239,8 @@ export function noteCrud(_this) {
         placeholder: " ",
         cell: true,
         overHidden: true,
-        span: 6
+        span: 6,
+        align:"right"
       },
       {
         label: "净重",
@@ -247,7 +250,8 @@ export function noteCrud(_this) {
         cell: true,
         type: "number",
         overHidden: true,
-        span: 6
+        span: 6,
+        align:"right"
       },
       {
         label: "实收重量",
@@ -256,7 +260,8 @@ export function noteCrud(_this) {
         placeholder: " ",
         cell: true,
         type: "number",
-        span: 6
+        span: 6,
+        align:"right"
       },
       {
         label: "生产日期",

@@ -36,6 +36,7 @@
             @on-load="query"
             @row-dblclick="handleRowDBLClick"
             @current-row-change="cellClick"
+            @selection-change="selectionChange"
           ></avue-crud>
         </div>
       </view-container>
@@ -89,7 +90,8 @@ export default {
       crudOp: mainCrud(this),
       crud: [],
       page: {
-        pageSize: 10,
+        pageSizes: [20,50,100,200,500],
+        pageSize: 20,
         currentPage: 1,
         total: 0,
       },
@@ -97,6 +99,7 @@ export default {
       dialogVisible: false,
       detail: {},
       isAdd: false,
+      selectList: []
     };
   },
   watch: {},
@@ -184,35 +187,30 @@ export default {
           this.$tip.warning(this.$t("public.qxcz"));
         });
     },
+    selectionChange(val){
+      this.selectList = val
+    },
     audit() {
-      if (Object.keys(this.detail).length === 0) {
+      if (this.selectList.length === 0) {
         this.$tip.error("请选择要审核的数据!");
         return;
       }
       this.$tip
         .cofirm(
-          "是否确定通过审核单号为 【 " +
-            this.detail.weaveJobCode +
-            this.$t("iaoMng.delTle2"),
+          "是否确定通过审核?",
           this,
           {}
         )
         .then(() => {
-          auditOne(this.detail.shipId)
-            .then((res) => {
-              this.$tip.success(res.data);
-              // if (res.data.code === 200) {
-
-              //   this.detail.isAudit = 1;
-              //   this.crud.splice(this.detail.index - 1, 1);
-              this.query();
-              // } else {
-              //   this.$tip.error(this.$t("public.bcsb"));
-              // }
+          this.wLoading = true
+          this.selectList.forEach((item,i) =>{
+            auditOne(item.shipId).then((res) => {
+              if(this.selectList.length - 1 == i){
+                this.$tip.success(this.$t("public.bccg"))
+                this.query()
+              }
             })
-            .catch((err) => {
-              this.$tip.error(this.$t("public.bcsb"));
-            });
+          })
         })
         .catch((err) => {
           this.$tip.warning(this.$t("public.qxcz"));
@@ -252,4 +250,8 @@ export default {
   beforeDestroy() {},
 };
 </script>
-<style lang='stylus'></style>
+<style lang='stylus'>
+.el-tag--mini{
+  display: none
+}
+</style>
