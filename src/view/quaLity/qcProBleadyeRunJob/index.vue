@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-06-16 09:01:00
+ * @LastEditTime: 2022-06-16 09:56:10
  * @Description:
 -->
 <template>
@@ -125,8 +125,14 @@ export default {
           this.loading = false;
       })
     },
-    
   },
+  updated() {
+    if (this.crudDataList && this.crudDataList.length) {
+      this.$nextTick(() => {
+        this.$refs["crud"].doLayout();
+      });
+    }
+  },
 };
 </script>
 <style lang='stylus'>
