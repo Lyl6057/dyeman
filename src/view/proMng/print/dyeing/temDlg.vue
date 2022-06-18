@@ -2,131 +2,47 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-15 11:27:06
+ * @LastEditTime: 2022-06-18 14:04:15
  * @Description: 
 -->
 <template>
   <div id="dyeing">
-    <view-container
-      :title="(isAdd ? '新增' : '修改') + '染整工单'"
-      :element-loading-text="$t('public.loading')"
-      v-loading="wLoading"
-      class="not-number-icon"
-    >
+    <view-container :title="(isAdd ? '新增' : '修改') + '染整工单'" :element-loading-text="$t('public.loading')" v-loading="wLoading" class="not-number-icon">
       <div class="btnList">
-        <el-tooltip
-          class="item"
-          effect="dark"
-          content="Bảo tồn"
-          placement="top-start"
-        >
+        <el-tooltip class="item" effect="dark" content="Bảo tồn" placement="top-start">
           <el-button type="success" @click="setMerge" :loading="wLoading">{{
             $t("public.save")
           }}</el-button>
         </el-tooltip>
 
         <!-- <el-button type="primary" @click="checkOrder">选择订单号</el-button> -->
-        <el-tooltip
-          class="item"
-          effect="dark"
-          content="Mục sản xuất"
-          placement="top-start"
-        >
-          <el-button
-            type="primary"
-            @click="checkProject"
-            :disabled="!this.form.bleadyeJobId"
-            >生产项目</el-button
-          >
+        <el-tooltip class="item" effect="dark" content="Mục sản xuất" placement="top-start">
+          <el-button type="primary" @click="checkProject" :disabled="!this.form.bleadyeJobId">生产项目</el-button>
         </el-tooltip>
-        <el-tooltip
-          class="item"
-          effect="dark"
-          content=" Yêu cầu kiểm tra"
-          placement="top-start"
-        >
-          <el-button
-            type="primary"
-            @click="checkTest"
-            :disabled="!this.form.bleadyeJobId"
-            >測試要求</el-button
-          >
+        <el-tooltip class="item" effect="dark" content=" Yêu cầu kiểm tra" placement="top-start">
+          <el-button type="primary" @click="checkTest" :disabled="!this.form.bleadyeJobId">測試要求</el-button>
         </el-tooltip>
-        <el-tooltip
-          class="item"
-          effect="dark"
-          content="Tham số máy dài"
-          placement="top-start"
-        >
-          <el-button
-            type="primary"
-            @click="checkCar"
-            :disabled="!this.form.bleadyeJobId"
-            >长车加工项目</el-button
-          >
+        <el-tooltip class="item" effect="dark" content="Tham số máy dài" placement="top-start">
+          <el-button type="primary" @click="checkCar" :disabled="!this.form.bleadyeJobId">长车加工项目</el-button>
         </el-tooltip>
-        <el-tooltip
-          class="item"
-          effect="dark"
-          content="Tham  số  bồn  nhuộm"
-          placement="top-start"
-        >
-          <el-button
-            type="primary"
-            @click="checkstrain"
-            :disabled="!this.form.bleadyeJobId"
-            >染缸參數</el-button
-          >
+        <el-tooltip class="item" effect="dark" content="Tham  số  bồn  nhuộm" placement="top-start">
+          <el-button type="primary" @click="checkstrain" :disabled="!this.form.bleadyeJobId">染缸參數</el-button>
         </el-tooltip>
 
-        <el-tooltip
-          class="item"
-          effect="dark"
-          content="Mục sản xuất"
-          placement="top-start"
-        >
-          <el-button
-            type="primary"
-            @click="checkTechItem"
-            :disabled="!this.form.bleadyeJobId"
-            >生產工藝</el-button
-          >
+        <el-tooltip class="item" effect="dark" content="Mục sản xuất" placement="top-start">
+          <el-button type="primary" @click="checkTechItem" :disabled="!this.form.bleadyeJobId">生產工藝</el-button>
         </el-tooltip>
         <!-- <el-button type="primary" @click="setPreview">预览</el-button> -->
-        <el-tooltip
-          class="item"
-          effect="dark"
-          content=" in"
-          placement="top-start"
-        >
+        <el-tooltip class="item" effect="dark" content=" in" placement="top-start">
           <el-button type="success" @click="print" :disabled="!form.bleadyeJobId">打印</el-button>
         </el-tooltip>
-        <el-tooltip
-            class="item"
-            effect="dark"
-            content=" in"
-            placement="top-start"
-          >
-            <el-button type="success" @click="printOther(1)" :disabled="!form.bleadyeJobId" :loading="wLoading"
-              >打印工艺</el-button
-            >
-          </el-tooltip>
-          <el-tooltip
-            class="item"
-            effect="dark"
-            content=" in"
-            placement="top-start"
-          >
-            <el-button type="success" @click="printOther(2)" :disabled="!form.bleadyeJobId" :loading="wLoading"
-              >打印染缸参数</el-button
-            >
-          </el-tooltip>
-        <el-tooltip
-          class="item"
-          effect="dark"
-          content="đóng"
-          placement="top-start"
-        >
+        <el-tooltip class="item" effect="dark" content=" in" placement="top-start">
+          <el-button type="success" @click="printOther(1)" :disabled="!form.bleadyeJobId" :loading="wLoading">打印工艺</el-button>
+        </el-tooltip>
+        <el-tooltip class="item" effect="dark" content=" in" placement="top-start">
+          <el-button type="success" @click="printOther(2)" :disabled="!form.bleadyeJobId" :loading="wLoading">打印染缸参数</el-button>
+        </el-tooltip>
+        <el-tooltip class="item" effect="dark" content="đóng" placement="top-start">
           <el-button type="warning" @click="close">{{
             this.$t("public.close")
           }}</el-button>
@@ -136,313 +52,144 @@
       <div class="formBox">
         <avue-form ref="form" :option="formOp" v-model="form">
           <template slot-scope="scope" slot="mergVatNo">
-                  <el-select
-                    v-model="form.mergVatNo"
-                    filterable
-                    remote
-                    clearable
-                    default-first-option
-                    placeholder="请输入缸号"
-                    multiple
-                    :remote-method="remoteMethod"
-                    :loading="vatLoading"
-                  >
-                    <el-option
-                      v-for="item in vatOptions"
-                      :key="item.runJobId"
-                      :label="item.vatNo"
-                      :value="`${item.vatNo}:${item.runJobId}`"
-                      :disabled="item.vatNo == form.vatNo"
-                    >
-                    </el-option>
-                  </el-select>
-                </template>
+            <el-select v-model="form.mergVatNo" filterable remote clearable default-first-option placeholder="请输入缸号" multiple :remote-method="remoteMethod" :loading="vatLoading">
+              <el-option v-for="item in vatOptions" :key="item.runJobId" :label="item.vatNo" :value="`${item.vatNo}:${item.runJobId}`" :disabled="item.vatNo == form.vatNo">
+              </el-option>
+            </el-select>
+          </template>
         </avue-form>
       </div>
     </view-container>
-    <el-dialog
-      :visible.sync="visible"
-      fullscreen
-      :close-on-press-escape="false"
-      append-to-body
-      id="viewDlg"
-      :element-loading-text="$t('public.loading')"
-      v-loading="dlgLoading"
-      v-if="visible"
-    >
+    <el-dialog :visible.sync="visible" fullscreen :close-on-press-escape="false" append-to-body id="viewDlg" :element-loading-text="$t('public.loading')" v-loading="dlgLoading" v-if="visible">
       <el-row>
         <el-col :span="this.tabs == '生產工藝' ? 12 : 24">
           <view-container :title="tabs">
             <div class="btnList">
-              <el-tooltip
-                class="item"
-                effect="dark"
-                content="Bảo tồn"
-                placement="top-start"
-              >
+              <el-tooltip class="item" effect="dark" content="Bảo tồn" placement="top-start">
                 <el-button @click="saveOther" type="success">{{
                   $t("public.save")
                 }}</el-button>
               </el-tooltip>
-              <el-tooltip
-                class="item"
-                effect="dark"
-                content="thêm mới "
-                placement="top-start"
-              >
+              <el-tooltip class="item" effect="dark" content="thêm mới " placement="top-start">
                 <el-button @click="add" type="primary">{{
                   $t("public.add")
                 }}</el-button>
               </el-tooltip>
-              <el-tooltip
-                class="item"
-                effect="dark"
-                content="xóa"
-                placement="top-start"
-              >
-                <el-button
-                  @click="del"
-                  type="danger"
-                  :disabled="Object.keys(chooseData).length == 0"
-                  >{{ $t("public.del") }}</el-button
-                >
+              <el-tooltip class="item" effect="dark" content="xóa" placement="top-start">
+                <el-button @click="del" type="danger" :disabled="Object.keys(chooseData).length == 0">{{ $t("public.del") }}</el-button>
               </el-tooltip>
-              <el-tooltip
-                class="item"
-                effect="dark"
-                content="in"
-                placement="top-start"
-              >
-                <el-button
-                  @click="printGy"
-                  type="primary"
-                  :disabled="printList.length == 0"
-                  >打印</el-button
-                >
+              <el-tooltip class="item" effect="dark" content="in" placement="top-start">
+                <el-button @click="printGy" type="primary" :disabled="printList.length == 0">打印</el-button>
               </el-tooltip>
-                <el-button @click="copyGy" type="primary" v-if="tabs == '生產工藝'">复制工艺</el-button>
-              <el-tooltip
-                class="item"
-                effect="dark"
-                content="đóng"
-                placement="top-start"
-              >
+              <el-button @click="copyGy" type="primary" v-if="tabs == '生產工藝'">复制工艺</el-button>
+              <el-tooltip class="item" effect="dark" content="đóng" placement="top-start">
                 <el-button @click="visible = false" type="warning">{{
                   $t("public.close")
                 }}</el-button>
               </el-tooltip>
-            
-              <span style="margin-left: 10px" v-if="tabs == '生產工藝'">
-                自动计算</span
-              >
 
-              <el-switch
-                v-if="tabs == '生產工藝'"
-                v-model="mathCtr"
-                active-color="#13ce66"
-                inactive-color="#ccc"
-              >
+              <span style="margin-left: 10px" v-if="tabs == '生產工藝'">
+                自动计算</span>
+
+              <el-switch v-if="tabs == '生產工藝'" v-model="mathCtr" active-color="#13ce66" inactive-color="#ccc">
               </el-switch>
-              <el-tag
-                style="font-size: 17px; margin-left: 10px"
-                v-if="tabs == '生產工藝'"
-              >
-                重量:{{ detail.clothWeight }}</el-tag
-              >
+              <el-tag style="font-size: 17px; margin-left: 10px" v-if="tabs == '生產工藝'">
+                重量:{{ detail.clothWeight }}</el-tag>
               <el-tag style="font-size: 17px" v-if="tabs == '生產工藝'">
-                合缸重量:{{ vatWeight }}</el-tag
-              >
+                合缸重量:{{ vatWeight }}</el-tag>
 
               <!-- <span> </span> -->
             </div>
             <div class="crudBox">
-              <avue-crud
-                ref="crud"
-                :option="crudOp"
-                :data="crud"
-                :page.sync="page"
-                v-loading="loading"
-                @on-load="query"
-                @row-dblclick="handleRowDBLClick"
-                @current-row-change="cellClick"
-                @selection-change="selectionChange"
-              >
+              <avue-crud ref="crud" :option="crudOp" :data="crud" :page.sync="page" v-loading="loading" @on-load="query" @row-dblclick="handleRowDBLClick" @current-row-change="cellClick" @selection-change="selectionChange">
                 <template slot="bleachSet" slot-scope="scope">
                   <!-- {{ scope.row.dataStyle }} -->
                   <div v-if="scope.row.dataStyle === 'string'">
                     <!-- string 类型 -->
-                    <el-input
-                      v-model="scope.row.bleachSet"
-                      type="number"
-                    ></el-input>
+                    <el-input v-model="scope.row.bleachSet" type="number"></el-input>
                   </div>
                   <div v-else style="text-align: center">
                     <!-- boolean 类型 -->
-                    <el-checkbox
-                      v-model="scope.row.bleachSet"
-                      :true-label="1"
-                      :false-label="0"
-                    ></el-checkbox>
+                    <el-checkbox v-model="scope.row.bleachSet" :true-label="1" :false-label="0"></el-checkbox>
                   </div>
                 </template>
                 <template slot="bleachFact" slot-scope="scope">
                   <!-- {{ scope.row.dataStyle }} -->
                   <div v-if="scope.row.dataStyle === 'string'">
                     <!-- string 类型 -->
-                    <el-input
-                      v-model="scope.row.bleachFact"
-                      type="number"
-                    ></el-input>
+                    <el-input v-model="scope.row.bleachFact" type="number"></el-input>
                   </div>
                   <div v-else style="text-align: center">
                     <!-- boolean 类型 -->
-                    <el-checkbox
-                      v-model="scope.row.bleachFact"
-                      :true-label="1"
-                      :false-label="0"
-                    ></el-checkbox>
+                    <el-checkbox v-model="scope.row.bleachFact" :true-label="1" :false-label="0"></el-checkbox>
                   </div>
                 </template>
                 <template slot="dyeSet" slot-scope="scope">
                   <!-- {{ scope.row.dataStyle }} -->
                   <div v-if="scope.row.dataStyle === 'string'">
                     <!-- string 类型 -->
-                    <el-input
-                      v-model="scope.row.dyeSet"
-                      type="number"
-                    ></el-input>
+                    <el-input v-model="scope.row.dyeSet" type="number"></el-input>
                   </div>
                   <div v-else style="text-align: center">
                     <!-- boolean 类型 -->
-                    <el-checkbox
-                      v-model="scope.row.dyeSet"
-                      :true-label="1"
-                      :false-label="0"
-                    ></el-checkbox>
+                    <el-checkbox v-model="scope.row.dyeSet" :true-label="1" :false-label="0"></el-checkbox>
                   </div>
                 </template>
                 <template slot="dyeFact" slot-scope="scope">
                   <!-- {{ scope.row.dataStyle }} -->
                   <div v-if="scope.row.dataStyle === 'string'">
                     <!-- string 类型 -->
-                    <el-input
-                      v-model="scope.row.dyeFact"
-                      type="number"
-                    ></el-input>
+                    <el-input v-model="scope.row.dyeFact" type="number"></el-input>
                   </div>
                   <div v-else style="text-align: center">
                     <!-- boolean 类型 -->
-                    <el-checkbox
-                      v-model="scope.row.dyeFact"
-                      :true-label="1"
-                      :false-label="0"
-                    ></el-checkbox>
+                    <el-checkbox v-model="scope.row.dyeFact" :true-label="1" :false-label="0"></el-checkbox>
                   </div>
                 </template>
                 <template slot="soapSet" slot-scope="scope">
                   <!-- {{ scope.row.dataStyle }} -->
                   <div v-if="scope.row.dataStyle === 'string'">
                     <!-- string 类型 -->
-                    <el-input
-                      v-model="scope.row.soapSet"
-                      type="number"
-                    ></el-input>
+                    <el-input v-model="scope.row.soapSet" type="number"></el-input>
                   </div>
                   <div v-else style="text-align: center">
                     <!-- boolean 类型 -->
-                    <el-checkbox
-                      v-model="scope.row.soapSet"
-                      :true-label="1"
-                      :false-label="0"
-                    ></el-checkbox>
+                    <el-checkbox v-model="scope.row.soapSet" :true-label="1" :false-label="0"></el-checkbox>
                   </div>
                 </template>
                 <template slot="soapFact" slot-scope="scope">
                   <!-- {{ scope.row.dataStyle }} -->
                   <div v-if="scope.row.dataStyle === 'string'">
                     <!-- string 类型 -->
-                    <el-input
-                      v-model="scope.row.soapFact"
-                      type="number"
-                    ></el-input>
+                    <el-input v-model="scope.row.soapFact" type="number"></el-input>
                   </div>
                   <div v-else style="text-align: center">
                     <!-- boolean 类型 -->
-                    <el-checkbox
-                      v-model="scope.row.soapFact"
-                      :true-label="1"
-                      :false-label="0"
-                    ></el-checkbox>
+                    <el-checkbox v-model="scope.row.soapFact" :true-label="1" :false-label="0"></el-checkbox>
                   </div>
                 </template>
               </avue-crud>
-            </div> </view-container
-        ></el-col>
+            </div>
+          </view-container>
+        </el-col>
         <el-col :span="12" v-if="tabs == '生產工藝'">
           <view-container title="工藝明細">
             <div class="btnList">
-              <el-tooltip
-                class="item"
-                effect="dark"
-                content="thêm mới "
-                placement="top-start"
-              >
-                <el-button
-                  @click="addDtl"
-                  type="primary"
-                  :disabled="Object.keys(chooseData).length == 0"
-                  >{{ $t("public.add") }}</el-button
-                >
+              <el-tooltip class="item" effect="dark" content="thêm mới " placement="top-start">
+                <el-button @click="addDtl" type="primary" :disabled="Object.keys(chooseData).length == 0">{{ $t("public.add") }}</el-button>
               </el-tooltip>
-              <el-tooltip
-                class="item"
-                effect="dark"
-                content="xóa"
-                placement="top-start"
-              >
-                <el-button
-                  @click="delDtl"
-                  type="danger"
-                  :disabled="Object.keys(chooseDtlData).length == 0"
-                  >{{ $t("public.del") }}</el-button
-                >
+              <el-tooltip class="item" effect="dark" content="xóa" placement="top-start">
+                <el-button @click="delDtl" type="danger" :disabled="Object.keys(chooseDtlData).length == 0">{{ $t("public.del") }}</el-button>
               </el-tooltip>
-              <el-button
-                @click="up"
-                type="primary"
-                :disabled="Object.keys(chooseDtlData).length == 0"
-                >上移</el-button
-              >
-              <el-button
-                @click="down"
-                type="primary"
-                :disabled="Object.keys(chooseDtlData).length == 0"
-                >下移</el-button
-              >
+              <el-button @click="up" type="primary" :disabled="Object.keys(chooseDtlData).length == 0">上移</el-button>
+              <el-button @click="down" type="primary" :disabled="Object.keys(chooseDtlData).length == 0">下移</el-button>
             </div>
             <div class="formBox"></div>
             <div class="crudBox">
-              <avue-crud
-                ref="yarnCrud"
-                :option="codeItemCrud"
-                :data="chooseData.list"
-                @on-load="query"
-                @current-row-change="cellDtlClick"
-              >
+              <avue-crud ref="yarnCrud" :option="codeItemCrud" :data="chooseData.list" @on-load="query" @current-row-change="cellDtlClick">
                 <template slot="mateName" slot-scope="scope">
-                  <el-select v-if="scope.row.bleadyeType != 'run' && scope.row.$cellEdit" 
-                    v-model="scope.row.mateName" 
-                    remote
-                    filterable
-                    reserve-keyword 
-                    clearable 
-                    default-first-option 
-                    placeholder="请输入材料信息" 
-                    :loading="vatLoading" 
-                    :remote-method="remoteMate" 
-                    @change="handleMatNameChange"
-                    @focus="mateFocus(scope.row)">
-                    <el-option v-for="item in mateOption" :key="item.bcCode" :label="item.cnnamelong" :value="`${item.bcCode}——${item.cnnamelong}`">
+                  <el-select v-if="scope.row.bleadyeType != 'run' && scope.row.$cellEdit" v-model="scope.row.mateName" remote filterable reserve-keyword clearable default-first-option placeholder="请输入材料信息" :loading="vatLoading" :remote-method="remoteMate" @focus="mateFocus(scope.row)">
+                    <el-option v-for="item in mateOption" :key="item.bcCode" :label="`${item.bcCode}——${item.cnnamelong}`" :value="`${item.bcCode}——${item.cnnamelong}`">
                     </el-option>
                   </el-select>
                   <el-input v-else-if="scope.row.bleadyeType == 'run' && scope.row.$cellEdit" v-model="scope.row.mateName"></el-input>
@@ -452,54 +199,25 @@
                   <!-- {{ scope.row.dataStyle }} -->
                   <div v-if="scope.row.measureType === 'g/L'">
                     <!-- string 类型 -->
-                    <el-select
-                      v-model="scope.row.formulaUnit"
-                      placeholder=" "
-                      @change="unitCtr(scope)"
-                      :disabled="scope.row.bleadyeType != 'run'"
-                    >
-                      <el-option
-                        v-for="item in options"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value"
-                      >
+                    <el-select v-model="scope.row.formulaUnit" placeholder=" " @change="unitCtr(scope)" :disabled="scope.row.bleadyeType != 'run'">
+                      <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
                       </el-option>
                     </el-select>
                   </div>
                   <div v-else style="text-align: center">
-                    <el-select
-                      v-model="scope.row.formulaUnit"
-                      placeholder=" "
-                      @change="unitCtr(scope)"
-                      :disabled="scope.row.bleadyeType != 'run'"
-                    >
-                      <el-option
-                        v-for="item in option"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value"
-                      >
+                    <el-select v-model="scope.row.formulaUnit" placeholder=" " @change="unitCtr(scope)" :disabled="scope.row.bleadyeType != 'run'">
+                      <el-option v-for="item in option" :key="item.value" :label="item.label" :value="item.value">
                       </el-option>
                     </el-select>
                   </div>
                 </template>
-                 <template slot="bleadyeType" slot-scope="scope">
-                    <!-- string 类型 -->
-                    <el-select
-                      v-model="scope.row.bleadyeType"
-                      placeholder=" "
-                      @change="bleadyeTypeChange(scope)"
-                    >
-                      <el-option
-                        v-for="item in bleadyeType"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value"
-                      >
-                      </el-option>
-                    </el-select>
-                 </template>
+                <template slot="bleadyeType" slot-scope="scope">
+                  <!-- string 类型 -->
+                  <el-select v-model="scope.row.bleadyeType" placeholder=" " @change="bleadyeTypeChange(scope)">
+                    <el-option v-for="item in bleadyeType" :key="item.value" :label="item.label" :value="item.value">
+                    </el-option>
+                  </el-select>
+                </template>
                 <!-- <template slot="mateName" slot-scope="scope">
                   <input
                     v-model="scope.row.mateName"
@@ -508,61 +226,25 @@
                   ></input>
                 </template> -->
                 <template slot="mateBatchNo" slot-scope="scope">
-                  <input
-                    v-model="scope.row.mateBatchNo"
-                    class="scope-input"
-                    @click="selectValue($event)"
-                  ></input>
+                  <input v-model="scope.row.mateBatchNo" class="scope-input" @click="selectValue($event)"></input>
                 </template>
                 <template slot="formulaAmount" slot-scope="scope">
-                  <input
-                    v-model="scope.row.formulaAmount"
-                    class="scope-input"
-                    type="number"
-                    @click="selectValue($event)"
-                    @change="changeAmount"
-                  ></input>
+                  <input v-model="scope.row.formulaAmount" class="scope-input" type="number" @click="selectValue($event)" @change="changeAmount"></input>
                 </template>
                 <template slot="useAmount" slot-scope="scope">
-                  <input
-                    v-model="scope.row.useAmount"
-                    class="scope-input"
-                    :max="10"
-                    type="number"
-                    @click="selectValue($event)"
-                  ></input>
+                  <input v-model="scope.row.useAmount" class="scope-input" :max="10" type="number" @click="selectValue($event)"></input>
                 </template>
                 <template slot="runTemp" slot-scope="scope">
-                  <input
-                    v-model="scope.row.runTemp"
-                    class="scope-input"
-                    type="number"
-                    @click="selectValue($event)"
-                  ></input>
+                  <input v-model="scope.row.runTemp" class="scope-input" type="number" @click="selectValue($event)"></input>
                 </template>
                 <template slot="runTime" slot-scope="scope">
-                  <input
-                    v-model="scope.row.runTime"
-                    class="scope-input"
-                    type="number"
-                    @click="selectValue($event)"
-                  ></input>
+                  <input v-model="scope.row.runTime" class="scope-input" type="number" @click="selectValue($event)"></input>
                 </template>
                 <template slot="dilutionRate" slot-scope="scope">
-                  <input
-                    v-model="scope.row.dilutionRate"
-                    class="scope-input"
-                    type="number"
-                    @click="selectValue($event)"
-                  ></input>
+                  <input v-model="scope.row.dilutionRate" class="scope-input" type="number" @click="selectValue($event)"></input>
                 </template>
                 <template slot="deliveryQuantity" slot-scope="scope">
-                  <input
-                    v-model="scope.row.deliveryQuantity"
-                    class="scope-input"
-                    type="number"
-                    @click="selectValue($event)"
-                  ></input>
+                  <input v-model="scope.row.deliveryQuantity" class="scope-input" type="number" @click="selectValue($event)"></input>
                 </template>
               </avue-crud>
             </div>
@@ -570,30 +252,9 @@
         </el-col>
       </el-row>
     </el-dialog>
-    <choice
-      :choiceV="choiceV"
-      :choiceTle="choiceTle"
-      :choiceQ="choiceQ"
-      dlgWidth="100%"
-      @choiceData="choiceData"
-      @close="choiceV = false"
-      v-if="choiceV"
-    ></choice>
-    <select-process
-      :choiceV="choiceP"
-      @choiceData="choiceData"
-      @close="choiceP = false"
-      v-if="choiceP"
-    ></select-process>
-    <el-dialog
-      id="colorMng_Dlg"
-      :visible.sync="pdfDlg"
-      fullscreen
-      width="100%"
-      append-to-body
-      :close-on-click-modal="false"
-      :close-on-press-escape="false"
-    >
+    <choice :choiceV="choiceV" :choiceTle="choiceTle" :choiceQ="choiceQ" dlgWidth="100%" @choiceData="choiceData" @close="choiceV = false" v-if="choiceV"></choice>
+    <select-process :choiceV="choiceP" @choiceData="choiceData" @close="choiceP = false" v-if="choiceP"></select-process>
+    <el-dialog id="colorMng_Dlg" :visible.sync="pdfDlg" fullscreen width="100%" append-to-body :close-on-click-modal="false" :close-on-press-escape="false">
       <view-container title="打印預覽">
         <!-- <div class="btnList">
             <el-button type="warning" @click="pdfDlg = false">{{
@@ -602,11 +263,7 @@
             <el-button type="primary" @click="print2">打印</el-button>
           </div> -->
         <!--startprint-->
-        <embed
-          id="pdf"
-          style="width: 100vw; height: calc(100vh - 80px)"
-          :src="pdfUrl"
-        />
+        <embed id="pdf" style="width: 100vw; height: calc(100vh - 80px)" :src="pdfUrl" />
         <!--endprint-->
       </view-container>
     </el-dialog>
@@ -614,7 +271,7 @@
 </template>
 <script>
 import choice from "@/components/proMng/index";
-import { getBasChemicalByPage, getBasPigmentByPage} from "../../techCode/api"
+import { getBasChemicalByPage, getBasPigmentByPage } from "../../techCode/api";
 import {
   mainCrud,
   dlgForm,
@@ -784,15 +441,15 @@ export default {
   },
   watch: {},
   methods: {
-    mateFocus(val){
+    mateFocus(val) {
       this.$refs.yarnCrud.setCurrentRow(val);
-      this.remoteMate(val.mateName)
+      this.remoteMate(val.basMateId);
     },
-    handleMatNameChange(val) {
-      this.chooseDtlData.mateCode = val.split("——")[0];
-      // this.chooseData.mateName = val.split("-")[1];
-    },
-    remoteMate(val){
+    // handleMatNameChange(val) {
+    //   this.chooseDtlData.basMateId = val.split("——")[0];
+    //   // this.chooseData.mateName = val.split("-")[1];
+    // },
+    remoteMate(val) {
       if (this.chooseDtlData.bleadyeType == "run") {
         return;
       }
@@ -803,7 +460,7 @@ export default {
       } else {
         fetchF = getBasPigmentByPage;
       }
-      fetchF({ fillTextSeach: val}).then((res) => {
+      fetchF({ fillTextSeach: val }).then((res) => {
         this.mateOption = res.data.records;
         this.vatLoading = false;
       });
@@ -1722,6 +1379,9 @@ export default {
           if (this.crud[i].list && this.crud[i].list.length > 0) {
             this.crud[i].list.forEach((item) => {
               item.proBleadyeJobTechargueFk = this.crud[i].jobTechId;
+              let mateData = item.mateName.split("——");
+              item.basMateId = mateData[0];
+              item.mateName = mateData[1];
               if (!item.techItemId) {
                 addTechItem(item).then((res) => {
                   item.techItemId = res.data.data;
@@ -1991,6 +1651,7 @@ export default {
         data.forEach((item, i) => {
           item.$cellEdit = true;
           item.index = i + 1;
+          item.mateName = item.basMateId + "——" + item.mateName;
           this.chooseData.list.push(Object.assign(item, { index: i + 1 }));
         });
         this.chooseData.list = res.data.records;
@@ -2076,7 +1737,8 @@ export default {
             item.index = i + 1;
             item.sn = i + 1;
             item.$cellEdit = true;
-            item.mateCode = item.basMateId;
+            // item.mateCode = item.basMateId;
+            // item.mateName = item.basMateId + '——' + item.mateName
             item.proBleadyeCodeItemFk = item.codeItemIt;
             item.formulaAmount = item.formulaAmount;
             item.formulaUnit = item.formulaUnit;
@@ -2134,7 +1796,8 @@ export default {
           item.index = this.chooseData.list.length + 1;
           item.sn = this.chooseData.list.length + 1;
           item.$cellEdit = true;
-          item.mateCode = item.basMateId;
+          // item.mateCode = item.basMateId;
+          // item.mateName = item.basMateId + '——' + item.mateName
           item.proBleadyeCodeItemFk = item.codeItemIt;
           item.formulaAmount = item.formulaAmount;
           item.formulaUnit = item.formulaUnit;

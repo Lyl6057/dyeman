@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-15 11:05:08
+ * @LastEditTime: 2022-06-18 14:01:26
  * @Description:
  */
 
@@ -1644,23 +1644,23 @@ export function codeItemCrud(_this) {
         align: "center",
         display: false
       },
-      {
-        label: "物料代碼",
-        prop: "mateCode",
-        width: 120,
-        cell: false,
-        span: 6,
-        placeholder: " "
-      },
+      // {
+      //   label: "物料",
+      //   prop: "basMateId",
+      //   width: 120,
+      //   cell: false,
+      //   span: 6,
+      //   placeholder: " ",
+      //   slot: true,
+      // },
       {
         label: "物料名稱",
         prop: "mateName",
-        width: 200,
+        width: 300,
         cell: true,
         span: 6,
         overHidden: true,
         slot: true,
-        // slot: true,
         placeholder: " "
       },
       {
