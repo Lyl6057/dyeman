@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-19 10:53:53
+ * @LastEditTime: 2022-06-18 10:17:39
  * @Description:
 -->
 <template>
@@ -107,7 +107,7 @@
               <el-button
                 type="success"
                 @click="save"
-                :disabled="form.clothState == 3"
+                :disabled="detail.clothState == 9 || detail.whseVouch == 9"
                 >{{ this.$t("public.save") }}</el-button
               >
               <el-button type="primary" @click="weighing">称重</el-button>
