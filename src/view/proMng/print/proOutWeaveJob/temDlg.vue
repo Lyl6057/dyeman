@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-05-20 16:24:33
+ * @LastEditTime: 2022-06-18 10:25:42
  * @Description: 
 -->
 <template>
@@ -106,7 +106,11 @@
       </div>
 
       <div class="formBox">
-        <avue-form ref="form" :option="formOp" v-model="form"> </avue-form>
+        <avue-form ref="form" :option="formOp" v-model="form"> 
+          <template slot="operatProcess">
+            <el-button type="primary" @click="operatProcessClick">上机工艺</el-button>
+          </template>
+        </avue-form>
       </div>
     </view-container>
     <el-dialog
@@ -225,6 +229,11 @@
         />
       </view-container>
     </el-dialog>
+    <el-dialog id="colorMng_Dlg" :visible.sync="gytDlg" fullscreen width="100%" append-to-body :close-on-click-modal="false" :close-on-press-escape="false">
+      <view-container title="上机工艺维护">
+        <technology v-if="gytDlg" :weave="form" @refresh="technologyRefresh" @close="gytDlg = false"></technology>
+      </view-container>
+    </el-dialog>
     <choice
       :choiceV="choiceV"
       :choiceTle="choiceTle"
@@ -284,6 +293,7 @@ import XlsxTemplate from "xlsx-template";
 import JSZipUtils from "jszip-utils";
 import saveAs from "file-saver";
 import { getBf } from "../clothFly/api";
+import technology from "../proWeaveJob/technology"
 export default {
   name: "",
   props: {
@@ -294,10 +304,12 @@ export default {
   components: {
     preView: preview,
     choice: choice,
+    technology
   },
   data() {
     return {
       wLoading: false,
+      gytDlg: false,
       formOp: mainCrud(this),
       form: {},
       page: {
@@ -392,6 +404,21 @@ export default {
         process.env.API_HOST +
         "/api/proWeaveJob/prinEntityPdf?id=" +
         this.form.weaveJobId;
+    },
+    technologyRefresh(val){
+      this.form.pinColumn = val.pinColumn 
+      this.form.diskNum = val.diskNum 
+      this.form.syringeNum = val.syringeNum 
+      this.form.totalColumn = val.totalColumn 
+      this.form.needlePlaceType = val.needlePlaceType 
+      this.refresh = true
+    },
+    operatProcessClick(){
+      if (!this.form.weaveJobId) {
+        this.$tip.warning("请先保存主表信息！")
+        return
+      }
+      this.gytDlg = true
     },
     async getAllYarn() {
       getGroup({

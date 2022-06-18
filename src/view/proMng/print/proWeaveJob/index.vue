@@ -2,93 +2,34 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-02-14 13:11:33
+ * @LastEditTime: 2022-06-17 15:50:57
  * @Description: 
 -->
 <template>
   <div id="clothFlyPrint">
-    <view-container
-      title="織造通知單打印"
-      v-loading="wloading"
-      element-loading-text="拼命加载中..."
-    >
+    <view-container title="織造通知單打印" v-loading="wloading" element-loading-text="拼命加载中...">
       <el-row class="btnList">
-        <el-tooltip
-          class="item"
-          effect="dark"
-          content="cập nhật"
-          placement="top-start"
-        >
-          <el-button
-            type="success"
-            :disabled="!detail.weaveJobId"
-            @click="handleRowDBLClick(detail)"
-            >{{ this.$t("public.update") }}</el-button
-          >
+        <el-tooltip class="item" effect="dark" content="cập nhật" placement="top-start">
+          <el-button type="success" :disabled="!detail.weaveJobId" @click="handleRowDBLClick(detail)">{{ this.$t("public.update") }}</el-button>
         </el-tooltip>
-        <el-tooltip
-          class="item"
-          effect="dark"
-          content="thêm mới "
-          placement="top-start"
-        >
+        <el-tooltip class="item" effect="dark" content="thêm mới " placement="top-start">
           <el-button type="primary" @click="add">{{
             this.$t("public.add")
           }}</el-button>
         </el-tooltip>
-        <el-tooltip
-          class="item"
-          effect="dark"
-          content="xóa"
-          placement="top-start"
-        >
-          <el-button
-            type="danger"
-            :disabled="!detail.weaveJobId"
-            @click="del"
-            >{{ this.$t("public.del") }}</el-button
-          >
+        <el-tooltip class="item" effect="dark" content="xóa" placement="top-start">
+          <el-button type="danger" :disabled="!detail.weaveJobId" @click="del">{{ this.$t("public.del") }}</el-button>
         </el-tooltip>
-        <el-tooltip
-          class="item"
-          effect="dark"
-          content="in"
-          placement="top-start"
-        >
-          <el-button
-            type="primary"
-            @click="print"
-            :loading="wloading"
-            :disabled="detail.auditState === 0"
-            >打印</el-button
-          >
+        <el-tooltip class="item" effect="dark" content="in" placement="top-start">
+          <el-button type="primary" @click="print" :loading="wloading" :disabled="detail.auditState === 0">打印</el-button>
         </el-tooltip>
-        <el-tooltip
-          class="item"
-          effect="dark"
-          content="copy"
-          placement="top-start"
-        >
-          <el-button type="primary" @click="copyEvent" :loading="wloading"
-            >复制</el-button
-          >
+        <el-tooltip class="item" effect="dark" content="copy" placement="top-start">
+          <el-button type="primary" @click="copyEvent" :loading="wloading">复制</el-button>
         </el-tooltip>
-        <el-tooltip
-          class="item"
-          effect="dark"
-          content="拆单"
-          placement="top-start"
-        >
-          <el-button type="primary" @click="splitWeave" :loading="wloading"
-            >拆单</el-button
-          >
+        <el-tooltip class="item" effect="dark" content="拆单" placement="top-start">
+          <el-button type="primary" @click="splitWeave" :loading="wloading">拆单</el-button>
         </el-tooltip>
-        <el-tooltip
-          class="item"
-          effect="dark"
-          content="tìm kiếm"
-          placement="top-start"
-        >
+        <el-tooltip class="item" effect="dark" content="tìm kiếm" placement="top-start">
           <el-button type="primary" @click="query">{{
             this.$t("public.query")
           }}</el-button>
@@ -101,57 +42,15 @@
         <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
       </el-row>
       <el-row class="crudBox">
-        <avue-crud
-          ref="crud"
-          id="crud"
-          :option="crudOp"
-          :data="crud"
-          :page.sync="page"
-          v-loading="loading"
-          :row-style="rowStyle"
-          @on-load="query"
-          @row-dblclick="handleRowDBLClick"
-          @current-row-change="cellClick"
-        ></avue-crud>
+        <avue-crud ref="crud" id="crud" :option="crudOp" :data="crud" :page.sync="page" v-loading="loading" :row-style="rowStyle" @on-load="query" @row-dblclick="handleRowDBLClick" @current-row-change="cellClick"></avue-crud>
       </el-row>
-      <el-dialog
-        id="colorMng_Dlg"
-        :visible.sync="dialogVisible"
-        fullscreen
-        width="100%"
-        append-to-body
-        :close-on-click-modal="false"
-        :close-on-press-escape="false"
-        v-if="dialogVisible"
-      >
-        <tem-dlg
-          ref="tem"
-          :detail="detail"
-          :isAdd="isAdd"
-          :copyC="copyC"
-          :splitW="splitW"
-          :audit="false"
-          @close="dialogVisible = false"
-          @refresh="query"
-          v-if="dialogVisible"
-        ></tem-dlg>
+      <el-dialog id="colorMng_Dlg" :visible.sync="dialogVisible" fullscreen width="100%" append-to-body :close-on-click-modal="false" :close-on-press-escape="false" v-if="dialogVisible">
+        <tem-dlg ref="tem" :detail="detail" :isAdd="isAdd" :copyC="copyC" :splitW="splitW" :audit="false" @close="dialogVisible = false" @refresh="query" v-if="dialogVisible"></tem-dlg>
       </el-dialog>
     </view-container>
-    <el-dialog
-      id="colorMng_Dlg"
-      :visible.sync="pdfDlg"
-      fullscreen
-      width="100%"
-      append-to-body
-      :close-on-click-modal="false"
-      :close-on-press-escape="false"
-    >
+    <el-dialog id="colorMng_Dlg" :visible.sync="pdfDlg" fullscreen width="100%" append-to-body :close-on-click-modal="false" :close-on-press-escape="false">
       <view-container title="打印預覽">
-        <embed
-          id="pdf"
-          style="width: 100vw; height: calc(100vh - 80px)"
-          :src="pdfUrl"
-        />
+        <embed id="pdf" style="width: 100vw; height: calc(100vh - 80px)" :src="pdfUrl" />
       </view-container>
     </el-dialog>
   </div>
@@ -203,13 +102,13 @@ export default {
           delete this.form[key];
         }
       }
-      this.form.weaveJobCode =
-        "!^%" + (this.form.weaveJobCode ? this.form.weaveJobCode : "");
-      this.form.salPoNo = "%" + (this.form.salPoNo ? this.form.salPoNo : "");
-      this.form.colorCode =
-        "%" + (this.form.colorCode ? this.form.colorCode : "");
+      let params = JSON.parse(JSON.stringify(this.form));
+      params.weaveJobCode =
+        "!^%" + (params.weaveJobCode ? params.weaveJobCode : "");
+      params.salPoNo = "%" + (params.salPoNo ? params.salPoNo : "");
+      params.colorCode = "%" + (params.colorCode ? params.colorCode : "");
       get(
-        Object.assign(this.form, {
+        Object.assign(params, {
           rows: this.page.pageSize,
           start: this.page.currentPage,
           isWorkOut: 0,
@@ -221,15 +120,6 @@ export default {
         });
         if (this.crud.length > 0) {
           this.$refs.crud.setCurrentRow(this.crud[0]);
-        }
-        if (this.form.weaveJobCode.indexOf("!^%") != -1) {
-          this.form.weaveJobCode = this.form.weaveJobCode.split("!^%")[1] || "";
-        }
-        if (this.form.salPoNo.indexOf("%") != -1) {
-          this.form.salPoNo = this.form.salPoNo.split("%")[1] || "";
-        }
-        if (this.form.colorCode.indexOf("%") != -1) {
-          this.form.colorCode = this.form.colorCode.split("%")[1] || "";
         }
         this.page.total = res.data.total;
         this.loading = false;

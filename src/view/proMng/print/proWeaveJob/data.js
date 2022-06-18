@@ -2,11 +2,14 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-14 14:21:28
+ * @LastEditTime: 2022-06-18 14:57:47
  * @Description:
  */
 
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
+
+export const picTop = [{value:"━",label:"━"},{value:"V",label:"V"},{value:"U",label:"U"}],
+picBottom = [{value:"━",label:"━"},{value:"Λ",label:"Λ"},{value:"Π",label:"Π"}]
 
 export function mainForm(_this) {
   return {
@@ -616,7 +619,7 @@ export function mainCrud(_this, audit) {
         // minRows: 0,
         hide: true,
         span: 4,
-        // type: "number",
+        type: "number",
         placeholder: " "
       },
       {
@@ -998,14 +1001,7 @@ export function mainCrud(_this, audit) {
             placeholder: " ",
             span: 6
           },
-          {
-            label: "上機工藝",
-            tip: "công nghệ lên máy",
-            prop: "operatProcess",
-            hide: true,
-            span: 6,
-            placeholder: " "
-          },
+         
           {
             label: "循環(自動間)",
             tip: "Tuần hoàn (vải sọc tự động)",
@@ -1111,7 +1107,23 @@ export function mainCrud(_this, audit) {
             placeholder: " ",
             hide: true,
             display: false
-          }
+          },
+          {
+            label: "",
+            tip: "công nghệ lên máy",
+            prop: "operatProcess",
+            hide: true,
+            span: 6,
+            formslot: true,
+            placeholder: " ",
+            click: ()=>{
+              if (!_this.form.weaveJobId) {
+                this.$tip.warning("请先保存主表信息！")
+                return
+              }
+              _this.gytDlg = true
+            }
+          },
         ]
       }
     ]
@@ -1487,6 +1499,7 @@ export function strainCrud(_this) {
     ]
   };
 }
+
 export function machineCrud(_this) {
   return {
     menu: false,
@@ -1536,6 +1549,221 @@ export function machineCrud(_this) {
         width: 140,
         cell: false,
         span: 6
+      },
+    ]
+  };
+}
+
+
+
+export function technologyForm(_this) {
+  return {
+    submitBtn: false,
+    emptyBtn: false,
+    labelWidth: 90,
+    column: [
+      {
+        label: "单双面",
+        prop: "levelNo",
+        labelWidth: 80,
+        span: 4,
+        placeholder: " ",
+        type: 'switch',
+        clearable: false,
+        dicData: [
+          {
+            value: 1,
+            label:"单面"
+          },
+          {
+            value: 2,
+            label:"双面/罗纹"
+          }
+        ],
+        change: ({value}) =>{
+          _this.formOp.column[3].disabled = value == 1 ? true : false;
+          _this.arrangementOp.column[0].hide = value == 1 ? true : false;
+          if (value == 1) {
+            _this.form.diskNum = 0;
+          }
+        }
+      },
+      {
+        label: "排针列数",
+        prop: "pinColumn",
+        span: 4,
+        placeholder: " ",
+        type: 'number',
+        align: 'right',
+        minRows: 0,
+        maxRows: 20,
+        change: (val)=>{
+          if(!val.value){
+            _this.arrangement = []
+            return
+          }
+          _this.pincolumnChange(val.value)
+        }
+      },
+      {
+        label: "循环路数",
+        prop: "totalColumn",
+        span: 4,
+        placeholder: " ",
+        type: 'number',
+        align: 'right',
+        minRows: 0,
+        maxRows: 20,
+        change: (val)=>{
+          _this.cycleChange(val.value)
+        }
+      },
+      {
+        label: "上针列数",
+        prop: "diskNum",
+        span: 4,
+        placeholder: " ",
+        type: 'number',
+        align: 'right',
+        minRows: 0,
+        maxRows: 12,
+        disabled: false,
+        change: (val)=>{
+          _this.NumChange(val.value, 1)
+        }
+      },
+      {
+        label: "下针列数",
+        prop: "syringeNum",
+        span: 4,
+        placeholder: " ",
+        type: 'number',
+        align: 'right',
+        minRows: 0,
+        maxRows: 12,
+        change: (val)=>{
+          _this.NumChange(val.value, 2)
+        }
+      },
+      {
+        label: "织针排列",
+        prop: "needlePlaceType",
+        span: 4,
+        placeholder: " ",
+        type: 'select',
+        clearable: false,
+        dicData: [
+          {
+            value: 0,
+            label:"对位"
+          },
+          {
+            value: 1,
+            label:"错位"
+          }
+        ],
+        minRows: 0,
+        maxRows: 12,
+      },
+    ]
+  };
+}
+
+export function arrangementCrud(_this) {
+  return {
+    menu: false,
+    addBtn: false,
+    border: true,
+    highlightCurrentRow: true,
+    height: "calc(100vh - 370px)",
+    refreshBtn: false,
+    columnBtn: false,
+    page: false,
+    labelWidth: 130,
+    column: [
+      {
+        label: "针盘针(上针)",
+        prop: "prop1",
+        span: 6,
+        placeholder: " ",
+        type: 'number',
+        align: 'right',
+        hide: false,
+        minRows: 1,
+        maxRows: 5,
+        cell: true,
+        width: 140
+      },
+      {
+        label: "针筒针(下针)",
+        prop: "prop2",
+        span: 6,
+        placeholder: " ",
+        type: 'number',
+        align: 'right',
+        minRows: 1,
+        maxRows: 5,
+        cell: true,
+        width: 140
+      },
+    ]
+  };
+}
+
+export function technologyCrud(_this) {
+  return {
+    menu: false,
+    addBtn: false,
+    border: true,
+    highlightCurrentRow: true,
+    height: "calc(100vh - 370px)",
+    refreshBtn: false,
+    columnBtn: false,
+    page: false,
+    labelWidth: 130,
+    column: [
+      {
+        label: "名称",
+        prop: "prop1",
+        span: 6,
+        width: 140,
+        placeholder: " ",
+        type: 'number',
+        align: 'center'
+      },
+      {
+        label: "路数",
+        prop: "prop2",
+        width: 110,
+        span: 6,
+        placeholder: " ",
+        type: 'number',
+        align: 'center'
+      },
+    ]
+  };
+}
+
+export function fabricCrud(_this) {
+  return {
+    menu: false,
+    addBtn: false,
+    border: true,
+    highlightCurrentRow: true,
+    height: "calc(100vh - 630px)",
+    refreshBtn: false,
+    columnBtn: false,
+    page: false,
+    labelWidth: 130,
+    column: [
+      {
+        label: "纱线名称",
+        prop: "prop1",
+        span: 6,
+        width: 400,
+        overHidden: true,
+        placeholder: " ",
+        align: 'center'
       },
     ]
   };

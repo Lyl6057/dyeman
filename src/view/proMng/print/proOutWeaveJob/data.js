@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-05-23 13:30:11
+ * @LastEditTime: 2022-06-18 10:00:36
  * @Description:
  */
 
@@ -785,20 +785,19 @@ export function mainCrud(_this) {
             span: 6,
             placeholder: " "
           },
-          {
-            label: "上機工藝",
-            tip: "công nghệ lên máy",
-            prop: "operatProcess",
-            hide: true,
-            span: 12,
-            placeholder: " "
-          },
+          // {
+          //   label: "上機工藝",
+          //   tip: "công nghệ lên máy",
+          //   prop: "operatProcess",
+          //   hide: true,
+          //   span: 12,
+          //   placeholder: " "
+          // },
           {
             label: "輸送盤資料",
             tip: "Thông số đĩa dây Cu-roa",
             prop: "transPlate",
             hide: true,
-            placeholder: " ",
             placeholder: " ",
             span: 12
           },
@@ -938,7 +937,23 @@ export function mainCrud(_this) {
             // type: "select",
             // dicData:
             //   postDicT('ucmlUser', 'employeename', 'ucmlUseroid')
-          }
+          },
+          {
+            label: "",
+            tip: "công nghệ lên máy",
+            prop: "operatProcess",
+            hide: true,
+            span: 6,
+            formslot: true,
+            placeholder: " ",
+            click: ()=>{
+              if (!_this.form.weaveJobId) {
+                this.$tip.warning("请先保存主表信息！")
+                return
+              }
+              _this.gytDlg = true
+            }
+          },
         ]
       }
     ]

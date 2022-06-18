@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-01 14:06:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-03 13:58:16
+ * @LastEditTime: 2022-06-17 13:29:38
  * @Description:
  */
 
@@ -350,3 +350,38 @@ export function delMachine(id) {
     method: "delete"
   });
 }
+
+
+// 工艺子表
+export function createWeaveJobTechnology(data) {
+  return axios({
+    url: "/api/proWeaveJobTechnology",
+    method: "post",
+    params: data
+  });
+}
+
+export function updateWeaveJobTechnology(data) {
+  return axios({
+    url: "/api/proWeaveJobTechnology",
+    method: "put",
+    params: data
+  });
+}
+
+export function fetchWeaveJobTechnology(data) {
+  return axios({
+    url: "/api/proWeaveJobTechnology",
+    method: "get",
+    params: data
+  });
+}
+
+export function reomveWeaveJobTechnology(id) {
+  return axios({
+    url: "/api/proWeaveJobTechnology?proWeaveJobTechnologyId=" + id,
+    method: "delete",
+  });
+}
+
+

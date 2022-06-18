@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-14 14:20:23
+ * @LastEditTime: 2022-06-18 10:29:11
  * @Description: 
 -->
 <template>
@@ -43,6 +43,9 @@
         <avue-form ref="form" :option="formOp" v-model="form">
           <template slot="gramWeightUnit">
             <div>g/m²</div>
+          </template>
+          <template slot="operatProcess">
+            <el-button type="primary" @click="operatProcessClick">上机工艺</el-button>
           </template>
         </avue-form>
       </div>
@@ -92,11 +95,17 @@
         <embed id="pdf" style="width: 100vw; height: calc(100vh - 80px)" :src="pdfUrl" />
       </view-container>
     </el-dialog>
+    <el-dialog id="colorMng_Dlg" :visible.sync="gytDlg" fullscreen width="100%" append-to-body :close-on-click-modal="false" :close-on-press-escape="false">
+      <view-container title="上机工艺维护">
+        <technology v-if="gytDlg" :weave="form" @refresh="technologyRefresh" @close="gytDlg = false"></technology>
+      </view-container>
+    </el-dialog>
     <choice :choiceV="choiceV" :choiceTle="choiceTle" :choiceQ="choiceQ" dlgWidth="100%" @choiceData="choiceData" @close="choiceV = false" v-if="choiceV"></choice>
   </div>
 </template>
 <script>
 import choice from "@/components/proMng/index";
+import technology from "./technology"
 import {
   mainCrud,
   dlgForm,
@@ -160,6 +169,7 @@ export default {
   components: {
     preView: preview,
     choice: choice,
+    technology
   },
   data() {
     return {
@@ -206,6 +216,8 @@ export default {
       pdfUrl: "",
       yarnlist: [],
       canSave: true,
+      gytDlg: false,
+      refresh: false
     };
   },
   watch: {
@@ -298,6 +310,21 @@ export default {
           this.wLoading = false;
         }, 500);
       }
+    },
+    technologyRefresh(val){
+      this.form.pinColumn = val.pinColumn 
+      this.form.diskNum = val.diskNum 
+      this.form.syringeNum = val.syringeNum 
+      this.form.totalColumn = val.totalColumn 
+      this.form.needlePlaceType = val.needlePlaceType 
+      this.refresh = true
+    },
+    operatProcessClick(){
+      if (!this.form.weaveJobId) {
+        this.$tip.warning("请先保存主表信息！")
+        return
+      }
+      this.gytDlg = true
     },
     print() {
       this.pdfDlg = true;
@@ -662,7 +689,6 @@ export default {
     },
     saveYarn() {
       for (let i = 0; i < this.crud.length; i++) {
-        console.log(this.crud[i].amount);
         if (this.tabs == "用紗明细" && !this.crud[i].amount) {
           this.$tip.error("数量不能為空!");
           return;
@@ -1116,10 +1142,12 @@ export default {
       }, 200);
     },
     close() {
-      if (this.isAdd) {
+      if (this.refresh) {
         this.$emit("refresh");
+        this.$emit("close");
+      } else {
+        this.$emit("close");
       }
-      this.$emit("close");
     },
   },
   created() {},
