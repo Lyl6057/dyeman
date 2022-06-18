@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-23 14:49:22
+ * @LastEditTime: 2022-06-18 08:30:30
  * @Description:
 -->
 <template>
@@ -238,6 +238,9 @@ export default {
         this.finishedNotes = res.data.sort((a, b) => {
           return a.productNo > b.productNo ? 1 : -1;
         });
+        this.finishedNotes.forEach((item) =>{
+            item.disabled =  item.whseVouch == 9 ? true : false
+        })
         this.vat2Change();
       });
     },
@@ -258,6 +261,9 @@ export default {
               return a.productNo > b.productNo ? 1 : -1;
             })
           );
+          this.finishedNotes.forEach((item) =>{
+            item.disabled =  item.whseVouch == 9 ? true : false
+          })
           res.data.forEach((item, i) => {
             this.checkData.push(item.cardId);
           });
