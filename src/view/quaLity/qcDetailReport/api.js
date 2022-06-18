@@ -2,11 +2,20 @@
  * @Author: Lyl
  * @Date: 2021-02-01 14:06:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-02 15:11:15
+ * @LastEditTime: 2022-06-17 16:41:27
  * @Description:
  */
 
 import axios from "axios";
+
+// 审核
+export function aduitQcCheckoutFabric(params) {
+  return axios({
+    url: "/api/qcCheckoutFabric/vouch",
+    method: "put",
+    params
+  });
+}
 
 // 获得拆缸后的重量
 export function getDismantleVatno(val) {

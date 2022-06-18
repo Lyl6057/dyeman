@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-03-30 14:28:43
+ * @LastEditTime: 2022-06-18 07:45:12
  * @Description:
  */
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
@@ -40,11 +40,35 @@ export function mainForm(_this) {
         ]
       },
       {
+        label: "审核状态",
+        prop: "whseVouch",
+        width: 120,
+        type: "select",
+        span: 6,
+        dicData: [
+          {
+            value: 0,
+            label: "未审核"
+          },
+          {
+            value: 1,
+            label: "拒收"
+          },
+          {
+            value: 9,
+            label: "已审核"
+          }
+        ],
+        overHidden: true,
+        sortable: true
+      },
+      {
         label: "备注",
         prop: "remark",
-        span: 12,
+        span: 6,
         placeholder: " "
-      }
+      },
+      
     ]
   };
 }
@@ -89,6 +113,37 @@ export function mainCrud(_this) {
         overHidden: true,
         sortable: true,
         fixed: true
+      },
+      {
+        label: "审核状态",
+        prop: "whseVouch",
+        width: 120,
+        type: "select",
+        dicData: [
+          {
+            value: 0,
+            label: "未审核"
+          },
+          {
+            value: 1,
+            label: "拒收"
+          },
+          {
+            value: 9,
+            label: "已审核"
+          }
+        ],
+        overHidden: true,
+        sortable: true
+      },
+      {
+        label: "审核人",
+        prop: "whseVoucher",
+        disabled: true,
+        placeholder: " ",
+        span: 6,
+        width: 120,
+        overHidden: true
       },
       {
         label: "布类名称",
@@ -221,6 +276,18 @@ export function mainCrud(_this) {
         placeholder: " ",
         overHidden: true,
         cell: true
+      },
+      {
+        label: "审核日期",
+        prop: "whseVouchTime",
+        type: "date",
+        format: "yyyy-MM-dd HH:mm:ss",
+        valueFormat: "yyyy-MM-dd HH:mm:ss",
+        span: 6,
+        align: "center",
+        // sortable: true,
+        width: 200,
+        overHidden: true
       },
       {
         label: "日期",

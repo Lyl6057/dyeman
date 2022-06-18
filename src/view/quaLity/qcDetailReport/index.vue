@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-05-23 08:03:33
+ * @LastEditTime: 2022-06-18 08:11:39
  * @Description:
 -->
 <template>
@@ -16,6 +16,13 @@
         <el-button type="primary" @click="query">{{
           this.$t("public.query")
         }}</el-button>
+        <el-dropdown size="small" split-button type="primary" style="margin-left: 10px" @command="handleAduit" @click="handleAduit(1)">
+          审核
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item  key="9" :command="9">通过</el-dropdown-item>
+            <el-dropdown-item  key="1" :command="1">不通过</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
         <el-button
           type="primary"
           @click="updateDivdWeight"
@@ -74,6 +81,7 @@ import {
   getFinishedNote,
   getDismantleVatno,
   updateRunJob,
+  aduitQcCheckoutFabric
 } from "./api";
 export default {
   name: "qcDeatilReport",
@@ -95,6 +103,7 @@ export default {
       loading: false,
       serachLoading: false,
       options: [],
+      chooseData: {}
     };
   },
   watch: {},
@@ -120,6 +129,28 @@ export default {
           this.wloading = false;
         }, 200);
       });
+    },
+    handleAduit(val){
+      if(!this.chooseData.checkoutId){
+        this.$tip.warning("请先选择审核的数据!");
+        return;
+      }
+      this.loading = true;
+      let params = {
+        checkoutId: this.chooseData.checkoutId,
+        vatNo:  this.chooseData.vatNo,
+        whseVouch: val,
+        whseVouchTime: this.$getNowTime("datetime"),
+        whseVoucher: parent.userID
+      }
+      aduitQcCheckoutFabric(params).then(res =>{
+        console.log(res.data);
+        this.$tip.success("提交成功!");
+        this.query()
+      }).finally(() =>{
+         this.loading = false;
+      })
+      
     },
     remoteMethod(val) {
       this.serachLoading = true;
@@ -149,7 +180,6 @@ export default {
       }).then((res) => {
         if (res.data.records.length) {
           let vatData = res.data.records[0]; // 当前缸号信息
-          console.log(vatData);
           let checkData = {
             vatNo: vatData.vatNo,
             fabricName: vatData.fabName,
@@ -226,6 +256,7 @@ export default {
                     remark: this.form.remark,
                     checkoutDate: this.$getNowTime("datetime"),
                     wmUnit: this.form.wmUnit,
+                    whseVouch: 0
                   })
                 ).then((res) => {
                   // this.updateDivdWeight();
@@ -273,6 +304,7 @@ export default {
     cellClick(val) {
       this.remoteMethod(val.vatNo);
       this.form.vatNo = val.vatNo;
+      this.chooseData = val
     },
   },
   updated() {},
