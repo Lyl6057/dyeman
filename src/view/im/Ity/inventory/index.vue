@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-24 14:15:12
  * @LastEditors: Lyl
- * @LastEditTime: 2022-05-24 11:10:20
+ * @LastEditTime: 2022-06-20 08:00:40
  * @Description: 
 -->
 <template>
@@ -171,6 +171,7 @@ export default {
           delete this.form[key];
         }
       }
+      let query = JSON.parse(JSON.stringify(this.form));
       switch (this.form.type) {
         case "SX":
           this.getFun = getSx;
@@ -198,7 +199,7 @@ export default {
           this.getList = getCpbList;
           this.crudOp = finishedCrud(this);
           this.typeObj.sort = "productNo";
-          this.form.productNo = "!^"; // 成品编号升序
+          query.vatNo = "!^%"; // 成品编号升序
           this.typeObj.outAdr = "./static/xlxsTemplate/inventory.xlsx";
           break;
         case "PB":
@@ -241,7 +242,7 @@ export default {
           this.loading = false;
           return;
       }
-      let query = JSON.parse(JSON.stringify(this.form));
+      
       query.yarnsId = "!^%" + (query.chemicalId || "");
       query.batId = "!^%" + (query.batId || "");
       query.chemicalId = query.yarnsId;
