@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-18 14:04:15
+ * @LastEditTime: 2022-06-19 18:59:57
  * @Description: 
 -->
 <template>
@@ -1379,9 +1379,11 @@ export default {
           if (this.crud[i].list && this.crud[i].list.length > 0) {
             this.crud[i].list.forEach((item) => {
               item.proBleadyeJobTechargueFk = this.crud[i].jobTechId;
-              let mateData = item.mateName.split("——");
-              item.basMateId = mateData[0];
-              item.mateName = mateData[1];
+              if(item.bleadyeType != 'run'){
+                let mateData = item.mateName.split("——");
+                item.basMateId = mateData[0];
+                item.mateName = mateData[1];
+              }
               if (!item.techItemId) {
                 addTechItem(item).then((res) => {
                   item.techItemId = res.data.data;
@@ -1651,7 +1653,9 @@ export default {
         data.forEach((item, i) => {
           item.$cellEdit = true;
           item.index = i + 1;
-          item.mateName = item.basMateId + "——" + item.mateName;
+          if(item.bleadyeType != 'run'){
+             item.mateName = item.basMateId + "——" + item.mateName;
+          }
           this.chooseData.list.push(Object.assign(item, { index: i + 1 }));
         });
         this.chooseData.list = res.data.records;
@@ -1739,6 +1743,9 @@ export default {
             item.$cellEdit = true;
             // item.mateCode = item.basMateId;
             // item.mateName = item.basMateId + '——' + item.mateName
+            if(item.bleadyeType != 'run'){
+              item.mateName = item.basMateId + "——" + item.mateName;
+            }
             item.proBleadyeCodeItemFk = item.codeItemIt;
             item.formulaAmount = item.formulaAmount;
             item.formulaUnit = item.formulaUnit;
@@ -1796,6 +1803,9 @@ export default {
           item.index = this.chooseData.list.length + 1;
           item.sn = this.chooseData.list.length + 1;
           item.$cellEdit = true;
+          if(item.bleadyeType != 'run'){
+             item.mateName = item.basMateId + "——" + item.mateName;
+          }
           // item.mateCode = item.basMateId;
           // item.mateName = item.basMateId + '——' + item.mateName
           item.proBleadyeCodeItemFk = item.codeItemIt;
