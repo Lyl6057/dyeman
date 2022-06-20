@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-05-03 13:03:03
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-15 10:01:38
+ * @LastEditTime: 2022-06-17 15:59:25
  * @Description:
  */
 
@@ -4320,7 +4320,7 @@ export function weaveJobC(_this) {
     refreshBtn: false,
     columnBtn: false,
     page: true,
-    selection: true,
+    selection: false,
     labelWidth: 130,
     column: [
       {

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-04-01 14:08:13
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-01 13:37:29
+ * @LastEditTime: 2022-06-17 17:01:34
  * @Description:
  */
 
@@ -69,7 +69,7 @@ export function quality(_this) {
           index: "modifyFinished"
         },
         {
-          menuName: "8.报表",
+          menuName: "8.入库细码单",
           index: "qcDetailReport"
         },
         {
