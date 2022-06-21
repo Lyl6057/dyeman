@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-03-23 10:36:15
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-06-14 10:27:06
+ * @LastEditTime: 2022-06-20 15:52:43
  */
 
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
@@ -130,6 +130,24 @@ export function mainCrud(_this) {
       {
         label: "数量",
         prop: "yarnAmount",
+        width: 100,
+        align: "right",
+        formatter: (row, value) => {
+          return value || "0"
+        }
+      },
+      {
+        label: "领用量",
+        prop: "applyAmount",
+        width: 100,
+        align: "right",
+        formatter: (row, value) => {
+          return value || "0"
+        }
+      },
+      {
+        label: "胚布数",
+        prop: "clothWeight",
         width: 100,
         align: "right",
         formatter: (row, value) => {
