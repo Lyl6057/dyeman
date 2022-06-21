@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-19 18:59:57
+ * @LastEditTime: 2022-06-21 10:59:08
  * @Description: 
 -->
 <template>
@@ -188,12 +188,17 @@
             <div class="crudBox">
               <avue-crud ref="yarnCrud" :option="codeItemCrud" :data="chooseData.list" @on-load="query" @current-row-change="cellDtlClick">
                 <template slot="mateName" slot-scope="scope">
-                  <el-select v-if="scope.row.bleadyeType != 'run' && scope.row.$cellEdit" v-model="scope.row.mateName" remote filterable reserve-keyword clearable default-first-option placeholder="请输入材料信息" :loading="vatLoading" :remote-method="remoteMate" @focus="mateFocus(scope.row)">
-                    <el-option v-for="item in mateOption" :key="item.bcCode" :label="`${item.bcCode}——${item.cnnamelong}`" :value="`${item.bcCode}——${item.cnnamelong}`">
-                    </el-option>
-                  </el-select>
-                  <el-input v-else-if="scope.row.bleadyeType == 'run' && scope.row.$cellEdit" v-model="scope.row.mateName"></el-input>
-                  <span v-else>{{scope.row.mateName}}</span>
+                  <el-popover
+                    placement="left"
+                    :title="scope.row.mateNames"
+                    width="200"
+                    trigger="hover">
+                      <el-select slot="reference"  v-if="scope.row.bleadyeType != 'run'" v-model="scope.row.mateName"  remote filterable reserve-keyword clearable default-first-option placeholder="请输入材料信息" :loading="vatLoading" :remote-method="remoteMate" @focus="mateFocus(scope.row)" @change="mateChange">
+                        <el-option v-for="item in mateOption" :key="item.bcCode" :label="item.cnnamelong + '-' +item.factoryName" :value="item.factoryName">
+                        </el-option>
+                      </el-select>
+                  </el-popover>
+                  <el-input v-if="scope.row.bleadyeType == 'run'" v-model="scope.row.mateName"></el-input>
                 </template>
                 <template slot="formulaUnit" slot-scope="scope">
                   <!-- {{ scope.row.dataStyle }} -->
@@ -443,13 +448,13 @@ export default {
   methods: {
     mateFocus(val) {
       this.$refs.yarnCrud.setCurrentRow(val);
-      this.remoteMate(val.basMateId);
+      this.remoteMate( val.mateName, 'factoryName');
     },
     // handleMatNameChange(val) {
     //   this.chooseDtlData.basMateId = val.split("——")[0];
     //   // this.chooseData.mateName = val.split("-")[1];
     // },
-    remoteMate(val) {
+    remoteMate(val,type) {
       if (this.chooseDtlData.bleadyeType == "run") {
         return;
       }
@@ -460,9 +465,29 @@ export default {
       } else {
         fetchF = getBasPigmentByPage;
       }
-      fetchF({ fillTextSeach: val }).then((res) => {
+      fetchF( {[type || 'fillTextSeach'] :  val} ).then((res) => {
         this.mateOption = res.data.records;
         this.vatLoading = false;
+      });
+    },
+    mateChange(val){
+      if (this.chooseDtlData.bleadyeType == "run") {
+        return;
+      }
+      let fetchF = null;
+      if (this.chooseDtlData.bleadyeType == "add_chemicalmat") {
+        fetchF = getBasChemicalByPage;
+      } else {
+        fetchF = getBasPigmentByPage;
+      }
+      fetchF({factoryName: val}).then((res) => {
+        if(res.data.total){
+          this.$nextTick(() =>{
+            this.$set(this.chooseDtlData, "mateCode", res.data.records[0].bcCode)
+            this.$set(this.chooseDtlData, "mateName", res.data.records[0].factoryName)
+            this.$set(this.chooseDtlData, "mateNames", res.data.records[0].cnnamelong)
+          })
+        }
       });
     },
     remoteMethod(val) {
@@ -1379,11 +1404,11 @@ export default {
           if (this.crud[i].list && this.crud[i].list.length > 0) {
             this.crud[i].list.forEach((item) => {
               item.proBleadyeJobTechargueFk = this.crud[i].jobTechId;
-              if(item.bleadyeType != 'run'){
-                let mateData = item.mateName.split("——");
-                item.basMateId = mateData[0];
-                item.mateName = mateData[1];
-              }
+              // if(item.bleadyeType != 'run'){
+              //   let mateData = item.mateName.split("——");
+              //   item.basMateId = mateData[0];
+              //   item.mateName = mateData[1];
+              // }
               if (!item.techItemId) {
                 addTechItem(item).then((res) => {
                   item.techItemId = res.data.data;
@@ -1653,9 +1678,9 @@ export default {
         data.forEach((item, i) => {
           item.$cellEdit = true;
           item.index = i + 1;
-          if(item.bleadyeType != 'run'){
-             item.mateName = item.basMateId + "——" + item.mateName;
-          }
+          // if(item.bleadyeType != 'run'){
+          //    item.mateName = item.basMateId + "——" + item.mateName;
+          // }
           this.chooseData.list.push(Object.assign(item, { index: i + 1 }));
         });
         this.chooseData.list = res.data.records;
@@ -1741,11 +1766,11 @@ export default {
             item.index = i + 1;
             item.sn = i + 1;
             item.$cellEdit = true;
-            // item.mateCode = item.basMateId;
-            // item.mateName = item.basMateId + '——' + item.mateName
-            if(item.bleadyeType != 'run'){
-              item.mateName = item.basMateId + "——" + item.mateName;
-            }
+            item.mateCode = item.basMateId;
+            // item.mateName = item.mateName
+            // if(item.bleadyeType != 'run'){
+            //   item.mateName = item.basMateId + "——" + item.mateName;
+            // }
             item.proBleadyeCodeItemFk = item.codeItemIt;
             item.formulaAmount = item.formulaAmount;
             item.formulaUnit = item.formulaUnit;
@@ -1803,9 +1828,9 @@ export default {
           item.index = this.chooseData.list.length + 1;
           item.sn = this.chooseData.list.length + 1;
           item.$cellEdit = true;
-          if(item.bleadyeType != 'run'){
-             item.mateName = item.basMateId + "——" + item.mateName;
-          }
+          // if(item.bleadyeType != 'run'){
+          //    item.mateName = item.basMateId + "——" + item.mateName;
+          // }
           // item.mateCode = item.basMateId;
           // item.mateName = item.basMateId + '——' + item.mateName
           item.proBleadyeCodeItemFk = item.codeItemIt;
