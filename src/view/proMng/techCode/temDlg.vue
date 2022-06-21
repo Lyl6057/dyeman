@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-14 16:00:12
+ * @LastEditTime: 2022-06-21 10:47:02
  * @Description: 
 -->
 <template>
@@ -30,18 +30,8 @@
       <div class="crudBox">
         <avue-crud ref="crud" id="mainCrud" :option="crudOp" :data="crud" :page.sync="page" v-loading="loading" @on-load="query" @row-dblclick="handleRowDBLClick" @current-row-change="cellClick">
           <template slot="mateName" slot-scope="scope">
-            <el-select v-if="scope.row.bleadyeType != 'run' && scope.row.$cellEdit" 
-              v-model="scope.row.mateName" 
-              remote
-              filterable
-              reserve-keyword 
-              clearable 
-              default-first-option 
-              placeholder="请输入材料信息" 
-              :loading="vatLoading" 
-              :remote-method="remoteMethod" 
-              @change="handleMatNameChange">
-              <el-option v-for="item in options" :key="item.bcCode" :label="`${item.bcCode}——${item.cnnamelong}`" :value="`${item.bcCode}——${item.cnnamelong}`">
+            <el-select slot="reference" v-if="scope.row.bleadyeType != 'run' && scope.row.$cellEdit"  v-model="scope.row.mateName" remote filterable reserve-keyword clearable default-first-option placeholder="请输入材料信息" :loading="vatLoading" :remote-method="remoteMethod" @change="handleMatNameChange">
+              <el-option v-for="item in options" :key="item.bcCode" :label="`${item.bcCode}——${item.factoryName}`" :value="`${item.bcCode}——${item.factoryName}`">
               </el-option>
             </el-select>
             <el-input v-else-if="scope.row.bleadyeType == 'run' && scope.row.$cellEdit" v-model="scope.row.mateName"></el-input>
@@ -97,6 +87,7 @@ export default {
   data() {
     return {
       wLoading: false,
+      vatLoading: false,
       options: [],
       formOp: mainCrud(this),
       form: {},
@@ -140,7 +131,7 @@ export default {
       } else {
         fetchF = getBasPigmentByPage;
       }
-      fetchF({ fillTextSeach: val}).then((res) => {
+      fetchF({ fillTextSeach: val }).then((res) => {
         this.options = res.data.records;
         this.vatLoading = false;
       });
@@ -277,9 +268,10 @@ export default {
               item[key] = undefined;
             }
           }
-          // item.$cellEdit = true;
           item.index = i + 1;
-          item.mateName = item.basMateId + '——' + item.mateName
+          if (item.bleadyeType != "run") {
+            item.mateName = item.basMateId + "——" + item.mateName;
+          }
         });
         this.page.total = res.data.total;
         setTimeout(() => {
@@ -303,7 +295,9 @@ export default {
             }
           }
           let data = JSON.parse(JSON.stringify(item));
-          data.mateName = data.mateName.split("——")[1]
+          if (data.bleadyeType != "run") {
+            data.mateName = data.mateName.split("——")[1];
+          }
           if (data.bleadyeType == "add_chemicalmat") {
             data.formulaUnit = "KG";
           } else if (data.bleadyeType == "add_pigment") {
@@ -450,8 +444,8 @@ export default {
       this.$set(val, "$cellEdit", true);
       this.oldData = val;
       this.chooseData = val;
-      if(this.chooseData.basMateId){
-        this.remoteMethod(this.chooseData.basMateId)
+      if (this.chooseData.basMateId) {
+        this.remoteMethod(this.chooseData.basMateId);
       }
       if (!this.chooseData.list) {
         this.chooseData.list = [];

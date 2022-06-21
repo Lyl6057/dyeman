@@ -174,12 +174,13 @@ export default {
           this.mx = records.records.sort((a, b) => {
             return a.batchNo > b.batchNo ? 1 : -1;
           });
+          console.log(this.mx);
           this.mx.forEach((item, index) => {
             item.$cellEdit = true;
             item.index = index + 1;
             item.weight = Number(item.weight || item.stockQty || 0);
             item.weightUnit = item.weightUnit || item.stockUnit;
-            item.applyNum = Number(item.applyNum).toFixed(2);
+            // item.applyNum = Number(item.applyNum).toFixed(2);
             // item.weight = item.weight.toFixed(2);
             if (index === this.mx.length - 1) {
               setTimeout(() => {
