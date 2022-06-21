@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
- * @LastEditors: Lyl
- * @LastEditTime: 2022-06-18 10:25:42
+ * @LastEditors: Symbol_Yang
+ * @LastEditTime: 2022-06-21 09:20:20
  * @Description: 
 -->
 <template>
@@ -243,6 +243,20 @@
       @close="choiceV = false"
       v-if="choiceV"
     ></choice>
+
+    <!-- 织胚明细 -->
+    <div class="weaveEmbryoDtlBtn-wrapper" @click.stop="handleOpenWeaEmbDtl">
+      <span style="color: #409eff; font-size: 15px; margin-left: 20px" >织胚明细</span>
+    </div>
+    <el-dialog :visible.sync="meaEmbVisible" fullscreen  append-to-body :close-on-click-modal="false" :close-on-press-escape="false" >
+      <MeaveEmbyroDtl 
+        :weaveJobId="form.weaveJobId"
+        ref="meaveEmbyroDtlRef" 
+        @close="meaEmbVisible = false" />
+    </el-dialog>
+
+    <ReformRecordDtl ref="reformRecordDtlRef" />
+
   </div>
 </template>
 <script>
@@ -294,6 +308,7 @@ import JSZipUtils from "jszip-utils";
 import saveAs from "file-saver";
 import { getBf } from "../clothFly/api";
 import technology from "../proWeaveJob/technology"
+import MeaveEmbyroDtl from "./meaveEmbyroDtl.vue"
 export default {
   name: "",
   props: {
@@ -304,7 +319,8 @@ export default {
   components: {
     preView: preview,
     choice: choice,
-    technology
+    technology,
+    MeaveEmbyroDtl,
   },
   data() {
     return {
@@ -349,10 +365,25 @@ export default {
       pdfUrl: "",
       yarnlist: [],
       canSave: true,
+
+      // 织胚明细 弹出窗状态
+      meaEmbVisible: false,
     };
   },
   watch: {},
   methods: {
+    // 织胚明细DOM 移动
+    meaveDomMove(){
+      let meaveDtlBtnDom = document.querySelectorAll(".weaveEmbryoDtlBtn-wrapper")[0];
+      let formGroupWrapper = document.querySelectorAll("#proWeaveJob .avue-group__header")[0];
+      formGroupWrapper.appendChild(meaveDtlBtnDom)
+    },
+    // 打开织胚明细界面
+    async handleOpenWeaEmbDtl(){
+      this.meaEmbVisible = true;
+      await this.$nextTick();
+      this.$refs.meaveEmbyroDtlRef.getDataList();
+    },
     getData() {
       if (this.isAdd) {
         baseCodeSupplyEx({ code: "proWeaveJob" }).then((res) => {
@@ -1071,6 +1102,7 @@ export default {
   },
   created() {},
   mounted() {
+    this.meaveDomMove();
     this.getData();
   },
   beforeDestroy() {},

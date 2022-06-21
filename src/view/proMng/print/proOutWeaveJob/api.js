@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-02-01 14:06:25
- * @LastEditors: Lyl
- * @LastEditTime: 2021-07-08 18:05:11
+ * @LastEditors: Symbol_Yang
+ * @LastEditTime: 2022-06-20 17:29:05
  * @Description:
  */
 
@@ -283,3 +283,26 @@ export function delMachine(id) {
     method: "delete"
   });
 }
+
+
+// 获取织胚明细数据
+export function fetchWeaveJobFlatknitData(params){
+  return axios({
+    url: "/api/proWeaveJobFlatknit/list",
+    method: "get",
+    params
+  });
+}
+
+// 批量新增或修改织胚明细数据
+export function batchSaveOrUpdateFlatknit(data){
+  return axios({
+    url: "/api/proWeaveJobFlatknit/batch/save",
+    method: "post",
+    data
+  });
+}
+
+// 批量删除织胚明细数据
+
+

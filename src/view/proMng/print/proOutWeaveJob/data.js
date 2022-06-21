@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
- * @LastEditors: Lyl
- * @LastEditTime: 2022-06-18 10:00:36
+ * @LastEditors: Symbol_Yang
+ * @LastEditTime: 2022-06-21 09:14:33
  * @Description:
  */
 
@@ -1380,3 +1380,31 @@ export function machineCrud(_this) {
     ]
   };
 }
+
+
+// 织胚明细数据
+export function meaveEmbyroDtlCrud(_this){
+  return {
+    height: "calc(100vh - 148px)",
+    page: false,
+    menu: false,  
+    border: true,
+    showHeader: false,
+    column: [
+      {
+        prop: "key",
+        label: "第一列",
+        width: 150,
+        align: "center"
+      },
+      {
+        prop: "prop_1",
+        label: "第二列",
+        width: 150,
+        cell: true,
+        placeholder: " "
+      }
+    ]
+  }
+}
+
