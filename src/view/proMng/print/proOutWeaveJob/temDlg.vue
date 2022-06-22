@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-06-21 09:20:20
+ * @LastEditTime: 2022-06-22 11:19:17
  * @Description: 
 -->
 <template>
@@ -254,8 +254,6 @@
         ref="meaveEmbyroDtlRef" 
         @close="meaEmbVisible = false" />
     </el-dialog>
-
-    <ReformRecordDtl ref="reformRecordDtlRef" />
 
   </div>
 </template>
