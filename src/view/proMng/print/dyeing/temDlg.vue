@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-21 10:59:08
+ * @LastEditTime: 2022-06-22 07:53:13
  * @Description: 
 -->
 <template>
@@ -61,9 +61,8 @@
       </div>
     </view-container>
     <el-dialog :visible.sync="visible" fullscreen :close-on-press-escape="false" append-to-body id="viewDlg" :element-loading-text="$t('public.loading')" v-loading="dlgLoading" v-if="visible">
-      <el-row>
-        <el-col :span="this.tabs == '生產工藝' ? 12 : 24">
-          <view-container :title="tabs">
+        <div v-resize style="width: 50%">
+          <view-container :title="tabs"  >
             <div class="btnList">
               <el-tooltip class="item" effect="dark" content="Bảo tồn" placement="top-start">
                 <el-button @click="saveOther" type="success">{{
@@ -171,8 +170,8 @@
               </avue-crud>
             </div>
           </view-container>
-        </el-col>
-        <el-col :span="12" v-if="tabs == '生產工藝'">
+        </div>
+        <div v-if="tabs == '生產工藝'">
           <view-container title="工藝明細">
             <div class="btnList">
               <el-tooltip class="item" effect="dark" content="thêm mới " placement="top-start">
@@ -194,7 +193,7 @@
                     width="200"
                     trigger="hover">
                       <el-select slot="reference"  v-if="scope.row.bleadyeType != 'run'" v-model="scope.row.mateName"  remote filterable reserve-keyword clearable default-first-option placeholder="请输入材料信息" :loading="vatLoading" :remote-method="remoteMate" @focus="mateFocus(scope.row)" @change="mateChange">
-                        <el-option v-for="item in mateOption" :key="item.bcCode" :label="item.cnnamelong + '-' +item.factoryName" :value="item.factoryName">
+                        <el-option v-for="item in mateOption" :key="item.bcCode" :label="item.factoryName" :value="item.factoryName">
                         </el-option>
                       </el-select>
                   </el-popover>
@@ -254,8 +253,7 @@
               </avue-crud>
             </div>
           </view-container>
-        </el-col>
-      </el-row>
+        </div>
     </el-dialog>
     <choice :choiceV="choiceV" :choiceTle="choiceTle" :choiceQ="choiceQ" dlgWidth="100%" @choiceData="choiceData" @close="choiceV = false" v-if="choiceV"></choice>
     <select-process :choiceV="choiceP" @choiceData="choiceData" @close="choiceP = false" v-if="choiceP"></select-process>
@@ -2148,13 +2146,18 @@ export default {
 };
 </script>
 <style lang='stylus'>
+.crudBox {
+  -webkit-user-select:none;
+  -moz-user-select:none;
+  -ms-user-select:none;
+  user-select:none;
+}
 .el-tag--mini {
   height: 28px !important;
   // padding: 0 5px;
   line-height: 28px !important;
   font-size: 14px;
 }
-
 .scope-input {
   height: 28px;
   line-height: 28px;
@@ -2177,6 +2180,7 @@ export default {
 }
 
 #dyeing {
+  
   .el-input-number__decrease, .el-input-number__increase {
     display: none;
   }
@@ -2208,6 +2212,7 @@ export default {
 }
 
 #colorMng_Dlg {
+
   .is-fullscreen {
     overflow: hidden !important;
   }

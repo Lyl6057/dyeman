@@ -1597,27 +1597,6 @@ export function techargueCrud(_this) {
             if (isNaN(_this.chooseData.haltWater)) {
               _this.chooseData.haltWater = 0;
             }
-            // if (
-            //   _this.form.dyeJarCount == 1 &&
-            //   _this.chooseData.haltWater < 125
-            // ) {
-            //   _this.chooseData.haltWater = 125;
-            // } else if (
-            //   _this.form.dyeJarCount == 2 &&
-            //   _this.chooseData.haltWater < 600
-            // ) {
-            //   _this.chooseData.haltWater = 600;
-            // } else if (
-            //   _this.form.dyeJarCount == 3 &&
-            //   _this.chooseData.haltWater < 400
-            // ) {
-            //   _this.chooseData.haltWater = 850;
-            // } else if (
-            //   _this.form.dyeJarCount == 4 &&
-            //   _this.chooseData.haltWater < 400
-            // ) {
-            //   _this.chooseData.haltWater = 1000;
-            // }
           });
         }
       }
