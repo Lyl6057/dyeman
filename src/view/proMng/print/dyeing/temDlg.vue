@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-22 07:53:13
+ * @LastEditTime: 2022-06-22 08:02:27
  * @Description: 
 -->
 <template>
@@ -61,7 +61,7 @@
       </div>
     </view-container>
     <el-dialog :visible.sync="visible" fullscreen :close-on-press-escape="false" append-to-body id="viewDlg" :element-loading-text="$t('public.loading')" v-loading="dlgLoading" v-if="visible">
-        <div v-resize style="width: 50%">
+        <div v-resize :style="{ width:tabs == '生產工藝' ? '50%' : '100%'}">
           <view-container :title="tabs"  >
             <div class="btnList">
               <el-tooltip class="item" effect="dark" content="Bảo tồn" placement="top-start">

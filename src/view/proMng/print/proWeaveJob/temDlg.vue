@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-18 10:29:11
+ * @LastEditTime: 2022-06-21 13:56:30
  * @Description: 
 -->
 <template>
@@ -1037,6 +1037,10 @@ export default {
             yarnBatch: item.batId,
             yarnBrand: item.yarnsCard,
             factoryYarnBatch: item.batchNo,
+            amount: 0,
+            realAmount: 0,
+            lossRate: 0,
+            yarnRatio: 0,
             unit: item.weightUnit,
             $cellEdit: true,
           });

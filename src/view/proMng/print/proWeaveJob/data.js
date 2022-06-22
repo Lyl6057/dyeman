@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-18 14:57:47
+ * @LastEditTime: 2022-06-21 14:12:26
  * @Description:
  */
 
@@ -1302,30 +1302,90 @@ export function yarnCrud(_this, audit) {
         cell: false,
         placeholder: " "
       },
-      {
-        label: "实测纱支",
-        prop: "yarnActual",
-        width: 120,
-        // overHidden: true,
-        span: 6,
-        cell: true //audit ? false : _this.detail.auditState ? false : true
-      },
+     
       {
         label: "用纱比例",
         prop: "yarnRatio",
         width: 100,
         span: 6,
         type: "number",
+        minRows: 0,
+        maxRows: 100,
         cell: true, // audit ? false : _this.detail.auditState ? false : true,
-        placeholder: " "
+        placeholder: " ",
+        change:({ value })=>{
+          if (!value) {
+            return
+          }
+          _this.chooseData.amount = Number((_this.form.amount * (value + _this.chooseData.lossRate) / 100).toFixed(1))
+        }
       },
-
+      {
+        label: "纱损比例",
+        prop: "lossRate",
+        width: 120,
+        align: "right",
+        type: "number",
+        span: 6,
+        minRows: 0,
+        maxRows: 20,
+        placeholder: " ",
+        cell: true,
+        change:({ value })=>{
+          if (!value) {
+            return
+          }
+          _this.chooseData.amount = Number((_this.form.amount * (value + _this.chooseData.yarnRatio) / 100).toFixed(1)) 
+        }
+      },
+      {
+        label: "数量",
+        prop: "amount",
+        width: 120,
+        align: "right",
+        type: "number",
+        span: 6,
+        placeholder: " ",
+        minRows: 0,
+        cell: true //audit ? false : _this.detail.auditState ? false : true
+      },
+      {
+        label: "实际数量",
+        prop: "realAmount",
+        width: 120,
+        align: "right",
+        type: "number",
+        span: 6,
+        placeholder: " ",
+        cell: true,
+        minRows: 0,
+      },
+      
+      {
+        label: "单位",
+        prop: "unit",
+        width: 100,
+        span: 6,
+        cell: true, // audit ? false : _this.detail.auditState ? false : true,
+        placeholder: " ",
+        type: "select",
+        dicData: getDIC("bas_matUnit")
+      },
+      {
+        label: "实测纱支",
+        prop: "yarnActual",
+        width: 120,
+        // overHidden: true,
+        placeholder: ' ',
+        span: 6,
+        cell: true //audit ? false : _this.detail.auditState ? false : true
+      },
       {
         label: "纱长",
         prop: "yarnLength",
         width: 120,
         span: 6,
-        align: "right",
+        align: "left",
         cell: true,
         placeholder: " "
       },
@@ -1347,26 +1407,7 @@ export function yarnCrud(_this, audit) {
         span: 6,
         placeholder: " "
       },
-      {
-        label: "数量",
-        prop: "amount",
-        width: 120,
-        align: "right",
-        type: "number",
-        span: 6,
-        placeholder: " ",
-        cell: true //audit ? false : _this.detail.auditState ? false : true
-      },
-      {
-        label: "单位",
-        prop: "unit",
-        width: 100,
-        span: 6,
-        cell: true, // audit ? false : _this.detail.auditState ? false : true,
-        placeholder: " ",
-        type: "select",
-        dicData: getDIC("bas_matUnit")
-      }
+      
     ]
   };
 }
