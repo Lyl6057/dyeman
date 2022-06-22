@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-06-20 11:17:59
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-06-21 09:14:27
+ * @LastEditTime: 2022-06-21 16:57:04
 -->
 <template>
     <view-container title="织胚明细" >
@@ -103,7 +103,7 @@
                     label: crudColLen.toString(),
                     cell: true,
                     placeholder: " ",
-                    width: 120
+                    width: 150
                 })
             },
             // 删除尺寸
@@ -147,7 +147,7 @@
                             width: 150,
                             prop: prop,
                             label: prop,
-                            cell: true,
+                            cell: prop != 'key',
                             placeholder: " ",
                         }
                     });
