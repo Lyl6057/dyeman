@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
- * @LastEditors: Lyl
- * @LastEditTime: 2022-05-06 09:39:43
+ * @LastEditors: Symbol_Yang
+ * @LastEditTime: 2022-06-23 09:53:21
  * @Description: 
 -->
 <template>
@@ -209,6 +209,8 @@ export default {
           rows: this.page.pageSize,
           start: this.page.currentPage,
           // isPrinted: true,
+          // 加上过滤厂
+          filterFactory: true
         }),
         r_clothCheckTime_r
       )

@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
- * @LastEditors: Lyl
- * @LastEditTime: 2022-06-14 15:03:47
+ * @LastEditors: Symbol_Yang
+ * @LastEditTime: 2022-06-23 09:52:56
  * @Description:
 -->
 <template>
@@ -112,6 +112,8 @@ export default {
           start: this.page.currentPage,
           // isPrinted: true,
           clothState: this.form.clothState || 1,
+          // 加上过滤厂
+          filterFactory: true
         },
         r_clothCheckTime_r
       ).then((res) => {

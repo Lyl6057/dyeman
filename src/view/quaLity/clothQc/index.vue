@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
- * @LastEditors: Lyl
- * @LastEditTime: 2022-02-18 16:34:49
+ * @LastEditors: Symbol_Yang
+ * @LastEditTime: 2022-06-23 09:53:46
  * @Description:
 -->
 <template>
@@ -224,6 +224,8 @@ export default {
           start: this.page.currentPage,
           isPrinted: true,
           clothState: this.form.clothState || 1,
+          // 加上过滤厂
+          filterFactory: true
         })
       ).then((res) => {
         this.crud = res.data.records;

@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
- * @LastEditors: Lyl
- * @LastEditTime: 2021-11-16 08:31:20
+ * @LastEditors: Symbol_Yang
+ * @LastEditTime: 2022-06-23 09:34:13
  * @Description: 
 -->
 <template>
@@ -94,6 +94,8 @@ export default {
         Object.assign(this.form, {
           rows: this.page.pageSize,
           start: this.page.currentPage,
+           // 加上过滤厂
+          filterFactory: true
         })
       ).then((res) => {
         this.crud = res.data.records;
