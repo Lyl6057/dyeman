@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-03-23 10:36:15
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-06-16 09:07:23
+ * @LastEditTime: 2022-06-23 14:55:09
  */
 
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
@@ -17,21 +17,10 @@ export function mainForm(_this) {
     labelWidth: 100,
     column: [
       {
-        label: "缸号",
-        prop: "vatNo",
-        span: 6,
-        placeholder: " ",
-      },
-      {
-        label: "织单号",
-        prop: "weaveJobCode",
-        span: 6,
-        placeholder: " ",
-        
-      },
-      {
-        label: "订单号",
-        prop: "salPoNo",
+        label: "开单日期",
+        prop: "workDate",
+        type: "daterange",
+        valueFormat: "yyyy-MM-dd",
         span: 6,
         placeholder: " ",
       },
@@ -96,6 +85,14 @@ export function mainCrud(_this) {
         overHidden: true,
       },
       {
+        label: "开单日期",
+        prop: "workDate",
+        width: 150,
+        formatter: (row, value) => {
+          return value && (value.slice(0,10))
+        }
+      },
+      {
         label: "布票号",
         prop: "clothNoteCode",
         width: 150,
@@ -116,7 +113,7 @@ export function mainCrud(_this) {
         width: 150,
         align: "right",
         formatter: (row, value) => {
-          return value || "0"
+          return (+value || 0).toFixed(1)
         }
       },
       

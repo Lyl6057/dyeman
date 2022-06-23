@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-06-20 08:30:00
+ * @LastEditTime: 2022-06-23 15:07:17
  * @Description:
 -->
 <template>
@@ -19,7 +19,7 @@
         <el-button type="primary" @click="handleExport">导出</el-button>
       </el-row>
       <el-row class="formBox">
-        <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
+        <avue-form ref="form" :option="formOp" v-model="queryParams"></avue-form>
       </el-row>
       <el-row class="crudBox">
         <avue-crud
@@ -44,7 +44,7 @@ export default {
   data() {
     return {
       formOp: mainForm(this),
-      form: {},
+      queryParams: {},
       crudOp: mainCrud(this),
       crudDataList: [],
       page: {
@@ -71,10 +71,16 @@ export default {
         if (res.data) {
           let url = res.data.url;
           // 参数枚举
-          let paramsKeys = ['vatNo','weaveJobCode','salPoNo'];
-          paramsKeys.forEach(key => {
-            url += `&${key}=${this.form[key]}`;
-          })
+          let workDate = this.queryParams.workDate
+          if(workDate && workDate.length == 2){
+            url += `&workDate_begin=${workDate[0]}`;
+            url += `&workDate_end=${workDate[1]}`;
+          }
+          
+          // let paramsKeys = ['vatNo','weaveJobCode','salPoNo'];
+          // paramsKeys.forEach(key => {
+          //   url += `&${key}=${this.queryParams[key]}`;
+          // })
           
           let oA = document.createElement("a");
           oA.href = url;
@@ -93,20 +99,19 @@ export default {
     // 获取数据
     handleLoadData(){
       this.loading = true ;
-      let formData = this.formOp.column.reduce((a,b) => {
-        let value = this.form[b.prop]
-        if(value){
-          a[b.prop] = "%" + value
-        }
-        return a;
-      }, {})
-      let params = Object.assign({
+     
+      let params = {
           rows: this.page.pageSize,
           start: this.page.currentPage,
           includeDtlCount: true,
           includeDtl: true,
-          dataSortRules: "vatNo,weaveJobCode"
-      },formData)
+          dataSortRules: "workDate|desc,vatNo|desc,weaveJobCode|desc"
+      };
+      let workDate = this.queryParams.workDate
+      if(workDate && workDate.length == 2){
+        params.workDate_begin = workDate[0];
+        params.workDate_end = workDate[1];
+      }
       
       fetchProBleadyeRunJobByPage(params).then(res => {
           this.page.total = res.data.total;
@@ -126,13 +131,13 @@ export default {
       })
     },
   },
-  updated() {
-    if (this.crudDataList && this.crudDataList.length) {
-      this.$nextTick(() => {
-        this.$refs["crud"].doLayout();
-      });
-    }
-  },
+  updated(){
+    if(this.crudDataList && this.crudDataList.length){
+      this.$nextTick(() => {
+        this.$refs["crud"].doLayout();
+        });
+    }
+  }
 };
 </script>
 <style lang='stylus'>
