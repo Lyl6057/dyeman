@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-18 07:45:12
+ * @LastEditTime: 2022-06-22 10:12:39
  * @Description:
  */
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";

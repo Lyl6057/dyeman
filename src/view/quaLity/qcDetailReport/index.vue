@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-18 08:11:39
+ * @LastEditTime: 2022-06-22 10:09:13
  * @Description:
 -->
 <template>
@@ -16,13 +16,14 @@
         <el-button type="primary" @click="query">{{
           this.$t("public.query")
         }}</el-button>
-        <el-dropdown size="small" split-button type="primary" style="margin-left: 10px" @command="handleAduit" @click="handleAduit(1)">
+        <el-button type="primary" @click="handleAudit">审核</el-button>
+        <!-- <el-dropdown size="small" split-button type="primary" style="margin-left: 10px" @command="handleAudit" @click="handleAudit(1)">
           审核
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item  key="9" :command="9">通过</el-dropdown-item>
             <el-dropdown-item  key="1" :command="1">不通过</el-dropdown-item>
           </el-dropdown-menu>
-        </el-dropdown>
+        </el-dropdown> -->
         <el-button
           type="primary"
           @click="updateDivdWeight"
@@ -69,6 +70,9 @@
         </avue-crud>
       </el-row>
     </view-container>
+    <el-dialog id="colorMng_Dlg" :visible.sync="auditVisible" width="70%" top="8vh" append-to-body :close-on-click-modal="false" :close-on-press-escape="false">
+      <audit :vatNo="chooseData.vatNo" @submitAudit="submitAudit" v-if="auditVisible"></audit>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -83,9 +87,12 @@ import {
   updateRunJob,
   aduitQcCheckoutFabric
 } from "./api";
+import audit from './audit'
 export default {
   name: "qcDeatilReport",
-  components: {},
+  components: {
+    audit
+  },
   data() {
     return {
       formOp: mainForm(this),
@@ -103,7 +110,8 @@ export default {
       loading: false,
       serachLoading: false,
       options: [],
-      chooseData: {}
+      chooseData: {},
+      auditVisible: false
     };
   },
   watch: {},
@@ -130,7 +138,7 @@ export default {
         }, 200);
       });
     },
-    handleAduit(val){
+    submitAudit(val){
       if(!this.chooseData.checkoutId){
         this.$tip.warning("请先选择审核的数据!");
         return;
@@ -144,13 +152,15 @@ export default {
         whseVoucher: parent.userID
       }
       aduitQcCheckoutFabric(params).then(res =>{
-        console.log(res.data);
         this.$tip.success("提交成功!");
         this.query()
       }).finally(() =>{
-         this.loading = false;
+        this.auditVisible = false
+        this.loading = false;
       })
-      
+    },
+    handleAudit(){
+      this.auditVisible = true
     },
     remoteMethod(val) {
       this.serachLoading = true;
