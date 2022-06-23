@@ -2,85 +2,38 @@
  * @Author: Lyl
  * @Date: 2022-04-08 14:41:23
  * @LastEditors: Lyl
- * @LastEditTime: 2022-05-26 13:19:08
+ * @LastEditTime: 2022-06-22 10:54:22
  * @FilePath: \iot.vue\src\view\im\whseInOutKB\inWhse.vue
  * @Description: 
 -->
 
 <template>
   <div class="whseInOut_updateNote">
-    <view-container
-      title="生成入库记录"
-      :element-loading-text="$t('public.loading')"
-      v-loading="loading"
-    >
+    <view-container title="生成入库记录" :element-loading-text="$t('public.loading')" v-loading="loading">
       <div class="btnList">
-        <el-popover
-          placement="right"
-          width="160"
-          v-model="visible"
-          style="margin: 0 8px"
-        >
+        <el-popover placement="right" width="160" v-model="visible" style="margin: 0 8px">
           <p>请输入要新的载具编号</p>
           <el-input v-model="newLoad"></el-input>
           <div style="text-align: center; margin-top: 10px">
-            <el-button size="mini" type="text" @click="visible = false"
-              >取消</el-button
-            >
-            <el-button type="primary" size="mini" @click="sumbit"
-              >确定</el-button
-            >
+            <el-button size="mini" type="text" @click="visible = false">取消</el-button>
+            <el-button type="primary" size="mini" @click="sumbit">确定</el-button>
           </div>
           <el-button type="success" slot="reference">保存</el-button>
         </el-popover>
         <el-button type="warning" @click="del">删除</el-button>
         <el-button type="primary" @click="choiceHandle">选择货物</el-button>
         <el-button type="warning" @click="$emit('close')">关闭</el-button>
-        <el-input
-          v-model="scanIpt"
-          style="width: 15%; margin-left: 2rem"
-          placeholder="扫码请点此处"
-          @change="scanChange"
-        ></el-input>
+        <el-input v-model="scanIpt" style="width: 15%; margin-left: 2rem" placeholder="扫码请点此处" @change="scanChange"></el-input>
       </div>
       <div class="crudBox">
-        <avue-crud
-          ref="crud"
-          :option="crudOp"
-          :data="crud"
-          @selection-change="selectionChange"
-        ></avue-crud>
+        <avue-crud ref="crud" :option="crudOp" :data="crud" @selection-change="selectionChange"></avue-crud>
       </div>
     </view-container>
-    <el-dialog
-      id="colorMng_Dlg"
-      :visible.sync="verifyVisible"
-      width="70%"
-      top="8vh"
-      append-to-body
-      :close-on-click-modal="false"
-      :close-on-press-escape="false"
-    >
-      <verify-submit
-        :crudOp="crudOp"
-        :crud="crud"
-        :newLoad="newLoad"
-        v-if="verifyVisible"
-        @cancel="verifyVisible = false"
-        @success="save"
-      >
+    <el-dialog id="colorMng_Dlg" :visible.sync="verifyVisible" width="70%" top="8vh" append-to-body :close-on-click-modal="false" :close-on-press-escape="false">
+      <verify-submit :crudOp="crudOp" :crud="crud" :newLoad="newLoad" v-if="verifyVisible" @cancel="verifyVisible = false" @success="save">
       </verify-submit>
     </el-dialog>
-    <pro-choice
-      :choiceV="choiceV"
-      :choiceTle="choiceTle"
-      :choiceQ="choiceQ"
-      marginTop="3vh"
-      dlgWidth="80%"
-      @choiceData="choiceData"
-      @close="choiceV = false"
-      v-if="choiceV"
-    ></pro-choice>
+    <pro-choice :choiceV="choiceV" :choiceTle="choiceTle" :choiceQ="choiceQ" marginTop="3vh" dlgWidth="80%" @choiceData="choiceData" @close="choiceV = false" v-if="choiceV"></pro-choice>
   </div>
 </template>
 
@@ -119,7 +72,7 @@ export default {
         r_clothState_r: "||1||2||3",
         cardType: 1,
         sortF: "productNo",
-        fuzzy:'vatNo'
+        fuzzy: "vatNo",
       },
       selectList: [],
       verifyVisible: false,
@@ -140,9 +93,10 @@ export default {
       // 生成入库记录
       this.verifyVisible = false;
       this.loading = true;
-      try {
+      if (!list) {
+        // 入空布笼
         sendTaskNoin({
-          barCode: list[0].storeLoadCode,
+          barCode: this.newLoad,
           createTime: this.$getNowTime("datetime"),
           entrance: this.form.exit, // 入库口
           isEmpty: 0, // 是否为空
@@ -150,69 +104,96 @@ export default {
           layer: this.form.layer,
           type: this.form.goodsType, // 物料类别
           // storageCode: list[0].storeLoadCode,
-        }).then((sendRes) => {
-          if (sendRes.data.code) {
-            this.$tip.error(sendRes.data.data);
+        })
+          .then((sendRes) => {
+            if (sendRes.data.code) {
+              this.$tip.error(sendRes.data.data);
+              this.loading = false;
+              return;
+            }
+            if (sendRes.data == "返回异常") {
+              this.$tip.error(sendRes.data);
+              this.loading = false;
+            }
+          })
+          .finally(() => {
             this.loading = false;
-            return;
-          }
-          if (sendRes.data == "返回异常") {
-            this.$tip.error(sendRes.data);
-            this.loading = false;
-            return;
-          }
-          baseCodeSupplyEx({ code: "whse_in" }).then((bat) => {
-            baseCodeSupply({ code: "whse_in" }).then((bat) => {});
-            let addList = this.group(list, "storeLoadCode");
-            let batchNo = bat.data.data;
-            addInFinishedWhse({
-              yinId: batchNo,
-              yinDate: this.$getNowTime("datetime"),
-              yinStatus: 1,
-              yinType: 1,
-              finStatus: 0,
-              sysCreateBy: this.$store.state.userOid,
-              stockState: 0,
-              custCode: list[0].custCode,
-            }).then((res) => {
-              addList.forEach((item, i) => {
-                addStorageLog({
-                  whsCarriageStorageFk: item.storeLoadCode,
-                  useTime: this.$getNowTime("datatime"),
-                  useType: 2,
-                  businessType: 2,
-                  businessId: item.data[0].vatNo,
-                  deleteFlag: 0,
-                }).then((log) => {
-                  addInFinishedDtla({
-                    carriageStorageLogFk: log.data.data,
-                    wmsTaskLogFk: sendRes.data,
-                    whseFinishedclothinFk: res.data.data,
-                    pidCount: item.data.length,
-                    sumWeight: item.weight,
-                    weightUnit: "KG",
-                    storeLoadCode: item.storeLoadCode,
-                    outFlag: 0,
-                  }).then((dtla) => {
-                    item.data.forEach((dtlb, j) => {
-                      addInFinishedDtlb({
-                        pidNo: dtlb.pidNo,
-                        productDtlFk: dtla.data.data,
-                        productNo: dtlb.productNo,
-                        vatNo: dtlb.vatNo,
-                        weight:
-                          dtlb.weightUnit == "KG"
-                            ? dtlb.netWeight
-                            : dtlb.netWeightLbs,
-                        weightUnit: dtlb.weightUnit,
-                        productId: dtlb.cardId,
-                      }).then((dtlbRes) => {
-                        if (
-                          j == item.data.length - 1 &&
-                          i == addList.length - 1
-                        ) {
-                          this.finishedAfter(list);
-                        }
+          });
+      } else {
+        try {
+          sendTaskNoin({
+            barCode: list[0].storeLoadCode,
+            createTime: this.$getNowTime("datetime"),
+            entrance: this.form.exit, // 入库口
+            isEmpty: 0, // 是否为空
+            orderType: 1, // 出库/入库
+            layer: this.form.layer,
+            type: this.form.goodsType, // 物料类别
+            // storageCode: list[0].storeLoadCode,
+          }).then((sendRes) => {
+            if (sendRes.data.code) {
+              this.$tip.error(sendRes.data.data);
+              this.loading = false;
+              return;
+            }
+            if (sendRes.data == "返回异常") {
+              this.$tip.error(sendRes.data);
+              this.loading = false;
+              return;
+            }
+            baseCodeSupplyEx({ code: "whse_in" }).then((bat) => {
+              baseCodeSupply({ code: "whse_in" }).then((bat) => {});
+              let addList = this.group(list, "storeLoadCode");
+              let batchNo = bat.data.data;
+              addInFinishedWhse({
+                yinId: batchNo,
+                yinDate: this.$getNowTime("datetime"),
+                yinStatus: 1,
+                yinType: 1,
+                finStatus: 0,
+                sysCreateBy: this.$store.state.userOid,
+                stockState: 0,
+                custCode: list[0].custCode,
+              }).then((res) => {
+                addList.forEach((item, i) => {
+                  addStorageLog({
+                    whsCarriageStorageFk: item.storeLoadCode,
+                    useTime: this.$getNowTime("datatime"),
+                    useType: 2,
+                    businessType: 2,
+                    businessId: item.data[0].vatNo,
+                    deleteFlag: 0,
+                  }).then((log) => {
+                    addInFinishedDtla({
+                      carriageStorageLogFk: log.data.data,
+                      wmsTaskLogFk: sendRes.data,
+                      whseFinishedclothinFk: res.data.data,
+                      pidCount: item.data.length,
+                      sumWeight: item.weight,
+                      weightUnit: "KG",
+                      storeLoadCode: item.storeLoadCode,
+                      outFlag: 0,
+                    }).then((dtla) => {
+                      item.data.forEach((dtlb, j) => {
+                        addInFinishedDtlb({
+                          pidNo: dtlb.pidNo,
+                          productDtlFk: dtla.data.data,
+                          productNo: dtlb.productNo,
+                          vatNo: dtlb.vatNo,
+                          weight:
+                            dtlb.weightUnit == "KG"
+                              ? dtlb.netWeight
+                              : dtlb.netWeightLbs,
+                          weightUnit: dtlb.weightUnit,
+                          productId: dtlb.cardId,
+                        }).then((dtlbRes) => {
+                          if (
+                            j == item.data.length - 1 &&
+                            i == addList.length - 1
+                          ) {
+                            this.finishedAfter(list);
+                          }
+                        });
                       });
                     });
                   });
@@ -220,10 +201,10 @@ export default {
               });
             });
           });
-        });
-      } catch (error) {
-        this.loading = false;
-        console.error(error);
+        } catch (error) {
+          this.loading = false;
+          console.error(error);
+        }
       }
     },
     finishedAfter(list) {
