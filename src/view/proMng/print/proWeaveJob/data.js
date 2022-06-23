@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-21 14:12:26
+ * @LastEditTime: 2022-06-22 16:44:35
  * @Description:
  */
 
@@ -1716,7 +1716,7 @@ export function arrangementCrud(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 370px)",
+    height: "calc(100vh - 460px)",
     refreshBtn: false,
     columnBtn: false,
     page: false,
@@ -1730,8 +1730,8 @@ export function arrangementCrud(_this) {
         type: 'number',
         align: 'right',
         hide: false,
-        minRows: 1,
-        maxRows: 5,
+        minRows: 0,
+        maxRows: 12,
         cell: true,
         width: 140
       },
@@ -1742,8 +1742,8 @@ export function arrangementCrud(_this) {
         placeholder: " ",
         type: 'number',
         align: 'right',
-        minRows: 1,
-        maxRows: 5,
+        minRows: 0,
+        maxRows: 12,
         cell: true,
         width: 140
       },
@@ -1757,7 +1757,7 @@ export function technologyCrud(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 370px)",
+    height: "calc(100vh - 460px)",
     refreshBtn: false,
     columnBtn: false,
     page: false,
@@ -1791,7 +1791,7 @@ export function fabricCrud(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 630px)",
+    height: "calc(100vh - 540px)",
     refreshBtn: false,
     columnBtn: false,
     page: false,

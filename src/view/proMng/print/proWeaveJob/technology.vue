@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-06-16 10:22:40
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-18 15:00:13
+ * @LastEditTime: 2022-06-22 16:07:31
  * @FilePath: \iot.vue\src\view\proMng\print\proWeaveJob\technology.vue
  * @Description: 
 -->
@@ -43,6 +43,7 @@
 </template>
 <script>
 import choice from "@/components/proMng/index";
+import { JSONLoader } from "../../../../config/three";
 import {
   getYarn,
   update,
@@ -120,8 +121,8 @@ export default {
       await getYarn({
         proWeaveJobFk: this.weave.weaveJobId,
       }).then((res) => {
-        this.yarnList = res.data.records;
-        res.data.records.forEach((item, i) => {
+        this.yarnList = this.$unique(res.data.records, 'yarnCode');
+        this.yarnList.forEach((item, i) => {
           this.fabric.push({
             prop1: item.yarnName,
             $cellEdit: true,
@@ -148,10 +149,11 @@ export default {
           }
           res.data.forEach((item) => {
             if (item.picType === "1") {
+              console.log(item);
               // 织针排列
               this.$set(
                 this.arrangement[Number(item.rowId) - 1],
-                ["prop" + item.colId],
+                ["prop" + (this.form.levelNo == '1' ? Number(item.colId) + 1 : Number(item.colId))],
                 item.cpValue
               );
             } else if (item.picType === "2") {
@@ -333,7 +335,7 @@ export default {
         this.$tip.warning("循环路数不能为0!");
         return;
       }
-      this.loading = true;
+      // this.loading = true;
       // 织针排列
       let data = [];
       this.arrangement.forEach((item, i) => {
@@ -343,12 +345,12 @@ export default {
           data.push({
             weaveJobId: this.weave.weaveJobId,
             colId: j + 1,
-            colName: this.arrangementOp.column[j].label,
+            colName: this.arrangementOp.column[this.form.levelNo == 1 ? j + 1 : j].label,
             rowId: i + 1,
             rowName: i + 1,
-            cpValue: item[this.arrangementOp.column[j].prop],
+            cpValue: item[this.arrangementOp.column[this.form.levelNo == 1 ? j + 1 : j].prop],
             picType: 1,
-            needleType: j == 0 ? 1 : 2,
+            needleType: this.form.levelNo == 1 ? 2 : j == 0 ? 1 : 2,
           });
         }
       });
