@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2022-06-16 10:22:40
- * @LastEditors: Lyl
- * @LastEditTime: 2022-06-22 16:07:31
+ * @LastEditors: Symbol_Yang
+ * @LastEditTime: 2022-06-24 17:02:58
  * @FilePath: \iot.vue\src\view\proMng\print\proWeaveJob\technology.vue
  * @Description: 
 -->
@@ -25,9 +25,9 @@
       <el-col :span="19">
         <view-container title="三角排列">
           <avue-crud ref="technology" :option="technologyOp" :data="technology" style="margin-top: 5px">
-            <template v-for="(item, index) in form.totalColumn" :slot="'prop' + (index + 3)" slot-scope="scope">
+            <template v-for="(item, index) in (form.totalColumn) || []" :slot="'prop' + (index + 3)" slot-scope="scope">
               <el-select v-model="scope.row['prop' + (index + 3)]" :key="index">
-                <el-option v-for="item in scope.row.type == 1 ? picTop : picBottom" :key="item.value" :label="item.label" :value="item.value">
+                <el-option v-for="item in (scope.row.type == 1 ? picTop : picBottom) || []" :key="item.value" :label="item.label" :value="item.value">
                 </el-option>
               </el-select>
             </template>
