@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-06-16 10:22:40
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-06-24 17:02:58
+ * @LastEditTime: 2022-06-25 09:39:47
  * @FilePath: \iot.vue\src\view\proMng\print\proWeaveJob\technology.vue
  * @Description: 
 -->
@@ -378,15 +378,15 @@ export default {
         // 行
         for (let j = 0; j < this.fabricOp.column.length; j++) {
           //列
+          let cpValue = item[this.fabricOp.column[j].prop]
+
           data.push({
             weaveJobId: this.weave.weaveJobId,
             colId: j + 1,
             colName: this.fabricOp.column[j].label,
             rowId: i + 1,
             rowName: i + 1,
-            cpValue: item[this.fabricOp.column[j].prop]
-              ? item[this.fabricOp.column[j].prop]
-              : false,
+            cpValue: cpValue ? (cpValue == 'false,true' ? true : cpValue) : false,
             picType: 3,
           });
         }
