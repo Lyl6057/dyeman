@@ -4,19 +4,21 @@
  * @Author: Symbol_Yang
  * @Date: 2022-06-20 11:17:59
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-06-21 16:57:04
+ * @LastEditTime: 2022-06-25 11:42:10
 -->
 <template>
     <view-container title="织胚明细" >
         <div class="meave-embyro-dtl-container" v-loading="loading">
             <div class="btn-wrapper">
-                <el-tooltip  effect="dark" content="Bảo tồn" placement="top-start" >
+                <template v-if="isOutFactory">
+                  <el-tooltip  effect="dark" content="Bảo tồn" placement="top-start" >
                     <el-button type="success" @click="handleSave" >{{ $t("public.save") }}</el-button>
-                </el-tooltip>
-                <el-button type="primary" @click="handleAddPosition">添加部位</el-button>
-                <el-button type="danger" @click="handleRemovePosition" >删除部位</el-button>
-                <el-button type="primary" @click="handleAddSize">添加尺寸</el-button>
-                <el-button type="danger" @click="handleRemoveSize">删除尺寸</el-button>
+                    </el-tooltip>
+                    <el-button type="primary" @click="handleAddPosition">添加部位</el-button>
+                    <el-button type="danger" @click="handleRemovePosition" >删除部位</el-button>
+                    <el-button type="primary" @click="handleAddSize">添加尺寸</el-button>
+                    <el-button type="danger" @click="handleRemoveSize">删除尺寸</el-button>
+                </template>
                 <el-tooltip class="item" effect="dark" content="đóng" placement="top-start" >
                     <el-button type="warning" @click="handleClose">{{ this.$t("public.close") }}</el-button>
                 </el-tooltip>
@@ -49,6 +51,11 @@
                 meaEmbDtlData: [],
                 crudOp: meaveEmbyroDtlCrud(this),
                 curCliceRowIdx: 0,
+            }
+        },
+        computed:{
+            isOutFactory(){
+                return !this.$store.getters.isOutFactory
             }
         },
         methods:{

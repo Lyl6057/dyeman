@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-23 08:03:49
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-06-23 11:46:14
+ * @LastEditTime: 2022-06-25 11:30:45
  * @Description:
  */
 import axios from "axios";
@@ -25,7 +25,7 @@ let baseUrl =
 axios.interceptors.request.use(config => {
   config.url = baseUrl + config.url;
   // 请求头中加入操作用户数据
-  config.headers.UserName = parent.userID || "ADMIN";
+  config.headers.UserName = parent.userID || "HD008";
   return config;
 }),
   error => {

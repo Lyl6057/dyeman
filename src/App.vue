@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-24 08:12:20
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-22 14:52:29
+ * @LastEditTime: 2022-06-25 11:18:20
  * @Description: 
 -->
 <template>
@@ -37,6 +37,9 @@ export default {
       this.setUsers(Res.data[0].ucmlUseroid);
       
       // this.$store.getters.getUser  --- this.$store.state.userOid
+
+      this.validHasOutFactory() 
+
     });
     // 獲取多語言
     let lang = "1";
@@ -52,6 +55,15 @@ export default {
   },
   methods: {
     ...mapActions(["setUsers", "setLangs", "setSpowerClient","setLoginUser"]),
+    // 获取当前账号是否为外发厂账号
+    validHasOutFactory(){
+      axios({
+        url: "/api/ucmlUser/valid/outFactory",
+        method: "get",
+      }).then((res) => {
+        this.$store.commit("SET_IS_OUT_FACTORY", res.data.data)
+      })
+    }
   },
 };
 </script>

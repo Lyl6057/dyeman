@@ -2,15 +2,17 @@
  * @Author: Lyl
  * @Date: 2022-06-16 10:22:40
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-06-25 09:42:55
+ * @LastEditTime: 2022-06-25 11:44:10
  * @FilePath: \iot.vue\src\view\proMng\print\proOutWeaveJob\technology.vue
  * @Description: 
 -->
 <template>
   <div class="proWeaveJob-technology" v-loading="loading" element-loading-text="拼命加载中...">
     <el-row class="btnList">
-      <el-button type="success" @click="handleSave">{{ this.$t("public.save") }}</el-button>
-      <el-button type="primary" @click="choiceV = true">选择织单</el-button>
+      <template v-if="isOutFactory">
+        <el-button type="success" @click="handleSave">{{ this.$t("public.save") }}</el-button>
+        <el-button type="primary" @click="choiceV = true">选择织单</el-button>
+      </template>
       <el-button type="warning" @click="handleClose">{{ this.$t("public.close") }}</el-button>
     </el-row>
     <el-row class="formBox">
@@ -96,7 +98,11 @@ export default {
       });
     },
   },
-  computed: {},
+  computed:{
+    isOutFactory(){
+        return !this.$store.getters.isOutFactory
+    }
+  },
   created() {
     this.initData();
   },
