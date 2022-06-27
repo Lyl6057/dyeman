@@ -1,10 +1,6 @@
 <template>
   <div id="colorMng">
-    <view-container
-      title="外发加工送货单"
-      :element-loading-text="$t('public.loading')"
-      v-loading="wLoading"
-    >
+    <view-container title="外发加工送货单" :element-loading-text="$t('public.loading')" v-loading="wLoading">
       <div class="btnList">
         <el-button type="primary" @click="add">{{
           this.$t("public.add")
@@ -27,48 +23,15 @@
       </div>
       <view-container title="外发加工送货单资料">
         <div class="crudBox" style="margin-top: 5px">
-          <avue-crud
-            ref="crud"
-            :option="crudOp"
-            :data="crud"
-            :page.sync="page"
-            v-loading="loading"
-            @on-load="query"
-            @row-dblclick="handleRowDBLClick"
-            @current-row-change="cellClick"
-            @selection-change="selectionChange"
-          ></avue-crud>
+          <avue-crud ref="crud" :option="crudOp" :data="crud" :page.sync="page" v-loading="loading" @on-load="query" @row-dblclick="handleRowDBLClick" @current-row-change="cellClick" @selection-change="selectionChange"></avue-crud>
         </div>
       </view-container>
       <form action id="myform">
-        <input
-          type="file"
-          name="myFile"
-          id="myFile"
-          accept=".csv, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-          style="display: none"
-          @change="fileChange"
-        />
+        <input type="file" name="myFile" id="myFile" accept=".csv, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" style="display: none" @change="fileChange" />
       </form>
 
-      <el-dialog
-        id="colorMng_Dlg"
-        :visible.sync="dialogVisible"
-        fullscreen
-        width="100%"
-        append-to-body
-        :close-on-click-modal="false"
-        :close-on-press-escape="false"
-        v-if="dialogVisible"
-      >
-        <tem-dlg
-          ref="tem"
-          :detail="detail"
-          :isAdd="isAdd"
-          @refresh="query"
-          @close="dialogVisible = false"
-          v-if="dialogVisible"
-        ></tem-dlg>
+      <el-dialog id="colorMng_Dlg" :visible.sync="dialogVisible" fullscreen width="100%" append-to-body :close-on-click-modal="false" :close-on-press-escape="false" v-if="dialogVisible">
+        <tem-dlg ref="tem" :detail="detail" :isAdd="isAdd" @refresh="query" @close="dialogVisible = false" v-if="dialogVisible"></tem-dlg>
       </el-dialog>
     </view-container>
   </div>
@@ -90,7 +53,7 @@ export default {
       crudOp: mainCrud(this),
       crud: [],
       page: {
-        pageSizes: [20,50,100,200,500],
+        pageSizes: [20, 50, 100, 200, 500],
         pageSize: 20,
         currentPage: 1,
         total: 0,
@@ -99,7 +62,7 @@ export default {
       dialogVisible: false,
       detail: {},
       isAdd: false,
-      selectList: []
+      selectList: [],
     };
   },
   watch: {},
@@ -187,8 +150,8 @@ export default {
           this.$tip.warning(this.$t("public.qxcz"));
         });
     },
-    selectionChange(val){
-      this.selectList = val
+    selectionChange(val) {
+      this.selectList = val;
     },
     audit() {
       if (this.selectList.length === 0) {
@@ -196,21 +159,31 @@ export default {
         return;
       }
       this.$tip
-        .cofirm(
-          "是否确定通过审核?",
-          this,
-          {}
-        )
+        .cofirm("是否确定通过审核?", this, {})
         .then(() => {
-          this.wLoading = true
-          this.selectList.forEach((item,i) =>{
+          this.wLoading = true;
+          let success = true
+          this.selectList.forEach((item, i) => {
             auditOne(item.shipId).then((res) => {
-              if(this.selectList.length - 1 == i){
-                this.$tip.success(this.$t("public.bccg"))
-                this.query()
+              if (res.data.code != 200) {
+                success = false
+                let notifyData = {
+                  title: "提示",
+                  dangerouslyUseHTMLString: true,
+                  message: res.data.msg,
+                  type: "warning",
+                  position: "top-right",
+                };
+                setTimeout(() => this.$notify(notifyData), 100 * i);
               }
-            })
-          })
+              if (this.selectList.length - 1 == i) {
+                if (success) {
+                  this.$tip.success("提交成功!");
+                }
+                this.query();
+              }
+            });
+          });
         })
         .catch((err) => {
           this.$tip.warning(this.$t("public.qxcz"));
@@ -251,7 +224,7 @@ export default {
 };
 </script>
 <style lang='stylus'>
-.el-tag--mini{
-  display: none
+.el-tag--mini {
+  display: none;
 }
 </style>

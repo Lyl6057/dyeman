@@ -30,14 +30,14 @@
             </div>
             <el-button type="primary" slot="reference" :disabled="!selectList.length">修改载具</el-button>
           </el-popover>
-          <el-popover placement="top" width="160" v-model="visible1" style="margin: 0 8px">
+          <el-popover placement="top" width="160" v-model="visible1">
             <p>请输入要新的货位号</p>
             <el-input v-model="newStore"></el-input>
             <div style="text-align: center; margin-top: 10px">
               <el-button size="mini" type="text" @click="visible1 = false">取消</el-button>
               <el-button type="primary" size="mini" @click="changeLoad(newStore,'storeSiteCode')">确定</el-button>
             </div>
-            <el-button type="primary" slot="reference" :disabled="!selectList.length">修改载具</el-button>
+            <el-button type="primary" slot="reference" :disabled="!selectList.length">修改货位</el-button>
           </el-popover>
         </div>
         <div class="crudBox" style="margin-top: 5px">
