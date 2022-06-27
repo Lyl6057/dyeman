@@ -106,7 +106,6 @@ export default {
       let cansW = 650;
       this.headerData.forEach(item => {
         let textW = ctx.measureText(item.dptName).width;
-        console.log("textW", textW)
         cansW += (textW + 40 + 20)
       });
       return cansW
@@ -211,11 +210,11 @@ export default {
     renderFirstColItem(ctx) {
       let initY = 80 + this.titleH,
           colX = 60;
+      ctx.font = "13px serif";
       this.dataList.forEach((item, index) => {
         item.date.split(" ").forEach((dItem) => {
           let textW = ctx.measureText(dItem).width;
           ctx.fillStyle = this.SUB_COLOR;
-          ctx.font = "13px serif";
           ctx.fillText(dItem, colX - textW / 2, initY);
           initY += 15;
         });
