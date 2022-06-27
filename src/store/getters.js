@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-10 13:20:44
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-05-23 09:03:21
+ * @LastEditTime: 2022-06-25 11:17:35
  * @Description:
  */
 const getters = {
@@ -19,6 +19,8 @@ const getters = {
   equInCountData: state => state.whse.equInCountData || {},
 
   unOutCountData: state => state.whse.unOutCountDataList || [],
+
+  isOutFactory: state => state.isOutFactory,
 
 };
 export default getters

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-27 07:59:17
+ * @LastEditTime: 2022-06-27 09:31:34
  * @Description: 
 -->
 <template>
@@ -13,72 +13,74 @@
       v-loading="wLoading"
     >
       <div class="btnList">
-        <el-tooltip
-          class="item"
-          effect="dark"
-          content="Bảo tồn"
-          placement="top-start"
-        >
-          <el-button type="success" @click="save" title="save" v-if="canSave">{{
-            $t("public.save")
-          }}</el-button>
-        </el-tooltip>
+        <template v-if="isOutFactory">
+          <el-tooltip
+            class="item"
+            effect="dark"
+            content="Bảo tồn"
+            placement="top-start"
+          >
+            <el-button type="success" @click="save" title="save" v-if="canSave">{{
+              $t("public.save")
+            }}</el-button>
+          </el-tooltip>
 
-        <el-button
-          type="primary"
-          @click="checkOrder"
-          title="checkOrder"
-          v-if="canSave"
-          >选择订单号</el-button
-        >
-        <el-tooltip
-          class="item"
-          effect="dark"
-          content="Yarn detail"
-          placement="top-start"
-        >
           <el-button
             type="primary"
-            @click="checkYarn"
-            :disabled="!this.form.weaveJobId"
+            @click="checkOrder"
+            title="checkOrder"
             v-if="canSave"
-            >用紗明細</el-button
+            >选择订单号</el-button
           >
-        </el-tooltip>
-        <el-tooltip
-          class="item"
-          effect="dark"
-          content="After washing"
-          placement="top-start"
-        >
-          <el-button
+          <el-tooltip
+            class="item"
+            effect="dark"
+            content="Yarn detail"
+            placement="top-start"
+          >
+            <el-button
+              type="primary"
+              @click="checkYarn"
+              :disabled="!this.form.weaveJobId"
+              v-if="canSave"
+              >用紗明細</el-button
+            >
+          </el-tooltip>
+          <el-tooltip
+            class="item"
+            effect="dark"
+            content="After washing"
+            placement="top-start"
+          >
+            <el-button
+              type="primary"
+              @click="checkCalico"
+              :disabled="!this.form.weaveJobId"
+              v-if="canSave"
+              >洗後規格</el-button
+            >
+          </el-tooltip>
+          <!-- <el-button
             type="primary"
-            @click="checkCalico"
+            @click="checkstrain"
             :disabled="!this.form.weaveJobId"
-            v-if="canSave"
-            >洗後規格</el-button
+            >輸送張力</el-button
+          > -->
+          <el-tooltip
+            class="item"
+            effect="dark"
+            content="in"
+            placement="top-start"
           >
-        </el-tooltip>
-        <!-- <el-button
-          type="primary"
-          @click="checkstrain"
-          :disabled="!this.form.weaveJobId"
-          >輸送張力</el-button
-        > -->
-        <el-tooltip
-          class="item"
-          effect="dark"
-          content="in"
-          placement="top-start"
-        >
-          <el-button
-            type="primary"
-            @click="print"
-            :disabled="!this.form.weaveJobId"
-            v-if="canSave"
-            >打印</el-button
-          >
-        </el-tooltip>
+            <el-button
+              type="primary"
+              @click="print"
+              :disabled="!this.form.weaveJobId"
+              v-if="canSave"
+              >打印</el-button
+            >
+          </el-tooltip>
+        </template>
         <el-tooltip
           class="item"
           effect="dark"
@@ -232,7 +234,8 @@
 
     <!-- 织胚明细 -->
     <div class="weaveEmbryoDtlBtn-wrapper" @click.stop="handleOpenWeaEmbDtl">
-      <span style="color: #409eff; font-size: 15px; margin-left: 20px" >织胚明细</span>
+      <span style="color: #409eff; font-size: 15px; margin-left: 20px" >織胚明細</span>
+      <span style="color: #409eff; font-size: 15px; margin-left: 20px" >機臺</span>
     </div>
     <el-dialog :visible.sync="meaEmbVisible" fullscreen  append-to-body :close-on-click-modal="false" :close-on-press-escape="false" >
       <MeaveEmbyroDtl 
@@ -352,6 +355,11 @@ export default {
     };
   },
   watch: {},
+  computed: {
+    isOutFactory(){
+      return !this.$store.getters.isOutFactory
+    }
+  },
   methods: {
     // 织胚明细DOM 移动
     meaveDomMove(){

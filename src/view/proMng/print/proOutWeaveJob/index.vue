@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-27 09:19:48
+ * @LastEditTime: 2022-06-27 09:31:04
  * @Description: 
 -->
 <template>
@@ -18,6 +18,7 @@
           effect="dark"
           content="cập nhật"
           placement="top-start"
+          v-if="isOutFactory"
         >
           <el-button
             type="success"
@@ -31,6 +32,7 @@
           effect="dark"
           content="thêm mới "
           placement="top-start"
+          v-if="isOutFactory"
         >
           <el-button type="primary" @click="add">{{
             this.$t("public.add")
@@ -41,6 +43,7 @@
           effect="dark"
           content="xóa"
           placement="top-start"
+          v-if="isOutFactory"
         >
           <el-button
             type="danger"
@@ -54,6 +57,7 @@
           effect="dark"
           content="in"
           placement="top-start"
+          v-if="isOutFactory"
         >
           <el-button
             type="primary"
@@ -68,6 +72,7 @@
           effect="dark"
           content="copy"
           placement="top-start"
+          v-if="isOutFactory"
         >
           <el-button type="primary" @click="copyEvent" :loading="wloading"
             >复制</el-button
@@ -182,6 +187,11 @@ export default {
     };
   },
   watch: {},
+  computed: {
+    isOutFactory(){
+      return !this.$store.getters.isOutFactory
+    }
+  },
   methods: {
     query() {
       this.loading = true;

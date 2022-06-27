@@ -16,7 +16,12 @@ export default {
   },
   data() {
     return {
-      COLOR: "#1677d2",
+      // 主题颜色
+      SUB_COLOR: "#1677d2",
+      // 背景色
+      BG_COLOR: "#EEE",
+      // 前景色
+      FORE_COLOR: "#FFF",
       // 缸信息
       bleRunJobData: {},
       // 数据列信息
@@ -69,7 +74,7 @@ export default {
       let ctx = oCanvas.getContext("2d");
       // 重置画布数据
       ctx.clearRect(0, 0, this.oCanvasStyle.W, this.oCanvasStyle.H + 50);
-      ctx.fillStyle = "#eee";
+      ctx.fillStyle = this.BG_COLOR;
       ctx.fillRect(0, 0, this.oCanvasStyle.W, this.oCanvasStyle.H + 50);
 
       this.renderTitler(ctx);
@@ -81,7 +86,7 @@ export default {
     },
     // 绘制标题
     renderTitler(ctx) {
-      let { vatNo, colorName, clothWeight, wmUnit } = this.bleRunJobData;
+      let { vatNo, SUB_COLORName, clothWeight, wmUnit } = this.bleRunJobData;
       let userHourse = 0;
       if (this.dataList.length > 0) {
         let sDataTime = new Date(this.dataList[0].acceptDate).getTime();
@@ -91,11 +96,11 @@ export default {
         // 获取耗时
         userHourse = ((eDateTime - sDataTime) / 1000 / 60 / 60).toFixed(2);
       }
-      let text = `缸号：${vatNo || ""} 颜色：${colorName || ""} 数量：${
+      let text = `缸号：${vatNo || ""} 颜色：${SUB_COLORName || ""} 数量：${
         clothWeight || ""
       }${wmUnit || ""} 耗时：${userHourse || ""}小时`;
       let textW = ctx.measureText(text).width;
-      ctx.fillStyle = this.COLOR;
+      ctx.fillStyle = this.SUB_COLOR;
       ctx.font = "15px serif";
       let startDrawX = (this.oCanvasStyle.W - textW) / 2.5;
       ctx.fillText(text, startDrawX, 30);
@@ -108,13 +113,13 @@ export default {
 
     // 绘制栏位类型
     renderColType(ctx) {
-      ctx.fillStyle = this.COLOR;
+      ctx.fillStyle = this.SUB_COLOR;
       ctx.font = "13px serif";
       ctx.fillText("时间", 30, 45 + this.titleH);
       ctx.fillText("工序", 65, 45 + this.titleH);
       ctx.fillText("部门", 90, 30 + this.titleH);
 
-      ctx.strokeStyle = this.COLOR;
+      ctx.strokeStyle = this.SUB_COLOR;
       ctx.moveTo(60, 20 + this.titleH);
       ctx.lineTo(60, 50 + this.titleH);
       ctx.moveTo(60, 20 + this.titleH);
@@ -129,26 +134,27 @@ export default {
         itemH = 30;
       this.headerData.forEach((item) => {
         let textW = ctx.measureText(item.dptName).width;
-        let itemW = textW * 2.3;
+        let itemW = textW + 40;
         ctx.beginPath();
         ctx.moveTo(initX, initY);
         ctx.lineTo(initX + itemW, initY);
         ctx.lineTo(initX + itemW, initY + itemH);
         ctx.lineTo(initX, initY + itemH);
         ctx.closePath();
-        ctx.fillStyle = this.COLOR; //填充颜色
+        ctx.fillStyle = this.SUB_COLOR; //填充颜色
         ctx.fill(); //填充
 
-        ctx.fillStyle = "#fff";
+        ctx.fillStyle = this.FORE_COLOR;
         ctx.font = "15px serif";
         ctx.fillText(
           item.dptName,
-          initX + textW / 2 + 5,
+          initX + 20,
           initY + itemH / 2 + 5
         );
 
         // 赋值中间项
         item.centerX = initX + itemW / 2;
+        // 下一个方块的起始点
         initX += itemW + 20;
       });
     },
@@ -158,7 +164,7 @@ export default {
       this.headerData.forEach((item, index) => {
         ctx.setLineDash([5, 10]);
         ctx.lineWidth = 2;
-        ctx.storkeStyle = this.COLOR;
+        ctx.storkeStyle = this.SUB_COLOR;
         ctx.beginPath();
         ctx.moveTo(item.centerX, 40 + this.titleH);
         ctx.lineTo(item.centerX, this.oCanvasStyle.H);
@@ -173,7 +179,7 @@ export default {
       this.dataList.forEach((item, index) => {
         item.date.split(" ").forEach((dItem) => {
           let textW = ctx.measureText(dItem).width;
-          ctx.fillStyle = this.COLOR;
+          ctx.fillStyle = this.SUB_COLOR;
           ctx.font = "13px serif";
           ctx.fillText(dItem, colX - textW / 2, initY);
           initY += 15;
@@ -195,9 +201,25 @@ export default {
         let posX = posXEnum[item.dptworkProcessFk];
         // 存储X轴
         item.posX = posX - 5;
-        ctx.fillStyle = this.COLOR;
+        ctx.fillStyle = this.SUB_COLOR;
         ctx.fillRect(item.posX, item.posY, 10, 20);
-        ctx.fillText(item.acceptDesc, posX + 10, item.posY + 15);
+        // 添加描述
+        let textX = posX + 10,
+            textY = item.posY + 15;
+       
+        // 描述加文字背景
+        let textW = ctx.measureText(item.acceptDesc).width;
+        ctx.beginPath();
+        ctx.moveTo(textX, textY + 2);
+        ctx.lineTo(textX + textW, textY + 2);
+        ctx.lineTo(textX + textW, textY - 12);
+        ctx.lineTo(textX, textY - 12);
+        ctx.closePath();
+        ctx.fillStyle = this.BG_COLOR; //填充颜色
+        ctx.fill(); //填充
+
+        ctx.fillStyle = this.SUB_COLOR;
+        ctx.fillText(item.acceptDesc, textX, textY);
       });
     },
 
@@ -210,24 +232,25 @@ export default {
         if (!nextItem) return;
         let formX = item.posX + 5,
           formY = item.posY + 20,
-          toX = nextItem.posX + 5,
+          toX = nextItem.posX + (nextItem.posX > item.posX ? 10 : -5),
+          // toX = nextItem.posX - 5  ,
           toY = nextItem.posY;
         ctx.beginPath();
-        ctx.strokeStyle = this.COLOR;
+        ctx.strokeStyle = this.SUB_COLOR;
         ctx.moveTo(formX, formY);
         // ctx.lineTo(toX, toY);
         ctx.stroke();
         let midX = formX + (toX - formX) - (toX > formX ? 10 : -10);
         let midY = formY + (toY - formY);
-        this.drawArrow(ctx, formX, formY, midX, midY, 30, 8, 2, this.COLOR);
+        this.drawArrow(ctx, formX, formY, midX, midY, 30, 8, 2, this.SUB_COLOR);
       });
     },
     // 绘制三角形箭头
-    drawArrow(ctx, fromX, fromY, toX, toY, theta, headlen, width, color) {
+    drawArrow(ctx, fromX, fromY, toX, toY, theta, headlen, width, SUB_COLOR) {
       theta = typeof theta != "undefined" ? theta : 30;
       headlen = typeof theta != "undefined" ? headlen : 10;
       width = typeof width != "undefined" ? width : 1;
-      color = typeof color != "color" ? color : "#000";
+      SUB_COLOR = typeof SUB_COLOR != "SUB_COLOR" ? SUB_COLOR : "#000";
 
       // 计算各角度和对应的P2,P3坐标
       var angle = (Math.atan2(fromY - toY, fromX - toX) * 180) / Math.PI,
@@ -254,7 +277,7 @@ export default {
       arrowX = toX + botX;
       arrowY = toY + botY;
       ctx.lineTo(arrowX, arrowY);
-      ctx.strokeStyle = color;
+      ctx.strokeStyle = SUB_COLOR;
       ctx.lineWidth = 1;
       ctx.stroke();
       ctx.restore();
