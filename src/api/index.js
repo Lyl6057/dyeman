@@ -2,10 +2,19 @@
  * @Author: Lyl
  * @Date: 2021-03-10 13:20:43
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-29 09:21:05
+ * @LastEditTime: 2022-06-23 10:21:51
  * @Description:
  */
 import axios from "axios";
+// 用户组织信息
+export function getLoginOrg(params) {
+  return axios({
+    url: "/api/ucmlOrganize/loginOrg",
+    method: "get",
+    params: params
+  });
+}
+
 
 export function getPurApplicationDtl(params) {
   return axios({

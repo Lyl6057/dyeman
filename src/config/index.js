@@ -98,6 +98,9 @@ export const webSocket = {
     _this.spowerClient.onopen = function(event) {
       _this.$tip.success("S.POWER客户端连接成功!");
     };
+    // _this.spowerClient.onerror = function() {
+    //   _this.$tip.error("S.POWER客户端连接失败!");
+    // };
     //接收到消息的回调方法
     _this.spowerClient.onmessage = function(event) {};
     //连接关闭的回调方法

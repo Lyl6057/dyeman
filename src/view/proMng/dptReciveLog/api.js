@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-01 14:06:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-02-18 09:03:28
+ * @LastEditTime: 2022-06-23 10:23:07
  * @Description:
  */
 
@@ -18,7 +18,7 @@ export function getDptWorkProcess(params) {
 
 export function getLoginOrg(params) {
   return axios({
-    url: "/api/loginOrg",
+    url: "/api/ucmlOrganize/loginOrg",
     method: "get",
     params: params
   });
