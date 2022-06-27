@@ -1,6 +1,11 @@
 <template>
-  <div>
-    <canvas id="flowChartProRef"></canvas>
+  <div class="flow-chart-pro-container">
+    <div class="fixed-wrapper">
+      <canvas id="fixedConvasRef"></canvas>
+    </div>
+    <div class="flow-canvas-wrapper">
+      <canvas id="flowChartProRef"></canvas>
+    </div>
   </div>
 </template>
 
@@ -69,9 +74,9 @@ export default {
     // 初始化
     init() {
       let oCanvas = document.getElementById("flowChartProRef");
-      this.oCanvasStyle.W = oCanvas.width = this.headerData.length * 100 + 100;
-      this.oCanvasStyle.H = oCanvas.height = this.dataList.length * 50 + 100;
       let ctx = oCanvas.getContext("2d");
+      this.oCanvasStyle.W = oCanvas.width = this.getCanvasW(ctx)
+      this.oCanvasStyle.H = oCanvas.height = this.getCanvasH(ctx);
       // 重置画布数据
       ctx.clearRect(0, 0, this.oCanvasStyle.W, this.oCanvasStyle.H + 50);
       ctx.fillStyle = this.BG_COLOR;
@@ -83,6 +88,36 @@ export default {
       this.renderFirstColItem(ctx);
       this.renderProcItem(ctx);
       this.renderLine2Proc(ctx);
+      // 截取首列
+      this.clipFirstCol(ctx);
+    },
+    // 截取首列
+    clipFirstCol(ctx){
+      let clipW = 120, clipH = this.oCanvasStyle.H;
+      let data = ctx.getImageData(0,0,clipW,clipH);
+      let fixedCanvas = document.getElementById("fixedConvasRef");
+      let fixedCtx = fixedCanvas.getContext("2d");
+      fixedCanvas.width = clipW
+      fixedCanvas.height = clipH;
+      fixedCtx.putImageData(data, 0, 0, 0, 0, clipW,clipH);
+    },
+    // 计算canvas的长度值
+    getCanvasW(ctx){
+      let cansW = 650;
+      this.headerData.forEach(item => {
+        let textW = ctx.measureText(item.dptName).width;
+        console.log("textW", textW)
+        cansW += (textW + 40 + 20)
+      });
+      return cansW
+    },
+    getCanvasH(ctx){
+      let cansH = this.dataList.length * 50 + 100;
+      // 给予最小值
+      if(cansH < 400){
+        cansH = 400
+      }
+      return cansH;
     },
     // 绘制标题
     renderTitler(ctx) {
@@ -175,7 +210,7 @@ export default {
     // 绘制首行数据
     renderFirstColItem(ctx) {
       let initY = 80 + this.titleH,
-        colX = 60;
+          colX = 60;
       this.dataList.forEach((item, index) => {
         item.date.split(" ").forEach((dItem) => {
           let textW = ctx.measureText(dItem).width;
@@ -285,3 +320,35 @@ export default {
   },
 };
 </script>
+<style lang="stylus" scoped>
+.flow-chart-pro-container{
+  width 100%
+  position relative
+  .fixed-wrapper{
+    position absolute
+    top 0
+    left 0
+    // background skyblue 
+    z-index 999
+    width 120px
+    height 100%
+  }
+
+  .flow-canvas-wrapper{
+    width 100%
+    overflow-x scroll
+
+    &::-webkit-scrollbar {
+      height: 6px;
+    }
+    &::-webkit-scrollbar-track {
+      background-color: #eee;
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: #1e88da;
+    }
+  }
+
+  
+}
+</style>
