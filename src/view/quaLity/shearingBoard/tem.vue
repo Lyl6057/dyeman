@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-05-03 16:29:13
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-23 16:06:30
+ * @LastEditTime: 2022-06-27 13:59:24
  * @FilePath: \iot.vue\src\view\quaLity\shearingBoard\tem.vue
  * @Description: 
 -->
@@ -112,8 +112,7 @@ export default {
         return this.initData(cutId);
       }
       if(!this.cutDept){
-        // parent.userID
-        await getLoginOrg({ account:  "MIA"}).then((res) => {
+        await getLoginOrg({ account:  parent.userID}).then((res) => {
           this.cutDept = res.data.orgname
         });
       }

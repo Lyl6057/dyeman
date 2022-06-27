@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-05-03 16:09:34
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-23 15:00:38
+ * @LastEditTime: 2022-06-27 15:53:28
  * @FilePath: \iot.vue\src\view\quaLity\shearingBoard\data.js
  * @Description:
  */
@@ -63,7 +63,14 @@ export function mainForm(_this) {
         type: "date",
         format: "yyyy-MM-dd",
         valueFormat: "yyyy-MM-dd HH:mm:ss"
-      }
+      },
+      {
+        label: "成品编号",
+        prop: "productNo",
+        span: 6,
+        width: 150,
+        overHidden: true,
+      },
     ]
   };
 }
@@ -105,6 +112,13 @@ export function crateDataForm(_this) {
         type: "select",
         filterable: true,
         remote: true,
+        rules: [
+          {
+            required: true,
+            message: "",
+            trigger: "blur"
+          }
+        ],
         props:{
           label: 'orgname',
           value: 'orgname'
@@ -361,7 +375,7 @@ export function mainCrud(_this) {
         fixed: true
       },
       {
-        label: "剪板部门",
+        label: "剪办部门",
         prop: "cutDept",
         width: 100,
         span: 6,
@@ -524,6 +538,37 @@ export function mainCrud(_this) {
         span: 6,
         placeholder: " ",
         overHidden: true,
+      },
+      {
+        label: "已更新",
+        prop: "upFlag",
+        width: 80,
+        span: 6,
+        placeholder: " ",
+        overHidden: true,
+        type: 'select',
+        dicData: [
+          {
+            label: '是',
+            value: true
+          },
+          {
+            label: '否',
+            value: false
+          }
+        ]
+      },
+      {
+        label: "打印日期",
+        prop: "printTime",
+        width: 120,
+        span: 6,
+        placeholder: " ",
+        overHidden: true,
+        align: "center",
+        type: "datetime",
+        format: "yyyy-MM-dd HH:mm:ss",
+        valueFormat: "yyyy-MM-dd HH:mm:ss",
       },
       {
         label: "备注",

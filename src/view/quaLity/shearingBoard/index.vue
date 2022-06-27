@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-05-03 16:09:29
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-23 16:53:08
+ * @LastEditTime: 2022-06-27 16:42:24
  * @FilePath: \iot.vue\src\view\quaLity\shearingBoard\index.vue
  * @Description: 
 -->
@@ -11,16 +11,30 @@
   <div class="abnormalDaily">
     <view-container title="QA剪办记录">
       <el-row class="btnList">
-        <el-button type="success" @click="update"> {{this.$t("public.update")}} </el-button>
+        <el-button type="success" :disabled="chooseData.upFlag" @click="update"> {{this.$t("public.update")}} </el-button>
         <el-button type="primary" @click="add"> {{this.$t("public.add")}} </el-button>
-        <el-button type="danger" @click="del"> {{this.$t("public.del")}} </el-button>
-        <el-button type="primary" @click="handlePrint"> 打印 </el-button>
+        <el-button type="danger" :disabled="chooseData.upFlag" @click="del"> {{this.$t("public.del")}} </el-button>
+        <el-popover style="margin:0 10px" placement="right" width="160" v-model="updateVisible">
+          <p>是否确定更新数据?</p>
+          <div>
+            <el-button size="mini" type="text" @click="updateVisible = false">取消</el-button>
+            <el-button slot="reference" type="primary" @click="handleUpdate">确定</el-button>
+          </div>
+          <el-button slot="reference" type="primary" :disabled="chooseData.upFlag">更新码卡</el-button>
+        </el-popover>
+        <el-popover style="margin-right: 10px" placement="right" width="160" v-model="printVisible">
+          <p>是否确定打印?</p>
+          <div>
+            <el-button size="mini" type="text" @click="printVisible = false">取消</el-button>
+            <el-button slot="reference" type="primary" @click="handlePrint">确定</el-button>
+          </div>
+          <el-button slot="reference" type="primary" :disabled="!chooseData.upFlag">打印</el-button>
+        </el-popover>
         <el-button type="primary" @click="query"> {{this.$t("public.query")}} </el-button>
         <div style="float: right">
           码卡信息 <el-switch v-model="hasCardData" active-text="显示" inactive-text="隐藏">
           </el-switch>
         </div>
-
       </el-row>
       <el-row class="formBox">
         <avue-form ref="form" :option="formOp" v-model="form"> </avue-form>
@@ -95,6 +109,9 @@ export default {
       cardData: {},
       hasCardData: true,
       prsocket: null,
+      printVisible: false,
+      updateVisible: false,
+      chooseData: { }
     };
   },
   watch: {},
@@ -111,6 +128,7 @@ export default {
       this.loading = true;
       let params = {
         cutDept: "%" + (this.form.cutDept || ""),
+        productNo: "%" + (this.form.productNo || ""),
         cutDate: this.form.cutDate,
         dataSortRules: "cutDate|desc,cutDept",
       };
@@ -125,6 +143,7 @@ export default {
             item.cutDefeWeightLbs = item.cutDefeWeight * 2.2046;
           });
           this.page.total = total;
+          this.chooseData = {}
           this.$refs.crud.setCurrentRow();
           await this.$nextTick();
           this.curIdx = null;
@@ -182,8 +201,21 @@ export default {
         this.$tip.error("打印服务离线，请启动服务后刷新页面!");
         return;
       }
-      this.loading = true;
       let printData = this.crud[this.curIdx - 1];
+      printData.printTime = this.$getNowTime("datetime");
+      this.prsocket.send("finishCard:" + printData.proCardFk);
+      updateProFinalProductCardCut(printData);
+      this.printVisible = false;
+      this.$tip.success("已发送打印动作!");
+    },
+    handleUpdate() {
+      let printData = this.crud[this.curIdx - 1];
+      if(printData.upFlag){
+        this.$tip.warning("该码卡已更新!")
+        return;
+      }
+      this.loading = true;
+      
       let params = {
         cardId: printData.proCardFk,
         rows: 20,
@@ -196,7 +228,7 @@ export default {
           if (res.data.total) {
             //存在码卡信息，更新
             let data = res.data.records[0];
-            if (!printData.printTime) {
+            if (!printData.upFlag) {
               // 打印过不再改变数量
               data.netWeight =
                 data.netWeight -
@@ -210,12 +242,13 @@ export default {
               data.grossWeightLbs = Number(
                 (data.grossWeight * 2.2046).toFixed(1)
               );
+              data.yardLength = printData.cutYds
               await updateFinishedNoteData(data);
+              printData.upFlag = true
+              await updateProFinalProductCardCut(printData);
+              this.updateVisible = false;
+              this.$tip.success("更新成功!");
             }
-            printData.printTime = this.$getNowTime("datetime");
-            updateProFinalProductCardCut(printData);
-            this.prsocket.send("finishCard:" + data.cardId);
-            this.$tip.success("已发送打印动作!");
           }
         })
         .finally(() => {
@@ -227,6 +260,7 @@ export default {
     },
     rowClick(row) {
       this.curIdx = row.$index + 1;
+      this.chooseData = row
       this.getCardData(row);
     },
     getCardData(row) {
