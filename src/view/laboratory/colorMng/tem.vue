@@ -111,8 +111,8 @@ export default {
           this.wLoading = true;
           if (this.form.labTapcoloroid) {
             // update
-            // this.form.sysLastUpd = this.$getNowTime("datetime")
-            // this.form.sysLastUpdBy = this.$store.state.userOid
+            this.form.sysLastUpd = this.$getNowTime("datetime")
+            this.form.sysLastUpdBy = this.$store.state.userOid
             delete this.form['sn']
             for(let key in this.form){
               if(key.indexOf("$")!= -1){
@@ -130,8 +130,8 @@ export default {
                 this.$tip.error("保存失败!" + err);
               });
           } else {
-            // this.form.sysCreated = this.$getNowTime("datetime")
-            // this.form.sysCreatedby = this.$store.state.userOid
+            this.form.sysCreated = this.$getNowTime("datetime")
+            this.form.sysCreatedby = this.$store.state.userOid
             for(let key in this.form){
               if(key.indexOf("$")!= -1){
                 delete this.form[key]
