@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-10 13:20:44
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-06-25 11:17:35
+ * @LastEditTime: 2022-06-27 09:32:08
  * @Description:
  */
 const getters = {
@@ -21,6 +21,7 @@ const getters = {
   unOutCountData: state => state.whse.unOutCountDataList || [],
 
   isOutFactory: state => state.isOutFactory,
+  outFactoryId: state => state.outFactoryId,
 
 };
 export default getters

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-06-21 09:14:33
+ * @LastEditTime: 2022-06-27 10:16:44
  * @Description:
  */
 
@@ -1381,6 +1381,7 @@ export function machineCrud(_this) {
   };
 }
 
+// --- Yang 2022.06.25
 
 // 织胚明细数据
 export function meaveEmbyroDtlCrud(_this){
@@ -1408,3 +1409,56 @@ export function meaveEmbyroDtlCrud(_this){
   }
 }
 
+// 设备
+export function machineInfoCrud(_this) {
+  return {
+    menu: false,
+    addBtn: false,
+    border: true,
+    highlightCurrentRow: true,
+    height: "calc(100vh - 148px)",
+    refreshBtn: false,
+    columnBtn: false,
+    page: true,
+    labelWidth: 130,
+    column: [
+      {
+        label: "#",
+        prop: "$index",
+        width: 50,
+        align: "center",
+        display: false,
+        formatter(row,col,value){
+          return Number(value) + 1
+        },
+      },
+      {
+        label: "機號",
+        prop: "mathineCode",
+        width: 140,
+        cell: true,
+        filterable: true,
+        type: "select",
+        dicData: [],
+        span: 6
+      },
+      {
+        label: "开机时间",
+        prop: "recordTime",
+        width: 180,
+        cell: true,
+        span: 6,
+        type: "datetime",
+        format: "yyyy-MM-dd HH:mm:ss",
+        valueFormat: "yyyy-MM-dd HH:mm:ss"
+      },
+      {
+        label: "记录人",
+        prop: "userName",
+        width: 140,
+        cell: false,
+        span: 6
+      },
+    ]
+  };
+}
