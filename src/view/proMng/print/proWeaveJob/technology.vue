@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-06-16 10:22:40
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-22 16:07:31
+ * @LastEditTime: 2022-06-27 08:46:52
  * @FilePath: \iot.vue\src\view\proMng\print\proWeaveJob\technology.vue
  * @Description: 
 -->
@@ -43,7 +43,6 @@
 </template>
 <script>
 import choice from "@/components/proMng/index";
-import { JSONLoader } from "../../../../config/three";
 import {
   getYarn,
   update,
@@ -149,7 +148,6 @@ export default {
           }
           res.data.forEach((item) => {
             if (item.picType === "1") {
-              console.log(item);
               // 织针排列
               this.$set(
                 this.arrangement[Number(item.rowId) - 1],
@@ -163,7 +161,7 @@ export default {
                 item.cpValue
               );
             } else if (this.yarnList.length) {
-              if ( item.colId != '1') { // 复制织单，不复制纱线名称
+              if ( item.colId != '1' && Number(item.rowId <= this.yarnList.length)) { // 复制织单，不复制纱线名称
                 this.$set(
                   this.fabric[Number(item.rowId) - 1],
                   ["prop" + item.colId],

@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
- * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-06-22 11:19:17
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-06-27 07:59:17
  * @Description: 
 -->
 <template>
@@ -79,20 +79,6 @@
             >打印</el-button
           >
         </el-tooltip>
-        <!-- <el-tooltip
-          class="item"
-          effect="dark"
-          content="xuất"
-          placement="top-start"
-        >
-          <el-button
-            type="primary"
-            @click="out"
-            v-if="canSave"
-            :disabled="!this.form.weaveJobId"
-            >导出excel</el-button
-          >
-        </el-tooltip> -->
         <el-tooltip
           class="item"
           effect="dark"
@@ -301,9 +287,6 @@ import {
 } from "./api";
 import { baseCodeSupplyEx } from "@/api/index";
 import preview from "./preview";
-import XlsxTemplate from "xlsx-template";
-import JSZipUtils from "jszip-utils";
-import saveAs from "file-saver";
 import { getBf } from "../clothFly/api";
 import technology from "../proWeaveJob/technology"
 import MeaveEmbyroDtl from "./meaveEmbyroDtl.vue"
@@ -483,61 +466,6 @@ export default {
           this.form.mathineCode += item.mathineCode + " / ";
         });
       });
-    },
-    async out() {
-      this.wLoading = true;
-      try {
-        //获得Excel模板的buffer对象
-        const exlBuf = await JSZipUtils.getBinaryContent(
-          "./static/xlxsTemplate/weave.xlsx"
-        );
-        // Create a template
-        var template = new XlsxTemplate(exlBuf);
-        // Replacements take place on first sheet
-        var sheetNumber = "LIGHT";
-        // Set up some placeholder values matching the placeholders in the template
-        var query = this.form;
-        this.form.calicoFabricRequire == "" ||
-        this.form.calicoFabricRequire == "开幅"
-          ? ((this.form.kf = "☑"), (this.form.yt = "□"))
-          : ((this.form.kf = "□"), (this.form.yt = "☑"));
-
-        getCalico({
-          star: 1,
-          rows: 999,
-          proWeaveJobFk: this.form.weaveJobId,
-        }).then((res) => {
-          let xh = res.data.records[0];
-          let arr = this.yarnlist;
-          arr.forEach((item, i) => {
-            item.index = i + 1;
-          });
-          var values = {
-            //数据需要自己提前准备好
-            query,
-            xh,
-            arr,
-          };
-          template.substitute(sheetNumber, values);
-          // Get binary data.
-          var out = template.generate({ type: "blob" });
-          let _this = this;
-          var fun1 = function () {
-            return new Promise((resolve, reject) => {
-              saveAs(out, "织造生产单-" + _this.form.weaveJobCode + ".xlsx");
-              resolve();
-            });
-          };
-          fun1().then((res) => {
-            setTimeout(() => {
-              this.$tip.success("导出成功!");
-              this.wLoading = false;
-            }, 1000);
-          });
-        });
-      } catch (e) {
-        console.log(e);
-      }
     },
     save() {
       this.$refs.form.validate((valid, done) => {

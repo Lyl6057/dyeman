@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-17 15:50:57
+ * @LastEditTime: 2022-06-27 09:18:42
  * @Description: 
 -->
 <template>
@@ -34,6 +34,10 @@
             this.$t("public.query")
           }}</el-button>
         </el-tooltip>
+        <div style="float: right; margin-right: 5px">
+          模糊查询 <el-switch v-model="hasFuzzy" active-text="开" inactive-text="关">
+          </el-switch>
+        </div>
         <!-- <el-button type="warning" @click="close">{{
           this.$t("public.close")
         }}</el-button> -->
@@ -58,8 +62,6 @@
 <script>
 import { mainForm, mainCrud } from "./data";
 import { get, add, update, del, print } from "./api";
-import XlsxTemplate from "xlsx-template";
-import JSZipUtils from "jszip-utils";
 import tem from "./temDlg";
 export default {
   name: "",
@@ -90,6 +92,7 @@ export default {
       pdfUrl: "",
       copyC: false,
       splitW: false,
+      hasFuzzy: true,
     };
   },
   watch: {},
@@ -103,10 +106,12 @@ export default {
         }
       }
       let params = JSON.parse(JSON.stringify(this.form));
-      params.weaveJobCode =
-        "!^%" + (params.weaveJobCode ? params.weaveJobCode : "");
-      params.salPoNo = "%" + (params.salPoNo ? params.salPoNo : "");
-      params.colorCode = "%" + (params.colorCode ? params.colorCode : "");
+      if (this.hasFuzzy) {
+        params.weaveJobCode =
+          "!^%" + (params.weaveJobCode ? params.weaveJobCode : "");
+        params.salPoNo = "%" + (params.salPoNo ? params.salPoNo : "");
+        params.colorCode = "%" + (params.colorCode ? params.colorCode : "");
+      }
       get(
         Object.assign(params, {
           rows: this.page.pageSize,

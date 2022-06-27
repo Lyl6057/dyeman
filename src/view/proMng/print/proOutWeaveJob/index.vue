@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
- * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-06-23 09:36:14
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-06-27 09:19:48
  * @Description: 
 -->
 <template>
@@ -83,6 +83,10 @@
             this.$t("public.query")
           }}</el-button>
         </el-tooltip>
+        <div style="float: right; margin-right: 5px">
+          模糊查询 <el-switch v-model="hasFuzzy" active-text="开" inactive-text="关">
+          </el-switch>
+        </div>
         <!-- <el-button type="warning" @click="close">{{
           this.$t("public.close")
         }}</el-button> -->
@@ -147,8 +151,6 @@
 <script>
 import { mainForm, mainCrud } from "./data";
 import { get, add, update, del, print } from "./api";
-import XlsxTemplate from "xlsx-template";
-import JSZipUtils from "jszip-utils";
 import tem from "./temDlg";
 export default {
   name: "",
@@ -175,6 +177,7 @@ export default {
       czsocket: {},
       pdfDlg: false,
       pdfUrl: "",
+      hasFuzzy: true,
       copyC: false,
     };
   },
@@ -188,14 +191,15 @@ export default {
           delete this.form[key];
         }
       }
-      this.form.weaveJobCode =
-        "!^%" + (this.form.weaveJobCode ? this.form.weaveJobCode : "");
-      this.form.salPoNo = "%" + (this.form.salPoNo ? this.form.salPoNo : "");
-      this.form.colorCode =
-        "%" + (this.form.colorCode ? this.form.colorCode : "");
-
+      let params = JSON.parse(JSON.stringify(this.form));
+      if (this.hasFuzzy) {
+        params.weaveJobCode =
+          "!^%" + (params.weaveJobCode ? params.weaveJobCode : "");
+        params.salPoNo = "%" + (params.salPoNo ? params.salPoNo : "");
+        params.colorCode = "%" + (params.colorCode ? params.colorCode : "");
+      }
       get(
-        Object.assign(this.form, {
+        Object.assign(params, {
           rows: this.page.pageSize,
           start: this.page.currentPage,
           isWorkOut: 1,
@@ -211,15 +215,6 @@ export default {
           this.$refs.crud.setCurrentRow(this.crud[0]);
         }
         this.page.total = res.data.total;
-        if (this.form.weaveJobCode.indexOf("!^%") != -1) {
-          this.form.weaveJobCode = this.form.weaveJobCode.split("!^%")[1] || "";
-        }
-        if (this.form.salPoNo.indexOf("%") != -1) {
-          this.form.salPoNo = this.form.salPoNo.split("%").join("");
-        }
-        if (this.form.colorCode.indexOf("%") != -1) {
-          this.form.colorCode = this.form.colorCode.split("%").join("");
-        }
         this.loading = false;
       });
     },
