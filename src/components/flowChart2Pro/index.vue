@@ -103,10 +103,10 @@ export default {
     },
     // 计算canvas的长度值
     getCanvasW(ctx){
-      let cansW = 650;
+      let cansW = 150;
+      ctx.font = "15px serif";
       this.headerData.forEach(item => {
         let textW = ctx.measureText(item.dptName).width;
-        console.log("textW", textW)
         cansW += (textW + 40 + 20)
       });
       return cansW
@@ -167,6 +167,7 @@ export default {
       let initX = 135,
         initY = 15 + this.titleH,
         itemH = 30;
+      ctx.font = "15px serif";
       this.headerData.forEach((item) => {
         let textW = ctx.measureText(item.dptName).width;
         let itemW = textW + 40;
@@ -180,7 +181,7 @@ export default {
         ctx.fill(); //填充
 
         ctx.fillStyle = this.FORE_COLOR;
-        ctx.font = "15px serif";
+        // ctx.font = "15px serif";
         ctx.fillText(
           item.dptName,
           initX + 20,
@@ -211,11 +212,11 @@ export default {
     renderFirstColItem(ctx) {
       let initY = 80 + this.titleH,
           colX = 60;
+      ctx.font = "13px serif";
       this.dataList.forEach((item, index) => {
         item.date.split(" ").forEach((dItem) => {
           let textW = ctx.measureText(dItem).width;
           ctx.fillStyle = this.SUB_COLOR;
-          ctx.font = "13px serif";
           ctx.fillText(dItem, colX - textW / 2, initY);
           initY += 15;
         });
