@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
- * @LastEditors: Lyl
- * @LastEditTime: 2022-06-27 09:31:34
+ * @LastEditors: Symbol_Yang
+ * @LastEditTime: 2022-06-27 10:44:21
  * @Description: 
 -->
 <template>
@@ -233,9 +233,9 @@
     ></choice>
 
     <!-- 织胚明细 -->
-    <div class="weaveEmbryoDtlBtn-wrapper" @click.stop="handleOpenWeaEmbDtl">
-      <span style="color: #409eff; font-size: 15px; margin-left: 20px" >織胚明細</span>
-      <span style="color: #409eff; font-size: 15px; margin-left: 20px" >機臺</span>
+    <div class="other-dtl-wrapper" >
+      <span style="color: #409eff; font-size: 15px; margin-left: 20px" @click.stop="handleOpenWeaEmbDtl" >織胚明細</span>
+      <span style="color: #409eff; font-size: 15px; margin-left: 20px" @click.stop="handleOpenMachineInfo" >機臺</span>
     </div>
     <el-dialog :visible.sync="meaEmbVisible" fullscreen  append-to-body :close-on-click-modal="false" :close-on-press-escape="false" >
       <MeaveEmbyroDtl 
@@ -243,7 +243,12 @@
         ref="meaveEmbyroDtlRef" 
         @close="meaEmbVisible = false" />
     </el-dialog>
-
+    <el-dialog :visible.sync="machineInfoVisible" fullscreen  append-to-body :close-on-click-modal="false" :close-on-press-escape="false" >
+      <MachineInfo 
+        :weaveJobId="form.weaveJobId"
+        ref="machineInfoRef" 
+        @close="machineInfoVisible = false" />
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -293,6 +298,7 @@ import preview from "./preview";
 import { getBf } from "../clothFly/api";
 import technology from "../proWeaveJob/technology"
 import MeaveEmbyroDtl from "./meaveEmbyroDtl.vue"
+import MachineInfo from "./machineInfo.vue"
 export default {
   name: "",
   props: {
@@ -305,6 +311,7 @@ export default {
     choice: choice,
     technology,
     MeaveEmbyroDtl,
+    MachineInfo
   },
   data() {
     return {
@@ -352,6 +359,7 @@ export default {
 
       // 织胚明细 弹出窗状态
       meaEmbVisible: false,
+      machineInfoVisible: false,
     };
   },
   watch: {},
@@ -363,7 +371,7 @@ export default {
   methods: {
     // 织胚明细DOM 移动
     meaveDomMove(){
-      let meaveDtlBtnDom = document.querySelectorAll(".weaveEmbryoDtlBtn-wrapper")[0];
+      let meaveDtlBtnDom = document.querySelectorAll(".other-dtl-wrapper")[0];
       let formGroupWrapper = document.querySelectorAll("#proWeaveJob .avue-group__header")[0];
       formGroupWrapper.appendChild(meaveDtlBtnDom)
     },
@@ -372,6 +380,12 @@ export default {
       this.meaEmbVisible = true;
       await this.$nextTick();
       this.$refs.meaveEmbyroDtlRef.getDataList();
+    },
+    // 打开机台维护界面
+    async handleOpenMachineInfo(){
+      this.machineInfoVisible = true;
+      await this.$nextTick();
+      this.$refs.machineInfoRef.init();
     },
     getData() {
       if (this.isAdd) {

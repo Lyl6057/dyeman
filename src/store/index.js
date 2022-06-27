@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-24 08:12:20
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-06-25 11:17:03
+ * @LastEditTime: 2022-06-27 09:32:21
  * @Description:
  */
 import Vue from "vue";
@@ -31,6 +31,7 @@ const store = new VueX.Store({
     loginUser: "",
     // 是否是外发厂
     isOutFactory: false,
+    outFactoryId: "",
   },
   getters: {
     ...getters,
@@ -53,8 +54,9 @@ const store = new VueX.Store({
     getLoginUser:  state => state.loginUser
   },
   mutations: {
-    SET_IS_OUT_FACTORY(state, isOutFactory){
-      state.isOutFactory = isOutFactory
+    SET_IS_OUT_FACTORY(state, outFactoryId){
+      state.isOutFactory = Boolean(outFactoryId);
+      state.outFactoryId = outFactoryId;
     },
     SET_SPOWERCLIENT(state, value){
       state.spowerClient = value

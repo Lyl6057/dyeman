@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-01 14:06:25
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-06-20 17:29:05
+ * @LastEditTime: 2022-06-27 10:28:27
  * @Description:
  */
 
@@ -303,6 +303,46 @@ export function batchSaveOrUpdateFlatknit(data){
   });
 }
 
-// 批量删除织胚明细数据
 
+
+// 根据织单主键获取机台信息
+export function fetchMachineInfoData(params){
+  return axios({
+    url: "/api/proWeaveJobUseMachine",
+    method: "get",
+    params:params
+  });
+}
+
+
+
+// 批量新增机台信息
+export function bactchSaveOrUpdateMachineInfo(dataList){
+  return axios({
+    url: "/api/proWeaveJobUseMachine/batch/saveOrUpdate",
+    method: "post",
+    data:dataList
+  });
+}
+
+
+
+// 批量删除机台信息
+export function bactchDelDataByIds(ids){
+  return axios({
+    url: "/api/proWeaveJobUseMachine/batch/removeByIds",
+    method: "post",
+    data:ids
+  });
+}
+
+
+// 根据外发厂获取机号进行
+export function fetchDict2MachineCode(params){
+  return axios({
+    url: "/api/proWeaveJobUseMachine/dict/machineCode",
+    method: "get",
+    params:params
+  });
+}
 
