@@ -174,7 +174,6 @@ export default {
           this.mx = records.records.sort((a, b) => {
             return a.batchNo > b.batchNo ? 1 : -1;
           });
-          console.log(this.mx);
           this.mx.forEach((item, index) => {
             item.$cellEdit = true;
             item.index = index + 1;
