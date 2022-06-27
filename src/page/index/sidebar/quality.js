@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-04-01 14:08:13
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-17 17:01:34
+ * @LastEditTime: 2022-06-22 13:59:06
  * @Description:
  */
 
@@ -87,6 +87,10 @@ export function quality(_this) {
         {
           menuName: "12.异常报告总表",
           index: "qcAbnormalDaily"
+        },
+        {
+          menuName: "13.QA剪办记录",
+          index: "shearingBoard"
         }
       ]
     },

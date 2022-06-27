@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-03-10 13:20:44
- * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-06-01 14:03:06
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-06-22 13:58:59
  * @Description:
  */
 export default [
@@ -26,6 +26,15 @@ export default [
     name: "QA产能统计",
     component: resolve =>
       require(["@/view/quaLity/qaProductionCapacity/index"], resolve),
+    meta: {
+      keepAlive: true
+    }
+  },
+  {
+    path: "/shearingBoard",
+    name: "QA剪办记录",
+    component: resolve =>
+      require(["@/view/quaLity/shearingBoard/index"], resolve),
     meta: {
       keepAlive: true
     }
