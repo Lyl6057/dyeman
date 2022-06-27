@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-15 09:58:15
+ * @LastEditTime: 2022-06-27 11:14:49
  * @Description: 
 -->
 <template>
@@ -630,7 +630,6 @@ export default {
         this.$tip.warning("请先输入缸号信息")
         return
       }
-      console.log(this.form);
       this.choiceQ.weaveJobCode = this.form.weaveJobCode;
       this.choiceQ.weaveJobFk = this.form.weaveJobId
       this.choiceV = true;
