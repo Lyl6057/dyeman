@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-05-03 16:09:29
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-27 16:42:24
+ * @LastEditTime: 2022-06-28 08:03:59
  * @FilePath: \iot.vue\src\view\quaLity\shearingBoard\index.vue
  * @Description: 
 -->
@@ -14,22 +14,20 @@
         <el-button type="success" :disabled="chooseData.upFlag" @click="update"> {{this.$t("public.update")}} </el-button>
         <el-button type="primary" @click="add"> {{this.$t("public.add")}} </el-button>
         <el-button type="danger" :disabled="chooseData.upFlag" @click="del"> {{this.$t("public.del")}} </el-button>
-        <el-popover style="margin:0 10px" placement="right" width="160" v-model="updateVisible">
-          <p>是否确定更新数据?</p>
-          <div>
-            <el-button size="mini" type="text" @click="updateVisible = false">取消</el-button>
-            <el-button slot="reference" type="primary" @click="handleUpdate">确定</el-button>
-          </div>
-          <el-button slot="reference" type="primary" :disabled="chooseData.upFlag">更新码卡</el-button>
-        </el-popover>
-        <el-popover style="margin-right: 10px" placement="right" width="160" v-model="printVisible">
-          <p>是否确定打印?</p>
-          <div>
-            <el-button size="mini" type="text" @click="printVisible = false">取消</el-button>
-            <el-button slot="reference" type="primary" @click="handlePrint">确定</el-button>
-          </div>
+        <el-popconfirm
+          title="是否确定更新数据?"
+          @onConfirm="handleUpdate"
+          style="margin: 0 10px"
+        >
+          <el-button slot="reference" type="primary" :disabled="chooseData.upFlag || !chooseData.cutId">更新码卡</el-button>
+        </el-popconfirm>
+        <el-popconfirm
+          title="是否确定打印?"
+          @onConfirm="handlePrint"
+          style="margin-right: 10px"
+        >
           <el-button slot="reference" type="primary" :disabled="!chooseData.upFlag">打印</el-button>
-        </el-popover>
+        </el-popconfirm>
         <el-button type="primary" @click="query"> {{this.$t("public.query")}} </el-button>
         <div style="float: right">
           码卡信息 <el-switch v-model="hasCardData" active-text="显示" inactive-text="隐藏">
@@ -215,7 +213,6 @@ export default {
         return;
       }
       this.loading = true;
-      
       let params = {
         cardId: printData.proCardFk,
         rows: 20,

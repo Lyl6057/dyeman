@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-05-03 16:29:13
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-27 13:59:24
+ * @LastEditTime: 2022-06-28 09:03:27
  * @FilePath: \iot.vue\src\view\quaLity\shearingBoard\tem.vue
  * @Description: 
 -->
@@ -28,9 +28,12 @@
 </template>
 
 <script>
-import { getLoginOrg } from '@/api/index';
+import { getLoginOrg } from "@/api/index";
 import {
-  fetchProFinalProductCardCutByPage, addProFinalProductCardCut, updateProFinalProductCardCut, getFinishedNoteByPage,
+  fetchProFinalProductCardCutByPage,
+  addProFinalProductCardCut,
+  updateProFinalProductCardCut,
+  getFinishedNoteByPage,
 } from "./api.js";
 import { crateDataForm, qcCheckStorePlanCrud } from "./data.js";
 export default {
@@ -46,16 +49,14 @@ export default {
       vatOptions: [],
       hasRefresh: false,
       options: [],
-      cutDept: null
+      cutDept: null,
     };
   },
   watch: {},
   computed: {},
-  created() {
-    
-  },
+  created() {},
   mounted() {
-    this.remoteMethod("")
+    this.remoteMethod("");
   },
   methods: {
     remoteMethod(val) {
@@ -65,31 +66,30 @@ export default {
         rows: 20,
         start: 1,
         page: 1,
-        cardType: 1
+        cardType: 1,
       }).then((res) => {
         this.options = res.data.records;
         this.vatLoading = false;
       });
     },
     handleVatnoChange(productNo) {
-      this.loading = true
+      this.loading = true;
       getFinishedNoteByPage({
         productNo,
         rows: 10,
         start: 1,
         page: 1,
-        cardType: 1
+        cardType: 1,
       }).then((vatRes) => {
         if (vatRes.data.records.length) {
-          let data = vatRes.data.records[0]
+          let data = vatRes.data.records[0];
           this.qcShearingBoardData.netWeight = data.netWeight;
           this.qcShearingBoardData.netWeightLbs = data.netWeightLbs;
           this.qcShearingBoardData.befcutYds = data.yardLength;
           this.qcShearingBoardData.proCardFk = data.cardId;
-          
         }
-        this.loading = false
-      })
+        this.loading = false;
+      });
     },
     async initData(cutId) {
       this.loading = true;
@@ -107,22 +107,22 @@ export default {
         });
     },
     async addAndcreateData(cutId) {
-      this.loading = true
+      this.loading = true;
       if (cutId) {
         return this.initData(cutId);
       }
-      if(!this.cutDept){
-        await getLoginOrg({ account:  parent.userID}).then((res) => {
-          this.cutDept = res.data.orgname
+      if (!this.cutDept) {
+        await getLoginOrg({ account: parent.userID }).then((res) => {
+          this.cutDept = res.data.orgname;
         });
       }
       // 初始化新增数据
       this.qcShearingBoardData = {
-        cutId: '',
-        productNo: '',
-        cutDate: this.$getNowTime("date") + ' 00:00:00',
+        cutId: "",
+        productNo: "",
+        cutDate: this.$getNowTime("date") + " 00:00:00",
         cutDept: this.cutDept,
-        respDept: '',
+        respDept: "",
         netWeight: 0,
         netWeightLbs: 0,
         cutSamWeight: 0,
@@ -131,13 +131,46 @@ export default {
         cutDefeWeightLbs: 0,
         befcutYds: 0,
         cutYds: 0,
-        cutRemarks: ''
+        cutRemarks: "",
       };
-      await this.$nextTick()
-      this.loading = false
+      await this.$nextTick();
+      this.loading = false;
     },
     handleStoreRowClick(val) {
       this.dtlCurIdx = val.$index + 1;
+    },
+    async calculateYardLength(id) {
+      let res = await getFinishedNoteByPage({
+        cardId: id,
+        rows: 20,
+        start: 1,
+        page: 1,
+      });
+      let data = res.data.records[0];
+      let {
+        realGramWeight,
+        actualSideBreadth,
+        netWeight,
+        gramWeightUnit,
+        widthUnit,
+      } = data;
+      let gramWeight, breadth;
+      if (!realGramWeight || !actualSideBreadth || !netWeight) {
+        return;
+      }
+      gramWeight =
+        gramWeightUnit == "Kg"
+          ? Number(realGramWeight)
+          : Number(realGramWeight / 1000);
+      breadth =
+        widthUnit == "INCH"
+          ? Number((actualSideBreadth * 2.54) / 100)
+          : Number(actualSideBreadth / 100);
+
+      let yardLength = parseInt(
+        Number(netWeight / gramWeight / breadth) * 1.0936
+      );
+      return yardLength;
     },
     handleSave() {
       this.$refs.qcCheckPlanForm.validate(async (valid, done) => {
@@ -146,17 +179,22 @@ export default {
             this.$tip.error("请补充查布计划表信息!");
             return;
           }
-          this.loading = true;
+          // this.loading = true;
           let cutId = this.qcShearingBoardData.cutId;
+          // 计算码长
+          let yardLength = await this.calculateYardLength(
+            this.qcShearingBoardData.proCardFk
+          );
+          this.qcShearingBoardData.cutYds = yardLength
           if (cutId) {
             await updateProFinalProductCardCut(this.qcShearingBoardData).then();
           } else {
-            this.qcShearingBoardData.saveTime = this.$getNowTime("datetime")
-            cutId = await addProFinalProductCardCut(this.qcShearingBoardData).then(
-              (res) => {
-                return res.data.data;
-              }
-            );
+            this.qcShearingBoardData.saveTime = this.$getNowTime("datetime");
+            cutId = await addProFinalProductCardCut(
+              this.qcShearingBoardData
+            ).then((res) => {
+              return res.data.data;
+            });
             this.qcShearingBoardData.cutId = cutId;
           }
           this.hasRefresh = true;
@@ -167,7 +205,7 @@ export default {
             done();
           }, 200);
         } catch (err) {
-          done()
+          done();
           this.loading = false;
           this.$tip.error(err);
         }
