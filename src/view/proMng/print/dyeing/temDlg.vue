@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-22 08:02:27
+ * @LastEditTime: 2022-06-28 09:35:05
  * @Description: 
 -->
 <template>
@@ -189,7 +189,7 @@
                 <template slot="mateName" slot-scope="scope">
                   <el-popover
                     placement="left"
-                    :title="scope.row.mateNames"
+                    :title="scope.row.cnnamelong || scope.row.mateName"
                     width="200"
                     trigger="hover">
                       <el-select slot="reference"  v-if="scope.row.bleadyeType != 'run'" v-model="scope.row.mateName"  remote filterable reserve-keyword clearable default-first-option placeholder="请输入材料信息" :loading="vatLoading" :remote-method="remoteMate" @focus="mateFocus(scope.row)" @change="mateChange">
@@ -446,7 +446,7 @@ export default {
   methods: {
     mateFocus(val) {
       this.$refs.yarnCrud.setCurrentRow(val);
-      this.remoteMate( val.mateName, 'factoryName');
+      this.remoteMate( "%" + val.mateName, 'factoryName');
     },
     // handleMatNameChange(val) {
     //   this.chooseDtlData.basMateId = val.split("——")[0];
@@ -469,6 +469,12 @@ export default {
       });
     },
     mateChange(val){
+      if(!val){
+        this.chooseDtlData.mateCode = ''
+        this.chooseDtlData.mateName = ''
+        this.chooseDtlData.cnnamelong = ''
+        return;
+      }
       if (this.chooseDtlData.bleadyeType == "run") {
         return;
       }
@@ -478,12 +484,12 @@ export default {
       } else {
         fetchF = getBasPigmentByPage;
       }
-      fetchF({factoryName: val}).then((res) => {
+      fetchF({factoryName: "%" + val}).then((res) => {
         if(res.data.total){
           this.$nextTick(() =>{
             this.$set(this.chooseDtlData, "mateCode", res.data.records[0].bcCode)
             this.$set(this.chooseDtlData, "mateName", res.data.records[0].factoryName)
-            this.$set(this.chooseDtlData, "mateNames", res.data.records[0].cnnamelong)
+            this.$set(this.chooseDtlData, "cnnamelong", res.data.records[0].cnnamelong)
           })
         }
       });
