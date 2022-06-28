@@ -221,7 +221,7 @@ export function rsxkr1C(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 200px)",
+    height: "calc(100vh - 205px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
@@ -279,9 +279,6 @@ export function rsxkr1C(_this) {
           _this.iptChange(_this.chooseData);
         },
         hide: _this.hide != "6" ? true : false,
-        change: val => {
-          _this.iptChange(_this.chooseData);
-        }
       },
 
       {
@@ -392,7 +389,7 @@ export function rsxkr2C(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 273px)",
+    height: "calc(100vh - 278px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
@@ -557,8 +554,8 @@ export function rcpb3C(_this) {
     highlightCurrentRow: true,
     height:
       _this.hide === "1" || _this.hide === "2"
-        ? "calc(100vh - 330px)"
-        : "calc(100vh - 313px)",
+        ? "calc(100vh - 335px)"
+        : "calc(100vh - 318px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
@@ -631,7 +628,7 @@ export function rcpb3C(_this) {
         cell: true,
         width: 100,
         align: "right",
-        hide: !_this.hide === "6"
+        hide: _this.hide != "6"
         // click: (val) => {
         //   _this.iptPhChange(_this.choosePhData);
         // },
@@ -652,21 +649,23 @@ export function rcpb3C(_this) {
         width: 100,
         type: "select",
         dicData: matUnit,
-        hide: !_this.hide === "6"
+        hide: _this.hide != "6"
       },
       {
         label: _this.$t("whseField.krbph"),
         prop: "custTicket",
         cell: true,
-        width: 150,
+        // width: 150,
+        overHidden: true,
         hide: _this.hide === "6"
       },
       {
         label: _this.$t("whseField.krbph"),
         prop: "ticketNo",
         cell: true,
-        width: 150,
-        hide: !_this.hide === "6"
+        overHidden: true,
+        // width: 150,
+        hide: _this.hide != "6"
       }
     ]
   };

@@ -19,12 +19,6 @@
           <el-button type="danger" @click="del">{{
             this.$t("public.del")
           }}</el-button>
-          <el-button
-            type="success"
-            :disabled="changeList.length === 0"
-            @click="save"
-            >{{ this.$t("public.save") }}</el-button
-          >
           <!-- <el-button
             type="warning"
             @click="ruleV = true"
@@ -47,7 +41,6 @@
         </div>
         <el-row class="crudBox">
           <el-col :span="24">
-            <!-- <view-container :title="data.type.split('_')[0] + '出库资料'"> -->
             <avue-crud
               ref="mainCrud"
               id="mainCrud"
@@ -59,18 +52,7 @@
               @current-row-change="cellClick"
               @row-dblclick="handleRowDBLClick"
             ></avue-crud>
-            <!-- </view-container> -->
           </el-col>
-          <!-- <el-col :span="hide === '1' ? 0 : 14" v-if="hide != '1'">
-            <view-container :title="data.type.split('_')[0] + '出库明细'">
-              <tem-dlg
-                ref="tem"
-                :datas="data"
-                :everyThing="everyThing"
-                :hide="hide"
-                :isPlan="false"
-              ></tem-dlg></view-container
-          ></el-col> -->
         </el-row>
       </el-tab-pane>
       <el-tab-pane
@@ -259,9 +241,19 @@ export default {
           delete this.form[key];
         }
       }
+      let params = {
+        retCode: "!^%" + ( this.form.retCode || '' ),
+        woOutno: this.form.retCode,
+        retDate: this.form.retDate,
+        woDate: this.form.woDate,
+        retBatch: "%" +  ( this.form.retBatch || '' ),
+        spNo: "%" + ( this.form.spNo || ''),
+        finStatus: this.form.finStatus,
+        sysCreatedby: this.form.sysCreatedby,
+      }
       this.everyThing
         .func(
-          Object.assign(this.form, {
+          Object.assign(params, {
             rows: this.page.pageSize,
             start: this.page.currentPage,
             retType: JSON.parse(localStorage.getItem("imWk")).type.split(

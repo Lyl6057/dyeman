@@ -447,7 +447,7 @@ export default {
         this.sxformOp.column[8].display = false;
         this.outcrudOp.selection = true;
         this.outcrudOp.showSummary = false;
-        this.outcrudOp.height = "calc(100vh - 215px)";
+        this.outcrudOp.height = "calc(100vh - 220px)";
         this.isPh = false;
         this.sxV = true;
       }
@@ -1257,7 +1257,7 @@ export default {
       // this.outcrudOp.column[5].hide = true;
       this.outcrudOp.selection = false;
       this.outcrudOp.showSummary = true;
-      this.outcrudOp.height = "calc(100vh - 273px)";
+      this.outcrudOp.height = "calc(100vh - 278px)";
       this.sxcheckList = [];
       this.sxV = false;
     },
@@ -1273,7 +1273,7 @@ export default {
     //   this.sysCreatedby = Res.data.ucmlUseroid;
     // });
     this.form.sysCreatedby = this.$store.state.userOid;
-    this.rcOp.height = "calc(100vh - 273px)";
+    this.rcOp.height = "calc(100vh - 278px)";
     if (this.hide === "3" || this.hide === "4" || this.hide === "5") {
       this.mxOp = rsxkr3C(this);
     }
