@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-03-23 10:36:15
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-06-23 14:55:09
+ * @LastEditTime: 2022-06-28 10:35:00
  */
 
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
@@ -87,9 +87,26 @@ export function mainCrud(_this) {
       {
         label: "开单日期",
         prop: "workDate",
-        width: 150,
+        width: 110,
         formatter: (row, value) => {
           return value && (value.slice(0,10))
+        }
+      },
+      {
+        label: "交货日期",
+        prop: "deliveDate",
+        width: 110,
+        formatter: (row, value) => {
+          return value && (value.slice(0,10))
+        }
+      },
+      {
+        label: "重量(KG)",
+        prop: "clothWeight",
+        width: 110,
+        align: "right",
+        formatter: (row, value) => {
+          return value && Number(value).toFixed(2);
         }
       },
       {
@@ -109,7 +126,7 @@ export function mainCrud(_this) {
       },
       {
         label: "备布重量",
-        prop: "clothWeight",
+        prop: "preCalicoWeight",
         width: 150,
         align: "right",
         formatter: (row, value) => {

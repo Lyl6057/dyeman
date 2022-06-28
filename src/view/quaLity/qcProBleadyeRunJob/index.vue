@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-06-23 15:07:17
+ * @LastEditTime: 2022-06-28 10:34:58
  * @Description:
 -->
 <template>
@@ -122,6 +122,9 @@ export default {
               item.children.sort((a,b) => a.sn - b.sn).forEach((cItem,cIndex) => {
                 cItem.id = `${index}-${cIndex}`;
                 cItem.pidCount = cItem.sn
+                // 属性值替换
+                cItem.preCalicoWeight = cItem.clothWeight;
+                cItem.clothWeight = ''
               })
             };
             return item;
