@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-27 11:14:49
+ * @LastEditTime: 2022-06-28 10:10:28
  * @Description: 
 -->
 <template>
@@ -390,6 +390,7 @@ export default {
           stockState: 0,
           sysCreated: this.$getNowTime("datetime"),
           sysCreatedby: this.$store.state.userOid,
+          retBatch: this.form.vatNo
         }).then((res) => {
           baseCodeSupply({ code: "whse_out" }).then((res) => {});
           baseCodeSupplyEx({ code: "pb_out_whse" }).then((outPh) => {
@@ -520,6 +521,7 @@ export default {
           stockState: 0,
           sysCreated: this.$getNowTime("datetime"),
           sysCreatedby: this.$store.state.userOid,
+          retBatch: this.form.vatNo
         }).then((res) => {
           baseCodeSupply({ code: "whse_out" }).then((res) => {});
           baseCodeSupplyEx({ code: "pb_out_whse" }).then((outPh) => {
