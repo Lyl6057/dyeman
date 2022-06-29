@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-08-07 07:57:44
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-10 09:54:39
+ * @LastEditTime: 2022-06-29 14:11:43
  * @Description: 
 -->
 <template>
@@ -165,6 +165,7 @@ import {
 import { webSocket } from "@/config/index.js";
 import printTem from "./printTem.vue";
 import { addStorageLog, getStorageLog } from "../scan/api";
+import { getCodeValue } from "@/api/index"
 export default {
   name: "",
   components: {
@@ -175,9 +176,6 @@ export default {
     return {
       formOp: mainForm(this),
       form: {
-        // realGramWeight: 0,
-        // clothWidth: 0,
-        // sideBreadthValue: 0,
         netWeight: 0,
       },
       crudOp: mainCrud(this),
@@ -207,13 +205,19 @@ export default {
       vatLoading: false,
       dlgCtr: true,
       spowerClient: null,
+      tubeMaxValue: 0
     };
   },
   created() {
-    // this.setCz();
   },
   mounted() {
     this.wLoading = true;
+    getCodeValue("bas_sys_rule").then(res => {
+      if(!res.data.length){
+        this.tubeMaxValue = 0
+      }
+      this.tubeMaxValue = Number(res.data[0].reserved1)
+    });
     getCheckItem().then((res) => {
       let data = res.data.filter((item) => {
         return item.checkType != 2;
@@ -226,7 +230,7 @@ export default {
           this.form.originPlace = "06";
           this.form.qcTakeOut = 0;
           this.form.pidNo = 1;
-          this.form.paperTube = 1;
+          this.form.paperTube = this.tubeMaxValue;
           this.form.widthUnit = "INCH";
           this.form.gramWeightUnit = "g";
           getTem({ isDefault: 1, isUsed: 1 }).then((res) => {
@@ -498,14 +502,15 @@ export default {
           });
         }
       });
-
-      // this.pdfDlg = true;
-      // this.pdfUrl =
-      //   process.env.API_HOST +
-      //   "/api/proBleadyeRunJob/createBleadyeRunJobPdf?id=" +
-      //   this.detail.cardId;
     },
-    print() {
+    async print() {
+      if(this.form.paperTube > this.tubeMaxValue){
+        let cofirmRes = await this.$tip.cofirm("纸筒重量超过规定重量，是否确定打印码卡(Trọng lượng thùng giấy vượt quá trọng lượng quy định, bạn có chắc muốn in mã này không)?").then(() => {return true}).catch((e) => {return false})
+        if(!cofirmRes){
+          this.$tip.warning("已取消打印!");
+          return 
+        }
+      }
       if (this.prsocket.readyState == 3 || this.prsocket.readyState == 0) {
         this.$tip.error("打印服务离线，请启动服务!");
         return;
