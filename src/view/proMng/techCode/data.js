@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-21 09:24:40
+ * @LastEditTime: 2022-06-28 13:43:30
  * @Description:
  */
 
@@ -15,19 +15,17 @@ export function mainForm(_this) {
   return {
     submitBtn: false,
     emptyBtn: false,
-    labelWidth: 150,
+    labelWidth: 110,
     column: [
       {
         label: "工艺编号",
         prop: "bleadyeCode",
         span: 6,
-        placeholder: " "
       },
       {
         label: "工艺名称",
         prop: "bleadyeName",
         span: 6,
-        placeholder: " "
       },
       {
         label: "工艺分类",
@@ -286,18 +284,18 @@ export function dlgCrud(_this) {
           })
         }
       },
-      // {
-      //   label: "材料代碼",
-      //   prop: "basMateId",
-      //   width: 120,
-      //   span: 6,
-      //   formslot: true,
-      //   cell: false
-      // },
+      {
+        label: "材料代碼",
+        prop: "basMateId",
+        width: 120,
+        span: 6,
+        // formslot: true,
+        cell: false
+      },
       {
         label: "材料名称",
         prop: "mateName",
-        width: 300,
+        width: 350,
         span: 6,
         slot: true,
         overHidden: true,

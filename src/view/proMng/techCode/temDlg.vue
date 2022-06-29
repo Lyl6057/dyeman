@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-21 10:47:02
+ * @LastEditTime: 2022-06-28 11:19:47
  * @Description: 
 -->
 <template>
@@ -31,7 +31,7 @@
         <avue-crud ref="crud" id="mainCrud" :option="crudOp" :data="crud" :page.sync="page" v-loading="loading" @on-load="query" @row-dblclick="handleRowDBLClick" @current-row-change="cellClick">
           <template slot="mateName" slot-scope="scope">
             <el-select slot="reference" v-if="scope.row.bleadyeType != 'run' && scope.row.$cellEdit"  v-model="scope.row.mateName" remote filterable reserve-keyword clearable default-first-option placeholder="请输入材料信息" :loading="vatLoading" :remote-method="remoteMethod" @change="handleMatNameChange">
-              <el-option v-for="item in options" :key="item.bcCode" :label="`${item.bcCode}——${item.factoryName}`" :value="`${item.bcCode}——${item.factoryName}`">
+              <el-option v-for="item in options" :key="item.bcCode" :label="`${item.cnnamelong}—${item.factoryName}`" :value="`${item.factoryName}`">
               </el-option>
             </el-select>
             <el-input v-else-if="scope.row.bleadyeType == 'run' && scope.row.$cellEdit" v-model="scope.row.mateName"></el-input>
@@ -117,8 +117,28 @@ export default {
   watch: {},
   methods: {
     handleMatNameChange(val) {
-      this.chooseData.basMateId = val.split("——")[0];
-      // this.chooseData.mateName = val.split("-")[1];
+      if(!val){
+        this.chooseData.basMateId = ''
+        this.chooseData.mateName = ''
+        return;
+      }
+      if (this.chooseData.bleadyeType == "run") {
+        return;
+      }
+      let fetchF = null;
+      if (this.chooseData.bleadyeType == "add_chemicalmat") {
+        fetchF = getBasChemicalByPage;
+      } else {
+        fetchF = getBasPigmentByPage;
+      }
+      fetchF({ factoryName: "%" + val }).then((res) => {
+        if(res.data.total){
+          this.$nextTick(() =>{
+            this.$set(this.chooseData, "basMateId", res.data.records[0].bcCode)
+            this.$set(this.chooseData, "mateName", res.data.records[0].factoryName)
+          })
+        }
+      });
     },
     remoteMethod(val) {
       if (this.chooseData.bleadyeType == "run") {
@@ -269,9 +289,6 @@ export default {
             }
           }
           item.index = i + 1;
-          if (item.bleadyeType != "run") {
-            item.mateName = item.basMateId + "——" + item.mateName;
-          }
         });
         this.page.total = res.data.total;
         setTimeout(() => {
@@ -295,9 +312,9 @@ export default {
             }
           }
           let data = JSON.parse(JSON.stringify(item));
-          if (data.bleadyeType != "run") {
-            data.mateName = data.mateName.split("——")[1];
-          }
+          // if (data.bleadyeType != "run") {
+          //   data.mateName = data.mateName.split("——")[1];
+          // }
           if (data.bleadyeType == "add_chemicalmat") {
             data.formulaUnit = "KG";
           } else if (data.bleadyeType == "add_pigment") {
