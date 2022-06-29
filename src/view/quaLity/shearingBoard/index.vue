@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-05-03 16:09:29
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-28 08:03:59
+ * @LastEditTime: 2022-06-28 16:55:15
  * @FilePath: \iot.vue\src\view\quaLity\shearingBoard\index.vue
  * @Description: 
 -->
@@ -14,20 +14,13 @@
         <el-button type="success" :disabled="chooseData.upFlag" @click="update"> {{this.$t("public.update")}} </el-button>
         <el-button type="primary" @click="add"> {{this.$t("public.add")}} </el-button>
         <el-button type="danger" :disabled="chooseData.upFlag" @click="del"> {{this.$t("public.del")}} </el-button>
-        <el-popconfirm
-          title="是否确定更新数据?"
-          @onConfirm="handleUpdate"
-          style="margin: 0 10px"
-        >
+        <el-popconfirm title="是否确定更新数据?" @onConfirm="handleUpdate" style="margin: 0 10px">
           <el-button slot="reference" type="primary" :disabled="chooseData.upFlag || !chooseData.cutId">更新码卡</el-button>
         </el-popconfirm>
-        <el-popconfirm
-          title="是否确定打印?"
-          @onConfirm="handlePrint"
-          style="margin-right: 10px"
-        >
+        <el-popconfirm title="是否确定打印?" @onConfirm="handlePrint" style="margin-right: 10px">
           <el-button slot="reference" type="primary" :disabled="!chooseData.upFlag">打印</el-button>
         </el-popconfirm>
+        <el-button type="primary" @click="handleOutreport"> 报表 </el-button>
         <el-button type="primary" @click="query"> {{this.$t("public.query")}} </el-button>
         <div style="float: right">
           码卡信息 <el-switch v-model="hasCardData" active-text="显示" inactive-text="隐藏">
@@ -109,7 +102,7 @@ export default {
       prsocket: null,
       printVisible: false,
       updateVisible: false,
-      chooseData: { }
+      chooseData: {},
     };
   },
   watch: {},
@@ -141,7 +134,7 @@ export default {
             item.cutDefeWeightLbs = item.cutDefeWeight * 2.2046;
           });
           this.page.total = total;
-          this.chooseData = {}
+          this.chooseData = {};
           this.$refs.crud.setCurrentRow();
           await this.$nextTick();
           this.curIdx = null;
@@ -194,6 +187,19 @@ export default {
           this.loading = false;
         });
     },
+    handleOutreport() {
+      let url = encodeURI(
+        "http://" +
+          document.domain +
+          ":91/api/proFinalProductCardCut/exportForm?cutDept=" +
+          (this.form.cutDept || "") +
+          "&cutDate=" +
+          (this.form.cutDate || "") +
+          "&productNo=" +
+          (this.form.productNo || "")
+      );
+      window.open(url);
+    },
     handlePrint() {
       if (this.prsocket.readyState == 3 || this.prsocket.readyState == 0) {
         this.$tip.error("打印服务离线，请启动服务后刷新页面!");
@@ -208,8 +214,8 @@ export default {
     },
     handleUpdate() {
       let printData = this.crud[this.curIdx - 1];
-      if(printData.upFlag){
-        this.$tip.warning("该码卡已更新!")
+      if (printData.upFlag) {
+        this.$tip.warning("该码卡已更新!");
         return;
       }
       this.loading = true;
@@ -239,9 +245,9 @@ export default {
               data.grossWeightLbs = Number(
                 (data.grossWeight * 2.2046).toFixed(1)
               );
-              data.yardLength = printData.cutYds
+              data.yardLength = printData.cutYds;
               await updateFinishedNoteData(data);
-              printData.upFlag = true
+              printData.upFlag = true;
               await updateProFinalProductCardCut(printData);
               this.updateVisible = false;
               this.$tip.success("更新成功!");
@@ -257,7 +263,7 @@ export default {
     },
     rowClick(row) {
       this.curIdx = row.$index + 1;
-      this.chooseData = row
+      this.chooseData = row;
       this.getCardData(row);
     },
     getCardData(row) {
@@ -278,6 +284,10 @@ export default {
     },
     handleRowDBLClick(row) {
       this.curIdx = row.$index + 1;
+      if(row.upFlag){
+        this.$tip.warning("已更新码卡不可修改！");
+        return;
+      }
       this.update();
     },
     temClose(hasRefresh) {

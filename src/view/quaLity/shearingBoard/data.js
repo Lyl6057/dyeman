@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-05-03 16:09:34
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-27 15:53:28
+ * @LastEditTime: 2022-06-28 16:27:00
  * @FilePath: \iot.vue\src\view\quaLity\shearingBoard\data.js
  * @Description:
  */
@@ -100,7 +100,7 @@ export function crateDataForm(_this) {
         type: "date",
         format: "yyyy-MM-dd",
         valueFormat: "yyyy-MM-dd HH:mm:ss",
-        placeholder: ' '
+        placeholder: ' ',
       },
       {
         label: "剪办部门",
@@ -160,6 +160,7 @@ export function crateDataForm(_this) {
         ],
         change: ({ value }) =>{
           _this.qcShearingBoardData.netWeightLbs = value * 2.2046
+          _this.calculateYardLength()
         }
       },
       {
@@ -209,6 +210,7 @@ export function crateDataForm(_this) {
             }
             _this.qcShearingBoardData.cutSamWeightLbs = value * 2.2046
           })
+          _this.calculateYardLength()
         }
       },
       {
@@ -263,6 +265,7 @@ export function crateDataForm(_this) {
             }
             _this.qcShearingBoardData.cutDefeWeightLbs = value * 2.2046
           })
+          _this.calculateYardLength()
         }
       },
       {

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-05-03 16:29:13
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-28 09:03:27
+ * @LastEditTime: 2022-06-28 16:52:52
  * @FilePath: \iot.vue\src\view\quaLity\shearingBoard\tem.vue
  * @Description: 
 -->
@@ -10,11 +10,11 @@
   <div class="qcChcekPlanTem">
     <view-container title="QA剪办记录维护" element-loading-text="正在拼命加载中..." v-loading="loading">
       <div class="btnList">
-        <el-button type="success" @click="handleSave">{{this.$t("public.save")}}</el-button>
+        <el-button type="success" @click="handleSave" :disabled="qcShearingBoardData.upFlag">{{this.$t("public.save")}}</el-button>
         <el-button type="warning" @click="handleClose">{{this.$t("public.close")}}</el-button>
       </div>
       <div class="formBox">
-        <avue-form ref="qcCheckPlanForm" :option="qcShearingBoardFormOp" v-model="qcShearingBoardData">
+        <avue-form ref="qcShearingBoardForm" :option="qcShearingBoardFormOp" v-model="qcShearingBoardData">
           <template slot-scope="scope" slot="productNo">
             <el-select v-model="qcShearingBoardData.productNo" filterable remote reserve-keyword clearable default-first-option placeholder="请输入成品编号" :remote-method="remoteMethod" :loading="vatLoading" @change="handleVatnoChange">
               <el-option v-for="item in options" :key="item.cardId" :label="item.productNo" :value="item.productNo">
@@ -139,9 +139,13 @@ export default {
     handleStoreRowClick(val) {
       this.dtlCurIdx = val.$index + 1;
     },
-    async calculateYardLength(id) {
+    async calculateYardLength() {
+      if(this.loading){
+        await this.$nextTick()
+      }
+      this.loading = true
       let res = await getFinishedNoteByPage({
-        cardId: id,
+        cardId: this.qcShearingBoardData.proCardFk,
         rows: 20,
         start: 1,
         page: 1,
@@ -167,25 +171,25 @@ export default {
           ? Number((actualSideBreadth * 2.54) / 100)
           : Number(actualSideBreadth / 100);
 
+      let cutWeight = netWeight - this.qcShearingBoardData.cutSamWeight - this.qcShearingBoardData.cutDefeWeight
       let yardLength = parseInt(
-        Number(netWeight / gramWeight / breadth) * 1.0936
+        Number(cutWeight / gramWeight / breadth) * 1.0936
       );
-      return yardLength;
+      this.qcShearingBoardData.cutYds =  yardLength;
+      setTimeout(() => {
+        this.loading = false
+      });
+      
     },
     handleSave() {
-      this.$refs.qcCheckPlanForm.validate(async (valid, done) => {
+      this.$refs.qcShearingBoardForm.validate(async (valid, done) => {
         try {
           if (!valid) {
             this.$tip.error("请补充查布计划表信息!");
             return;
           }
-          // this.loading = true;
+          this.loading = true;
           let cutId = this.qcShearingBoardData.cutId;
-          // 计算码长
-          let yardLength = await this.calculateYardLength(
-            this.qcShearingBoardData.proCardFk
-          );
-          this.qcShearingBoardData.cutYds = yardLength
           if (cutId) {
             await updateProFinalProductCardCut(this.qcShearingBoardData).then();
           } else {
