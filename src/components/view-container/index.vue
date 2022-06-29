@@ -1,7 +1,7 @@
 <template>
   <div class="view-container">
     <el-card>
-      <el-tabs type="border-card">
+      <el-tabs :type="type">
         <el-tab-pane :label="title">
           <slot />
         </el-tab-pane>
@@ -22,6 +22,10 @@ export default {
       type: String,
       default: "请定义你的标题",
     },
+    type: {
+      type: String,
+      default: 'border-card'
+    }
   },
 };
 </script>
