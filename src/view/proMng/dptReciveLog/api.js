@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-01 14:06:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-23 10:23:07
+ * @LastEditTime: 2022-06-29 10:28:36
  * @Description:
  */
 
@@ -77,6 +77,14 @@ export function get(params) {
 export function getWeave(params) {
   return axios({
     url: "/api/proWeaveJob/page",
+    method: "get",
+    params: params
+  });
+}
+
+export function getYarntest(params) {
+  return axios({
+    url: "/api/aloYarntest/page",
     method: "get",
     params: params
   });

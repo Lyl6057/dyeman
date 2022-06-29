@@ -1,186 +1,60 @@
 <!--
  * @Author: Lyl
- * @Date: 2021-01-30 10:05:32
+ * @Date: 2022-01-27 14:37:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-02 16:26:02
+ * @LastEditTime: 2022-06-29 11:23:55
+ * @FilePath: \iot.vue\src\view\proMng\dptReciveLog\index.vue
  * @Description: 
 -->
 <template>
   <div id="dptReciveLog">
-    <el-tabs
-      v-model="tabs"
-      type="border-card"
-      v-loading="wloading"
-      element-loading-text="拼命加载中..."
-      @tab-click="tabChange"
-    >
-      <el-tab-pane name="rd" label="染单管理">
-        <el-row class="btnList">
-          <el-tooltip
-            class="item"
-            effect="dark"
-            content="thêm mới "
-            placement="top-start"
-          >
-            <el-button type="primary" @click="add">{{
-              this.$t("public.add")
-            }}</el-button>
-          </el-tooltip>
-          <el-button type="success" @click="flowVisible = true"
-            >流程图</el-button
-          >
-          <el-tooltip
-            class="item"
-            effect="dark"
-            content="tìm kiếm"
-            placement="top-start"
-          >
-            <el-button type="primary" @click="query">{{
-              this.$t("public.query")
-            }}</el-button>
-          </el-tooltip>
-        </el-row>
-        <el-row class="formBox">
-          <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
-        </el-row>
-        <el-row class="crudBox">
-          <el-col :span="6">
-            <view-container
-              title="缸号信息"
-              v-loading="sloading"
-              element-loading-text="拼命加载中..."
-            >
-              <avue-crud
-                ref="crud"
-                id="crud"
-                :option="crudOp"
-                :data="crud"
-                :page.sync="page"
-                v-loading="loading"
-                @on-load="query"
-                @row-dblclick="handleRowDBLClick"
-                @current-row-change="cellClick"
-              >
-              </avue-crud>
-            </view-container>
-          </el-col>
-          <el-col :span="18">
-            <view-container
-              title="收单日志"
-              v-loading="sloading"
-              element-loading-text="拼命加载中..."
-            >
-              <avue-crud
-                ref="jdCrud"
-                id="jdCrud"
-                :option="jdOp"
-                :data="jd"
-                v-loading="sloading"
-              >
-              </avue-crud>
-            </view-container>
-          </el-col>
-        </el-row>
-      </el-tab-pane>
-      <el-tab-pane name="zd" label="织单管理">
-        <el-row class="btnList">
-          <el-tooltip
-            class="item"
-            effect="dark"
-            content="thêm mới "
-            placement="top-start"
-          >
-            <el-button type="primary" @click="add">{{
-              this.$t("public.add")
-            }}</el-button>
-          </el-tooltip>
-          <el-tooltip
-            class="item"
-            effect="dark"
-            content="tìm kiếm"
-            placement="top-start"
-          >
-            <el-button type="primary" @click="query">{{
-              this.$t("public.query")
-            }}</el-button>
-          </el-tooltip>
-        </el-row>
-        <el-row class="formBox">
-          <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
-        </el-row>
-        <el-row class="crudBox">
-          <el-col :span="6">
-            <view-container
-              title="织单信息"
-              v-loading="sloading"
-              element-loading-text="拼命加载中..."
-            >
-              <avue-crud
-                ref="crud"
-                id="crud"
-                :option="weaveCrudOp"
-                :data="crud"
-                :page.sync="page"
-                v-loading="loading"
-                @on-load="query"
-                @current-row-change="cellClick"
-              >
-              </avue-crud>
-            </view-container>
-          </el-col>
-          <el-col :span="18">
-            <view-container
-              title="收单日志"
-              v-loading="sloading"
-              element-loading-text="拼命加载中..."
-            >
-              <avue-crud
-                ref="jdCrud"
-                id="jdCrud"
-                :option="jdOp"
-                :data="jd"
-                v-loading="sloading"
-              >
-              </avue-crud>
-            </view-container>
-          </el-col>
-        </el-row>
-      </el-tab-pane>
+    <el-tabs v-model="tabs" type="card" v-loading="wloading" element-loading-text="拼命加载中..." @tab-click="tabChange">
+      <el-tab-pane name="rd" label="染整工单"></el-tab-pane>
+      <el-tab-pane name="zd" label="织造通知单"></el-tab-pane>
+      <el-tab-pane name="ssd" label="试纱单通知单"></el-tab-pane>
     </el-tabs>
-    <el-dialog
-      id="colorMng_Dlg"
-      :visible.sync="flowVisible"
-      width="70%"
-      top="5vh"
-      append-to-body
-    >
+    <el-row class="btnList">
+      <el-tooltip class="item" effect="dark" content="thêm mới " placement="top-start">
+        <el-button type="primary" @click="add">{{
+              this.$t("public.add")
+            }}</el-button>
+      </el-tooltip>
+      <el-button type="success" @click="flowVisible = true">流程图</el-button>
+      <el-tooltip class="item" effect="dark" content="tìm kiếm" placement="top-start">
+        <el-button type="primary" @click="query">{{
+              this.$t("public.query")
+            }}</el-button>
+      </el-tooltip>
+    </el-row>
+    <el-row class="formBox">
+      <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
+    </el-row>
+    <el-row class="crudBox">
+      <el-col :span="6" v-resize>
+        <view-container :title="tabTitle" v-loading="sloading" element-loading-text="拼命加载中...">
+          <avue-crud ref="crud" id="crud" style="margin: 5px" :option="crudOp" :data="crud" :page.sync="page" v-loading="loading" @on-load="query" @row-dblclick="handleRowDBLClick" @current-row-change="cellClick">
+          </avue-crud>
+        </view-container>
+      </el-col>
+      <el-col :span="18">
+        <view-container title="收单日志" v-loading="sloading" element-loading-text="拼命加载中...">
+          <avue-crud ref="jdCrud" id="jdCrud" style="margin: 5px" :option="jdOp" :data="jd" v-loading="sloading">
+          </avue-crud>
+        </view-container>
+      </el-col>
+    </el-row>
+
+    <el-dialog id="colorMng_Dlg" :visible.sync="flowVisible" width="70%" top="5vh" append-to-body>
       <flow-chart-pro ref="flowchartpro" v-model="fk"></flow-chart-pro>
     </el-dialog>
-    <el-dialog
-      id="colorMng_Dlg"
-      :visible.sync="dialogVisible"
-      fullscreen
-      width="70%"
-      append-to-body
-      :close-on-click-modal="false"
-      :close-on-press-escape="false"
-    >
-      <tem-dlg
-        v-if="dialogVisible"
-        ref="tem"
-        :detail="detail"
-        :isAdd="isAdd"
-        :userId="userId"
-        :tabs="tabs"
-        @close="dialogVisible = false"
-        @refresh="query"
-      ></tem-dlg>
+    <el-dialog id="colorMng_Dlg" :visible.sync="dialogVisible" fullscreen width="70%" append-to-body :close-on-click-modal="false" :close-on-press-escape="false">
+      <tem-dlg v-if="dialogVisible" ref="tem" :detail="detail" :isAdd="isAdd" :userId="userId" :tabs="tabs" @close="dialogVisible = false" @refresh="query"></tem-dlg>
     </el-dialog>
   </div>
 </template>
 <script>
 import flowChartPro from "@/components/flowChart2Pro/index.vue";
-import { mainForm, mainCrud, dlgCrud, weavecrud, weaveForm } from "./data";
+import { mainForm, mainCrud, dlgCrud, weavecrud, weaveForm, yarnTestCrud, yarnForm } from "./data";
 import {
   get,
   getWeave,
@@ -194,6 +68,7 @@ import {
   getRunJob,
   getLoginOrg,
   getDptWorkProcess,
+  getYarntest,
 } from "./api";
 import tem from "./temDlg";
 export default {
@@ -219,35 +94,34 @@ export default {
       dialogVisible: false,
       detail: {},
       isAdd: false,
-      input: "",
       wloading: false,
-      czsocket: {},
       activities: [],
       sloading: false,
       spowerClient: null,
-      weaveCrudOp: weavecrud(this),
-      weaveCrud: [],
       tabs: "rd",
       flowVisible: false,
       fk: "",
       userId: "",
+      tabTitle: '缸号信息',
+      func: get
     };
   },
   watch: {},
   methods: {
     query() {
       this.loading = true;
-      // this.detail = {};
       for (let key in this.form) {
         if (this.form[key] == "") {
           delete this.form[key];
         }
       }
-      this.form.weaveJobCode =
-        "!^%" + (this.form.weaveJobCode ? this.form.weaveJobCode : "");
-      let func = this.tabs == "rd" ? get : getWeave;
-      func(
-        Object.assign(this.form, {
+      let params = {
+        weaveJobCode: "!^%" + (this.form.weaveJobCode ? this.form.weaveJobCode : ""),
+        vatNo:  (this.form.vatNo ? this.form.vatNo : ""),
+        yarntestNote: "!^%" + (this.form.yarntestNote || '')
+      }
+      this.func(
+        Object.assign(params, {
           rows: this.page.pageSize,
           page: this.page.currentPage,
           start: this.page.currentPage,
@@ -260,9 +134,6 @@ export default {
         if (this.crud.length > 0) {
           this.$refs.crud.setCurrentRow(this.crud[0]);
         }
-        if (this.form.weaveJobCode.indexOf("!^%") != -1) {
-          this.form.weaveJobCode = this.form.weaveJobCode.split("!^%")[1] || "";
-        }
         this.page.total = res.data.total;
         setTimeout(() => {
           this.loading = false;
@@ -271,9 +142,24 @@ export default {
     },
     tabChange() {
       if (this.tabs == "rd") {
-        this.formOp = mainForm();
-      } else {
-        this.formOp = weaveForm();
+        this.tabTitle = '缸号信息';
+        this.form.weaveJobCode = ''
+        this.formOp = mainForm(this);
+        this.crudOp = mainCrud(this)
+        this.func = get
+      } else if(this.tabs == "zd") {
+        this.tabTitle = '织单信息';
+        this.form.vatNo = ''
+        this.crudOp = weavecrud(this)
+        this.formOp = weaveForm(this);
+        this.func = getWeave
+      }else{
+        this.tabTitle = '试纱通知单信息';
+        this.form.vatNo = ''
+        this.form.weaveJobCode = ''
+        this.crudOp = yarnTestCrud(this)
+        this.formOp = yarnForm(this);
+        this.func = getYarntest
       }
       this.$nextTick(() => {
         this.query();
@@ -289,9 +175,9 @@ export default {
     },
     cellClick(val) {
       this.sloading = true;
-      this.fk = val.runJobId || val.weaveJobId;
+      this.fk = val.runJobId || val.weaveJobId || val.aloYarntestoid;
       getLog({
-        runJobId: val.runJobId || val.weaveJobId,
+        runJobId:  this.fk,
       }).then((res) => {
         this.jd = res.data;
         this.sloading = false;
@@ -324,15 +210,16 @@ export default {
               weaveJobCode: scanData,
             }).then(async (res) => {
               _this.dialogVisible = true;
-              await _this.$nextTick()
+              await _this.$nextTick();
               // setTimeout(() => {
-                if (res.data.records.length) {
-                  _this.$refs.tem.remoteMethod(
-                    res.data.records[0].weaveJobCode, _this.dialogVisible
-                  );
-                } else {
-                  _this.$tip.error("暂无该织单信息!");
-                }
+              if (res.data.records.length) {
+                _this.$refs.tem.remoteMethod(
+                  res.data.records[0].weaveJobCode,
+                  _this.dialogVisible
+                );
+              } else {
+                _this.$tip.error("暂无该织单信息!");
+              }
               // }, 200);
             });
           } else {
@@ -341,14 +228,17 @@ export default {
               vatNo: scanData,
             }).then(async (res) => {
               _this.dialogVisible = true;
-              await _this.$nextTick()
+              await _this.$nextTick();
               // setTimeout(() => {
-                if (res.data.length) {
-                  _this.$refs.tem.remoteMethod(res.data[0].vatNo, _this.dialogVisible);
-                  // _this.detail.runJobFk = res.data[0].runJobId;
-                } else {
-                  _this.$tip.error("暂无该缸号信息!");
-                }
+              if (res.data.length) {
+                _this.$refs.tem.remoteMethod(
+                  res.data[0].vatNo,
+                  _this.dialogVisible
+                );
+                // _this.detail.runJobFk = res.data[0].runJobId;
+              } else {
+                _this.$tip.error("暂无该缸号信息!");
+              }
               // }, 200);
             });
           }
@@ -376,8 +266,15 @@ export default {
 };
 </script>
 <style lang='stylus'>
-#dptReciveLog
-  .el-timeline-item
-    padding-bottom 10px
-    font-size 16px
+#dptReciveLog {
+  border-left: 1px solid #ccc;
+  .el-tabs__header{
+    margin: 0
+  }
+  .el-timeline-item {
+    padding-bottom: 10px;
+    font-size: 16px;
+  }
+  
+}
 </style>

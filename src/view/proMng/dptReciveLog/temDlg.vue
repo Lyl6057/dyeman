@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-02 16:30:53
+ * @LastEditTime: 2022-06-29 11:16:37
  * @Description: 
 -->
 <template>
@@ -36,6 +36,12 @@
               </el-option>
             </el-select>
           </template>
+          <template slot-scope="scope" slot="aloYarntestoid">
+            <el-select v-model="form.aloYarntestoid" filterable remote reserve-keyword clearable default-first-option placeholder="请输入织单号" :remote-method="remoteMethod" :loading="vatLoading" @change="getLogWeight">
+              <el-option v-for="item in options" :key="item.aloYarntestoid" :label="item.yarntestNote" :value="item.aloYarntestoid">
+              </el-option>
+            </el-select>
+          </template>
         </avue-form>
       </div>
     </view-container>
@@ -44,7 +50,7 @@
 <script>
 import choice from "@/components/proMng/index";
 import { mainCrud, dlgForm, dlgCrud } from "./data";
-import { add, getRunJobByPage, getWeave, getLog } from "./api";
+import { add, getRunJobByPage, getWeave, getLog, getYarntest } from "./api";
 export default {
   name: "techCodeTem",
   props: {
@@ -78,46 +84,71 @@ export default {
   methods: {
     remoteMethod(val, scanSave) {
       this.vatLoading = true;
-      this.wLoading = true;
+      // this.wLoading = true;
       if (this.tabs == "rd") {
         getRunJobByPage({
-          vatNo:"!^%" +  val,
+          vatNo: "!^%" + val,
           rows: 10,
           start: 1,
           page: 1,
-        }).then((res) => {
-          this.options = res.data.records;
-          this.$nextTick(() => {
-            if (res.data.records.length == 1) {
-              this.form.runJobFk = res.data.records[0].runJobId;
-              this.form.clothWeight = res.data.records[0].clothWeight;
-              scanSave && this.save(1)
-            }
-          });
-        }).finally(() =>{
-          this.vatLoading = false;
-          this.wLoading = false;
         })
-      } else {
+          .then((res) => {
+            this.options = res.data.records;
+            this.$nextTick(() => {
+              if (res.data.records.length == 1) {
+                this.form.runJobFk = res.data.records[0].runJobId;
+                this.form.clothWeight = res.data.records[0].clothWeight;
+                scanSave && this.save(1);
+              }
+            });
+          })
+          .finally(() => {
+            this.vatLoading = false;
+            // this.wLoading = false;
+          });
+      } else if (this.tabs == "zd") {
         getWeave({
           weaveJobCode: "!^%" + val,
           rows: 10,
           start: 1,
           page: 1,
-        }).then((res) => {
-          this.options = res.data.records;
-          this.vatLoading = false;
-          this.$nextTick(() => {
-            if (res.data.records.length) {
-              this.form.weaveJobId = res.data.records[0].weaveJobId;
-              this.form.clothWeight = res.data.records[0].clothWeight;
-              scanSave && this.save(1)
-            }
-          });
-        }).finally(() =>{
-          this.vatLoading = false;
-          this.wLoading = false;
         })
+          .then((res) => {
+            this.options = res.data.records;
+            this.vatLoading = false;
+            this.$nextTick(() => {
+              if (res.data.records.length == 1) {
+                this.form.weaveJobId = res.data.records[0].weaveJobId;
+                this.form.clothWeight = res.data.records[0].clothWeight;
+                scanSave && this.save(1);
+              }
+            });
+          })
+          .finally(() => {
+            this.vatLoading = false;
+            // this.wLoading = false;
+          });
+      } else {
+        getYarntest({
+          yarntestNote: "!^%" + val,
+          rows: 10,
+          start: 1,
+          page: 1,
+        })
+          .then((res) => {
+            this.options = res.data.records;
+            this.vatLoading = false;
+            this.$nextTick(() => {
+              if (res.data.records.length == 1) {
+                this.form.aloYarntestoid = res.data.records[0].aloYarntestoid;
+                scanSave && this.save(1);
+              }
+            });
+          })
+          .finally(() => {
+            this.vatLoading = false;
+            // this.wLoading = false;
+          });
       }
     },
     getLogWeight(id) {
@@ -149,7 +180,7 @@ export default {
                 this.form.realOutput = weight;
               }
             });
-          } else {
+          } else if(this.tabs == "zd") {
             getWeave({
               weaveJobId: id,
               rows: 10,
@@ -182,8 +213,10 @@ export default {
             this.wLoading = true;
             if (this.tabs == "rd") {
               this.form.vatNo = this.form.$runJobFk;
-            } else {
+            } else if (this.tabs == "zd") {
               this.form.runJobFk = this.form.weaveJobId;
+            } else {
+              this.form.runJobFk = this.form.aloYarntestoid;
             }
             add(this.form).then((res) => {
               if (res.data.code == 200) {
@@ -191,7 +224,6 @@ export default {
                 this.$tip.success(this.$t("public.bccg"));
                 this.$emit("refresh");
                 !isContinue && this.$emit("close");
-                
               } else {
                 this.$tip.error(this.$t("public.bcsb"));
               }
