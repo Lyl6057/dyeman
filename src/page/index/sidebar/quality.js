@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-04-01 14:08:13
- * @LastEditors: Lyl
- * @LastEditTime: 2022-06-22 13:59:06
+ * @LastEditors: Symbol_Yang
+ * @LastEditTime: 2022-06-28 16:06:28
  * @Description:
  */
 
@@ -32,6 +32,10 @@ export function quality(_this) {
         {
           menuName: "5.布票打印",
           index: "noteCode"
+        },
+        {
+          menuName: "6.入仓通知单",
+          index: "stkinMemo"
         }
       ]
     },
