@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-14 15:48:16
+ * @LastEditTime: 2022-06-28 11:23:30
  * @Description: 
 -->
 <template>
@@ -141,12 +141,13 @@ export default {
           delete this.form[key];
         }
       }
-      // this.form.bleadyeCode =
-      //   "!^%" + (this.form.bleadyeCode ? this.form.bleadyeCode : "");
-      // this.form.bleadyeName =
-      //   "%" + (this.form.bleadyeName ? this.form.bleadyeName : "");
+      let params = {
+        bleadyeCode: "!^%" + (this.form.bleadyeCode || ''),
+        bleadyeName: "!^%" + (this.form.bleadyeName || ''),
+        techPart: this.form.techPart
+      }
       get(
-        Object.assign(this.form, {
+        Object.assign(params, {
           rows: this.page.pageSize,
           start: this.page.currentPage,
         })
@@ -171,12 +172,6 @@ export default {
         if (this.crud.length > 0) {
           this.$refs.crud.setCurrentRow(this.crud[0]);
         }
-        // if (this.form.bleadyeCode.indexOf("!^%") != -1) {
-        //   this.form.bleadyeCode = this.form.bleadyeCode.split("!^%")[1] || "";
-        // }
-        // if (this.form.bleadyeName.indexOf("%") != -1) {
-        //   this.form.bleadyeName = this.form.bleadyeName.split("%")[1] || "";
-        // }
         this.page.total = res.data.total;
         this.loading = false;
       });

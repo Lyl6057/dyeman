@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-03-29 10:04:07
+ * @LastEditTime: 2022-06-29 09:39:35
  * @Description:
 -->
 <template>
@@ -230,7 +230,7 @@ export default {
         Object.assign(this.form, {
           rows: this.page.pageSize,
           start: this.page.currentPage,
-          isPrinted: true,
+          // isPrinted: true,
           clothState: this.form.clothState || 1,
           delFlag: false,
         })
