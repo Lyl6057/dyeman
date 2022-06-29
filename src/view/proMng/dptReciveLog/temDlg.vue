@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-29 11:16:37
+ * @LastEditTime: 2022-06-29 13:16:34
  * @Description: 
 -->
 <template>
@@ -37,7 +37,7 @@
             </el-select>
           </template>
           <template slot-scope="scope" slot="aloYarntestoid">
-            <el-select v-model="form.aloYarntestoid" filterable remote reserve-keyword clearable default-first-option placeholder="请输入织单号" :remote-method="remoteMethod" :loading="vatLoading" @change="getLogWeight">
+            <el-select v-model="form.aloYarntestoid" filterable remote reserve-keyword clearable default-first-option placeholder="请输入试纱通知单号" :remote-method="remoteMethod" :loading="vatLoading" @change="getLogWeight">
               <el-option v-for="item in options" :key="item.aloYarntestoid" :label="item.yarntestNote" :value="item.aloYarntestoid">
               </el-option>
             </el-select>

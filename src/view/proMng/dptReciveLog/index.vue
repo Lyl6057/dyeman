@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-01-27 14:37:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-29 11:23:55
+ * @LastEditTime: 2022-06-29 13:19:58
  * @FilePath: \iot.vue\src\view\proMng\dptReciveLog\index.vue
  * @Description: 
 -->
@@ -11,7 +11,7 @@
     <el-tabs v-model="tabs" type="card" v-loading="wloading" element-loading-text="拼命加载中..." @tab-click="tabChange">
       <el-tab-pane name="rd" label="染整工单"></el-tab-pane>
       <el-tab-pane name="zd" label="织造通知单"></el-tab-pane>
-      <el-tab-pane name="ssd" label="试纱单通知单"></el-tab-pane>
+      <el-tab-pane name="ssd" label="试纱通知单"></el-tab-pane>
     </el-tabs>
     <el-row class="btnList">
       <el-tooltip class="item" effect="dark" content="thêm mới " placement="top-start">
