@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2021-10-01 16:33:53
+ * @LastEditTime: 2022-06-29 10:08:44
  * @Description:
  */
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
@@ -63,7 +63,45 @@ export function mainForm(_this) {
       //   placeholder: " ",
       //   tip: "Số cây vải"
       // },
-
+      {
+        label: "是否外发",
+        prop: "outworkFlag",
+        span: 6,
+        placeholder: " ",
+        type: "select",
+        dicData: [
+          {
+            label: "是",
+            value: true
+          },
+          {
+            label: "否",
+            value: false
+          },
+          
+        ],
+      },
+      {
+        label: "打印状态",
+        prop: "isPrinted",
+        span: 6,
+        placeholder: " ",
+        cell: true,
+        overHidden: true,
+        width: 120,
+        type: "select",
+        dicData: [
+          {
+            label: "未打印",
+            value: 0
+          },
+          {
+            label: "已打印",
+            value: 1
+          },
+          
+        ],
+      },
       {
         label: "胚布状态",
         tip: "Cloth state",
@@ -116,7 +154,7 @@ export function mainCrud(_this) {
     border: true,
     index: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 267px)",
+    height: "calc(100vh - 315px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
@@ -143,7 +181,7 @@ export function mainCrud(_this) {
       },
       {
         label: "織單號(MS đơn sản xuất bp Dệt)",
-        prop: "weaveJobCode",
+        prop: "proName",
         width: 150,
         span: 6,
         placeholder: " ",

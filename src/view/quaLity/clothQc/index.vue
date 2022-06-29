@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
- * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-06-23 09:53:46
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-06-29 10:09:14
  * @Description:
 -->
 <template>
@@ -54,7 +54,7 @@
               }}</el-button>
               <el-button type="primary" @click="openCheck">验布项目</el-button>
             </div>
-            <div style="height: calc(100vh - 275px); overflow: auto">
+            <div style="height: calc(100vh - 323px); overflow: auto">
               <avue-form ref="form" :option="checkForm" v-model="checkQc">
               </avue-form>
             </div>
@@ -122,6 +122,8 @@ export default {
       form: {
         weaveJobFk: "",
         clothState: 1,
+        isPrinted: 1,
+        outworkFlag: false
       },
       crudOp: mainCrud(this),
       crud: [],
@@ -210,22 +212,22 @@ export default {
     query() {
       this.wLoading = true;
       let { prop, order } = this.sort;
-      for (let key in this.form) {
-        if (!this.form[key]) {
-          delete this.form[key];
-        }
-      }
       order
         ? (this.form.sort = prop + (order == "descending" ? ",1" : ",0"))
         : (this.form.sort = "storeLoadCode,1");
+      let params = {
+        storeLoadCode:  '%' + (this.form.storeLoadCode || ''),
+        // weaveJobCode: '%' + (this.form.weaveJobCode || ''),
+        noteCode: '!^%' + (this.form.noteCode || ''),
+        proName: '%' + (this.form.weaveJobCode || ''),
+      }
       get(
-        Object.assign(this.form, {
+        Object.assign(params, {
           rows: this.page.pageSize,
           start: this.page.currentPage,
-          isPrinted: true,
-          clothState: this.form.clothState || 1,
-          // 加上过滤厂
-          filterFactory: true
+          isPrinted: this.form.isPrinted,
+          clothState: this.form.clothState,
+          outworkFlag: this.form.outworkFlag,
         })
       ).then((res) => {
         this.crud = res.data.records;
@@ -235,6 +237,7 @@ export default {
         this.crud.forEach((item, i) => {
           item.index = i + 1;
           item.eachNumber = Number(item.eachNumber);
+          item.proName = item.weaveJobCode || item.proName
         });
         this.page.total = res.data.total;
         setTimeout(() => {

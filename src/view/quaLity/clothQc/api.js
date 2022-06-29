@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-01 14:06:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-10-01 14:57:32
+ * @LastEditTime: 2022-06-29 09:57:42
  * @Description:
  */
 
@@ -64,7 +64,7 @@ export function getJob(params) {
 // 獲取打印記錄
 export function get(params) {
   return axios({
-    url: "/api/proClothNote/pageLike",
+    url: "/api/proClothNote/page",
     method: "get",
     params: params
   });
