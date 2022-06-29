@@ -11,7 +11,7 @@
     <div class="main">404</div>
     <div class="footer">
       <div class="page">not found</div>
-      <p>臣妾做不到....</p>
+      <p>臣妾做不到..</p>
     </div>
   </div>
 </template>
