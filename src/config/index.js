@@ -455,3 +455,20 @@ export function toTableLow(_this, tableName = "crud") {
     .getElementsByClassName("el-table__body-wrapper")[0];
   dom1.scrollTo(0, dom1.scrollHeight);
 }
+
+
+// 获取fineReport路径接口
+/**
+ * params: {
+ *    module: "PRO",
+      id: "PRO_BLEADYE_RUN_SUMMARY",
+ * }
+ * 
+ */
+export function fetchFineReportUrl(params) {
+  return axios({
+    url: "/api/basFinereporturl/finereport/detail",
+    method: "get",
+    params:params
+  });
+}

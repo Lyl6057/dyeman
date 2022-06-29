@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-01-23 08:03:49
- * @LastEditors: Lyl
- * @LastEditTime: 2022-06-27 10:34:10
+ * @LastEditors: Symbol_Yang
+ * @LastEditTime: 2022-06-28 16:03:38
  * @Description:
  */
 import Vue from "vue";
@@ -19,9 +19,9 @@ import 'nprogress/nprogress.css'
 // import re from '@/router/view/re'
 // import iq from '@/router/view/iq'
 // import whseMng from "@/router/view/im";
-// import quaLity from "@/router/view/quaLity";
+import quaLity from "@/router/view/quaLity";
 // import laboratory from "./view/laboratory";
-import proMng from "./view/proMng";
+// import proMng from "./view/proMng";
 // import energy from "./view/energy";
 
 NProgress.configure({ showSpinner: false })
@@ -62,9 +62,9 @@ const router = new Router({
         // ...re,
         // ...iq,
         // ...whseMng
-        // ...quaLity
+        ...quaLity
         // ...laboratory
-        ...proMng
+        // ...proMng
         // ...energy
       ]
     },

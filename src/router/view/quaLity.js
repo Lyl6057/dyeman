@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-03-10 13:20:44
- * @LastEditors: Lyl
- * @LastEditTime: 2022-06-22 13:58:59
+ * @LastEditors: Symbol_Yang
+ * @LastEditTime: 2022-06-28 16:05:59
  * @Description:
  */
 export default [
@@ -96,6 +96,14 @@ export default [
     path: "/noteCode",
     name: "布票打印",
     component: resolve => require(["@/view/quaLity/noteCode/index"], resolve),
+    meta: {
+      keepAlive: true
+    }
+  },
+  {
+    path: "/stkinMemo",
+    name: "入仓通知单",
+    component: resolve => require(["@/view/quaLity/proClothStkinMemo/index"], resolve),
     meta: {
       keepAlive: true
     }
