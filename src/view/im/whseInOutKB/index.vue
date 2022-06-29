@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-01-12 15:39:08
  * @LastEditors: Lyl
- * @LastEditTime: 2022-05-26 13:54:07
+ * @LastEditTime: 2022-06-28 10:41:44
  * @FilePath: \iot.vue\src\view\im\whseInOutKB\index.vue
  * @Description: 
 -->
@@ -461,7 +461,7 @@ export default {
       this.taskForm.barCode = this.taskForm.barCode
         ? (this.taskForm.barCode = "%" + this.taskForm.barCode)
         : "";
-      this.taskForm.orderId = "!^";
+      this.taskForm.orderId = "!^%";
       getTask(
         Object.assign(this.taskForm, {
           rows: this.page.pageSize,
