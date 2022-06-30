@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-08 10:53:56
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-08 14:11:24
+ * @LastEditTime: 2022-06-30 14:48:23
 -->
 <template>
   <div id="ityInventoryList">
@@ -110,6 +110,7 @@ export default {
             }
             url = url.replace("###",type);
             url += `&inventory_no=${inventoryNo}`;
+            url += `&type=1`
             let oA = document.createElement('a');
             oA.target = "_blank";
             oA.href = url;
