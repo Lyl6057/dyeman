@@ -1,22 +1,28 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-02-24 08:12:20
- * @LastEditors: Lyl
- * @LastEditTime: 2021-07-02 08:52:53
+ * @LastEditors: Symbol_Yang
+ * @LastEditTime: 2022-06-30 17:13:02
  * @Description: 
 -->
 <template>
   <div id="name">
     <div class="btnList">
-      <el-button type="primary" @click="add">{{
+      <el-button type="primary"  :disabled="hasEdit" @click="add">{{
         this.$t("public.add")
       }}</el-button>
-      <el-button type="danger" @click="del">{{
+      <el-button type="danger"  :disabled="hasEdit" @click="del">{{
         this.$t("public.del")
       }}</el-button>
-      <el-button type="primary" @click="batchAdd">{{
+      <el-button type="primary"  :disabled="hasEdit" @click="batchAdd">{{
         $t("choicDlg.plsc")
       }}</el-button>
+
+      <span style="display:inline-block; padding: 0px 10px">|</span>
+      <el-select v-model="curSelLocCode" clearable placeholder="选择货位码进行批量操作">
+        <el-option v-for="(item, index) in locationCodeDict" :key="index" :label="item.label" :value="item.value"></el-option>
+      </el-select>
+      <el-button type="primary" @click="handleBatchSelLocCode">批量选择货位码</el-button>
     </div>
 
     <div class="crudBox">
@@ -49,7 +55,7 @@
           }}</el-button>
           <el-button type="warning" @click="batchV = false">{{
             $t("public.close")
-          }}</el-button>
+          }}</el-button>         
         </div>
         <div class="formBox">
           <avue-form
@@ -85,6 +91,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    hasEdit: {
+      type: Boolean,
+      default: true
+    }
   },
   components: {
     choice: choice,
@@ -110,7 +120,15 @@ export default {
       chooseData: {},
       oldPhData: {},
       batchV: false,
+
+      // 当前选择货位码
+      curSelLocCode: ""
     };
+  },
+  computed:{
+    locationCodeDict(){
+      return (this.loc1C.column.find(item => item.prop == "locationCode")|| {}).dicData || []
+    }
   },
   watch: {
     inData() {
@@ -122,8 +140,31 @@ export default {
         }
       }
     },
+    hasEdit:{
+      handler(value){
+        this.changeCrudCellStatus(value);  
+      },
+      immediate: false,
+    }
   },
   methods: {
+    // 批量选择货位码
+    handleBatchSelLocCode(){
+      if(!this.curSelLocCode) return this.$tip.warning("请选择货位码");
+      this.$tip.cofirm("是否确认进行所有货位码进行覆盖").then(() => {
+           this.inData.loc.forEach(item => {
+             item.locationCode = this.curSelLocCode;
+           })
+      })
+    },
+    // 修改类型(是否可编辑状态)
+    changeCrudCellStatus(value){
+
+      this.loc1C.column.forEach(item => {
+        item.prop != "locationCode" &&  (item.cell = !value)
+      })
+      
+    },
     query() {
       if (!this.inData.whseCalicoinDtlaoid) {
         return; // 沒有通行證 不給請求數據

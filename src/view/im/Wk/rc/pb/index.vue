@@ -61,6 +61,9 @@
       <el-tab-pane name="pb" label="已入仓胚布">
         <weight-info></weight-info>
       </el-tab-pane>
+      <el-tab-pane name="stkin" label="未入仓通知单">
+        <stkin-memo ref="stkinMemoRef" @selected="handleStkSelected" />
+      </el-tab-pane>
     </el-tabs>
 
     <el-dialog
@@ -115,6 +118,7 @@ import { baseCodeSupply, baseCodeSupplyEx } from "@/api/index";
 import { getPb, getPbDetali, addPb, updatePb, delPb } from "@/api/im/Wk/rc";
 import { rcpb1F, rcpb1C, rcpb2C, rcpb2F } from "./data";
 import weightInfo from "./weight/index";
+import stkinMemo from "./stkinMemo"
 export default {
   name: "",
   components: {
@@ -122,6 +126,7 @@ export default {
     ruleDlg: rule,
     choice: choice,
     weightInfo,
+    stkinMemo
   },
   data() {
     return {
@@ -155,6 +160,10 @@ export default {
   },
   watch: {},
   methods: {
+    // 胚布入仓通知单选中回调
+    handleStkSelected(stkinMemoRow){
+      this.add(stkinMemoRow);
+    },
     getData() {
       this.loading = true;
       this.oldData = {};
@@ -220,7 +229,7 @@ export default {
           this.loading = false;
         });
     },
-    add() {
+    add(stkinMemoRow) {
       let data = {
         index: this.crud.length + 1,
         $cellEdit: true,
@@ -230,6 +239,11 @@ export default {
         yinStatus: "1",
         finStatus: "0",
       };
+      // 判断是否有通知单编号
+      if(stkinMemoRow && stkinMemoRow.memoNo){
+        data.deliNo = stkinMemoRow.memoNo;
+        data.stkinMemoOid = stkinMemoRow.proClothStkinMemooid
+      }
       baseCodeSupplyEx({ code: "whse_in" }).then((res) => {
         data.yinId = res.data.data;
         this.isAdd = true;

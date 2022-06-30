@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-02-24 08:12:20
- * @LastEditors: Lyl
- * @LastEditTime: 2022-06-06 13:38:33
+ * @LastEditors: Symbol_Yang
+ * @LastEditTime: 2022-06-30 16:35:35
  * @Description:
  */
 import { getDIC,getDicNS } from "@/config";

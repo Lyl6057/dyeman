@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:18:36
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-06-28 18:20:19
+ * @LastEditTime: 2022-06-29 17:30:08
 -->
 <template>
   <div id="whse-unIn-container">
@@ -76,6 +76,7 @@ export default {
     // 全选回调
     handleSelectAll(){
       this.$refs.whseUnInRef.selectClear();
+      this.curSelectCodes = [];
     },
     // 选中回调
     handleSelect(rows, row){
