@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-21 13:56:30
+ * @LastEditTime: 2022-06-30 07:41:14
  * @Description: 
 -->
 <template>
@@ -233,6 +233,12 @@ export default {
         this.wLoading = true;
         if (this.splitW) {
           this.form = JSON.parse(JSON.stringify(this.detail));
+          delete this.form.levelNo;
+          delete this.form.pinColumn;
+          delete this.form.totalColumn;
+          delete this.form.diskNum;
+          delete this.form.syringeNum;
+          delete this.form.needlePlaceType;
           getNoteSum({ weaveJobCode: this.detail.weaveJobCode }).then((res) => {
             if (res.data) {
               // realWeight 毛重 clothWeight 净重
@@ -265,6 +271,12 @@ export default {
               this.form = JSON.parse(JSON.stringify(this.detail));
               // this.form.weaveJobCode = this.detail.weaveJobCode + "A";
               this.form.auditState = 0;
+              delete this.form.levelNo;
+              delete this.form.pinColumn;
+              delete this.form.totalColumn;
+              delete this.form.diskNum;
+              delete this.form.syringeNum;
+              delete this.form.needlePlaceType;
             } else {
               this.form.calicoFabricRequire = "开幅";
               this.form.calicoShap = "1";

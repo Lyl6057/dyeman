@@ -390,7 +390,7 @@ export default {
         this.choiceF = scflStockF(this);
         this.getData = getScflStock;
         break;
-      case "选择成品布":
+      case "选择成品布信息":
         this.choiceC = finishedNoteC(this);
         this.choiceF = finishedNoteF(this);
         this.getData = getFinishedNote;

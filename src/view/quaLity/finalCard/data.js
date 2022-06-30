@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-06-07 07:56:01
  * @LastEditors: Lyl
- * @LastEditTime: 2022-01-17 20:37:54
+ * @LastEditTime: 2022-06-29 13:54:06
  * @Description:
  */
 
@@ -96,27 +96,9 @@ export function mainCrud(_this) {
                 if (val.value) {
                   _this.queryVat(val.value);
                 }
-
-                // _this.form.productNo =
-                //   _this.form.vatNo + _this.$preFixInt(_this.form.pidNo, 3);
               });
-
-              // if (val.value) {
-              //   _this.$nextTick(() => {
-              //     _this.query();
-              //   });
-              // }
             }
           },
-          // {
-          //   label: "成品编号",
-          //   prop: "productNo",
-          //   // tip: "Số lô nhuộm",
-          //   overHidden: true,
-          //   placeholder: " ",
-          //   width: 140,
-          //   span: 6
-          // },
           {
             label: "订单编号",
             prop: "poNo",
@@ -174,16 +156,6 @@ export function mainCrud(_this) {
             overHidden: true,
             placeholder: " "
           },
-          // {
-          //   label: "客布代码",
-          //   // tip: "Số màu",
-          //   prop: "guestFabId",
-          //   width: 150,
-          //   span: 6,
-          //   overHidden: true,
-          //   placeholder: " "
-          // },
-
           {
             label: "顏色名稱",
             tip: "Màu",
@@ -254,24 +226,6 @@ export function mainCrud(_this) {
             type: "select",
             dicData: getDIC("bas_yarnorigin")
           }
-
-          //   {
-          //     label: "布类名称",
-          //     tip: "Loại vải",
-          //     prop: "fabName",
-          //     width: 100,
-          //     span: 12,
-          //     placeholder: " "
-          //   },
-
-          //   {
-          //     label: "成份要求",
-          //     tip: "Thành phần",
-          //     prop: "guestComponents",
-          //     width: 100,
-          //     span: 12,
-          //     placeholder: " "
-          //   }
         ]
       },
       {
@@ -283,31 +237,21 @@ export function mainCrud(_this) {
             label: "克重洗前B/W",
             tip: "Trọng lượng trước giặt",
             prop: "gramWeight",
-            // width: 100,
             tipPlacement: "right",
             span: 6,
-            // type: "number",
             align: "left",
             disabled: true,
             placeholder: " "
-            // change: () => {
-            // _this.codeLength();
-            //  }
           },
           {
             label: "克重洗后A/W",
             disabled: true,
             tip: "Trọng lượng sau giặt",
             prop: "afterWeightDsp",
-            // width: 100,
             tipPlacement: "right",
             span: 6,
-            // type: "number",
             align: "left",
             placeholder: " "
-            // change: () => {
-            // _this.codeLength();
-            //  }
           },
           {
             label: "幅宽",
@@ -332,7 +276,6 @@ export function mainCrud(_this) {
           },
           {
             label: "边至边",
-            // tip: "Khổ rộng vải mộc",
             prop: "sideBreadthValue",
             tipPlacement: "right",
             disabled: true,
@@ -341,9 +284,6 @@ export function mainCrud(_this) {
             type: "number",
             align: "left",
             placeholder: " "
-            // change: () => {
-            //   _this.codeLength();
-            // }
           }
         ]
       },
@@ -388,13 +328,6 @@ export function mainCrud(_this) {
             type: "number",
             precision: 1,
             align: "left",
-            // rules: [
-            //   {
-            //     required: true,
-            //     message: "請输入净重",
-            //     trigger: "blur"
-            //   }
-            // ],
             placeholder: " "
           },
           {

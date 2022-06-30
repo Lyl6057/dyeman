@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-05-03 16:09:29
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-01 11:02:26
+ * @LastEditTime: 2022-06-29 13:48:38
  * @FilePath: \iot.vue\src\view\quaLity\abnormalDaily\index.vue
  * @Description: 
 -->
@@ -32,7 +32,8 @@
           @row-dblclick="handleRowDBLClick"
         >
           <template slot-scope="scope" slot="menu">
-            <el-button type="primary" @click="handleCreateOrder(scope)">生成回修单</el-button>
+            <el-button type="primary" plain  @click="handleCreateAbnormal(scope)">异常报告</el-button>
+            <el-button type="primary" plain  @click="handleCreateOrder(scope)">回修单</el-button>
           </template>
         </avue-crud>
       </el-row>
@@ -132,6 +133,9 @@ export default {
       this.dialogVisible = false;
       hasRefresh && this.query();
     },
+    handleCreateAbnormal({ row }){
+      window.open(process.env.API_HOST + '/api/qcCheckClothDayDetail/qaDailyPdf?id=' + row.detailId);
+    },
     async handleCreateOrder({ row }){
       this.wloading = true
       let detailRes =  await fetchQcClothBackRepairByPage({ dayDetailfFk: row.detailId})
@@ -142,10 +146,10 @@ export default {
       }
       if(detailRes.data.total){ 
         await updateQcClothBackRepair(params)
-        window.open(process.env.API_HOST + "/api/qcClothBackRepair/repairPdf?id=" + detailRes.data.records[0].repairId)
+        window.open(process.env.API_HOST + '/api/qcClothBackRepair/repairPdf?id=' + detailRes.data.records[0].repairId)
       }else{
         let addRes = await addQcClothBackRepair(params)
-        window.open(process.env.API_HOST + "/api/qcClothBackRepair/repairPdf?id=" + addRes.data.data)
+        window.open(process.env.API_HOST + '/api/qcClothBackRepair/repairPdf?id=' + addRes.data.data)
       }
     },
     handleReport(command){

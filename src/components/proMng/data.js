@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-05-03 13:03:03
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-17 15:59:25
+ * @LastEditTime: 2022-06-29 16:17:47
  * @Description:
  */
 
@@ -3810,7 +3810,7 @@ export function getClothNote1(params) {
 }
 export function getClothNote(params) {
   return axios({
-    url: "/api/proClothNote/pageLike",
+    url: "/api/proClothNote/page",
     method: "get",
     params: params
   });
@@ -3821,16 +3821,16 @@ export function clothNoteF(_this) {
     emptyBtn: false,
     labelWidth: 120,
     column: [
-      // {
-      //   label: "織單號",
-      //   prop: "weaveJobCode",
-      //   span: 6,
-      //   placeholder: " ",
-      //   // formslot: true,
-      //   // slot: true,
-      //   // type: "select",
-      //   tip: "MS đơn sản xuất bp Dệt"
-      // },
+      {
+        label: "織單號",
+        prop: "proName",
+        span: 6,
+        placeholder: " ",
+        // formslot: true,
+        // slot: true,
+        // type: "select",
+        tip: "MS đơn sản xuất bp Dệt"
+      },
       {
         label: "载具编号",
         tip: "Mã lồng thép",
@@ -3871,18 +3871,18 @@ export function clothNoteF(_this) {
           // _this.filterList();
         }
       },
-      {
-        label: "匹號",
-        prop: "eachNumber",
-        width: 80,
-        align: "right",
-        span: 6,
-        placeholder: " ",
-        tip: "Số cây vải",
-        change: () => {
-          // _this.filterList();
-        }
-      }
+      // {
+      //   label: "匹號",
+      //   prop: "eachNumber",
+      //   width: 80,
+      //   align: "right",
+      //   span: 6,
+      //   placeholder: " ",
+      //   tip: "Số cây vải",
+      //   change: () => {
+      //     // _this.filterList();
+      //   }
+      // }
 
       // {
       //   label: "胚布状态",
@@ -3968,7 +3968,7 @@ export function clothNoteC(_this) {
       },
       {
         label: "織單號(MS đơn sản xuất bp Dệt)",
-        prop: "weaveJobCode",
+        prop: "proName",
         width: 150,
         span: 6,
         placeholder: " ",

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-05-03 16:09:34
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-01 11:26:40
+ * @LastEditTime: 2022-06-29 13:46:41
  * @FilePath: \iot.vue\src\view\quaLity\abnormalDaily\data.js
  * @Description:
  */
@@ -65,10 +65,10 @@ export function mainForm(_this) {
 export function mainCrud(_this) {
   return {
     ...mainCrudOpCommon,
-    menuWidth: 120,
     labelWidth:120,
     showSummary: true,
     menu: true,
+    menuWidth: 200,
     sumColumnList: [
       {
         label: " ",
