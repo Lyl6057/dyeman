@@ -121,7 +121,7 @@ export default {
       minRows: 1,
       maxRows: 5,
       choiceV: false,
-      choiceTle: "选择成品布",
+      choiceTle: "选择成品布信息",
       choiceTarget: {},
       choiceField: "",
       choiceQ: {
