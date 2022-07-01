@@ -99,7 +99,7 @@
 import { rcpb2C, rcpb2F, rcpb3C } from "./data";
 import choice from "@/components/choice";
 import inwhseph from "@/components/calico/inwhse_ph";
-import { fetchStkinMemoDataByStkinOid } from "./stkinMemo/api"
+import { fetchStkinMemoDataByStkinOid,updateNoteClothStatus2 } from "./stkinMemo/api"
 import {
   addPb,
   updatePb,
@@ -196,13 +196,11 @@ export default {
     },
     // 修改类型(是否可编辑状态)
     changeCrudCellStatus(value){
-
       let cIdx = this.mxOp.column.findIndex(item => item.prop == 'countingNo');
       let fIdx = this.mxOp.column.findIndex(item => item.prop == 'fabticket');
       [cIdx,fIdx].forEach(idx => {
         this.mxOp.column[idx].cell = !value
       });
-
     },
     // 通知单数据抽取
     dataExtract(){
@@ -262,6 +260,7 @@ export default {
     getDetail() {
       if (this.isAdd) {
         this.form = this.detail;
+        this.form.sysCreatedby = this.$store.state.userOid;
         this.form.stkinMemoOid && this.dataExtract();
         return;
       }
@@ -708,7 +707,7 @@ export default {
         addPb(this.form).then((Res) => {
           baseCodeSupply({ code: "whse_in" }).then((res) => {});
           this.form.whseCalicoinoid = Res.data.data;
-          this.form.sysCreatedby = this.$store.state.userOid;
+          
           if (this.mx.length === 0) {
             this.loading = false;
             this.$tip.success(this.$t("public.bccg"));
@@ -756,6 +755,12 @@ export default {
                 this.$tip.success(this.$t("public.bccg"));
               }
             }
+
+            // 若是通知单 所有数据保存成功后，对对应的布票状态进行修改为2
+            if(this.form.stkinMemoOid){
+              updateNoteClothStatus2({stkInOid: this.form.stkinMemoOid})
+            }
+
           });
         });
       }

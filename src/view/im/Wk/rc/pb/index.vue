@@ -377,6 +377,7 @@ export default {
     temClose(val) {
       if (val) {
         this.getData();
+        this.$refs.stkinMemoRef.handleQuery();
       }
       this.dialogVisible = false;
     },

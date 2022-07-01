@@ -4,13 +4,14 @@
  * @Author: Symbol_Yang
  * @Date: 2022-06-29 17:18:58
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-06-30 11:07:27
+ * @LastEditTime: 2022-07-01 09:22:02
 -->
 <template>
   <div id="whse-unIn-container" v-loading="loading">
     <div class="btnList">
-      <el-button type="success" @click="handleCreateDtl">生成入仓明细</el-button>
+        <el-button type="success" @click="handleCreateDtl">生成入仓明细</el-button>
        <el-button type="warning" @click="handleClose">{{ this.$t("public.close") }}</el-button>
+       <el-button type="primary" @click="handleQuery">{{ this.$t("public.query") }}</el-button>
     </div>
     <div class="crudBox">
       <avue-crud
@@ -48,6 +49,10 @@
             }
         },
         methods: {
+            handleQuery(){
+                this.page.currentPage = 1;
+                this.getDataList();
+            },
             // 关闭
             handleClose(){
                 document.getElementsByClassName("el-dialog__headerbtn")[0].click();
