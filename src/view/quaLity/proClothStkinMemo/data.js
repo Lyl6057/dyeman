@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:08:41
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-06-29 08:34:26
+ * @LastEditTime: 2022-07-01 10:23:44
  */
 
 // 表格通用配置
@@ -56,13 +56,14 @@ export function stkinMemoCrudOp(_this) {
       },
       {
         label: "入仓日期",
-        prop: "whseInDate",
+        prop: "yinDate",
         width: 150,
       },
       {
         label: "入仓数量(kg)",
         prop: "whseInWeight",
         width: 150,
+        align: "right"
       },
     ]
   }

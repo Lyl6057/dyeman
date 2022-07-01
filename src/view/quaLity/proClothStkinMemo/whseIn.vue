@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:18:23
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-06-29 14:49:54
+ * @LastEditTime: 2022-07-01 10:36:34
 -->
 <template>
   <div id="stkin-memo-container">
@@ -60,8 +60,7 @@ export default {
   },
   computed:{
       hasEdit(){
-          // return  true // this.curSelectRow.stockState != "0";
-          return false;
+          return Boolean(this.curSelectRow.yinDate);
       }
   },
   methods: {
@@ -99,6 +98,7 @@ export default {
       let params = {
         start: this.page.currentPage,
         rows: this.page.pageSize,
+        dataSortRules: "memoDate|desc,memoNo|desc"
       };
       if(memoDate && memoDate.length == 2){
         Object.assign(params,{

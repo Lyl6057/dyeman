@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:18:51
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-06-28 17:52:53
+ * @LastEditTime: 2022-07-01 10:31:31
 -->
 <template>
   <div id="stkin-memo-dtl-container">
@@ -63,7 +63,11 @@ export default {
       loading: false,
       loadLabel: "正在数据请求...",
       stkinMemoFormOp: stkinMemoFormOp(this),
-      stkinMemoData: {},
+      stkinMemoData: {
+        memoNo: "",
+        memoDate: "",
+        yinDate: "",
+      },
       stkinMemoDtlCrudOp: stkinMemoDtlCrudOp(this),
       stlkinMemoDtlDataList: [],
       hasRefresh: false,
@@ -75,7 +79,7 @@ export default {
   },
   computed: {
     hasNotEdit() {
-      return  false  //this.stkinMemoData.stockState == "1";
+      return  Boolean(this.stkinMemoData.yinDate);
     },
     
   },
@@ -88,7 +92,9 @@ export default {
     // 获取纱线入仓明细数据
     getStkinMemoData(stkinMemoData) {
       this.loading = true;
-      this.stlkinMemoData = stkinMemoData;
+      Object.assign(this.stkinMemoData, stkinMemoData)
+      // this.stlkinMemoData = stkinMemoData;
+      // console.log(this.stlkinMemoData)
       fetchStkinMemoDataByStkinOid({stkinOid: stkinMemoData.proClothStkinMemooid}).then(res => {
         this.dataAnalysic(res.data)
       }).finally(() => {
@@ -145,6 +151,7 @@ export default {
       this.stkinMemoData = {
         memoNo: "",
         memoDate: timeConversion(new Date()),
+        yinDate: ""
       };
       baseCodeSupplyEx({ code: "stkin_memo_notice" }).then((res) => {
         this.stkinMemoData.memoNo = res.data.data;

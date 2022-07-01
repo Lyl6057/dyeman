@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
- * @LastEditors: Lyl
- * @LastEditTime: 2022-06-29 10:09:14
+ * @LastEditors: Symbol_Yang
+ * @LastEditTime: 2022-07-01 10:22:27
  * @Description:
 -->
 <template>
@@ -220,6 +220,9 @@ export default {
         // weaveJobCode: '%' + (this.form.weaveJobCode || ''),
         noteCode: '!^%' + (this.form.noteCode || ''),
         proName: '%' + (this.form.weaveJobCode || ''),
+        
+        // 外发厂过滤
+        filterFactory: true,
       }
       get(
         Object.assign(params, {

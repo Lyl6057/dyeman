@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:18:36
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-06-29 17:30:08
+ * @LastEditTime: 2022-07-01 14:11:12
 -->
 <template>
   <div id="whse-unIn-container">
@@ -63,7 +63,7 @@ export default {
         let params = {
             start: this.page.currentPage,
             rows: this.page.pageSize,
-            typeOf: this.imWkType - 4
+            filterFactory: true,
         }
         fetchUnStoreClothByPage(params).then(res => {
             this.page.total = res.data.total;
@@ -106,6 +106,9 @@ export default {
     .avue-crud__menu {
       min-height: 5px !important;
       height: 5px !important;
+    }
+    .avue-crud__tip{
+        display none !important
     }
   }
 </style>
