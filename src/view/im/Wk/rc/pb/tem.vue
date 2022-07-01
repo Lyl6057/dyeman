@@ -438,7 +438,7 @@ export default {
         document
           .getElementById("count")
           .getElementsByClassName("el-table__row")
-          [_this.count.length - 1].addEventListener(
+          [this.count.length - 1].addEventListener(
             "input",
             function () {
               _this.iptPhChange(_this.oldPhData);

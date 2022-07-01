@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-01-12 15:46:05
  * @LastEditors: Lyl
- * @LastEditTime: 2022-05-23 13:43:54
+ * @LastEditTime: 2022-07-01 08:13:54
  * @FilePath: \iot.vue\src\view\im\whseInOutKB\data.js
  * @Description:
  */
@@ -81,6 +81,24 @@ const outExit = [
   }
 ];
 
+const crudCommonConfig = {
+    menu: false,
+    addBtn: false,
+    cancelBtn: false,
+    editBtn: false,
+    delBtn: false,
+    menuWidth: 80,
+    border: true,
+    index: false,
+    highlightCurrentRow: true,
+    height: "calc(100vh - 120px)",
+    refreshBtn: false,
+    columnBtn: false,
+    page: false,
+    labelWidth: 100,
+    selection: true,
+    showSummary: true,
+}
 export function formOp(_this) {
   return {
     submitBtn: false,
@@ -106,22 +124,6 @@ export function formOp(_this) {
             label: "正常出库",
             value: 2
           },
-          // {
-          //   label: "验布出库",
-          //   value: 3
-          // },
-          // {
-          //   label: "验布入库",
-          //   value: 4
-          // },
-          // {
-          //   label: "松布出库",
-          //   value: 5
-          // },
-          // {
-          //   label: "松布入库",
-          //   value: 6
-          // }
         ],
         change: val => {
           _this.typeChange(val.value);
@@ -186,7 +188,7 @@ export function formOp(_this) {
       },
       {
         label: "織單號",
-        prop: "proName",
+        prop: "weaveJobCode",
         display: false,
         span: 6,
         placeholder: " ",
@@ -734,7 +736,7 @@ export function clothCrud(_this) {
       // },
       {
         label: "载具编号",
-        prop: "storeLoadCode",
+        prop: "palletCode",
         span: 8,
         placeholder: " ",
         cell: true,
@@ -744,7 +746,7 @@ export function clothCrud(_this) {
       },
       {
         label: "货位码",
-        prop: "storeSiteCode",
+        prop: "storageId",
         span: 8,
         placeholder: " ",
         cell: true,
@@ -754,288 +756,106 @@ export function clothCrud(_this) {
       },
       {
         label: "織單號",
-        prop: "proName",
+        prop: "weaveJobCode",
         width: 150,
         span: 6,
         placeholder: " ",
         disabled: true,
         overHidden: true
       },
-      // {
-      //   label: "验布记录",
-      //   prop: "perching",
-      //   width: 250,
-      //   placeholder: " ",
-      //   overHidden: true,
-
-      // },
-      // {
-      //   label: "訂單號(Số đơn hàng)",
-      //   prop: "poNo",
-      //   width: 150,
-      //   span: 6,
-      //   placeholder: " ",
-      //   disabled: true,
-      //   overHidden: true
-      // },
-      {
-        label: "布票號",
-        prop: "noteCode",
-        width: 170,
-        disabled: true,
-        placeholder: " ",
-        sortable: true,
-        span: 6,
-        // sortable: true,
-        overHidden: true
-      },
-      // {
-      //   label: "客戶",
-      //   prop: "customerName",
-      //   width: 150,
-      //   disabled: true, placeholder: " ",
-      //   span: 6,
-      //   display: false,
-      //   overHidden: true
-      // },
-      // {
-      //   label: "布类名称",
-      //   prop: "fabricName",
-      //   disabled: true,
-      //   placeholder: " ",
-      //   span: 6,
-      //   width: 200,
-      //   overHidden: true,
-      //   hide: true
-      // },
-      // {
-      //   label: "顏色(Màu sắc)",
-      //   prop: "proColor",
-      //   disabled: true, placeholder: " ",
-      //   span: 6,
-      //   width: 120,
-      //   overHidden: true,
-      //   hide: true
-      // },
-
-      // {
-      //   label: "纱批(Lô sợi)",
-      //   prop: "spi",
-      //   width: 90,
-      //   hide: true,
-      //   span: 6,
-      // },
-
-      // {
-      //   label: "纱牌(Nhãn hiệu sợi)",
-      //   prop: "sp",
-      //   width: 90,
-      //   hide: true,
-      //   span: 6,
-      // },
-      // {
-      //   label: "机台編號",
-      //   prop: "machineCode",
-      //   width: 110,
-      //   hide: false,
-      //   span: 6,
-      //   disabled: true,
-
-      // },
-      // {
-      //   label: "机号",
-      //   prop: "loomNo",
-      //   width: 95,
-      //   hide: false,
-      //   span: 6,
-      //   rules: [
-      //     {
-      //       required: true,
-      //       message: "请输入机号",
-      //       trigger: "blur"
-      //     }
-      //   ],
-      //   disabled: true
-      //   // sortable: true,
-      // },
-      // {
-      //   label: "值机工号",
-      //   prop: "workNo",
-      //   span: 8,
-      //   placeholder: " ",
-      //   width: 120,
-      //   overHidden: true
-      // },
-      // {
-      //   label: "验布员工号",
-      //   prop: "clothChecker",
-      //   span: 8,
-      //   placeholder: " ",
-      //   width: 130,
-      //   sortable: true,
-      //   overHidden: true
-      // },
-      // {
-      //   label: "值机工号",
-      //   prop: "workNo",
-      //   width: 90,
-      //   hide: false,
-      //   span: 6,
-      //   disabled: true,
-      //   rules: [{
-      //     required: true,
-      //     message: "请输入值机工号",
-      //     trigger: "blur"
-      //   }],
-      // },
       {
         label: "匹號",
-        prop: "eachNumber",
-        width: 80,
+        prop: "pidNos",
+        width: 150,
         align: "right",
         // sortable: true,
         span: 6,
         type: "number",
         precision: 0
       },
-      // {
-      //   label: "毛重(KG)",
-      //   prop: "realWeight",
-      //   width: 100,
-      //   align: "right",
-      //   span: 6,
-      //   cell: false,
-      //   placeholder: " "
-      //   // type: "number",
-      //   // precision: 1
-      // },
+     
       {
-        label: _this.$t("whseField.zl") + "(KG)",
-        prop: "clothWeight",
-        width: 100,
-        align: "center",
+        label: "客人訂單號",
+        prop: "custPoNo",
+        width: 120,
         span: 6,
-        cell: true,
         placeholder: " ",
-        type: "number",
-        precision: 1
+        disabled: true,
+        overHidden: true
       },
-      // {
-      //   label: "扣减",
-      //   prop: "qcTakeOut",
-      //   width: 80,
-      //   align: "right",
-      //   span: 6,
-      //   cell: true,
-      //   placeholder: " ",
-      //   type: "number",
-      //   precision: 1
-      // },
       {
-        label: "米长",
-        prop: "clothLengthValue",
-        span: 8,
+        label: "本厂訂單號",
+        prop: "salPoNo",
+        width: 120,
+        span: 6,
         placeholder: " ",
-        cell: false,
-        overHidden: true,
-        align: "right",
-        // sortable: true,
-        type: "number",
-        width: 80
+        disabled: true,
+        overHidden: true
       },
-      // {
-      //   label: "存储位置",
-      //   prop: "storeSiteCode",
-      //   cell: true,
-      //   width: 120,
-      //   placeholder: " ",
-      //   overHidden: true,
-      //   type: "select",
-      //   props: {
-      //     label: "locationCode",
-      //     value: "locationCode"
-      //   }
-      // },
-      // {
-      //   label: "單位",
-      //   prop: "weightUnit",
-      //   width: 80,
-      //   display: false,
-      //   placeholder: " ",
-      //   span: 6,
-      //   type: "select",
-      //   dicData: matUnit
-      // },
-      // {
-      //   label: "長度",
-      //   prop: "clothLength",
-      //   width: 80,
-      //   display: false
-      // },
-
-      // {
-      //   label: "單位",
-      //   prop: "lenUnit",
-      //   width: 80,
-      //   display: false,
-      //   placeholder: " ",
-      //   span: 6,
-      //   type: "select",
-      //   dicData: matUnit
-      // },
-
-      // {
-      //   label: "已打印",
-      //   prop: "isPrinted",
-      //   type: "select",
-      //   disabled: true,
-      //   dicData: [
-      //     {
-      //       value: true,
-      //       label: "是"
-      //     },
-      //     {
-      //       value: false,
-      //       label: "否"
-      //     }
-      //   ],
-      //   span: 6,
-      // },
       {
-        label: "备注",
-        prop: "remark",
-        width: 250,
+        label: "客戶",
+        prop: "custCode",
+        width: 120,
+        disabled: true,
         placeholder: " ",
-        // overHidden: true,
-        cell: true,
-        type: "select",
-        filterable: true,
-        allowCreate: true,
-        defaultFirstOption: true,
-        dicData: getDIC("QC_CLOTH_VISITING_REMOVE")
+        span: 6,
+        display: false,
+        overHidden: true
       },
-      // {
-      //   label: "打印时间(thời gian in)",
-      //   prop: "printedTime",
-      //   type: "date",
-      //   format: "yyyy-MM-dd HH:mm:ss",
-      //   valueFormat: "yyyy-MM-dd HH:mm:ss",
-      //   span: 6,
-      //   align: "center",
-      //   sortable: true,
-      //   width: 200
-      // },
       {
-        label: "验布时间",
-        prop: "clothCheckTime",
+        label: "成品期",
+        prop: "productDate",
+        width: 120,
+        span: 6,
         type: "date",
-        format: "yyyy-MM-dd HH:mm:ss",
-        valueFormat: "yyyy-MM-dd HH:mm:ss",
-        span: 6,
         align: "center",
-        sortable: true,
-        width: 160
-      }
+        format: "yyyy-MM-dd",
+        valueFormat: "yyyy-MM-dd"
+      },
+      {
+        label: "胚布期",
+        prop: "calicoDate",
+        width: 120,
+        span: 6,
+        type: "date",
+        align: "center",
+        format: "yyyy-MM-dd",
+        valueFormat: "yyyy-MM-dd"
+      },
+      {
+        label: "布料编号",
+        prop: "custFabricCode",
+        width: 100,
+        overHidden: true,
+        span: 6
+      },
+      {
+        label: "布料名称",
+        prop: "fabricDesc",
+        width: 250,
+        overHidden: true,
+        span: 6
+      },
+      {
+        label: "顏色",
+        prop: "colorName",
+        disabled: true,
+        placeholder: " ",
+        span: 6,
+        width: 120,
+        overHidden: true
+      },
+      {
+        label: "色号",
+        prop: "colorCode",
+        disabled: true,
+        placeholder: " ",
+        span: 6,
+        width: 120,
+        overHidden: true
+      },
+      
+      
     ]
   };
 }
@@ -1376,24 +1196,9 @@ export function taskCrud(_this) {
   };
 }
 
-export function inWhseCrud(_this) {
+export function inWhseFinishedCrud(_this) {
   return {
-    menu: false,
-    addBtn: false,
-    cancelBtn: false,
-    editBtn: false,
-    delBtn: false,
-    menuWidth: 80,
-    border: true,
-    index: false,
-    highlightCurrentRow: true,
-    height: "calc(100vh - 120px)",
-    refreshBtn: false,
-    columnBtn: false,
-    page: false,
-    labelWidth: 100,
-    selection: true,
-    showSummary: true,
+    ...crudCommonConfig,
     sumColumnList: [
       {
         label: " ",
@@ -1490,13 +1295,11 @@ export function inWhseCrud(_this) {
       },
       {
         label: "码长",
-        // tip: "Tổng cộng(KG)",
         prop: "yardLength",
         width: 100,
         span: 8,
         type: "number",
         align: "right",
-        // precision: 1,
         minRows: 0,
         placeholder: " "
       },
@@ -1506,23 +1309,137 @@ export function inWhseCrud(_this) {
         width: 120,
         span: 8,
         cell: false,
-        // type: "number",
         align: "left",
         placeholder: " ",
         overHidden: true
       },
       {
         label: "幅宽",
-        // tip: "Tổng cộng(KG)",
         prop: "actualSideBreadth",
         width: 120,
         cell: false,
         span: 8,
-        // type: "number",
         align: "left",
         placeholder: " ",
         overHidden: true
       }
+    ]
+  };
+}
+
+export function inWhseNoteCrud(_this) {
+  return {
+    ...crudCommonConfig,
+    sumColumnList: [
+      {
+        label: " ",
+        name: "vatNo",
+        type: "count"
+      },
+      {
+        label: " ",
+        name: "netWeight",
+        type: "sum",
+        decimals: 1
+      }
+    ],
+    column: [
+      {
+        label: "#",
+        prop: "index",
+        width: 60,
+        align: "center",
+        display: false
+      },
+      {
+        label: "織單號",
+        prop: "proName",
+        width: 150,
+        span: 6,
+        placeholder: " ",
+        disabled: true,
+        overHidden: true
+      },
+      {
+        label: "布票號",
+        prop: "noteCode",
+        width: 180,
+        disabled: true,
+        placeholder: " ",
+        span: 6,
+        sortable: true,
+        overHidden: true
+      },
+      {
+        label: "匹號",
+        prop: "eachNumber",
+        width: 105,
+        align: "right",
+        sortable: true,
+        span: 6,
+        type: "number"
+      },
+      {
+        label: "毛重",
+        prop: "realWeight",
+        width: 120,
+        align: "right",
+        span: 6,
+        cell: false,
+        placeholder: " "
+      },
+      {
+        label: _this.$t("whseField.zl"),
+        prop: "clothWeight",
+        width: 120,
+        align: "right",
+        span: 6,
+        cell: false,
+        placeholder: " ",
+        type: "number",
+        precision: 1,
+      },
+      {
+        label: "QC扣减数量",
+        prop: "qcTakeOut",
+        width: 160,
+        align: "right",
+        span: 6,
+        cell: false,
+        placeholder: " ",
+        type: "number",
+        precision: 1,
+      },
+      {
+        label: "米长",
+        prop: "clothLengthValue",
+        span: 8,
+        placeholder: " ",
+        align: "right",
+        cell: false,
+        overHidden: true,
+        type: "number",
+        width: 100
+      },
+      {
+        label: "载具编号",
+        prop: "storeLoadCode",
+        span: 8,
+        placeholder: " ",
+        cell: false,
+        overHidden: true,
+        sortable: true,
+        width: 120
+      },
+      {
+        label: "存储位置",
+        prop: "storeSiteCode",
+        cell: false,
+        width: 220,
+        placeholder: " ",
+        type: "select",
+        dicData: getDicT("whseLocation", "locationCode", "locationCode")
+      },
     ]
   };
 }

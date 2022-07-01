@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-05-03 16:09:34
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-29 13:46:41
+ * @LastEditTime: 2022-06-30 16:09:42
  * @FilePath: \iot.vue\src\view\quaLity\abnormalDaily\data.js
  * @Description:
  */
@@ -132,6 +132,7 @@ export function mainCrud(_this) {
         width: 140,
         span: 6,
         type: "select",
+        disabled: true,
         readonly: true,
         dicData: cust,
         tip: "Khách hàng"
@@ -148,7 +149,29 @@ export function mainCrud(_this) {
         overHidden: true,
         hide: true
       }, 
-      
+      {
+        label: "批号",
+        tip: "Tên loại vải",
+        prop: "salPo",
+        readonly: true,
+        placeholder: " ",
+        span: 6,
+        width: 100,
+        overHidden: true,
+      }, 
+      {
+        label: "交货期",
+        prop: "deliveryDate",
+        width: 160,
+        span: 6,
+        placeholder: " ",
+        overHidden: true,
+        readonly: true,
+        align: "center",
+        type: "datetime",
+        format: "yyyy-MM-dd HH:mm:ss",
+        valueFormat: "yyyy-MM-dd HH:mm:ss",
+      },
       {
         label: "检验疋数",
         prop: "checkPcount",
@@ -198,6 +221,7 @@ export function mainCrud(_this) {
         width: 150,
         span: 6,
         overHidden: true,
+        
       },
       {
         label: "检验数量(磅)",
@@ -208,6 +232,7 @@ export function mainCrud(_this) {
         type: "number",
         align: "right",
         precision: 2,
+        
         rules: [
           {
             required: true,
@@ -237,6 +262,15 @@ export function mainCrud(_this) {
         overHidden: true,
       },
       {
+        label: "详细情况",
+        prop: "problemContent",
+        width: 180,
+        placeholder: " ",
+        span: 12,
+        overHidden: true,
+      },
+      
+      {
         label: "处理方案",
         prop: "solution",
         width: 180,
@@ -244,12 +278,59 @@ export function mainCrud(_this) {
         span: 12,
         overHidden: true,
       },
+      
+      // {
+      //   label: "qc负责人",
+      //   prop: "qcMan",
+      //   width: 180,
+      //   placeholder: " ",
+      //   span: 6,
+      //   overHidden: true,
+      // },
+      // {
+      //   label: "日期",
+      //   prop: "qcConfirDate",
+      //   width: 160,
+      //   span: 6,
+      //   placeholder: " ",
+      //   overHidden: true,
+      //   align: "center",
+      //   type: "datetime",
+      //   format: "yyyy-MM-dd HH:mm:ss",
+      //   valueFormat: "yyyy-MM-dd HH:mm:ss",
+      // },
+      {
+        label: "分析/措施",
+        prop: "chargeSuggest",
+        placeholder: " ",
+        width: 200,
+        span: 12,
+        overHidden: true,
+      },
+      // {
+      //   label: "部门负责人",
+      //   prop: "chargeMan",
+      //   width: 180,
+      //   placeholder: " ",
+      //   span: 6,
+      //   overHidden: true,
+      // },
+      
+      {
+        label: "反馈人员",
+        prop: "qcCheck",
+        width: 180,
+        placeholder: " ",
+        readonly: true,
+        span: 6,
+        overHidden: true,
+      },
       {
         label: "备注",
         prop: "remark",
         placeholder: " ",
         width: 200,
-        span: 12,
+        span: 18,
         overHidden: true,
       },
     ]
