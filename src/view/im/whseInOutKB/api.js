@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-01-13 09:53:53
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-25 16:26:27
+ * @LastEditTime: 2022-06-30 09:11:58
  * @FilePath: \iot.vue\src\view\im\whseInOutKB\api.js
  * @Description:
  */
@@ -39,6 +39,15 @@ export function updateStorageLog(data) {
 export function getFinalStock(params) {
   return axios({
     url: "/api/viewWmsTray/page", //prodStock
+    method: "get",
+    params: params
+  });
+}
+
+// 查询胚布库存
+export function getNoteStock(params) {
+  return axios({
+    url: "/api/viewWmsCalicoTray/page", //prodStock
     method: "get",
     params: params
   });

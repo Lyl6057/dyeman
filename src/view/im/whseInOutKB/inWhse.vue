@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-04-08 14:41:23
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-22 10:54:22
+ * @LastEditTime: 2022-07-01 08:05:14
  * @FilePath: \iot.vue\src\view\im\whseInOutKB\inWhse.vue
  * @Description: 
 -->
@@ -20,7 +20,7 @@
           </div>
           <el-button type="success" slot="reference">保存</el-button>
         </el-popover>
-        <el-button type="warning" @click="del">删除</el-button>
+        <el-button type="danger" @click="del">删除</el-button>
         <el-button type="primary" @click="choiceHandle">选择货物</el-button>
         <el-button type="warning" @click="$emit('close')">关闭</el-button>
         <el-input v-model="scanIpt" style="width: 15%; margin-left: 2rem" placeholder="扫码请点此处" @change="scanChange"></el-input>
@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import { inWhseCrud } from "./data";
+import { inWhseFinishedCrud, inWhseNoteCrud } from "./data";
 import proChoice from "@/components/proMng/index";
 import {
   addInFinishedWhse,
@@ -48,6 +48,10 @@ import {
   updateFinished,
   sendTaskNoin,
   getInFinishedByPage,
+  addInWhse,
+  addInDtla,
+  addInDtlb,
+  updateNote,
 } from "./api";
 import { baseCodeSupply, baseCodeSupplyEx } from "@/api/index";
 import verifySubmit from "./verifySubmit.vue";
@@ -61,18 +65,18 @@ export default {
   },
   data() {
     return {
-      crudOp: inWhseCrud(this),
+      crudOp: inWhseFinishedCrud(this),
       crud: [],
       loading: false,
       visible: false,
       newLoad: "",
       choiceV: false,
-      choiceTle: "选择成品布",
+      choiceTle: "选择成品布信息",
       choiceQ: {
         r_clothState_r: "||1||2||3",
         cardType: 1,
         sortF: "productNo",
-        fuzzy: "vatNo",
+        fuzzy: "vatNo,note,proName,storeLoadCode,loomNo",
       },
       selectList: [],
       verifyVisible: false,
@@ -89,17 +93,25 @@ export default {
   created() {},
   mounted() {},
   methods: {
+    initData() {
+      this.crudOp =
+        this.form.goodsType == 1
+          ? inWhseNoteCrud(this)
+          : inWhseFinishedCrud(this);
+      this.choiceQ.sortF = this.form.goodsType == 1 ? "noteCode" : "productNo";
+    },
     save(list) {
       // 生成入库记录
       this.verifyVisible = false;
       this.loading = true;
+      let type = this.form.goodsType;
       if (!list) {
         // 入空布笼
         sendTaskNoin({
           barCode: this.newLoad,
           createTime: this.$getNowTime("datetime"),
           entrance: this.form.exit, // 入库口
-          isEmpty: 0, // 是否为空
+          isEmpty: 1, // 是否为空
           orderType: 1, // 出库/入库
           layer: this.form.layer,
           type: this.form.goodsType, // 物料类别
@@ -145,60 +157,116 @@ export default {
               baseCodeSupply({ code: "whse_in" }).then((bat) => {});
               let addList = this.group(list, "storeLoadCode");
               let batchNo = bat.data.data;
-              addInFinishedWhse({
-                yinId: batchNo,
-                yinDate: this.$getNowTime("datetime"),
-                yinStatus: 1,
-                yinType: 1,
-                finStatus: 0,
-                sysCreateBy: this.$store.state.userOid,
-                stockState: 0,
-                custCode: list[0].custCode,
-              }).then((res) => {
-                addList.forEach((item, i) => {
-                  addStorageLog({
-                    whsCarriageStorageFk: item.storeLoadCode,
-                    useTime: this.$getNowTime("datatime"),
-                    useType: 2,
-                    businessType: 2,
-                    businessId: item.data[0].vatNo,
-                    deleteFlag: 0,
-                  }).then((log) => {
-                    addInFinishedDtla({
-                      carriageStorageLogFk: log.data.data,
-                      wmsTaskLogFk: sendRes.data,
-                      whseFinishedclothinFk: res.data.data,
-                      pidCount: item.data.length,
-                      sumWeight: item.weight,
-                      weightUnit: "KG",
-                      storeLoadCode: item.storeLoadCode,
-                      outFlag: 0,
-                    }).then((dtla) => {
-                      item.data.forEach((dtlb, j) => {
-                        addInFinishedDtlb({
-                          pidNo: dtlb.pidNo,
-                          productDtlFk: dtla.data.data,
-                          productNo: dtlb.productNo,
-                          vatNo: dtlb.vatNo,
-                          weight:
-                            dtlb.weightUnit == "KG"
-                              ? dtlb.netWeight
-                              : dtlb.netWeightLbs,
-                          weightUnit: dtlb.weightUnit,
-                          productId: dtlb.cardId,
-                        }).then((dtlbRes) => {
-                          if (
-                            j == item.data.length - 1 &&
-                            i == addList.length - 1
-                          ) {
-                            this.finishedAfter(list);
-                          }
+              if (type == 1) {
+                addInWhse({
+                  yinId: batchNo,
+                  yinDate: this.$getNowTime("datetime"),
+                  yinStatus: 1,
+                  yinType: 6, // 生产入仓
+                  finStatus: 0,
+                  sysCreateBy: this.$store.state.userOid,
+                  sysCreated: this.$getNowTime("datetime"),
+                  stockState: 0,
+                }).then((res) => {
+                  addList.forEach((item, i) => {
+                    addStorageLog({
+                      whsCarriageStorageFk: item.storeLoadCode,
+                      useTime: this.$getNowTime("datatime"),
+                      useType: 2,
+                      businessType: 1,
+                      businessId: item.data[0].proName,
+                      deleteFlag: 0,
+                    }).then((log) => {
+                      addInDtla({
+                        carriageStorageLogFk: log.data.data,
+                        wmsTaskLogFk: sendRes.data,
+                        iotWmsTaskLogFk: sendRes.data,
+                        whseCalicoinFk: res.data.data,
+                        countingNo: item.data.length,
+                        weight: item.weight || item.netWeight,
+                        weightUnit: "KG",
+                        storeLoadCode: item.storeLoadCode,
+                        outFlag: 0,
+                      }).then((dtla) => {
+                        item.data.forEach((dtlb, j) => {
+                          addInDtlb({
+                            outFlag: 0,
+                            countingNo: dtlb.eachNumber,
+                            weight: dtlb.clothWeight || dtlb.realWeight,
+                            weightUnit: "KG",
+                            whseCalicoinDtlaFk: dtla.data.data,
+                            custTicket: dtlb.noteCode,
+                            weaveJobCode: dtlb.proName,
+                          }).then((dtlbRes) => {
+                            if (
+                              j == item.data.length - 1 &&
+                              i == addList.length - 1
+                            ) {
+                              this.finishedAfter(list);
+                            }
+                          });
                         });
                       });
                     });
                   });
                 });
-              });
+              } else {
+                addInFinishedWhse({
+                  yinId: batchNo,
+                  yinDate: this.$getNowTime("datetime"),
+                  yinStatus: 1,
+                  yinType: 1,
+                  finStatus: 0,
+                  sysCreateBy: this.$store.state.userOid,
+                  sysCreated: this.$getNowTime("datetime"),
+                  stockState: 0,
+                  custCode: list[0].custCode,
+                }).then((res) => {
+                  addList.forEach((item, i) => {
+                    addStorageLog({
+                      whsCarriageStorageFk: item.storeLoadCode,
+                      useTime: this.$getNowTime("datatime"),
+                      useType: 2,
+                      businessType: 2,
+                      businessId: item.data[0].vatNo,
+                      deleteFlag: 0,
+                    }).then((log) => {
+                      addInFinishedDtla({
+                        carriageStorageLogFk: log.data.data,
+                        wmsTaskLogFk: sendRes.data,
+                        whseFinishedclothinFk: res.data.data,
+                        pidCount: item.data.length,
+                        sumWeight: item.weight,
+                        weightUnit: "KG",
+                        storeLoadCode: item.storeLoadCode,
+                        outFlag: 0,
+                      }).then((dtla) => {
+                        item.data.forEach((dtlb, j) => {
+                          addInFinishedDtlb({
+                            pidNo: dtlb.pidNo,
+                            productDtlFk: dtla.data.data,
+                            productNo: dtlb.productNo,
+                            vatNo: dtlb.vatNo,
+                            weight:
+                              dtlb.weightUnit == "KG"
+                                ? dtlb.netWeight
+                                : dtlb.netWeightLbs,
+                            weightUnit: dtlb.weightUnit,
+                            productId: dtlb.cardId,
+                          }).then((dtlbRes) => {
+                            if (
+                              j == item.data.length - 1 &&
+                              i == addList.length - 1
+                            ) {
+                              this.finishedAfter(list);
+                            }
+                          });
+                        });
+                      });
+                    });
+                  });
+                });
+              }
             });
           });
         } catch (error) {
@@ -210,15 +278,27 @@ export default {
     finishedAfter(list) {
       list.forEach((item, i) => {
         item.clothState = 2;
-        updateFinished(item).then((res) => {
-          if (i == list.length - 1) {
-            setTimeout(() => {
-              this.$emit("close");
-              this.loading = false;
-              this.$tip.success("任务提交成功!");
-            }, 200);
-          }
-        });
+        if (this.form.goodsType == 2) {
+          updateFinished(item).then((res) => {
+            if (i == list.length - 1) {
+              setTimeout(() => {
+                this.$emit("close");
+                this.loading = false;
+                this.$tip.success("任务提交成功!");
+              }, 200);
+            }
+          });
+        } else {
+          updateNote(item).then((res) => {
+            if (i == list.length - 1) {
+              setTimeout(() => {
+                this.$emit("close");
+                this.loading = false;
+                this.$tip.success("任务提交成功!");
+              }, 200);
+            }
+          });
+        }
       });
     },
     sumbit() {
@@ -231,8 +311,16 @@ export default {
         return;
       }
       this.loading = true;
-      this.crud = this.$unique(this.crud.concat(val), "productNo");
-      this.crud.sort((a, b) => (a.productNo > b.productNo ? 1 : -1));
+      this.crud = this.$unique(
+        this.crud.concat(val),
+        this.form.goodsType == 1 ? "noteCode" : "productNo"
+      );
+      this.crud.sort((a, b) =>
+        a[this.form.goodsType == 1 ? "noteCode" : "productNo"] >
+        b[this.form.goodsType == 1 ? "noteCode" : "productNo"]
+          ? 1
+          : -1
+      );
       this.crud.forEach((item, i) => {
         item.storeLoadCode = "";
         item.index = i + 1;
@@ -243,6 +331,8 @@ export default {
       }, 200);
     },
     choiceHandle() {
+      this.choiceTle =
+        this.form.goodsType == 1 ? "选择胚布信息" : "选择成品布信息";
       this.choiceV = true;
     },
     scanChange() {
