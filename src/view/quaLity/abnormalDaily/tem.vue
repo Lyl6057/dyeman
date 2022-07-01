@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-05-03 16:29:13
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-01 11:27:04
+ * @LastEditTime: 2022-06-30 15:59:39
  * @FilePath: \iot.vue\src\view\quaLity\abnormalDaily\tem.vue
  * @Description: 
 -->
@@ -85,10 +85,13 @@ export default {
         page: 1,
       }).then((vatRes) => {
         if (vatRes.data.records.length) {
-          this.qcCheckPlanFormData.custId = vatRes.data.records[0].custCode;
-          this.qcCheckPlanFormData.fabName = vatRes.data.records[0].fabName;
-          this.qcCheckPlanFormData.colorName = vatRes.data.records[0].colorName;
-          this.getVatNoWeightAndSumpid(vatRes.data.records[0].vatNo)
+          let data =  vatRes.data.records[0];
+          this.qcCheckPlanFormData.salPo = data.salPoNo;
+          this.qcCheckPlanFormData.deliveryDate = data.deliveDate;
+          this.qcCheckPlanFormData.custId = data.custCode;
+          this.qcCheckPlanFormData.fabName = data.fabName;
+          this.qcCheckPlanFormData.colorName = data.colorName;
+          this.getVatNoWeightAndSumpid(data.vatNo)
         }else{
           this.loading = false
         }
@@ -143,7 +146,8 @@ export default {
         chargeDpt: '',
         problemDesc: '',
         solution: '',
-        remark: ''
+        remark: '',
+        qcConfirDate: this.$getNowTime("datetime")
       };
     },
     handleStoreRowClick(val) {
