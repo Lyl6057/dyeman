@@ -183,8 +183,17 @@ export default {
           delete this.form[key];
         }
       }
+      let params = {
+        yinId : '!^%' + (this.form.yinId || ''),
+        purNo : '%' + (this.form.purNo || ''),
+        deliNo : '%' + (this.form.deliNo || ''),
+        yinDate : this.form.yinDate,
+        yinStatus : this.form.yinStatus,
+        finStatus : this.form.finStatus,
+
+      }
       getPb(
-        Object.assign(this.form, {
+        Object.assign(params, {
           rows: this.page.pageSize,
           start: this.page.currentPage,
           yinType: JSON.parse(localStorage.getItem("imWk")).type.split("_")[1],

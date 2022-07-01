@@ -638,7 +638,7 @@ export function rcpb2C(_this) {
       },
       {
         label: "载具编号",
-        prop: "fabticket",
+        prop: "storeLoadCode",
         cell: true,
         width: 140,
         hide: _this.hide === "6" || _this.hide === "7" ? false : true
