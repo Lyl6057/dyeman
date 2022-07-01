@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-23 08:03:49
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-06-28 16:03:38
+ * @LastEditTime: 2022-06-30 11:22:25
  * @Description:
  */
 import Vue from "vue";
@@ -18,8 +18,8 @@ import 'nprogress/nprogress.css'
 // import pro from "@/router/view/pro";
 // import re from '@/router/view/re'
 // import iq from '@/router/view/iq'
-// import whseMng from "@/router/view/im";
-import quaLity from "@/router/view/quaLity";
+import whseMng from "@/router/view/im";
+// import quaLity from "@/router/view/quaLity";
 // import laboratory from "./view/laboratory";
 // import proMng from "./view/proMng";
 // import energy from "./view/energy";
@@ -61,8 +61,8 @@ const router = new Router({
         // ...pro,
         // ...re,
         // ...iq,
-        // ...whseMng
-        ...quaLity
+        ...whseMng
+        // ...quaLity
         // ...laboratory
         // ...proMng
         // ...energy

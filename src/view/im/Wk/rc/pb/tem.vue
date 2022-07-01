@@ -26,12 +26,17 @@
         <el-col :span="hide != '7' ? 12 : 24">
           <view-container :title="datas.type.split('_')[0] + $t('iaoMng.rcmx')">
             <div class="btnList">
-              <el-button type="primary" @click="add">{{
+              <el-button type="primary" :disabled="hasEdit" @click="add">{{
                 this.$t("public.add")
               }}</el-button>
-              <el-button type="danger" @click="del">{{
+              <el-button type="danger" :disabled="hasEdit" @click="del">{{
                 this.$t("public.del")
               }}</el-button>
+              <span style="display:inline-block; padding: 0px 10px">|</span>
+              <el-select v-model="curSelLocCode" clearable placeholder="选择货位码进行批量操作">
+                <el-option v-for="(item, index) in locationCodeDict" :key="index" :label="item.label" :value="item.value"></el-option>
+              </el-select>
+              <el-button type="primary" @click="handleBatchSelLocCode">批量选择货位码</el-button>
             </div>
             <div class="crudBox">
               <avue-crud
@@ -74,6 +79,7 @@
               :inData="chooseData"
               :api="everyThing"
               :form="form"
+              :hasEdit="hasEdit"
             ></inwhse-ph> </view-container
         ></el-col>
       </el-row>
@@ -93,6 +99,7 @@
 import { rcpb2C, rcpb2F, rcpb3C } from "./data";
 import choice from "@/components/choice";
 import inwhseph from "@/components/calico/inwhse_ph";
+import { fetchStkinMemoDataByStkinOid,updateNoteClothStatus2 } from "./stkinMemo/api"
 import {
   addPb,
   updatePb,
@@ -157,13 +164,104 @@ export default {
         addLoc: addPbPhDetali,
         updateLoc: updatePbPhDetali,
       },
+      // 当前选择货位码
+      curSelLocCode: ""
     };
   },
-  watch: {},
+  computed:{
+    hasEdit(){
+      return Boolean(this.form.deliNo) 
+    },
+    locationCodeDict(){
+      return (this.mxOp.column.find(item => item.prop == "locationCode")|| {}).dicData || []
+    }
+  },
+  watch: {
+    hasEdit:{
+      handler(value){
+        this.changeCrudCellStatus(value);  
+      },
+      immediate: true
+    }
+  },
   methods: {
+    // 批量选择货位码
+    handleBatchSelLocCode(){
+      if(!this.curSelLocCode) return this.$tip.warning("请选择货位码");
+      this.$tip.cofirm("是否确认进行所有货位码进行覆盖").then(() => {
+           this.mx.forEach(item => {
+             item.locationCode = this.curSelLocCode;
+           })
+      })
+    },
+    // 修改类型(是否可编辑状态)
+    changeCrudCellStatus(value){
+      let cIdx = this.mxOp.column.findIndex(item => item.prop == 'countingNo');
+      let fIdx = this.mxOp.column.findIndex(item => item.prop == 'fabticket');
+      [cIdx,fIdx].forEach(idx => {
+        this.mxOp.column[idx].cell = !value
+      });
+    },
+    // 通知单数据抽取
+    dataExtract(){
+      // 避免多次
+      if(this.lock) return
+      this.lock = true;
+      let params = {
+        stkinOid: this.form.stkinMemoOid
+      }
+      fetchStkinMemoDataByStkinOid(params).then(res => {
+        this.dataAnalysic(res.data)
+      }).finally(() => {
+        this.lock = false;
+      })
+    },
+    // 数据解析
+    dataAnalysic(originDataList){
+      let targetData = {};
+      originDataList.sort((a,b) => a.eachNumber - b.eachNumber);
+      let mIndex = 0;
+      originDataList.forEach((item,index) => {
+        let { storeLoadCode, weaveJobCode } = item;
+        let key = storeLoadCode + weaveJobCode;
+        // 不存在则进行初始化
+        if(!targetData[key]){
+          targetData[key] = {
+            loc: [],
+            countingNo: 0,
+            prodNo: weaveJobCode,
+            fabticket: storeLoadCode,
+            index: mIndex++,
+            locationCode: ""
+          }
+        }
+
+        targetData[key].loc.push({
+          batchNo: "",
+          countingNo: item.eachNumber,
+          weight: item.clothWeight,
+          weightUnit: "KG",
+          custTicket: item.noteCode,
+          locationCode: ""
+        })
+        targetData[key].countingNo++;
+
+      });
+
+      // 赋值
+      this.mx = Object.values(targetData);
+
+      if(this.mx.length > 0){
+        this.chooseData.loc = this.mx[0].loc
+      }
+
+
+    },
     getDetail() {
       if (this.isAdd) {
         this.form = this.detail;
+        this.form.sysCreatedby = this.$store.state.userOid;
+        this.form.stkinMemoOid && this.dataExtract();
         return;
       }
       if (
@@ -609,7 +707,7 @@ export default {
         addPb(this.form).then((Res) => {
           baseCodeSupply({ code: "whse_in" }).then((res) => {});
           this.form.whseCalicoinoid = Res.data.data;
-          this.form.sysCreatedby = this.$store.state.userOid;
+          
           if (this.mx.length === 0) {
             this.loading = false;
             this.$tip.success(this.$t("public.bccg"));
@@ -657,6 +755,12 @@ export default {
                 this.$tip.success(this.$t("public.bccg"));
               }
             }
+
+            // 若是通知单 所有数据保存成功后，对对应的布票状态进行修改为2
+            if(this.form.stkinMemoOid){
+              updateNoteClothStatus2({stkInOid: this.form.stkinMemoOid})
+            }
+
           });
         });
       }

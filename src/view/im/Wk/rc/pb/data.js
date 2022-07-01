@@ -216,16 +216,11 @@ export function rcpb2F(_this) {
         }
       },
       {
-        label: _this.$t("whseField.jyzt"),
-        prop: "yinStatus",
-        span: 6,
-        placeholder: " ",
-
-        type: "select",
+        label: "入仓通知单",
+        prop: "deliNo",
         disabled: true,
-        dicData: getDIC("whse_yinstatus")
+        span: 6,
       },
-
       {
         label: _this.$t("whseField.cwzt"),
         prop: "finStatus",
@@ -243,7 +238,17 @@ export function rcpb2F(_this) {
         span: 6,
         type: "select",
         dicData: getDicT("ucmlUser", "employeename", "ucmlUseroid")
-      }
+      },
+      {
+        label: _this.$t("whseField.jyzt"),
+        prop: "yinStatus",
+        span: 6,
+        placeholder: " ",
+
+        type: "select",
+        disabled: true,
+        dicData: getDIC("whse_yinstatus")
+      },
     ]
   };
 }
