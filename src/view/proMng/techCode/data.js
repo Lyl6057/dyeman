@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-28 13:43:30
+ * @LastEditTime: 2022-07-02 10:37:44
  * @Description:
  */
 
@@ -298,7 +298,7 @@ export function dlgCrud(_this) {
         width: 350,
         span: 6,
         slot: true,
-        overHidden: true,
+        // overHidden: true,
         cell: true
       },
       {

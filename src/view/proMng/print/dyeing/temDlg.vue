@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-28 09:35:05
+ * @LastEditTime: 2022-07-02 10:39:06
  * @Description: 
 -->
 <template>
@@ -463,7 +463,7 @@ export default {
       } else {
         fetchF = getBasPigmentByPage;
       }
-      fetchF( {[type || 'fillTextSeach'] :  val} ).then((res) => {
+      fetchF( {[type || 'fillTextSeach'] :  val,  start: 1, rows: 50} ).then((res) => {
         this.mateOption = res.data.records;
         this.vatLoading = false;
       });
@@ -484,8 +484,8 @@ export default {
       } else {
         fetchF = getBasPigmentByPage;
       }
-      fetchF({factoryName: "%" + val}).then((res) => {
-        if(res.data.total){
+      fetchF({factoryName: "%" + val,  start: 1, rows: 50}).then((res) => {
+        if(res.data.total == 1){
           this.$nextTick(() =>{
             this.$set(this.chooseDtlData, "mateCode", res.data.records[0].bcCode)
             this.$set(this.chooseDtlData, "mateName", res.data.records[0].factoryName)

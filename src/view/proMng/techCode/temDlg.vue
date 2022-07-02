@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-28 11:19:47
+ * @LastEditTime: 2022-07-02 10:39:37
  * @Description: 
 -->
 <template>
@@ -131,8 +131,8 @@ export default {
       } else {
         fetchF = getBasPigmentByPage;
       }
-      fetchF({ factoryName: "%" + val }).then((res) => {
-        if(res.data.total){
+      fetchF({ factoryName: "%" + val, start: 1, rows: 50}).then((res) => {
+        if(res.data.total == 1){
           this.$nextTick(() =>{
             this.$set(this.chooseData, "basMateId", res.data.records[0].bcCode)
             this.$set(this.chooseData, "mateName", res.data.records[0].factoryName)
@@ -151,7 +151,7 @@ export default {
       } else {
         fetchF = getBasPigmentByPage;
       }
-      fetchF({ fillTextSeach: val }).then((res) => {
+      fetchF({ fillTextSeach: val , start: 1, rows: 50}).then((res) => {
         this.options = res.data.records;
         this.vatLoading = false;
       });
