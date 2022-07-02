@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-05-03 16:09:34
  * @LastEditors: Lyl
- * @LastEditTime: 2022-05-14 11:29:04
+ * @LastEditTime: 2022-07-01 16:55:51
  * @FilePath: \iot.vue\src\view\quaLity\qaCheckPlan\data.js
  * @Description:
  */
@@ -50,12 +50,12 @@ export function mainForm(_this) {
       {
         label: "计划开始",
         prop: "planStart",
-        type: "date",
-        format: "yyyy-MM-dd",
-        valueFormat: "yyyy-MM-dd",
-        span: 6,
+        type: "datetimerange",
+        format: "yyyy-MM-dd HH:mm:ss",
+        valueFormat: "yyyy-MM-dd HH:mm:ss",
+        span: 12,
         placeholder: " "
-      }
+      },
     ]
   };
 }
