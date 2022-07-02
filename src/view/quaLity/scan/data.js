@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-01-17 20:37:41
+ * @LastEditTime: 2022-07-02 08:26:04
  * @Description:
  */
 
@@ -12,7 +12,7 @@ export function mainForm(_this) {
   return {
     submitBtn: false,
     emptyBtn: false,
-    labelWidth: 160,
+    labelWidth: 140,
     column: [
       {
         label: "布票号",
@@ -29,8 +29,6 @@ export function mainForm(_this) {
         prop: "eachNumbers",
         tip: "重量",
         width: 80,
-        // align: "left",
-        // type: "number",
         span: 8,
         placeholder: "请打开称重应用"
       },
@@ -50,16 +48,17 @@ export function mainForm(_this) {
         tip: "载具编号",
         span: 8,
         placeholder: "请输入载具编号",
-        // type: "select",
-        // filterable: true,
-        // dicData: getDicT(
-        //   "whsCarriageStorage",
-        //   "storageCode",
-        //   "carriageStorageId"
-        // ),
         click: () => {
           _this.type = "zj";
         }
+      },
+      {
+        label: "纸筒重量",
+        prop: "paperTubes",
+        tip: "纸筒重量",
+        width: 80,
+        type: "number",
+        span: 8,
       },
       {
         label: "QC扣减数量",
@@ -69,7 +68,6 @@ export function mainForm(_this) {
         // align: "left",
         type: "number",
         span: 8,
-        placeholder: "请输入QC扣减数量"
       },
       {
         label: "值机工号",
@@ -85,7 +83,7 @@ export function mainForm(_this) {
         label: "存储位置",
         tip: "存储位置",
         prop: "storeSiteCodes",
-        span: 16,
+        span: 8,
         placeholder: "请输入存储位置",
         type: "select",
         // props: {

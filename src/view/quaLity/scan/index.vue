@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-01-17 16:48:26
+ * @LastEditTime: 2022-07-02 11:04:44
  * @Description: 
 -->
 <template>
@@ -11,17 +11,7 @@
     :element-loading-text="$t('public.loading')"
     v-loading="wLoading"
   >
-    <view-container title="QC验布">
-      <!-- <el-row class="btnList"> -->
-      <!-- <el-button type="success" @click="save">{{
-          this.$t("public.save")
-        }}</el-button> -->
-      <!-- <el-button type="primary" @click="query">{{
-          this.$t("public.query")
-        }}</el-button> -->
-
-      <!-- <el-button type="success" @click="print">打印</el-button> -->
-      <!-- </el-row> -->
+    <view-container title="胚布称重">
       <el-row class="formBox" style="margin-top: 5px">
         <avue-form ref="form" :option="formOp" v-model="form">
           <template slot-scope="scope" slot="qcClothCheckItem">
@@ -68,10 +58,8 @@
                   <div class="history">
                     <span>布票号: {{ item.noteCode }}</span>
                     <span> 重量: {{ item.clothWeight }}</span>
-                    <!-- <span>验布员工号: {{ item.clothChecker }}</span> -->
                   </div>
                 </el-tooltip>
-                <!-- <el-divider style="margin: 0"></el-divider> -->
               </div>
               <div
                 style="
@@ -245,10 +233,7 @@ import { mainForm } from "./data";
 import { webSocket } from "@/config/index.js";
 import {
   get,
-  add,
   update,
-  del,
-  getWeave,
   getQcItem,
   getQcRecord,
   addQcRecord,
@@ -263,6 +248,7 @@ export default {
       formOp: mainForm(this),
       form: {
         qcTakeOuts: 0,
+        paperTubes: 0
       },
       // crudOp: mainCrud(this),
       crud: { qcTakeOuts: 0 },
@@ -398,6 +384,9 @@ export default {
           if (this.form.qcTakeOuts) {
             this.crud.qcTakeOut = Number(this.form.qcTakeOuts || 0);
           }
+          if (this.form.paperTubes) {
+            this.crud.paperTube = Number(this.form.paperTubes || 0);
+          }
           if (this.form.storeLoadCodes) {
             this.crud.storeLoadCode = this.form.storeLoadCodes;
           }
@@ -508,7 +497,7 @@ export default {
       this.wLoading = true;
       this.crud.clothCheckTime = this.$getNowTime("datetime");
       this.crud.realWeight =
-        Number(this.crud.clothWeight) + Number(this.crud.qcTakeOut);
+        Number(this.crud.clothWeight) + Number(this.crud.qcTakeOut) + Number(this.crud.paperTube);
       if (this.crud.gramWeight && this.crud.breadth && this.crud.realWeight) {
         let gramWeight, breadth;
 

@@ -2,10 +2,11 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-05-06 08:10:22
+ * @LastEditTime: 2022-07-02 14:15:16
  * @Description:
  */
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
+
 export function mainForm(_this) {
   return {
     submitBtn: false,
@@ -17,9 +18,6 @@ export function mainForm(_this) {
         prop: "weaveJobCode",
         span: 6,
         placeholder: " ",
-        // formslot: true,
-        // slot: true,
-        // type: "select",
         tip: "MS đơn sản xuất bp Dệt"
       },
       {
@@ -36,16 +34,6 @@ export function mainForm(_this) {
         placeholder: " ",
         tip: "Mã vải"
       },
-      
-      // {
-      //   label: "匹號",
-      //   prop: "eachNumber",
-      //   width: 80,
-      //   align: "right",
-      //   span: 6,
-      //   placeholder: " ",
-      //   tip: "Số cây vải"
-      // },
       {
         label: "载具编号",
         tip: "Mã lồng thép",
@@ -126,6 +114,7 @@ export function mainForm(_this) {
     ]
   };
 }
+
 export function mainCrud(_this) {
   return {
     menu: false,
@@ -156,13 +145,6 @@ export function mainCrud(_this) {
       }
     ],
     column: [
-      // {
-      //   label: "#",
-      //   prop: "index",
-      //   width: 50,
-      //   align: "center",
-      //   display: false
-      // },
       {
         label: "織單號(MS đơn sản xuất bp Dệt)",
         prop: "weaveJobCode",
@@ -198,15 +180,6 @@ export function mainCrud(_this) {
         sortable: true,
         overHidden: true
       },
-      // {
-      //   label: "客戶",
-      //   prop: "customerName",
-      //   width: 150,
-      //   disabled: true, placeholder: " ",
-      //   span: 6,
-      //   display: false,
-      //   overHidden: true
-      // },
       {
         label: "布类名称(Tên loại vải)",
         prop: "fabricName",
@@ -243,15 +216,6 @@ export function mainCrud(_this) {
         hide: true,
         span: 6
       },
-      // {
-      //   label: "机台編號",
-      //   prop: "machineCode",
-      //   width: 110,
-      //   hide: false,
-      //   span: 6,
-      //   disabled: true,
-
-      // },
       {
         label: "机号(Mã máy)",
         prop: "loomNo",
@@ -285,19 +249,6 @@ export function mainCrud(_this) {
         sortable: true,
         overHidden: true
       },
-      // {
-      //   label: "值机工号",
-      //   prop: "workNo",
-      //   width: 90,
-      //   hide: false,
-      //   span: 6,
-      //   disabled: true,
-      //   rules: [{
-      //     required: true,
-      //     message: "请输入值机工号",
-      //     trigger: "blur"
-      //   }],
-      // },
       {
         label: "匹號(Số cây vải)",
         prop: "eachNumber",
@@ -315,8 +266,6 @@ export function mainCrud(_this) {
         span: 6,
         cell: false,
         placeholder: " "
-        // type: "number",
-        // precision: 1
       },
       {
         label: _this.$t("whseField.zl") + "(trọng lượng)",
@@ -336,13 +285,6 @@ export function mainCrud(_this) {
             if (isNaN(_this.detail.realWeight)) {
               _this.detail.realWeight = 0;
             }
-            // if (_this.detail.clothWeight) {
-            //   _this.detail.clothCheckTime = _this.$getNowTime("datetime")
-            //   _this.detail.clothState = 1
-            // } else {
-            //   _this.detail.clothCheckTime = ''
-            //   _this.detail.clothState = 0
-            // }
           });
         }
       },
@@ -375,7 +317,6 @@ export function mainCrud(_this) {
         align: "right",
         cell: false,
         overHidden: true,
-        // sortable: true,
         type: "number",
         width: 100
       },
@@ -387,7 +328,6 @@ export function mainCrud(_this) {
         align: "right",
         cell: false,
         overHidden: true,
-        // sortable: true,
         type: "number",
         width: 100
       },
@@ -408,60 +348,11 @@ export function mainCrud(_this) {
         width: 220,
         placeholder: " ",
         type: "select",
-        // props: {
-        //   label: "locationCode",
-        //   value: "locationCode"
-        // },
         filterable: true,
         allowCreate: true,
         defaultFirstOption: true,
         dicData: getDicT("whseLocation", "locationCode", "locationCode")
       },
-      // {
-      //   label: "單位",
-      //   prop: "weightUnit",
-      //   width: 80,
-      //   display: false,
-      //   placeholder: " ",
-      //   span: 6,
-      //   type: "select",
-      //   dicData: matUnit
-      // },
-      // {
-      //   label: "長度",
-      //   prop: "clothLength",
-      //   width: 80,
-      //   display: false
-      // },
-
-      // {
-      //   label: "單位",
-      //   prop: "lenUnit",
-      //   width: 80,
-      //   display: false,
-      //   placeholder: " ",
-      //   span: 6,
-      //   type: "select",
-      //   dicData: matUnit
-      // },
-
-      // {
-      //   label: "已打印",
-      //   prop: "isPrinted",
-      //   type: "select",
-      //   disabled: true,
-      //   dicData: [
-      //     {
-      //       value: true,
-      //       label: "是"
-      //     },
-      //     {
-      //       value: false,
-      //       label: "否"
-      //     }
-      //   ],
-      //   span: 6,
-      // },
       {
         label: "备注(ghi chú)",
         prop: "remark",
@@ -514,9 +405,6 @@ export function dlgForm(_this) {
         span: 8,
         placeholder: " ",
         disabled: true
-        // formslot: true,
-        // slot: true,
-        // type: "select",
       },
       {
         label: "布票編號",
@@ -550,8 +438,8 @@ export function dlgForm(_this) {
           _this.$nextTick(() => {
             _this.clothLength();
           });
-        }
-        // type: "number",
+        },
+        type: "number",
         // precision: 1
       },
       {
@@ -567,18 +455,32 @@ export function dlgForm(_this) {
         change: () => {
           _this.$nextTick(() => {
             _this.detail.realWeight = Number(
-              Number(_this.detail.clothWeight) + Number(_this.detail.qcTakeOut)
+              Number(_this.detail.clothWeight) + Number(_this.detail.qcTakeOut) + Number(_this.detail.paperTube || 0)
             ).toFixed(1);
             if (isNaN(_this.detail.realWeight)) {
               _this.detail.realWeight = 0;
             }
-            // if (_this.detail.clothWeight) {
-            //   _this.detail.clothCheckTime = _this.$getNowTime("datetime")
-            //   _this.detail.clothState = 1
-            // } else {
-            //   _this.detail.clothCheckTime = ''
-            //   _this.detail.clothState = 0
-            // }
+          });
+        }
+      },
+      {
+        label: "纸筒重量",
+        prop: "paperTube",
+        width: 160,
+        align: "right",
+        span: 8,
+        cell: false,
+        placeholder: " ",
+        type: "number",
+        precision: 1,
+        change: () => {
+          _this.$nextTick(() => {
+            _this.detail.realWeight = Number(
+              Number(_this.detail.clothWeight) + Number(_this.detail.qcTakeOut) +  Number(_this.detail.paperTube || 0)
+            ).toFixed(1);
+            if (isNaN(_this.detail.realWeight)) {
+              _this.detail.realWeight = 0;
+            }
           });
         }
       },
@@ -595,7 +497,7 @@ export function dlgForm(_this) {
         change: () => {
           _this.$nextTick(() => {
             _this.detail.realWeight = Number(
-              Number(_this.detail.clothWeight) + Number(_this.detail.qcTakeOut)
+              Number(_this.detail.clothWeight) + Number(_this.detail.qcTakeOut) +  Number(_this.detail.paperTube || 0)
             ).toFixed(1);
             if (isNaN(_this.detail.realWeight)) {
               _this.detail.realWeight = 0;
@@ -635,7 +537,7 @@ export function dlgForm(_this) {
         label: "备注",
         prop: "remark",
         width: 250,
-        span: 8,
+        span: 24,
         placeholder: " ",
         // overHidden: true,
         cell: true,

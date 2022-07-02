@@ -1,54 +1,26 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
- * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-06-23 09:53:21
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-07-02 14:17:39
  * @Description: 
 -->
 <template>
-  <div
-    id="clothFlyWeight"
-    :element-loading-text="$t('public.loading')"
-    v-loading="wLoading"
-  >
+  <div id="clothFlyWeight" :element-loading-text="$t('public.loading')" v-loading="wLoading">
     <view-container title="称重记录">
       <el-row class="btnList">
-        <el-button
-          type="success"
-          @click="saveAll"
-          :disabled="form.clothState == 3"
-          >{{ this.$t("public.save") }}</el-button
-        >
-        <el-button
-          type="primary"
-          @click="dialogVisible = true"
-          :disabled="!detail.noteId"
-          >{{ this.$t("public.update") }}</el-button
-        >
+        <el-button type="success" @click="saveAll" :disabled="form.clothState == 3">{{ this.$t("public.save") }}</el-button>
+        <el-button type="primary" @click="dialogVisible = true" :disabled="!detail.noteId">{{ this.$t("public.update") }}</el-button>
         <el-button type="primary" @click="query(true)">{{
           this.$t("public.query")
         }}</el-button>
         <el-button type="primary" @click="print">打印</el-button>
         <el-button type="primary" @click="outExcel">导出</el-button>
 
-        <el-tooltip
-          class="item"
-          effect="dark"
-          content="同步勾选数据的储存位置,值为第一条勾选的数据"
-          placement="right-start"
-        >
-          <el-button
-            type="primary"
-            @click="syncLoc"
-            :disabled="selectList.length < 2"
-            >同步储存位置</el-button
-          >
+        <el-tooltip class="item" effect="dark" content="同步勾选数据的储存位置,值为第一条勾选的数据" placement="right-start">
+          <el-button type="primary" @click="syncLoc" :disabled="selectList.length < 2">同步储存位置</el-button>
         </el-tooltip>
-        <span
-          v-if="crud.length && weightSum > 0"
-          style="float: right; margin-right: 10px"
-          >【 {{ crud[0].weaveJobCode }} 】 总重量: {{ weightSum }} KG</span
-        >
+        <span v-if="crud.length && weightSum > 0" style="float: right; margin-right: 10px">【 {{ crud[0].weaveJobCode }} 】 总重量: {{ weightSum }} KG</span>
 
         <!-- <el-button type="warning" @click="close">{{
           this.$t("public.close")
@@ -58,19 +30,7 @@
         <avue-form ref="form" :option="formOp" v-model="form"> </avue-form>
       </el-row>
       <el-row class="crudBox">
-        <avue-crud
-          ref="crud"
-          :option="crudOp"
-          :data="crud"
-          :page.sync="page"
-          v-loading="loading"
-          @on-load="query"
-          @row-dblclick="handleRowDBLClick"
-          @current-row-change="cellClick"
-          :summary-method="summaryMethod"
-          @selection-change="selectionChange"
-          @sort-change="sortChange"
-        >
+        <avue-crud ref="crud" :option="crudOp" :data="crud" :page.sync="page" v-loading="loading" @on-load="query" @row-dblclick="handleRowDBLClick" @current-row-change="cellClick" :summary-method="summaryMethod" @selection-change="selectionChange" @sort-change="sortChange">
           <!-- <template slot="menu" v-if="form.clothState != 3">
             <el-button size="small" type="primary" @click="weighing"
               >称重</el-button
@@ -79,22 +39,10 @@
         </avue-crud>
       </el-row>
     </view-container>
-    <el-dialog
-      id="colorMng_Dlg"
-      :visible.sync="dialogVisible"
-      width="70%"
-      append-to-body
-      :close-on-click-modal="false"
-      :close-on-press-escape="false"
-    >
+    <el-dialog id="colorMng_Dlg" :visible.sync="dialogVisible" width="70%" append-to-body :close-on-click-modal="false" :close-on-press-escape="false">
       <view-container title="修改">
         <div class="btnList">
-          <el-button
-            type="success"
-            @click="save"
-            :disabled="form.clothState == 3"
-            >{{ this.$t("public.save") }}</el-button
-          >
+          <el-button type="success" @click="save" :disabled="form.clothState == 3">{{ this.$t("public.save") }}</el-button>
           <el-button type="primary" @click="weighing">称重</el-button>
           <el-button type="warning" @click="dialogVisible = false">{{
             this.$t("public.close")
@@ -105,15 +53,7 @@
         </div>
       </view-container>
     </el-dialog>
-    <el-dialog
-      id="colorMng_Dlg"
-      :visible.sync="pdfDlg"
-      fullscreen
-      width="100%"
-      append-to-body
-      :close-on-click-modal="false"
-      :close-on-press-escape="false"
-    >
+    <el-dialog id="colorMng_Dlg" :visible.sync="pdfDlg" fullscreen width="100%" append-to-body :close-on-click-modal="false" :close-on-press-escape="false">
       <view-container title="打印預覽">
         <!-- <div class="btnList">
             <el-button type="warning" @click="pdfDlg = false">{{
@@ -122,11 +62,7 @@
             <el-button type="primary" @click="print2">打印</el-button>
           </div> -->
         <!--startprint-->
-        <embed
-          id="pdf"
-          style="width: 100vw; height: calc(100vh - 80px)"
-          :src="pdfUrl"
-        />
+        <embed id="pdf" style="width: 100vw; height: calc(100vh - 80px)" :src="pdfUrl" />
         <!--endprint-->
       </view-container>
     </el-dialog>
@@ -146,7 +82,7 @@ export default {
       form: {
         weaveJobFk: "",
         clothState: 0,
-        outworkFlag: false
+        outworkFlag: false,
       },
       dlgOp: dlgForm(this),
       crudOp: mainCrud(this),
@@ -210,7 +146,7 @@ export default {
           start: this.page.currentPage,
           // isPrinted: true,
           // 加上过滤厂
-          filterFactory: true
+          filterFactory: true,
         }),
         r_clothCheckTime_r
       )
@@ -362,6 +298,9 @@ export default {
         val.storeSiteCode = this.checkLabel;
       }
       this.detail = val;
+      if (!this.detail.paperTube) {
+        this.detail.paperTube = 0
+      }
       // this.oldData.$cellEdit = false;
       // // val.$cellEdit = true;
       // this.$set(val, "$cellEdit", true);
@@ -428,31 +367,16 @@ export default {
       if (
         this.detail.gramWeight &&
         this.detail.breadth &&
-        this.detail.realWeight
+        this.detail.clothWeight
       ) {
         let gramWeight, breadth;
-
         this.$nextTick(() => {
-          // if (this.form.gramWeightUnit == "Kg") {
-          // 默认是 g
-          // gramWeight = Number(this.form.realGramWeight);
-          // } else {
           gramWeight =
             typeof this.detail.gramWeight === "number"
               ? Number(this.detail.gramWeight) / 1000
               : this.detail.gramWeight
               ? Number(this.detail.gramWeight.match(/\d+/g)[0]) / 1000
               : 0;
-
-          // this.detail.gramWeight.indexOf("(") != -1
-          //   ? Number(this.detail.gramWeight.match(/\d+/g)[0]) / 1000
-          // : Number(this.detail.gramWeight) / 1000;
-          // }
-
-          // if (this.form.widthUnit == "INCH") {
-          //   // 默认是 inch
-          //   breadth = Number(this.form.clothWidth);
-          // } else {
           breadth =
             typeof this.detail.breadth === "number"
               ? (Number(this.detail.breadth) * 2.54) / 100
@@ -460,20 +384,15 @@ export default {
               ? (Number(this.detail.breadth.match(/\d+/g)[0]) * 2.54) / 100
               : 0;
 
-          // this.detail.breadth.indexOf("(") != -1
-          //   ? (Number(this.detail.breadth.match(/\d+/g)[0]) * 2.54) / 100
-          //   : (Number(this.detail.breadth) * 2.54) / 100;
-          // }
-
-          let weight = this.detail.realWeight;
-          // if (this.form.weightUnit == "LBS") {
-          //   weight = weight * 2.20462262;
-          // }
-          // gramWeight 单位为 g/m , breadth 单位为 inch 需要 * 2.54 转换成cm / 100 转换成 m
-
-          this.detail.clothLengthValue = Number(
-            (weight / gramWeight / breadth).toFixed(1)
-          );
+          let weight = this.detail.clothWeight;
+          if (!gramWeight || !breadth) {
+            // 没有门幅/克重 码长无法计算为0
+            this.detail.clothLengthValue = 0;
+          } else {
+            this.detail.clothLengthValue = Number(
+              (weight / gramWeight / breadth).toFixed(1)
+            );
+          }
         });
       }
     },
@@ -519,9 +438,13 @@ export default {
 };
 </script>
 <style lang='stylus'>
-#clothFlyWeight
-  .el-table
-    overflow visible !important
-  .el-tag--mini
-    display none !important
+#clothFlyWeight {
+  .el-table {
+    overflow: visible !important;
+  }
+
+  .el-tag--mini {
+    display: none !important;
+  }
+}
 </style>
