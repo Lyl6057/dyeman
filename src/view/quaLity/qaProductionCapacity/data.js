@@ -2,14 +2,20 @@
  * @Author: Lyl
  * @Date: 2022-05-03 16:09:34
  * @LastEditors: Lyl
- * @LastEditTime: 2022-05-18 10:12:06
+ * @LastEditTime: 2022-07-01 16:45:34
  * @FilePath: \iot.vue\src\view\quaLity\qaProductionCapacity\data.js
  * @Description:
  */
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
 
-function fillZero(row, value) {
-  return value && value.toFixed(2);
+function fillWeek(row, value) {
+  let year = value.slice(0,3);
+  let month = value.slice(4,5);
+  let day = value.slice(6,7);
+ 
+  console.log(year, month, day);
+  let date = new Date(value);
+  return value && date;
 }
 
 // 表格通用配置
@@ -91,7 +97,17 @@ export function mainCrud(_this) {
         placeholder: " ",
         overHidden: true,
         sortable: true,
-        // display: false,
+        align: "center"
+      },
+      {
+        label: "星期",
+        prop: "week",
+        width: 120,
+        span: 6,
+        placeholder: " ",
+        formatter: fillWeek,
+        overHidden: true,
+        sortable: true,
         align: "center"
       },
       {

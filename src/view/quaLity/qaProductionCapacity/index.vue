@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-05-03 16:09:29
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-01 14:18:26
+ * @LastEditTime: 2022-07-01 16:42:13
  * @FilePath: \iot.vue\src\view\quaLity\qaProductionCapacity\index.vue
  * @Description: 
 -->
@@ -97,6 +97,9 @@ export default {
         this.crud = records;
         this.page.total = total;
         this.$refs.crud.setCurrentRow();
+        this.crud.forEach((item) =>{
+          item.week = item.dayId
+        })
         await this.$nextTick();
         this.$refs["crud"].doLayout();
         this.curIdx = null;
