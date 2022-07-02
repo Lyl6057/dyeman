@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-01-12 15:39:08
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-30 09:29:16
+ * @LastEditTime: 2022-07-01 14:12:51
  * @FilePath: \iot.vue\src\view\im\whseInOutKB\index.vue
  * @Description: 
 -->
@@ -295,7 +295,7 @@ export default {
         } else {
           // 胚布出仓
           getNoteStock({
-            palletCode: "%" + (this.form.storeLoadCode || ""),
+            palletCode: this.form.storeLoadCode, // "%" + (this.form.storeLoadCode || ""),
             weaveJobCode: "%" + (this.form.weaveJobCode || ""),
             storeLoadCode: this.form.storeLoadCode,
             clothState: 1,
@@ -350,7 +350,7 @@ export default {
               rows: this.mainPage.pageSize,
               start: this.mainPage.currentPage,
               vatNo: "!^%" + (this.form.vatNo || ""),
-              palletCode: "%" + (this.form.storeLoadCode || ""),
+              palletCode: this.form.storeLoadCode , //"%" + (this.form.storeLoadCode || ""),
               // clothState: 1,
               cardType: 1,
             })
@@ -705,7 +705,6 @@ export default {
         )
         .then(() => {
           this.wLoading = true;
-          // if (this.form.type == 2) {
           sendTaskNoin({
             barCode: this.form.storeLoadCode,
             createTime: this.$getNowTime("datetime"),
@@ -729,28 +728,6 @@ export default {
             this.query();
             this.queryTask();
           });
-          // } else {
-          //   sendTask({
-          //     barCode: this.form.storeLoadCode,
-          //     createTime: this.$getNowTime("datetime"),
-          //     entrance: this.form.exit, // 入库口
-          //     isEmpty: this.form.storageState, // 是否为空
-          //     orderType: this.form.type, // 出库/入库
-          //     type: this.form.goodsType, // 物料类别
-          //     finishStatus: 0,
-          //     // storageCode: this.selectList[0].storeSiteCode,
-          //   }).then((res) => {
-          //     if (res.data.code == 0) {
-          //       this.$tip.success("任务提交成功!");
-          //       this.query();
-          //       this.queryTask();
-          //       // this.successAfter();
-          //     } else {
-          //       this.wLoading = false;
-          //       this.$tip.error("提交任务失败," + res.data.message + "!");
-          //     }
-          //   });
-          // }
         })
         .catch(() => {});
     },

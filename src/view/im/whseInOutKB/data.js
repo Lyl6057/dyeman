@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-01-12 15:46:05
  * @LastEditors: Lyl
- * @LastEditTime: 2022-07-01 08:13:54
+ * @LastEditTime: 2022-07-02 09:11:06
  * @FilePath: \iot.vue\src\view\im\whseInOutKB\data.js
  * @Description:
  */
@@ -492,6 +492,7 @@ export function finishedCrud(_this) {
     ]
   };
 }
+
 export function finishedStockOp(_this) {
   return {
     menu: false,
@@ -695,6 +696,7 @@ export function finishedStockOp(_this) {
     ]
   };
 }
+
 export function clothCrud(_this) {
   return {
     menu: false,
