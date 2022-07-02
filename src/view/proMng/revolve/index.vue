@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-10 08:36:05
+ * @LastEditTime: 2022-07-02 09:03:03
  * @Description:
 -->
 <template>
@@ -240,20 +240,21 @@ export default {
           delete this.form[key];
         }
       }
-      this.form.vatNo = "!^%" + (this.form.vatNo ? this.form.vatNo : "");
-      this.form.weaveJobCode =
-        "%" + (this.form.weaveJobCode ? this.form.weaveJobCode : "");
-
-      this.form.salPoNo = "%" + (this.form.salPoNo ? this.form.salPoNo : "");
-
-      // this.form.colorCode =
-      //   "%" + (this.form.colorCode ? this.form.colorCode : "");
-
+      let params = {
+        vatNo: '!^%' + (this.form.vatNo || ''),
+        weaveJobCode: '%' + (this.form.weaveJobCode || ''),
+        salPoNo: '%' + (this.form.salPoNo || ''),
+        colorCode: '%' + (this.form.colorCode || ''),
+        serviceOperator: '%' + (this.form.serviceOperator || ''),
+        fabName: '%' + (this.form.fabName || ''),
+      }
       get(
-        Object.assign(this.form, {
+        Object.assign(params, {
           rows: this.page.pageSize,
           start: this.page.currentPage,
           pages: this.page.currentPage,
+          workDate: this.form.workDate,
+          custCode: this.form.custCode,
           delFlag: 0,
         })
       ).then((res) => {
@@ -261,22 +262,8 @@ export default {
         this.crud.forEach((item, i) => {
           item.index = i + 1;
         });
-
-        if (this.crud.length > 0) {
-          this.$refs.crud.setCurrentRow(this.crud[0]);
-        }
-        if (this.form.vatNo.indexOf("!^%") != -1) {
-          this.form.vatNo = this.form.vatNo.split("!^%")[1] || "";
-        }
-        if (this.form.weaveJobCode.indexOf("%") != -1) {
-          this.form.weaveJobCode = this.form.weaveJobCode.split("%")[1];
-        }
-        if (this.form.salPoNo.indexOf("%") != -1) {
-          this.form.salPoNo = this.form.salPoNo.split("%").join("");
-        }
-        // if (this.form.colorCode.indexOf("%") != -1) {
-        //   this.form.colorCode = this.form.colorCode.split("%").join("");
-        // }
+        this.crud.length > 0 && this.$refs.crud.setCurrentRow(this.crud[0]);
+        
         this.page.total = res.data.total;
         this.loading = false;
       });

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-14 13:58:49
+ * @LastEditTime: 2022-07-02 08:57:58
  * @Description:
  */
 
@@ -13,7 +13,7 @@ export function mainForm(_this) {
   return {
     submitBtn: false,
     emptyBtn: false,
-    labelWidth: 150,
+    labelWidth: 120,
     column: [
       {
         label: "缸號",
@@ -43,6 +43,15 @@ export function mainForm(_this) {
         dicData: cust
       },
       {
+        label: "布類描述",
+        prop: "fabName",
+        placeholder: " ",
+        tip: "Loại vải",
+        overHidden: true,
+        width: 250,
+        span: 6
+      },
+      {
         label: "开单日期",
         prop: "workDate",
         span: 6,
@@ -63,23 +72,23 @@ export function mainForm(_this) {
         span: 6,
         placeholder: " "
       },
-      {
-        label: "审核状态",
-        prop: "auditState",
-        span: 6,
-        placeholder: " ",
-        type: "select",
-        dicData: [
-          {
-            value: 1,
-            label: "已审核"
-          },
-          {
-            value: 0,
-            label: "待审核"
-          }
-        ]
-      }
+      // {
+      //   label: "审核状态",
+      //   prop: "auditState",
+      //   span: 6,
+      //   placeholder: " ",
+      //   type: "select",
+      //   dicData: [
+      //     {
+      //       value: 1,
+      //       label: "已审核"
+      //     },
+      //     {
+      //       value: 0,
+      //       label: "待审核"
+      //     }
+      //   ]
+      // }
       // {
       //   label: _this.$t('whseField.khmc'),
       //   prop: "colorBh",
