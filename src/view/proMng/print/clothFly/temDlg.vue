@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-02-22 10:48:06
+ * @LastEditTime: 2022-07-01 14:59:07
  * @Description: 
 -->
 <template>
@@ -37,35 +37,20 @@
       <el-tabs v-model="tabs" type="border-card">
         <el-tab-pane name="bf" label="布飞信息">
           <div class="list-type">
-            <el-radio-group v-model="listType" @change="typeChange">
+            <el-radio-group v-model="listType" @change="getBf">
               <el-radio label="1">未打印</el-radio>
               <el-radio label="2">已打印</el-radio>
               <el-radio label="3">全部</el-radio>
             </el-radio-group>
-            <!-- <span style="margin-left: 20px; font-size: 18px"> 机号: </span> -->
-
-            <!-- <el-select
-              v-model="jh"
-              placeholder="请选择机号"
-              filterable
-              allow-create
-              default-first-option
-              clearable
-              @change="getBf"
-            >
-              <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              >
-              </el-option>
-            </el-select> -->
+            <span style="margin-left: 20px; font-size: 18px"> 布票号: </span>
+            <el-input v-model="noteCode" style="width: 20%" @change="getBf"></el-input>
           </div>
           <avue-crud
             ref="crud"
             :option="crudOp"
             :data="crud"
+            :page.sync="page"
+            @on-load="getBf"
             @selection-change="selectionChange"
           >
           </avue-crud>
@@ -85,9 +70,7 @@
 <script>
 import { mainCrud, bfCrud } from "./data";
 import { webSocket } from "@/config/index.js";
-import { getDIC, getDicT, getXDicT, postDicT, getDicNS } from "@/config";
 import {
-  getCodeSupply,
   addBf,
   printBf,
   getYarn,
@@ -114,7 +97,8 @@ export default {
       formOp: mainCrud(this),
       form: {},
       page: {
-        pageSize: 10,
+        pageSizes: [50, 100, 200 ,500 ,1000],
+        pageSize: 100,
         currentPage: 1,
         total: 0,
       },
@@ -149,41 +133,18 @@ export default {
       allData: [],
       jh: "",
       options: [],
+      noteCode: null
     };
   },
   watch: {},
   methods: {
     getData() {
-      // getBf().then((res) => {});
       this.wLoading = true;
       this.form = this.detail;
-      // this.formOp.column[10].dicData = getDicNS(
-      //   `proWeaveJobUseMachine?proWeaveJobFk=${this.form.weaveJobId}`,
-      //   "mathineCode",
-      //   "mathineCode"
-      // );
-      // this.jh = this.form.mathineCode;
-      // if (this.jh) {
-      //   this.options.push({
-      //     value: this.jh,
-      //     label: this.jh,
-      //   });
-      // }
-
       this.form.ps = (Number(this.form.amount) / Number(this.form.pz)).toFixed(
         0
       );
       this.form.nowDate = this.$getNowTime("date");
-      // getGroup({ proWeaveJobFk: this.form.weaveJobId }).then((group) => {
-      // this.yarnList = group.data;
-      // group.data.sort((a, b) => {
-      //   return a.sn - b.sn;
-      // });
-      // this.formOp.column[13].dicData = group.data;
-      // this.crudOp.column[3].dicData = group.data;
-      // if (group.data.length > 0) {
-      //   this.form.proWeaveJobGroupFk = group.data[0].groupId;
-      // }
       getJh({ proWeaveJobFk: this.form.weaveJobId }).then((res) => {
         res.data.forEach((item) => {
           this.formOp.column[10].dicData.push({
@@ -195,10 +156,6 @@ export default {
           this.form.mathineCode = res.data[0].mathineCode;
         }
       });
-      // });
-    },
-    typeChange() {
-      this.getBf();
     },
     setPreview() {
       this.$refs.form.validate((valid, done) => {
@@ -253,15 +210,6 @@ export default {
             this.$preFixInt(Number(data[0].sn), 2) +
             this.form.mathineCode;
         }
-        // this.getBf();
-        // if (yarn.data.length > 1) {
-        // } else {
-        //   // yarn.data.forEach((item) => {
-        //   //   this.form.yarnThickness.push(item.yarnName);
-        //   // });
-        //   // this.form.bph =
-        //   //   this.form.custCode + res.data.data + this.form.mathineCode;
-        // }
       });
     },
     readd() {
@@ -500,20 +448,18 @@ export default {
         Object.assign(query, {
           weaveJobFk: this.detail.weaveJobId,
           // proWeaveJobGroupFk: this.form.proWeaveJobGroupFk,
-          rows: 999,
-          start: 1,
+          rows: this.page.pageSize,
+          start: this.page.currentPage,
+          noteCode: '^^%' + (this.noteCode || '') 
         })
       ).then((res) => {
         this.crud = res.data.records;
+        this.page.total = res.data.total
         this.crud.forEach((item) => {
           item.$cellEdit = true;
         });
-        this.crud.sort((a, b) => {
-          return a.eachNumber - b.eachNumber;
-        });
         if (this.listType == "3") {
           this.allData = res.data.records;
-
           if (this.options.length <= 1) {
             this.group(this.allData, "machineCode");
           }
@@ -523,10 +469,12 @@ export default {
             this.form.qsph = this.allData[0].eachNumber;
           }
         }
-        setTimeout(() => {
-          this.wLoading = false;
-        }, 200);
-      });
+      }).finally(async () =>{
+          setTimeout(() => {
+            this.wLoading = false;
+          }, 200);
+          
+      })
     },
     print() {
       if (this.prsocket.readyState == 3) {

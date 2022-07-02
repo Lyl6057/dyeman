@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-05-23 13:05:11
+ * @LastEditTime: 2022-07-01 14:39:38
  * @Description:
  */
 
@@ -483,10 +483,10 @@ export function bfCrud(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 410px)",
+    height: "calc(100vh - 450px)",
     refreshBtn: false,
     columnBtn: false,
-    page: false,
+    page: true,
     labelWidth: 100,
     selection: true,
     column: [
