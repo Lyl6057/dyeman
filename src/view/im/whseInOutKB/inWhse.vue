@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-04-08 14:41:23
  * @LastEditors: Lyl
- * @LastEditTime: 2022-07-01 08:05:14
+ * @LastEditTime: 2022-07-04 13:07:53
  * @FilePath: \iot.vue\src\view\im\whseInOutKB\inWhse.vue
  * @Description: 
 -->
@@ -52,6 +52,7 @@ import {
   addInDtla,
   addInDtlb,
   updateNote,
+  getInCloth
 } from "./api";
 import { baseCodeSupply, baseCodeSupplyEx } from "@/api/index";
 import verifySubmit from "./verifySubmit.vue";
@@ -336,7 +337,23 @@ export default {
       this.choiceV = true;
     },
     scanChange() {
-      getInFinishedByPage({
+      if(this.form.goodsType == 1){
+        getInCloth({
+          noteCode: this.scanIpt,
+        }).then((res) => {
+          if (res.data.records) {
+            let note = res.data.records[0];
+            note.storeLoadCode = "";
+            note.index = this.crud.length + 1;
+            this.crud.push(note);
+            this.crud = this.$unique(this.crud, "noteCode");
+            this.scanIpt = "";
+          } else {
+            this.$tip.warning("暂无数据!");
+          }
+        })
+      }else{
+        getInFinishedByPage({
         cardType: 1,
         productNo: this.scanIpt,
         r_clothState_r: "||1||3",
@@ -352,6 +369,8 @@ export default {
           this.$tip.warning("暂无数据!");
         }
       });
+      }
+      
     },
     del() {
       this.selectList.forEach((item, i) => {
