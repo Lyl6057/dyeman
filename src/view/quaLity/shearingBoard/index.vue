@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-05-03 16:09:29
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-28 16:55:15
+ * @LastEditTime: 2022-07-05 13:32:40
  * @FilePath: \iot.vue\src\view\quaLity\shearingBoard\index.vue
  * @Description: 
 -->
@@ -75,7 +75,6 @@ import {
   updateProFinalProductCardCut,
 } from "./api.js";
 import { mainForm, mainCrud } from "./data.js";
-import { webSocket } from "@/config/index.js";
 export default {
   components: {
     temDlg,
@@ -99,19 +98,14 @@ export default {
       cutId: {},
       cardData: {},
       hasCardData: true,
-      prsocket: null,
-      printVisible: false,
-      updateVisible: false,
+      spowerClient: null,
       chooseData: {},
     };
   },
   watch: {},
   computed: {},
   created() {
-    this.prsocket = null;
-    let _this = this;
-    webSocket.setPrint(this);
-    _this.prsocket.onmessage = function (e) {};
+    this.spowerClient = this.$store.state.spowerClient;
   },
   mounted() {},
   methods: {
@@ -201,15 +195,14 @@ export default {
       window.open(url);
     },
     handlePrint() {
-      if (this.prsocket.readyState == 3 || this.prsocket.readyState == 0) {
+      if (this.spowerClient.readyState == 3 || this.spowerClient.readyState == 0) {
         this.$tip.error("打印服务离线，请启动服务后刷新页面!");
         return;
       }
       let printData = this.crud[this.curIdx - 1];
       printData.printTime = this.$getNowTime("datetime");
-      this.prsocket.send("finishCard:" + printData.proCardFk);
+      this.spowerClient.send("print=finishCard:" + printData.proCardFk);
       updateProFinalProductCardCut(printData);
-      this.printVisible = false;
       this.$tip.success("已发送打印动作!");
     },
     handleUpdate() {
@@ -249,7 +242,6 @@ export default {
               await updateFinishedNoteData(data);
               printData.upFlag = true;
               await updateProFinalProductCardCut(printData);
-              this.updateVisible = false;
               this.$tip.success("更新成功!");
             }
           }
@@ -257,9 +249,6 @@ export default {
         .finally(() => {
           this.loading = false;
         });
-    },
-    setPrintApp() {
-      webSocket.setClient(this);
     },
     rowClick(row) {
       this.curIdx = row.$index + 1;
