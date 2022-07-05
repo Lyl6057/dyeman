@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-18 10:17:39
+ * @LastEditTime: 2022-07-05 14:59:44
  * @Description:
 -->
 <template>
@@ -218,7 +218,7 @@ export default {
       detail: {
         weightUnit: "KG",
       },
-      czsocket: "",
+      spowerClient: "",
       weight: 0,
       changeList: [],
       wLoading: false,
@@ -232,7 +232,6 @@ export default {
       historyOp: dlgCrud(this),
       history: [],
       weightUnit: "KG",
-      prsocket: null,
       tabs: "update",
       historyCheck: {},
       loadDialogVisible: false,
@@ -305,11 +304,11 @@ export default {
       this.$refs.crud.rowExcel();
     },
     weighing() {
-      if (this.czsocket.readyState == 3) {
+      if (this.spowerClient.readyState == 3) {
         this.$tip.error("称重应用未启动，请启动后重新进入此页面!");
         return;
       } else {
-        this.czsocket.send("weight");
+        this.spowerClient.send("weight");
       }
       // setTimeout(() => {
       //   this.detail.clothWeight = this.weight;
@@ -429,27 +428,15 @@ export default {
       this.historyCheck = val;
     },
     setCz() {
-      webSocket.setCz(this);
+      this.spowerClient = this.$store.state.spowerClient;
       let _this = this;
-      _this.czsocket.onmessage = function (e) {
-        if (e.data.indexOf(":") != -1) {
-          let data = e.data.split(":");
-          _this.detail.weightUnit = data[1];
-          data[0] = Number((parseInt(Number(data[0]) * 10) / 10).toFixed(1));
-          if (_this.detail.weightUnit == "KG") {
-            _this.detail.netWeight = Number(data[0]); //;
-          } else {
-            _this.detail.netWeightLbs = Number(data[0]); //;
-          }
-        } else {
-          _this.detail.netWeight = Number(e.data);
-        }
+      _this.spowerClient.onmessage = function (e) {
+        let weight = e.data.indexOf(":") != -1 ? Number(e.data.replace(/[^\d.]/g, "")) : e.data;
+        let unit = e.data.split(":")[1];
+        _this.detail.weightUnit = unit
+        weight = Number((parseInt(Number(weight) * 10) / 10).toFixed(1));
+        unit == "KG" ? _this.detail.netWeight = weight :  _this.detail.netWeightLbs = weight;
       };
-      _this.czsocket.onopen = function (event) {
-        _this.$tip.success("称重应用连接成功!");
-      };
-      webSocket.setPrint(this);
-      _this.prsocket.onmessage = function (e) {};
     },
     calculateWeight() {},
     codeLength() {
@@ -1011,13 +998,13 @@ export default {
       });
     },
     print() {
-      if (this.prsocket.readyState == 3) {
+      if (this.spowerClient.readyState == 3) {
         this.setCz();
         // this.$tip.error("打印服务离线，请启动服务!");
         return;
       }
       this.selectList.forEach((item, i) => {
-        this.prsocket.send("finishCard:" + item.cardId);
+        this.spowerClient.send("print=finishCard:" + item.cardId);
         if (i == this.selectList.length - 1) {
           this.$tip.success("已发送全部打印请求!");
         }
@@ -1035,12 +1022,11 @@ export default {
     });
   },
   beforeRouteLeave(to, from, next) {
-    this.czsocket = null;
+    this.spowerClient = null;
     next();
   },
   created() {},
   mounted() {
-    // this.setCz();
     getCheckItem().then((res) => {
       let data = res.data.filter((item) => {
         return item.checkType != 2;

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-08-07 07:57:44
  * @LastEditors: Lyl
- * @LastEditTime: 2022-05-26 10:57:45
+ * @LastEditTime: 2022-07-05 16:31:05
  * @Description: 
 -->
 <template>
@@ -185,13 +185,11 @@ export default {
       isAdd: false,
       input: "",
       wLoading: false,
-      // czsocket: {},
       pdfDlg: false,
       pdfUrl: "",
-      czsocket: null,
+      spowerClient: null,
       time: null,
       history: [],
-      prsocket: null,
       sheetNum: 1,
       commonTem: null,
       output: {},
@@ -200,7 +198,6 @@ export default {
     };
   },
   created() {
-    // this.setCz();
   },
   mounted() {
     this.wLoading = true;
@@ -489,7 +486,7 @@ export default {
       //   this.detail.cardId;
     },
     print() {
-      if (this.prsocket.readyState == 3) {
+      if (this.spowerClient.readyState == 3) {
         this.$tip.error("打印服务离线，请启动服务!");
         return;
       }
@@ -551,8 +548,8 @@ export default {
                             for (let i = 0; i < this.sheetNum; i++) {
                               setTimeout(() => {
                                 if (data.cardId) {
-                                  this.prsocket.send(
-                                    "finishCard:" + data.cardId
+                                  this.spowerClient.send(
+                                    "print=finishCard:" + data.cardId
                                   );
                                 } else {
                                   this.$tip.error(
@@ -568,7 +565,7 @@ export default {
                             }
                           } else {
                             if (data.cardId) {
-                              this.prsocket.send("finishCard:" + data.cardId);
+                              this.spowerClient.send("print=finishCard:" + data.cardId);
                               this.$tip.success("已发送打印请求!");
                             } else {
                               this.$tip.error("数据错误,请重新查询后进行打印!");
@@ -609,8 +606,8 @@ export default {
                           for (let i = 0; i < this.sheetNum; i++) {
                             setTimeout(() => {
                               if (this.form.cardId) {
-                                this.prsocket.send(
-                                  "finishCard:" + this.form.cardId
+                                this.spowerClient.send(
+                                  "print=finishCard:" + this.form.cardId
                                 );
                               } else {
                                 this.$tip.error(
@@ -626,8 +623,8 @@ export default {
                           }
                         } else {
                           if (this.form.cardId) {
-                            this.prsocket.send(
-                              "finishCard:" + this.form.cardId
+                            this.spowerClient.send(
+                              "print=finishCard:" + this.form.cardId
                             );
                           } else {
                             this.$tip.error("数据错误,请重新查询后进行打印!");
@@ -682,11 +679,8 @@ export default {
       }
     },
     setCz() {
-      this.czsocket = null;
-      this.prsocket = null;
-      let _this = this;
-      webSocket.setPrint(this);
-      _this.prsocket.onmessage = function (e) {};
+      this.spowerClient = null;
+      this.spowerClient = this.$store.state.spowerClient;
     },
     codeLength() {
       if (
@@ -725,7 +719,6 @@ export default {
       this.form.yardLength = parseInt(
         Number(weight / gramWeight / breadth) * 1.0936
       );
-      console.log(this.form.weight, weight, gramWeight, breadth);
       // });
     },
   },
