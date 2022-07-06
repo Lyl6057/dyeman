@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-12 09:07:11
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-27 14:01:10
+ * @LastEditTime: 2022-07-05 16:15:12
  */
 import {
   getDIC,
@@ -91,7 +91,7 @@ export const moduleParamsEnum = {
     mainOidFkKey: "whseRetsuppdyesalFk",
     dtlOidFk: "whseRetsuppdyesalDtloid",
     inDtlOidFk: "whseDyesainDtlaFk",
-    stockKey: "viewDyesalinStok"
+    stockKey: "viewDyestuffStock"
   },
 }
 

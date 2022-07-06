@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-03-24 14:15:12
- * @LastEditors: Lyl
- * @LastEditTime: 2022-06-20 08:00:40
+ * @LastEditors: Symbol_Yang
+ * @LastEditTime: 2022-07-05 16:29:27
  * @Description: 
 -->
 <template>
@@ -433,7 +433,7 @@ export default {
       let idxs = row.index.toString().split("-");
       if (idxs.length == 1) return;
       let type = this.form.type;
-      if (!["SX"].includes(type)) return;
+      if (!["SX","RHL","RLL"].includes(type)) return;
       this.drawerVisible = true;
       await this.$nextTick();
       let params = {};
@@ -446,6 +446,14 @@ export default {
             batId: row.batId,
             locationCode: row.locationCode,
           };
+          break;
+        case "RHL":
+        case "RLL":
+          params = {
+            materialId: this.crud[idxs[0] - 1].chemicalId,
+            storageNo: row.storageNo,
+            batchNo: row.batchNo
+          }
           break;
       }
       this.$refs.whseDtlRef.initData(type, params);

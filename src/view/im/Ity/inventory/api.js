@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-03-24 14:21:09
- * @LastEditors: Lyl
- * @LastEditTime: 2022-05-24 11:11:52
+ * @LastEditors: Symbol_Yang
+ * @LastEditTime: 2022-07-05 16:28:21
  * @Description:
  */
 import axios from "axios";
@@ -15,6 +15,25 @@ export function fetchWhseDtlDataByYarns(params) {
     params: params
   });
 }
+
+// 根据化工原料信息获取出入仓明细
+export function fetchWhseDtlDataByChemical(params) {
+  return axios({
+    url: "/api/viewChemicalStock/whseDtl/page",
+    method: "get",
+    params: params
+  });
+}
+
+// 根据染料信息获取出入仓明细
+export function fetchWhseDtlDataByDyestuff(params) {
+  return axios({
+    url: "/api/viewDyestuffStock/whseDtl/page",
+    method: "get",
+    params: params
+  });
+}
+
 
 // 判断当天是否已存在清单
 export function fetchCheckHasExistByNow(params) {
