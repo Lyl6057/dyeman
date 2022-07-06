@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-07-05 14:59:44
+ * @LastEditTime: 2022-07-06 08:13:17
  * @Description:
 -->
 <template>
@@ -998,9 +998,9 @@ export default {
       });
     },
     print() {
-      if (this.spowerClient.readyState == 3) {
+      if (!this.spowerClient || this.spowerClient.readyState == 3) {
         this.setCz();
-        // this.$tip.error("打印服务离线，请启动服务!");
+        this.$tip.error("打印程序离线，请启动服务!");
         return;
       }
       this.selectList.forEach((item, i) => {

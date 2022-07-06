@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-08-07 07:57:44
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-29 14:11:43
+ * @LastEditTime: 2022-07-06 08:15:59
  * @Description: 
 -->
 <template>
@@ -191,13 +191,10 @@ export default {
       isAdd: false,
       input: "",
       wLoading: false,
-      // czsocket: {},
       pdfDlg: false,
       pdfUrl: "",
-      czsocket: {},
       time: null,
       history: [],
-      prsocket: null,
       sheetNum: 1,
       commonTem: null,
       output: {},
@@ -511,8 +508,9 @@ export default {
           return 
         }
       }
-      if (this.prsocket.readyState == 3 || this.prsocket.readyState == 0) {
+      if (!this.spowerClient || this.spowerClient.readyState == 3 || this.spowerClient.readyState == 0) {
         this.$tip.error("打印服务离线，请启动服务!");
+        this.setCz()
         return;
       }
       if (!this.form.netWeight) {
@@ -566,8 +564,8 @@ export default {
                             for (let i = 0; i < this.sheetNum; i++) {
                               setTimeout(() => {
                                 if (data.cardId) {
-                                  this.prsocket.send(
-                                    "finishCard:" + data.cardId
+                                  this.spowerClient.send(
+                                    "print=finishCard:" + data.cardId
                                   );
                                 } else {
                                   this.$tip.error(
@@ -583,7 +581,7 @@ export default {
                             }
                           } else {
                             if (data.cardId) {
-                              this.prsocket.send("finishCard:" + data.cardId);
+                              this.spowerClient.send("print=finishCard:" + data.cardId);
                               this.$tip.success("已发送打印请求!");
                             } else {
                               this.$tip.error("数据错误,请重新查询后进行打印!");
@@ -614,8 +612,8 @@ export default {
                           for (let i = 0; i < this.sheetNum; i++) {
                             setTimeout(() => {
                               if (this.form.cardId) {
-                                this.prsocket.send(
-                                  "finishCard:" + this.form.cardId
+                                this.spowerClient.send(
+                                  "print=finishCard:" + this.form.cardId
                                 );
                               } else {
                                 this.$tip.error(
@@ -631,8 +629,8 @@ export default {
                           }
                         } else {
                           if (this.form.cardId) {
-                            this.prsocket.send(
-                              "finishCard:" + this.form.cardId
+                            this.spowerClient.send(
+                              "print=finishCard:" + this.form.cardId
                             );
                           } else {
                             this.$tip.error("数据错误,请重新查询后进行打印!");
@@ -706,81 +704,8 @@ export default {
       }
     },
     setCz() {
-      this.czsocket = null;
-      this.prsocket = null;
-      webSocket.setCz(this);
+     this.spowerClient = this.$store.state.spowerClient;
       let _this = this;
-      _this.czsocket.onmessage = function (e) {
-        if (e.data.indexOf(":") != -1) {
-          let data = e.data.split(":");
-          _this.form.weightUnit = data[1];
-          data[0] = Number((parseInt(Number(data[0]) * 10) / 10).toFixed(1));
-          if (_this.form.weightUnit == "KG") {
-            _this.form.netWeight = Number(data[0]); //;
-            _this.form.netWeightLbs = _this.form.netWeight * 2.2046;
-
-            _this.form.grossWeight =
-              _this.form.netWeight +
-              Number(_this.form.paperTube || 0) +
-              Number(_this.form.qcTakeOut || 0);
-            _this.form.grossWeightLbs = _this.form.grossWeight * 2.2046;
-          } else {
-            _this.form.netWeightLbs = Number(data[0]); //;
-            _this.form.netWeight = _this.form.netWeightLbs / 2.2046;
-
-            _this.form.grossWeightLbs =
-              _this.form.netWeightLbs +
-              Number(_this.form.paperTube || 0) +
-              Number(_this.form.qcTakeOut || 0);
-            _this.form.grossWeight = _this.form.grossWeightLbs / 2.2046;
-            // _this.form.grossWeightLbs = Number(data[0]); //;
-            // _this.form.grossWeight = _this.form.grossWeightLbs / 2.2046;
-
-            // _this.form.netWeightLbs =
-            //   _this.form.grossWeightLbs -
-            //   Number(_this.form.paperTube || 0) -
-            //   Number(_this.form.qcTakeOut);
-
-            // _this.form.netWeight = _this.form.netWeightLbs / 2.2046;
-          }
-        } else {
-          _this.form.netWeight = Number(e.data);
-        }
-
-        // _this.codeLength();
-      };
-      _this.czsocket.onopen = function (event) {
-        setTimeout(() => {
-          _this.time = setInterval(() => {
-            if (_this.czsocket.readyState == 1) {
-              _this.dlgCtr = true;
-              _this.czsocket.send("weight");
-            } else {
-              clearInterval(_this.time);
-              _this.czsocket = null;
-              _this.prsocket = null;
-              _this.setCz();
-            }
-          }, 1200);
-        }, 200);
-        _this.$tip.success("服务器连接成功!");
-      };
-      _this.czsocket.onerror = function () {
-        if (_this.dlgCtr) {
-          _this.$tip.warning("称重服务离线，请打开称重应用!");
-          _this.$nextTick(() => {
-            _this.dlgCtr = false;
-          });
-        }
-        _this.czsocket = null;
-        _this.prsocket = null;
-        _this.$nextTick(() => {
-          _this.setCz();
-        });
-      };
-      webSocket.setPrint(this);
-      _this.prsocket.onmessage = function (e) {};
-      webSocket.setClient(this);
       _this.spowerClient.onmessage = function (e) {
         if (e.data.indexOf("scan") != -1) {
           _this.$nextTick(() => {
@@ -790,7 +715,34 @@ export default {
               _this.form.storeLoadCode = e.data.split("scan=")[1];
             }
           });
+          return
         }
+        let weight = e.data.indexOf(":") != -1 ? Number(e.data.replace(/[^\d.]/g, "")) : e.data;
+        let unit = e.data.split(":")[1];
+        _this.form.weightUnit = unit
+        weight = Number((parseInt(Number(weight) * 10) / 10).toFixed(1));
+        if (_this.form.weightUnit == "KG") {
+          _this.form.netWeight = weight; //;
+          _this.form.netWeightLbs = _this.form.netWeight * 2.2046;
+          _this.form.grossWeight =
+            _this.form.netWeight +
+            Number(_this.form.paperTube || 0) +
+            Number(_this.form.qcTakeOut || 0);
+          _this.form.grossWeightLbs = _this.form.grossWeight * 2.2046;
+        } else {
+          _this.form.netWeightLbs = weight; //;
+          _this.form.netWeight = _this.form.netWeightLbs / 2.2046;
+
+          _this.form.grossWeightLbs =
+            _this.form.netWeightLbs +
+            Number(_this.form.paperTube || 0) +
+            Number(_this.form.qcTakeOut || 0);
+          _this.form.grossWeight = _this.form.grossWeightLbs / 2.2046;
+        }
+      };
+      _this.spowerClient.onerror = function () {
+          _this.$tip.warning("称重服务离线，请打开称重应用!");
+          _this.dlgCtr = false;
       };
     },
     codeLength() {
@@ -840,11 +792,6 @@ export default {
     next((vm) => {
       let self = vm;
       self.setCz();
-      // vm.spowerClient = vm.$store.state.spowerClient
-      // vm.spowerClient.onmessage = function (e){
-      //   console.log(e);
-      // }
-
       document.onkeydown = function (e) {
         let ev = document.all ? window.event : e;
 

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-05-03 16:29:13
  * @LastEditors: Lyl
- * @LastEditTime: 2022-07-05 14:26:34
+ * @LastEditTime: 2022-07-06 09:51:16
  * @FilePath: \iot.vue\src\view\quaLity\shearingBoard\tem.vue
  * @Description: 
 -->
@@ -34,9 +34,9 @@
       </div>
       <div class="formBox">
         <avue-form ref="qcShearingBoardForm" :option="qcShearingBoardFormOp" v-model="qcShearingBoardData">
-          <template slot-scope="scope" slot="productNo">
-            <el-select v-model="qcShearingBoardData.productNo" filterable remote reserve-keyword clearable default-first-option placeholder="请输入成品编号" :remote-method="remoteMethod" :loading="vatLoading" @change="handleVatnoChange">
-              <el-option v-for="item in options" :key="item.cardId" :label="item.productNo" :value="item.productNo">
+          <template slot-scope="scope" slot="proCardFk">
+            <el-select v-model="qcShearingBoardData.proCardFk" filterable remote reserve-keyword clearable default-first-option placeholder="请输入成品编号" :remote-method="remoteMethod" :loading="vatLoading" @change="handleVatnoChange">
+              <el-option v-for="item in options" :key="item.cardId" :label="item.productNo + '  (' + item.vatNo + ')'" :value="item.cardId">
               </el-option>
             </el-select>
           </template>
@@ -104,10 +104,10 @@ export default {
         this.vatLoading = false;
       });
     },
-    handleVatnoChange(productNo) {
+    handleVatnoChange(cardId) {
       this.loading = true;
       getFinishedNoteByPage({
-        productNo,
+        cardId,
         rows: 10,
         start: 1,
         page: 1,
@@ -118,7 +118,8 @@ export default {
           this.qcShearingBoardData.netWeight = data.netWeight;
           this.qcShearingBoardData.netWeightLbs = data.netWeightLbs;
           this.qcShearingBoardData.befcutYds = data.yardLength;
-          this.qcShearingBoardData.proCardFk = data.cardId;
+          // this.qcShearingBoardData.proCardFk = data.cardId;
+          this.qcShearingBoardData.productNo = data.productNo
         }
         this.loading = false;
       });
@@ -221,6 +222,7 @@ export default {
           }
           this.loading = true;
           let cutId = this.qcShearingBoardData.cutId;
+          this.qcShearingBoardData.cutRemarks  = this.qcShearingBoardData.cutRemarks.toString()
           if (cutId) {
             await updateProFinalProductCardCut(this.qcShearingBoardData).then();
           } else {

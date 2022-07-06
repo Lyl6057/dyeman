@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-05-03 16:09:34
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-28 16:27:00
+ * @LastEditTime: 2022-07-06 09:50:15
  * @FilePath: \iot.vue\src\view\quaLity\shearingBoard\data.js
  * @Description:
  */
@@ -82,7 +82,7 @@ export function crateDataForm(_this) {
     column: [
       {
         label: "成品编号",
-        prop: "productNo",
+        prop: "proCardFk",
         span: 6,
         rules: [
           {
@@ -333,9 +333,15 @@ export function crateDataForm(_this) {
         prop: "cutRemarks",
         width: 180,
         placeholder: " ",
+        dataType: "Srting",
         span: 24,
         overHidden: true,
-        type: 'textarea'
+        type: "select",
+        multiple: true,
+        filterable: true,
+        allowCreate: true,
+        defaultFirstOption: true,
+        dicData: getDicT("qcClothCheckItem", "itemName", "itemName", {}, 'sn')
       }
     ]
   };
@@ -579,7 +585,7 @@ export function mainCrud(_this) {
         width: 180,
         placeholder: " ",
         span: 12,
-        overHidden: true
+        overHidden: true,
       }
     ]
   };

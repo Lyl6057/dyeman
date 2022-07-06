@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-07-01 14:59:07
+ * @LastEditTime: 2022-07-06 08:14:23
  * @Description: 
 -->
 <template>
@@ -119,7 +119,7 @@ export default {
       // 加载进度
       loadedRatio: 0,
       curPageNum: 0,
-      prsocket: "",
+      spowerClient: "",
       tabs: "bf",
       crudOp: bfCrud(this),
       crud: [],
@@ -477,7 +477,8 @@ export default {
       })
     },
     print() {
-      if (this.prsocket.readyState == 3) {
+      if (!this.spowerClient || this.spowerClient.readyState == 3) {
+        this.setCz()
         this.$tip.error("打印应用未启动，请打开后重新进入此页面!");
         return;
       }
@@ -488,10 +489,7 @@ export default {
             this.wLoading = true;
             // 打印操作
             this.selectData.forEach((item, i) => {
-              this.prsocket.send(item.noteId);
-              // this.$tip.success(
-              //   "已发送布飞【 " + item.noteCode + " 】的打印请求!"
-              // );
+              this.spowerClient.send("print=noteId:" + item.noteId);
               if (!item.isPrinted) {
                 item.isPrinted = true;
                 item.clothState = 0;
@@ -583,11 +581,7 @@ export default {
       // return dest;
     },
     setCz() {
-      webSocket.setPrint(this);
-      let _this = this;
-      _this.prsocket.onmessage = function (e) {
-        console.log(e);
-      };
+      this.spowerClient = this.$store.state.spowerClient;
     },
     selectionChange(val) {
       this.selectData = val;
