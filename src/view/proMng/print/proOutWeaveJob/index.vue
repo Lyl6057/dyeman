@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-06-27 21:33:21
+ * @LastEditTime: 2022-07-06 11:53:39
  * @Description: 
 -->
 <template>
@@ -189,7 +189,7 @@ export default {
   watch: {},
   computed: {
     isOutFactory(){
-      return !this.$store.getters.isOutFactory
+      return  true // !this.$store.getters.isOutFactory
     }
   },
   methods: {
