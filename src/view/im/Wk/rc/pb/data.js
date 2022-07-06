@@ -84,16 +84,6 @@ export function rcpb2F(_this) {
         placeholder: " ",
         disabled: true
       },
-      // {
-      //   label: "入倉類型",
-      //   prop: "yinType",
-      //   span: 6,
-      //   placeholder: " ",
-      //   type: "select",
-      //   dicData: getDIC('Whse_CalicoType'),
-      //   // display: _this.hide === "6" || _this.hide === "4" ? true : false,
-      //   disabled: true
-      // },
       {
         label: _this.$t("whseField.rcrq"),
         prop: "yinDate",
@@ -194,15 +184,6 @@ export function rcpb2F(_this) {
         disabled: !_this.isAdd,
         type: "select",
         dicData: getDicT("viWhseProcessinstruct", "instructId", "instructId"),
-        // click: () => {
-        //   _this.choiceV = !_this.choiceV;
-        //   _this.choiceField = "instructId";
-        //   this.choiceQ.registerNo = this.form;
-        //   _this.choiceTarget = _this.form;
-        //   _this.dlgWidth = "100%";
-        //   _this.choiceTle = $t('iaoMng.xzzld');
-
-        // }
         change: () => {
           _this.$nextTick(() => {
             if (
@@ -280,24 +261,6 @@ export function rcpbDetailF(_this) {
         placeholder: " ",
         disabled: true
       },
-      // {
-      //   label: _this.$t("whseField.jyzt"),
-      //   prop: "yinStatus",
-      //   span: 6,
-      //   placeholder: " ",
-      //   type: "select",
-      //   display: true,
-      //   dicData:
-      //     getDIC('whse_yinstatus')
-      // },
-      //           {
-      //   label: "创建日期",
-      //   prop: "sysCreated",
-      //   span: 8,
-      //   placeholder: " ",
-      //   disabled: true,
-      //   type: "datetime",
-      // },
       {
         label: _this.$t("whseField.rcrq"),
         prop: "yinDate",
@@ -315,13 +278,6 @@ export function rcpbDetailF(_this) {
         placeholder: " ",
         disabled: true
       }
-      // {
-      //   label: _this.$t("whseField.cwzt"),
-      //   prop: "finStatus",
-      //   span: 6,
-      //   placeholder: " ",
-      //   disabled: true
-      // },
     ]
   };
 }
@@ -402,7 +358,6 @@ export function rcpb1C(_this) {
         click: () => {
           _this.choiceV = !_this.choiceV;
           _this.choiceField = "purNo";
-          // _this.choiceQ.purType = '5'
           _this.oldData = _this.chooseData;
           _this.choiceTarget = _this.oldData;
           _this.choiceTle = _this.$t("choicDlg.xzpbcgd");
@@ -423,7 +378,6 @@ export function rcpb1C(_this) {
           _this.choiceQ.deliType = "calico";
           _this.choiceField = "deliNo";
           _this.oldData = _this.chooseData;
-          // _this.choiceQ.purNo = this.oldData.purNo
           _this.choiceTarget = _this.oldData;
           _this.choiceTle = _this.$t("choicDlg.shd");
         }
@@ -582,7 +536,7 @@ export function rcpb2C(_this) {
       },
       {
         label: _this.$t("whseField.scdh"),
-        prop: "prodNo",
+        prop: "weaveJobCode",
         cell: false,
         width: 200,
         hide:
@@ -591,13 +545,6 @@ export function rcpb2C(_this) {
             : true,
         placeholder: _this.$t("whseField.qxzscdh"), //"請選擇生產單號",
         click: val => {
-          // _this.choiceV = !_this.choiceV
-          // _this.choiceField = "prodNo";
-          // _this.oldData = _this.chooseData;
-          // _this.choiceTarget = _this.oldData;
-          // if (_this.hide === '6' || _this.hide === '7') {
-          //   _this.choiceTle = "胚布貨物包";
-          // }
           if (_this.hide === "4") {
             _this.choiceTle = _this.$t("choicDlg.pbdd");
           }
@@ -658,54 +605,7 @@ export function rcpb2C(_this) {
           "locationCode",
           "locationCode"
         )
-        // click: () => {
-        //   _this.dlgWidth = "100%"
-        //   _this.choiceV = !_this.choiceV
-        //   _this.choiceField = "locationCode";
-        //   _this.choiceTarget = _this.chooseData;
-        //   _this.choiceTle = _this.$t("choicDlg.xzhw");
-        // }
       },
-
-      // {
-      //   label: _this.$t('whseField.khbh'),
-      //   prop: "custId",
-      //   cell: false,
-      //   width: 150,
-      //   hide: true,
-      //   // type: "select",
-      //   // click: (val) => {
-      //   //   _this.choiceV = !_this.choiceV
-      //   //   _this.choiceField = "custId";
-      //   //   _this.oldData = _this.chooseData;
-      //   //   _this.choiceTarget = _this.oldData;
-      //   //   _this.choiceTle = _this.$t("whseField.khbh");
-      //   //   _this.iptChange(_this.chooseData);
-      //   // },
-      // },
-
-      // {
-      //   label: _this.$t("whseField.ph"),
-      //   prop: "batchNo",
-      //   hide: _this.hide === '6' || _this.hide === '4' || _this.hide === '7' ? true : false,
-      //   cell: true,
-      //   width: 150,
-      //   change: () => {
-      //     _this.$nextTick(() => {
-      //       _this.chooseData.loc.forEach((item, index) => {
-      //         item.batchNo = _this.chooseData.batchNo
-      //       })
-      //     })
-
-      //   }
-      // },
-
-      // {
-      //   label: "来胚入仓_FK",
-      //   prop: "whseCalicoinFk",
-      //   hide: true,
-      // },
-
       {
         label: _this.$t("whseField.zl"),
         prop: "weight",
@@ -767,20 +667,13 @@ export function rcpb3C(_this) {
         prop: "batchNo",
         cell: true,
         width: 170
-
-        // click: (val) => {
-        //   _this.iptPhChange(_this.choosePhData);
-        // },
       },
       {
         label: _this.$t("whseField.ph2"),
-        prop: "countingNo",
+        prop: "pidNo",
         cell: true,
         width: 70,
         align: "right"
-        // click: (val) => {
-        //   _this.iptPhChange(_this.choosePhData);
-        // },
       },
       {
         label: _this.$t("whseField.zl"),
@@ -788,9 +681,6 @@ export function rcpb3C(_this) {
         cell: true,
         width: 100,
         align: "right"
-        // click: (val) => {
-        //   _this.iptPhChange(_this.choosePhData);
-        // },
       },
       {
         label: _this.$t("whseField.zldw"),
@@ -799,18 +689,12 @@ export function rcpb3C(_this) {
         width: 100,
         type: "select",
         dicData: getDIC("bas_matUnit")
-        // click: (val) => {
-        //   _this.iptPhChange(_this.choosePhData);
-        // },
       },
       {
         label: _this.$t("whseField.krbph"),
-        prop: "custTicket",
+        prop: "noteCode",
         cell: true,
         width: 150
-        // click: (val) => {
-        //   _this.iptPhChange(_this.choosePhData);
-        // },
       }
     ]
   };
