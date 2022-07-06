@@ -365,7 +365,7 @@ export default {
   watch: {},
   computed: {
     isOutFactory(){
-      return !this.$store.getters.isOutFactory
+      return  true //!this.$store.getters.isOutFactory
     }
   },
   methods: {
