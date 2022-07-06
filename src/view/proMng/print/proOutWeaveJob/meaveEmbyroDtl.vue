@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-06-20 11:17:59
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-06-25 11:42:10
+ * @LastEditTime: 2022-07-06 11:59:24
 -->
 <template>
     <view-container title="织胚明细" >
@@ -55,7 +55,7 @@
         },
         computed:{
             isOutFactory(){
-                return !this.$store.getters.isOutFactory
+                return  true // !this.$store.getters.isOutFactory
             }
         },
         methods:{
