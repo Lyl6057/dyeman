@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-20 08:46:17
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-20 16:44:30
+ * @LastEditTime: 2022-07-05 16:29:03
 -->
 
 <template>
@@ -38,7 +38,7 @@
   </div>
 </template>
 <script>
-import { fetchWhseDtlDataByYarns } from "./api";
+import { fetchWhseDtlDataByYarns,fetchWhseDtlDataByChemical,fetchWhseDtlDataByDyestuff } from "./api";
 import { whseDtlCrudOp,whseDtlCountFormOp } from "./data";
 export default {
   name: "inventoryWhseDtl",
@@ -66,7 +66,6 @@ export default {
   methods: {
     handleSeletChange(rows){
         let inWeight = 0, outWeight = 0;
-        console.log("row",rows);
         rows.forEach(item => {
             if(item.whseStatus == 'in'){
                 inWeight += item.weight
@@ -102,6 +101,12 @@ export default {
       switch (this.whseType) {
         case "SX":
           fetchWhseDtlDataFn = fetchWhseDtlDataByYarns;
+          break;
+        case "RHL" :
+          fetchWhseDtlDataFn = fetchWhseDtlDataByChemical;
+          break;
+        case "RLL" :
+          fetchWhseDtlDataFn = fetchWhseDtlDataByDyestuff;
           break;
         default:
           break;
