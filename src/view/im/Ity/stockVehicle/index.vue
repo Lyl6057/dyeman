@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-24 14:15:12
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-12 14:22:19
+ * @LastEditTime: 2022-07-06 14:11:28
  * @Description: 
 -->
 <template>
@@ -31,9 +31,8 @@
   </div>
 </template>
 <script>
-import { fetchStockVehicleByPage } from "./api";
+import { fetchStockVehicleByPage, fetchNoteStockVehicleByPage } from "./api";
 import { formOp, crudOp } from "./data";
-import { fetchFineReportUrl } from "@/api/index";
 export default {
   name: "",
   components: {},
@@ -49,7 +48,9 @@ export default {
         total: 0,
       },
       formOp: formOp(this),
-      form: {},
+      form: {
+        type: 1
+      },
       crudOp: crudOp(this),
       crud: [],
       chooseData: {},
@@ -68,8 +69,9 @@ export default {
       let query = JSON.parse(JSON.stringify(this.form));
       query.palletCode = "!^%" + (query.palletCode || "");
       query.vatNo = "%" + (query.vatNo || "");
+      query.weaveJobCode = "%" + (query.weaveJobCode || "");
       query.storageId = "%" + (query.storageId || "");
-      fetchStockVehicleByPage(
+      (this.form.type == 1 ? fetchNoteStockVehicleByPage : fetchStockVehicleByPage)(
         Object.assign(query, {
           rows: this.page.pageSize,
           start: this.page.currentPage,
