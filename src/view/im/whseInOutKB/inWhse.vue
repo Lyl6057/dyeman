@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-04-08 14:41:23
  * @LastEditors: Lyl
- * @LastEditTime: 2022-07-04 13:07:53
+ * @LastEditTime: 2022-07-06 14:50:31
  * @FilePath: \iot.vue\src\view\im\whseInOutKB\inWhse.vue
  * @Description: 
 -->
@@ -180,7 +180,6 @@ export default {
                     }).then((log) => {
                       addInDtla({
                         carriageStorageLogFk: log.data.data,
-                        wmsTaskLogFk: sendRes.data,
                         iotWmsTaskLogFk: sendRes.data,
                         whseCalicoinFk: res.data.data,
                         countingNo: item.data.length,
@@ -192,11 +191,11 @@ export default {
                         item.data.forEach((dtlb, j) => {
                           addInDtlb({
                             outFlag: 0,
-                            countingNo: dtlb.eachNumber,
+                            pidNo: dtlb.eachNumber,
                             weight: dtlb.clothWeight || dtlb.realWeight,
                             weightUnit: "KG",
                             whseCalicoinDtlaFk: dtla.data.data,
-                            custTicket: dtlb.noteCode,
+                            noteCode: dtlb.noteCode,
                             weaveJobCode: dtlb.proName,
                           }).then((dtlbRes) => {
                             if (
