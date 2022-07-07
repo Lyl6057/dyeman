@@ -14,6 +14,7 @@
     - src\page\index\sidebar\index.js 菜单
 ## 1. 重要目录及文档说明
 
+```
 |--build
 |--config
 |--src
@@ -36,7 +37,7 @@
 |--|--|--index.styl 页面 css
 |--|--view 功能页面，文件构造为 功能模块/功能名称/index.vue
 |--static 存放静态文件，如图片等
-
+```
 ## 2. 环境说明
 
    UI 库：
