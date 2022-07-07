@@ -89,11 +89,6 @@ export const webSocket = {
     } else {
       _this.$tip.error("该浏览器不支持websocket通讯，请切换浏览器！");
     }
-    //连接发生错误的回调方法
-    // _this.prsocket.onerror = function() {
-    //   // _this.$tip.error("打印应用连接失败，请检查是否启动!");
-    //   _this.$tip.warning("打印服务离线!");
-    // };
     //连接成功建立的回调方法
     _this.spowerClient.onopen = function(event) {
       _this.$tip.success("S.POWER客户端连接成功!");
@@ -104,7 +99,9 @@ export const webSocket = {
     //接收到消息的回调方法
     _this.spowerClient.onmessage = function(event) {};
     //连接关闭的回调方法
-    _this.spowerClient.onclose = function() {};
+    // _this.spowerClient.onclose = function() {
+    //   _this.$tip.error("S.POWER客户端已退出!");
+    // };
   },
   setDriving(_this) {
     if ("WebSocket" in window) {
