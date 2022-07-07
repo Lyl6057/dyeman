@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-06-08 17:50:06
  * @LastEditors: Lyl
- * @LastEditTime: 2022-01-20 08:05:01
+ * @LastEditTime: 2022-07-07 15:49:12
  * @Description: 
 -->
 <template>
@@ -141,7 +141,7 @@ export default {
       dlgForm: {},
       dLoading: false,
       pdfDlg: false,
-      prsocket: null,
+      spowerClient: null,
       sheetNum: 1,
     };
   },
@@ -262,14 +262,14 @@ export default {
     },
     print() {
       this.wLoading = true;
-      if (this.prsocket.readyState == 3 || this.prsocket.readyState == 0) {
+      if (!this.spowerClient.readyState || this.spowerClient.readyState == 3 || this.spowerClient.readyState == 0) {
         this.setPrint();
         return;
       }
       if (this.chooseData[this.apiParams.save]) {
         for (let i = 0; i < this.sheetNum; i++) {
-          this.prsocket.send(
-            `${this.apiParams.printId}:` + this.chooseData[this.apiParams.save]
+          this.spowerClient.send(
+            `print=${this.apiParams.printId}:` + this.chooseData[this.apiParams.save]
           );
           if (i == this.sheetNum - 1) {
             this.$tip.success("已全部发送打印请求!");
@@ -311,13 +311,7 @@ export default {
       }
     },
     setPrint() {
-      this.prsocket = null;
-      webSocket.setPrint(this);
-      this.prsocket.onmessage = function (e) {};
-      this.wLoading = false;
-      this.prsocket.onerror = function (e) {
-        alert("称重服务离线，请打开称重应用!");
-      };
+      this.spowerClient = this.$store.state.spowerClient;
     },
   },
   created() {
