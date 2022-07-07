@@ -11,7 +11,7 @@
 ## 项目地址
   - gitee: https://gitee.com/Forforever/dyeman
   - 发布地址 \\192.168.5.1\d$\Program\eWDFS\BPObject\vuePackage
-  - 
+  - 测试
 1. 重要目录及文档说明
 
 |--build
