@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-05-03 16:09:34
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-30 16:09:42
+ * @LastEditTime: 2022-07-07 08:08:57
  * @FilePath: \iot.vue\src\view\quaLity\abnormalDaily\data.js
  * @Description:
  */
@@ -144,7 +144,7 @@ export function mainCrud(_this) {
         prop: "fabName",
         readonly: true,
         placeholder: " ",
-        span: 12,
+        span: 6,
         width: 200,
         overHidden: true,
         hide: true
@@ -171,6 +171,35 @@ export function mainCrud(_this) {
         type: "datetime",
         format: "yyyy-MM-dd HH:mm:ss",
         valueFormat: "yyyy-MM-dd HH:mm:ss",
+      },
+      {
+        label: "颜色名称",
+        prop: "colorName",
+        readonly: true,
+        width: 150,
+        span: 6,
+        overHidden: true,
+        
+      },
+     
+      {
+        label: "责任部门",
+        prop: "chargeDpt",
+        width: 150,
+        span: 6,
+        placeholder: " ",
+        overHidden: true,
+        type: "select",
+        dicData: getDicT("proDptworkProcess", "dptName", "dptCode", {}, "sn"),
+      },
+      {
+        label: "反馈人员",
+        prop: "qcCheck",
+        width: 180,
+        placeholder: " ",
+        readonly: true,
+        span: 6,
+        overHidden: true,
       },
       {
         label: "检验疋数",
@@ -203,25 +232,6 @@ export function mainCrud(_this) {
             trigger: "blur"
           }
         ]
-      },
-      {
-        label: "责任部门",
-        prop: "chargeDpt",
-        width: 150,
-        span: 6,
-        placeholder: " ",
-        overHidden: true,
-        type: "select",
-        dicData: getDicT("proDptworkProcess", "dptName", "dptCode", {}, "sn"),
-      },
-      {
-        label: "颜色名称",
-        prop: "colorName",
-        readonly: true,
-        width: 150,
-        span: 6,
-        overHidden: true,
-        
       },
       {
         label: "检验数量(磅)",
@@ -258,16 +268,22 @@ export function mainCrud(_this) {
         prop: "problemDesc",
         width: 180,
         placeholder: " ",
-        span: 12,
+        span: 24,
+        maxRows: 4,
+        minRows: 3,
         overHidden: true,
+        type: "textarea"
       },
       {
         label: "详细情况",
         prop: "problemContent",
         width: 180,
         placeholder: " ",
-        span: 12,
+        span: 24,
         overHidden: true,
+        maxRows: 4,
+        minRows: 3,
+        type: "textarea"
       },
       
       {
@@ -275,8 +291,11 @@ export function mainCrud(_this) {
         prop: "solution",
         width: 180,
         placeholder: " ",
-        span: 12,
+        span: 24,
         overHidden: true,
+        type: "textarea",
+        maxRows: 4,
+        minRows: 3
       },
       
       // {
@@ -304,8 +323,11 @@ export function mainCrud(_this) {
         prop: "chargeSuggest",
         placeholder: " ",
         width: 200,
-        span: 12,
+        span: 24,
+        maxRows: 4,
+        minRows: 3,
         overHidden: true,
+        type: "textarea"
       },
       // {
       //   label: "部门负责人",
@@ -316,22 +338,17 @@ export function mainCrud(_this) {
       //   overHidden: true,
       // },
       
-      {
-        label: "反馈人员",
-        prop: "qcCheck",
-        width: 180,
-        placeholder: " ",
-        readonly: true,
-        span: 6,
-        overHidden: true,
-      },
+      
       {
         label: "备注",
         prop: "remark",
         placeholder: " ",
         width: 200,
-        span: 18,
+        span: 24,
+        maxRows: 4,
+        minRows: 3,
         overHidden: true,
+        type: "textarea"
       },
     ]
   };
