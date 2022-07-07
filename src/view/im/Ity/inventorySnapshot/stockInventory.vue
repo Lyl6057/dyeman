@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-08 10:53:56
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-06-30 15:11:19
+ * @LastEditTime: 2022-07-07 14:39:58
 -->
 <template>
   <div id="ityInventoryList">
@@ -67,7 +67,7 @@
           <avue-form ref="editForm" :option="editFormOp" v-model="editFormData"></avue-form>
       </el-dialog>
       <el-dialog :fullscreen='true' :visible.sync="dtlDialogVisible" :append-to-body="true" width="100%" :close-on-click-modal="false">
-        <inv-dtl v-if='dtlDialogVisible' ref="invDtlRef" @closeDialog='handleDtlCloseDialog' ></inv-dtl>
+        <inv-dtl v-if='dtlDialogVisible' ref="invDtlRef" @closeDialog='handleDtlCloseDialog' snapshotType="0" ></inv-dtl>
       </el-dialog>
   </div>
 </template>

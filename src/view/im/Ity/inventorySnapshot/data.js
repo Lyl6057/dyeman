@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-03-26 09:58:34
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-06-06 16:18:10
+ * @LastEditTime: 2022-07-07 15:20:13
  */
 
 
@@ -401,6 +401,12 @@ export function pubCrudOp(_this){
         prop: "unitName",
         cell: false,
         width: 80,
+      },
+      {
+        label: _this.$t("whseField.hwm"),
+        prop: "locationId",
+        cell: false,
+        width: 120
       },
       {
         label: "检验状态",

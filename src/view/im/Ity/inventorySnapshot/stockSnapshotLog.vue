@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-08 10:53:56
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-06-30 14:48:23
+ * @LastEditTime: 2022-07-07 14:40:23
 -->
 <template>
   <div id="ityInventoryList">
@@ -30,7 +30,7 @@
         ></avue-crud>
       </div>
       <el-dialog :fullscreen='true' :visible.sync="dtlDialogVisible" :append-to-body="true" width="100%" :close-on-click-modal="false">
-        <inv-dtl v-if='dtlDialogVisible' :hasOperate="false" ref="invDtlRef" @closeDialog='handleDtlCloseDialog' ></inv-dtl>
+        <inv-dtl v-if='dtlDialogVisible' :hasOperate="false" ref="invDtlRef" @closeDialog='handleDtlCloseDialog' snapshotType="1" ></inv-dtl>
       </el-dialog>
   </div>
 </template>

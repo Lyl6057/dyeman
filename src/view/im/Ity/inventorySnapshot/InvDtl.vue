@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-03-29 10:05:29
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-23 11:55:13
+ * @LastEditTime: 2022-07-07 14:39:47
 -->
 
 <template>
@@ -49,6 +49,10 @@ export default {
         hasOperate: {
             type: Boolean,
             default: () => true
+        },
+        snapshotType: {
+            type: String,
+            default: () => "0"
         }
     },
     data(){
@@ -237,7 +241,8 @@ export default {
                 start: this.page.currentPage,
                 materialClass, whseInventoryoid,
                 matCode: this.queryForm.matCode,
-                isFilterSameQty: this.queryForm.isFilterSameQty
+                isFilterSameQty: this.queryForm.isFilterSameQty,
+                snapshotType: this.snapshotType
             };
             this.loading = true;
             fetchInvDtlDataByPage(params).then(res => {
