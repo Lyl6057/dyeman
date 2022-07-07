@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-05-03 16:09:29
  * @LastEditors: Lyl
- * @LastEditTime: 2022-07-05 13:32:40
+ * @LastEditTime: 2022-07-06 16:55:07
  * @FilePath: \iot.vue\src\view\quaLity\shearingBoard\index.vue
  * @Description: 
 -->
@@ -23,7 +23,8 @@
         <el-button type="primary" @click="handleOutreport"> 报表 </el-button>
         <el-button type="primary" @click="query"> {{this.$t("public.query")}} </el-button>
         <div style="float: right">
-          码卡信息 <el-switch v-model="hasCardData" active-text="显示" inactive-text="隐藏">
+          打印张数：<el-input type="number" v-model="printCount" max="3" min="1" style="width: 80px;margin-right: 15px"></el-input>
+          码卡信息： <el-switch v-model="hasCardData" active-text="显示" inactive-text="隐藏">
           </el-switch>
         </div>
       </el-row>
@@ -100,6 +101,7 @@ export default {
       hasCardData: true,
       spowerClient: null,
       chooseData: {},
+      printCount: 1
     };
   },
   watch: {},
@@ -201,7 +203,9 @@ export default {
       }
       let printData = this.crud[this.curIdx - 1];
       printData.printTime = this.$getNowTime("datetime");
-      this.spowerClient.send("print=finishCard:" + printData.proCardFk);
+      for (let i = 0; i < this.printCount; i++) {
+        this.spowerClient.send("print=finishCard:" + printData.proCardFk);
+      }
       updateProFinalProductCardCut(printData);
       this.$tip.success("已发送打印动作!");
     },

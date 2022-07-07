@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-05-03 16:29:13
  * @LastEditors: Lyl
- * @LastEditTime: 2022-07-06 09:51:16
+ * @LastEditTime: 2022-07-07 07:49:24
  * @FilePath: \iot.vue\src\view\quaLity\shearingBoard\tem.vue
  * @Description: 
 -->
@@ -19,6 +19,7 @@
         </el-popconfirm>
         <el-button type="warning" @click="handleClose">{{this.$t("public.close")}}</el-button>
         <div style="float: right; margin-right: 10px">
+        打印张数：<el-input type="number" v-model="printCount" max="3" min="1" style="width: 80px;margin-right: 15px"></el-input>
           电子秤： <el-switch
             v-model="turnOnGetWeight"
             style="margin-right: 10px"
@@ -72,7 +73,8 @@ export default {
       cutDept: null,
       turnOnGetWeight: true,
       isBoard: true,
-      spowerClient: null
+      spowerClient: null,
+      printCount: 1
     };
   },
   watch: {},
@@ -113,15 +115,19 @@ export default {
         page: 1,
         cardType: 1,
       }).then((vatRes) => {
-        if (vatRes.data.records.length) {
+        if (vatRes.data.records.length > 0) {
           let data = vatRes.data.records[0];
           this.qcShearingBoardData.netWeight = data.netWeight;
           this.qcShearingBoardData.netWeightLbs = data.netWeightLbs;
           this.qcShearingBoardData.befcutYds = data.yardLength;
           // this.qcShearingBoardData.proCardFk = data.cardId;
           this.qcShearingBoardData.productNo = data.productNo
+        } else {
+          this.qcShearingBoardData.proCardFk = '';
         }
-        this.loading = false;
+        setTimeout(() => {
+          this.loading = false;
+        }, 0);
       });
     },
     async initData(cutId) {
@@ -213,16 +219,36 @@ export default {
         this.loading = false
       });
     },
+    vaildDayHasNoteRecords() {
+      
+    },
     handleSave() {
       this.$refs.qcShearingBoardForm.validate(async (valid, done) => {
         try {
+          if(!this.qcShearingBoardData.productNo){
+            this.$tip.warning("成品码卡不能为空!");
+          }
           if (!valid) {
-            this.$tip.error("请补充查布计划表信息!");
+            this.$tip.warning("请补充查布计划表信息!");
+            return;
+          }
+          let params = {
+            rows: 20,
+            start: 1,
+            page: 1,
+            cutDate: this.$getNowTime("date") + ' 00:00:00',
+            proCardFk: this.qcShearingBoardData.proCardFk
+          }
+          let dayRecords = await fetchProFinalProductCardCutByPage(params).then(res => { return res.data.total });
+          if(dayRecords) {
+            this.$tip.warning("成品编号【 " + this.qcShearingBoardData.productNo  + " 】今日已剪过办，请勿重复新增!")
+            done();
+            this.$emit("close", this.hasRefresh);
             return;
           }
           this.loading = true;
           let cutId = this.qcShearingBoardData.cutId;
-          this.qcShearingBoardData.cutRemarks  = this.qcShearingBoardData.cutRemarks.toString()
+          this.qcShearingBoardData.cutRemarks = this.qcShearingBoardData.cutRemarks.toString()
           if (cutId) {
             await updateProFinalProductCardCut(this.qcShearingBoardData).then();
           } else {
@@ -259,7 +285,9 @@ export default {
       }
       let printData = this.qcShearingBoardData;
       printData.printTime = this.$getNowTime("datetime");
-      this.spowerClient.send("print=finishCard:" + printData.proCardFk);
+      for (let i = 0; i < this.printCount; i++) {
+        this.spowerClient.send("print=finishCard:" + printData.proCardFk);
+      }
       updateProFinalProductCardCut(printData);
       this.hasRefresh = true;
       this.$tip.success("已发送打印动作!");
