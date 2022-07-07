@@ -535,22 +535,6 @@ export function rcpb2C(_this) {
         hide: true
       },
       {
-        label: _this.$t("whseField.scdh"),
-        prop: "weaveJobCode",
-        cell: false,
-        width: 200,
-        hide:
-          _this.hide === "6" || _this.hide === "4" || _this.hide === "7"
-            ? false
-            : true,
-        placeholder: _this.$t("whseField.qxzscdh"), //"請選擇生產單號",
-        click: val => {
-          if (_this.hide === "4") {
-            _this.choiceTle = _this.$t("choicDlg.pbdd");
-          }
-        }
-      },
-      {
         label: _this.$t("choicDlg.pbbm"),
         prop: "calicoId",
         cell: false,
@@ -573,6 +557,13 @@ export function rcpb2C(_this) {
         click: val => {}
       },
       {
+        label: "载具编号",
+        prop: "storeLoadCode",
+        cell: true,
+        width: 140,
+        hide: _this.hide === "6" || _this.hide === "7" ? false : true
+      },
+      {
         label: _this.$t("whseField.ps"),
         prop: "countingNo",
         hide:
@@ -583,37 +574,31 @@ export function rcpb2C(_this) {
         width: 100,
         align: "right"
       },
-      {
-        label: "载具编号",
-        prop: "storeLoadCode",
-        cell: true,
-        width: 140,
-        hide: _this.hide === "6" || _this.hide === "7" ? false : true
-      },
-      {
-        label: _this.$t("whseField.hwm"),
-        prop: "locationCode",
-        cell: true,
-        hide: _this.hide === "6" || _this.hide === "7" ? false : true,
-        width: 180,
-        filterable: true,
-        allowCreate: true,
-        defaultFirstOption: true,
-        type: "select",
-        dicData: getDicNS(
-          "whseLocation?warehouseType=1",
-          "locationCode",
-          "locationCode"
-        )
-      },
-      {
-        label: _this.$t("whseField.zl"),
-        prop: "weight",
-        hide: _this.hide != "5",
-        cell: true,
-        width: 100,
-        align: "right"
-      }
+      
+      // {
+      //   label: _this.$t("whseField.hwm"),
+      //   prop: "locationCode",
+      //   cell: true,
+      //   hide: _this.hide === "6" || _this.hide === "7" ? false : true,
+      //   width: 180,
+      //   filterable: true,
+      //   allowCreate: true,
+      //   defaultFirstOption: true,
+      //   type: "select",
+      //   dicData: getDicNS(
+      //     "whseLocation?warehouseType=1",
+      //     "locationCode",
+      //     "locationCode"
+      //   )
+      // },
+      // {
+      //   label: _this.$t("whseField.zl"),
+      //   prop: "weight",
+      //   cell: true,
+      //   width: 100,
+      //   align: "right"
+      // },
+      
 
       // {
       //   label: _this.$t("whseField.zldw"),
@@ -695,7 +680,8 @@ export function rcpb3C(_this) {
         prop: "noteCode",
         cell: true,
         width: 150
-      }
+      },
+      
     ]
   };
 }
