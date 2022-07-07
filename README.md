@@ -1,18 +1,18 @@
-<!--
- * @Author: Lyl
- * @Date: 2022-07-07 13:30:48
- * @LastEditors: Lyl
- * @LastEditTime: 2022-07-07 13:32:58
- * @FilePath: \dyeman\README.md
- * @Description: 
--->
+
 # dyeman_vue
 
 ## 项目地址
   - gitee: https://gitee.com/Forforever/dyeman
   - 发布地址 \\192.168.5.1\d$\Program\eWDFS\BPObject\vuePackage
-  - 测试
-1. 重要目录及文档说明
+    - warehouseMng 仓库
+    - qualityMng 品质
+    - proMng 生产
+    - laboratory 化验室 
+    - energyMng 能源
+  - 提交代码请忽略路由、菜单中的index.js文件，以免造成冲突
+    - src\router\index.js 路由 
+    - src\page\index\sidebar\index.js 菜单
+## 1. 重要目录及文档说明
 
 |--build
 |--config
@@ -37,13 +37,12 @@
 |--|--view 功能页面，文件构造为 功能模块/功能名称/index.vue
 |--static 存放静态文件，如图片等
 
-2. 环境说明
+## 2. 环境说明
 
    UI 库：
    Avue、Element
 
    插件：
-   npm install vue-particles 粒子特效
    npm install stylus stylus-loader css 预处理器
    <!-- npm install xlsx
    npm install core-js -->
