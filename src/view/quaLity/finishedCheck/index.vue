@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-07-06 08:20:06
+ * @LastEditTime: 2022-07-07 10:10:28
  * @Description:
 -->
 <template>
@@ -330,8 +330,10 @@ export default {
     });
   },
   created() {},
-  mounted() {
-    this.setCz();
+  beforeRouteEnter(to, form, next) {
+    next((vm) => {
+      vm.setCz();
+    });
   },
   beforeDestroy() {},
 };

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-05-03 16:09:29
  * @LastEditors: Lyl
- * @LastEditTime: 2022-07-06 16:55:07
+ * @LastEditTime: 2022-07-07 10:50:34
  * @FilePath: \iot.vue\src\view\quaLity\shearingBoard\index.vue
  * @Description: 
 -->
@@ -23,7 +23,7 @@
         <el-button type="primary" @click="handleOutreport"> 报表 </el-button>
         <el-button type="primary" @click="query"> {{this.$t("public.query")}} </el-button>
         <div style="float: right">
-          打印张数：<el-input type="number" v-model="printCount" max="3" min="1" style="width: 80px;margin-right: 15px"></el-input>
+          打印张数：<el-input type="number" v-model="printCount" max="5" min="1" style="width: 80px;margin-right: 15px"></el-input>
           码卡信息： <el-switch v-model="hasCardData" active-text="显示" inactive-text="隐藏">
           </el-switch>
         </div>
@@ -61,7 +61,7 @@
       </el-row>
     </view-container>
     <el-dialog :visible.sync="dialogVisible" fullscreen append-to-body>
-      <tem-dlg ref="qcCheckPlanTem" @refresh="query" @close="temClose"> </tem-dlg>
+      <tem-dlg ref="qcCheckPlanTem" @refresh="query" @close="temClose" v-if="dialogVisible"> </tem-dlg>
     </el-dialog>
   </div>
 </template>
@@ -107,7 +107,13 @@ export default {
   watch: {},
   computed: {},
   created() {
-    this.spowerClient = this.$store.state.spowerClient;
+    
+  },
+  beforeRouteEnter(to, form, next) {
+    next((vm) => {
+      let self = vm;
+      self.spowerClient = self.$store.state.spowerClient;
+    });
   },
   mounted() {},
   methods: {

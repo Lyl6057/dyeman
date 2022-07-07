@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2021-06-19 16:31:57
+ * @LastEditTime: 2022-07-07 10:06:26
  * @Description: 
 -->
 <template>
@@ -149,25 +149,6 @@ export default {
       this.detail = val;
       this.checkLabel = val.storeSiteCode;
       // this.print();
-    },
-    setCz() {
-      webSocket.setCz(this);
-      let _this = this;
-      _this.czsocket.onmessage = function (e) {
-        _this.detail.clothWeight = e.data;
-        _this.detail.clothCheckTime = _this.$getNowTime("datetime");
-      };
-    },
-    weighing() {
-      if (this.czsocket.readyState == 3) {
-        this.$tip.error("称重应用未启动，请启动后重新进入此页面!");
-        return;
-      } else {
-        this.czsocket.send("weight");
-      }
-      // setTimeout(() => {
-      //   this.detail.clothWeight = this.weight;
-      // }, 200);
     },
     save() {
       this.wLoading = true;

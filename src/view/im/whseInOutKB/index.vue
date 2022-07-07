@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-01-12 15:39:08
  * @LastEditors: Lyl
- * @LastEditTime: 2022-07-01 14:12:51
+ * @LastEditTime: 2022-07-07 10:13:12
  * @FilePath: \iot.vue\src\view\im\whseInOutKB\index.vue
  * @Description: 
 -->
@@ -246,18 +246,6 @@ export default {
         _this.form.netWeight = Number(data.split(":")[0]);
         _this.form.weightUnit = Number(data.split(":")[1]);
       }
-    };
-    webSocket.setWebSoket(_this);
-    _this.websocket.onmessage = function (data) {
-      // console.log("websocketResult:", data);
-      // let webResult = JSON.parse(data.data);
-      // _this.$tip.success(
-      //   `载具${data.storageCode}${
-      //     data.orderType == 1 ? "入仓" : "出仓"
-      //   }任务已完成!`
-      // );
-      // _this.finishTask(webResult);
-      _this.queryTask();
     };
   },
   mounted() {},

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-07-06 08:27:53
+ * @LastEditTime: 2022-07-07 10:11:07
  * @Description: 
 -->
 <template>
@@ -400,6 +400,12 @@ export default {
     });
   },
   created() {},
+  beforeRouteEnter(to, form, next) {
+    next((vm) => {
+      let self = vm;
+      self.setCz();
+    });
+  },
   mounted() {
     // this.query();
     this.form.clothState = 0;
@@ -415,8 +421,6 @@ export default {
         _this.ctrKey = false;
       }
     });
-    _this.setCz();
-
     // this.$nextTick(() => {
     //   setTimeout(() => {
     //     let _this = this;

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-07-06 08:13:17
+ * @LastEditTime: 2022-07-07 10:43:13
  * @Description:
 -->
 <template>
@@ -236,6 +236,7 @@ export default {
       historyCheck: {},
       loadDialogVisible: false,
       newLoad: "",
+      weighData: {}
     };
   },
   watch: {},
@@ -304,15 +305,16 @@ export default {
       this.$refs.crud.rowExcel();
     },
     weighing() {
-      if (this.spowerClient.readyState == 3) {
+      if (!this.spowerClient || this.spowerClient.readyState == 3) {
         this.$tip.error("称重应用未启动，请启动后重新进入此页面!");
         return;
       } else {
-        this.spowerClient.send("weight");
+        if(!this.weighData.weightUnit){
+          this.$tip.error("电子秤未连接!");
+          return;
+        }
+        this.weighData.weightUnit == "KG" ? this.detail.netWeight = this.weighData.netWeight : this.detail.netWeightLbs = this.weighData.netWeightLbs;
       }
-      // setTimeout(() => {
-      //   this.detail.clothWeight = this.weight;
-      // }, 200);
     },
     save() {
       if (!this.detail.netWeight || !this.detail.netWeightLbs) {
@@ -433,12 +435,11 @@ export default {
       _this.spowerClient.onmessage = function (e) {
         let weight = e.data.indexOf(":") != -1 ? Number(e.data.replace(/[^\d.]/g, "")) : e.data;
         let unit = e.data.split(":")[1];
-        _this.detail.weightUnit = unit
+        _this.weighData.weightUnit = unit
         weight = Number((parseInt(Number(weight) * 10) / 10).toFixed(1));
-        unit == "KG" ? _this.detail.netWeight = weight :  _this.detail.netWeightLbs = weight;
+        unit == "KG" ? _this.weighData.netWeight = weight :  _this.weighData.netWeightLbs = weight;
       };
     },
-    calculateWeight() {},
     codeLength() {
       if (
         !this.detail.realGramWeight ||

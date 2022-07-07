@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-07-06 08:14:23
+ * @LastEditTime: 2022-07-07 10:19:39
  * @Description: 
 -->
 <template>
@@ -478,7 +478,6 @@ export default {
     },
     print() {
       if (!this.spowerClient || this.spowerClient.readyState == 3) {
-        this.setCz()
         this.$tip.error("打印应用未启动，请打开后重新进入此页面!");
         return;
       }
@@ -580,9 +579,6 @@ export default {
       this.options = dest;
       // return dest;
     },
-    setCz() {
-      this.spowerClient = this.$store.state.spowerClient;
-    },
     selectionChange(val) {
       this.selectData = val;
     },
@@ -590,9 +586,13 @@ export default {
   created() {},
   mounted() {
     this.getData();
-    this.setCz(this);
   },
   beforeDestroy() {},
+  beforeRouteEnter(to, form, next) {
+    next((vm) => {
+      vm.spowerClient = vm.$store.state.spowerClient;
+    });
+  },
 };
 </script>
 <style lang='stylus'>
