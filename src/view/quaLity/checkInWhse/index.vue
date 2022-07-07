@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
- * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-06-23 09:52:56
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-07-06 16:04:03
  * @Description:
 -->
 <template>
@@ -10,12 +10,6 @@
     <view-container title="胚布信息">
       <el-row class="btnList">
         <el-button type="success" @click="pass" :disabled="!selectList.length || this.form.clothState === 2">审核</el-button>
-        <!-- <el-button
-          type="success"
-          @click="setInWhse"
-          :disabled="!selectList.length"
-          >审核1</el-button
-        > -->
         <el-button type="primary" @click="query">{{
           this.$t("public.query")
         }}</el-button>
@@ -35,9 +29,9 @@
       </el-row>
       <el-row class="crudBox">
         <avue-crud ref="crud" :option="crudOp" :data="crud" :page.sync="page" v-loading="loading" @on-load="query" @row-dblclick="handleRowDBLClick" @current-row-change="cellClick" :summary-method="summaryMethod" @selection-change="selectionChange" @sort-change="sortChange">
-          <template slot="menu">
+          <!-- <template slot="menu">
             <el-button size="small" type="primary" @click="passOne" :disabled="this.form.clothState != '1'">通过</el-button>
-          </template>
+          </template> -->
         </avue-crud>
       </el-row>
     </view-container>
@@ -202,27 +196,29 @@ export default {
           yinStatus: 0,
           sysCreatedby: this.$store.state.userOid,
         };
-        let list = this.group(this.selectList, "weaveJobCode");
+        let list = this.group(this.selectList, "storeLoadCode");
         addInWhse(data).then((inwhse) => {
           baseCodeSupply({ code: "whse_in" }).then((res) => {});
           const inwhseId = inwhse.data.data;
           baseCodeSupplyEx({ code: "pb_in_whse" }).then((pbIn) => {
             list.forEach((item, i) => {
               addInDtla({
-                prodNo: item.weaveJobCode,
-                weight: this.checkSum,
+                // prodNo: item.weaveJobCode,
+                weight: item.weight,
                 countingNo: item.data.length,
                 whseCalicoinFk: inwhseId,
-                fabticket: this.selectList[0].storeLoadCode,
+                storeLoadCode: item.storeLoadCode,
                 batchNo: pbIn.data.data,
+                outFlag: 0
               }).then((dtla) => {
                 const dtlaId = dtla.data.data;
                 item.data.forEach((dtlb, b) => {
                   addInDtlb({
-                    custTicket: dtlb.noteCode,
+                    noteCode: dtlb.noteCode,
                     batchNo: pbIn.data.data,
-                    countingNo: dtlb.eachNumber,
+                    pidNo: dtlb.eachNumber,
                     locationCode: dtlb.storeSiteCode,
+                    weaveJobCode: dtlb.proName,
                     weight: dtlb.clothWeight,
                     weightUnit: "KG",
                     whseCalicoinDtlaFk: dtlaId,
@@ -281,6 +277,8 @@ export default {
           dest.push({
             [type]: ai[type],
             data: [ai],
+            weight: ai.clothWeight || ai.netWeight,
+            weightLbs: ai.clothWeight || ai.netWeightLbs,
           });
           map[ai[type]] = ai;
         } else {
@@ -288,6 +286,8 @@ export default {
             var dj = dest[j];
             if (dj[type] == ai[type]) {
               dj.data.push(ai);
+              dj.weight += ai.clothWeight || ai.netWeight;
+              dj.weightLbs += ai.clothWeight || ai.netWeightLbs;
               break;
             }
           }
