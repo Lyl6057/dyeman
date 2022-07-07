@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-08-07 07:57:44
  * @LastEditors: Lyl
- * @LastEditTime: 2022-01-17 09:34:36
+ * @LastEditTime: 2022-07-06 08:19:54
  * @Description: 
 -->
 <template>
@@ -179,13 +179,11 @@ export default {
       isAdd: false,
       input: "",
       wLoading: false,
-      // czsocket: {},
       pdfDlg: false,
       pdfUrl: "",
-      czsocket: null,
       time: null,
       history: [],
-      prsocket: null,
+      spowerClient: null,
       sheetNum: 1,
       commonTem: null,
       output: {},
@@ -194,7 +192,6 @@ export default {
     };
   },
   created() {
-    // this.setCz();
   },
   mounted() {
     getCheckItem().then((res) => {
@@ -466,8 +463,9 @@ export default {
       //   this.detail.cardId;
     },
     print() {
-      if (this.prsocket.readyState == 3) {
+      if (!this.spowerClient || this.spowerClient.readyState == 3) {
         this.$tip.error("打印服务离线，请启动服务!");
+        this.spowerClient = this.$store.state.spowerClient;
         return;
       }
       if (!this.form.netWeight) {
@@ -511,7 +509,7 @@ export default {
                         for (let i = 0; i < this.sheetNum; i++) {
                           setTimeout(() => {
                             if (data.cardId) {
-                              this.prsocket.send("finishCard:" + data.cardId);
+                              this.spowerClient.send("print=finishCard:" + data.cardId);
                             } else {
                               this.$tip.error("数据错误,请重新查询后进行打印!");
                               this.wLoading = false;
@@ -524,7 +522,7 @@ export default {
                         }
                       } else {
                         if (data.cardId) {
-                          this.prsocket.send("finishCard:" + data.cardId);
+                          this.spowerClient.send("print=finishCard:" + data.cardId);
                           this.$tip.success("已发送打印请求!");
                         } else {
                           this.$tip.error("数据错误,请重新查询后进行打印!");
@@ -546,8 +544,8 @@ export default {
                         for (let i = 0; i < this.sheetNum; i++) {
                           setTimeout(() => {
                             if (this.form.cardId) {
-                              this.prsocket.send(
-                                "finishCard:" + this.form.cardId
+                              this.spowerClient.send(
+                                "print=finishCard:" + this.form.cardId
                               );
                             } else {
                               this.$tip.error("数据错误,请重新查询后进行打印!");
@@ -561,7 +559,7 @@ export default {
                         }
                       } else {
                         if (this.form.cardId) {
-                          this.prsocket.send("finishCard:" + this.form.cardId);
+                          this.spowerClient.send("print=finishCard:" + this.form.cardId);
                         } else {
                           this.$tip.error("数据错误,请重新查询后进行打印!");
                         }
@@ -655,11 +653,7 @@ export default {
       this.detail = val;
     },
     setCz() {
-      this.czsocket = null;
-      this.prsocket = null;
-      let _this = this;
-      webSocket.setPrint(this);
-      _this.prsocket.onmessage = function (e) {};
+      this.spowerClient = this.$store.state.spowerClient;
     },
     codeLength() {
       if (

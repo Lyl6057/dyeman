@@ -23,7 +23,7 @@
         <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
       </div>
       <el-row class="crudBox">
-        <el-col :span="hide != '7' ? 12 : 24">
+        <el-col :span="hide != '7' ? 10 : 24">
           <view-container :title="datas.type.split('_')[0] + $t('iaoMng.rcmx')">
             <div class="btnList">
               <el-button type="primary" :disabled="hasEdit" @click="add">{{
@@ -50,7 +50,7 @@
               ></avue-crud>
             </div> </view-container
         ></el-col>
-        <el-col :span="12" v-if="hide != '7'">
+        <el-col :span="14" v-if="hide != '7'">
           <view-container
             :title="datas.type.split('_')[0] + $t('iaoMng.rcphzl')"
           >

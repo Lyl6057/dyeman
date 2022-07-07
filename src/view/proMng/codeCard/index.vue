@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-08-07 07:57:44
  * @LastEditors: Lyl
- * @LastEditTime: 2021-09-24 18:45:53
+ * @LastEditTime: 2022-07-07 10:08:54
  * @Description: 
 -->
 <template>
@@ -176,7 +176,7 @@ export default {
       pdfDlg: false,
       pdfUrl: "",
       type: this.$route.params.type,
-      prsocket: null,
+      spowerClient: null,
       tabs: "form",
       history: [],
     };
@@ -270,7 +270,7 @@ export default {
                     if (this.sheetNum) {
                       for (let i = 0; i < this.sheetNum; i++) {
                         setTimeout(() => {
-                          this.prsocket.send("appColor:" + res.data[0].cardId);
+                          this.spowerClient.send("print=appColor:" + res.data[0].cardId);
                         }, 200);
 
                         if (i == this.sheetNum - 1) {
@@ -279,7 +279,7 @@ export default {
                         }
                       }
                     } else {
-                      this.prsocket.send("appColor:" + res.data[0].cardId);
+                      this.spowerClient.send("print=appColor:" + res.data[0].cardId);
                       this.$tip.success("已发送打印请求!");
                       done();
                     }
@@ -296,7 +296,7 @@ export default {
                         data.cardId = res.data.data;
                         this.history.unshift(data);
                         this.history = this.$unique(this.history, "cardId");
-                        this.prsocket.send("appColor:" + res.data.data);
+                        this.spowerClient.send("print=appColor:" + res.data.data);
                       }
                       done();
                     });
@@ -362,15 +362,10 @@ export default {
     cellClick(val) {
       this.detail = val;
     },
-    setCz() {
-      webSocket.setPrint(this);
-      let _this = this;
-      _this.prsocket.onmessage = function (e) {};
-    },
   },
   beforeRouteEnter(to, form, next) {
     next((vm) => {
-      vm.setCz();
+      vm.spowerClient = vm.$store.state.spowerClient;
       let self = vm;
       document.onkeydown = function (e) {
         let ev = document.all ? window.event : e;

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-07-02 11:04:44
+ * @LastEditTime: 2022-07-07 11:18:31
  * @Description: 
 -->
 <template>
@@ -263,7 +263,7 @@ export default {
       dialogVisible: false,
       detail: {},
       weight: 0,
-      czsocket: {},
+      spowerClient: {},
       changeList: [],
       wLoading: false,
       time: null,
@@ -330,7 +330,6 @@ export default {
         },
       ],
       clothSum: 0,
-      spowerClient: null,
     };
   },
   watch: {},
@@ -451,25 +450,8 @@ export default {
       // this.print();
     },
     setCz() {
-      webSocket.setCz(this);
+      this.spowerClient = this.$store.state.spowerClient;
       let _this = this;
-      _this.czsocket.onmessage = function (e) {
-        if (e.data.indexOf(":")) {
-          _this.form.eachNumbers = Number(e.data.replace(/[^\d.]/g, ""));
-        } else {
-          _this.form.eachNumbers = e.data;
-        }
-        // _this.clothLength();
-      };
-      _this.czsocket.onopen = function (event) {
-        setTimeout(() => {
-          _this.time = setInterval(() => {
-            _this.czsocket.send("weight");
-          }, 1000);
-        }, 200);
-        _this.$tip.success("服务器连接成功!");
-      };
-      webSocket.setClient(this);
       _this.spowerClient.onmessage = function (e) {
         if (e.data.indexOf("scan") != -1) {
           _this.$nextTick(() => {
@@ -481,17 +463,14 @@ export default {
               _this.getLoad();
             }
           });
+          return
+        }
+        if (e.data.indexOf(":") != -1) {
+          _this.form.eachNumbers = Number(e.data.replace(/[^\d.]/g, ""));
+        } else {
+          _this.form.eachNumbers = e.data;
         }
       };
-    },
-    weighing() {
-      if (this.czsocket.readyState == 3) {
-        this.$tip.error("称重应用未启动，请启动后重新进入此页面!");
-        return;
-      }
-      setTimeout(() => {
-        this.crud.clothWeight = this.form.eachNumbers;
-      }, 200);
     },
     save() {
       this.wLoading = true;
@@ -756,9 +735,10 @@ export default {
       });
     },
   },
-  created() {},
+  created() {
+    // this.setCz()
+  },
   mounted() {
-    this.setCz();
     this.qcType = [1, 2, 3, 4];
     this.typeChange();
     // this.formOp.column[7].dicData = this.qcItems;
@@ -776,6 +756,7 @@ export default {
   beforeRouteEnter(to, form, next) {
     next((vm) => {
       let self = vm;
+      self.setCz();
       document.onkeydown = function (e) {
         let ev = document.all ? window.event : e;
         if (ev.keyCode === 13 && self.type === "bf" && self.form.noteCode) {

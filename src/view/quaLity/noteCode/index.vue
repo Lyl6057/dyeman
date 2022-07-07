@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-08-07 07:57:44
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-01-06 16:26:31
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-07-06 08:20:19
  * @Description: 
 -->
 <template>
@@ -206,7 +206,6 @@ export default {
     };
   },
   created() {
-    // this.setCz();
   },
   mounted() {},
   beforeDestroy() {
@@ -561,9 +560,6 @@ export default {
       }
     },
     setCz() {
-      // this.czsocket = null;
-      // this.prsocket = null;
-      // webSocket.setClient(this);
       this.spowerClient = this.$store.state.spowerClient;
       let _this = this;
       _this.spowerClient.onmessage = function (e) {
@@ -575,7 +571,6 @@ export default {
           _this.form.weightUnit = Number(data.split(":")[1]);
         }
       };
-      console.log(this.spowerClient);
     },
     codeLength() {
       if (
@@ -624,11 +619,6 @@ export default {
     next((vm) => {
       let self = vm;
       self.setCz();
-      // vm.spowerClient = vm.$store.state.spowerClient
-      // vm.spowerClient.onmessage = function (e){
-      //   console.log(e);
-      // }
-
       document.onkeydown = function (e) {
         let ev = document.all ? window.event : e;
         if (ev.keyCode === 13 && self.form.vatNo) {

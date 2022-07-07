@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-04-25 14:09:54
  * @LastEditors: Lyl
- * @LastEditTime: 2022-05-26 15:43:07
+ * @LastEditTime: 2022-07-07 11:05:46
  * @FilePath: \iot.vue\src\view\im\transferLoadQa\data.js
  * @Description:
  */
@@ -644,7 +644,6 @@ export function taskForm(_this) {
       {
         label: "指令类型",
         prop: "orderType",
-        clearable: false,
         span: 6,
         placeholder: " ",
         cell: true,

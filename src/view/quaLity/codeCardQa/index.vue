@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-08-07 07:57:44
  * @LastEditors: Lyl
- * @LastEditTime: 2022-07-05 16:31:05
+ * @LastEditTime: 2022-07-06 08:15:08
  * @Description: 
 -->
 <template>
@@ -486,8 +486,9 @@ export default {
       //   this.detail.cardId;
     },
     print() {
-      if (this.spowerClient.readyState == 3) {
+      if (!this.spowerClient || this.spowerClient.readyState == 3) {
         this.$tip.error("打印服务离线，请启动服务!");
+        this.spowerClient = this.$store.state.spowerClient;
         return;
       }
       // if (!this.form.weight) {

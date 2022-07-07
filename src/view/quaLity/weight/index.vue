@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-07-02 14:17:39
+ * @LastEditTime: 2022-07-07 10:11:07
  * @Description: 
 -->
 <template>
@@ -209,14 +209,11 @@ export default {
       // this.print();
     },
     setCz() {
-      webSocket.setCz(this);
+      this.spowerClient = this.$store.state.spowerClient;
       let _this = this;
-      _this.czsocket.onmessage = function (e) {
-        if (e.data.indexOf(":") != -1) {
-          _this.detail.clothWeight = Number(e.data.split(":")[0]);
-        } else {
-          _this.detail.clothWeight = e.data;
-        }
+      _this.spowerClient.onmessage = function (e) {
+        let weight = e.data.indexOf(":") != -1 ? Number(e.data.replace(/[^\d.]/g, "")) : e.data;
+        _this.detail.clothWeight = weight;
         _this.detail.clothCheckTime = _this.$getNowTime("datetime");
       };
     },
@@ -403,6 +400,12 @@ export default {
     });
   },
   created() {},
+  beforeRouteEnter(to, form, next) {
+    next((vm) => {
+      let self = vm;
+      self.setCz();
+    });
+  },
   mounted() {
     // this.query();
     this.form.clothState = 0;
@@ -418,8 +421,6 @@ export default {
         _this.ctrKey = false;
       }
     });
-    _this.setCz();
-
     // this.$nextTick(() => {
     //   setTimeout(() => {
     //     let _this = this;

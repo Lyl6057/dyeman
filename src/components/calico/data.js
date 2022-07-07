@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-02-24 08:12:20
- * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-06-30 16:35:35
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-07-06 16:22:37
  * @Description:
  */
 import { getDIC,getDicNS } from "@/config";
@@ -90,7 +90,7 @@ export function loc1C(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 280px)",
+    height: "calc(100vh - 276px)",
     refreshBtn: false,
     columnBtn: false,
     page: false,
@@ -110,14 +110,27 @@ export function loc1C(_this) {
         align: "center"
       },
       {
-        label: _this.$t("whseField.ph"), //"批號",
-        prop: "batchNo",
-        cell: true,
-        width: 140
+        label: _this.$t("whseField.scdh"),
+        prop: "weaveJobCode",
+        cell: false,
+        width: 120,
+        placeholder: _this.$t("whseField.qxzscdh"), //"請選擇生產單號",
       },
       {
+        label: _this.$t("whseField.krbph"), //"客人布票号",
+        prop: "noteCode",
+        cell: true,
+        width: 160
+      },
+      // {
+      //   label: _this.$t("whseField.ph"), //"批號",
+      //   prop: "batchNo",
+      //   cell: true,
+      //   width: 140
+      // },
+      {
         label: _this.$t("whseField.ph2"), // "疋號",
-        prop: "countingNo",
+        prop: "pidNo",
         cell: true,
         width: 70,
         align: "right"
@@ -137,12 +150,7 @@ export function loc1C(_this) {
         type: "select",
         dicData: getDIC("bas_matUnit")
       },
-      {
-        label: _this.$t("whseField.krbph"), //"客人布票号",
-        prop: "custTicket",
-        cell: true,
-        width: 180
-      },
+      
       {
         label: _this.$t("whseField.hwm"), //"貨位碼",
         prop: "locationCode",
@@ -160,7 +168,8 @@ export function loc1C(_this) {
         //   _this.choiceV = true;
         //   // }
         // }
-      }
+      },
+      
     ]
   };
 }

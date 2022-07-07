@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-05-03 16:29:13
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-30 15:59:39
+ * @LastEditTime: 2022-07-07 08:19:22
  * @FilePath: \iot.vue\src\view\quaLity\abnormalDaily\tem.vue
  * @Description: 
 -->
@@ -147,6 +147,7 @@ export default {
         problemDesc: '',
         solution: '',
         remark: '',
+        qcCheck: parent.userID,
         qcConfirDate: this.$getNowTime("datetime")
       };
     },

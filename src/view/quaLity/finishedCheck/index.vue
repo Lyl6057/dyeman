@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-03-29 09:53:49
+ * @LastEditTime: 2022-07-07 10:10:28
  * @Description:
 -->
 <template>
@@ -186,13 +186,13 @@ export default {
         .catch(() => {});
     },
     print() {
-      if (this.prsocket.readyState == 3) {
+      if (!this.spowerClient || this.spowerClient.readyState == 3) {
         this.setCz();
-        // this.$tip.error("打印服务离线，请启动服务!");
+        this.$tip.error("打印服务离线，请启动服务!");
         return;
       }
       this.selectList.forEach((item, i) => {
-        this.prsocket.send("finishCard:" + item.cardId);
+        this.spowerClient.send("print=finishCard:" + item.cardId);
         if (i == this.selectList.length - 1) {
           this.$tip.success("已发送全部打印请求!");
         }
@@ -321,9 +321,7 @@ export default {
       return sums;
     },
     setCz() {
-      let _this = this;
-      webSocket.setPrint(this);
-      _this.prsocket.onmessage = function (e) {};
+      this.spowerClient = this.$store.state.spowerClient;
     },
   },
   updated() {
@@ -332,8 +330,10 @@ export default {
     });
   },
   created() {},
-  mounted() {
-    this.setCz();
+  beforeRouteEnter(to, form, next) {
+    next((vm) => {
+      vm.setCz();
+    });
   },
   beforeDestroy() {},
 };

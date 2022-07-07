@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
- * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-06-23 09:34:13
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-07-06 13:33:08
  * @Description: 
 -->
 <template>
@@ -144,13 +144,6 @@ export default {
       this.detail = val;
       // this.print();
     },
-    setCz() {
-      webSocket.setPrint(this);
-      let _this = this;
-      _this.czsocket.onmessage = function (e) {
-        console.log(e);
-      };
-    },
     cellClick(val) {
       this.detail = val;
     },
@@ -161,7 +154,6 @@ export default {
   created() {},
   mounted() {
     this.query();
-    // this.setCz();
   },
   beforeDestroy() {},
 };
