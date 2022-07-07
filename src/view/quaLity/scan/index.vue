@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-07-06 08:25:28
+ * @LastEditTime: 2022-07-07 11:18:31
  * @Description: 
 -->
 <template>
@@ -735,9 +735,10 @@ export default {
       });
     },
   },
-  created() {},
+  created() {
+    // this.setCz()
+  },
   mounted() {
-    this.setCz();
     this.qcType = [1, 2, 3, 4];
     this.typeChange();
     // this.formOp.column[7].dicData = this.qcItems;
@@ -755,6 +756,7 @@ export default {
   beforeRouteEnter(to, form, next) {
     next((vm) => {
       let self = vm;
+      self.setCz();
       document.onkeydown = function (e) {
         let ev = document.all ? window.event : e;
         if (ev.keyCode === 13 && self.type === "bf" && self.form.noteCode) {
