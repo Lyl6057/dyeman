@@ -269,6 +269,8 @@ export default {
           Object.assign(queryData, this.choiceQ, {
             rows: this.page.pageSize,
             start: this.page.currentPage,
+            // 添加外发厂过滤
+            filterFactory: true
           })
         ).then((Res) => {
           let records = Res.data;
