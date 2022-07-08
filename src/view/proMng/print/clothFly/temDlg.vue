@@ -7,27 +7,16 @@
 -->
 <template>
   <div id="colorMng_Te1">
-    <view-container
-      title="織造通知單"
-      :element-loading-text="$t('public.loading')"
-      v-loading="wLoading"
-    >
+    <view-container title="織造通知單" :element-loading-text="$t('public.loading')" v-loading="wLoading">
       <div class="btnList">
-        <el-button type="success" :disabled="crud.length == 0" @click="save"
-          >保存</el-button
-        >
+        <el-button type="success" :disabled="crud.length == 0" @click="save">保存</el-button>
         <el-button type="primary" @click="add">生成</el-button>
         <!-- <el-button type="primary" @click="readd">重新布飞</el-button>  -->
         <el-button type="danger" @click="del">删除</el-button>
-        <el-button
-          type="success"
-          @click="print"
-          :disabled="selectData.length == 0"
-          >打印</el-button
-        >
+        <el-button type="success" @click="print" :disabled="selectData.length == 0">打印</el-button>
 
         <el-button type="warning" @click="close">{{
-          this.$t("public.close")
+            this.$t("public.close")
         }}</el-button>
       </div>
 
@@ -45,23 +34,12 @@
             <span style="margin-left: 20px; font-size: 18px"> 布票号: </span>
             <el-input v-model="noteCode" style="width: 20%" @change="getBf"></el-input>
           </div>
-          <avue-crud
-            ref="crud"
-            :option="crudOp"
-            :data="crud"
-            :page.sync="page"
-            @on-load="getBf"
-            @selection-change="selectionChange"
-          >
+          <avue-crud ref="crud" :option="crudOp" :data="crud" :page.sync="page" @on-load="getBf"
+            @selection-change="selectionChange">
           </avue-crud>
         </el-tab-pane>
         <el-tab-pane name="dy" label="打印预览(仅供参考)">
-          <pre-view
-            ref="preview"
-            :detail="crud"
-            :form="form"
-            v-if="crud.length > 0"
-          ></pre-view>
+          <pre-view ref="preview" :detail="crud" :form="form" v-if="crud.length > 0"></pre-view>
         </el-tab-pane>
       </el-tabs>
     </view-container>
@@ -97,7 +75,7 @@ export default {
       formOp: mainCrud(this),
       form: {},
       page: {
-        pageSizes: [50, 100, 200 ,500 ,1000],
+        pageSizes: [50, 100, 200, 500, 1000],
         pageSize: 100,
         currentPage: 1,
         total: 0,
@@ -450,7 +428,7 @@ export default {
           // proWeaveJobGroupFk: this.form.proWeaveJobGroupFk,
           rows: this.page.pageSize,
           start: this.page.currentPage,
-          noteCode: '^^%' + (this.noteCode || '') 
+          noteCode: '^^%' + (this.noteCode || '')
         })
       ).then((res) => {
         this.crud = res.data.records;
@@ -469,15 +447,17 @@ export default {
             this.form.qsph = this.allData[0].eachNumber;
           }
         }
-      }).finally(async () =>{
-          setTimeout(() => {
-            this.wLoading = false;
-          }, 200);
-          
+      }).finally(async () => {
+        setTimeout(() => {
+          this.wLoading = false;
+        }, 200);
+
       })
     },
     print() {
+       this.spowerClient = this.$store.state.spowerClient;
       if (!this.spowerClient || this.spowerClient.readyState == 3) {
+
         this.$tip.error("打印应用未启动，请打开后重新进入此页面!");
         return;
       }
@@ -493,7 +473,7 @@ export default {
                 item.isPrinted = true;
                 item.clothState = 0;
                 item.printedTime = this.$getNowTime("datetime");
-                updateNote(item).then((res) => {});
+                updateNote(item).then((res) => { });
               }
 
               if (i === this.selectData.length - 1) {
@@ -583,14 +563,14 @@ export default {
       this.selectData = val;
     },
   },
-  created() {},
+  created() { },
   mounted() {
     this.getData();
   },
-  beforeDestroy() {},
+  beforeDestroy() { },
   beforeRouteEnter(to, form, next) {
     next((vm) => {
-      vm.spowerClient = vm.$store.state.spowerClient;
+       vm.spowerClient = vm.$store.state.spowerClient;
     });
   },
 };
