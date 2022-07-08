@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-08 11:26:21
+ * @LastEditTime: 2022-07-08 14:51:15
  * @Description: 
 -->
 <template>
@@ -426,7 +426,17 @@ export default {
             }
           }
           if (this.form.creator != parent.userID) {
+            
             this.formOp.column[this.formOp.column.length - 1].disabled = true;
+          }
+          // 控制操作
+          if(this.$store.getters.isOutFactory){
+            this.formOp.column.forEach(cItem => {
+              cItem.disabled = true;
+            })
+            this.formOp.group[0].column.forEach(cItem => {
+              cItem.disabled = true;
+            })
           }
           this.wLoading = false;
         }, 500);

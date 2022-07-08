@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-06-20 11:17:59
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-08 11:26:06
+ * @LastEditTime: 2022-07-08 14:52:18
 -->
 <template>
     <view-container title="织胚明细" >
@@ -81,7 +81,6 @@
                 });
                 this.loading = true;
                 batchSaveOrUpdateFlatknit(result).then(res => {
-                    console.log("batch post res data", res);
                     this.getDataList();
                 }).finally(_ => {
                     this.loading = false;
@@ -162,7 +161,7 @@
                 }
 
                 targetDataList.forEach(item => {
-                    item.$cellEdit = true;
+                    item.$cellEdit = this.isOutFactory;
                 })
                 this.meaEmbDtlData = targetDataList;
             },
