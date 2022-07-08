@@ -6,63 +6,39 @@
  * @Description: 
 -->
 <template>
-  <div
-    id="clothFlyScan"
-    :element-loading-text="$t('public.loading')"
-    v-loading="wLoading"
-  >
+  <div id="clothFlyScan" :element-loading-text="$t('public.loading')" v-loading="wLoading">
     <view-container title="胚布称重">
       <el-row class="formBox" style="margin-top: 5px">
         <avue-form ref="form" :option="formOp" v-model="form">
           <template slot-scope="scope" slot="qcClothCheckItem">
-            <el-button
-              type="primary"
-              @click="qcDlg = true"
-              style="margin-top: 10px"
-              >选择检验项目</el-button
-            >
+            <el-button type="primary" @click="qcDlg = true" style="margin-top: 10px">选择检验项目</el-button>
           </template>
         </avue-form>
       </el-row>
       <el-row class="crudBox">
         <el-col :span="5">
           <view-container title="载具信息">
-            <el-card
-              class="border-card"
-              style="
+            <el-card class="border-card" style="
                 height: calc(100vh - 400px);
                 overflow: auto;
                 margin-bottom: 50px;
-              "
-              id="history"
-            >
-              <div
-                class="text item"
-                v-for="item in Load"
-                :key="item.noteId"
-                style="border-bottom: 1px solid #eee"
-              >
-                <el-tooltip
-                  class="item"
-                  effect="dark"
-                  :content="
-                    '布票号' +
-                    item.noteCode +
-                    ' 重量' +
-                    item.clothWeight +
-                    ' 载具编号' +
-                    item.storeLoadCode
-                  "
-                  placement="top"
-                >
+              " id="history">
+              <div class="text item" v-for="item in Load" :key="item.noteId" style="border-bottom: 1px solid #eee">
+                <el-tooltip class="item" effect="dark" :content="
+                  '布票号' +
+                  item.noteCode +
+                  ' 重量' +
+                  item.clothWeight +
+                  ' 载具编号' +
+                  item.storeLoadCode
+                " placement="top">
                   <div class="history">
                     <span>布票号: {{ item.noteCode }}</span>
                     <span> 重量: {{ item.clothWeight }}</span>
                   </div>
                 </el-tooltip>
               </div>
-              <div
-                style="
+              <div style="
                   height: 45px;
                   line-height: 45px;
                   position: absolute;
@@ -72,8 +48,7 @@
                   width: 100%;
                   font-size: 18px;
                   font-weight: 700;
-                "
-              >
+                ">
                 共:{{ Load.length }} 疋，总: {{ clothSum }} KG
               </div>
             </el-card>
@@ -113,14 +88,10 @@
                 <el-row class="text item">
                   <el-col :span="8">克重: {{ crud.gramWeight }}</el-col>
                   <el-col :span="8">门幅: {{ crud.breadth }}</el-col>
-                  <el-col :span="8"
-                    >长度(m): {{ crud.clothLengthValue }}</el-col
-                  >
+                  <el-col :span="8">长度(m): {{ crud.clothLengthValue }}</el-col>
                 </el-row>
                 <el-row class="text item">
-                  <el-col :span="10"
-                    >验布员工号: {{ crud.clothChecker }}</el-col
-                  >
+                  <el-col :span="10">验布员工号: {{ crud.clothChecker }}</el-col>
                   <el-col :span="14">值机工号: {{ crud.workNo }}</el-col>
                 </el-row>
 
@@ -135,12 +106,7 @@
             </el-tab-pane>
             <el-tab-pane name="qc" label="验布项目">
               <div style="height: calc(100vh - 350px); overflow: auto">
-                <avue-form
-                  ref="form"
-                  :option="checkForm"
-                  v-model="checkQc"
-                  style="margin-top: 10px"
-                >
+                <avue-form ref="form" :option="checkForm" v-model="checkQc" style="margin-top: 10px">
                 </avue-form>
               </div>
             </el-tab-pane>
@@ -148,30 +114,16 @@
         </el-col>
         <el-col :span="5">
           <view-container title="历史胚布">
-            <el-card
-              class="border-card"
-              style="height: calc(100vh - 350px); overflow: auto"
-              id="history"
-            >
-              <div
-                class="text item"
-                v-for="item in history"
-                :key="item.noteId"
-                style="border-bottom: 1px solid #eee"
-              >
-                <el-tooltip
-                  class="item"
-                  effect="dark"
-                  :content="
-                    '布票号' +
-                    item.noteCode +
-                    ' 重量' +
-                    item.clothWeight +
-                    ' 验布员工号' +
-                    item.clothChecker
-                  "
-                  placement="top"
-                >
+            <el-card class="border-card" style="height: calc(100vh - 350px); overflow: auto" id="history">
+              <div class="text item" v-for="item in history" :key="item.noteId" style="border-bottom: 1px solid #eee">
+                <el-tooltip class="item" effect="dark" :content="
+                  '布票号' +
+                  item.noteCode +
+                  ' 重量' +
+                  item.clothWeight +
+                  ' 验布员工号' +
+                  item.clothChecker
+                " placement="top">
                   <div class="history">
                     <span>布票号: {{ item.noteCode }}</span>
                     <span> 重量: {{ item.clothWeight }}</span>
@@ -183,42 +135,21 @@
             </el-card>
           </view-container>
         </el-col>
-        <el-dialog
-          title
-          :visible.sync="qcDlg"
-          id="qcItemDlg"
-          fullscreen
-          append-to-body
-          :close-on-click-modal="false"
-          v-if="qcDlg"
-        >
+        <el-dialog title :visible.sync="qcDlg" id="qcItemDlg" fullscreen append-to-body :close-on-click-modal="false"
+          v-if="qcDlg">
           <view-container title="选择检验项目">
             <div class="btnList" style="height: 38px">
               <el-button type="success" @click="check">确定</el-button>
               <el-button type="warning" @click="qcDlg = false">{{
-                this.$t("public.close")
+                  this.$t("public.close")
               }}</el-button>
               <span style="margin-left: 10px; font-size: 16px">疵点类型:</span>
-              <el-select
-                v-model="qcType"
-                multiple
-                placeholder="请选择"
-                style="width: 350px"
-                @change="typeChange"
-              >
-                <el-option
-                  v-for="item in options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                >
+              <el-select v-model="qcType" multiple placeholder="请选择" style="width: 350px" @change="typeChange">
+                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
                 </el-option>
               </el-select>
             </div>
-            <div
-              class="formBox qc-check-item"
-              style="height: calc(100vh - 120px); overflow: auto"
-            >
+            <div class="formBox qc-check-item" style="height: calc(100vh - 120px); overflow: auto">
               <avue-form ref="form" :option="qcForm" v-model="qcItem">
               </avue-form>
             </div>
@@ -413,7 +344,7 @@ export default {
                   // }
                 }
                 data.checkDate = this.$getNowTime("datetime");
-                updateQcRecord(data).then((res) => {});
+                updateQcRecord(data).then((res) => { });
               } else {
                 // add
                 let data = {};
@@ -427,7 +358,7 @@ export default {
                 }
                 data.proClothNoteFk = this.crud.noteId;
                 data.checkDate = this.$getNowTime("datetime");
-                addQcRecord(data).then((res) => {});
+                addQcRecord(data).then((res) => { });
               }
             });
           }
@@ -453,6 +384,7 @@ export default {
       this.spowerClient = this.$store.state.spowerClient;
       let _this = this;
       _this.spowerClient.onmessage = function (e) {
+
         if (e.data.indexOf("scan") != -1) {
           _this.$nextTick(() => {
             let scanData = e.data.split("scan=")[1];
@@ -466,7 +398,9 @@ export default {
           return
         }
         if (e.data.indexOf(":") != -1) {
-          _this.form.eachNumbers = Number(e.data.replace(/[^\d.]/g, ""));
+          // _this.form.eachNumbers = Number(e.data.replace(/[^\d.]/g, ""));
+          let _weight = Number(e.data.split("weight=")[1].split(":")[0])
+          _this.form.eachNumbers = (_weight > 0) ? _weight : 0;
         } else {
           _this.form.eachNumbers = e.data;
         }
@@ -489,8 +423,8 @@ export default {
           typeof this.crud.gramWeight === "number"
             ? Number(this.crud.gramWeight) / 1000
             : this.crud.gramWeight
-            ? Number(this.crud.gramWeight.match(/\d+/g)[0]) / 1000
-            : 0;
+              ? Number(this.crud.gramWeight.match(/\d+/g)[0]) / 1000
+              : 0;
 
         // this.crud.gramWeight.match(/\d+/g);
         // this.crud.gramWeight.indexOf("(") != -1
@@ -506,8 +440,8 @@ export default {
           typeof this.crud.breadth === "number"
             ? Number(this.crud.breadth) * 0.254
             : this.crud.breadth
-            ? Number(this.crud.breadth.match(/\d+/g)[0]) * 0.254
-            : 0;
+              ? Number(this.crud.breadth.match(/\d+/g)[0]) * 0.254
+              : 0;
         // this.crud.breadth.indexOf("(") != -1
         //   ? (Number(this.crud.breadth.match(/\d+/g)[0]) * 2.54) / 100
         //   : (Number(this.crud.breadth) * 2.54) / 100;
@@ -607,11 +541,11 @@ export default {
             useType: 2,
             whsCarriageStorageFk: this.crud.storeLoadCode,
             useTime: this.$getNowTime("datetime"),
-          }).then((addStoge) => {});
+          }).then((addStoge) => { });
         }
       });
     },
-    clothLength() {},
+    clothLength() { },
     check() {
       // console.log(this.qcItem);
       // this.form.qcClothCheckItem = this.qcItem;
@@ -676,10 +610,10 @@ export default {
               item == 1
                 ? "纱疵"
                 : item == 2
-                ? "织疵"
-                : item == 3
-                ? "染疵"
-                : "结构",
+                  ? "织疵"
+                  : item == 3
+                    ? "染疵"
+                    : "结构",
             prop: "basic" + item,
             // labelPosition: "top",
             column: [

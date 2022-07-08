@@ -6,14 +6,10 @@
  * @Description: 
 -->
 <template>
-  <div
-    id="prowovenrealWeight"
-    v-loading="loading"
-    :element-loading-text="$t('public.loading')"
-  >
+  <div id="prowovenrealWeight" v-loading="loading" :element-loading-text="$t('public.loading')">
     <view-container title="生产进度统计">
-      <div  style="margin: 10px !important">
-        <avue-form ref="form" :option="formOp" v-model="form" @submit="query"> </avue-form>    
+      <div style="margin: 10px !important">
+        <avue-form ref="form" :option="formOp" v-model="form" @submit="query"> </avue-form>
       </div>
       <div class="crudBox">
         <el-row>
@@ -39,7 +35,9 @@ export default {
   data() {
     return {
       formOp: mainForm(this),
-      form: {},
+      form: {
+        isWorkOut:""
+      },
       crudOp: mainCrud(this),
       crud: [],
       loading: false,
@@ -59,15 +57,22 @@ export default {
   },
   watch: {},
   methods: {
-    query(form,done) {
-      let dones = done ||  new Function();
+    query(form, done) {
+      let dones = done || new Function();
       this.loading = true;
       let params = {
         rows: this.page.pageSize,
         start: this.page.currentPage,
-        weaveJobCode: "%" + (this.form.weaveJobCode || "")
+        weaveJobCode: "%" + (this.form.weaveJobCode || ""),
+         isWorkOut:this.form.isWorkOut
       }
-      get(params).then((res) => {
+      let data = JSON.parse(JSON.stringify(params));
+      if (this.form["isWorkOut"] != "") {
+        Object.assign(data,{
+          isWorkOut:this.form.isWorkOut
+        })
+      };
+      get(data).then((res) => {
         this.resData = res.data.records;
         this.resData.forEach((item, index) => {
           item.index = index + 1;
@@ -233,10 +238,10 @@ export default {
       option && myChart.setOption(option);
     },
   },
-  created() {},
+  created() { },
   mounted() {
   },
-  beforeDestroy() {},
+  beforeDestroy() { },
 };
 </script>
 <style lang='stylus' scoped>

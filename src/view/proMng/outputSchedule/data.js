@@ -6,14 +6,23 @@
  * @Description:
  */
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
-
+const DIC = {
+  VAILD: [
+  {
+      label: '是',
+      value: true
+  }, {
+      label: '否',
+      value: false
+  }],
+}
 export function mainForm(_this) {
   return {
     submitBtn: true,
-    submitText:"查询",
+    submitText: "查询",
     emptyBtn: false,
     labelWidth: 150,
-    menuSpan:6,
+    menuSpan: 6,
     menuPostion: "right",
     menuBtn: true,
     column: [
@@ -25,7 +34,19 @@ export function mainForm(_this) {
         sortable: true,
         fixed: false,
         span: 8
-      }
+      },
+      {
+        label: "是否外发单",
+        placeholder:" ",
+        width: 170,
+        prop: "isWorkOut",
+        type: "select",
+        dicData: DIC.VAILD,
+        span:4,
+        mock:{
+          type:'dic',
+        },
+    },
     ]
   };
 }
@@ -65,7 +86,7 @@ export function mainCrud(_this) {
         width: 110,
         overHidden: true,
         type: "select",
-        dicData:[
+        dicData: [
           {
             label: "是",
             value: true
@@ -137,7 +158,18 @@ export function mainCrud(_this) {
         align: "right",
         cell: true
       },
-      
+      {
+        label: "订单与生产差额",
+        prop: "owed",
+        disabled: false,
+        overHidden: true,
+        width: 150,
+        placeholder: " ",
+        span: 6,
+        align: "right",
+        cell: true
+      },
+
     ]
   };
 }
