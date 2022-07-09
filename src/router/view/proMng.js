@@ -10,7 +10,7 @@ export default [
   {
     path: "/",
     name: "主页",
-    redirect: "/ProWorkflowInfo"
+    //redirect: "/ProWorkflowInfo"
   },
   {
     path: "/dyeDeliveryNote",

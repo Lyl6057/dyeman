@@ -1,22 +1,13 @@
 <template>
   <div id="sidebar">
-    <el-menu
-      :default-active="this.$route.path"
-      class="eldemo"
-      unique-opened
-      collapse-transition
-      router
-      :collapse="isActive"
-      v-loading.fullscreen.lock="loading"
-      element-loading-text="拼命加载中"
-    >
+    <el-menu :default-active="this.$route.path" class="eldemo" unique-opened collapse-transition router
+      :collapse="isActive" v-loading.fullscreen.lock="loading" element-loading-text="拼命加载中">
       <menus :menuData="list" :level="0"></menus>
     </el-menu>
     <div @click="IsActive" class="menu-icon">
       <el-divider>
-        <i class="el-icon-d-arrow-right" v-if="isActive"></i
-        ><i class="el-icon-d-arrow-left" v-else></i
-      ></el-divider>
+        <i class="el-icon-d-arrow-right" v-if="isActive"></i><i class="el-icon-d-arrow-left" v-else></i>
+      </el-divider>
     </div>
   </div>
 </template>
@@ -62,11 +53,20 @@ export default {
         func(this.menuData);
         this.list = this.menuData;
         this.$nextTick(() => {
+          var path = "";
+          const menuindex = this.menuData.findIndex(e => e.hide == false);
+          if (menuindex != -1) {
+            const indexChildren = this.menuData[menuindex].children.findIndex(e => e.hide == false);
+            if (indexChildren != -1) {
+              path = this.menuData[menuindex].children[indexChildren].index;
+            } else {
+              path = this.menuData[menuindex].index;
+            }
+          }else{
+            path="/404"
+          }
           setTimeout(() => {
-            // this.$router.push({ path: "ProWorkflowInfo" }); // 生产管理
-            // this.$router.push({ path: "imWl" });
-            // this.$router.push({ path: "colorMng" });
-            // this.$router.push({ path: "weight" });
+            this.$router.push({ path: path });
             this.loading = false;
           }, 200);
         });
