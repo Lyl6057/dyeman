@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-08 14:51:15
+ * @LastEditTime: 2022-07-09 09:54:30
  * @Description: 
 -->
 <template>
@@ -377,12 +377,14 @@ export default {
     },
     // 打开织胚明细界面
     async handleOpenWeaEmbDtl(){
+      if(!this.form.weaveJobId) return this.$tip.warning("请先保存通知单");
       this.meaEmbVisible = true;
       await this.$nextTick();
       this.$refs.meaveEmbyroDtlRef.getDataList();
     },
     // 打开机台维护界面
     async handleOpenMachineInfo(){
+      if(!this.form.weaveJobId) return this.$tip.warning("请先保存通知单");
       this.machineInfoVisible = true;
       await this.$nextTick();
       this.$refs.machineInfoRef.init();
