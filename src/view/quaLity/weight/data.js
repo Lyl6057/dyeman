@@ -95,7 +95,7 @@ export function mainForm(_this) {
             label: "否",
             value: false
           },
-          
+
         ],
       },
       {
@@ -476,7 +476,7 @@ export function dlgForm(_this) {
         change: () => {
           _this.$nextTick(() => {
             _this.detail.realWeight = Number(
-              Number(_this.detail.clothWeight) + Number(_this.detail.qcTakeOut) +  Number(_this.detail.paperTube || 0)
+              Number(_this.detail.clothWeight) + Number(_this.detail.qcTakeOut) + Number(_this.detail.paperTube || 0)
             ).toFixed(1);
             if (isNaN(_this.detail.realWeight)) {
               _this.detail.realWeight = 0;
@@ -497,7 +497,7 @@ export function dlgForm(_this) {
         change: () => {
           _this.$nextTick(() => {
             _this.detail.realWeight = Number(
-              Number(_this.detail.clothWeight) + Number(_this.detail.qcTakeOut) +  Number(_this.detail.paperTube || 0)
+              Number(_this.detail.clothWeight) + Number(_this.detail.qcTakeOut) + Number(_this.detail.paperTube || 0)
             ).toFixed(1);
             if (isNaN(_this.detail.realWeight)) {
               _this.detail.realWeight = 0;

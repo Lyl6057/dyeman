@@ -383,8 +383,8 @@ export function mainCrud(_this) {
           _this.$nextTick(() => {
             _this.detail.grossWeight = Number(
               _this.detail.netWeight +
-                Number(_this.detail.paperTube || 0) +
-                Number(_this.detail.qcTakeOut || 0)
+              Number(_this.detail.paperTube || 0) +
+              Number(_this.detail.qcTakeOut || 0)
             ).toFixed(2);
           });
         }
@@ -405,8 +405,8 @@ export function mainCrud(_this) {
           _this.$nextTick(() => {
             _this.detail.grossWeight = Number(
               _this.detail.netWeight +
-                Number(_this.detail.paperTube || 0) +
-                Number(_this.detail.qcTakeOut || 0)
+              Number(_this.detail.paperTube || 0) +
+              Number(_this.detail.qcTakeOut || 0)
             ).toFixed(2);
           });
         }
@@ -640,7 +640,7 @@ export function dlgForm(_this) {
         minRows: 0,
         align: "left",
         placeholder: " ",
-        disabled: false,
+        disabled: true,
         change: () => {
           _this.$nextTick(() => {
             if (_this.detail.weightUnit == "KG") {
@@ -659,7 +659,6 @@ export function dlgForm(_this) {
         label: "纸筒重量",
         tip: "Trọng lượng thoi giấy",
         prop: "paperTube",
-
         width: 100,
         span: 8,
         minRows: 0,
@@ -702,6 +701,14 @@ export function dlgForm(_this) {
         disabled: true
       },
       {
+        label: "",
+        tip: "trọng lượng tịnh(LBS)",
+        prop: "netWeightLbs",
+        width: 1,
+        span: 1,
+        display:false
+      },
+      {
         label: "净重(LBS)",
         tip: "trọng lượng tịnh(LBS)",
         prop: "netWeightLbs",
@@ -712,6 +719,7 @@ export function dlgForm(_this) {
         precision: 1,
         align: "left",
         placeholder: " ",
+        disabled: true,
         change: () => {
           _this.$nextTick(() => {
             if (_this.detail.weightUnit == "LBS") {

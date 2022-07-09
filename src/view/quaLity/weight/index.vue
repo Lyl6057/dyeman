@@ -1,18 +1,20 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
- * @LastEditors: Lyl
- * @LastEditTime: 2022-07-07 10:11:07
+ * @LastEditors: pmp
+ * @LastEditTime: 2022-07-09 09:18:12
  * @Description: 
 -->
 <template>
   <div id="clothFlyWeight" :element-loading-text="$t('public.loading')" v-loading="wLoading">
     <view-container title="称重记录">
       <el-row class="btnList">
-        <el-button type="success" @click="saveAll" :disabled="form.clothState == 3">{{ this.$t("public.save") }}</el-button>
-        <el-button type="primary" @click="dialogVisible = true" :disabled="!detail.noteId">{{ this.$t("public.update") }}</el-button>
+        <el-button type="success" @click="saveAll" :disabled="form.clothState == 3">{{ this.$t("public.save") }}
+        </el-button>
+        <el-button type="primary" @click="dialogVisible = true" :disabled="!detail.noteId">{{ this.$t("public.update")
+        }}</el-button>
         <el-button type="primary" @click="query(true)">{{
-          this.$t("public.query")
+            this.$t("public.query")
         }}</el-button>
         <el-button type="primary" @click="print">打印</el-button>
         <el-button type="primary" @click="outExcel">导出</el-button>
@@ -20,7 +22,8 @@
         <el-tooltip class="item" effect="dark" content="同步勾选数据的储存位置,值为第一条勾选的数据" placement="right-start">
           <el-button type="primary" @click="syncLoc" :disabled="selectList.length < 2">同步储存位置</el-button>
         </el-tooltip>
-        <span v-if="crud.length && weightSum > 0" style="float: right; margin-right: 10px">【 {{ crud[0].weaveJobCode }} 】 总重量: {{ weightSum }} KG</span>
+        <span v-if="crud.length && weightSum > 0" style="float: right; margin-right: 10px">【 {{ crud[0].weaveJobCode }}
+          】 总重量: {{ weightSum }} KG</span>
 
         <!-- <el-button type="warning" @click="close">{{
           this.$t("public.close")
@@ -30,7 +33,9 @@
         <avue-form ref="form" :option="formOp" v-model="form"> </avue-form>
       </el-row>
       <el-row class="crudBox">
-        <avue-crud ref="crud" :option="crudOp" :data="crud" :page.sync="page" v-loading="loading" @on-load="query" @row-dblclick="handleRowDBLClick" @current-row-change="cellClick" :summary-method="summaryMethod" @selection-change="selectionChange" @sort-change="sortChange">
+        <avue-crud ref="crud" :option="crudOp" :data="crud" :page.sync="page" v-loading="loading" @on-load="query"
+          @row-dblclick="handleRowDBLClick" @current-row-change="cellClick" :summary-method="summaryMethod"
+          @selection-change="selectionChange" @sort-change="sortChange">
           <!-- <template slot="menu" v-if="form.clothState != 3">
             <el-button size="small" type="primary" @click="weighing"
               >称重</el-button
@@ -39,21 +44,27 @@
         </avue-crud>
       </el-row>
     </view-container>
-    <el-dialog id="colorMng_Dlg" :visible.sync="dialogVisible" width="70%" append-to-body :close-on-click-modal="false" :close-on-press-escape="false">
+    <el-dialog id="colorMng_Dlg" :visible.sync="dialogVisible" width="70%" append-to-body :close-on-click-modal="false"
+      :close-on-press-escape="false">
       <view-container title="修改">
         <div class="btnList">
-          <el-button type="success" @click="save" :disabled="form.clothState == 3">{{ this.$t("public.save") }}</el-button>
+          <el-button type="success" @click="save" :disabled="form.clothState == 3">{{ this.$t("public.save") }}
+          </el-button>
           <el-button type="primary" @click="weighing">称重</el-button>
           <el-button type="warning" @click="dialogVisible = false">{{
-            this.$t("public.close")
+              this.$t("public.close")
           }}</el-button>
+          <div style="float:right; margin-right: 17px;">
+            电子秤读取： <el-switch v-model="useWeight" active-text="启用" inactive-text="停用"></el-switch>
+          </div>
         </div>
         <div class="formBox">
           <avue-form ref="form" :option="dlgOp" v-model="detail"></avue-form>
         </div>
       </view-container>
     </el-dialog>
-    <el-dialog id="colorMng_Dlg" :visible.sync="pdfDlg" fullscreen width="100%" append-to-body :close-on-click-modal="false" :close-on-press-escape="false">
+    <el-dialog id="colorMng_Dlg" :visible.sync="pdfDlg" fullscreen width="100%" append-to-body
+      :close-on-click-modal="false" :close-on-press-escape="false">
       <view-container title="打印預覽">
         <!-- <div class="btnList">
             <el-button type="warning" @click="pdfDlg = false">{{
@@ -111,6 +122,7 @@ export default {
       checkLabel: "",
       sort: {},
       weightSum: 0,
+      useWeight: false
     };
   },
   watch: {},
@@ -213,7 +225,9 @@ export default {
       let _this = this;
       _this.spowerClient.onmessage = function (e) {
         let weight = e.data.indexOf(":") != -1 ? Number(e.data.replace(/[^\d.]/g, "")) : e.data;
-        _this.detail.clothWeight = weight;
+        if (_this.useWeight) {
+          _this.detail.clothWeight = weight;
+        }
         _this.detail.clothCheckTime = _this.$getNowTime("datetime");
       };
     },
@@ -372,14 +386,14 @@ export default {
             typeof this.detail.gramWeight === "number"
               ? Number(this.detail.gramWeight) / 1000
               : this.detail.gramWeight
-              ? Number(this.detail.gramWeight.match(/\d+/g)[0]) / 1000
-              : 0;
+                ? Number(this.detail.gramWeight.match(/\d+/g)[0]) / 1000
+                : 0;
           breadth =
             typeof this.detail.breadth === "number"
               ? (Number(this.detail.breadth) * 2.54) / 100
               : this.detail.breadth
-              ? (Number(this.detail.breadth.match(/\d+/g)[0]) * 2.54) / 100
-              : 0;
+                ? (Number(this.detail.breadth.match(/\d+/g)[0]) * 2.54) / 100
+                : 0;
 
           let weight = this.detail.clothWeight;
           if (!gramWeight || !breadth) {
@@ -399,7 +413,7 @@ export default {
       this.$refs["crud"].doLayout();
     });
   },
-  created() {},
+  created() { },
   beforeRouteEnter(to, form, next) {
     next((vm) => {
       let self = vm;
@@ -435,7 +449,7 @@ export default {
     //   }, 200);
     // });
   },
-  beforeDestroy() {},
+  beforeDestroy() { },
 };
 </script>
 <style lang='stylus'>

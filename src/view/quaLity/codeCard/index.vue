@@ -1,36 +1,21 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
- * @LastEditors: Lyl
- * @LastEditTime: 2022-07-07 10:43:13
+ * @LastEditors: pmp
+ * @LastEditTime: 2022-07-09 09:18:01
  * @Description:
 -->
 <template>
-  <div
-    id="clothFlyWeight"
-    :element-loading-text="$t('public.loading')"
-    v-loading="wLoading"
-  >
+  <div id="clothFlyWeight" :element-loading-text="$t('public.loading')" v-loading="wLoading">
     <view-container title="成品码卡信息">
       <el-row class="btnList">
-        <el-button
-          type="primary"
-          @click="dialogVisible = true"
-          :disabled="!detail.cardId"
-          >{{ this.$t("public.update") }}</el-button
-        >
-        <el-button type="primary" @click="query">{{
-          this.$t("public.query")
+        <el-button type="primary" @click="dialogVisible = true" :disabled="!detail.cardId">{{ this.$t("public.update")
         }}</el-button>
-        <el-button type="primary" @click="print" :disabled="!selectList.length"
-          >打印</el-button
-        >
-        <el-button
-          type="primary"
-          @click="batchEdit"
-          :disabled="!selectList.length"
-          >修改载具</el-button
-        >
+        <el-button type="primary" @click="query">{{
+            this.$t("public.query")
+        }}</el-button>
+        <el-button type="primary" @click="print" :disabled="!selectList.length">打印</el-button>
+        <el-button type="primary" @click="batchEdit" :disabled="!selectList.length">修改载具</el-button>
         <!-- <el-button type="danger" @click="del" :disabled="!selectList.length">{{
           this.$t("public.del")
         }}</el-button> -->
@@ -73,17 +58,8 @@
         <avue-form ref="form" :option="formOp" v-model="form"> </avue-form>
       </el-row>
       <el-row class="crudBox">
-        <avue-crud
-          ref="crud"
-          :option="crudOp"
-          :data="crud"
-          :page.sync="page"
-          v-loading="loading"
-          @on-load="query"
-          @row-dblclick="handleRowDBLClick"
-          @current-row-change="cellClick"
-          @selection-change="selectionChange"
-        >
+        <avue-crud ref="crud" :option="crudOp" :data="crud" :page.sync="page" v-loading="loading" @on-load="query"
+          @row-dblclick="handleRowDBLClick" @current-row-change="cellClick" @selection-change="selectionChange">
           <!--  @sort-change="sortChange" -->
           <!-- :summary-method="summaryMethod" -->
           <!-- <template slot="menu">
@@ -93,52 +69,36 @@
           </template> -->
         </avue-crud>
       </el-row>
-      <el-dialog
-        id="colorMng_Dlg"
-        :visible.sync="dialogVisible"
-        width="70%"
-        append-to-body
-        :close-on-click-modal="false"
-        :close-on-press-escape="false"
-      >
+      <el-dialog id="colorMng_Dlg" :visible.sync="dialogVisible" width="70%" append-to-body
+        :close-on-click-modal="false" :close-on-press-escape="false">
         <el-tabs type="border-card" v-model="tabs">
           <el-tab-pane label="修改" name="update">
             <div class="btnList">
-              <el-button
-                type="success"
-                @click="save"
-                :disabled="detail.clothState == 9 || detail.whseVouch == 9"
-                >{{ this.$t("public.save") }}</el-button
-              >
+              <el-button type="success" @click="save" :disabled="detail.clothState == 9 || detail.whseVouch == 9">{{
+                  this.$t("public.save")
+              }}</el-button>
               <el-button type="primary" @click="weighing">称重</el-button>
               <el-button type="warning" @click="dialogVisible = false">{{
-                this.$t("public.close")
+                  this.$t("public.close")
               }}</el-button>
+              <div style="float: right;margin-right: 17px;">
+                电子秤读取： <el-switch v-model="useWeight" active-text="启用" inactive-text="停用"></el-switch>
+              </div>
             </div>
             <div class="formBox">
-              <avue-form
-                ref="form"
-                :option="dlgOp"
-                v-model="detail"
-              ></avue-form>
+              <avue-form ref="form" :option="dlgOp" v-model="detail"></avue-form>
             </div>
           </el-tab-pane>
           <el-tab-pane label="历史记录" name="history">
             <div class="btnList">
               <el-button type="primary" @click="recover">恢复</el-button>
               <el-button type="warning" @click="dialogVisible = false">{{
-                this.$t("public.close")
+                  this.$t("public.close")
               }}</el-button>
             </div>
             <div class="formBox">
-              <avue-crud
-                ref="dlgCrud"
-                :option="historyOp"
-                :data="history"
-                @current-row-change="historyCellClick"
-                v-loading="loading"
-                @selection-change="selectionChange"
-              />
+              <avue-crud ref="dlgCrud" :option="historyOp" :data="history" @current-row-change="historyCellClick"
+                v-loading="loading" @selection-change="selectionChange" />
             </div>
           </el-tab-pane>
         </el-tabs>
@@ -146,20 +106,10 @@
           
         </view-container> -->
       </el-dialog>
-      <el-dialog
-        id="normal_Dlg"
-        title="请输入新的载具编号"
-        :visible.sync="loadDialogVisible"
-        width="30%"
-        center
-        append-to-body
-        style="text-align: center"
-      >
-        <el-input
-          v-model="newLoad"
-          placeholder="新载具编号(new vehicle number)"
-          style="width: 50%; margin: 0 auto; text-align: center"
-        ></el-input>
+      <el-dialog id="normal_Dlg" title="请输入新的载具编号" :visible.sync="loadDialogVisible" width="30%" center append-to-body
+        style="text-align: center">
+        <el-input v-model="newLoad" placeholder="新载具编号(new vehicle number)"
+          style="width: 50%; margin: 0 auto; text-align: center"></el-input>
         <span slot="footer" class="dialog-footer">
           <el-button @click="loadDialogVisible = false">取 消</el-button>
           <el-button type="primary" @click="loadSubmit">确 定</el-button>
@@ -236,7 +186,8 @@ export default {
       historyCheck: {},
       loadDialogVisible: false,
       newLoad: "",
-      weighData: {}
+      weighData: {},
+      useWeight: false
     };
   },
   watch: {},
@@ -309,7 +260,7 @@ export default {
         this.$tip.error("称重应用未启动，请启动后重新进入此页面!");
         return;
       } else {
-        if(!this.weighData.weightUnit){
+        if (!this.weighData.weightUnit) {
           this.$tip.error("电子秤未连接!");
           return;
         }
@@ -437,7 +388,10 @@ export default {
         let unit = e.data.split(":")[1];
         _this.weighData.weightUnit = unit
         weight = Number((parseInt(Number(weight) * 10) / 10).toFixed(1));
-        unit == "KG" ? _this.weighData.netWeight = weight :  _this.weighData.netWeightLbs = weight;
+        unit == "KG" ? _this.weighData.netWeight = weight : _this.weighData.netWeightLbs = weight;
+        if (_this.useWeight) {
+          _this.weighData.weightUnit == "KG" ? _this.detail.netWeight = _this.weighData.netWeight : _this.detail.netWeightLbs = _this.weighData.netWeightLbs;
+        }
       };
     },
     codeLength() {
@@ -1026,7 +980,7 @@ export default {
     this.spowerClient = null;
     next();
   },
-  created() {},
+  created() { },
   mounted() {
     getCheckItem().then((res) => {
       let data = res.data.filter((item) => {
@@ -1035,7 +989,7 @@ export default {
       this.dlgOp.column[12].dicData = data;
     });
   },
-  beforeDestroy() {},
+  beforeDestroy() { },
 };
 </script>
 <style lang='stylus'>
