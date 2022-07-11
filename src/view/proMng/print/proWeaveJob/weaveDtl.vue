@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-07-11 08:22:07
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-11 10:33:15
+ * @LastEditTime: 2022-07-11 15:30:38
 -->
 <template>
     <div id="weave-dlt-container" >
@@ -20,6 +20,12 @@ import { batchSaveOrUpdateWeaveDtlData, fetchWeaveDtlDataByFk } from "./api";
 import { weaveDtlCrudOp } from "./data"
 export default {
     name: "weaveDtl",
+    props: {
+        creator: {
+            type: String,
+            default: ""
+        }
+    },
     data(){
         return {
             crudData: [],
@@ -43,7 +49,7 @@ export default {
             };
             fetchWeaveDtlDataByFk(params).then(res => {
                 this.crudData = res.data.map(item => {
-                    item.$cellEdit = true;
+                    item.$cellEdit = this.creator == parent.userID;
                     return item;
                 });
             })
