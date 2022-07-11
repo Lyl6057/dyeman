@@ -1,19 +1,40 @@
 <!--
  * @Author: Lyl
  * @Date: 2022-01-12 15:39:08
- * @LastEditors: Lyl
- * @LastEditTime: 2022-07-07 10:13:12
+ * @LastEditors: PMP
+ * @LastEditTime: 2022-07-11 12:00:00
  * @FilePath: \iot.vue\src\view\im\whseInOutKB\index.vue
  * @Description: 
 -->
 <template>
   <div class="whseInOutKB" :element-loading-text="$t('public.loading')" v-loading="wLoading">
+    <el-dialog title="测试任务结果" :visible.sync="testVisible" width="30%" :before-close="handleClose">
+      <div>
+        <el-form ref="form" :model="testform" label-width="120px">
+          <el-form-item label="Code">
+            <el-input v-model="testform.code"></el-input>
+          </el-form-item>
+          <el-form-item label="Data">
+            <el-input v-model="testform.data"></el-input>
+          </el-form-item>
+          <el-form-item label="Message">
+            <el-input type="textarea" v-model="testform.msg"></el-input>
+          </el-form-item>
+        </el-form>
+      </div>
+
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="() => testVisible = false">Cancel</el-button>
+      </span>
+    </el-dialog>
+
     <el-tabs v-model="tabs" type="border-card">
       <el-tab-pane label="出入库看板" name="kanban">
         <el-row class="btnList">
           <el-button type="success" @click="sendTask">提交任务</el-button>
+          <el-button type="warning" @click="testTask">测试任务</el-button>
           <el-button type="primary" @click="query" v-if="form.type == 2">{{
-            this.$t("public.query")
+              this.$t("public.query")
           }}</el-button>
         </el-row>
         <el-row class="formBox">
@@ -21,14 +42,15 @@
         </el-row>
         <view-container title="布笼物品信息">
           <el-row class="crudBox" style="margin-top: 5px">
-            <avue-crud ref="crud" :option="crudOp" :page.sync="mainPage" :data="crud" v-loading="loading" @on-load="query" @row-dblclick="handleRowDBLClick"></avue-crud>
+            <avue-crud ref="crud" :option="crudOp" :page.sync="mainPage" :data="crud" v-loading="loading"
+              @on-load="query" @row-dblclick="handleRowDBLClick"></avue-crud>
           </el-row>
         </view-container>
       </el-tab-pane>
       <el-tab-pane label="任务管理" name="task">
         <el-row class="btnList">
           <el-button type="primary" @click="queryTask">{{
-            this.$t("public.query")
+              this.$t("public.query")
           }}</el-button>
         </el-row>
         <el-row class="formBox">
@@ -37,15 +59,19 @@
         </el-row>
         <view-container title="任务信息">
           <el-row class="crudBox" style="margin-top: 5px">
-            <avue-crud ref="task" :option="taskCrudOp" :page.sync="page" :data="task" v-loading="loading" @on-load="queryTask" @current-row-change="cellClick"></avue-crud>
+            <avue-crud ref="task" :option="taskCrudOp" :page.sync="page" :data="task" v-loading="loading"
+              @on-load="queryTask" @current-row-change="cellClick"></avue-crud>
           </el-row>
         </view-container>
       </el-tab-pane>
     </el-tabs>
-    <el-dialog id="colorMng_Dlg" :visible.sync="dialogVisible" fullscreen width="70%" append-to-body :close-on-click-modal="false" :close-on-press-escape="false">
-      <updatenote-com v-if="dialogVisible" ref="tem" :noteList="crud" :noteType="tabs" @close="diaClose"></updatenote-com>
+    <el-dialog id="colorMng_Dlg" :visible.sync="dialogVisible" fullscreen width="70%" append-to-body
+      :close-on-click-modal="false" :close-on-press-escape="false">
+      <updatenote-com v-if="dialogVisible" ref="tem" :noteList="crud" :noteType="tabs" @close="diaClose">
+      </updatenote-com>
     </el-dialog>
-    <el-dialog id="colorMng_Dlg" :visible.sync="inVisible" fullscreen width="70%" append-to-body :close-on-click-modal="false" :close-on-press-escape="false">
+    <el-dialog id="colorMng_Dlg" :visible.sync="inVisible" fullscreen width="70%" append-to-body
+      :close-on-click-modal="false" :close-on-press-escape="false">
       <inwhse-com v-if="inVisible" ref="inwhse" :form="form" @close="inVisible = false"></inwhse-com>
     </el-dialog>
   </div>
@@ -91,6 +117,7 @@ import {
   updateOutFinishedWhse,
   sendTask,
   sendTaskNoin,
+  sendTestTaskNoin,
   getTaskList,
   getStorageLog,
   updateStorageLog,
@@ -228,6 +255,12 @@ export default {
       taskChoose: {},
       idArr: [],
       inVisible: false,
+      testVisible: false,
+      testform: {
+        code: "",
+        data: "",
+        meg: ""
+      }
     };
   },
   watch: {},
@@ -248,7 +281,7 @@ export default {
       }
     };
   },
-  mounted() {},
+  mounted() { },
   methods: {
     query() {
       if (!this.form.storeLoadCode && !this.form.vatNo && !this.form.weaveJobCode) {
@@ -338,7 +371,7 @@ export default {
               rows: this.mainPage.pageSize,
               start: this.mainPage.currentPage,
               vatNo: "!^%" + (this.form.vatNo || ""),
-              palletCode: this.form.storeLoadCode , //"%" + (this.form.storeLoadCode || ""),
+              palletCode: this.form.storeLoadCode, //"%" + (this.form.storeLoadCode || ""),
               // clothState: 1,
               cardType: 1,
             })
@@ -500,8 +533,7 @@ export default {
                             }).then((res) => {
                               this.wLoading = false;
                               this.$tip.success(
-                                `载具${data.storageCode}${
-                                  data.orderType == 1 ? "入仓" : "出仓"
+                                `载具${data.storageCode}${data.orderType == 1 ? "入仓" : "出仓"
                                 }任务已完成!`
                               );
                               return;
@@ -509,8 +541,7 @@ export default {
                           } else {
                             this.wLoading = false;
                             this.$tip.success(
-                              `载具${data.storageCode}${
-                                data.orderType == 1 ? "入仓" : "出仓"
+                              `载具${data.storageCode}${data.orderType == 1 ? "入仓" : "出仓"
                               }任务已完成!`
                             );
                           }
@@ -541,10 +572,9 @@ export default {
                                         if (i == dtla.data.length - 1) {
                                           this.wLoading = false;
                                           this.$tip.success(
-                                            `载具${data.storageCode}${
-                                              data.orderType == 1
-                                                ? "入仓"
-                                                : "出仓"
+                                            `载具${data.storageCode}${data.orderType == 1
+                                              ? "入仓"
+                                              : "出仓"
                                             }任务已完成!`
                                           );
                                         }
@@ -554,8 +584,7 @@ export default {
                                 } else {
                                   this.wLoading = false;
                                   this.$tip.success(
-                                    `载具${data.storageCode}${
-                                      data.orderType == 1 ? "入仓" : "出仓"
+                                    `载具${data.storageCode}${data.orderType == 1 ? "入仓" : "出仓"
                                     }任务已完成!`
                                   );
                                 }
@@ -573,8 +602,7 @@ export default {
                 });
               } else {
                 this.$tip.success(
-                  `载具${data.storageCode}${
-                    data.type == 1 ? "入仓" : "出仓"
+                  `载具${data.storageCode}${data.type == 1 ? "入仓" : "出仓"
                   }任务已完成!`
                 );
                 this.wLoading = false;
@@ -595,8 +623,7 @@ export default {
     submit() {
       this.$tip
         .cofirm(
-          `是否确定提交选中的${
-            this.form.goodsType == 1 ? "胚布" : "成品布"
+          `是否确定提交选中的${this.form.goodsType == 1 ? "胚布" : "成品布"
           }, 生成${this.form.type == 1 ? "入" : "出"}库记录？`,
           this,
           {}
@@ -670,7 +697,7 @@ export default {
             });
           }
         })
-        .catch(() => {});
+        .catch(() => { });
     },
     async sendTask() {
       if (this.form.type == 1) {
@@ -683,14 +710,12 @@ export default {
         this.$tip.error("载具编号不能为空!");
         return;
       }
-      this.$tip
-        .cofirm(
-          `是否确定提交选中的${
-            this.form.goodsType == 1 ? "胚布" : "成品布"
-          }, 生成${this.form.type == 1 ? "入" : "出"}库记录？`,
-          this,
-          {}
-        )
+      this.$tip.cofirm(
+        `是否确定提交选中的${this.form.goodsType == 1 ? "胚布" : "成品布"
+        }, 生成${this.form.type == 1 ? "入" : "出"}库记录？`,
+        this,
+        {}
+      )
         .then(() => {
           this.wLoading = true;
           sendTaskNoin({
@@ -717,7 +742,47 @@ export default {
             this.queryTask();
           });
         })
-        .catch(() => {});
+        .catch(() => { });
+    },
+    async testTask() {
+      if (this.form.type == 1) {
+        this.inVisible = true;
+        await this.$nextTick();
+        this.$refs.inwhse.initData();
+        return;
+      }
+      if (!this.form.storeLoadCode) {
+        this.$tip.error("载具编号不能为空!");
+        return;
+      }
+      this.$tip.cofirm(
+        `是否确定提交选中的${this.form.goodsType == 1 ? "胚布" : "成品布"
+        }, 生成${this.form.type == 1 ? "入" : "出"}库记录？`,
+        this,
+        {}
+      )
+        .then(() => {
+          this.wLoading = true;
+          sendTestTaskNoin({
+            barCode: this.form.storeLoadCode,
+            createTime: this.$getNowTime("datetime"),
+            entrance: this.form.exit, // 入库口
+            isEmpty: this.form.storageState, // 是否为空
+            orderType: this.form.type, // 出库/入库
+            type: this.form.goodsType, // 物料类别
+            storageCode: this.form.storeLoadCode,
+
+          }).then((sendRes) => {
+            this.wLoading = false;
+            this.loading = false;
+            this.testform.data = sendRes.data.data;
+            this.testform.msg = sendRes.data.msg;
+            this.testform.code = sendRes.data.code;
+            this.testVisible = true;
+
+          });
+        })
+        .catch(() => { });
     },
     successAfter(outList) {
       if (this.form.goodsType == 1) {
@@ -819,7 +884,7 @@ export default {
           };
           let list = this.group(noteList, "proName");
           addInWhse(data).then((inwhse) => {
-            baseCodeSupply({ code: "whse_in" }).then((res) => {});
+            baseCodeSupply({ code: "whse_in" }).then((res) => { });
             const inwhseId = inwhse.data.data;
             baseCodeSupplyEx({ code: "pb_in_whse" }).then((pbIn) => {
               list.forEach((item, i) => {
@@ -843,7 +908,7 @@ export default {
                       weight: dtlb.clothWeight,
                       weightUnit: "KG",
                       whseCalicoinDtlaFk: dtlaId,
-                    }).then((dtlb) => {});
+                    }).then((dtlb) => { });
                     if (b == item.data.length - 1 && i == list.length - 1) {
                       this.queryTask();
                       this.$tip.success("入库成功!");
@@ -851,7 +916,7 @@ export default {
                   });
                 });
               });
-              baseCodeSupply({ code: "pb_in_whse" }).then((res) => {});
+              baseCodeSupply({ code: "pb_in_whse" }).then((res) => { });
             });
           });
         });
@@ -868,7 +933,7 @@ export default {
           };
           let list = this.group(noteList, "proName");
           addOutWhse(data).then((inwhse) => {
-            baseCodeSupply({ code: "whse_out" }).then((res) => {});
+            baseCodeSupply({ code: "whse_out" }).then((res) => { });
             const outwhseId = inwhse.data.data;
             baseCodeSupplyEx({ code: "pb_out_whse" }).then((pbIn) => {
               list.forEach((item, i) => {
@@ -890,7 +955,7 @@ export default {
                       weight: dtlb.clothWeight,
                       weightUnit: "KG",
                       whseMaterialDlaFk: dtlaId,
-                    }).then((dtlb) => {});
+                    }).then((dtlb) => { });
                     if (b == item.data.length - 1 && i == list.length - 1) {
                       this.queryTask();
                       this.$tip.success("出库成功!");
@@ -898,7 +963,7 @@ export default {
                   });
                 });
               });
-              baseCodeSupply({ code: "pb_out_whse" }).then((res) => {});
+              baseCodeSupply({ code: "pb_out_whse" }).then((res) => { });
             });
           });
         });
@@ -920,7 +985,7 @@ export default {
           };
           let list = this.group(noteList, "vatNo");
           addInFinishedWhse(inData).then((inwhse) => {
-            baseCodeSupply({ code: "whse_in" }).then((res) => {});
+            baseCodeSupply({ code: "whse_in" }).then((res) => { });
             const inwhseId = inwhse.data.data;
             baseCodeSupplyEx({ code: "cpb_in_whse" }).then((pbIn) => {
               list.forEach((item, i) => {
@@ -950,7 +1015,7 @@ export default {
                       weightUnit: dtlb.weightUnit,
                       productId: dtlb.cardId,
                       vatNo: dtlb.vatNo,
-                    }).then((dtlb) => {});
+                    }).then((dtlb) => { });
                     if (b == item.data.length - 1 && i == list.length - 1) {
                       this.$tip.success("任务提交成功!");
                       this.$nextTick(() => {
@@ -963,7 +1028,7 @@ export default {
                   });
                 });
               });
-              baseCodeSupply({ code: "cpb_in_whse" }).then((res) => {});
+              baseCodeSupply({ code: "cpb_in_whse" }).then((res) => { });
             });
           });
         });
@@ -1055,7 +1120,7 @@ export default {
                       woWeights: dtlb.stockQty,
                       woUnit: dtlb.weightUnit,
                       whseFinclothselloutDtlaFk: dtlaId,
-                    }).then((dtlb) => {});
+                    }).then((dtlb) => { });
                     if (b == item.data.length - 1 && i == list.length - 1) {
                       this.$tip.success("任务提交成功!");
                       this.$nextTick(() => {
@@ -1071,7 +1136,7 @@ export default {
                   });
                 });
               });
-              baseCodeSupply({ code: "cpb_out_whse" }).then((res) => {});
+              baseCodeSupply({ code: "cpb_out_whse" }).then((res) => { });
             });
           });
         });
@@ -1119,7 +1184,7 @@ export default {
     cellClick(val) {
       this.taskChoose = val;
     },
-    cellStyle({ row, column, rowIndex, columnIndex }) {},
+    cellStyle({ row, column, rowIndex, columnIndex }) { },
     summaryMethod({ columns, data }) {
       const sums = [];
       if (columns.length > 0 && this.form.type == 2) {

@@ -70,6 +70,13 @@ export function sendTaskNoin(data) {
   });
 }
 
+export function sendTestTaskNoin(data) {
+  return axios({
+    url: "/erp/sendWmsInsExtest",
+    method: "post",
+    data: data
+  });
+}
 // 新增任务记录
 export function addTask(data) {
   return axios({
