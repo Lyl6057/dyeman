@@ -53,20 +53,26 @@ export default {
         func(this.menuData);
         this.list = this.menuData;
         this.$nextTick(() => {
+          console.log(this.menuData)
           var path = "";
+
           const menuindex = this.menuData.findIndex(e => e.hide == false);
           if (menuindex != -1) {
-            const indexChildren = this.menuData[menuindex].children.findIndex(e => e.hide == false);
-            if (indexChildren != -1) {
-              path = this.menuData[menuindex].children[indexChildren].index;
-            } else {
+            if (this.menuData[menuindex].children != null) {
+              const indexChildren = this.menuData[menuindex].children.findIndex(e => e.hide == false);
+              if (indexChildren != -1) {
+                path = this.menuData[menuindex].children[indexChildren].index;
+              } else {
+                path = this.menuData[menuindex].index;
+              }
+            }else{
               path = this.menuData[menuindex].index;
             }
-          }else{
-            path="/404"
+          } else {
+            path = "/404"
           }
           setTimeout(() => {
-            this.$router.push({ path: path });
+            // this.$router.push({ path: path });
             this.loading = false;
           }, 200);
         });
