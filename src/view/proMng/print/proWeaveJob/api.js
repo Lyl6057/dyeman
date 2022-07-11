@@ -1,12 +1,41 @@
 /*
  * @Author: Lyl
  * @Date: 2021-02-01 14:06:25
- * @LastEditors: Lyl
- * @LastEditTime: 2022-06-17 13:29:38
+ * @LastEditors: Symbol_Yang
+ * @LastEditTime: 2022-07-11 09:40:25
  * @Description:
  */
 
 import axios from "axios";
+
+
+
+// 查询未生产的织造通知单
+export function fetchUnCreateWeavaJob(params){
+  return axios({
+    url: "/api/vGstPoColorpoQty/page",
+    method: "get",
+    params: params
+  });
+}
+
+// 批量新增织单明细
+export function batchSaveOrUpdateWeaveDtlData(data){
+  return axios({
+    url: "/api/proWeaveJobGstpodetail/batch/saveOrUpdate",
+    method: "post",
+    data: data,
+  })
+}
+
+// 获取织单明细
+export function fetchWeaveDtlDataByFk(params){
+  return axios({
+    url: "/api/proWeaveJobGstpodetail/list",
+    method: "get",
+    params: params,
+  })
+}
 
 
 // 查询设备信息

@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
- * @LastEditors: Lyl
- * @LastEditTime: 2022-06-30 07:41:14
+ * @LastEditors: Symbol_Yang
+ * @LastEditTime: 2022-07-11 11:56:54
  * @Description: 
 -->
 <template>
@@ -47,7 +47,9 @@
           <template slot="operatProcess">
             <el-button type="primary" @click="operatProcessClick">上机工艺</el-button>
           </template>
+
         </avue-form>
+        <weave-dtl ref="weaveDtlRef" v-model="form.contractAmount" :creator="form.creator" />
       </div>
     </view-container>
 
@@ -106,6 +108,7 @@
 <script>
 import choice from "@/components/proMng/index";
 import technology from "./technology"
+import WeaveDtl from "./weaveDtl.vue"
 import {
   mainCrud,
   dlgForm,
@@ -157,6 +160,7 @@ import {
 import { baseCodeSupplyEx, baseCodeSupply } from "@/api/index";
 import preview from "./preview";
 import { getBf } from "../clothFly/api";
+import v1 from "uuid/v1"
 export default {
   name: "",
   props: {
@@ -165,11 +169,14 @@ export default {
     copyC: Boolean,
     splitW: Boolean,
     audit: Boolean,
+    isExtract: Boolean,
+    extractRows: Array,
   },
   components: {
     preView: preview,
     choice: choice,
-    technology
+    technology,
+    "weave-dtl": WeaveDtl,
   },
   data() {
     return {
@@ -217,7 +224,9 @@ export default {
       yarnlist: [],
       canSave: true,
       gytDlg: false,
-      refresh: false
+      refresh: false,
+
+
     };
   },
   watch: {
@@ -292,6 +301,10 @@ export default {
             this.form.isWorkOut = 0;
             this.form.auditState = 0;
             this.form.creator = parent.userID;
+          }).then(res => {
+            if(this.isExtract){
+              this.analysisExtractData();
+            }
           });
         }
         setTimeout(() => {
@@ -302,6 +315,7 @@ export default {
         this.form = this.detail;
         this.getAllYarn();
         this.getMachineList();
+        this.getWeaveDtlData();
         // if (this.form.realEnd === "" || this.form.realEnd === null) {
         //   this.form.nowDate = this.form.planEnd.split(" ")[0];
         // } else {
@@ -322,6 +336,50 @@ export default {
           this.wLoading = false;
         }, 500);
       }
+    },
+    // 获取织单明细数据
+    getWeaveDtlData(){
+      this.$refs.weaveDtlRef.getWeaveDtlData(this.form.weaveJobId)
+    },
+    // 解析抽取到的数据
+    analysisExtractData(){
+
+      let poNoMap = {};
+      let contractAmount = 0;
+
+      let dtlCrudData = this.extractRows.map(item => {
+        poNoMap[item.poNo] = true;
+        let weavePoQty = item.poQtyKg - item.weavePoQty
+        contractAmount += weavePoQty;
+        return Object.assign({}, item, {
+          weavePoQty: weavePoQty,
+          $cellEdit: true,
+          proWeaveJobGstpodetailoid: v1(),
+        });
+      });
+
+      let poNos = Object.keys(poNoMap).join(",");
+      let itemData = this.extractRows[0];
+      Object.assign(this.form, {
+        salPoNo: poNos,
+        marketOrder: poNos,
+        custCode: itemData.custId,
+        custFabricCode: itemData.fabCode,
+        contractAmount: contractAmount,
+        fiberComp: itemData.fabConst,
+        fabricDesc: itemData.fabName,
+        gramWeightValue: itemData.fabWeight11,
+        gwMaxValue: itemData.fabWeight13,
+        gwMinValue: itemData.fabWeight14,
+        breadthValue: itemData.fabWidth11,
+        breadthUpper: itemData.fabWidth13,
+        breadthLower: itemData.fabWidth14,
+        horizonShrink: itemData.shrinkHorizontal,
+        verticalShrink: itemData.shrinkVertical,
+        creator: parent.userID || "ADMIN"
+      })
+      this.$refs.weaveDtlRef.crudData = dtlCrudData;
+      
     },
     technologyRefresh(val){
       this.form.pinColumn = val.pinColumn 
@@ -467,6 +525,7 @@ export default {
               update(this.form).then((res) => {
                 if (res.data.code == 200) {
                   this.$tip.success(this.$t("public.bccg"));
+                  this.saveWeavaDtlData();
                 } else {
                   this.$tip.error(this.$t("public.bcsb") + res.data.msg);
                 }
@@ -507,7 +566,9 @@ export default {
                     });
                   } else {
                     baseCodeSupply({ code: "proWeaveJob" }).then((res) => {});
+                    this.saveWeavaDtlData();
                     this.$tip.success(this.$t("public.bccg"));
+                    this.refresh = true;
                   }
                 } else {
                   this.$tip.error(this.$t("public.bcsb" + res.data.msg));
@@ -530,6 +591,10 @@ export default {
           return;
         }
       });
+    },
+    // 保存织单明细
+    saveWeavaDtlData(){
+      this.$refs.weaveDtlRef.saveWeaveDltData(this.form.weaveJobId);
     },
     query() {
       this.loading = true;

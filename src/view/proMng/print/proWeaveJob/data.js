@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
- * @LastEditors: Lyl
- * @LastEditTime: 2022-06-22 16:44:35
+ * @LastEditors: Symbol_Yang
+ * @LastEditTime: 2022-07-11 11:42:37
  * @Description:
  */
 
@@ -1125,8 +1125,13 @@ export function mainCrud(_this, audit) {
             }
           },
         ]
+      },
+      {
+        icon: "el-icon-s-help",
+        label: "织单明细",
+        prop: "weaveDtl",
       }
-    ]
+    ],
   };
 }
 
@@ -1808,4 +1813,202 @@ export function fabricCrud(_this) {
       },
     ]
   };
+}
+
+//  Symbol_Yang 2022.07.09
+// 待生产
+export function unCreateFormOp(_this){
+  return {
+    submitBtn: false,
+    emptyBtn: false,
+    labelWidth: 120,
+    column:[
+      {
+        prop: 'custId',
+        label: "客户",
+        type: "select",
+        dicData: cust,
+        span: 4
+      },
+      {
+        prop: 'poNo',
+        label: "生产通知单",
+        dicData: [],
+        span: 4
+      },
+      {
+        prop: 'exDate',
+        label: "货期",
+        type: "daterange",
+        valueFormat: "yyyy-MM-dd",
+        span: 6
+      }
+    ]
+  }
+}
+
+export function unCreateCrudOp(_this){
+  return {
+    menu: false,
+    addBtn: false,
+    border: true,
+    highlightCurrentRow: true,
+    height: "calc(100vh - 274px)",
+    refreshBtn: false,
+    columnBtn: false,
+    labelWidth: 130,
+    selection: true,
+    column:[
+      {
+        prop: 'poNo',
+        label: "生产通知单号",
+        width: 130,
+      },
+      {
+        prop: 'custName',
+        label: "客户",
+        width: 100,
+        overHidden: true
+      },
+      {
+        prop: 'exDate',
+        label: "货期",
+        width: 100,
+      },
+      {
+        prop: 'fabCode',
+        label: "布料编号",
+        width: 100,
+      },
+      {
+        prop: 'fabName',
+        label: "布料名称",
+        width: 200,
+        overHidden: true
+      },
+      {
+        prop: 'fabConst',
+        label: "布料成分",
+        width: 200,
+        overHidden: true
+      },
+      {
+        prop: 'colorChnName',
+        label: "颜色",
+        width: 100,
+        formatter(r,v){
+          return `${v} (${r.colorEngName})`
+        },
+        overHidden: true
+      },
+      {
+        prop: 'colorNo',
+        label: "本厂色号",
+        width: 100,
+      },
+      {
+        prop: 'colorDept',
+        label: "颜色深度",
+        width: 100,
+      },
+      {
+        prop: 'poQtyKg',
+        label: "数量(kg)",
+        width: 100,
+        align: "right"
+      },
+      {
+        prop: 'dyeClass',
+        label: "颜色类别",
+        width: 100,
+      },
+      {
+        prop: 'weavePoQty',
+        label: "已排织单数量(kg)",
+        width: 100,
+        align: "right"
+      },
+      {
+        prop: '货期',
+        label: "未排织单数量(kg)",
+        width: 100,
+        formatter(r,v){
+          return r.poQtyKg - r.weavePoQty
+        },
+        align: "right"
+      },
+      {
+        prop: 'fabWeight21',
+        label: "克重(GM2)",
+        width: 100,
+        align: "right"
+      },
+      {
+        prop: 'fabWidth21',
+        label: "副宽",
+        width: 70,
+      },
+      {
+        prop: 'shrinkHorizontal',
+        label: "横缩",
+        width: 70,
+      },
+      {
+        prop: 'shrinkVertical',
+        label: "直缩",
+        width: 70,
+      }
+    ]
+  }
+}
+
+// 织单明细
+export function weaveDtlCrudOp(_this){
+  return {
+    menu: false,
+    addBtn: false,
+    border: true,
+    highlightCurrentRow: true,
+    height: "calc(100vh - 515px)",
+    refreshBtn: false,
+    columnBtn: false,
+    labelWidth: 130,
+    page: false,
+    column: [
+      {
+        prop: "poNo",
+        label: "生产通知单号",
+      },
+      {
+        prop: "fabCode",
+        label: "布类代码",
+      },
+      {
+        prop: "fabName",
+        label: "布料名称",
+      },
+      {
+        prop: "fabConst",
+        label: "布类成份",
+      },
+      {
+        prop: "colorEngName",
+        label: "颜色中文名称",
+      },
+      {
+        prop: "colorChnName",
+        label: "颜色英文名称",
+      },
+      {
+        prop: "weavePoQty",
+        label: "排织数量(kg)",
+        cell: true,
+        align: 'right',
+        type: "number",
+        change(){
+          _this.reComputed()
+        }
+      }
+    ]
+  }
 }
