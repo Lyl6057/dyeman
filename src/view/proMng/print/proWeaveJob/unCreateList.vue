@@ -82,7 +82,8 @@ export default {
         getDataList(){
             let params =  {
                 rows: this.page.pageSize,
-                start: this.page.currentPage
+                start: this.page.currentPage,
+                dataSortRules: "exDate|desc,poNo|desc,fabCode,colorDept,colorChnName",
             }
             let props = ["custId","poNo"]
             props.forEach(key => {

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-12 08:34:31
+ * @LastEditTime: 2022-07-12 11:28:52
  * @Description:
  */
 
@@ -1847,6 +1847,13 @@ export function unCreateFormOp(_this){
   }
 }
 
+// 数字千分位转化
+function num2Thousadth(num,decimal){
+  let reg = /\B(?=(\d{3})+(?!\d))/g
+  return (+num || 0).toFixed(decimal).replace(reg,",")
+}
+
+
 export function unCreateCrudOp(_this){
   return {
     menu: false,
@@ -1905,40 +1912,49 @@ export function unCreateCrudOp(_this){
         prop: 'colorNo',
         label: "本厂色号",
         width: 100,
+        align: "center",
       },
       {
         prop: 'colorDept',
         label: "颜色深度",
         width: 100,
+        align: "center",
       },
       {
         prop: 'poQtyKg',
         label: "数量(kg)",
         width: 100,
-        align: "right"
+        align: "right",
+        formatter(r,v){
+          return num2Thousadth(v,1)
+        },
       },
       {
         prop: 'dyeClass',
-        label: "颜色类别",
-        width: 100,
+        label: "染色类别",
+        width: 100
       },
       {
         prop: 'weavePoQty',
         label: "已排织单数量(kg)",
         width: 100,
-        align: "right"
+        align: "right",
+        formatter(r,v){
+          return num2Thousadth(v,1)
+        },
       },
       {
-        prop: '货期',
+        prop: 'nuWeavePoQty',
         label: "未排织单数量(kg)",
         width: 100,
         formatter(r,v){
-          return r.poQtyKg - r.weavePoQty
+          let value = r.poQtyKg - r.weavePoQty
+          return num2Thousadth(value,1) 
         },
         align: "right"
       },
       {
-        prop: 'fabWeight21',
+        prop: 'fabWeight11',
         label: "克重(GM2)",
         width: 100,
         align: "right"
@@ -1947,6 +1963,7 @@ export function unCreateCrudOp(_this){
         prop: 'fabWidth21',
         label: "幅宽",
         width: 70,
+        align: "right"
       },
       {
         prop: 'shrinkHorizontal',
