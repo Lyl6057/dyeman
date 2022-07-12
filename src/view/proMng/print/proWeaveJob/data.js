@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-11 11:42:37
+ * @LastEditTime: 2022-07-12 08:34:31
  * @Description:
  */
 
@@ -1945,7 +1945,7 @@ export function unCreateCrudOp(_this){
       },
       {
         prop: 'fabWidth21',
-        label: "副宽",
+        label: "幅宽",
         width: 70,
       },
       {
@@ -1978,10 +1978,12 @@ export function weaveDtlCrudOp(_this){
       {
         prop: "poNo",
         label: "生产通知单号",
+        width: 120
       },
       {
         prop: "fabCode",
         label: "布类代码",
+        width: 120
       },
       {
         prop: "fabName",
@@ -1994,10 +1996,12 @@ export function weaveDtlCrudOp(_this){
       {
         prop: "colorEngName",
         label: "颜色中文名称",
+        width: 120
       },
       {
         prop: "colorChnName",
         label: "颜色英文名称",
+        width: 120
       },
       {
         prop: "weavePoQty",
@@ -2005,6 +2009,7 @@ export function weaveDtlCrudOp(_this){
         cell: true,
         align: 'right',
         type: "number",
+        width: 120,
         change(){
           _this.reComputed()
         }

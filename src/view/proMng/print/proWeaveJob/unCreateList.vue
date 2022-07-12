@@ -56,7 +56,7 @@ export default {
                 this.curSelKey = ""
             }else{
                 if(this.curSelKey != row.custId + row.fabCode){
-                    this.$refs.crudRef.toggleRowSelection(row, false);
+                    return this.$refs.crudRef.toggleRowSelection(row, false);
                 }
             }
             this.selectRows = rows;
