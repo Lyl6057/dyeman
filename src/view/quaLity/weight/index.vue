@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
- * @LastEditors: pmp
- * @LastEditTime: 2022-07-09 09:18:12
+ * @LastEditors: PMP
+ * @LastEditTime: 2022-07-011 12:00:23
  * @Description: 
 -->
 <template>
@@ -46,22 +46,46 @@
     </view-container>
     <el-dialog id="colorMng_Dlg" :visible.sync="dialogVisible" width="70%" append-to-body :close-on-click-modal="false"
       :close-on-press-escape="false">
-      <view-container title="修改">
-        <div class="btnList">
-          <el-button type="success" @click="save" :disabled="form.clothState == 3">{{ this.$t("public.save") }}
-          </el-button>
-          <el-button type="primary" @click="weighing">称重</el-button>
-          <el-button type="warning" @click="dialogVisible = false">{{
-              this.$t("public.close")
-          }}</el-button>
-          <div style="float:right; margin-right: 17px;">
-            电子秤读取： <el-switch v-model="useWeight" active-text="启用" inactive-text="停用"></el-switch>
+      <el-tabs type="border-card" v-model="tabs">
+        <el-tab-pane label="修改" name="update">
+          <template #label>
+            <el-tooltip class="item" effect="dark" content="Chỉnh sửa" placement="bottom">
+              <span>修改</span>
+            </el-tooltip>
+          </template>
+          <div class="btnList">
+            <el-button type="success" @click="save" :disabled="detail.clothState == 3">{{ this.$t("public.save") }}
+            </el-button>
+            <el-button type="primary" @click="weighing">称重</el-button>
+            <el-button type="warning" @click="dialogVisible = false">{{ this.$t("public.close") }}</el-button>
+            <div style="float: right;margin-right: 17px;">
+              电子秤读取： <el-switch v-model="useWeight" active-text="启用" inactive-text="停用"></el-switch>
+            </div>
           </div>
-        </div>
-        <div class="formBox">
-          <avue-form ref="form" :option="dlgOp" v-model="detail"></avue-form>
-        </div>
-      </view-container>
+          <div class="formBox">
+            <avue-form ref="form" :option="dlgOp" v-model="detail"></avue-form>
+          </div>
+        </el-tab-pane>
+        <el-tab-pane label="历史记录" name="history">
+          <template #label>
+            <el-tooltip class="item" effect="dark" content="Lịch sử ghi chép" placement="bottom">
+              <span>历史记录</span>
+            </el-tooltip>
+          </template>
+          <div class="btnList">
+            <el-tooltip class="item" effect="dark" content="Phục hồi dữ liệu" placement="bottom">
+              <el-button type="primary" @click="recover">恢复</el-button>
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" content="Thoát" placement="bottom">
+              <el-button type="warning" @click="dialogVisible = false">{{ this.$t("public.close") }}</el-button>
+            </el-tooltip>
+          </div>
+          <div class="formBox">
+            <avue-crud ref="dlgCrud" :option="historyOp" :data="history" @current-row-change="historyCellClick"
+              v-loading="loading" @selection-change="selectionChange" :page.sync="historyPage"  />
+          </div>
+        </el-tab-pane>
+      </el-tabs>
     </el-dialog>
     <el-dialog id="colorMng_Dlg" :visible.sync="pdfDlg" fullscreen width="100%" append-to-body
       :close-on-click-modal="false" :close-on-press-escape="false">
@@ -80,10 +104,11 @@
   </div>
 </template>
 <script>
-import { mainForm, mainCrud, dlgForm } from "./data";
+import { mainForm, mainCrud, dlgForm, dlgCrud } from "./data";
 import { webSocket } from "@/config/index.js";
-import { get, add, update, del, getJob, updateNote, getNowWeight } from "./api";
+import { get, add, update, del, getJob, updateNote, getNowWeight, recover, getHistory } from "./api";
 import qs from "qs";
+import { error } from "../../../config/seal";
 export default {
   name: "",
   components: {},
@@ -97,11 +122,19 @@ export default {
       },
       dlgOp: dlgForm(this),
       crudOp: mainCrud(this),
+      historyOp: dlgCrud(this),
+      history: [],
       crud: [],
       page: {
         pageSize: 50,
         pageSizes: [20, 50, 100, 200, 500],
         currentPage: 1,
+        total: 0,
+      },
+      historyPage: {
+        pageSize: 20,
+        pageSizes: [20, 50, 100, 200, 500],
+         currentPage: 1,
         total: 0,
       },
       loading: false,
@@ -122,7 +155,10 @@ export default {
       checkLabel: "",
       sort: {},
       weightSum: 0,
-      useWeight: false
+      useWeight: false,
+      tabs: "update",
+      old_weight: "",
+      hisId:''
     };
   },
   watch: {},
@@ -214,19 +250,54 @@ export default {
           this.wLoading = false;
         });
     },
+    recover() {
+      this.$tip.cofirm("是否确定恢复到选中的数据? Bạn có muốn phục hồi dữ liệu đã chọn").then(() => {
+        this.loading = true;
+        recover({
+          hisId:this.hisId
+        }).then((res) => {
+          if (res.data.code == 200) {
+            setTimeout(() => {
+              this.dialogVisible = false;
+              this.loading = false;
+              this.query();
+              this.$tip.success(this.$t("public.bccg"));
+            }, 200);
+          } else {
+            this.loading = false;
+            this.wLoading = false;
+            this.$tip.error(res.data.msg);
+            console.error(res.data.msg);
+          }
+        });
+      });
+    },
     handleRowDBLClick(val) {
       this.detail = val;
+      this.old_weight = val.clothWeight;
       this.checkLabel = val.storeSiteCode;
       this.dialogVisible = true;
-      // this.print();
+      getHistory({
+        clothNoteFk: this.detail.noteId,
+      }).then((res) => {
+        this.history = res.data.sort((a, b) => {
+          return a.clothCheckTime > b.clothCheckTime ? -1 : 1;
+        });
+      });
+    },
+    historyCellClick(val){
+      this.hisId=val.hisId;
     },
     setCz() {
       this.spowerClient = this.$store.state.spowerClient;
       let _this = this;
       _this.spowerClient.onmessage = function (e) {
-        let weight = e.data.indexOf(":") != -1 ? Number(e.data.replace(/[^\d.]/g, "")) : e.data;
+        let _weight = Number(e.data.split("weight=")[1].split(":")[0])
+        // let weight = e.data.indexOf(":") != -1 ? Number(e.data.replace(/[^\d.]/g, "")) : e.data;
         if (_this.useWeight) {
-          _this.detail.clothWeight = weight;
+          _this.detail.clothWeight = (_weight > 0) ? _weight : 0;
+        } else {
+          _this.detail.clothWeight = _this.old_weight
         }
         _this.detail.clothCheckTime = _this.$getNowTime("datetime");
       };
@@ -421,10 +492,8 @@ export default {
     });
   },
   mounted() {
-    // this.query();
     this.form.clothState = 0;
     let _this = this;
-
     document.addEventListener("keydown", function (e) {
       if (e.ctrlKey) {
         _this.ctrKey = true;

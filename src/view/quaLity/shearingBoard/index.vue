@@ -9,7 +9,7 @@
 
 <template>
   <div class="abnormalDaily">
-    <view-container title="QA剪办记录">
+    <view-container title="剪办记录">
       <el-row class="btnList">
         <el-button type="success" :disabled="chooseData.upFlag" @click="update"> {{this.$t("public.update")}} </el-button>
         <el-button type="primary" @click="add"> {{this.$t("public.add")}} </el-button>
@@ -67,6 +67,7 @@
 </template>
 
 <script>
+import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
 import temDlg from "./tem.vue";
 import {
   fetchProFinalProductCardCutByPage,

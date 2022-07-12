@@ -550,3 +550,197 @@ export function dlgForm(_this) {
     ]
   };
 }
+
+
+export function dlgCrud(_this) {
+  return {
+    menu: false,
+    addBtn: false,
+    cancelBtn: false,
+    editBtn: false,
+    delBtn: false,
+    menuWidth: 80,
+    border: true,
+    index: true,
+    highlightCurrentRow: true,
+    height: "calc(100vh - 280px)",
+    refreshBtn: false,
+    columnBtn: false,
+    page: false,
+    labelWidth: 100,
+    selection: false,
+    showSummary: false,
+    // sumColumnList: [],
+    //hisId 
+    //weightUnit machineCode  gramWeight loomNo workNo breadth madeDate isPrinted  printedTime breadthValue breadthUnit  outworkFlag  createTime creator  
+
+    column: [
+      {
+        label: "机台编号(Mã máy)",
+        prop: "machineCode",
+        width: 90,
+        span: 6,
+        placeholder: " ",
+        disabled: true,
+        overHidden: true,
+        sortable: false
+      },
+
+      // {
+      //   label: "机号(Số máy)",
+      //   prop: "loomNo",
+      //   width: 180,
+      //   span: 6,
+      //   placeholder: " ",
+      //   disabled: true,
+      //   overHidden: true,
+      //   sortable: true
+      // },
+      {
+        label: "值机工号(Mã NV)",
+        prop: "workNo",
+        width: 90,
+        span: 6,
+        placeholder: " ",
+        disabled: true,
+        overHidden: true,
+        sortable: false
+      },
+      {
+        label: "重量(Trọng lượng)",
+        prop: "clothWeight",
+        width: 100,
+        span: 6,
+        placeholder: " ",
+        disabled: true,
+        overHidden: true,
+        sortable: true
+      },
+      {
+        label: "重量单位(Đơn vị)",
+        prop: "weightUnit",
+        width: 90,
+        span: 6,
+        placeholder: " ",
+        disabled: true,
+        overHidden: true,
+        sortable: false
+      },
+      {
+        label: "克重(Gam)",
+        prop: "gramWeight",
+        width: 100,
+        span: 6,
+        placeholder: " ",
+        disabled: true,
+        overHidden: true,
+        sortable: false
+      },
+      {
+        label: "幅宽数值(Chiều rộng)",
+        prop: "breadthValue",
+        width: 140,
+        span: 6,
+        placeholder: " ",
+        disabled: true,
+        overHidden: true,
+        sortable: true
+      },
+      {
+        label: "幅宽门幅单位(Đơn vị)",
+        prop: "breadthUnit",
+        width: 120,
+        span: 6,
+        placeholder: " ",
+        disabled: true,
+        overHidden: true,
+        sortable: false
+      },
+      {
+        label: "制票日期",
+        prop: "madeDate",
+        width: 180,
+        span: 6,
+        placeholder: " ",
+        disabled: true,
+        overHidden: true,
+        sortable: true
+      },
+      {
+        label: "已打印(Đã in)",
+        prop: "isPrinted",
+        width: 80,
+        span: 6,
+        placeholder: " ",
+        disabled: true,
+        overHidden: true,
+        sortable: false,
+        type: 'select',
+        dicData: [
+          {
+            label: '是',
+            value: true
+          },
+          {
+            label: '否',
+            value: false
+          }
+        ]
+      },
+      {
+        label: "打印时间(TG in)",
+        prop: "printedTime",
+        width: 180,
+        span: 6,
+        placeholder: " ",
+        disabled: true,
+        overHidden: true,
+        sortable: true
+      },
+      {
+        label: "外发标志",
+        prop: "outworkFlag",
+        width: 90,
+        span: 6,
+        placeholder: " ",
+        disabled: true,
+        overHidden: true,
+        sortable: false,
+        type: 'select',
+        dicData: [
+          {
+            label: '是',
+            value: true
+          },
+          {
+            label: '否',
+            value: false
+          }
+        ]
+      },
+      {
+        label: "创建时间(Thời gian tạo)",
+        prop: "createTime",
+        width: 220,
+        span: 6,
+        placeholder: " ",
+        disabled: true,
+        overHidden: true,
+        sortable: true
+      }
+      ,
+      {
+        label: "创建人(Người tạo)",
+        prop: "creator",
+        width: 180,
+        span: 6,
+        placeholder: " ",
+        disabled: true,
+        overHidden: true,
+        sortable: true
+      }
+
+
+    ]
+  };
+}

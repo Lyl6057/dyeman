@@ -35,7 +35,7 @@ export function getNowWeight(weaveJobCode) {
 }
 
 // 獲取打印記錄
-export function get(params,r_clothCheckTime_r) {
+export function get(params, r_clothCheckTime_r) {
   return axios({
     url: '/api/proClothNote/pages?r_clothCheckTime_r=' + r_clothCheckTime_r,
     method: 'get',
@@ -75,6 +75,22 @@ export function printBf(id) {
   return axios({
     url: '/api/proClothNote/printing?id=' + id,
     method: 'get',
+  })
+}
+//历史
+export function getHistory(data) {
+  return axios({
+    url: '/api/proClothNoteHis',
+    method: 'get',
+    params: data
+  })
+}
+//回复
+export function recover(data) {
+  return axios({
+    url: '/api/proClothNoteHis/rcv',
+    method: 'put',
+    params:data
   })
 }
 

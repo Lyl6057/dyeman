@@ -69,3 +69,10 @@ export function createRepairPdf(id){
     method: "get"
   })
 }
+
+export function getallDpt(){
+  return axios({
+    url:"/api/proDptworkProcess",
+    method: "get"
+  })
+}

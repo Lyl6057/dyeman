@@ -54,7 +54,15 @@ export function mainForm(_this) {
           label: 'orgname',
           value: 'orgname'
         },
-        dicUrl:baseUrl + '/ucmlOrganize?orgname=%25' + '{{key}}'
+        dicData: getDicT("proDptworkProcess", "dptName", "dptCode", {}, "sn"),
+        rules: [
+          {
+            required: true,
+            message: "請选择部门",
+            trigger: "blur"
+          }
+        ],
+       // dicUrl:baseUrl + '/ucmlOrganize?orgname=%25' + '{{key}}'
       },
       {
         label: "剪办日期",
@@ -105,26 +113,45 @@ export function crateDataForm(_this) {
       {
         label: "剪办部门",
         prop: "cutDept",
-        width: 150,
+        tipPlacement: "right",
         span: 6,
+        tip: "Bộ phận cắt",
         placeholder: " ",
-        overHidden: true,
         type: "select",
-        filterable: true,
-        remote: true,
+        dicData: getDicT("proDptworkProcess", "dptName", "dptCode", {}, "sn"),
         rules: [
           {
             required: true,
-            message: "",
+            message: "請选择部门",
             trigger: "blur"
           }
         ],
-        props:{
-          label: 'orgname',
-          value: 'orgname'
-        },
-        dicUrl:baseUrl + '/ucmlOrganize?orgname=%25' + '{{key}}'
+      //  cascader: ["stepId"]
       },
+
+      // {
+      //   label: "剪办部门",
+      //   prop: "cutDept",
+      //   width: 150,
+      //   span: 6,
+      //   placeholder: " ",
+      //   overHidden: true,
+      //   type: "select",
+      //   filterable: true,
+      //   remote: true,
+      //   rules: [
+      //     {
+      //       required: true,
+      //       message: "",
+      //       trigger: "blur"
+      //     }
+      //   ],
+      //   props:{
+      //     label: 'orgname',
+      //     value: 'orgname'
+      //   },
+      //   dicUrl:baseUrl + '/ucmlOrganize?orgname=%25' + '{{key}}'
+      // },
       {
         label: "责任部门",
         prop: "respDept",

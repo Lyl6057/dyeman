@@ -10,16 +10,20 @@
   <div class="qcChcekPlanTem">
     <view-container title="QA剪办记录维护" element-loading-text="正在拼命加载中..." v-loading="loading">
       <div class="btnList">
-        <el-button type="success" @click="handleSave" :disabled="qcShearingBoardData.upFlag">{{this.$t("public.save")}}</el-button>
+        <el-button type="success" @click="handleSave" :disabled="qcShearingBoardData.upFlag">{{ this.$t("public.save")
+        }}
+        </el-button>
         <el-popconfirm title="是否确定更新数据?" @onConfirm="handleUpdate" style="margin: 0 10px">
-          <el-button slot="reference" type="primary" :disabled="qcShearingBoardData.upFlag || !qcShearingBoardData.cutId">更新码卡</el-button>
+          <el-button slot="reference" type="primary"
+            :disabled="qcShearingBoardData.upFlag || !qcShearingBoardData.cutId">更新码卡</el-button>
         </el-popconfirm>
         <el-popconfirm title="是否确定打印?" @onConfirm="handlePrint" style="margin-right: 10px">
           <el-button slot="reference" type="primary" :disabled="!qcShearingBoardData.upFlag">打印</el-button>
         </el-popconfirm>
-        <el-button type="warning" @click="handleClose">{{this.$t("public.close")}}</el-button>
+        <el-button type="warning" @click="handleClose">{{ this.$t("public.close") }}</el-button>
         <div style="float: right; margin-right: 10px">
-          打印张数：<el-input type="number" v-model="printCount" max="5" min="1" style="width: 80px;margin-right: 15px"></el-input>
+          打印张数：<el-input type="number" v-model="printCount" max="5" min="1" style="width: 80px;margin-right: 15px">
+          </el-input>
           电子秤： <el-switch v-model="turnOnGetWeight" style="margin-right: 10px" active-text="开启" inactive-text="关闭">
           </el-switch>
           类型： <el-switch v-model="isBoard" active-text="剪办" inactive-text="剪疵">
@@ -29,8 +33,11 @@
       <div class="formBox">
         <avue-form ref="qcShearingBoardForm" :option="qcShearingBoardFormOp" v-model="qcShearingBoardData">
           <template slot-scope="scope" slot="proCardFk">
-            <el-select v-model="qcShearingBoardData.proCardFk" filterable remote reserve-keyword clearable default-first-option placeholder="请输入成品编号" :remote-method="remoteMethod" :loading="vatLoading" @change="handleVatnoChange">
-              <el-option v-for="item in options" :key="item.cardId" :label="item.productNo + '  (' + item.vatNo + ')'" :value="item.cardId">
+            <el-select v-model="qcShearingBoardData.proCardFk" filterable remote reserve-keyword clearable
+              default-first-option placeholder="请输入成品编号" :remote-method="remoteMethod" :loading="vatLoading"
+              @change="handleVatnoChange">
+              <el-option v-for="item in options" :key="item.cardId" :label="item.productNo + '  (' + item.vatNo + ')'"
+                :value="item.cardId">
               </el-option>
             </el-select>
           </template>
@@ -48,6 +55,7 @@ import {
   updateProFinalProductCardCut,
   getFinishedNoteByPage,
   updateFinishedNoteData,
+  getallDpt
 } from "./api.js";
 import { crateDataForm } from "./data.js";
 export default {
@@ -90,6 +98,7 @@ export default {
   },
   mounted() {
     this.remoteMethod("");
+
   },
   methods: {
     remoteMethod(val) {
@@ -159,8 +168,20 @@ export default {
         return this.initData(cutId);
       }
       if (!this.cutDept) {
-        await getLoginOrg({ account: parent.userID }).then((res) => {
-          this.cutDept = res.data.orgname;
+        let result = await getallDpt();
+        await getLoginOrg({ account: parent.userID }).then((ress) => {
+          if (ress.data.orgno == null) return;
+          if (result.data.length > 0) {
+            result.data.map((e) => {
+              let children = e.orgNo.split(',');
+              if (children.length > 0) {
+                let index = children.findIndex(e => e == ress.data.orgno);
+                if (index != -1) {
+                  this.cutDept = e.dptCode;
+                }
+              }
+            })
+          }
         });
       }
       // 初始化新增数据
@@ -261,32 +282,50 @@ export default {
             ).then((res) => {
               return res.data.total;
             });
-            if (dayRecords) {
-              this.$tip.warning(
-                "成品编号【 " +
-                  this.qcShearingBoardData.productNo +
-                  " 】今日已剪过办，请勿重复新增!"
-              );
-              this.loading = false;
-              done();
-              this.$emit("close", this.hasRefresh);
-              return;
+
+            if (dayRecords > 0) {
+              this.$tip.cofirm("成品编号【 " +
+                this.qcShearingBoardData.productNo +
+                " 】今日已剪过办，请勿重复新增!  Hôm nay đã cắt qua mã này 【 " + this.qcShearingBoardData.productNo + " 】. Bạn có muốn cắt thêm lần nữa không?"
+              ).then(async () => {
+                this.qcShearingBoardData.saveTime = this.$getNowTime("datetime");
+                cutId = await addProFinalProductCardCut(
+                  this.qcShearingBoardData
+                ).then((res) => {
+                  return res.data.data;
+                });
+                this.qcShearingBoardData.cutId = cutId;
+                this.hasRefresh = true;
+                await this.initData(cutId);
+                this.$tip.success("保存成功!");
+                setTimeout(() => {
+                  this.loading = false;
+                  done();
+                }, 200);
+              }).catch(() => {
+                this.loading = false;
+                done();
+                this.$emit("close", this.hasRefresh);
+              });
+            } else {
+              this.qcShearingBoardData.saveTime = this.$getNowTime("datetime");
+              cutId = await addProFinalProductCardCut(
+                this.qcShearingBoardData
+              ).then((res) => {
+                return res.data.data;
+              });
+              this.qcShearingBoardData.cutId = cutId;
+              this.hasRefresh = true;
+              await this.initData(cutId);
+              this.$tip.success("保存成功!");
+              setTimeout(() => {
+                this.loading = false;
+                done();
+              }, 200);
             }
-            this.qcShearingBoardData.saveTime = this.$getNowTime("datetime");
-            cutId = await addProFinalProductCardCut(
-              this.qcShearingBoardData
-            ).then((res) => {
-              return res.data.data;
-            });
-            this.qcShearingBoardData.cutId = cutId;
           }
-          this.hasRefresh = true;
-          await this.initData(cutId);
-          this.$tip.success("保存成功!");
-          setTimeout(() => {
-            this.loading = false;
-            done();
-          }, 200);
+
+
         } catch (err) {
           done();
           this.loading = false;
