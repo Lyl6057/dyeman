@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-13 15:08:23
+ * @LastEditTime: 2022-07-13 15:44:53
  * @Description:
  */
 
@@ -2018,7 +2018,8 @@ export function weaveDtlCrudOp(_this){
       {
         prop: "colorEngName",
         label: "颜色英文名称",
-        width: 150
+        width: 150,
+        overHidden: true
       },
       {
         prop: "weavePoQty",
