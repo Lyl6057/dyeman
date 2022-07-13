@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-13 10:19:26
+ * @LastEditTime: 2022-07-13 15:08:23
  * @Description:
  */
 
@@ -2011,14 +2011,14 @@ export function weaveDtlCrudOp(_this){
         label: "布类成份",
       },
       {
-        prop: "colorEngName",
+        prop: "colorChnName",
         label: "颜色中文名称",
         width: 120
       },
       {
-        prop: "colorChnName",
+        prop: "colorEngName",
         label: "颜色英文名称",
-        width: 120
+        width: 150
       },
       {
         prop: "weavePoQty",

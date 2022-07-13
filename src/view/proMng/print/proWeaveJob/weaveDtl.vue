@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-07-11 08:22:07
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-11 15:30:38
+ * @LastEditTime: 2022-07-13 15:21:26
 -->
 <template>
     <div id="weave-dlt-container" >
@@ -80,7 +80,7 @@ export default {
 </script>
 <style lang="stylus">
     #weave-dlt-container{
-        .el-input-number .el-input__inner{
+        .el-input-number .el-input .el-input__inner{
             text-align right !important;
         }
     }
