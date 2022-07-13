@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
- * @LastEditors: Lyl
- * @LastEditTime: 2022-06-21 11:02:34
+ * @LastEditors: Symbol_Yang
+ * @LastEditTime: 2022-07-13 15:00:18
  * @Description:
  */
 
@@ -1376,7 +1376,7 @@ export function techargueCrud(_this) {
       {
         label: "#",
         prop: "sn",
-        width: 80,
+        width: 60,
         cell: true,
         align: "center",
         display: false
@@ -1384,7 +1384,7 @@ export function techargueCrud(_this) {
       {
         label: "工艺代碼",
         prop: "proBleadyeTechCodeFk",
-        width: 120,
+        width: 90 ,
         cell: false,
         span: 6,
         props: {
@@ -1397,7 +1397,7 @@ export function techargueCrud(_this) {
       {
         label: "工艺名稱",
         prop: "bleadyeName",
-        width: 180,
+        width: 120,
         cell: false,
         overHidden:true,
         span: 6,
@@ -1420,9 +1420,10 @@ export function techargueCrud(_this) {
       {
         label: "浴比",
         prop: "liquorRatio",
-        width: 120,
+        width: 60,
         cell: true,
         type: "number",
+        align: "right",
         span: 6,
         change: val => {
           if (!val.value) {
@@ -1446,10 +1447,14 @@ export function techargueCrud(_this) {
       {
         label: "总水量",
         prop: "totalWater",
-        width: 120,
+        width: 80,
         cell: true,
         span: 6,
         type: "number",
+        align: "right",
+        formatter(r,v){
+          return v && Number(v).toString().replace(/\B(?=(\d{3})+(?!\d))/g,",");
+        },
         placeholder: " ",
         change: val => {
           if (!val.value) {
@@ -1515,10 +1520,14 @@ export function techargueCrud(_this) {
       {
         label: "布含水量(%)",
         prop: "wetClothWater",
-        width: 120,
+        width: 110,
         cell: true,
         span: 6,
         type: "number",
+        align: "right",
+        formatter(r,v){
+          return v && Number(v).toString().replace(/\B(?=(\d{3})+(?!\d))/g,",");
+        },
         placeholder: " ",
         change: val => {
           if (!val.value) {
@@ -1544,7 +1553,6 @@ export function techargueCrud(_this) {
           }
         }
       },
-
       {
         label: "副缸外加水量",
         prop: "shotgunWater",
@@ -1552,6 +1560,10 @@ export function techargueCrud(_this) {
         cell: true,
         type: "number",
         span: 6,
+        align: "right",
+        formatter(r,v){
+          return v && Number(v).toString().replace(/\B(?=(\d{3})+(?!\d))/g,",");
+        },
         placeholder: " ",
         change: val => {
           // if (!val.value) {
@@ -1582,10 +1594,14 @@ export function techargueCrud(_this) {
       {
         label: "停机水量",
         prop: "haltWater",
-        width: 120,
+        width: 85,
         cell: true,
         type: "number",
         span: 6,
+        align: "right",
+        formatter(r,v){
+          return v && Number(v).toString().replace(/\B(?=(\d{3})+(?!\d))/g,",");
+        },
         placeholder: " ",
         change: val => {
           if (!val.value || val.value < 0) {
@@ -1644,7 +1660,7 @@ export function codeItemCrud(_this) {
       {
         label: "物料批次",
         prop: "mateBatchNo",
-        width: 120,
+        width: 100,
         cell: true,
         span: 6,
         slot: true,
@@ -1656,6 +1672,7 @@ export function codeItemCrud(_this) {
         width: 90,
         cell: true,
         type: "number",
+        align: 'center',
         span: 6,
         slot: true,
         placeholder: " ",
@@ -1721,6 +1738,7 @@ export function codeItemCrud(_this) {
         // dicData: matUnit,
         placeholder: " ",
         type: "select",
+        align: "center",
         dicData: [
           {
             label: "%",
@@ -1750,10 +1768,11 @@ export function codeItemCrud(_this) {
       {
         label: "單位",
         prop: "formulaUnit",
-        width: 90,
+        width: 80,
         cell: true,
         slot: true,
         span: 6,
+        align: "center",
         type: "select",
         dicData: [
           {
@@ -1783,6 +1802,7 @@ export function codeItemCrud(_this) {
         cell: false,
         span: 6,
         placeholder: " ",
+        align: "center",
         // slot: true,
         type: "select",
         dicData: [
@@ -1803,7 +1823,7 @@ export function codeItemCrud(_this) {
       {
         label: "溫度",
         prop: "runTemp",
-        width: 90,
+        width: 80,
         cell: true,
         type: "number",
         span: 6,
@@ -1813,7 +1833,7 @@ export function codeItemCrud(_this) {
       {
         label: "時間(分鐘)",
         prop: "runTime",
-        width: 120,
+        width: 100,
         cell: true,
         type: "number",
         span: 6,
@@ -1823,7 +1843,7 @@ export function codeItemCrud(_this) {
       {
         label: "開稀比例",
         prop: "dilutionRate",
-        width: 120,
+        width: 90,
         cell: true,
         type: "number",
         span: 6,
@@ -1834,7 +1854,7 @@ export function codeItemCrud(_this) {
         label: "輸送數量",
         prop: "deliveryQuantity",
         width: 120,
-        cell: true,
+        cell: 80,
         type: "number",
         span: 6,
         slot: true,

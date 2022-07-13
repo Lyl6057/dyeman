@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
- * @LastEditors: Lyl
- * @LastEditTime: 2022-07-02 10:39:06
+ * @LastEditors: Symbol_Yang
+ * @LastEditTime: 2022-07-13 15:05:27
  * @Description: 
 -->
 <template>
@@ -100,7 +100,7 @@
               <!-- <span> </span> -->
             </div>
             <div class="crudBox">
-              <avue-crud ref="crud" :option="crudOp" :data="crud" :page.sync="page" v-loading="loading" @on-load="query" @row-dblclick="handleRowDBLClick" @current-row-change="cellClick" @selection-change="selectionChange">
+              <avue-crud ref="crud" :option="crudOp" :data="crud" :page.sync="page" v-loading="loading" @on-load="query" @row-dblclick="handleRowDBLClick" @row-click="handleRowclick" @current-row-change="cellClick" @selection-change="selectionChange">
                 <template slot="bleachSet" slot-scope="scope">
                   <!-- {{ scope.row.dataStyle }} -->
                   <div v-if="scope.row.dataStyle === 'string'">
@@ -233,19 +233,19 @@
                   <input v-model="scope.row.mateBatchNo" class="scope-input" @click="selectValue($event)"></input>
                 </template>
                 <template slot="formulaAmount" slot-scope="scope">
-                  <input v-model="scope.row.formulaAmount" class="scope-input" type="number" @click="selectValue($event)" @change="changeAmount"></input>
+                  <input v-model="scope.row.formulaAmount" class="scope-input input-align_right" type="number" @click="selectValue($event)" @change="changeAmount"></input>
                 </template>
                 <template slot="useAmount" slot-scope="scope">
-                  <input v-model="scope.row.useAmount" class="scope-input" :max="10" type="number" @click="selectValue($event)"></input>
+                  <input v-model="scope.row.useAmount" class="scope-input input-align_right" :max="10" type="number" @click="selectValue($event)"></input>
                 </template>
                 <template slot="runTemp" slot-scope="scope">
-                  <input v-model="scope.row.runTemp" class="scope-input" type="number" @click="selectValue($event)"></input>
+                  <input v-model="scope.row.runTemp" class="scope-input input-align_right" type="number" @click="selectValue($event)"></input>
                 </template>
                 <template slot="runTime" slot-scope="scope">
-                  <input v-model="scope.row.runTime" class="scope-input" type="number" @click="selectValue($event)"></input>
+                  <input v-model="scope.row.runTime" class="scope-input input-align_right" type="number" @click="selectValue($event)"></input>
                 </template>
                 <template slot="dilutionRate" slot-scope="scope">
-                  <input v-model="scope.row.dilutionRate" class="scope-input" type="number" @click="selectValue($event)"></input>
+                  <input v-model="scope.row.dilutionRate" class="scope-input input-align_right" type="number" @click="selectValue($event)"></input>
                 </template>
                 <template slot="deliveryQuantity" slot-scope="scope">
                   <input v-model="scope.row.deliveryQuantity" class="scope-input" type="number" @click="selectValue($event)"></input>
@@ -1305,10 +1305,12 @@ export default {
                 item[key] = undefined;
               }
             }
-            item.$cellEdit = true;
             item.index = i + 1;
             if (this.tabs === "生產工藝") {
               item.bleadyeName = item.proBleadyeTechCodeFk;
+              this.$set(item, "$cellEdit", false)
+            }else{
+              item.$cellEdit = true;
             }
           });
           if (this.tabs === "生產工藝") {
@@ -1369,6 +1371,23 @@ export default {
           return;
         }
       }
+      // --- Symbol_Yang + 2022.07.13 start
+      // 检查工艺明细
+      if(this.tabs == "生產工藝"){
+        let validRes = this.crud.every(item => {
+          return item.list.every(cItem => {
+            if(cItem.bleadyeType != "run" && !cItem.mateCode){
+              return false;
+            }
+            return true
+          })
+        });
+        if(!validRes){
+          return this.$tip.error("明细中，工艺类型为增加助剂或增加染料时，物料编号不能为空");
+        } 
+      }
+
+      // --- end
       this.dlgLoading = true;
       let addDtla = (item, i) => {
         return new Promise((resolve, reject) => {
@@ -1639,6 +1658,16 @@ export default {
       this.choiceTle = "选择染整工单";
       this.choiceP = true;
     },
+    // 单击列表数据
+    handleRowclick(row){
+      if(this.tabs == "生產工藝"){
+        console.log("enter row click")
+        this.crud.forEach(item => {
+          item.$cellEdit = false;
+        })
+        row.$cellEdit = true;
+      }
+    },
     handleRowDBLClick(val) {
       this.chooseData = val;
       this.check();
@@ -1742,7 +1771,7 @@ export default {
         this.dlgLoading = true;
         let params = {
           index: this.crud.length + 1,
-          $cellEdit: true,
+          $cellEdit: false,
           proBleadyeTechCodeFk: val.bleadyeCodeId,
           bleadyeName: val.bleadyeCodeId,
           liquorRatio: val.liquorRatio,
@@ -2179,6 +2208,18 @@ export default {
   outline: 0;
   padding: 0 5px !important;
   width: 100%;
+  &.input-align_center{
+    text-align: center
+  }
+  &.input-align_right{
+    text-align: right
+  }
+}
+
+.is-center{
+  input{
+    text-align: center !important
+  }
 }
 
 .avue-crud__tip {
