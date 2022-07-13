@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-09 09:06:25
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-16 08:55:57
+ * @LastEditTime: 2022-07-13 09:59:08
 -->
 <template>
   <div class="with-drawal-dlt-container">
@@ -56,7 +56,8 @@ import {
   updateWithDrawal,
   batchAddOrUpdateDtl,
   batchDelDtlDataById,
-  fetchWithDrwarlDtlDataList
+  fetchWithDrwarlDtlDataList,
+  validWeaveJobCode
 } from "./api";
 import { baseCodeSupplyEx, baseCodeSupply } from "@/api/index";
 import { timeConversion } from "@/config/util";
@@ -110,7 +111,6 @@ export default {
   watch: {
     withDatalData: {
       handler(value) {
-        console.log("value", value);
         if (value.proYarnsWithdrawaloid) {
           this.setWithDrawalData();
         } else {
@@ -219,7 +219,8 @@ export default {
     },
     // 保存
     async handleSave() {
-      if (!this.saveValid()) return;
+      let validRes = await this.saveValid().then(res => res);
+      if (!validRes) return;
       this.loading = true;
       let oid = this.withDrawalFormData.proYarnsWithdrawaloid;
       if (oid) {
@@ -246,7 +247,7 @@ export default {
       this.$tip.success("操作成功");
     },
     // 保存校验
-    saveValid() {
+    async saveValid() {
       let { typeOf, extFactId } = this.withDrawalFormData;
       if (typeOf == "" || typeOf == null || typeOf == undefined) {
         this.$tip.warning("退纱类型不能为空");
@@ -264,11 +265,19 @@ export default {
       }
 
       let isNull2Value = this.crudDataList.every(item => {
-        return item.weight1 && item.cartonNumber && item.packSize;
+        return item.weaveJobCode && item.weight1 && item.cartonNumber && item.packSize;
       });
 
       if (!isNull2Value) {
-        this.$tip.warning("请完善明细数据（退纱数量、件数、包装规格不能为空）");
+        this.$tip.warning("请完善明细数据（织单号、退纱数量、件数、包装规格不能为空）");
+        return false;
+      }
+
+      let weaveJobCodes = this.crudDataList.map(item => item.weaveJobCode);
+
+      let notExistsCode = await validWeaveJobCode(weaveJobCodes).then(res => res.data.data).catch(err => []);
+      if(notExistsCode && notExistsCode.length > 0){
+        this.$tip.warning(`${notExistsCode.join(',')} 织单号不存在，请检查`);
         return false;
       }
 

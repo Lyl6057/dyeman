@@ -4,11 +4,20 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-09 08:21:45
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-11 14:19:21
+ * @LastEditTime: 2022-07-13 09:38:50
  */
 
 import axios from "axios";
 
+
+// 检验是明细中织单号是否存在
+export function validWeaveJobCode(data){
+    return axios({
+        url: "/api/proYarnsWithdrawal/valid/weaveJobCode",
+        method: "post",
+        data:data
+    })
+}
 
 // 获取分页数据
 export function fetchWithDrawalListByPage(params){
