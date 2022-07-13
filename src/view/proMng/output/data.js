@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-04-23 09:03:31
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-12 08:54:53
+ * @LastEditTime: 2022-07-12 16:29:54
  * @Description:
  */
 
@@ -39,13 +39,13 @@ export function mainCrud(_this) {
     showSummary: true,
     sumColumnList: [
       {
-        name: "sum",
-        type: "sum",
+        name: "weaveJobCode",
+        type: "count",
         label: " "
       },
       {
-        name: "weaveJobCode",
-        type: "count",
+        name: "subSum",
+        type: "sum",
         label: " "
       }
     ],
@@ -63,8 +63,18 @@ export function mainCrud(_this) {
         prop: "weaveJobCode",
         width: 150,
         overHidden: true,
-        sortable: true,
         fixed: true
+      },
+      {
+        label: "合计",
+        prop: "subSum",
+        width: 100,
+        overHidden: true,
+        fixed: true,
+        align: "right",
+        formatter(r,v){
+          return v && Number(v).toFixed(1).replace(/\B(?=(\d{3})+(?!\d))/g,",");
+        }
       }
     
     ]
