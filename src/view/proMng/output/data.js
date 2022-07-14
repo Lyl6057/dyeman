@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-04-23 09:03:31
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-12 16:29:54
+ * @LastEditTime: 2022-07-14 16:30:45
  * @Description:
  */
 
@@ -25,6 +25,10 @@ export function mainForm(_this) {
   };
 }
 
+export function num2Thousadth(r,v){
+  return  v && Number(v).toFixed(1).replace(/\B(?=(\d{3})+(?!\d))/g,",");
+}
+
 export function mainCrud(_this) {
   return {
     menu: false,
@@ -44,7 +48,22 @@ export function mainCrud(_this) {
         label: " "
       },
       {
+        name: "amount",
+        type: "sum",
+        label: " "
+      },
+      {
+        name: "totalWeight",
+        type: "sum",
+        label: " "
+      },
+      {
         name: "subSum",
+        type: "sum",
+        label: " "
+      },
+      {
+        name: "debtWeight",
         type: "sum",
         label: " "
       }
@@ -66,15 +85,41 @@ export function mainCrud(_this) {
         fixed: true
       },
       {
-        label: "合计",
+        label: "所需总数",
+        prop: "amount",
+        width: 100,
+        overHidden: true,
+        fixed: true,
+        align: "right",
+        formatter: num2Thousadth
+      },
+      {
+        label: "合计已织产量",
+        prop: "totalWeight",
+        width: 120,
+        overHidden: true,
+        fixed: true,
+        align: "right",
+        formatter: num2Thousadth
+      },
+      {
+        label: "当月合计",
         prop: "subSum",
         width: 100,
         overHidden: true,
         fixed: true,
         align: "right",
-        formatter(r,v){
-          return v && Number(v).toFixed(1).replace(/\B(?=(\d{3})+(?!\d))/g,",");
-        }
+        formatter: num2Thousadth
+      },
+      {
+        label: "欠数",
+        prop: "debtWeight",
+        width: 100,
+        overHidden: true,
+        fixed: true,
+        slot: true,
+        align: "right",
+        formatter: num2Thousadth
       }
     
     ]

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-04-23 08:32:22
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-12 17:37:23
+ * @LastEditTime: 2022-07-14 16:39:56
  * @Description: 
 -->
 <template>
@@ -27,7 +27,11 @@
               :data="crudData"
               :page.sync="page"
               @on-load="getDataList"
-            ></avue-crud>
+            >
+              <template slot="debtWeight" slot-scope="{row}">
+                <span :style="{color: row.high ? 'red' : '' }" >{{num2Thousadth(false,row.debtWeight)  }}</span>
+              </template>
+            </avue-crud>
           </el-col>
         </el-row>
       </div>
@@ -36,7 +40,7 @@
   </div>
 </template>
 <script>
-import { mainForm, mainCrud } from "./data";
+import { mainForm, mainCrud, num2Thousadth } from "./data";
 import { fetchDayOutputData } from "./api";
 import { fetchFineReportUrl } from "@/config/index"
 export default {
@@ -67,14 +71,14 @@ export default {
     }
   },
   methods: {
+    num2Thousadth,
     // 导出报表
     handleExport(){
       let exportMonth = this.queryParams.searchMonth;
       let beginDate = exportMonth + "-01";
-      let [ y, m, day ] = this.getSelMonthDate(beginDate);
+      let [ y, m, day ] = this.getTarMonthDate(beginDate);
       let timer = new Date(beginDate).getTime() + (day * 24 * 60 * 60 * 1000);
       let endDate = new Date(timer);
-      console.log("end date",beginDate,timer, endDate)
       endDate = `${endDate.getFullYear()}-${endDate.getMonth() + 1}-01`
 
       let queryData = {
@@ -101,13 +105,13 @@ export default {
     // 初始化
     async init(){
       await this.$nextTick();
-      let [year, month] = this.getSelMonthDate();
+      let [year, month] = this.getTarMonthDate();
       this.queryParams.searchMonth = `${year}-${month}`
       this.getDataList();
     },
     // 赋值表格配置参数
     setCrudColProp(date){
-      let [year,month,day] = this.getSelMonthDate(date);
+      let [year,month,day] = this.getTarMonthDate(date);
       let {column, sumColumnList} = mainCrud(this);
       month = ('0' + month).slice(-2)
       new Array(day).fill(1).forEach((_,index) => {
@@ -135,12 +139,13 @@ export default {
      
     },
     // 计算当前月份有多少天
-    getSelMonthDate(date){
+    getTarMonthDate(date){
       let now = date ? new Date(date) : new Date();
       let year = now.getFullYear(),
-          month = now.getMonth() + 1;
-      let day = new Date(year,month,0).getDate();
-      return [year,month, day]
+          month = now.getMonth() + 1,
+          day = now.getDate();
+      let days = new Date(year,month,0).getDate();
+      return [year,month, days, day]
     },
     // 查询
     handleQuery(){
@@ -148,6 +153,7 @@ export default {
     },
     // 
     getDataList(){
+      if(this.loading) return;
       this.loading = true;
       let params = {
         month: this.queryParams.searchMonth
@@ -158,7 +164,10 @@ export default {
           if(!tData[item.weaveJobCode]){
             tData[item.weaveJobCode] = {
               weaveJobCode: item.weaveJobCode,
-              subSum: 0
+              subSum: 0,
+              amount: item.amount,
+              totalWeight: item.totalWeight,
+              debtWeight: item.debtWeight
             };
           }
           tData[item.weaveJobCode][item.outputDate] = item.weight;
@@ -166,10 +175,21 @@ export default {
         });
         let targetData = Object.values(tData).map((item,index) => {
           item.index = index + 1;
+          item.high = (item.debtWeight / item.amount) <= 0.05
           return item;
         });
         // targetData.sort((a,b) => a.weaveJobCode - b.weaveJobCode); 
+
+        // 检查是否是当前月份，若是当前月份则将有数据的排在最前
+        let [nowY, nowM,day, date] = this.getTarMonthDate();
+        if(`${nowY}-${nowM}` == this.queryParams.searchMonth){
+          let prop = `${nowY}-${("0" + nowM).slice(-2)}-${('0' + date).slice(-2)}`
+          targetData.sort((a,b) => b[prop] ? 1 : -1);
+          targetData.forEach((item,index) => item.index = index + 1)
+        }
+
         this.crudData = targetData;
+        
         
       }).finally(() => {
         this.$nextTick(() => {
