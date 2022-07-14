@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-04-23 08:32:22
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-14 10:40:45
+ * @LastEditTime: 2022-07-14 13:38:56
  * @Description: 
 -->
 <template>
@@ -80,13 +80,13 @@ export default {
             inStockQty: 0,
             outStockQty: 0,
             qcDeductQty: 0,
-            amount: 0,
+            amount: item.amount,
             diffQty: 0,
             children:[]
           }
         }
-
-        tDataMap[item.weaveJobCode].children.push({
+        let tData = tDataMap[item.weaveJobCode];
+        tData.children.push({
             isWorkOut: item.recordMonth,
             grossWeight: item.grossWeight,
             clothWeight: item.clothWeight,
@@ -94,27 +94,26 @@ export default {
             inStockQty: item.inStockQty,
             outStockQty: item.outStockQty,
             qcDeductQty: item.qcDeductQty,
-            amount: item.amount,
+            // amount: item.amount,
             id: item.weaveJobCode + index,
-            diffQty: item.amount - item.clothWeight
+            // diffQty: item.amount - item.clothWeight
         })
+
+        tData.grossWeight += item.grossWeight;
+        tData.clothWeight += item.clothWeight;
+        tData.weightedQty += item.weightedQty;
+        tData.inStockQty += item.inStockQty;
+        tData.outStockQty += item.outStockQty;
+        tData.qcDeductQty += item.qcDeductQty;
+        // tData.amount += item.amount;
+        // tData.diffQty += (item.amount - item.clothWeight);
 
       });
 
       let resultData = Object.values(tDataMap);
       resultData.forEach(item => {
         item.children.sort((a,b) => b.isWorkOut - a.isWorkOut) 
-        item.children.forEach(cItem => {
-          item.grossWeight += cItem.grossWeight;
-          item.clothWeight += cItem.clothWeight;
-          item.weightedQty += cItem.weightedQty;
-          item.inStockQty += cItem.inStockQty;
-          item.outStockQty += cItem.outStockQty;
-          item.qcDeductQty += cItem.qcDeductQty;
-          item.amount += cItem.amount;
-          item.diffQty += cItem.diffQty;
-        })
-        
+        item.diffQty = item.amount - item.clothWeight
       });
 
       this.crudData = resultData;

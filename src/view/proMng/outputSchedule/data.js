@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-04-23 09:03:31
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-14 10:33:30
+ * @LastEditTime: 2022-07-14 13:41:06
  * @Description:
  */
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
@@ -51,6 +51,10 @@ export function mainForm(_this) {
   };
 }
 
+function num2Thousadth(r,v){
+  return  v && Number(v).toFixed(1).replace(/\B(?=(\d{3})+(?!\d))/g,",");
+}
+
 export function mainCrud(_this) {
   return {
     menu: false,
@@ -93,9 +97,7 @@ export function mainCrud(_this) {
         prop: "amount",
         width: 110,
         align: "right",
-        formatter(r,v){
-          return v && (+v).toFixed(1)
-        }
+        formatter: num2Thousadth,
       },
       // {
       //   label: "生产月份",
@@ -112,9 +114,7 @@ export function mainCrud(_this) {
         width: 120,
         span: 6,
         align: "right",
-        formatter(r,v){
-          return v && (+v).toFixed(1)
-        },
+        formatter: num2Thousadth
       },
       {
         label: "总净量",
@@ -123,18 +123,14 @@ export function mainCrud(_this) {
         overHidden: true,
         span: 6,
         align: "right",
-        formatter(r,v){
-          return v && (+v).toFixed(1)
-        },
+        formatter: num2Thousadth
       },
       {
         label: "已称重",
         prop: "weightedQty",
         width: 100,
         overHidden: true,
-        formatter(r,v){
-          return v && (+v).toFixed(1)
-        },
+        formatter: num2Thousadth,
         align: "right",
       },
       {
@@ -142,9 +138,7 @@ export function mainCrud(_this) {
         prop: "inStockQty",
         width: 100,
         overHidden: true,
-        formatter(r,v){
-          return v && (+v).toFixed(1)
-        },
+        formatter: num2Thousadth,
         align: "right",
       },
       {
@@ -152,9 +146,7 @@ export function mainCrud(_this) {
         prop: "outStockQty",
         width: 100,
         overHidden: true,
-        formatter(r,v){
-          return v && (+v).toFixed(1)
-        },
+        formatter: num2Thousadth,
         align: "right",
       },
       {
@@ -163,9 +155,7 @@ export function mainCrud(_this) {
         overHidden: true,
         width: 120,
         align: "right",
-        formatter(r,v){
-          return v && (+v).toFixed(1)
-        },
+        formatter: num2Thousadth,
       },
       {
         label: "订单与生产差额",
@@ -174,9 +164,7 @@ export function mainCrud(_this) {
         width: 150,
         span: 6,
         align: "right",
-        formatter(r,v){
-          return v && (+v).toFixed(1)
-        },
+        formatter: num2Thousadth,
         cell: true
         
       },
