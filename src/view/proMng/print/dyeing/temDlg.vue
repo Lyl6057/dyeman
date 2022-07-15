@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-13 15:05:27
+ * @LastEditTime: 2022-07-15 11:33:51
  * @Description: 
 -->
 <template>
@@ -1375,6 +1375,7 @@ export default {
       // 检查工艺明细
       if(this.tabs == "生產工藝"){
         let validRes = this.crud.every(item => {
+          item.list || (item.list = []);
           return item.list.every(cItem => {
             if(cItem.bleadyeType != "run" && !cItem.mateCode){
               return false;
