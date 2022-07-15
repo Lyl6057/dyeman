@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
- * @LastEditors: Lyl
- * @LastEditTime: 2022-04-09 13:42:29
+ * @LastEditors: Symbol_Yang
+ * @LastEditTime: 2022-07-15 14:50:52
  * @Description:
  */
 
@@ -83,7 +83,7 @@ export function dlgForm(_this) {
 let cust = getDicT("basCustomer", "custName", "custCode");
 
 const dyeOrder = getXDicT("proBleadyeJob");
-
+console.log("dyeOrder",dyeOrder)
 export function mainCrud(_this) {
   return {
     menu: false,
@@ -134,7 +134,7 @@ export function mainCrud(_this) {
           value: "vatNo"
         },
         type: "select",
-        dicData: dyeOrder,
+        // dicData: dyeOrder,
         tip: "客户(Khách hàng)",
         disabled: true
       },
