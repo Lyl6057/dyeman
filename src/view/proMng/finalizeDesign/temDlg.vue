@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
- * @LastEditors: Lyl
- * @LastEditTime: 2022-04-15 08:05:15
+ * @LastEditors: Symbol_Yang
+ * @LastEditTime: 2022-07-15 09:29:37
  * @Description: 
 -->
 <template>
@@ -113,6 +113,21 @@
                     ></el-checkbox>
                   </div>
                 </template>
+
+                <!-- 物料名称 -->
+                <template slot="materialName" slot-scope="{row}">
+                  <el-popover
+                    placement="left"
+                    :title="row.cnnamelong || row.materialName"
+                    width="200"
+                    trigger="hover">
+                      <el-select slot="reference"  v-model="row.materialName"  remote filterable reserve-keyword clearable default-first-option placeholder="请输入物料名称" :loading="vatLoading" :remote-method="remoteMate" @focus="mateFocus(row)" @change="(val) => handleMateChange(val,row)">
+                        <el-option v-for="item in mateOption" :key="item.bcCode" :label="item.cnnamelong" :value="item.cnnamelong">
+                        </el-option>
+                      </el-select>
+                  </el-popover>
+                </template>
+
               </avue-crud>
             </div> </view-container
         ></el-col>
@@ -160,6 +175,7 @@
 <script>
 import choice from "@/components/proMng/index";
 import { mainCrud, dlgForm, dlgCrud, pfCrud, gyCrud, cpForm } from "./data";
+import { getBasChemicalByPage } from "../techCode/api";
 import {
   add,
   update,
@@ -227,10 +243,34 @@ export default {
       chooseDtlData: {},
       pdfDlg: false,
       pdfUrl: "",
+
+      // 2022.07.15 ++  Symbol_Yang
+      vatLoading: false,
+      mateOption:[],
     };
   },
   watch: {},
   methods: {
+    // --- 对物料名称列进行自定义 Symbol_Yang 2022.07.15
+    mateFocus(row) {
+      this.$refs.otherCrud.setCurrentRow(row);
+      this.remoteMate( "%" + row.mateName, 'factoryName');
+    },
+
+    remoteMate(val,type) {
+      this.vatLoading = true;
+      getBasChemicalByPage( {[type || 'fillTextSeach'] :  val,  start: 1, rows: 50} ).then((res) => {
+        this.mateOption = res.data.records;
+        this.vatLoading = false;
+      });
+    },
+    handleMateChange(val,row){
+      let item = this.mateOption.find(item => item.cnnamelong == val);
+      if(item){
+        row.materialCode = item.bcCode
+      }
+    },
+
     getData() {
       if (this.isAdd) {
         setTimeout(() => {

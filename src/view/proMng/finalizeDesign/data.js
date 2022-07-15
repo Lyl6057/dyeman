@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
- * @LastEditors: Lyl
- * @LastEditTime: 2021-12-24 15:28:06
+ * @LastEditors: Symbol_Yang
+ * @LastEditTime: 2022-07-15 09:29:41
  * @Description:
  */
 
@@ -1175,7 +1175,7 @@ export function pfCrud(_this) {
         overHidden: true,
         span: 6,
         placeholder: " ",
-        cell: true
+        // cell: true
       },
       {
         label: "物料名称",
@@ -1184,7 +1184,8 @@ export function pfCrud(_this) {
         // overHidden: true,
         placeholder: " ",
         span: 6,
-        cell: true
+        cell: true,
+        slot: true,
       },
       {
         label: "配方(g/L)",
