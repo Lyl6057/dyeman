@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-15 09:29:37
+ * @LastEditTime: 2022-07-15 10:46:05
  * @Description: 
 -->
 <template>
@@ -122,7 +122,7 @@
                     width="200"
                     trigger="hover">
                       <el-select slot="reference"  v-model="row.materialName"  remote filterable reserve-keyword clearable default-first-option placeholder="请输入物料名称" :loading="vatLoading" :remote-method="remoteMate" @focus="mateFocus(row)" @change="(val) => handleMateChange(val,row)">
-                        <el-option v-for="item in mateOption" :key="item.bcCode" :label="item.cnnamelong" :value="item.cnnamelong">
+                        <el-option v-for="item in mateOption" :key="item.bcCode" :label="item.factoryName" :value="item.factoryName">
                         </el-option>
                       </el-select>
                   </el-popover>
@@ -265,7 +265,7 @@ export default {
       });
     },
     handleMateChange(val,row){
-      let item = this.mateOption.find(item => item.cnnamelong == val);
+      let item = this.mateOption.find(item => item.factoryName == val);
       if(item){
         row.materialCode = item.bcCode
       }
