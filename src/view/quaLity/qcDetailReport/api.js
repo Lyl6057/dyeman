@@ -59,6 +59,15 @@ export function get(params) {
   });
 }
 
+export function getdetail(params) {
+  return axios({
+    url:
+      "/api/proFinalProductCard/page?r_clothCheckTime_r=!%5E",
+    method: "get",
+    params: params
+  });
+}
+
 // 新增佈飛记录
 export function add(data) {
   return axios({

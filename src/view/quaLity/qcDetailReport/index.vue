@@ -6,15 +6,11 @@
  * @Description:
 -->
 <template>
-  <div
-    id="qcDeatilReport"
-    :element-loading-text="$t('public.loading')"
-    v-loading="wloading"
-  >
+  <div id="qcDeatilReport" :element-loading-text="$t('public.loading')" v-loading="wloading">
     <view-container title="成品码卡报表">
       <el-row class="btnList">
         <el-button type="primary" @click="query">{{
-          this.$t("public.query")
+            this.$t("public.query")
         }}</el-button>
         <el-button type="primary" @click="handleAudit">审核</el-button>
         <!-- <el-dropdown size="small" split-button type="primary" style="margin-left: 10px" @command="handleAudit" @click="handleAudit(1)">
@@ -24,59 +20,53 @@
             <el-dropdown-item  key="1" :command="1">不通过</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown> -->
-        <el-button
-          type="primary"
-          @click="updateDivdWeight"
-          :disabled="!form.vatNo"
-          >{{ this.$t("public.report") }}</el-button
-        >
+        <el-button type="primary" @click="updateDivdWeight" :disabled="!form.vatNo">{{ this.$t("public.report") }}
+        </el-button>
       </el-row>
       <el-row class="formBox">
         <avue-form ref="form" :option="formOp" v-model="form">
           <template slot-scope="scope" slot="vatNo">
-            <el-select
-              v-model="form.vatNo"
-              filterable
-              remote
-              reserve-keyword
-              clearable
-              default-first-option
-              placeholder="请输入缸号"
-              :loading="serachLoading"
-              :remote-method="remoteMethod"
-              @change="query"
-            >
-              <el-option
-                v-for="item in options"
-                :key="item.vatNo"
-                :label="item.vatNo"
-                :value="item.vatNo"
-              >
+            <el-select v-model="form.vatNo" filterable remote reserve-keyword clearable default-first-option
+              placeholder="请输入缸号" :loading="serachLoading" :remote-method="remoteMethod" @change="query">
+              <el-option v-for="item in options" :key="item.vatNo" :label="item.vatNo" :value="item.vatNo">
               </el-option>
             </el-select>
           </template>
         </avue-form>
       </el-row>
       <el-row class="crudBox">
-        <avue-crud
-          ref="crud"
-          :option="crudOp"
-          :data="crud"
-          :page.sync="page"
-          v-loading="loading"
-          @on-load="query"
-          @cell-click="cellClick"
-        >
+        <avue-crud ref="crud" :option="crudOp" :data="crud" :page.sync="page" v-loading="loading" @on-load="query"
+          @cell-click="cellClick" @row-dblclick="handleRowDBLClick">
         </avue-crud>
       </el-row>
     </view-container>
-    <el-dialog id="colorMng_Dlg" :visible.sync="auditVisible" width="70%" top="8vh" append-to-body :close-on-click-modal="false" :close-on-press-escape="false">
+    <el-dialog id="showdetail" :visible.sync="detailVisible" width="70%" top="8vh" append-to-body
+      :close-on-click-modal="false" :close-on-press-escape="false">
+      <view-container title="成品码卡信息">
+        <el-row class="btnList">
+          <el-tooltip class="item" effect="dark" content="In" placement="bottom">
+            <el-button type="primary" @click="print" :disabled="!selectList.length">打印</el-button>
+          </el-tooltip>
+          <el-tooltip class="item" effect="dark" content="Thoát" placement="bottom">
+            <el-button type="warning" @click="detailVisible = false">取消</el-button>
+          </el-tooltip>
+        </el-row>
+
+        <avue-crud ref="crud" :option="crudOpdetail" :data="crudDetail" :page.sync="pageDetail"
+          v-loading="loadingDetail" @current-row-change="cellDetailClick" @selection-change="selectionChange">
+        </avue-crud>
+      </view-container>
+
+    </el-dialog>
+
+    <el-dialog id="colorMng_Dlg" :visible.sync="auditVisible" width="70%" top="8vh" append-to-body
+      :close-on-click-modal="false" :close-on-press-escape="false">
       <audit :vatNo="chooseData.vatNo" @submitAudit="submitAudit" v-if="auditVisible"></audit>
     </el-dialog>
   </div>
 </template>
 <script>
-import { mainForm, mainCrud, dlgForm, dlgCrud } from "./data";
+import { mainForm, mainCrud, dlgForm, dlgCrud, detailCrud } from "./data";
 import {
   get,
   add,
@@ -85,7 +75,8 @@ import {
   getFinishedNote,
   getDismantleVatno,
   updateRunJob,
-  aduitQcCheckoutFabric
+  aduitQcCheckoutFabric,
+  getdetail
 } from "./api";
 import audit from './audit'
 export default {
@@ -99,19 +90,30 @@ export default {
       form: {
         wmUnit: "KG",
       },
+      crudOpdetail: detailCrud(this),
       crudOp: mainCrud(this),
       crud: [],
+      crudDetail: [],
       page: {
         pageSize: 50,
         pageSizes: [20, 50, 100, 200, 500],
         total: 0,
       },
+      pageDetail: {
+        pageSize: 100,
+        pageSizes: [20, 50, 100, 200, 500],
+        total: 0,
+      },
+      spowerClient: "",
       wloading: false,
       loading: false,
       serachLoading: false,
       options: [],
       chooseData: {},
-      auditVisible: false
+      auditVisible: false,
+      detailVisible: false,
+      loadingDetail: false,
+      selectList: []
     };
   },
   watch: {},
@@ -138,35 +140,63 @@ export default {
         }, 200);
       });
     },
-    submitAudit(val){
-      if(!this.chooseData.checkoutId){
+    querydetail(val) {
+      this.loadingDetail = true;
+      getdetail(
+        Object.assign({ vatNo: val }, {
+          rows: this.pageDetail.pageSize,
+          start: this.pageDetail.currentPage,
+          isPrinted: true,
+          cardType: 1,
+          delFlag: false,
+        })
+      ).then((res) => {
+        this.crudDetail = res.data.records;
+        // if (this.crudDetail.length > 0) {
+        //   this.$refs.crudDetail.setCurrentRow(this.crudDetail[0]);
+        // }
+        this.crudDetail.sort((a, b) => {
+          return a.pidNo > b.pidNo ? 1 : -1;
+        });
+        // this.crudDetail.forEach((item, i) => {
+        //   item.index = i + 1;
+        // });
+        this.pageDetail.total = res.data.total;
+        setTimeout(() => {
+          //  this.$refs.crudDetail.setCurrentRow(this.crudDetail[0] || {});
+          this.loadingDetail = false;
+        }, 200);
+      });
+    },
+    submitAudit(val) {
+      if (!this.chooseData.checkoutId) {
         this.$tip.warning("请先选择审核的数据!");
         return;
       }
       this.loading = true;
       let params = {
         checkoutId: this.chooseData.checkoutId,
-        vatNo:  this.chooseData.vatNo,
+        vatNo: this.chooseData.vatNo,
         whseVouch: val,
         whseVouchTime: this.$getNowTime("datetime"),
         whseVoucher: parent.userID
       }
-      aduitQcCheckoutFabric(params).then(res =>{
+      aduitQcCheckoutFabric(params).then(res => {
         this.$tip.success("提交成功!");
         this.query()
-      }).finally(() =>{
+      }).finally(() => {
         this.auditVisible = false
         this.loading = false;
       })
     },
-    handleAudit(){
+    handleAudit() {
       this.auditVisible = true
     },
     remoteMethod(val) {
       this.serachLoading = true;
       getRunJobByPage({
         vatNo: "!^%" + val,
-        rows: 10,
+        rows: 100,
         start: 1,
         page: 1,
       }).then((res) => {
@@ -251,11 +281,11 @@ export default {
                   // this.updateDivdWeight();
                   let name = encodeURI(
                     "http:" +
-                      process.env.API_HOST.split(":")[1] +
-                      ":92/api/proFinalProductCard/warehousingdetails?vatNo=" +
-                      this.form.vatNo +
-                      "&units=" +
-                      this.form.wmUnit
+                    process.env.API_HOST.split(":")[1] +
+                    ":92/api/proFinalProductCard/warehousingdetails?vatNo=" +
+                    this.form.vatNo +
+                    "&units=" +
+                    this.form.wmUnit
                   );
                   window.open(name);
                   this.wloading = false;
@@ -272,11 +302,11 @@ export default {
                   // this.updateDivdWeight();
                   let name = encodeURI(
                     "http:" +
-                      process.env.API_HOST.split(":")[1] +
-                      ":92/api/proFinalProductCard/warehousingdetails?vatNo=" +
-                      this.form.vatNo +
-                      "&units=" +
-                      this.form.wmUnit
+                    process.env.API_HOST.split(":")[1] +
+                    ":92/api/proFinalProductCard/warehousingdetails?vatNo=" +
+                    this.form.vatNo +
+                    "&units=" +
+                    this.form.wmUnit
                   );
                   window.open(name);
                   this.wloading = false;
@@ -305,10 +335,28 @@ export default {
             updateRunJob(vatList.data.records[0]).then((res) => {
               this.outReport();
             }); // 更新原缸拆缸重量
-          }else{
+          } else {
             this.outReport();
           }
         });
+      });
+    },
+    handleRowDBLClick(val) {
+      this.querydetail(val.vatNo)
+      this.detailVisible = true;
+
+    },
+    print() {
+      this.spowerClient = this.$store.state.spowerClient;
+      if (!this.spowerClient || this.spowerClient.readyState == 3) {
+        this.$tip.cofirm("打印程序离线，请启动服务!, Ứng dụng IOT.SP chưa được mở hoặc đã xảy ra lỗi, vui lòng tắt mở lại ứng dụng hoặc khởi động lại máy tính!").then({}).catch({})
+        return;
+      }
+      this.selectList.forEach((item, i) => {
+        this.spowerClient.send("print=finishCard:" + item.cardId);
+        if (i == this.selectList.length - 1) {
+          this.$tip.success("已发送全部打印请求!");
+        }
       });
     },
     cellClick(val) {
@@ -316,11 +364,19 @@ export default {
       this.form.vatNo = val.vatNo;
       this.chooseData = val
     },
+    cellDetailClick(val) {
+      this.querydetail(val.vatNo)
+    },
+    selectionChange(list) {
+      this.selectList = list;
+    },
   },
-  updated() {},
-  created() {},
-  mounted() {},
-  beforeDestroy() {},
+  updated() { },
+  created() { },
+  mounted() {
+
+  },
+  beforeDestroy() { },
 };
 </script>
 <style lang='stylus'>
