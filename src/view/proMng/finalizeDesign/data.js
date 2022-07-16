@@ -1169,6 +1169,38 @@ export function pfCrud(_this) {
         display: false
       },
       {
+        label: "工艺类型",
+        prop: "bleadyeType",
+        // overHidden: true,
+        width: 120,
+        span: 6,
+        cell: true,
+        type: "select",
+        clearable: false,
+        dicData: [
+          {
+            label: "增加助剂",
+            value: "add_chemicalmat"
+          },
+          {
+            label: "增加颜料",
+            value: "add_pigment"
+          },
+          {
+            label: "运行",
+            value: "run"
+          }
+        ],
+        change: (val) => {
+          if (val == 'run') {
+            return
+          }
+          _this.$nextTick(() => {
+            _this.remoteMethod(_this.chooseData.materialCode)
+          })
+        }
+      },
+      {
         label: "物料编码",
         prop: "materialCode",
         width: 140,
