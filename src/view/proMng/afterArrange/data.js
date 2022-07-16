@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-16 09:12:05
+ * @LastEditTime: 2022-07-16 11:03:54
  * @Description:
  */
 
@@ -180,7 +180,11 @@ export function mainCrud(_this) {
         type: "number",
         align: "right",
         disabled: true,
-        span: 6
+        span: 6,
+        formatter(r,v){
+          return v && Number(v).toFixed(1)
+        }
+
       },
       {
         label: "订单数(kg)",
@@ -190,7 +194,10 @@ export function mainCrud(_this) {
         placeholder: " ",
         align: "right",
         disabled: true,
-        span: 6
+        span: 6,
+        formatter(r,v){
+          return v && Number(v).toFixed(1)
+        }
       },
       {
         label: "交货地址",

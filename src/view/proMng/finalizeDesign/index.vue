@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
- * @LastEditors: Lyl
- * @LastEditTime: 2021-11-15 19:06:11
+ * @LastEditors: Symbol_Yang
+ * @LastEditTime: 2022-07-16 10:54:22
  * @Description: 
 -->
 <template>
@@ -154,6 +154,7 @@ export default {
         Object.assign(this.form, {
           rows: this.page.pageSize,
           start: this.page.currentPage,
+          dataSortRules: "startJobDate|desc,vatNo"
         })
       )
         .then((res) => {
