@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2022-01-27 14:37:25
- * @LastEditors: Lyl
- * @LastEditTime: 2022-06-29 13:19:58
+ * @LastEditors: Symbol_Yang
+ * @LastEditTime: 2022-07-16 11:36:49
  * @FilePath: \iot.vue\src\view\proMng\dptReciveLog\index.vue
  * @Description: 
 -->
@@ -116,9 +116,12 @@ export default {
         }
       }
       let params = {
-        weaveJobCode: "!^%" + (this.form.weaveJobCode ? this.form.weaveJobCode : ""),
+        weaveJobCode: "%" + (this.form.weaveJobCode ? this.form.weaveJobCode : ""),
         vatNo:  (this.form.vatNo ? this.form.vatNo : ""),
         yarntestNote: "!^%" + (this.form.yarntestNote || '')
+      }
+      if(this.tabs == 'zd'){
+        params.dataSortRules = "calicoDate|desc,weaveJobCode"
       }
       this.func(
         Object.assign(params, {

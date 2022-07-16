@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-15 14:53:05
+ * @LastEditTime: 2022-07-16 11:01:43
  * @Description: 
 -->
 <template>
@@ -134,11 +134,12 @@ export default {
         }
       }
       let queryData = JSON.parse(JSON.stringify(this.form));
-      queryData.vatNo = "!^%" + (queryData.vatNo || "");
+      queryData.vatNo = "%" + (queryData.vatNo || "");
       get(
         Object.assign(queryData, {
           rows: this.page.pageSize,
           page: this.page.currentPage,
+          dataSortRules: "workDate|desc,vatNo"
         })
       )
         .then((res) => {

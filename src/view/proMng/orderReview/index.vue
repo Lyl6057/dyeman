@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
- * @LastEditors: Lyl
- * @LastEditTime: 2022-02-16 10:14:39
+ * @LastEditors: Symbol_Yang
+ * @LastEditTime: 2022-07-16 11:09:30
  * @Description:
 -->
 <template>
@@ -310,6 +310,7 @@ export default {
             start: this.wpage.currentPage,
             isWorkOut: 0,
             weaveState: 0,
+            dataSortRules: "weaveJobCode|desc"
           })
         ).then((res) => {
           this.wcrud = res.data.records;
