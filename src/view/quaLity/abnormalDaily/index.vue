@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2022-05-03 16:09:29
- * @LastEditors: Lyl
- * @LastEditTime: 2022-06-29 13:48:38
+ * @LastEditors: PMP
+ * @LastEditTime: 2022-7-16 7:40:38
  * @FilePath: \iot.vue\src\view\quaLity\abnormalDaily\index.vue
  * @Description: 
 -->

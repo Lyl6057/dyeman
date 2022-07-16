@@ -17,7 +17,7 @@ function fillZero(row, value) {
 
 // 表格通用配置
 const mainCrudOpCommon = {
-  menu: false,
+  menu: true,
   addBtn: false,
   delBtn: false,
   editBtn: false,
@@ -194,7 +194,7 @@ export function mainCrud(_this) {
       },
       {
         label: "反馈人员",
-        prop: "qcCheck",
+        prop: "qcChecker",
         width: 180,
         placeholder: " ",
         readonly: true,

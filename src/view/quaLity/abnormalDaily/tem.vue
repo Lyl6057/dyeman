@@ -26,7 +26,6 @@
     </view-container>
   </div>
 </template>
-
 <script>
 import {
   fetchQcCheckClothDayDetailByPage, addQcCheckClothDayDetail, updateQcCheckClothDayDetail, getRunJobByPage, getFinishedNoteList,
@@ -147,7 +146,7 @@ export default {
         problemDesc: '',
         solution: '',
         remark: '',
-        qcCheck: parent.userID,
+        qcChecker: parent.userID,
         qcConfirDate: this.$getNowTime("datetime")
       };
     },
