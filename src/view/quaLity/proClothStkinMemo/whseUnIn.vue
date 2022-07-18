@@ -4,13 +4,21 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:18:36
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-01 14:11:12
+ * @LastEditTime: 2022-07-18 09:05:56
 -->
 <template>
   <div id="whse-unIn-container">
     <div class="btnList">
       <el-button type="success" @click="handleCreateDtl">生成胚布入仓通知单</el-button>
+      <el-button type="primary" @click="handleQuery">查询</el-button>
     </div>
+    <div class="formBox">
+        <avue-form
+          ref="form"
+          :option="formOp"
+          v-model="queryParams"
+        ></avue-form>
+      </div>
     <div class="crudBox">
       <avue-crud
         ref="whseUnInRef"
@@ -26,7 +34,7 @@
   </div>
 </template>
 <script>
-import { unStoreCrudOp } from "./data"
+import { unStoreCrudOp,unStoreFormOp } from "./data"
 import { fetchUnStoreClothByPage } from "./api"
 export default {
   name: "whseUnIn",
@@ -45,6 +53,10 @@ export default {
         currentPage: 1,
         total: 0
       },
+      formOp: unStoreFormOp(this),
+      queryParams: {
+        lastCheckTime: "",
+      },
       crudOp: unStoreCrudOp(this),
       crudDataList: [],
       curSelectCodes: []
@@ -57,6 +69,10 @@ export default {
       this.$emit("select",this.curSelectCodes.join(","));
       this.$refs.whseUnInRef.selectClear();
     },
+    handleQuery(){
+      this.page.currentPage = 1;
+      this.getDataList();
+    },
     getDataList() {
         this.loading = true;
         this.curSelectCodes = []
@@ -64,6 +80,11 @@ export default {
             start: this.page.currentPage,
             rows: this.page.pageSize,
             filterFactory: true,
+        }
+        let { lastCheckTime } = this.queryParams;
+        if(lastCheckTime && lastCheckTime.length == 2){
+          params.lastCheckTimeBegin = lastCheckTime[0];
+          params.lastCheckTimeEnd = lastCheckTime[1];
         }
         fetchUnStoreClothByPage(params).then(res => {
             this.page.total = res.data.total;
