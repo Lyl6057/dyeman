@@ -67,21 +67,29 @@
                     <el-checkbox v-model="scope.row.itemActual" :true-label="1" :false-label="0"></el-checkbox>
                   </div>
                 </template>
-
                 <template slot="materialName" slot-scope="scope">
-                  <el-select slot="reference" v-if="scope.row.bleadyeType != 'run' && scope.row.$cellEdit"
-                    v-model="scope.row.mateName" remote filterable reserve-keyword clearable default-first-option
-                    placeholder="请输入材料信息" :loading="vatLoading" :remote-method="remoteMethod"
-                    @change="handleMatNameChange">
-                    <el-option v-for="item in options" :key="item.bcCode"
-                      :label="`${item.cnnamelong}—${item.factoryName}`" :value="`${item.factoryName}`">
-                    </el-option>
-                  </el-select>
+                  <template v-if="scope.row.bleadyeType != 'run' && scope.row.$cellEdit">
+                    <el-popover placement="right" title="信息" width="200" trigger="hover" :content="showinfo(scope.row)">
+                      <el-select slot="reference" v-model="scope.row.materialName" remote filterable reserve-keyword
+                        clearable default-first-option placeholder="请输入材料信息" :loading="vatLoading"
+                        :remote-method="remoteMethod" @change="handleMatNameChange">
+                        <el-option v-for="item in options" :key="item.bcCode"
+                          :label="`${item.cnnamelong}—${item.factoryName}`" :value="`${item.factoryName}`"
+                          :title="'CN:' + item.cnnamelong + '\n' + 'EN:' + item.ennamelong + '\n' + 'VI:' + item.vinamelong + '\n' + item.factoryName">
+                          <template #label>
+                            <span>{{ `${item.cnnamelong}-${item.cnnamelong}—${item.factoryName}` }} </span>
+                          </template>
+                        </el-option>
+                      </el-select>
+                    </el-popover>
+                  </template>
                   <el-input v-else-if="scope.row.bleadyeType == 'run' && scope.row.$cellEdit"
-                    v-model="scope.row.mateName"></el-input>
-                  <span v-else>{{ scope.row.mateName }}</span>
+                    v-model="scope.row.materialName">
+                  </el-input>
+                  <span v-else>
+                    {{ scope.row.materialName }}
+                  </span>
                 </template>
-
                 <!-- 物料名称 -->
                 <!-- <template slot="materialName" slot-scope="{row}">
                   <el-popover placement="left" :title="row.cnnamelong || row.materialName" width="200" trigger="hover">
@@ -400,6 +408,7 @@ export default {
           })
         )
         .then((res) => {
+
           this.crud = res.data;
           if (this.tabs == "生产工艺") {
             // this.crud = this.crud.sort((a, b) => {
@@ -508,7 +517,12 @@ export default {
         this.choiceQ.paramType = "afterfinish";
         this.choiceV = true;
       } else {
-        this.crud.push({ index: this.crud.length + 1, $cellEdit: true });
+        let data = {
+          index: this.crud.length + 1,
+          bleadyeType: "add_chemicalmat",
+          $cellEdit: true
+        };
+        this.crud.push(data);
         this.$refs.otherCrud.setCurrentRow(this.crud[this.crud.length - 1]);
       }
     },
@@ -789,7 +803,6 @@ export default {
         this.form.proShrinkHorizontal = val.horizonShrink;
         this.form.proShrinkVertical = val.verticalShrink;
       }
-
       this.choiceV = false;
     },
     remoteMethod(val) {
@@ -842,10 +855,18 @@ export default {
           this.$nextTick(() => {
             this.$set(this.chooseData, "materialCode", res.data.records[0].bcCode)
             this.$set(this.chooseData, "materialName", res.data.records[0].factoryName)
+            const title = "VN: " + res.data.records[0].vinamelong + ",\n" +
+              "CN: " + res.data.records[0].cnnamelong + ",\n" +
+              "EN: " + res.data.records[0].ennamelong + ",\n" +
+              "factoryName: " + res.data.records[0].factoryName;
+            this.$set(this.chooseData, "popover", title)
           })
         }
       });
     },
+    showinfo(val) {
+      return (val.popover) ? val.popover : "";
+    }
   },
   created() { },
   mounted() {
