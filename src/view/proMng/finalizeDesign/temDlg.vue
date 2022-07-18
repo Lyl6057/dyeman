@@ -1,39 +1,24 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
- * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-15 10:46:05
+ * @LastEditors: PMP
+ * @LastEditTime: 2022-07-16 08:29:05
  * @Description: 
 -->
 <template>
   <div id="ldOrderDlg">
-    <view-container
-      :title="(isAdd ? '新增' : '修改') + '定型指令单'"
-      :element-loading-text="$t('public.loading')"
-      v-loading="wLoading"
-    >
+    <view-container :title="(isAdd ? '新增' : '修改') + '定型指令单'" :element-loading-text="$t('public.loading')"
+      v-loading="wLoading">
       <div class="btnList">
         <el-button type="success" @click="save">{{
-          $t("public.save")
+            $t("public.save")
         }}</el-button>
         <!-- <el-button type="primary" @click="checkOrder">选择织造通知号</el-button> -->
-        <el-button
-          type="primary"
-          @click="checkProcess"
-          :disabled="!this.form.finishJobId"
-          >生产工艺</el-button
-        >
-        <el-button
-          type="primary"
-          @click="checkFormula"
-          :disabled="!this.form.finishJobId"
-          >后整配方</el-button
-        >
-        <el-button type="primary" @click="print" :disabled="!form.finishJobId"
-          >打印</el-button
-        >
+        <el-button type="primary" @click="checkProcess" :disabled="!this.form.finishJobId">生产工艺</el-button>
+        <el-button type="primary" @click="checkFormula" :disabled="!this.form.finishJobId">后整配方</el-button>
+        <el-button type="primary" @click="print" :disabled="!form.finishJobId">打印</el-button>
         <el-button type="warning" @click="close">{{
-          this.$t("public.close")
+            this.$t("public.close")
         }}</el-button>
       </div>
 
@@ -41,47 +26,27 @@
         <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
       </div>
     </view-container>
-    <el-dialog
-      :visible.sync="visible"
-      fullscreen
-      append-to-body
-      id="viewDlg"
-      :element-loading-text="$t('public.loading')"
-      v-loading="dlgLoading"
-      v-if="visible"
-    >
+    <el-dialog :visible.sync="visible" fullscreen append-to-body id="viewDlg"
+      :element-loading-text="$t('public.loading')" v-loading="dlgLoading" v-if="visible">
       <el-row>
         <el-col :span="tabs == '生产工艺' ? 12 : 24">
           <view-container :title="tabs">
             <div class="btnList">
               <el-button @click="saveOther" type="success">{{
-                $t("public.save")
+                  $t("public.save")
               }}</el-button>
               <el-button @click="add" type="primary">{{
-                $t("public.add")
+                  $t("public.add")
               }}</el-button>
-              <el-button
-                @click="del"
-                type="danger"
-                :disabled="Object.keys(chooseData).length == 0"
-                >{{ $t("public.del") }}</el-button
-              >
+              <el-button @click="del" type="danger" :disabled="Object.keys(chooseData).length == 0">{{ $t("public.del")
+              }}</el-button>
               <el-button @click="visible = false" type="warning">{{
-                $t("public.close")
+                  $t("public.close")
               }}</el-button>
             </div>
             <div class="crudBox">
-              <avue-crud
-                id="otherCrud"
-                ref="otherCrud"
-                :option="crudOp"
-                :data="crud"
-                :page.sync="page"
-                v-loading="loading"
-                @on-load="query"
-                @row-dblclick="handleRowDBLClick"
-                @current-row-change="cellClick"
-              >
+              <avue-crud id="otherCrud" ref="otherCrud" :option="crudOp" :data="crud" :page.sync="page"
+                v-loading="loading" @on-load="query" @row-dblclick="handleRowDBLClick" @current-row-change="cellClick">
                 <template slot="itemSet" slot-scope="scope">
                   <div v-if="scope.row.dataStyle === 'string'">
                     <!-- string 类型 -->
@@ -89,85 +54,74 @@
                   </div>
                   <div v-else style="text-align: center">
                     <!-- boolean 类型 -->
-                    <el-checkbox
-                      v-model="scope.row.itemSet"
-                      :true-label="1"
-                      :false-label="0"
-                    ></el-checkbox>
+                    <el-checkbox v-model="scope.row.itemSet" :true-label="1" :false-label="0"></el-checkbox>
                   </div>
                 </template>
                 <template slot="itemActual" slot-scope="scope">
                   <div v-if="scope.row.dataStyle === 'string'">
                     <!-- string 类型 -->
-                    <el-input
-                      v-model="scope.row.itemActual"
-                      type="number"
-                    ></el-input>
+                    <el-input v-model="scope.row.itemActual" type="number"></el-input>
                   </div>
                   <div v-else style="text-align: center">
                     <!-- boolean 类型 -->
-                    <el-checkbox
-                      v-model="scope.row.itemActual"
-                      :true-label="1"
-                      :false-label="0"
-                    ></el-checkbox>
+                    <el-checkbox v-model="scope.row.itemActual" :true-label="1" :false-label="0"></el-checkbox>
                   </div>
                 </template>
-
-                <!-- 物料名称 -->
-                <template slot="materialName" slot-scope="{row}">
-                  <el-popover
-                    placement="left"
-                    :title="row.cnnamelong || row.materialName"
-                    width="200"
-                    trigger="hover">
-                      <el-select slot="reference"  v-model="row.materialName"  remote filterable reserve-keyword clearable default-first-option placeholder="请输入物料名称" :loading="vatLoading" :remote-method="remoteMate" @focus="mateFocus(row)" @change="(val) => handleMateChange(val,row)">
-                        <el-option v-for="item in mateOption" :key="item.bcCode" :label="item.factoryName" :value="item.factoryName">
+                <template slot="materialName" slot-scope="scope">
+                  <template v-if="scope.row.bleadyeType != 'run' && scope.row.$cellEdit">
+                    <el-popover placement="right" title="信息" width="200" trigger="hover" :content="showinfo(scope.row)">
+                      <el-select slot="reference" v-model="scope.row.materialName" remote filterable reserve-keyword
+                        clearable default-first-option placeholder="请输入材料信息" :loading="vatLoading"
+                        :remote-method="remoteMethod" @change="handleMatNameChange">
+                        <el-option v-for="item in options" :key="item.bcCode"
+                          :label="`${item.cnnamelong}—${item.factoryName}`" :value="`${item.factoryName}`"
+                          :title="'CN:' + item.cnnamelong + '\n' + 'EN:' + item.ennamelong + '\n' + 'VI:' + item.vinamelong + '\n' + item.factoryName">
+                          <template #label>
+                            <span>{{ `${item.cnnamelong}-${item.cnnamelong}—${item.factoryName}` }} </span>
+                          </template>
                         </el-option>
                       </el-select>
-                  </el-popover>
+                    </el-popover>
+                  </template>
+                  <el-input v-else-if="scope.row.bleadyeType == 'run' && scope.row.$cellEdit"
+                    v-model="scope.row.materialName">
+                  </el-input>
+                  <span v-else>
+                    {{ scope.row.materialName }}
+                  </span>
                 </template>
+                <!-- 物料名称 -->
+                <!-- <template slot="materialName" slot-scope="{row}">
+                  <el-popover placement="left" :title="row.cnnamelong || row.materialName" width="200" trigger="hover">
+                    <el-select slot="reference" v-model="row.materialName" remote filterable reserve-keyword clearable
+                      default-first-option placeholder="请输入物料名称" :loading="vatLoading" :remote-method="remoteMate"
+                      @focus="mateFocus(row)" @change="(val) => handleMateChange(val, row)">
+                      <el-option v-for="item in mateOption" :key="item.bcCode" :label="item.factoryName"
+                        :value="item.factoryName">
+                      </el-option>
+                    </el-select>
+                  </el-popover>
+                </template> -->
 
               </avue-crud>
-            </div> </view-container
-        ></el-col>
+            </div>
+          </view-container>
+        </el-col>
         <el-col :span="12" v-if="tabs == '生产工艺'">
           <view-container title="成品规格要求" style="">
             <div style="margin-top: 15px; height: calc(100vh - 100px)">
-              <avue-form
-                ref="cpform"
-                :option="cpForm"
-                v-model="form"
-              ></avue-form>
+              <avue-form ref="cpform" :option="cpForm" v-model="form"></avue-form>
             </div>
           </view-container>
         </el-col>
       </el-row>
     </el-dialog>
-    <choice
-      :choiceV="choiceV"
-      :choiceTle="choiceTle"
-      :choiceQ="choiceQ"
-      dlgWidth="100%"
-      @choiceData="choiceData"
-      @close="choiceV = false"
-      v-if="choiceV"
-    ></choice>
-    <el-dialog
-      id="colorMng_Dlg"
-      :visible.sync="pdfDlg"
-      fullscreen
-      width="100%"
-      append-to-body
-      :close-on-click-modal="false"
-      :close-on-press-escape="false"
-    >
+    <choice :choiceV="choiceV" :choiceTle="choiceTle" :choiceQ="choiceQ" dlgWidth="100%" @choiceData="choiceData"
+      @close="choiceV = false" v-if="choiceV"></choice>
+    <el-dialog id="colorMng_Dlg" :visible.sync="pdfDlg" fullscreen width="100%" append-to-body
+      :close-on-click-modal="false" :close-on-press-escape="false">
       <view-container title="打印預覽">
-        <embed
-          id="pdf"
-          style="width: 100vw; height: calc(100vh - 80px)"
-          :src="pdfUrl"
-        />
+        <embed id="pdf" style="width: 100vw; height: calc(100vh - 80px)" :src="pdfUrl" />
       </view-container>
     </el-dialog>
   </div>
@@ -175,7 +129,7 @@
 <script>
 import choice from "@/components/proMng/index";
 import { mainCrud, dlgForm, dlgCrud, pfCrud, gyCrud, cpForm } from "./data";
-import { getBasChemicalByPage } from "../techCode/api";
+import { getBasChemicalByPage, getBasPigmentByPage } from "../techCode/api";
 import {
   add,
   update,
@@ -243,10 +197,10 @@ export default {
       chooseDtlData: {},
       pdfDlg: false,
       pdfUrl: "",
-
+      options: [],
       // 2022.07.15 ++  Symbol_Yang
       vatLoading: false,
-      mateOption:[],
+      mateOption: [],
     };
   },
   watch: {},
@@ -254,19 +208,19 @@ export default {
     // --- 对物料名称列进行自定义 Symbol_Yang 2022.07.15
     mateFocus(row) {
       this.$refs.otherCrud.setCurrentRow(row);
-      this.remoteMate( "%" + row.mateName, 'factoryName');
+      this.remoteMate("%" + row.mateName, 'factoryName');
     },
 
-    remoteMate(val,type) {
+    remoteMate(val, type) {
       this.vatLoading = true;
-      getBasChemicalByPage( {[type || 'fillTextSeach'] :  val,  start: 1, rows: 50} ).then((res) => {
+      getBasChemicalByPage({ [type || 'fillTextSeach']: val, start: 1, rows: 50 }).then((res) => {
         this.mateOption = res.data.records;
         this.vatLoading = false;
       });
     },
-    handleMateChange(val,row){
+    handleMateChange(val, row) {
       let item = this.mateOption.find(item => item.factoryName == val);
-      if(item){
+      if (item) {
         row.materialCode = item.bcCode
       }
     },
@@ -454,6 +408,7 @@ export default {
           })
         )
         .then((res) => {
+
           this.crud = res.data;
           if (this.tabs == "生产工艺") {
             // this.crud = this.crud.sort((a, b) => {
@@ -562,7 +517,13 @@ export default {
         this.choiceQ.paramType = "afterfinish";
         this.choiceV = true;
       } else {
-        this.crud.push({ index: this.crud.length + 1, $cellEdit: true });
+        let data = {
+          index: this.crud.length + 1,
+          bleadyeType: "add_chemicalmat",
+          $cellEdit: true
+        };
+        this.crud.push(data);
+        this.$refs.otherCrud.setCurrentRow(this.crud[this.crud.length - 1]);
       }
     },
     addDtl() {
@@ -747,15 +708,15 @@ export default {
           typeof val.breadthBorder === "number"
             ? val.breadthBorder
             : val.breadthBorder
-            ? Number(val.breadthBorder.match(/\d+/g)[0])
-            : 0; //连边幅宽 breadth_border
+              ? Number(val.breadthBorder.match(/\d+/g)[0])
+              : 0; //连边幅宽 breadth_border
 
         this.form.proBreadthActual =
           typeof val.breadthActual === "number"
             ? val.breadthActual
             : val.breadthActual
-            ? Number(val.breadthActual.match(/\d+/g)[0])
-            : 0;
+              ? Number(val.breadthActual.match(/\d+/g)[0])
+              : 0;
 
         // val.breadthActual.indexOf("(") != -1
         //   ? Number(val.breadthActual.match(/\d+/g)[0])
@@ -765,8 +726,8 @@ export default {
           typeof val.gramWeightBefor === "number"
             ? val.gramWeightBefor
             : val.gramWeightBefor
-            ? Number(val.gramWeightBefor.match(/\d+/g)[0])
-            : 0;
+              ? Number(val.gramWeightBefor.match(/\d+/g)[0])
+              : 0;
 
         // val.gramWeightBefor.indexOf("(") != -1
         //   ? Number(val.gramWeightBefor.match(/\d+/g)[0])
@@ -776,8 +737,8 @@ export default {
           typeof val.gramWeightAfter === "number"
             ? val.gramWeightAfter
             : val.gramWeightAfter
-            ? Number(val.gramWeightAfter.match(/\d+/g)[0])
-            : 0;
+              ? Number(val.gramWeightAfter.match(/\d+/g)[0])
+              : 0;
 
         // val.gramWeightAfter.indexOf("(") != -1
         //   ? Number(val.gramWeightAfter.match(/\d+/g)[0])
@@ -842,8 +803,23 @@ export default {
         this.form.proShrinkHorizontal = val.horizonShrink;
         this.form.proShrinkVertical = val.verticalShrink;
       }
-
       this.choiceV = false;
+    },
+    remoteMethod(val) {
+      if (this.chooseData.bleadyeType == "run") {
+        return;
+      }
+      this.vatLoading = true;
+      let fetchF = null;
+      if (this.chooseData.bleadyeType == "add_chemicalmat") {
+        fetchF = getBasChemicalByPage;
+      } else {
+        fetchF = getBasPigmentByPage;
+      }
+      fetchF({ fillTextSeach: val, start: 1, rows: 50 }).then((res) => {
+        this.options = res.data.records;
+        this.vatLoading = false;
+      });
     },
     close() {
       if (this.refresh) {
@@ -859,12 +835,44 @@ export default {
           this.chooseData.formulaFactor * 1000 * this.chooseData.useAmount;
       }
     },
+    handleMatNameChange(val) {
+      if (!val) {
+        this.chooseData.basMateId = ''
+        this.chooseData.mateName = ''
+        return;
+      }
+      if (this.chooseData.bleadyeType == "run") {
+        return;
+      }
+      let fetchF = null;
+      if (this.chooseData.bleadyeType == "add_chemicalmat") {
+        fetchF = getBasChemicalByPage;
+      } else {
+        fetchF = getBasPigmentByPage;
+      }
+      fetchF({ factoryName: "%" + val, start: 1, rows: 50 }).then((res) => {
+        if (res.data.total == 1) {
+          this.$nextTick(() => {
+            this.$set(this.chooseData, "materialCode", res.data.records[0].bcCode)
+            this.$set(this.chooseData, "materialName", res.data.records[0].factoryName)
+            const title = "VN: " + res.data.records[0].vinamelong + ",\n" +
+              "CN: " + res.data.records[0].cnnamelong + ",\n" +
+              "EN: " + res.data.records[0].ennamelong + ",\n" +
+              "factoryName: " + res.data.records[0].factoryName;
+            this.$set(this.chooseData, "popover", title)
+          })
+        }
+      });
+    },
+    showinfo(val) {
+      return (val.popover) ? val.popover : "";
+    }
   },
-  created() {},
+  created() { },
   mounted() {
     this.getData();
   },
-  beforeDestroy() {},
+  beforeDestroy() { },
 };
 </script>
 <style lang='stylus'>
