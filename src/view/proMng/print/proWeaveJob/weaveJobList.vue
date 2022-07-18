@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-11 11:53:52
+ * @LastEditTime: 2022-07-18 15:30:44
  * @Description: 
 -->
 <template>
@@ -168,10 +168,10 @@ export default {
       this.dialogVisible = true;
     },
     del() {
-      if (this.detail.creator != parent.userID) {
-        this.$tip.warning("你无权限删除该条数据!");
-        return;
-      }
+      // if (this.detail.creator != parent.userID) {
+      //   this.$tip.warning("你无权限删除该条数据!");
+      //   return;
+      // }
       if (this.detail.auditState) {
         this.$tip.warning("通过审核的数据不可删除,请联系主管取消审核!");
         return;
@@ -205,6 +205,7 @@ export default {
     handleRowDBLClick(val) {
       this.dialogVisible = true;
       this.isAdd = false;
+      this.isExtract = false;
       this.detail = val;
       // this.print();
     },

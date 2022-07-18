@@ -18,23 +18,33 @@
                 :data="crudData" 
                 :page.sync="page" 
                 v-loading="loading" 
+                @row-dblclick="handleRowDblClick"
                @select="handleSelect"
-              @select-all="handleSelectAll"
+                @select-all="handleSelectAll"
                @on-load="getDataList"></avue-crud>
         </el-row>
+        <el-dialog :visible.sync="xiaLanDtlVisible" title="下栏明细数据" append-to-body >
+            <xia-lan-dtl ref="xiaLanDtlRef"></xia-lan-dtl>
+        </el-dialog>
     </div>
 </template>
 <script>
 import { unCreateFormOp,unCreateCrudOp } from "./data"
 import { fetchUnCreateWeavaJob } from "./api"
+import XiaLanDtl from "./xiaLanDtl.vue"
 export default {
     name: "unCreateList",
+    components:{
+        XiaLanDtl
+    },
     data(){
         return {
             loading: false,
             formOp:unCreateFormOp(this),
             crudOp: unCreateCrudOp(this),
-            queryParams: {},
+            queryParams: {
+                type: ""
+            },
             crudData: [],
             page: {
                 pageSize: 20,
@@ -45,9 +55,19 @@ export default {
             curSelKey: "",
             // 选中的值
             selectRows: [],
+
+            // 下栏明细数据
+            xiaLanDtlVisible: false,
         }
     },
     methods:{
+        // 行双击
+        async handleRowDblClick(row){
+            if(row.type != 3) return;
+            this.xiaLanDtlVisible = true;
+            await this.$nextTick();
+            this.$refs.xiaLanDtlRef.getDataList(row);
+        },
         // 选中改变
         handleSelect(rows,row){
             if(!this.curSelKey){
@@ -83,15 +103,18 @@ export default {
             let params =  {
                 rows: this.page.pageSize,
                 start: this.page.currentPage,
-                dataSortRules: "exDate|desc,poNo|desc,fabCode,colorDept,colorChnName",
+                dataSortRules: "exDate|desc,poNo,type,colorSeq",
             }
-            let props = ["custId","poNo"]
+            let props = ["custId","type"]
             props.forEach(key => {
                 let value = this.queryParams[key];
                 if(value){
                     params[key] = value;
                 }
             })
+            if(this.queryParams.poNo){
+                params.poNo = "%" + this.queryParams.poNo
+            }
             let exDateValue = this.queryParams.exDate;
             if(exDateValue && exDateValue.length == 2){
                 params.exDate_begin = exDateValue[0];

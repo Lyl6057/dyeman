@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-13 15:44:53
+ * @LastEditTime: 2022-07-18 11:07:08
  * @Description:
  */
 
@@ -1841,7 +1841,15 @@ export function unCreateFormOp(_this){
         label: "货期",
         type: "daterange",
         valueFormat: "yyyy-MM-dd",
-        span: 6
+        span: 6,
+      },
+      {
+        prop: 'type',
+        label: "布类选择",
+        type: "select",
+        dicData: getDIC("pro_cloth_type"),
+        span: 4,
+        placeholder: "请选择布类",
       }
     ]
   }
@@ -1886,6 +1894,7 @@ export function unCreateCrudOp(_this){
         prop: 'fabCode',
         label: "布料编号",
         width: 100,
+        overHidden: true,
       },
       {
         prop: 'fabName',
@@ -1932,7 +1941,8 @@ export function unCreateCrudOp(_this){
       {
         prop: 'dyeClass',
         label: "染色类别",
-        width: 100
+        width: 100,
+        align: "center"
       },
       {
         prop: 'weavePoQty',
@@ -2031,6 +2041,33 @@ export function weaveDtlCrudOp(_this){
         change(){
           _this.reComputed()
         }
+      }
+    ]
+  }
+}
+
+
+// 下栏明细数据
+export function xiaLanDtlCrudOp(_this){
+  return {
+    height: "500px",
+    page: false,
+    menu: false,  
+    border: true,
+    showHeader: false,
+    column: [
+      {
+        prop: "key",
+        label: "第一列",
+        width: 150,
+        align: "center"
+      },
+      {
+        prop: "prop_1",
+        label: "第二列",
+        width: 150,
+        cell: true,
+        placeholder: " "
       }
     ]
   }

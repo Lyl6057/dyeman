@@ -2,13 +2,29 @@
  * @Author: Lyl
  * @Date: 2021-02-01 14:06:25
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-11 09:40:25
+ * @LastEditTime: 2022-07-18 15:25:42
  * @Description:
  */
 
 import axios from "axios";
 
+//  根据抽取的已检验数据保存织胚明细
+export function saveFlatknitByUnCreate(params){
+  return axios({
+    url: "/api/proWeaveJobFlatknit/save/byXiaLan/" + params.weaveJobId,
+    method: "POST",
+    data: params.data,
+  });
+}
 
+// 根据分组外键（业务外键）获取下栏明细数据
+export function fetchXiaLanDtlData(data){
+  return axios({
+    url: "/api/vGstPoColorpoQty/xiaLan/dtl",
+    method: "POST",
+    data: data,
+  });
+}
 
 // 查询未生产的织造通知单
 export function fetchUnCreateWeavaJob(params){

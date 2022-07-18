@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-13 10:19:16
+ * @LastEditTime: 2022-07-18 15:29:49
  * @Description: 
 -->
 <template>
@@ -103,6 +103,17 @@
       </view-container>
     </el-dialog>
     <choice :choiceV="choiceV" :choiceTle="choiceTle" :choiceQ="choiceQ" dlgWidth="100%" @choiceData="choiceData" @close="choiceV = false" v-if="choiceV"></choice>
+  
+
+    <div class="other-dtl-wrapper" >
+      <span style="color: #409eff; font-size: 15px; margin-left: 20px" @click.stop="handleOpenWeaEmbDtl" >織胚明細</span>
+    </div>
+    <el-dialog :visible.sync="meaEmbVisible" fullscreen  append-to-body :close-on-click-modal="false" :close-on-press-escape="false" >
+      <MeaveEmbyroDtl 
+        :weaveJobId="form.weaveJobId"
+        ref="meaveEmbyroDtlRef" 
+        @close="meaEmbVisible = false" />
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -156,11 +167,13 @@ import {
   get,
   addProEquipmentSchedule,
   fetchEquipmentInfo,
+  saveFlatknitByUnCreate
 } from "./api";
 import { baseCodeSupplyEx, baseCodeSupply } from "@/api/index";
 import preview from "./preview";
 import { getBf } from "../clothFly/api";
 import v1 from "uuid/v1"
+import MeaveEmbyroDtl from "./meaveEmbyroDtl.vue"
 export default {
   name: "",
   props: {
@@ -177,6 +190,7 @@ export default {
     choice: choice,
     technology,
     "weave-dtl": WeaveDtl,
+    MeaveEmbyroDtl,
   },
   data() {
     return {
@@ -226,7 +240,9 @@ export default {
       gytDlg: false,
       refresh: false,
 
-
+      // 织胚明细 弹出窗状态
+      meaEmbVisible: false,
+      xiaLanDtls: []
     };
   },
   watch: {
@@ -237,6 +253,23 @@ export default {
     },
   },
   methods: {
+    // 织胚明细DOM 移动
+    meaveDomMove(){
+      let meaveDtlBtnDom = document.querySelectorAll(".other-dtl-wrapper")[0];
+      let formGroupWrapper = document.querySelectorAll("#proWeaveJob .avue-group__header")[0];
+      formGroupWrapper.appendChild(meaveDtlBtnDom)
+    },
+    // 打开织胚明细界面
+    async handleOpenWeaEmbDtl(){
+      if(!this.isExtract && !this.form.weaveJobId) return this.$tip.warning("请先保存通知单");
+      this.meaEmbVisible = true;
+      await this.$nextTick();
+      if(this.isExtract){
+        this.$refs.meaveEmbyroDtlRef.extractDtl(this.xiaLanDtls);
+      }else{
+        this.$refs.meaveEmbyroDtlRef.getDataList();
+      }
+    },
     getData() {
       if (this.isAdd) {
         this.wLoading = true;
@@ -346,9 +379,17 @@ export default {
 
       let poNoMap = {};
       let contractAmount = 0;
+      let xiaLanDtls = [];
 
       let dtlCrudData = this.extractRows.map(item => {
         poNoMap[item.poNo] = true;
+        if(item.type == 3){
+          xiaLanDtls.push({
+            poNo: item.poNo,
+            bomId: item.bomId,
+            groupNo: item.colorCode
+          })
+        }
         let weavePoQty = item.poQtyKg - item.weavePoQty
         contractAmount += weavePoQty;
         return Object.assign({}, item, {
@@ -379,6 +420,7 @@ export default {
         creator: parent.userID || "ADMIN"
       })
       this.$refs.weaveDtlRef.crudData = dtlCrudData;
+      this.xiaLanDtls = xiaLanDtls;
       
     },
     technologyRefresh(val){
@@ -595,6 +637,12 @@ export default {
     // 保存织单明细
     saveWeavaDtlData(){
       this.$refs.weaveDtlRef.saveWeaveDltData(this.form.weaveJobId);
+      if(this.isExtract){
+        saveFlatknitByUnCreate({
+          weaveJobId: this.form.weaveJobId,
+          data: this.xiaLanDtls
+        })
+      }
     },
     query() {
       this.loading = true;
@@ -1233,6 +1281,7 @@ export default {
   },
   created() {},
   mounted() {
+    this.meaveDomMove();
     this.getData();
   },
   beforeDestroy() {},
