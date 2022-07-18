@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:08:41
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-18 09:02:16
+ * @LastEditTime: 2022-07-18 17:31:46
  */
 
 // 表格通用配置
@@ -34,7 +34,7 @@ const formOpCommon = {
 export function stkinMemoCrudOp(_this) {
   return {
     ...mainCrudOpCommon,
-    height: "calc(100vh - 225px)",
+    height: "calc(100vh - 275px)",
     column: [{
         label: "入仓通知单编号",
         prop: "memoNo",
@@ -106,7 +106,7 @@ export function unStoreFormOp(_this) {
 export function unStoreCrudOp(_this) {
   return {
     ...mainCrudOpCommon,
-    height: "calc(100vh - 225px)",
+    height: "calc(100vh - 275px)",
     selection: true,
     index:false,
     column: [
