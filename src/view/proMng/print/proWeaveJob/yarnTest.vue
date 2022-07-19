@@ -4,19 +4,19 @@
  * @Author: Symbol_Yang
  * @Date: 2022-07-19 14:54:05
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-19 16:18:42
+ * @LastEditTime: 2022-07-19 16:51:48
 -->
 <template>
     <view-container  class="yarn-test-container" title="试纱结果记录" v-loading="loading">
         <el-tabs class="tab-container" v-model="activeName" @tab-click="handleTabClick">
             <el-tab-pane label="QA评估结果" name="first">
-                <el-input class="yarn-test-remark" type="textarea" v-model="remarksData.remark1"></el-input>
+                <el-input class="yarn-test-remark" type="textarea" readonly v-model="remarksData.remark1"></el-input>
             </el-tab-pane>
             <el-tab-pane label="复核结果" name="second">
-                <el-input class="yarn-test-remark" type="textarea" v-model="remarksData.remark2"></el-input>
+                <el-input class="yarn-test-remark" type="textarea" readonly v-model="remarksData.remark2"></el-input>
             </el-tab-pane>
             <el-tab-pane label="公司结论" name="third">
-                <el-input class="yarn-test-remark" type="textarea" v-model="remarksData.remark3"></el-input>
+                <el-input class="yarn-test-remark" type="textarea" readonly v-model="remarksData.remark3"></el-input>
             </el-tab-pane>
             <el-tab-pane label="下载文件" name="fourth">
                 <el-button type="success" @click="handleFileDownload" >{{remarksData.fileName}}文件下载</el-button>
