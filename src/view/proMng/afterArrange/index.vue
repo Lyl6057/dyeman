@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-16 11:01:43
+ * @LastEditTime: 2022-07-19 13:37:08
  * @Description: 
 -->
 <template>
@@ -138,7 +138,7 @@ export default {
       get(
         Object.assign(queryData, {
           rows: this.page.pageSize,
-          page: this.page.currentPage,
+          start: this.page.currentPage,
           dataSortRules: "workDate|desc,vatNo"
         })
       )
