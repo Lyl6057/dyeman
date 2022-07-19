@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:18:36
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-19 10:57:44
+ * @LastEditTime: 2022-07-19 11:54:11
 -->
 <template>
   <div id="whse-unIn-container">
@@ -84,7 +84,8 @@ export default {
         let { lastCheckTime } = this.queryParams;
         if(lastCheckTime && lastCheckTime.length == 2){
           params.lastCheckTimeBegin = lastCheckTime[0] + " 07:30:00";
-          params.lastCheckTimeEnd = lastCheckTime[1] + " 07:30:00";
+          let endDate = new Date(new Date(lastCheckTime[1]).getTime() + (24 * 60 * 60 * 1000));
+          params.lastCheckTimeEnd = `${endDate.getFullYear()}-${endDate.getMonth() + 1}-${endDate.getDate()} 07:30:00`;
         }
         fetchUnStoreClothByPage(params).then(res => {
             this.page.total = res.data.total;
