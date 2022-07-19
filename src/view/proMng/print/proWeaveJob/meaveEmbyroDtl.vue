@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-06-20 11:17:59
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-18 14:46:18
+ * @LastEditTime: 2022-07-19 07:59:40
 -->
 <template>
     <view-container title="织胚明细" >
@@ -165,7 +165,8 @@
                 });
                 let targetDataList = Object.values(propEnum);
                 if(targetDataList.length != 0){
-                    let option = Object.keys(targetDataList[1]).map(prop => {
+                    let props = Object.keys(targetDataList[1]).sort()
+                    let option = props.map(prop => {
                         return {
                             width: 150,
                             prop: prop,

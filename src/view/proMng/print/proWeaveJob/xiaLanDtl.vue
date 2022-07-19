@@ -52,7 +52,19 @@
             },
             // 数据格式解析
             dataTransform(originData){
-                let propEnum = {};
+                let propEnum = {
+                    1: {
+                        prop_1: "",
+                        key: "cpName",
+                        prop_2: ""
+                    },
+                    2: {
+                         key: "cpName"
+                    },
+                    3: {
+                         key: "cpName"
+                    },
+                };
                 originData.forEach(item => {
                     if(!propEnum[item.rowId]){
                         propEnum[item.rowId] = {};
@@ -63,9 +75,10 @@
                     }
                     itemData[`prop_${item.colId}`] = item.cpValue;
                 });
-                let targetDataList = Object.values(propEnum);
+                let targetDataList = Object.values(propEnum); 
                 if(targetDataList.length != 0){
-                    let option = Object.keys(targetDataList[1]).map(prop => {
+                    let props = Object.keys(targetDataList[1]).sort()
+                    let option = props.map(prop => {
                         return {
                             width: 150,
                             prop: prop,
