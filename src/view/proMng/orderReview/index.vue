@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-16 11:09:30
+ * @LastEditTime: 2022-07-19 10:17:50
  * @Description:
 -->
 <template>
@@ -248,6 +248,7 @@ export default {
             pages: this.page.currentPage,
             // isWorkOut: 0,
             // runState: 1,
+             dataSortRules: "workDate|desc,vatNo"
           })
         ).then((res) => {
           this.crud = res.data.records;
