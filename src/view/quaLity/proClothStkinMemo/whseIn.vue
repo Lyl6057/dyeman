@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:18:23
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-01 10:36:34
+ * @LastEditTime: 2022-07-19 14:47:56
 -->
 <template>
   <div id="stkin-memo-container">
@@ -102,8 +102,8 @@ export default {
       };
       if(memoDate && memoDate.length == 2){
         Object.assign(params,{
-          memoDate_begin: yinDate[0],
-          memoDate_end: yinDate[1]
+          memoDate_begin: memoDate[0],
+          memoDate_end: memoDate[1]
         })
       }
       fetchProClothStkinMemeByPage(params).then(res => {
