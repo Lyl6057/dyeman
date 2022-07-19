@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-16 10:54:22
+ * @LastEditTime: 2022-07-19 08:06:24
  * @Description: 
 -->
 <template>
@@ -144,7 +144,7 @@ export default {
           delete this.form[key];
         }
       }
-      this.form.vatNo = "!^%" + (this.form.vatNo ? this.form.vatNo : "");
+      this.form.vatNo = "%" + (this.form.vatNo ? this.form.vatNo : "");
       this.form.weaveJobCode =
         "%" + (this.form.weaveJobCode ? this.form.weaveJobCode : "");
       // if (this.form.startJobDate && this.form.startJobDate.indexOf(":") == -1) {
