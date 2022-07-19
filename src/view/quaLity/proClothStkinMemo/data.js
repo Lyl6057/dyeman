@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:08:41
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-19 10:31:52
+ * @LastEditTime: 2022-07-19 11:29:06
  */
 
 // 表格通用配置
@@ -79,7 +79,7 @@ export function stkinMemoQueryFormOp(_this) {
       prop: "memoDate",
       type: "daterange",
       valueFormat: "yyyy-MM-dd",
-      span: 5,
+      span: 6,
       placeholder: " ",
     }]
 
