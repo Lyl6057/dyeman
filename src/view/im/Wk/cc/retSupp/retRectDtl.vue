@@ -4,11 +4,11 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-12 10:34:33
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-27 09:45:19
+ * @LastEditTime: 2022-07-19 09:07:52
 -->
 <template>
   <div class="with-drawal-dlt-container">
-    <view-container title="退纱通知单信息维护" :element-loading-text="loadLabel" v-loading="loading">
+    <view-container title="退货通知单信息维护" :element-loading-text="loadLabel" v-loading="loading">
       <div class="btnList">
         <el-button
           type="primary"
@@ -20,7 +20,7 @@
       <div class="formBox">
         <avue-form ref="form" :option="retReatFormOp" v-model="retReatFormData"></avue-form>
       </div>
-      <view-container title="退纱通知单明细">
+      <view-container title="退货通知单明细">
         <!-- <div class="btnList"></div> -->
         <avue-crud
           ref="dtlCrudRef"
