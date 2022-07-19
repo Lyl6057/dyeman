@@ -2,11 +2,20 @@
  * @Author: Lyl
  * @Date: 2021-02-01 14:06:25
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-18 15:25:42
+ * @LastEditTime: 2022-07-19 15:39:56
  * @Description:
  */
 
 import axios from "axios";
+
+
+// 用纱明细中通过本厂纱批号获取试纱记录
+export function fetchYarnTestByYarnBatch(params){
+  return axios({
+    url: "/api/proWeaveJobYarn/yarnTest/byBatch/" + params.yarnBatch,
+    method: "get",
+  });
+}
 
 //  根据抽取的已检验数据保存织胚明细
 export function saveFlatknitByUnCreate(params){

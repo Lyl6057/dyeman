@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-18 15:29:49
+ * @LastEditTime: 2022-07-19 15:41:40
  * @Description: 
 -->
 <template>
@@ -114,12 +114,16 @@
         ref="meaveEmbyroDtlRef" 
         @close="meaEmbVisible = false" />
     </el-dialog>
+    <el-dialog :visible.sync="yarnTestVisible" append-to-body :close-on-click-modal="false" :close-on-press-escape="false" >
+      <YarnTest ref="yarnTestRef"  />
+    </el-dialog>
   </div>
 </template>
 <script>
 import choice from "@/components/proMng/index";
 import technology from "./technology"
 import WeaveDtl from "./weaveDtl.vue"
+import YarnTest from "./yarnTest.vue"
 import {
   mainCrud,
   dlgForm,
@@ -191,6 +195,7 @@ export default {
     technology,
     "weave-dtl": WeaveDtl,
     MeaveEmbyroDtl,
+    YarnTest
   },
   data() {
     return {
@@ -242,7 +247,11 @@ export default {
 
       // 织胚明细 弹出窗状态
       meaEmbVisible: false,
-      xiaLanDtls: []
+      xiaLanDtls: [],
+
+      // 试纱
+      yarnTestVisible: false,
+
     };
   },
   watch: {
@@ -1145,6 +1154,13 @@ export default {
       } else if (this.tabs === "更改紗長") {
         this.form.yarnLenghtChanged = this.chooseData.yarnLength;
         this.visible = false;
+      }else if (this.tabs === "用紗明细"){
+        // 不存在本厂批号则不进行操作
+        if(!this.chooseData.factoryYarnBatch) return;
+        this.yarnTestVisible = true;
+        this.$nextTick(() => {
+          this.$refs.yarnTestRef.getYarnTestData(this.chooseData.factoryYarnBatch);
+        })
       }
     },
     choiceData(val) {
