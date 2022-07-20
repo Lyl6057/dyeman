@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:08:41
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-05-25 09:31:19
+ * @LastEditTime: 2022-07-20 16:25:29
  */
 import {
   getDIC,
@@ -188,6 +188,7 @@ export function whseInFormOp(_this) {
 }
 
 export function retMatNoticCrudOp(_this) {
+  let type = _this.imWkType;
   return {
     ...mainCrudOpCommon,
     height: "calc(100vh - 225px)",
@@ -212,12 +213,12 @@ export function retMatNoticCrudOp(_this) {
         valueFormat: "yyyy-MM-dd"
       },
       {
-        label: dataPropEnum[3].materIdLabel,
+        label: dataPropEnum[type].materIdLabel,
         prop: "materialId",
         width: 120,
       },
       {
-        label: dataPropEnum[3].materNameLabel,
+        label: dataPropEnum[type].materNameLabel,
         prop: "materialName",
         overHidden: true,
         width: 250,
@@ -238,7 +239,7 @@ export function retMatNoticCrudOp(_this) {
       },
       {
         label: "单位",
-        prop: dataPropEnum[3].weightUnitKey,
+        prop: dataPropEnum[type].weightUnitKey,
         type: "select",
         dicData: getDIC("bas_matUnit"),
         width: 100,
