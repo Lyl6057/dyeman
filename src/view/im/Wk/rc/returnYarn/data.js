@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:08:41
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-05-25 09:30:04
+ * @LastEditTime: 2022-07-20 10:18:53
  */
 import {
   getDIC,
@@ -155,6 +155,7 @@ export function retYarnNoticCrudOp(_this) {
         label: "织单号",
         prop: "weaveJobCode",
         width: 120,
+        overHidden: true
       },
       {
         label: "纱线编号",

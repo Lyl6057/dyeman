@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:18:51
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-05-18 17:09:45
+ * @LastEditTime: 2022-07-20 11:07:19
 -->
 <template>
   <div id="whse-yarn-in-dtl-container">
@@ -315,6 +315,7 @@ export default {
                 weight: item[weightKey],
                 storageNo: "",
                 weightUnit: item.weightUnit,
+                storageNo: item.storageNo
               },
             ];
             return item;
