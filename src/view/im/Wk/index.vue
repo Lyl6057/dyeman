@@ -493,7 +493,7 @@ export default {
             {
               id: "6-5",
               click: () => {
-                this.toView("rc_sg", this.$t("iaoMng.fl") + "_5","FL");
+                this.toView("rc_sg", this.$t("iaoMng.fl") + "_4","FL");
               },
               title: this.$t("iaoMng.sgscfl"),
               icon: "el-icon-s-claim",
