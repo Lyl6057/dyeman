@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-24 14:15:12
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-05 16:29:27
+ * @LastEditTime: 2022-07-21 17:20:56
  * @Description: 
 -->
 <template>
@@ -433,7 +433,7 @@ export default {
       let idxs = row.index.toString().split("-");
       if (idxs.length == 1) return;
       let type = this.form.type;
-      if (!["SX","RHL","RLL"].includes(type)) return;
+      if (!["SX","RHL","RLL","WJ","FL","SB"].includes(type)) return;
       this.drawerVisible = true;
       await this.$nextTick();
       let params = {};
@@ -449,6 +449,9 @@ export default {
           break;
         case "RHL":
         case "RLL":
+        case "WJ":
+        case "FL":
+        case "SB":
           params = {
             materialId: this.crud[idxs[0] - 1].chemicalId,
             storageNo: row.storageNo,

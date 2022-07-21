@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-20 08:46:17
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-05 16:29:03
+ * @LastEditTime: 2022-07-21 17:24:07
 -->
 
 <template>
@@ -38,7 +38,14 @@
   </div>
 </template>
 <script>
-import { fetchWhseDtlDataByYarns,fetchWhseDtlDataByChemical,fetchWhseDtlDataByDyestuff } from "./api";
+import { 
+  fetchWhseDtlDataByYarns,
+  fetchWhseDtlDataByChemical,
+  fetchWhseDtlDataByDyestuff,
+  fetchWhseDtlDataByAccess,
+  fetchWhseDtlDataByHardware,
+  fetchWhseDtlDataByEquip
+  } from "./api";
 import { whseDtlCrudOp,whseDtlCountFormOp } from "./data";
 export default {
   name: "inventoryWhseDtl",
@@ -107,6 +114,15 @@ export default {
           break;
         case "RLL" :
           fetchWhseDtlDataFn = fetchWhseDtlDataByDyestuff;
+          break;
+        case "FL" :
+          fetchWhseDtlDataFn = fetchWhseDtlDataByAccess;
+          break;
+        case "WJ" :
+          fetchWhseDtlDataFn = fetchWhseDtlDataByHardware;
+          break;
+        case "SB" :
+          fetchWhseDtlDataFn = fetchWhseDtlDataByEquip;
           break;
         default:
           break;
