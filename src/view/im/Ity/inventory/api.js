@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-24 14:21:09
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-05 16:28:21
+ * @LastEditTime: 2022-07-21 17:24:42
  * @Description:
  */
 import axios from "axios";
@@ -34,6 +34,32 @@ export function fetchWhseDtlDataByDyestuff(params) {
   });
 }
 
+// 根据辅料信息获取出入仓明细
+export function fetchWhseDtlDataByAccess(params) {
+  return axios({
+    url: "/api/viewAccessoriesStock/whseDtl/page",
+    method: "get",
+    params: params
+  });
+}
+
+// 根据五金信息获取出入仓明细
+export function fetchWhseDtlDataByHardware(params) {
+  return axios({
+    url: "/api/viewHardwareStock/whseDtl/page",
+    method: "get",
+    params: params
+  });
+}
+
+// 根据设备信息获取出入仓明细
+export function fetchWhseDtlDataByEquip(params) {
+  return axios({
+    url: "/api/viewEquipmentStock/whseDtl/page",
+    method: "get",
+    params: params
+  });
+}
 
 // 判断当天是否已存在清单
 export function fetchCheckHasExistByNow(params) {
