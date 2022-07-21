@@ -4,7 +4,7 @@ let rlData = getXDicT("BasChemicalmatNew");
 let user = getDicT("ucmlUser", "employeename", "ucmlUseroid");
 
 function fillZero(row, value) {
-  return value && value.toFixed(2);
+  return value && (+value).toFixed(2);
 }
 
 export function rsxkr1F(_this) {
