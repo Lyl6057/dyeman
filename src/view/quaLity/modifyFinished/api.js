@@ -11,7 +11,7 @@ import axios from "axios";
 // 修改
 export function updateFinished(data) {
   return axios({
-    url: "/api/proFinalProductCard",
+    url: "/api/proFinalProductCard/rcv", // new recovery
     method: "put",
     params: data
   });
