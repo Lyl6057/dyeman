@@ -272,5 +272,16 @@ export default [
     meta: {
       keepAlive: true
     }
+  },
+  {
+    path: "/clothMerge",
+    name: "成品布合并",
+    component: resolve =>
+      require(["@/view/quaLity/clothMerge/index"], resolve),
+    meta: {
+      keepAlive: true
+    }
   }
+
+  
 ];

@@ -1233,12 +1233,18 @@ export function pfCrud(_this) {
             if (_this.chooseData.formulaFactor === 0) {
               _this.chooseData.waterAmount = 0;
             } else {
-              _this.chooseData.waterAmount = Number(
-                (
-                  (_this.chooseData.useAmount * 1000) /
-                  _this.chooseData.formulaFactor
-                ).toFixed(1)
-              );
+              if(_this.chooseData.waterAmount!==0){
+                _this.chooseData.useAmount = Number(
+                  ((_this.chooseData.formulaFactor * _this.chooseData.waterAmount) /1000).toFixed(1)
+                );
+              }else if(_this.chooseData.useAmount!==0){
+                _this.chooseData.waterAmount = Number(
+                  (
+                    (_this.chooseData.useAmount * 1000) /
+                    _this.chooseData.formulaFactor
+                  ).toFixed(1)
+                );
+              }
             }
           });
         }
@@ -1301,7 +1307,19 @@ export function pfCrud(_this) {
         minRows: 0,
         // maxRows: 9999,
         span: 6,
-        cell: true
+        cell: true,
+        change: () => {
+          _this.$nextTick(() => {
+            if (_this.chooseData.formulaFactor != 0 || _this.chooseData.waterAmount!=0) {
+              _this.chooseData.useAmount = Number(
+                ((_this.chooseData.formulaFactor * _this.chooseData.waterAmount) /1000).toFixed(1)
+              );
+            } 
+          });
+          //   _this.chooseData.waterAmount = Number(
+          //     (_this.form.jobAmount * _this.chooseData.waterRatio).toFixed(2)
+          //   );
+        }
       },
       {
         label: "开稀比例",

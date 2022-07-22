@@ -95,6 +95,10 @@ export function quality(_this) {
         {
           menuName: "13.QA剪办记录",
           index: "shearingBoard"
+        },
+        {
+          menuName: "14.成品布合并",
+          index: "clothMerge"
         }
       ]
     },

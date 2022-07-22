@@ -282,7 +282,7 @@ export default {
                   let name = encodeURI(
                     "http:" +
                     process.env.API_HOST.split(":")[1] +
-                    ":92/api/proFinalProductCard/warehousingdetails?vatNo=" +
+                    ":91/api/proFinalProductCard/warehousingdetails?vatNo=" +
                     this.form.vatNo +
                     "&units=" +
                     this.form.wmUnit
