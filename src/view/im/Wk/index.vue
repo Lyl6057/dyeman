@@ -302,7 +302,7 @@ export default {
         {
           id: "4",
           label: "化工原料",
-          name: "HRL",
+          name: "RHL",
           span: 3,
           data: [
             {
@@ -949,7 +949,7 @@ export default {
         {
           id: "5",
           label: "化工原料",
-          name: "HRL",
+          name: "RHL",
           span: 3,
           data: [
             {
@@ -964,7 +964,7 @@ export default {
               id: "5-2",
               click: () => {
                 // this.toView("cc_hgyl", this.$t("iaoMng.sclyhgylcc") + "_1");
-                this.toView("cc_productionUse", this.$t("iaoMng.hgyl") + "_1", "HRL");
+                this.toView("cc_productionUse", this.$t("iaoMng.hgyl") + "_1", "RHL");
               },
               title: this.$t("iaoMng.sclyhgylcc"),
               icon: "el-icon-s-claim",
@@ -977,7 +977,7 @@ export default {
               id: "5-3",
               click: () => {
                 // this.toView("cc_scfl", this.$t("iaoMng.tgysflcc") + "_4");
-                this.toView("ret_supp", this.$t("iaoMng.tgyshgylcc") + "_5", "HRL");
+                this.toView("ret_supp", this.$t("iaoMng.tgyshgylcc") + "_5", "RHL");
               },
               title: this.$t("iaoMng.tgyshgylcc"),
               icon: "el-icon-s-claim",
@@ -1214,7 +1214,7 @@ export default {
     getUnInStockCountData(refreshAll = false){
       let types = [];
       if(refreshAll){
-        types = ["SX","HRL","RLL", "FL", "WJ", "XZ", "ENG","EQU"];
+        types = ["SX","RHL","RLL", "FL", "WJ", "XZ", "ENG","EQU"];
       }else{
         this.curWhseType && types.push(this.curWhseType);
       }
@@ -1241,7 +1241,7 @@ export default {
     getUnOutStockCountData(refreshAll = false){
       let types = [];
       if(refreshAll){
-        types = ["SX","HRL","RLL", "FL", "WJ", "XZ", "ENG","EQU"];
+        types = ["SX","RHL","RLL", "FL", "WJ", "XZ", "ENG","EQU"];
       }else{
         this.curWhseType && types.push(this.curWhseType);
       }
