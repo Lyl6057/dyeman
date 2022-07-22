@@ -6,7 +6,7 @@
  * @FilePath: \iot.vue\src\view\im\transferLoadQa\data.js
  * @Description:
  */
-import { getDIC } from '@/config/index'
+import { getDIC,getDicT } from '@/config/index'
 export const outExit = [
   {
     label: "Q1",
@@ -55,50 +55,50 @@ export const sbExit = [
     label: "S1",
     value: "S1"
   },
-  {
-    label: "S2",
-    value: "S2"
-  },
+  // {
+  //   label: "S2",
+  //   value: "S2"
+  // },
   {
     label: "S3",
     value: "S3"
   },
-  {
-    label: "S4",
-    value: 'S4'
-  },
+  // {
+  //   label: "S4",
+  //   value: 'S4'
+  // },
   {
     label: "S5",
     value: "S5"
   },
-  {
-    label: "S6",
-    value: "S6"
-  },
+  // {
+  //   label: "S6",
+  //   value: "S6"
+  // },
   {
     label: "S7",
     value: 'S7'
   },
-  {
-    label: 'S8',
-    value: 'S8'
-  },
-  {
-    label: 'S9',
-    value: 'S9'
-  },
-  {
-    label: "S10",
-    value: "S10"
-  },
-  {
-    label: "S11",
-    value: "S11"
-  },
-  {
-    label: "S12",
-    value: "S12"
-  }
+  // {
+  //   label: 'S8',
+  //   value: 'S8'
+  // },
+  // {
+  //   label: 'S9',
+  //   value: 'S9'
+  // },
+  // {
+  //   label: "S10",
+  //   value: "S10"
+  // },
+  // {
+  //   label: "S11",
+  //   value: "S11"
+  // },
+  // {
+  //   label: "S12",
+  //   value: "S12"
+  // }
 ];
 
 const inExit = [
@@ -634,6 +634,81 @@ export function inWhseCrudOp(_this) {
   };
 }
 
+export function inWhseCrudPBOp(_this) {
+  return {
+    menu: false,
+    addBtn: false,
+    cancelBtn: false,
+    editBtn: false,
+    delBtn: false,
+    menuWidth: 200,
+    border: true,
+    stripe: true,
+    index: false,
+    highlightCurrentRow: true,
+    height: "calc(100vh - 208px)",
+    refreshBtn: false,
+    columnBtn: false,
+    page: false,
+    labelWidth: 100,
+    selection: false,
+    column: [
+      {
+        label: "#",
+        prop: "index",
+        width: 50,
+        align: "center",
+        display:true ,
+        fixed: true
+      },
+      {
+        label:"织单号",
+        prop: "weaveJobCode",
+        cell: false,
+        width: 170,
+        align: "right"
+      },
+     
+      {
+        label: "重量",
+        prop: "woWeights",
+        width: 70,
+        span: 6,
+        placeholder: " ",
+        disabled: true,
+     
+        fixed: true
+      },
+      {
+        label: "单位",
+        prop: "woUnit",
+        width: 100,
+        span: 6,
+        overHidden: true,
+        placeholder: " "
+      },
+      {
+        label: "布票号",
+        prop: "noteCode",
+        cell: false,
+        width: 250,
+        placeholder: " "
+      },
+      {
+        label: "疋号",
+        prop: "countingNo",
+        span: 8,
+        placeholder: " ",
+        cell: true,
+   
+        width: 120,
+        fixed: true
+      },
+    
+    ]
+  };
+}
+
 
 export function taskForm(_this) {
   return {
@@ -969,3 +1044,432 @@ export function taskCrud(_this) {
     ]
   };
 }
+
+export function taskHistoryCrud(_this) {
+  return {
+    menu: false,
+    addBtn: false,
+    cancelBtn: false,
+    editBtn: false,
+    delBtn: false,
+    menuWidth: 80,
+    border: true,
+    index: true,
+    highlightCurrentRow: true,
+    height: "calc(900vh - 320px)",
+    refreshBtn: false,
+    columnBtn: false,
+    page: true,
+    labelWidth: 100,
+    selection: false,
+    showSummary: false,
+    column: [
+      {
+        label: "创建时间",
+        prop: "createTime",
+        type: "datetime",
+        format: "yyyy-MM-dd HH:mm:ss",
+        valueFormat: "yyyy-MM-dd HH:mm:ss",
+        span: 6,
+        align: "center",
+        sortable: true,
+        width: 200
+      },
+      {
+        label: "入口编号",
+        prop: "entrance",
+        clearable: false,
+        width: 120,
+        span: 6,
+        placeholder: " ",
+        cell: true,
+        overHidden: true,
+        type: "select",
+        dicData: outExit
+      },
+      {
+        label: "指令类型",
+        prop: "orderType",
+        clearable: false,
+        span: 5,
+        placeholder: " ",
+        cell: true,
+        overHidden: true,
+        width: 120,
+        type: "select",
+        dicData: [
+          {
+            label: "正常入库",
+            value: 1
+          },
+          {
+            label: "正常出库",
+            value: 2
+          },
+          {
+            label: "验布出库",
+            value: 3
+          },
+          {
+            label: "验布入库",
+            value: 4
+          },
+          {
+            label: "松布出库",
+            value: 5
+          },
+          {
+            label: "松布入库",
+            value: 6
+          }
+        ],
+      },
+      {
+        label: "物料类别",
+        prop: "type",
+        clearable: false,
+        span: 6,
+        placeholder: " ",
+        cell: true,
+        overHidden: true,
+        width: 120,
+        type: "select",
+        dicData: [
+          {
+            label: "胚布",
+            value: 1
+          },
+          {
+            label: "成品布",
+            value: 2
+          }
+        ]
+      },
+      {
+        label: "载具条码",
+        prop: "barCode",
+        span: 6,
+        width: 120,
+        placeholder: " ",
+        cell: true,
+        overHidden: true
+      },
+     
+      {
+        label: "货位码",
+        prop: "storageCode",
+        span: 6,
+        width: 120,
+        placeholder: " ",
+        cell: true,
+        overHidden: true
+      },
+      {
+        label: "是否空布笼",
+        prop: "isEmpty",
+        span: 6,
+        placeholder: " ",
+        width: 125,
+        sortable: true,
+        overHidden: true,
+        type: "select",
+        dicData: [
+          {
+            label: "是",
+            value: 1
+          },
+          {
+            label: "否",
+            value: 0
+          }
+        ]
+      },
+      {
+        label: "完成状态",
+        prop: "finishStatus",
+        span: 6,
+        placeholder: " ",
+        width: 125,
+        sortable: true,
+        overHidden: true,
+        type: "select",
+        dicData: [
+          {
+            label: "已完成",
+            value: 1
+          },
+          {
+            label: "进行中",
+            value: 0
+          }
+        ]
+      },
+      {
+        label: "完成的信息",
+        prop: "finishInfo",
+        span: 6,
+        placeholder: " ",
+        width: 125,
+        overHidden: true
+      },
+      {
+        label: "返回的信息",
+        prop: "returnInfo",
+        span: 6,
+        placeholder: " ",
+        width: 125,
+        overHidden: true
+      },
+      {
+        label: "请求返回结果",
+        prop: "returnStatus",
+        span: 6,
+        placeholder: " ",
+        width: 125,
+        overHidden: true
+      },
+     
+      {
+        label: "响应时间",
+        prop: "updateTime",
+        type: "datetime",
+        format: "yyyy-MM-dd HH:mm:ss",
+        valueFormat: "yyyy-MM-dd HH:mm:ss",
+        span: 6,
+        align: "center",
+        sortable: true,
+        width: 200
+      },
+      {
+        label: "完成时间",
+        prop: "endTime",
+        type: "datetime",
+        format: "yyyy-MM-dd HH:mm:ss",
+        valueFormat: "yyyy-MM-dd HH:mm:ss",
+        span: 6,
+        align: "center",
+        sortable: true,
+        width: 200
+      }
+    ]
+  };
+}
+
+
+export function dlgCrud(_this) {
+  return {
+    menu: false,
+    addBtn: false,
+    cancelBtn: false,
+    editBtn: false,
+    delBtn: false,
+    menuWidth: 80,
+    border: true,
+    index: true,
+    highlightCurrentRow: true,
+    height: "calc(100vh - 280px)",
+    refreshBtn: false,
+    columnBtn: false,
+    page: true,
+    labelWidth: 100,
+    selection: true,
+    showSummary: false,
+    menuTitle: "称重",
+  
+    column: [
+      // {
+      //   label: "#",
+      //   prop: "index",
+      //   width: 50,
+      //   align: "center",
+      //   display: false
+      // },
+
+      {
+        label: "缸号(Số lô nhuộm)",
+        prop: "vatNo",
+        width: 180,
+        span: 6,
+        placeholder: " ",
+        disabled: true,
+        overHidden: true,
+        sortable: true
+      },
+      {
+        label: "成品编号",
+        prop: "productNo",
+        width: 150,
+        span: 6,
+        placeholder: " ",
+        disabled: true,
+        overHidden: true
+      },
+  
+      {
+        label: "匹號(Số cây vải)",
+        prop: "pidNo",
+        width: 100,
+        align: "right",
+        sortable: true,
+        span: 6,
+        type: "number",
+        precision: 0
+      },
+     
+    
+
+   
+      {
+        label: "净重(trọng lượng tịnh KG)",
+        prop: "netWeight",
+        width: 150,
+        align: "right",
+        span: 6,
+        cell: true,
+        placeholder: " ",
+        type: "number",
+        minRows: 0,
+        precision: 1
+      },
+      {
+        label: "净重(trọng lượng tịnh LBS)",
+        tip: "trọng lượng tịnh(LBS)",
+        prop: "netWeightLbs",
+        width: 120,
+        span: 8,
+        minRows: 0,
+        type: "number",
+        precision: 1,
+        align: "right",
+        placeholder: " "
+      },
+    
+
+   
+      // {
+      //   label: "备注(ghi chú)",
+      //   prop: "remark",
+      //   width: 250,
+      //   placeholder: " ",
+      //   // overHidden: true,
+      //   cell: true,
+      //   type: "select",
+      //   filterable: true,
+      //   allowCreate: true,
+      //   defaultFirstOption: true,
+      //   dicData: getDIC("QC_CLOTH_VISITING_REMOVE")
+      // },
+
+
+
+
+
+      // {
+      //   label: "克重(Trọng lượng trước giặt)",
+      //   // tip: "Tổng cộng(KG)",
+      //   prop: "realGramWeight",
+      //   width: 130,
+      //   span: 8,
+      //   cell: true,
+      //   // type: "number",
+      //   align: "left",
+      //   placeholder: " ",
+      //   overHidden: true
+      // },
+      // {
+      //   label: "幅宽(Khổ rộng vải mộc)",
+      //   // tip: "Tổng cộng(KG)",
+      //   prop: "actualSideBreadth",
+      //   width: 120,
+      //   cell: true,
+      //   span: 8,
+      //   // type: "number",
+      //   align: "left",
+      //   placeholder: " ",
+      //   overHidden: true
+      // },
+
+      // {
+      //   label: "單位",
+      //   prop: "weightUnit",
+      //   width: 80,
+      //   display: false,
+      //   placeholder: " ",
+      //   span: 6,
+      //   type: "select",
+      //   dicData: matUnit
+      // },
+      // {
+      //   label: "長度",
+      //   prop: "clothLength",
+      //   width: 80,
+      //   display: false
+      // },
+
+      // {
+      //   label: "單位",
+      //   prop: "lenUnit",
+      //   width: 80,
+      //   display: false,
+      //   placeholder: " ",
+      //   span: 6,
+      //   type: "select",
+      //   dicData: matUnit
+      // },
+
+      // {
+      //   label: "已打印",
+      //   prop: "isPrinted",
+      //   type: "select",
+      //   disabled: true,
+      //   dicData: [
+      //     {
+      //       value: true,
+      //       label: "是"
+      //     },
+      //     {
+      //       value: false,
+      //       label: "否"
+      //     }
+      //   ],
+      //   span: 6,
+      // },
+
+      // {
+      //   label: "打印时间(thời gian in)",
+      //   prop: "printedTime",
+      //   type: "date",
+      //   format: "yyyy-MM-dd HH:mm:ss",
+      //   valueFormat: "yyyy-MM-dd HH:mm:ss",
+      //   span: 6,
+      //   align: "center",
+      //   sortable: true,
+      //   width: 200
+      // },
+
+      // {
+      //   label: "验布员工号(Số thẻ người đứng máy)",
+      //   prop: "clothChecker",
+      //   span: 8,
+      //   placeholder: " ",
+      //   width: 180,
+      //   sortable: true,
+      //   overHidden: true
+      // },
+      // {
+      //   label: "验布时间(thời gian in)",
+      //   prop: "clothCheckTime",
+      //   type: "date",
+      //   format: "yyyy-MM-dd HH:mm:ss",
+      //   valueFormat: "yyyy-MM-dd HH:mm:ss",
+      //   span: 6,
+      //   align: "center",
+      //   // sortable: true,
+      //   width: 200
+      // }
+    ]
+  };
+}
+
+
+

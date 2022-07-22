@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2022-04-25 14:03:51
- * @LastEditors: Lyl
- * @LastEditTime: 2022-06-28 10:42:04
+ * @LastEditors: PMP
+ * @LastEditTime: 2022-07-21 11:07:24
  * @FilePath: \iot.vue\src\view\im\transferLoadQa\index.vue
  * @Description: 
 -->
@@ -27,8 +27,10 @@
                 </el-select>
                 <div style="text-align: left; margin-top: 10px">
                   <el-button type="primary" size="mini" @click="handleOutWhse(scope,'3')">提交</el-button>
+                  <el-button type="success" size="mini" @click="handleOutWhseTest(scope, '3')">测试提交</el-button>
                 </div>
-                <el-button type="text" size="mini" slot="reference" @click="exit = 'Q1'">验布</el-button>
+                <el-link type="primary" size="mini" slot="reference" @click="exit = 'Q1'" style="margin-right: 17px;">验布
+                </el-link>
               </el-popover>
               <el-popover placement="left" width="160" trigger="click">
                 <p>请选择验布口</p>
@@ -38,8 +40,10 @@
                 </el-select>
                 <div style="text-align: left; margin-top: 10px">
                   <el-button type="primary" size="mini" @click="handleOutWhse(scope,'5')">提交</el-button>
+                  <el-button type="success" size="mini" @click="handleOutWhseTest(scope, '5')">测试提交</el-button>
                 </div>
-                <el-button type="text"  size="mini" slot="reference" @click="exit = 'S1'">松布</el-button>
+                <el-link type="success" size="mini" slot="reference" @click="exit = 'S1'" style="margin-left: 17px;">松布
+                </el-link>
               </el-popover>
             </template>
           </avue-crud>
@@ -72,6 +76,7 @@
 <script>
 import { formOp, crudOp, outExit,sbExit, taskForm, taskCrud } from "./data";
 import { fetchStockVehicleByPage, sendTask, getTask } from "./api";
+import {sendTestTaskNoin} from "../whseInOutKB/api"
 import qcPlan from "./qcPlan";
 import inWhse from "./inWhse";
 export default {
@@ -98,7 +103,7 @@ export default {
       },
       taskpage: {
         pageSizes: [10, 50, 100, 200, 500],
-        pageSize: 10,
+        pageSize: 200,
         currentPage: 1,
         total: 0,
       },
@@ -180,7 +185,7 @@ export default {
     cellClick(val) {
       this.detail = val;
     },
-    handleOutWhse({ row },orderType) {
+    handleOutWhse({ row }, orderType) {
       if (!row) {
         this.$tip.error("请先选择要出库的载具!");
         return;
@@ -195,7 +200,7 @@ export default {
         entrance: this.exit, // 验布出口
         isEmpty: 0,
         type: 2, //0原材料,1五金件,2成品
-        orderType : Number(orderType) // 3 => 验布出库， 4 => 验布入库 5 => 松布出库
+        orderType: Number(orderType) // 3 => 验布出库， 4 => 验布入库 5 => 松布出库
       };
       sendTask(taskParams)
         .then((sendRes) => {
@@ -212,6 +217,32 @@ export default {
         .finally((res) => {
           this.wloading = false;
         });
+    },
+    handleOutWhseTest({ row }, orderType) {
+      if (!row) {
+        this.$tip.error("请先选择要出库的载具!");
+        return;
+      }
+      if (!this.exit) {
+        this.$tip.error("请先选择验布出口");
+        return;
+      }
+      this.wloading = true;
+      let taskParams = {
+        barCode: row.palletCode, // 载具
+        entrance: this.exit, // 验布出口
+        isEmpty: 0,
+        type: 2, //0原材料,1五金件,2成品
+        orderType: Number(orderType) // 3 => 验布出库， 4 => 验布入库 5 => 松布出库
+      };
+      sendTestTaskNoin(taskParams).then((res) => {
+        this.wloading = false;
+        if (res.data.code == 200) {
+          this.$tip.success(res.data.msg);
+        } else {
+          this.$tip.error(res.data.msg);
+        }
+      })
     },
     handleInWhse({ row }) {
       if (!row) {

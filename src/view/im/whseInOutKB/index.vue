@@ -72,7 +72,7 @@
     </el-dialog>
     <el-dialog id="colorMng_Dlg" :visible.sync="inVisible" fullscreen width="70%" append-to-body
       :close-on-click-modal="false" :close-on-press-escape="false">
-      <inwhse-com v-if="inVisible" ref="inwhse" :form="form" @close="inVisible = false"></inwhse-com>
+      <inwhse-com v-if="inVisible" ref="inwhse" :form="form" @close="inVisible = false" :test="test"></inwhse-com>
     </el-dialog>
   </div>
 </template>
@@ -256,6 +256,7 @@ export default {
       idArr: [],
       inVisible: false,
       testVisible: false,
+      test: false,
       testform: {
         code: "",
         data: "",
@@ -700,53 +701,58 @@ export default {
         .catch(() => { });
     },
     async sendTask() {
-      if (this.form.type == 1) {
-        this.inVisible = true;
-        await this.$nextTick();
-        this.$refs.inwhse.initData();
-        return;
-      }
-      if (!this.form.storeLoadCode) {
-        this.$tip.error("载具编号不能为空!");
-        return;
-      }
-      this.$tip.cofirm(
-        `是否确定提交选中的${this.form.goodsType == 1 ? "胚布" : "成品布"
-        }, 生成${this.form.type == 1 ? "入" : "出"}库记录？`,
-        this,
-        {}
-      )
-        .then(() => {
-          this.wLoading = true;
-          sendTaskNoin({
-            barCode: this.form.storeLoadCode,
-            createTime: this.$getNowTime("datetime"),
-            entrance: this.form.exit, // 入库口
-            isEmpty: this.form.storageState, // 是否为空
-            orderType: this.form.type, // 出库/入库
-            type: this.form.goodsType, // 物料类别
-            storageCode: this.form.storeLoadCode,
-          }).then((sendRes) => {
-            if (sendRes.data.code) {
-              this.$tip.error(sendRes.data.data);
-              this.loading = false;
-              return;
-            }
-            if (sendRes.data == "返回异常") {
-              this.$tip.error(sendRes.data);
-              this.loading = false;
-              return;
-            }
-            this.$tip.success("任务提交成功!");
-            this.query();
-            this.queryTask();
-          });
-        })
-        .catch(() => { });
+      this.$tip.cofirm("请用测试任务按钮，如果用提交任务有可能错误，Vui lòng nhấn nút 测试任务, nếu bạn sử dụng nút 提交任务 có thể xảy ra lỗi, nếu bạn vẫn muốn sử dụng hãy nhấn đồng ý")
+        .then(async () => {
+          this.test = false;
+          if (this.form.type == 1) {
+            this.inVisible = true;
+            await this.$nextTick();
+            this.$refs.inwhse.initData();
+            return;
+          }
+          if (!this.form.storeLoadCode) {
+            this.$tip.error("载具编号不能为空!");
+            return;
+          }
+          this.$tip.cofirm(
+            `是否确定提交选中的${this.form.goodsType == 1 ? "胚布" : "成品布"
+            }, 生成${this.form.type == 1 ? "入" : "出"}库记录？`,
+            this,
+            {}
+          )
+            .then(() => {
+              this.wLoading = true;
+              sendTaskNoin({
+                barCode: this.form.storeLoadCode,
+                createTime: this.$getNowTime("datetime"),
+                entrance: this.form.exit, // 入库口
+                isEmpty: this.form.storageState, // 是否为空
+                orderType: this.form.type, // 出库/入库
+                type: this.form.goodsType, // 物料类别
+                storageCode: this.form.storeLoadCode,
+              }).then((sendRes) => {
+                if (sendRes.data.code) {
+                  this.$tip.error(sendRes.data.data);
+                  this.loading = false;
+                  return;
+                }
+                if (sendRes.data == "返回异常") {
+                  this.$tip.error(sendRes.data);
+                  this.loading = false;
+                  return;
+                }
+                this.$tip.success("任务提交成功!");
+                this.query();
+                this.queryTask();
+              });
+            })
+            .catch(() => { });
+        }).catch(() => { })
     },
     async testTask() {
       if (this.form.type == 1) {
         this.inVisible = true;
+        this.test = true;
         await this.$nextTick();
         this.$refs.inwhse.initData();
         return;
@@ -772,14 +778,15 @@ export default {
             type: this.form.goodsType, // 物料类别
             storageCode: this.form.storeLoadCode,
 
-          }).then((sendRes) => {
-            this.wLoading = false;
+          }).then((res) => {
             this.loading = false;
-            this.testform.data = sendRes.data.data;
-            this.testform.msg = sendRes.data.msg;
-            this.testform.code = sendRes.data.code;
-            this.testVisible = true;
-
+            this.wLoading = false;
+            if (res.data.code == 200) {
+              this.$tip.success(res.data.msg);
+            } else {
+              this.$tip.error(res.data.msg);
+              console.error(res.data.msg);
+            }
           });
         })
         .catch(() => { });
