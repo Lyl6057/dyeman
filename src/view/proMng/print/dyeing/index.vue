@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
- * @LastEditors: Lyl
- * @LastEditTime: 2021-12-11 18:43:29
+ * @LastEditors: Symbol_Yang
+ * @LastEditTime: 2022-07-23 09:56:02
  * @Description: 
 -->
 <template>
@@ -275,7 +275,7 @@ export default {
           delete this.form[key];
         }
       }
-      this.form.vatNo = "!^%" + (this.form.vatNo ? this.form.vatNo : "");
+      this.form.vatNo = "%" + (this.form.vatNo ? this.form.vatNo : "");
       this.form.weaveJobCode =
         "%" + (this.form.weaveJobCode ? this.form.weaveJobCode : "");
       this.form.salPoNo = "%" + (this.form.salPoNo ? this.form.salPoNo : "");
@@ -283,6 +283,7 @@ export default {
         Object.assign(this.form, {
           rows: this.page.pageSize,
           start: this.page.currentPage,
+          dataSortRules:"workDate|desc,vatNo"
         })
       ).then((res) => {
         this.crud = res.data.records;

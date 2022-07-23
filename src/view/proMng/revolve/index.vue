@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
- * @LastEditors: Lyl
- * @LastEditTime: 2022-07-02 09:03:03
+ * @LastEditors: Symbol_Yang
+ * @LastEditTime: 2022-07-23 09:51:26
  * @Description:
 -->
 <template>
@@ -241,7 +241,7 @@ export default {
         }
       }
       let params = {
-        vatNo: '!^%' + (this.form.vatNo || ''),
+        vatNo: '%' + (this.form.vatNo || ''),
         weaveJobCode: '%' + (this.form.weaveJobCode || ''),
         salPoNo: '%' + (this.form.salPoNo || ''),
         colorCode: '%' + (this.form.colorCode || ''),
@@ -256,6 +256,7 @@ export default {
           workDate: this.form.workDate,
           custCode: this.form.custCode,
           delFlag: 0,
+          dataSortRules:"workDate|desc,vatNo"
         })
       ).then((res) => {
         this.crud = res.data.records;
