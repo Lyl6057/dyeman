@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
- * @LastEditors: Lyl
- * @LastEditTime: 2021-11-17 14:26:44
+ * @LastEditors: Symbol_Yang
+ * @LastEditTime: 2022-07-23 10:06:06
  * @Description: 
 -->
 <template>
@@ -144,12 +144,13 @@ export default {
       if (this.form.sendDate && this.form.sendDate.indexOf(" ") == -1) {
         this.form.sendDate += " 00:00:00";
       }
-      this.form.vatNo = "!^%" + (this.form.vatNo ? this.form.vatNo : "");
+      this.form.vatNo = "%" + (this.form.vatNo ? this.form.vatNo : "");
 
       get(
         Object.assign(this.form, {
           rows: this.page.pageSize,
           start: this.page.currentPage,
+          dataSortRules:"sendDate|desc,vatNo"
         })
       )
         .then((res) => {
