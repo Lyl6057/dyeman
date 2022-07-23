@@ -13,7 +13,7 @@ export function mainForm(_this) {
   return {
     submitBtn: false,
     emptyBtn: false,
-    labelWidth: 120,
+    labelWidth: 150,
     column: [
       {
         label: "缸號",
@@ -72,6 +72,25 @@ export function mainForm(_this) {
         span: 6,
         placeholder: " "
       },
+      // {
+      //   label: "第三方订单号",
+      //   prop: "thirdPo",
+      //   placeholder: " ",
+      //   tip: "Mã đặt hàng thứ 3",
+      //   overHidden: true,
+      //   width: 250,
+      //   span: 6
+      // },
+      // {
+      //   label: "第三方订识别码",
+      //   prop: "thirdSn",
+      //   placeholder: " ",
+      //   tip: "Mã nhận dạng thứ 3",
+      //   overHidden: true,
+      //   width: 250,
+      //   span: 6
+      // },
+
       // {
       //   label: "审核状态",
       //   prop: "auditState",
@@ -292,6 +311,27 @@ export function mainCrud(_this) {
         sortable: true,
         placeholder: " "
       },
+      {
+        label: "订单号",
+        prop: "thirdPo",
+        tip: "Mã đặt hàng",
+        span: 6,
+        hide: true,
+        width: 80,
+        sortable: true,
+        placeholder: " "
+      },
+      {
+        label: "订识别码",
+        prop: "thirdSn",
+        tip: "Mã nhận diện",
+        span: 6,
+        hide: true,
+        width: 80,
+        sortable: true,
+        placeholder: " "
+      },
+
 
       {
         label: "交货地址",
@@ -903,6 +943,26 @@ export function mainCrud(_this) {
         hide: false,
         placeholder: " ",
         span: 6
+      },
+      {
+        label: "第三方订单号",
+        prop: "thirdPo",
+        placeholder: " ",
+        tip: "Mã đặt hàng thứ 3",
+        width: 150,
+        span: 6,
+        disabled: true,
+        display: false,
+      },
+      {
+        label: "第三方订识别码",
+        prop: "thirdSn",
+        placeholder: " ",
+        tip: "Mã nhận dạng thứ 3",
+        width: 150,
+        span: 6,
+        disabled: true,
+        display: false,
       },
       {
         label: "开单员",

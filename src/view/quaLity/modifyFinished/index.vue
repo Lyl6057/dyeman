@@ -6,160 +6,82 @@
  * @Description:
 -->
 <template>
-  <div
-    id="modifyFinished"
-    :element-loading-text="$t('public.loading')"
-    v-loading="wloading"
-  >
+  <div id="modifyFinished" :element-loading-text="$t('public.loading')" v-loading="wloading">
     <el-tabs type="border-card" v-model="tabs">
       <el-tab-pane label="拆缸管理" name="first">
         <el-row class="btnList">
           <el-button type="success" @click="save">{{
-            this.$t("public.save")
+              this.$t("public.save")
           }}</el-button>
         </el-row>
         <el-row class="formBox">
           <avue-form ref="form" :option="formOp" v-model="form">
             <template slot-scope="scope" slot="vatNo1">
-              <el-select
-                v-model="form.vatNo1"
-                filterable
-                remote
-                reserve-keyword
-                clearable
-                default-first-option
-                placeholder="请输入缸号"
-                :remote-method="vatMethod"
-                @change="vatChange"
-              >
-                <el-option
-                  v-for="item in vatList"
-                  :key="item.vatNo"
-                  :label="item.vatNo"
-                  :value="item.vatNo"
-                  :disabled="item.vatNo == form.vatNo2"
-                >
+              <el-select v-model="form.vatNo1" filterable remote reserve-keyword clearable default-first-option
+                placeholder="请输入缸号" :remote-method="vatMethod" @change="vatChange">
+                <el-option v-for="item in vatList" :key="item.vatNo" :label="item.vatNo" :value="item.vatNo"
+                  :disabled="item.vatNo == form.vatNo2">
                 </el-option>
               </el-select>
             </template>
             <template slot-scope="scope" slot="vatNo2">
-              <el-select
-                v-model="form.vatNo2"
-                filterable
-                remote
-                reserve-keyword
-                clearable
-                default-first-option
-                placeholder="请输入缸号"
-                :remote-method="vatMethod"
-                @change="vatChange"
-              >
-                <el-option
-                  v-for="item in vatList"
-                  :key="item.vatNo"
-                  :label="item.vatNo"
-                  :value="item.vatNo"
-                  :disabled="item.vatNo == form.vatNo1"
-                >
+              <el-select v-model="form.vatNo2" filterable remote reserve-keyword clearable default-first-option
+                placeholder="请输入缸号" :remote-method="vatMethod" @change="vatChange">
+                <el-option v-for="item in vatList" :key="item.vatNo" :label="item.vatNo" :value="item.vatNo"
+                  :disabled="item.vatNo == form.vatNo1">
                 </el-option>
               </el-select>
             </template>
           </avue-form>
         </el-row>
         <el-row class="crudBox">
-          <el-transfer
-            filterable
-            v-model="checkData"
-            filter-placeholder="关键字搜索"
-            :data="finishedNotes"
-            :props="{
-              key: 'cardId',
-              label: 'productNo',
-            }"
-            :titles="[form.vatNo1 || '拆缸缸号', form.vatNo2 || '目标缸号']"
-            style="margin: 10px"
-          >
-            <span slot-scope="{ option }"
-              >{{ option.vatNo }} - {{ option.pidNo }} -
-              {{ option.netWeight + "KG" }}</span
-            ></el-transfer
-          >
+          <el-transfer filterable v-model="checkData" filter-placeholder="关键字搜索" :data="finishedNotes" :props="{
+            key: 'cardId',
+            label: 'productNo',
+          }" :titles="[form.vatNo1 || '拆缸缸号', form.vatNo2 || '目标缸号']" style="margin: 10px">
+            <span slot-scope="{ option }">{{ option.vatNo }} - {{ option.pidNo }} -
+              {{ option.netWeight + "KG" }}</span>
+          </el-transfer>
         </el-row>
       </el-tab-pane>
       <el-tab-pane label="删除/恢复数据" name="second">
         <el-row class="btnList">
           <el-button type="primary" @click="query">{{
-            this.$t("public.query")
+              this.$t("public.query")
           }}</el-button>
-          <el-button
-            :type="secondF.delFlag ? 'success' : 'danger'"
-            @click="del"
-            :disabled="!selectList.length"
-            >{{ secondF.delFlag ? "恢复" : "删除" }}</el-button
-          >
-          <el-button
-            type="primary"
-            @click="splitNote"
-            v-if="!secondF.delFlag"
-            :disabled="!detail.cardId"
-            >拆布</el-button
-          >
+          <el-button :type="secondF.delFlag ? 'success' : 'danger'" @click="del" :disabled="!selectList.length">{{
+              secondF.delFlag ? "恢复" : "删除"
+          }}</el-button>
+          <el-button type="primary" @click="splitNote" v-if="!secondF.delFlag" :disabled="!detail.cardId">拆布</el-button>
         </el-row>
         <el-row class="formBox">
           <avue-form ref="form" :option="secondFOp" v-model="secondF">
           </avue-form>
         </el-row>
         <el-row class="crudBox">
-          <avue-crud
-            ref="secondcrud"
-            :option="secondCOp"
-            :data="secondC"
-            :page.sync="secondPage"
-            v-loading="tloading"
-            @on-load="query"
-            @cell-click="cellClick"
-            @selection-change="selectionChange"
-          >
+          <avue-crud ref="secondcrud" :option="secondCOp" :data="secondC" :page.sync="secondPage" v-loading="tloading"
+            @on-load="query" @cell-click="cellClick" @selection-change="selectionChange">
           </avue-crud>
         </el-row>
       </el-tab-pane>
     </el-tabs>
-    <el-dialog
-      id="colorMng_Dlg"
-      :visible.sync="splitDlg"
-      width="80%"
-      top="10vh"
-      append-to-body
-      :close-on-click-modal="false"
-      :close-on-press-escape="false"
-    >
-      <view-container
-        title="拆布预览"
-        v-loading="splitLoading"
-        :element-loading-text="$t('public.loading')"
-      >
+    <el-dialog id="colorMng_Dlg" :visible.sync="splitDlg" width="80%" top="10vh" append-to-body
+      :close-on-click-modal="false" :close-on-press-escape="false">
+      <view-container title="拆布预览" v-loading="splitLoading" :element-loading-text="$t('public.loading')">
         <div class="btnList">
           <el-popover placement="right" width="160" v-model="visible">
             <p>是否确定保存？</p>
             <div style="text-align: right">
-              <el-button size="mini" type="text" @click="visible = false"
-                >取消</el-button
-              >
-              <el-button type="primary" size="mini" @click="splitSubmit"
-                >确定</el-button
-              >
+              <el-button size="mini" type="text" @click="visible = false">取消</el-button>
+              <el-button type="primary" size="mini" @click="splitSubmit">确定</el-button>
             </div>
             <el-button type="success" slot="reference">{{
-              this.$t("public.save")
+                this.$t("public.save")
             }}</el-button>
           </el-popover>
 
-          <el-button
-            type="warning"
-            @click="splitDlg = false"
-            style="margin-left: 10px"
-            >{{ this.$t("public.close") }}</el-button
-          >
+          <el-button type="warning" @click="splitDlg = false" style="margin-left: 10px">{{ this.$t("public.close") }}
+          </el-button>
           <span class="btn-right-title"> 缸号： {{ detail.vatNo }}</span>
         </div>
         <el-row class="formBox">
@@ -238,8 +160,8 @@ export default {
         this.finishedNotes = res.data.sort((a, b) => {
           return a.productNo > b.productNo ? 1 : -1;
         });
-        this.finishedNotes.forEach((item) =>{
-            item.disabled =  item.whseVouch == 9 ? true : false
+        this.finishedNotes.forEach((item) => {
+          item.disabled = item.whseVouch == 9 ? true : false
         })
         this.vat2Change();
       });
@@ -261,8 +183,8 @@ export default {
               return a.productNo > b.productNo ? 1 : -1;
             })
           );
-          this.finishedNotes.forEach((item) =>{
-            item.disabled =  item.whseVouch == 9 ? true : false
+          this.finishedNotes.forEach((item) => {
+            item.disabled = item.whseVouch == 9 ? true : false
           })
           res.data.forEach((item, i) => {
             this.checkData.push(item.cardId);
@@ -299,6 +221,7 @@ export default {
             this.$tip.success("保存成功！");
           }
         });
+        this.wloading = false;
       });
     },
     query() {
@@ -348,8 +271,9 @@ export default {
         this.$tip.cofirm("是否确定恢复选中的数据?").then(() => {
           this.wLoading = true;
           this.selectList.forEach((item, i) => {
+            console.log(item);
             item.delFlag = false;
-            updateFinished(item).then((res) => {
+            updateFinishedRCV(item).then((res) => {
               if (i == this.selectList.length - 1) {
                 this.$tip.success("恢复成功！");
                 this.query();
@@ -416,7 +340,7 @@ export default {
         (this.splitF.netWeight /
           (this.splitF.netWeight + this.splitF.netWeightNew)) *
         oldYardLength;
-      updateFinished(this.splitF).then((res) => {});
+      updateFinished(this.splitF).then((res) => { });
       let data = JSON.parse(JSON.stringify(this.splitF));
       data.sourceCardId = this.splitF.cardId;
       data.cardId = "";
@@ -449,10 +373,10 @@ export default {
       });
     },
   },
-  updated() {},
-  created() {},
-  mounted() {},
-  beforeDestroy() {},
+  updated() { },
+  created() { },
+  mounted() { },
+  beforeDestroy() { },
 };
 </script>
 <style lang='stylus'>
