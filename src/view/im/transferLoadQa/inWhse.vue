@@ -1,49 +1,70 @@
-<!--
+<!--value
  * @Author: Lyl
  * @Date: 2022-05-24 16:08:51
- * @LastEditors: Lyl
- * @LastEditTime: 2022-05-31 14:39:16
+ * @LastEditors: PMP
+ * @LastEditTime: 2022-07-23 14:39:16
  * @FilePath: \iot.vue\src\view\im\transferLoadQa\inWhse.vue
  * @Description: 
 -->
 <template>
   <div class="inWhse">
-    <el-dialog id="Dlg" :visible.sync="dialogVisiable" width="60%" append-to-body :close-on-click-modal="false">
+    <el-dialog id="Dlg" :visible.sync="dialogVisiable" width="100%" fullscreen append-to-body
+      :close-on-click-modal="false">
       <view-container title="成品码卡信息">
         <div class="btnList">
+          <el-button type="success" :disable="!selectList.length" @click="saveDetail">{{
+              $t("public.save")
+          }}</el-button>
+          <el-button type="danger" @click="deleteDlg">删除</el-button>
+          <el-button type="primary" @click="queryDlg">{{
+              $t("public.query")
+          }}</el-button>
           <el-button type="warning" @click="dialogVisiable = false">{{
               $t("public.close")
           }}</el-button>
         </div>
+        <el-row class="formBox">
+          <avue-form ref="formdlg" :option="formDlgOp" v-model="formDlg"> </avue-form>
+        </el-row>
         <div class="formBox">
-          <avue-crud ref="crudDlg" :option="crudOpDlg" :data="crudDlg" :page.sync="pageDlg"
-            :element-loading-text="$t('public.loading')" v-loading="Dlgloading">
-          </avue-crud>
+          <el-row>
+            <el-col :span="11">
+              <view-container title="可选择成品">
+                <avue-crud ref="crudPreDlg" :option="crudOpDlg" :data="crudPreDlg" :page.sync="pageDlgPrePB"
+                  @selection-change="selectionChangePre">
+                </avue-crud>
+              </view-container>
+            </el-col>
+            <el-col :span="2" style="justify-content: center;align-items: center;">
+              <el-row style="flex:1;justify-content: center;align-items: center;">
+                <el-button type="primary" @click="movetoLeft">{{ '<<<' }} </el-button>
+                    <el-button type="primary" @click="movetoRight">{{ '>>>' }}</el-button>
+              </el-row>
+            </el-col>
+            <el-col :span="11">
+              <view-container title="已选择成品">
+                <avue-crud ref="crudDlg" :option="crudOpDlg" :data="crudDlg" :page.sync="pageDlgPB"
+                  :element-loading-text="$t('public.loading')" @selection-change="selectionChange">
+                </avue-crud>
+              </view-container>
+            </el-col>
+          </el-row>
         </div>
       </view-container>
     </el-dialog>
-
     <el-row class="btnList">
       <el-button type="primary" @click="query">{{ this.$t("public.query") }}</el-button>
-
-      <el-popover style="margin-left: 10px" placement="right" width="160" v-model="visible">
-        <p>是否确定提交出任务吗？</p>
-        <div>
-          <el-button size="mini" type="text" @click="visible = false">取消</el-button>
-          <el-button type="primary" size="mini" @click="handleInWhse">确定</el-button>
-        </div>
-        <el-button slot="reference" type="primary">提交</el-button>
-      </el-popover>
       <el-popover style="margin-left: 10px" placement="right" width="160" v-model="visiblePB">
         <p>是否确定提交出任务吗？</p>
         <div>
           <el-button size="mini" type="text" @click="visiblePB = false">取消</el-button>
           <el-button type="primary" size="mini" @click="handleInWhseTest">确定</el-button>
         </div>
-        <el-button slot="reference" type="warning">测试提交</el-button>
+        <el-button slot="reference" type="success">提交</el-button>
       </el-popover>
 
-      <el-button type="success" @click="handCheck()" style="margin-left: 10px" :disable="!crud.length">跟读</el-button>
+      <el-button type="warning" @click="handCheck()" style="margin-left: 10px" :disabled="!crud.length">更改成品</el-button>
+
     </el-row>
     <el-row class="formBox">
       <avue-form ref="form" :option="formOp" v-model="form"> </avue-form>
@@ -66,16 +87,14 @@
 
 <script>
 import { fetchSelloutByPage, fetchPBSellout } from "./api";
-import { inWhseFormOp, inWhseCrudOp, dlgCrud, inWhseCrudPBOp } from "./data";
+import { inWhseFormOp, inWhseCrudOp, dlgCrud, inWhseCrudPBOp, inWhseFormDlgOp } from "./data";
 import { get } from "../../quaLity/codeCard/api"
 import {
   addInFinishedWhse,
   addInFinishedDtla,
   addInFinishedDtlb,
   addStorageLog,
-  updateFinished,
   sendTaskNoin,
-  getInFinishedByPage,
 } from "../whseInOutKB/api";
 import { sendTestTaskNoin } from "../whseInOutKB/api"
 import { baseCodeSupply, baseCodeSupplyEx } from "@/api/index";
@@ -84,6 +103,7 @@ export default {
   props: {},
   data() {
     return {
+      testdata: [],
       wloading: false,
       crudOp: inWhseCrudOp(this),
       crudOpPB: inWhseCrudPBOp(this),
@@ -91,10 +111,13 @@ export default {
       crud: [],
       crudPB: [],
       crudDlg: [],
+      crudPreDlg: [],
       formOp: inWhseFormOp(this),
+      formDlgOp: inWhseFormDlgOp(this),
       form: {
         type: 1,
       },
+      formDlg: {},
       page: {
         pageSizes: [10, 50, 100, 200, 500],
         pageSize: 10,
@@ -107,17 +130,33 @@ export default {
         currentPage: 1,
         total: 0,
       },
-      pageDlg: {
+      pageDlgPB: {
         pageSizes: [10, 50, 100, 200, 500],
-        pageSize: 10,
+        pageSize: 100,
         currentPage: 1,
         total: 0,
       },
+      pageDlg: {
+        pageSizes: [10, 50, 100, 200, 500],
+        pageSize: 100,
+        currentPage: 1,
+        total: 0,
+      },
+      pageDlgPrePB: {
+        pageSizes: [10, 50, 100, 200, 500],
+        pageSize: 1000,
+        currentPage: 1,
+        total: 0,
+      },
+      selectList: [],
+      selectListPre: [],
       clothType: false,// false : 成品 true：胚布
       visible: false,
       visiblePB: false,
       dialogVisiable: false,
-      Dlgloading: false
+      Dlgloading: false,
+      data: [],
+      transfer: [1, 4]
     };
   },
   watch: {},
@@ -133,7 +172,7 @@ export default {
       }
       this.wloading = true;
       this.crud = [];
-      if (entrance.slice(0, 1) == "Q") {
+      if (entrance.slice(0, 1) == "Q" || entrance.slice(0, 1) == "S") {
         this.clothType = false;
         fetchSelloutByPage({
           rows: this.page.pageSize,
@@ -162,120 +201,142 @@ export default {
 
             this.crudPB = res.data;
             this.pagePB.total = res.data.length;
-            console.log(this.crudPB)
+            //console.log(this.crudPB)
           })
       }
     },
-    handleInWhse() {
-      let { code, entrance, layer } = this.form;
-      if (!code || !entrance || !this.crud.length) {
-        this.$tip.warning("请先输入载具编号和库口!");
-        return;
-      }
-      let orderType = entrance.indexOf("S") != -1 ? 6 : 4;
-      // 生成入库记录
-      this.wloading = true;
-      let params = {
-        barCode: code,
-        createTime: this.$getNowTime("datetime"),
-        entrance: entrance, // 入库口
-        isEmpty: 0, // 是否为空
-        orderType, // 出库/入库
-        layer: layer,
-        type: 2, // 物料类别
-      };
-      let list = this.crud;
-      let weight = this.crud.reduce((pre, cur) => {
-        return pre + Number(cur.woWeights);
-      }, 0);
-      try {
-        sendTaskNoin(params).then((sendRes) => {
-          if (sendRes.data.code) {
-            this.$tip.error(sendRes.data.data);
-            this.wloading = false;
-            return;
-          }
-          if (sendRes.data == "返回异常") {
-            this.$tip.error(sendRes.data);
-            this.wloading = false;
-            return;
-          }
-          baseCodeSupplyEx({ code: "whse_in" }).then((bat) => {
-            baseCodeSupply({ code: "whse_in" }).then((bat) => { });
-            let batchNo = bat.data.data;
-            addInFinishedWhse({
-              yinId: batchNo,
-              yinDate: this.$getNowTime("datetime"),
-              yinStatus: 1,
-              yinType: 1,
-              finStatus: 0,
-              sysCreateBy: this.$store.state.userOid,
-              stockState: 0,
-              custCode: list[0].custCode || '',
-            }).then((res) => {
-              addStorageLog({
-                whsCarriageStorageFk: code,
-                useTime: this.$getNowTime("datatime"),
-                useType: 2,
-                businessType: 2,
-                businessId: list[0].vatNo,
-                deleteFlag: 0,
-              }).then((log) => {
-                addInFinishedDtla({
-                  carriageStorageLogFk: log.data.data,
-                  wmsTaskLogFk: sendRes.data,
-                  whseFinishedclothinFk: res.data.data,
-                  pidCount: list.length,
-                  sumWeight: weight,
-                  weightUnit: "KG",
-                  storeLoadCode: code,
-                  outFlag: 0,
-                }).then((dtla) => {
-                  list.forEach((item, i) => {
-                    // item.forEach((dtlb, j) => {
-                    addInFinishedDtlb({
-                      pidNo: item.countingNo,
-                      productDtlFk: dtla.data.data,
-                      productNo: item.productNo,
-                      vatNo: item.prodNo,
-                      weight: item.woWeights,
-                      weightUnit: item.woUnit,
-                      productId: item.cardId || '',
-                    }).then((dtlbRes) => {
-                      if (i === list.length - 1) {
-                        this.$tip.success("任务提交成功!");
-                      }
-                    });
-                    // });
-                  });
-                }).finally(() => {
-                  this.visible = false
-                  this.wloading = false;
-                })
-              });
-            });
-          });
+    deleteDlg() {
+      this.crudPreDlg = [];
+    },
+    queryDlg() {
+      this.Dlgloading = true;
+      get(
+        Object.assign({
+          vatNo: this.formDlg.vatNo
+        }, {
+          rows: this.pageDlgPrePB.pageSize,
+          start: this.pageDlgPrePB.currentPage,
+          isPrinted: true,
+          cardType: 1,
+          delFlag: false,
+        })
+      ).then((res) => {
+        if (this.crudPreDlg.length > 0) {
+          this.$refs.crudPreDlg.setCurrentRow(this.crud[0]);
+        }
+        res.data.records.map((e) => {
+          this.crudPreDlg.push(e);
+        })
+        this.crudPreDlg.sort((a, b) => {
+          return a.pidNo > b.pidNo ? 1 : -1;
         });
-      } catch (error) {
-        this.wloading = false;
-        console.error(error);
+        this.crudPreDlg.forEach((item, i) => {
+          // item.$cellEdit = true;
+          item.index = i + 1;
+        });
+        this.crudPreDlg.total = this.crudPreDlg.total + this.pagePB.total;
+        setTimeout(() => {
+          this.$refs.crudPreDlg.setCurrentRow(this.crud[0] || {});
+          this.Dlgloading = false;
+        }, 200);
+      });
+    },
+    movetoLeft() {
+      let array = [];
+      if (this.selectList.length > 0) {
+        this.selectList.map((e) => {
+          this.crudPreDlg.push(e);
+        })
+      }
+      this.crudDlg.map((e) => {
+        let index = this.selectList.findIndex(item => item.productNo == e.productNo);
+        if (index == -1) {
+          array.push(e)
+        }
+      })
+      this.crudDlg = array;
+      this.pageDlgPrePB.total = this.crudPreDlg.length;
+      this.pageDlgPB.total = this.crudDlg.length;
+    },
+    movetoRight() {
+      let array = [];
+      if (this.selectListPre.length > 0) {
+        this.selectListPre.map((e) => {
+          if (this.crudDlg.findIndex(item => item == e) != -1) {
+            this.$tip.warning("这个成品编号您已经选过了， Bạn đã chọn qua mã này rồi!");
+          } else {
+            this.crudDlg.push(e);
+          }
+        })
+        this.crudPreDlg.map((e) => {
+          let index = this.selectListPre.findIndex(item => item.productNo == e.productNo);
+          if (index == -1) {
+            array.push(e)
+          }
+        })
+        this.crudPreDlg = array;
+        this.pageDlgPrePB.total = this.crudPreDlg.length;
+        this.pageDlgPB.total = this.crudDlg.length;
       }
     },
+    saveDetail() {
+      this.$tip.cofirm("您确定需要改下成品吗？").then(() => {
+        this.crud = [];
+        this.crudDlg.map((e) => {
+          this.crud.push({
+            countingNo: e.pidNo,
+            productId: e.cardId,
+            prodNo: e.vatNo,
+            productNo: e.productNo,
+            storeLoadCode: this.form.code,
+            woUnit: e.weightUnit,
+            woWeights: e.netWeight,
+            woWeightsLbs: e.netWeightLbs,
+          })
+        });
+        this.crud.forEach((item, i) => {
+          item.index = i + 1;
+        });
+        this.dialogVisiable = false;
+        this.$tip.success("操作成功！")
+      })
 
+    },
     handleInWhseTest() {
-      this.$tip.warning("测试功能正在开发...!");
-      return;
+      // this.$tip.warning("测试功能正在开发...!");
+      // return;
+      // let { code, entrance, layer } = this.form;
+      // let PBType = entrance.indexOf("S") != -1 ? true : false;
+      // let length = PBType ? this.crudPB.length : this.crud.length;
+      // if (!code || !entrance || !length) {
+      //   this.$tip.warning("请先输入载具编号和库口!");
+      //   return;
+      // }
+      // this.visiblePB = false;
+      // let orderType = PBType ? 6 : 4;
+      // // 生成入库记录
+      // let list = PBType ? this.crudPB : this.crud;
+
+      //  if (PBType) {
+      //     wcdList.push({
+      //       noteCode: e.noteCode,
+      //       pidNo: e.countingNo,
+      //       weaveJobCode: e.weaveJobCode,
+      //       weight: e.woWeights,
+      //       weightUnit: e.woUnit,
+      //       whseCalicoinDtlaFk: e.whseCalicoOutDtlaFk,
+      //       whseCalicoinDtlboid: e.outDtlbId,
+      //     })
       let { code, entrance, layer } = this.form;
-      let PBType = entrance.indexOf("S") != -1 ? true : false;
-      let length = PBType ? this.crudPB.length : this.crud.length;
+      let length = this.crud.length;
       if (!code || !entrance || !length) {
         this.$tip.warning("请先输入载具编号和库口!");
         return;
       }
-      let orderType = PBType ? 6 : 4;
+      this.visiblePB = false;
+      let orderType = 4;
       // 生成入库记录
-      let list = PBType ? this.crudPB : this.crud;
-      console.log(this.crud)
+      let list = this.crud;
       this.wloading = true;
       let data = {
         barCode: code,
@@ -284,47 +345,37 @@ export default {
         isEmpty: 0, // 是否为空
         orderType, // 出库/入库
         layer: layer,
-        type: PBType ? 0 : 2, // 物料类别 S=0 Q=2
+        type: 2, // 物料类别 S=0 Q=2
       };
       const wcdList = [];
       const wfiList = [];
       list.map((e) => {
-        if (PBType) {
-          wcdList.push({
-            noteCode: e.noteCode,
-            pidNo: e.countingNo,
-            weaveJobCode: e.weaveJobCode,
-            weight: e.woWeights,
-            weightUnit: e.woUnit,
-            whseCalicoinDtlaFk: e.whseCalicoOutDtlaFk,
-            whseCalicoinDtlboid: e.outDtlbId,
-          })
-        } else {
-          wfiList.push({
-            pidNo: e.storeLoadCode,
-            productId: e.cardId,
-            productNo: e.productNo,
-            vatNo: e.prodNo,
-            weight: e.woWeights,
-            weightLbs: e.woWeightsLbs,
-            weightUnit: e.woUnit,
-          })
-        }
-      })
-      let params = PBType ?
-        Object.assign(data, { wcd: wcdList }) :
-        Object.assign(data, { wfi: wfiList });
-      try {
-        sendTestTaskNoin(params).then((res) => {
-          setInterval(() => {
-            this.wloading = false;
-            if (res.data.code == 200) {
-              this.$tip.success(res.data.msg);
-            } else {
-              this.$tip.error(res.data.msg);
-            }
-          }, 300);
+
+        wfiList.push({
+          pidNo: e.countingNo,
+          productNo: e.productNo,
+          vatNo: e.prodNo,
+          weight: e.woWeights,
+          weightLbs: e.woWeightsLbs,
+          weightUnit: e.woUnit,
         })
+
+      })
+      // let params = PBType ?
+      //   Object.assign(data, { wcd: wcdList }) :
+      //   Object.assign(data, { wfi: wfiList });
+      let params = Object.assign(data, { wfi: wfiList });
+      try {
+        this.wloading = false;
+        sendTestTaskNoin(params).then((res) => {
+          this.wloading = false;
+          if (res.data.code == 200) {
+            this.$tip.success(res.data.msg);
+          } else {
+            this.$tip.error(res.data.msg);
+          }
+        })
+        this.wloading = false;
       } catch (error) {
         this.wloading = false;
         this.$tip.error(error);
@@ -336,47 +387,33 @@ export default {
     cellClick(val) {
       this.detail = val;
     },
-    handCheck() {
-      this.pageDlg.total = 0;
-      let listVatNo = []
-      this.crud.map((e) => {
-        if (listVatNo.length == 0) {
-          listVatNo.push({ vatNo: e.prodNo })
-        } else {
-          if (listVatNo.findIndex(item => item.vatNo == e.prodNo) == -1) {
-            listVatNo.push({ vatNo: e.prodNo })
-          }
-        }
-      })
-      listVatNo.map((e) => {
-        this.queryCloth(e.vatNo);
-      })
-      this.dialogVisiable = true
+    selectionChange(list) {
+      this.selectList = list;
     },
-    queryCloth(vatno) {
-      get(
-        Object.assign({
-          clothChecker: '%',
-          storeLoadCode: '%',
-          vatNo: vatno,
-          rows: 200,
-          start: 1,
-          isPrinted: true,
-          cardType: 1,
-          delFlag: false,
+    selectionChangePre(list) {
+      this.selectListPre = list;
+    },
+    handCheck() {
+      this.wloading = true;
+      this.pageDlgPB.total = this.crud.length;
+      this.crudDlg = [];
+      this.crudPreDlg = [];
+      this.crud.map((e, i) => {
+        this.crudDlg.push({
+          pidNo: e.countingNo,
+          cardId: e.productId,
+          vatNo: e.prodNo,
+          productNo: e.productNo,
+          weightUnit: e.woUnit,
+          netWeight: e.woWeights,
+          netWeightLbs: e.woWeightsLbs,
         })
-      ).then((res) => {
-        console.log(res)
-        this.crudDlg = res.data.records;
-        if (this.crudDlg.length > 0) {
-          this.$refs.crudDlg.setCurrentRow(this.crudDlg[0]);
-        }
-        this.crudDlg.sort((a, b) => {
-          return a.pidNo > b.pidNo ? 1 : -1;
-        });
-        this.pageDlg.total = this.pageDlg.total + res.data.total;
-      });
-    }
+      })
+      setTimeout(() => {
+        this.dialogVisiable = true;
+        this.wloading = false;
+      }, 500);
+    },
   },
 };
 </script>

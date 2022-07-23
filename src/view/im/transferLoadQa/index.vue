@@ -11,23 +11,24 @@
     <el-tabs v-model="tabs" type="border-card">
       <el-tab-pane label="出库" name="out">
         <el-row class="btnList">
-          <el-button type="primary" @click="query">{{this.$t("public.query")}}</el-button>
+          <el-button type="primary" @click="query">{{ this.$t("public.query") }}</el-button>
         </el-row>
         <el-row class="formBox">
           <avue-form ref="form" :option="formOp" v-model="form"> </avue-form>
         </el-row>
         <div class="crudBox">
-          <avue-crud ref="crud" :option="crudOp" :data="crud" :page.sync="page" :element-loading-text="$t('public.loading')" v-loading="wloading" @cell-click="cellClick" @on-load="query">
+          <avue-crud ref="crud" :option="crudOp" :data="crud" :page.sync="page"
+            :element-loading-text="$t('public.loading')" v-loading="wloading" @cell-click="cellClick" @on-load="query">
             <template slot-scope="scope" slot="menu">
-              <el-popover placement="left" width="160" trigger="click">
+              <el-popover placement="left" width="160" trigger="click" ref="popoverYB">
                 <p>请选择验布口</p>
                 <el-select v-model="exit" placeholder="请选择验布口">
                   <el-option v-for="item in outExit" :key="item.value" :label="item.label" :value="item.value">
                   </el-option>
                 </el-select>
                 <div style="text-align: left; margin-top: 10px">
-                  <el-button type="primary" size="mini" @click="handleOutWhse(scope,'3')">提交</el-button>
-                  <el-button type="success" size="mini" @click="handleOutWhseTest(scope, '3')">测试提交</el-button>
+                  <!-- <el-button type="primary" size="mini" @click="handleOutWhse(scope,'3')">提交</el-button> -->
+                  <el-button type="success" size="mini" @click="handleOutWhseTest(scope, '3')">提交</el-button>
                 </div>
                 <el-link type="primary" size="mini" slot="reference" @click="exit = 'Q1'" style="margin-right: 17px;">验布
                 </el-link>
@@ -39,8 +40,8 @@
                   </el-option>
                 </el-select>
                 <div style="text-align: left; margin-top: 10px">
-                  <el-button type="primary" size="mini" @click="handleOutWhse(scope,'5')">提交</el-button>
-                  <el-button type="success" size="mini" @click="handleOutWhseTest(scope, '5')">测试提交</el-button>
+                  <!-- <el-button type="primary" size="mini" @click="handleOutWhse(scope,'5')">提交</el-button> -->
+                  <el-button type="success" size="mini" @click="handleOutWhseTest(scope, '5')">提交</el-button>
                 </div>
                 <el-link type="success" size="mini" slot="reference" @click="exit = 'S1'" style="margin-left: 17px;">松布
                 </el-link>
@@ -54,7 +55,7 @@
       </el-tab-pane>
       <el-tab-pane label="任务管理" name="task">
         <el-row class="btnList">
-          <el-button type="primary" @click="queryTask">{{this.$t("public.query")}}</el-button>
+          <el-button type="primary" @click="queryTask">{{ this.$t("public.query") }}</el-button>
         </el-row>
         <el-row class="formBox">
           <avue-form ref="form" :option="taskFormOp" v-model="taskForm">
@@ -62,7 +63,9 @@
         </el-row>
         <view-container title="任务信息">
           <el-row class="crudBox" style="margin-top: 5px">
-            <avue-crud ref="task" :option="taskCrudOp" :page.sync="taskpage" :data="task" :element-loading-text="$t('public.loading')" v-loading="wloading" @on-load="queryTask" @current-row-change="cellClick"></avue-crud>
+            <avue-crud ref="task" :option="taskCrudOp" :page.sync="taskpage" :data="task"
+              :element-loading-text="$t('public.loading')" v-loading="wloading" @on-load="queryTask"
+              @current-row-change="cellClick"></avue-crud>
           </el-row>
         </view-container>
       </el-tab-pane>
@@ -70,15 +73,17 @@
         <qc-plan></qc-plan>
       </el-tab-pane>
     </el-tabs>
+
   </div>
 </template>
 
 <script>
-import { formOp, crudOp, outExit,sbExit, taskForm, taskCrud } from "./data";
+import { formOp, crudOp, outExit, sbExit, taskForm, taskCrud, DlgtaskCrud } from "./data";
 import { fetchStockVehicleByPage, sendTask, getTask } from "./api";
-import {sendTestTaskNoin} from "../whseInOutKB/api"
+import { sendTestTaskNoin } from "../whseInOutKB/api"
 import qcPlan from "./qcPlan";
 import inWhse from "./inWhse";
+import axios from "axios";
 export default {
   components: {
     qcPlan,
@@ -89,7 +94,9 @@ export default {
     return {
       wloading: false,
       crudOp: crudOp(this),
+      crudDlgOp: DlgtaskCrud(this),
       crud: [],
+      crudDlg: [],
       formOp: formOp(this),
       form: {
         type: 1,
@@ -107,6 +114,7 @@ export default {
         currentPage: 1,
         total: 0,
       },
+      dlgVisiable: false,
       exit: "Q1",
       outExit,
       sbExit,
@@ -117,12 +125,14 @@ export default {
       taskCrudOp: taskCrud(this),
       task: [],
       tabs: "out",
+      visibleJB: false,
+      visiblePB: false
     };
   },
   watch: {},
   computed: {},
-  created() {},
-  mounted() {},
+  created() { },
+  mounted() { },
   methods: {
     query() {
       this.wloading = true;

@@ -17,6 +17,14 @@ export function fetchSelloutByPage(params) {
   });
 }
 
+export function fetchPBSellout(params) {
+  return axios({
+    url: "/api/whseCalicoOutDtla/pbsellout",
+    method: "get",
+    params: params
+  });
+}
+
 
 export function fetchStockVehicleByPage(params) {
   return axios({
@@ -39,5 +47,12 @@ export function getTask(params) {
     url: "/erp/page",
     method: "get",
     params: params
+  });
+}
+export function sendTestTaskNoin(data) {
+  return axios({
+    url: "/erp/sendWmsInsExtest",
+    method: "post",
+    data: data
   });
 }

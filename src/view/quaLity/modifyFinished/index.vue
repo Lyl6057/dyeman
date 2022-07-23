@@ -35,6 +35,7 @@
           </avue-form>
         </el-row>
         <el-row class="crudBox">
+
           <el-transfer filterable v-model="checkData" filter-placeholder="关键字搜索" :data="finishedNotes" :props="{
             key: 'cardId',
             label: 'productNo',
@@ -42,6 +43,7 @@
             <span slot-scope="{ option }">{{ option.vatNo }} - {{ option.pidNo }} -
               {{ option.netWeight + "KG" }}</span>
           </el-transfer>
+          
         </el-row>
       </el-tab-pane>
       <el-tab-pane label="删除/恢复数据" name="second">
@@ -100,6 +102,7 @@ import {
   getFinish,
   del,
   addFinished,
+  
 } from "./api";
 export default {
   name: "qcDeatilReport",

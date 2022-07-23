@@ -312,7 +312,7 @@ export function mainCrud(_this) {
         placeholder: " "
       },
       {
-        label: "订单号",
+        label: "FEPO",
         prop: "thirdPo",
         tip: "Mã đặt hàng",
         span: 6,
@@ -322,7 +322,7 @@ export function mainCrud(_this) {
         placeholder: " "
       },
       {
-        label: "订识别码",
+        label: "No",
         prop: "thirdSn",
         tip: "Mã nhận diện",
         span: 6,
@@ -331,8 +331,6 @@ export function mainCrud(_this) {
         sortable: true,
         placeholder: " "
       },
-
-
       {
         label: "交货地址",
         tip: "Địa chỉ giao hàng",
