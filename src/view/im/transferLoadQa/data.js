@@ -47,6 +47,26 @@ export const outExit = [
   {
     label: "Q10",
     value: "Q10"
+  },
+  {
+    label: "Y1",
+    value: "Y1"
+  },
+  {
+    label: "Y3",
+    value: "Y3"
+  },
+  {
+    label: "Y5",
+    value: "Y5"
+  },
+  {
+    label: "Y7",
+    value: "Y7"
+  },
+  {
+    label: "S4",
+    value: "S4"
   }
 ];
 
@@ -345,6 +365,23 @@ export function inWhseFormOp(_this) {
           }
         ]
       }
+    ]
+  };
+}
+
+export function inWhseFormDlgOp(_this) {
+  return {
+    submitBtn: false,
+    emptyBtn: false,
+    labelWidth: 90,
+    column: [
+      {
+        label: "缸号",
+        prop: "vatNo",
+        span: 6,
+        placeholder: " "
+      },
+    
     ]
   };
 }
@@ -1465,6 +1502,275 @@ export function dlgCrud(_this) {
       //   span: 6,
       //   align: "center",
       //   // sortable: true,
+      //   width: 200
+      // }
+    ]
+  };
+}
+
+
+export function DlgtaskCrud(_this) {
+  return {
+    menu: false,
+    addBtn: false,
+    cancelBtn: false,
+    editBtn: false,
+    delBtn: false,
+    menuWidth: 80,
+    border: true,
+    index: true,
+    highlightCurrentRow: true,
+    height: "calc(100vh - 320px)",
+    refreshBtn: false,
+    columnBtn: false,
+    page: true,
+    labelWidth: 100,
+    selection: false,
+    showSummary: false,
+    column: [
+      {
+        label: "任务ID",
+        prop: "taskId",
+        span: 6,
+        align: "center",
+        width: 70
+      },
+      {
+        label: "前置任务",
+        prop: "preTaskId",
+        width: 70,
+        span: 6,
+        placeholder: " ",
+        overHidden: true,
+      },
+      {
+        label: "WMS编号",
+        prop: "wmsTaskId",
+        width: 120,
+        span: 6,
+        placeholder: " ",
+        overHidden: true,
+      },
+      {
+        label: "托盘吗",
+        prop: "barCode",
+        width: 70,
+        span: 6,
+        placeholder: " ",
+        overHidden: true,
+      },
+      {
+        label: "任务状态",
+        prop: "taskStatus",
+        width: 100,
+        span: 6,
+        placeholder: " ",
+        overHidden: true,
+      },
+      {
+        label: "执行车辆",
+        prop: "processingRgvNo",
+        width: 70,
+        span: 6,
+        placeholder: " ",
+        overHidden: true,
+      },
+      {
+        label: "任务类型",
+        prop: "taskType",
+        width: 70,
+        span: 6,
+        placeholder: " ",
+        overHidden: true,
+      },
+      {
+        label: "小车进度",
+        prop: "rgvProgress",
+        width: 70,
+        span: 6,
+        placeholder: " ",
+        overHidden: true,
+      },
+      {
+        label: "添加时间",
+        prop: "createTime",
+        width: 130,
+        span: 6,
+        placeholder: " ",
+        overHidden: true,
+      },
+      {
+        label: "执行时间",
+        prop: "executeTime",
+        width: 130,
+        span: 6,
+        placeholder: " ",
+        overHidden: true,
+      },
+      
+  
+      // {
+      //   label: "指令类型",
+      //   prop: "orderType",
+      //   clearable: false,
+      //   span: 5,
+      //   placeholder: " ",
+      //   cell: true,
+      //   overHidden: true,
+      //   width: 120,
+      //   type: "select",
+      //   dicData: [
+      //     {
+      //       label: "正常入库",
+      //       value: 1
+      //     },
+      //     {
+      //       label: "正常出库",
+      //       value: 2
+      //     },
+      //     {
+      //       label: "验布出库",
+      //       value: 3
+      //     },
+      //     {
+      //       label: "验布入库",
+      //       value: 4
+      //     },
+      //     {
+      //       label: "松布出库",
+      //       value: 5
+      //     },
+      //     {
+      //       label: "松布入库",
+      //       value: 6
+      //     }
+      //   ],
+      // },
+      // {
+      //   label: "物料类别",
+      //   prop: "type",
+      //   clearable: false,
+      //   span: 6,
+      //   placeholder: " ",
+      //   cell: true,
+      //   overHidden: true,
+      //   width: 120,
+      //   type: "select",
+      //   dicData: [
+      //     {
+      //       label: "胚布",
+      //       value: 1
+      //     },
+      //     {
+      //       label: "成品布",
+      //       value: 2
+      //     }
+      //   ]
+      // },
+      // {
+      //   label: "载具条码",
+      //   prop: "barCode",
+      //   span: 6,
+      //   width: 120,
+      //   placeholder: " ",
+      //   cell: true,
+      //   overHidden: true
+      // },
+     
+      // {
+      //   label: "货位码",
+      //   prop: "storageCode",
+      //   span: 6,
+      //   width: 120,
+      //   placeholder: " ",
+      //   cell: true,
+      //   overHidden: true
+      // },
+      // {
+      //   label: "是否空布笼",
+      //   prop: "isEmpty",
+      //   span: 6,
+      //   placeholder: " ",
+      //   width: 125,
+      //   sortable: true,
+      //   overHidden: true,
+      //   type: "select",
+      //   dicData: [
+      //     {
+      //       label: "是",
+      //       value: 1
+      //     },
+      //     {
+      //       label: "否",
+      //       value: 0
+      //     }
+      //   ]
+      // },
+      // {
+      //   label: "完成状态",
+      //   prop: "finishStatus",
+      //   span: 6,
+      //   placeholder: " ",
+      //   width: 125,
+      //   sortable: true,
+      //   overHidden: true,
+      //   type: "select",
+      //   dicData: [
+      //     {
+      //       label: "已完成",
+      //       value: 1
+      //     },
+      //     {
+      //       label: "进行中",
+      //       value: 0
+      //     }
+      //   ]
+      // },
+      // {
+      //   label: "完成的信息",
+      //   prop: "finishInfo",
+      //   span: 6,
+      //   placeholder: " ",
+      //   width: 125,
+      //   overHidden: true
+      // },
+      // {
+      //   label: "返回的信息",
+      //   prop: "returnInfo",
+      //   span: 6,
+      //   placeholder: " ",
+      //   width: 125,
+      //   overHidden: true
+      // },
+      // {
+      //   label: "请求返回结果",
+      //   prop: "returnStatus",
+      //   span: 6,
+      //   placeholder: " ",
+      //   width: 125,
+      //   overHidden: true
+      // },
+     
+      // {
+      //   label: "响应时间",
+      //   prop: "updateTime",
+      //   type: "datetime",
+      //   format: "yyyy-MM-dd HH:mm:ss",
+      //   valueFormat: "yyyy-MM-dd HH:mm:ss",
+      //   span: 6,
+      //   align: "center",
+      //   sortable: true,
+      //   width: 200
+      // },
+      // {
+      //   label: "完成时间",
+      //   prop: "endTime",
+      //   type: "datetime",
+      //   format: "yyyy-MM-dd HH:mm:ss",
+      //   valueFormat: "yyyy-MM-dd HH:mm:ss",
+      //   span: 6,
+      //   align: "center",
+      //   sortable: true,
       //   width: 200
       // }
     ]

@@ -8,7 +8,7 @@
 -->
 <template>
   <div class="whseInOutKB" :element-loading-text="$t('public.loading')" v-loading="wLoading">
-    <el-dialog title="测试任务结果" :visible.sync="testVisible" width="30%" :before-close="handleClose">
+    <el-dialog title="测试任务结果" :visible.sync="testVisible" width="30%" >
       <div>
         <el-form ref="form" :model="testform" label-width="120px">
           <el-form-item label="Code">
@@ -31,8 +31,8 @@
     <el-tabs v-model="tabs" type="border-card">
       <el-tab-pane label="出入库看板" name="kanban">
         <el-row class="btnList">
-          <el-button type="success" @click="sendTask">提交任务</el-button>
-          <el-button type="warning" @click="testTask">测试任务</el-button>
+          <!-- <el-button type="success" @click="sendTask">提交任务</el-button> -->
+          <el-button type="success" @click="testTask">任务</el-button>
           <el-button type="primary" @click="query" v-if="form.type == 2">{{
               this.$t("public.query")
           }}</el-button>
