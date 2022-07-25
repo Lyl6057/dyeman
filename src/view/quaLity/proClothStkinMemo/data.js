@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:08:41
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-25 10:42:58
+ * @LastEditTime: 2022-07-25 11:09:29
  */
 
 // 表格通用配置
@@ -184,7 +184,7 @@ export function stkinMemoDtlCrudOp(_this) {
       {
         label: "布票号",
         prop: "noteCode",
-        width: 160,
+        width: 180,
         overHidden: true,
       },
       {
