@@ -86,18 +86,10 @@
 </template>
 
 <script>
-import { fetchSelloutByPage, fetchPBSellout } from "./api";
+import { fetchSelloutByPage, fetchPBSellout, getWayIOState } from "./api";
 import { inWhseFormOp, inWhseCrudOp, dlgCrud, inWhseCrudPBOp, inWhseFormDlgOp } from "./data";
 import { get } from "../../quaLity/codeCard/api"
-import {
-  addInFinishedWhse,
-  addInFinishedDtla,
-  addInFinishedDtlb,
-  addStorageLog,
-  sendTaskNoin,
-} from "../whseInOutKB/api";
 import { sendTestTaskNoin } from "../whseInOutKB/api"
-import { baseCodeSupply, baseCodeSupplyEx } from "@/api/index";
 export default {
   components: {},
   props: {},
