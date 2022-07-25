@@ -479,6 +479,9 @@ export function mainCrud(_this) {
             ],
             placeholder: " ",
             change: () => {
+              // _this.grossWeight=(_this.weightUnit=="KG")?0.4:0.9;
+              // console.log((_this.weightUnit=="KG")?0.4:0.9)
+              _this.changeUnit();
               _this.$nextTick(() => {
                 _this.codeLength();
               });
@@ -652,7 +655,7 @@ export function mainCrud(_this) {
           {
             label: "打印模板",
             // tip: "Tổng cộng(KG)",
-            prop: "basePrintTemplateFk",
+            prop: "printTemplate", //basePrintTemplateFk
             tip: "In mẫu",
             tipPlacement: "right",
             width: 100,
@@ -662,9 +665,16 @@ export function mainCrud(_this) {
             //   label: "tempTitle",
             //   value: "tempId"
             // },
-            dicData: getDicT("basePrintTemplate/list", "tempTitle", "tempId", {
-              isUsed: 1
-            }),
+            dicData: [
+              {
+                value: 0,
+                label: 'SPOWER 通用模板',
+              },
+              {
+                value: 1,
+                label:"KANE TOP 定制码卡",
+              },
+            ],
             placeholder: " ",
             rules: [
               {

@@ -7,109 +7,54 @@
 -->
 <template>
   <div id="finalCard">
-    <el-tabs
-      type="border-card"
-      v-loading="wLoading"
-      element-loading-text="拼命加载中..."
-    >
+    <el-tabs type="border-card" v-loading="wLoading" element-loading-text="拼命加载中...">
       <el-tab-pane label="成品码卡" class="queryForm">
         <el-row>
           <el-col :span="18">
             <el-row class="formBox">
-              <avue-form
-                ref="form"
-                :option="crudOp"
-                v-model="form"
-                style="height: calc(100vh - 265px); overflow: auto"
-              >
+              <avue-form ref="form" :option="crudOp" v-model="form" style="height: calc(100vh - 265px); overflow: auto">
                 <template slot="vatNo">
-                  <el-select
-                    v-model="form.vatNo"
-                    filterable
-                    remote
-                    reserve-keyword
-                    clearable
-                    default-first-option
-                    placeholder="请输入缸号"
-                    :remote-method="remoteMethod"
-                    :loading="vatLoading"
-                    @change="query"
-                  >
-                    <el-option
-                      v-for="item in options"
-                      :key="item.vatNo"
-                      :label="item.vatNo"
-                      :value="item.vatNo"
-                    >
+                  <el-select v-model="form.vatNo" filterable remote reserve-keyword clearable default-first-option
+                    placeholder="请输入缸号" :remote-method="remoteMethod" :loading="vatLoading" @change="query">
+                    <el-option v-for="item in options" :key="item.vatNo" :label="item.vatNo" :value="item.vatNo">
                     </el-option>
                   </el-select>
                 </template>
               </avue-form>
             </el-row>
-            <el-row
-              class="btnList"
-              style="
+            <el-row class="btnList" style="
                 text-align: center;
                 width: 98%;
                 margin: 0 auto;
                 height: 40px;
                 font-size: 22px;
-              "
-            >
-              <el-button type="primary" @click="query" :disabled="!form.vatNo"
-                >查询</el-button
-              >
-              <el-button type="primary" :disabled="!form.vatNo" @click="preview"
-                >预览</el-button
-              >
-              <el-button type="primary" :disabled="!form.vatNo" @click="print"
-                >打印</el-button
-              >
+              ">
+              <el-button type="primary" @click="query" :disabled="!form.vatNo">查询</el-button>
+              <el-button type="primary" :disabled="!form.vatNo" @click="preview">预览</el-button>
+              <el-button type="primary" :disabled="!form.vatNo" @click="print">打印</el-button>
 
               <span style="margin-left: 5px">
                 <span>张数</span>
-                <el-input
-                  v-model="sheetNum"
-                  type="number"
-                  max="3"
-                  min="1"
-                  maxlength="2"
-                  style="width: 70px; margin: 0 5px"
-                  @input="numberChange"
-                  @change="numberChange"
-                ></el-input>
+                <el-input v-model="sheetNum" type="number" max="3" min="1" maxlength="2"
+                  style="width: 70px; margin: 0 5px" @input="numberChange" @change="numberChange"></el-input>
                 打印机状态:<span :style="{ color: dlgCtr ? 'green' : 'red' }">
-                  {{ dlgCtr ? "已连接" : "未连接" }}</span
-                >
+                  {{ dlgCtr ? "已连接" : "未连接" }}</span>
               </span>
             </el-row>
           </el-col>
           <el-col :span="6">
             <view-container title="历史记录">
-              <el-card
-                class="border-card"
-                style="height: calc(100vh - 120px); overflow: auto"
-                id="history"
-              >
-                <div
-                  class="historyText"
-                  v-for="item in history"
-                  :key="item.noteId"
-                  style="border-bottom: 1px solid #eee"
-                >
-                  <el-tooltip
-                    class="item"
-                    effect="dark"
-                    :content="
-                      '缸号' +
-                      item.vatNo +
-                      '匹号' +
-                      item.pidNo +
-                      ' 净重' +
-                      item.netWeight
-                    "
-                    placement="top"
-                  >
+              <el-card class="border-card" style="height: calc(100vh - 120px); overflow: auto" id="history">
+                <div class="historyText" v-for="item in history" :key="item.noteId"
+                  style="border-bottom: 1px solid #eee">
+                  <el-tooltip class="item" effect="dark" :content="
+                    '缸号' +
+                    item.vatNo +
+                    '匹号' +
+                    item.pidNo +
+                    ' 净重' +
+                    item.netWeight
+                  " placement="top">
                     <div class="history">
                       <span>缸号: {{ item.vatNo }}</span>
                       <span>匹号: {{ item.pidNo }}</span>
@@ -121,21 +66,10 @@
             </view-container>
           </el-col>
         </el-row>
-        <el-dialog
-          id="colorMng_Dlg"
-          :visible.sync="pdfDlg"
-          fullscreen
-          width="100%"
-          append-to-body
-          :close-on-click-modal="false"
-          :close-on-press-escape="false"
-        >
+        <el-dialog id="colorMng_Dlg" :visible.sync="pdfDlg" fullscreen width="100%" append-to-body
+          :close-on-click-modal="false" :close-on-press-escape="false">
           <view-container title="打印預覽">
-            <embed
-              id="pdf"
-              style="width: 100vw; height: calc(100vh - 80px)"
-              :src="pdfUrl"
-            />
+            <embed id="pdf" style="width: 100vw; height: calc(100vh - 80px)" :src="pdfUrl" />
           </view-container>
         </el-dialog>
       </el-tab-pane>
@@ -202,7 +136,7 @@ export default {
       vatLoading: false,
       dlgCtr: true,
       spowerClient: null,
-      tubeMaxValue: 0
+      tubeMaxValue: 0,
     };
   },
   created() {
@@ -210,7 +144,7 @@ export default {
   mounted() {
     this.wLoading = true;
     getCodeValue("bas_sys_rule").then(res => {
-      if(!res.data.length){
+      if (!res.data.length) {
         this.tubeMaxValue = 0
       }
       this.tubeMaxValue = Number(res.data[0].reserved1)
@@ -227,12 +161,12 @@ export default {
           this.form.originPlace = "06";
           this.form.qcTakeOut = 0;
           this.form.pidNo = 1;
-          this.form.paperTube = this.tubeMaxValue;
+          //  this.form.paperTube = this.tubeMaxValue;
           this.form.widthUnit = "INCH";
           this.form.gramWeightUnit = "g";
           getTem({ isDefault: 1, isUsed: 1 }).then((res) => {
             if (res.data.length) {
-              this.form.basePrintTemplateFk = res.data[0].tempId;
+              this.form.printTemplate = 0;
               this.commonTem = res.data[0].tempId;
             }
             this.wLoading = false;
@@ -327,8 +261,8 @@ export default {
                   typeof this.form.breadthBorder === "number"
                     ? Number(this.form.breadthBorder || 0)
                     : this.form.breadthBorder
-                    ? Number(this.form.breadthBorder.match(/\d+/g)[0])
-                    : 0;
+                      ? Number(this.form.breadthBorder.match(/\d+/g)[0])
+                      : 0;
                 if (!this.form.sideBreadthValue) {
                   if (this.form.widthUnit == "INCH") {
                     this.form.sideBreadthValue = this.form.clothWidth + 2;
@@ -386,6 +320,7 @@ export default {
           }
         }
       );
+
     },
     getTemForCust() {
       getTem({ custCode: this.form.custCode, isUsed: 1 }).then((res) => {
@@ -445,18 +380,21 @@ export default {
                       delete data[item];
                     }
                   });
+                  console.log(res);
                   if (res.data.length) {
+
                     data.cardId = res.data[0].cardId;
                     this.form.cardId = data.cardId;
+                    ;
                     // 存在记录  更新 => 打印
                     // update(data).then((upRes) => {
                     // this.history.unshift(data);
                     // this.history = this.$unique(this.history, "cardId");
-
-                    this.pdfUrl =
-                      process.env.API_HOST +
-                      "/api/proFinalProductCard/cardPdf?cardId=" +
-                      this.form.cardId;
+                    let url = process.env.API_HOST + "/api/proFinalProductCard/cardPdf?cardId=" + this.form.cardId;
+                    if (this.form.printTemplate == 1) {
+                      url = url + "&tempId=123";
+                    }
+                    this.pdfUrl = url;
                     this.pdfDlg = true;
                     // });
                   } else {
@@ -469,10 +407,11 @@ export default {
                         this.form.cardId = addRes.data.data;
                         // this.history.unshift(data);
                         // this.history = this.$unique(this.history, "cardId");
-                        this.pdfUrl =
-                          process.env.API_HOST +
-                          "/api/proFinalProductCard/cardPdf?cardId=" +
-                          this.form.cardId;
+                        let url = process.env.API_HOST + "/api/proFinalProductCard/cardPdf?cardId=" + this.form.cardId;
+                        if (this.form.printTemplate == 1) {
+                          url = url + "&tempId=123";
+                        }
+                        this.pdfUrl = url;
                         this.pdfDlg = true;
                       }
                     });
@@ -501,11 +440,12 @@ export default {
       });
     },
     async print() {
-      if(this.form.paperTube > this.tubeMaxValue){
-        let cofirmRes = await this.$tip.cofirm("纸筒重量超过规定重量，是否确定打印码卡(Trọng lượng thùng giấy vượt quá trọng lượng quy định, bạn có chắc muốn in mã này không)?").then(() => {return true}).catch((e) => {return false})
-        if(!cofirmRes){
+      const ValueMax = this.form.weightUnit == "KG" ? 0.4 : 0.9;
+      if (this.form.paperTube > ValueMax) {
+        let cofirmRes = await this.$tip.cofirm("纸筒重量超过规定重量，是否确定打印码卡(Trọng lượng thùng giấy vượt quá trọng lượng quy định, bạn có chắc muốn in mã này không)?").then(() => { return true }).catch((e) => { return false })
+        if (!cofirmRes) {
           this.$tip.warning("已取消打印!");
-          return 
+          return
         }
       }
       if (!this.spowerClient || this.spowerClient.readyState == 3 || this.spowerClient.readyState == 0) {
@@ -686,7 +626,7 @@ export default {
             useType: 2,
             whsCarriageStorageFk: this.form.storeLoadCode,
             useTime: this.$getNowTime("datetime"),
-          }).then((addStoge) => {});
+          }).then((addStoge) => { });
         }
       });
     },
@@ -704,7 +644,7 @@ export default {
       }
     },
     setCz() {
-     this.spowerClient = this.$store.state.spowerClient;
+      this.spowerClient = this.$store.state.spowerClient;
       let _this = this;
       _this.spowerClient.onmessage = function (e) {
         if (e.data.indexOf("scan") != -1) {
@@ -741,9 +681,12 @@ export default {
         }
       };
       _this.spowerClient.onerror = function () {
-          _this.$tip.warning("称重服务离线，请打开称重应用!");
-          _this.dlgCtr = false;
+        _this.$tip.warning("称重服务离线，请打开称重应用!");
+        _this.dlgCtr = false;
       };
+    },
+    changeUnit() {
+      this.form.paperTube = (this.form.weightUnit == "KG") ? "0.4" : "0.9";
     },
     codeLength() {
       if (
