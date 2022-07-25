@@ -8,6 +8,12 @@
  */
 import axios from "axios";
 
+export function getWayIOState() {
+  return axios({
+    url: "/api/whseWayIoState",
+    method: "get",
+  });
+}
 
 export function fetchSelloutByPage(params) {
   return axios({
