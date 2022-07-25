@@ -30,7 +30,8 @@
                   <!-- <el-button type="primary" size="mini" @click="handleOutWhse(scope,'3')">提交</el-button> -->
                   <el-button type="success" size="mini" @click="handleOutWhseTest(scope, '3')">提交</el-button>
                 </div>
-                <el-link type="primary" size="mini" slot="reference" @click="exit = 'Q1'" style="margin-right: 17px;">验布
+                <el-link type="primary" size="mini" slot="reference" @click="defaultWay(1)" style="margin-right: 17px;">
+                  验布
                 </el-link>
               </el-popover>
               <el-popover placement="left" width="160" trigger="click">
@@ -43,7 +44,8 @@
                   <!-- <el-button type="primary" size="mini" @click="handleOutWhse(scope,'5')">提交</el-button> -->
                   <el-button type="success" size="mini" @click="handleOutWhseTest(scope, '5')">提交</el-button>
                 </div>
-                <el-link type="success" size="mini" slot="reference" @click="exit = 'S1'" style="margin-left: 17px;">松布
+                <el-link type="success" size="mini" slot="reference" @click="defaultWay(2)" style="margin-left: 17px;">
+                  松布
                 </el-link>
               </el-popover>
             </template>
@@ -78,8 +80,8 @@
 </template>
 
 <script>
-import { formOp, crudOp, outExit, sbExit, taskForm, taskCrud, DlgtaskCrud } from "./data";
-import { fetchStockVehicleByPage, sendTask, getTask } from "./api";
+import { formOp, crudOp, taskForm, taskCrud, DlgtaskCrud } from "./data";
+import { fetchStockVehicleByPage, sendTask, getTask, getWayIOState } from "./api";
 import { sendTestTaskNoin } from "../whseInOutKB/api"
 import qcPlan from "./qcPlan";
 import inWhse from "./inWhse";
@@ -115,9 +117,9 @@ export default {
         total: 0,
       },
       dlgVisiable: false,
-      exit: "Q1",
-      outExit,
-      sbExit,
+      exit: "",
+      outExit: [],
+      sbExit: [],
       visible: true,
       detail: {},
       taskFormOp: taskForm(this),
@@ -132,7 +134,7 @@ export default {
   watch: {},
   computed: {},
   created() { },
-  mounted() { },
+  mounted() { this.getWayIO() },
   methods: {
     query() {
       this.wloading = true;
@@ -285,6 +287,40 @@ export default {
           this.wloading = false;
         });
     },
+    defaultWay(type) {
+      if (type == 1) {
+        this.exit = (this.outExit.length > 0) ? this.outExit[0].value : "";
+      } else {
+        this.exit = (this.sbExit.length > 0) ? this.sbExit[0].value : "";
+      }
+    },
+    getWayIO() {
+      getWayIOState().then((res) => {
+        var outList = [];
+        var sbList = [];
+        if (res.data.length > 0) {
+          res.data.map((e) => {
+            if (e.useWay == 1) {
+              outList.push({
+                label: e.passwayName,
+                value: e.passwayName,
+                sn: e.sn
+              })
+            } else {
+              sbList.push({
+                label: e.passwayName,
+                value: e.passwayName,
+                sn: e.sn
+              })
+            }
+          })
+          outList.sort((a, b) => a.sn < b.sn);
+          sbList.sort((a, b) => a.sn < b.sn);
+          this.outExit = outList;
+          this.sbExit = sbList;
+        }
+      })
+    }
   },
 };
 </script>

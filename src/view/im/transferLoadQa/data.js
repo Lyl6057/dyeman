@@ -6,7 +6,8 @@
  * @FilePath: \iot.vue\src\view\im\transferLoadQa\data.js
  * @Description:
  */
-import { getDIC,getDicT } from '@/config/index'
+import { getDIC,getDicT } from '@/config/index';
+
 export const outExit = [
   {
     label: "Q1",
@@ -67,6 +68,10 @@ export const outExit = [
   {
     label: "S4",
     value: "S4"
+  },
+  {
+    label: "S10",
+    value: "S10"
   }
 ];
 
@@ -345,7 +350,7 @@ export function inWhseFormOp(_this) {
         span: 6,
         placeholder: " ",
         type: 'select',
-        dicData: outExit.concat(sbExit)
+        dicData: getDicT("whseWayIoState","passwayName","passwayName",{},"sn")
       },
       {
         label: "层数",
