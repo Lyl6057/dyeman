@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:18:51
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-01 10:31:31
+ * @LastEditTime: 2022-07-25 10:22:51
 -->
 <template>
   <div id="stkin-memo-dtl-container">
@@ -87,7 +87,6 @@ export default {
     
     // 初始化数据
     initData() {
-      
     },
     // 获取纱线入仓明细数据
     getStkinMemoData(stkinMemoData) {
@@ -149,6 +148,7 @@ export default {
     // 生成主表数据
     createWhseYarnInData() {
       this.stkinMemoData = {
+        whseYarninoid: "",
         memoNo: "",
         memoDate: timeConversion(new Date()),
         yinDate: ""
