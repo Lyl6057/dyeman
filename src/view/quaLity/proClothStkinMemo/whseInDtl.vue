@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:18:51
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-25 10:22:51
+ * @LastEditTime: 2022-07-25 11:54:16
 -->
 <template>
   <div id="stkin-memo-dtl-container">
@@ -91,7 +91,7 @@ export default {
     // 获取纱线入仓明细数据
     getStkinMemoData(stkinMemoData) {
       this.loading = true;
-      Object.assign(this.stkinMemoData, stkinMemoData)
+      this.stkinMemoData = stkinMemoData
       // this.stlkinMemoData = stkinMemoData;
       // console.log(this.stlkinMemoData)
       fetchStkinMemoDataByStkinOid({stkinOid: stkinMemoData.proClothStkinMemooid}).then(res => {
@@ -104,7 +104,7 @@ export default {
     async handleSave() {
       this.loading = true;
       // 保存主数据
-      let oid = this.stkinMemoData.whseYarninoid;
+      let oid = this.stkinMemoData.proClothStkinMemooid;
       if (oid) {
         await updateStkinMemoData(this.stkinMemoData);
       } else {
@@ -114,7 +114,7 @@ export default {
         // 流水号递增
         baseCodeSupply({ code: "stkin_memo_notice" });
       }
-      Object.assign(this.stkinMemoData, { whseYarninoid: oid });
+      Object.assign(this.stkinMemoData, { proClothStkinMemooid: oid });
       // 保存明细数据
       await this.saveDtlData(oid);
       this.loading = false;
@@ -148,7 +148,7 @@ export default {
     // 生成主表数据
     createWhseYarnInData() {
       this.stkinMemoData = {
-        whseYarninoid: "",
+        proClothStkinMemooid: "",
         memoNo: "",
         memoDate: timeConversion(new Date()),
         yinDate: ""
