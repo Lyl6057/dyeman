@@ -43,6 +43,32 @@ export default {
       this.reConnectIOT();
 
     });
+    let version = [
+      {
+        name: "proMng",
+        value: "20220726.1"
+      },
+      {
+        name: "Energy",
+        value: "20220726.1"
+      },
+      {
+        name: "qualityMng",
+        value: "20220726.1"
+      },
+      {
+        name: "laboratory",
+        value: "20220726.1"
+      },
+      {
+        name: "energyMng",
+        value: "20220726.1"
+      },
+      {
+        name: "warehouseMng",
+        value: "20220726.1"
+      }
+    ]
     // 獲取多語言
     let lang = "1";
     document.cookie.split(";").forEach((item, index) => {
@@ -52,6 +78,16 @@ export default {
       if (index === document.cookie.split(";").length - 1) {
         this.setLangs(lang);
       }
+      version.some(n => {
+        if (item.includes(n.name)) {
+          if (item.split("=")[1] != n.value) {
+            console.log("clear cookie");
+            this.clearCookie();
+          }
+        } else {
+          document.cookie = `${n.name}=${n.value}`;
+        }
+      })
     });
     // window.sessionStorage.setItem("tagView", "[]");
   },
@@ -75,6 +111,9 @@ export default {
       setTimeout(() => {
         this.reConnectIOT();
       }, 5000);
+    },
+    clearCookie() {
+      document.cookie.split(";").forEach(function (c) { document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); });
     }
   },
 };
