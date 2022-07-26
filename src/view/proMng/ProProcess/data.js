@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:08:41
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-25 16:58:27
+ * @LastEditTime: 2022-07-26 13:45:26
  */
 
 
@@ -71,10 +71,11 @@ export function mainCrudOp(_this) {
         prop: "shipDate",
         width: 100,
         overHidden: true,
+        align: "center"
       },
       {
         label: "走货数量(kg)",
-        prop: "shipQtyLbs",
+        prop: "shipQtyKg",
         width: 120,
         overHidden: true,
         align: "right"
@@ -148,26 +149,30 @@ export function dataFormOp(_this) {
       prop: "poNo",
       span: 4,
       disabled: true,
-      labelWidth: "120"
+      labelWidth: "120",
+      placeholder: " "
     },
     {
       label: "版本号",
       prop: "verNo",
       span: 4,
-      disabled: true
+      disabled: true,
+      placeholder: " "
     },
     {
       label: "走货日期",
       prop: "shipDate",
       span: 4,
-      disabled: true
+      disabled: true,
+      placeholder: " "
     },
     {
       label: "走货数量(kg)",
-      prop: "shipQtyLbs",
+      prop: "shipQtyKg",
       span: 4,
       disabled: true,
-      labelWidth: "110"
+      labelWidth: "110",
+      placeholder: " "
     },
     ]
   }
