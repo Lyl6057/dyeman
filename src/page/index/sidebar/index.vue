@@ -53,9 +53,7 @@ export default {
         func(this.menuData);
         this.list = this.menuData;
         this.$nextTick(() => {
-          console.log(this.menuData)
           var path = "";
-
           const menuindex = this.menuData.findIndex(e => e.hide == false);
           if (menuindex != -1) {
             if (this.menuData[menuindex].children != null) {
