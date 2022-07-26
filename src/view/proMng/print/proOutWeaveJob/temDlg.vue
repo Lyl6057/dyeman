@@ -7,58 +7,24 @@
 -->
 <template>
   <div id="proWeaveJob">
-    <view-container
-      :title="(isAdd ? '新增' : '修改') + '外发织造通知单'"
-      :element-loading-text="$t('public.loading')"
-      v-loading="wLoading"
-    >
+    <view-container :title="(isAdd ? '新增' : '修改') + '外发织造通知单'" :element-loading-text="$t('public.loading')"
+      v-loading="wLoading">
       <div class="btnList">
         <template v-if="isOutFactory">
-          <el-tooltip
-            class="item"
-            effect="dark"
-            content="Bảo tồn"
-            placement="top-start"
-          >
+          <el-tooltip class="item" effect="dark" content="Bảo tồn" placement="top-start">
             <el-button type="success" @click="save" title="save" v-if="canSave">{{
-              $t("public.save")
+                $t("public.save")
             }}</el-button>
           </el-tooltip>
 
-          <el-button
-            type="primary"
-            @click="checkOrder"
-            title="checkOrder"
-            v-if="canSave"
-            >选择订单号</el-button
-          >
-          <el-tooltip
-            class="item"
-            effect="dark"
-            content="Yarn detail"
-            placement="top-start"
-          >
-            <el-button
-              type="primary"
-              @click="checkYarn"
-              :disabled="!this.form.weaveJobId"
-              v-if="canSave"
-              >用紗明細</el-button
-            >
+          <el-button type="primary" @click="checkOrder" title="checkOrder" v-if="canSave">选择订单号</el-button>
+          <el-tooltip class="item" effect="dark" content="Yarn detail" placement="top-start">
+            <el-button type="primary" @click="checkYarn" :disabled="!this.form.weaveJobId" v-if="canSave">用紗明細
+            </el-button>
           </el-tooltip>
-          <el-tooltip
-            class="item"
-            effect="dark"
-            content="After washing"
-            placement="top-start"
-          >
-            <el-button
-              type="primary"
-              @click="checkCalico"
-              :disabled="!this.form.weaveJobId"
-              v-if="canSave"
-              >洗後規格</el-button
-            >
+          <el-tooltip class="item" effect="dark" content="After washing" placement="top-start">
+            <el-button type="primary" @click="checkCalico" :disabled="!this.form.weaveJobId" v-if="canSave">洗後規格
+            </el-button>
           </el-tooltip>
           <!-- <el-button
             type="primary"
@@ -66,188 +32,119 @@
             :disabled="!this.form.weaveJobId"
             >輸送張力</el-button
           > -->
-          <el-tooltip
-            class="item"
-            effect="dark"
-            content="in"
-            placement="top-start"
-          >
-            <el-button
-              type="primary"
-              @click="print"
-              :disabled="!this.form.weaveJobId"
-              v-if="canSave"
-              >打印</el-button
-            >
+          <el-tooltip class="item" effect="dark" content="in" placement="top-start">
+            <el-button type="primary" @click="print" :disabled="!this.form.weaveJobId" v-if="canSave">打印</el-button>
           </el-tooltip>
         </template>
-        <el-tooltip
-          class="item"
-          effect="dark"
-          content="đóng"
-          placement="top-start"
-        >
+        <el-tooltip class="item" effect="dark" content="đóng" placement="top-start">
           <el-button type="warning" @click="close">{{
-            this.$t("public.close")
+              this.$t("public.close")
           }}</el-button>
         </el-tooltip>
       </div>
 
       <div class="formBox">
-        <avue-form ref="form" :option="formOp" v-model="form"> 
+        <avue-form ref="form" :option="formOp" v-model="form">
           <template slot="operatProcess">
             <el-button type="primary" @click="operatProcessClick">上机工艺</el-button>
           </template>
         </avue-form>
+        <div title="">
+          <div style="margin:10px;margin-left:17px">
+            <el-radio-group v-model="machineType" @change="change">
+              <el-radio v-model="machineType" label="yj" size="medium">圆机</el-radio>
+              <el-radio v-model="machineType" label="bj" size="medium">扁机</el-radio>
+            </el-radio-group>
+
+            <span style="color: #409eff; font-size: 15px; margin-left: 20px"
+              @click.stop="handleOpenMachineInfo">機臺</span>
+
+          </div>
+
+          <div class="formBox" v-if="machineType == 'yj'">
+            <avue-form ref="formYJ" :option="formYJOp" v-model="formYJ">
+              <template slot="operatProcess">
+                <el-button type="primary" @click="operatProcessClick">上机工艺</el-button>
+              </template>
+            </avue-form>
+          </div>
+          <div v-if="machineType == 'bj'">
+            <MeaveEmbyroDtl :weaveJobId="form.weaveJobId" ref="meaveEmbyroDtlRef" :cansave="!this.form.weaveJobId"
+              @close="meaEmbVisible = false" />
+          </div>
+        </div>
       </div>
     </view-container>
-    <el-dialog
-      :visible.sync="visible"
-      fullscreen
-      append-to-body
-      id="viewDlg"
-      :element-loading-text="$t('public.loading')"
-      v-loading="dlgLoading"
-      v-if="visible"
-    >
+    <el-dialog :visible.sync="visible" fullscreen append-to-body id="viewDlg"
+      :element-loading-text="$t('public.loading')" v-loading="dlgLoading" v-if="visible">
       <el-row>
         <el-col :span="24">
           <view-container :title="tabs">
             <div class="btnList">
-              <el-button
-                @click="check"
-                type="success"
-                v-if="tabs == '選擇訂單' || tabs == '更改紗長'"
-                >{{ $t("public.choose") }}</el-button
-              >
-              <el-tooltip
-                class="item"
-                effect="dark"
-                content="Bảo tồn"
-                placement="top-start"
-              >
-                <el-button
-                  @click="saveOther"
-                  type="success"
-                  v-if="tabs != '選擇訂單'"
-                  >{{ $t("public.save") }}</el-button
-                >
+              <el-button @click="check" type="success" v-if="tabs == '選擇訂單' || tabs == '更改紗長'">{{ $t("public.choose") }}
+              </el-button>
+              <el-tooltip class="item" effect="dark" content="Bảo tồn" placement="top-start">
+                <el-button @click="saveOther" type="success" v-if="tabs != '選擇訂單'">{{ $t("public.save") }}</el-button>
               </el-tooltip>
-              <el-tooltip
-                class="item"
-                effect="dark"
-                content="thêm mới "
-                placement="top-start"
-              >
-                <el-button
-                  @click="add"
-                  type="primary"
-                  v-if="tabs != '選擇訂單'"
-                  >{{ $t("public.add") }}</el-button
-                >
+              <el-tooltip class="item" effect="dark" content="thêm mới " placement="top-start">
+                <el-button @click="add" type="primary" v-if="tabs != '選擇訂單'">{{ $t("public.add") }}</el-button>
               </el-tooltip>
-              <el-tooltip
-                class="item"
-                effect="dark"
-                content="xóa"
-                placement="top-start"
-              >
-                <el-button
-                  @click="del"
-                  type="danger"
-                  v-if="tabs != '選擇訂單'"
-                  :disabled="Object.keys(chooseData).length == 0"
-                  >{{ $t("public.del") }}</el-button
-                >
+              <el-tooltip class="item" effect="dark" content="xóa" placement="top-start">
+                <el-button @click="del" type="danger" v-if="tabs != '選擇訂單'"
+                  :disabled="Object.keys(chooseData).length == 0">{{ $t("public.del") }}</el-button>
               </el-tooltip>
-              <el-button
-                @click="query"
-                type="primary"
-                v-if="tabs == '選擇訂單'"
-                >{{ $t("public.query") }}</el-button
-              >
-              <el-tooltip
-                class="item"
-                effect="dark"
-                content="đóng"
-                placement="top-start"
-              >
+              <el-button @click="query" type="primary" v-if="tabs == '選擇訂單'">{{ $t("public.query") }}</el-button>
+              <el-tooltip class="item" effect="dark" content="đóng" placement="top-start">
                 <el-button @click="visible = false" type="warning">{{
-                  $t("public.close")
+                    $t("public.close")
                 }}</el-button>
               </el-tooltip>
             </div>
             <div class="formBox">
-              <avue-form
-                v-if="tabs == '選擇訂單'"
-                ref="dlgform"
-                :option="dlgFormOp"
-                v-model="dlgForm"
-              ></avue-form>
+              <avue-form v-if="tabs == '選擇訂單'" ref="dlgform" :option="dlgFormOp" v-model="dlgForm"></avue-form>
             </div>
             <div class="crudBox">
-              <avue-crud
-                ref="crud"
-                :option="crudOp"
-                :data="crud"
-                :page.sync="page"
-                v-loading="loading"
-                @on-load="query"
-                @row-dblclick="handleRowDBLClick"
-                @current-row-change="cellClick"
-              ></avue-crud>
-            </div> </view-container
-        ></el-col>
+              <avue-crud ref="crud" :option="crudOp" :data="crud" :page.sync="page" v-loading="loading" @on-load="query"
+                @row-dblclick="handleRowDBLClick" @current-row-change="cellClick"></avue-crud>
+            </div>
+          </view-container>
+        </el-col>
       </el-row>
     </el-dialog>
-    <el-dialog
-      id="colorMng_Dlg"
-      :visible.sync="pdfDlg"
-      fullscreen
-      width="100%"
-      append-to-body
-      :close-on-click-modal="false"
-      :close-on-press-escape="false"
-    >
+    <el-dialog id="colorMng_Dlg" :visible.sync="pdfDlg" fullscreen width="100%" append-to-body
+      :close-on-click-modal="false" :close-on-press-escape="false">
       <view-container title="打印預覽">
-        <embed
-          id="pdf"
-          style="width: 100vw; height: calc(100vh - 80px)"
-          :src="pdfUrl"
-        />
+        <embed id="pdf" style="width: 100vw; height: calc(100vh - 80px)" :src="pdfUrl" />
       </view-container>
     </el-dialog>
-    <el-dialog id="colorMng_Dlg" :visible.sync="gytDlg" fullscreen width="100%" append-to-body :close-on-click-modal="false" :close-on-press-escape="false">
+    <el-dialog id="colorMng_Dlg" :visible.sync="gytDlg" fullscreen width="100%" append-to-body
+      :close-on-click-modal="false" :close-on-press-escape="false">
       <view-container title="上机工艺维护">
         <technology v-if="gytDlg" :weave="form" @refresh="technologyRefresh" @close="gytDlg = false"></technology>
       </view-container>
     </el-dialog>
-    <choice
-      :choiceV="choiceV"
-      :choiceTle="choiceTle"
-      :choiceQ="choiceQ"
-      dlgWidth="100%"
-      @choiceData="choiceData"
-      @close="choiceV = false"
-      v-if="choiceV"
-    ></choice>
+    <choice :choiceV="choiceV" :choiceTle="choiceTle" :choiceQ="choiceQ" dlgWidth="100%" @choiceData="choiceData"
+      @close="choiceV = false" v-if="choiceV"></choice>
 
     <!-- 织胚明细 -->
-    <div class="other-dtl-wrapper" >
-      <span style="color: #409eff; font-size: 15px; margin-left: 20px" @click.stop="handleOpenWeaEmbDtl" >織胚明細</span>
-      <span style="color: #409eff; font-size: 15px; margin-left: 20px" @click.stop="handleOpenMachineInfo" >機臺</span>
+
+    <div class="other-dtl-wrapper1">
+      <span style="color: #409eff; font-size: 15px; margin-left: 20px" @click="handleOpenMachineInfo">機臺</span>
     </div>
-    <el-dialog :visible.sync="meaEmbVisible" fullscreen  append-to-body :close-on-click-modal="false" :close-on-press-escape="false" >
-      <MeaveEmbyroDtl 
-        :weaveJobId="form.weaveJobId"
-        ref="meaveEmbyroDtlRef" 
+
+    <div class="other-dtl-wrapper">
+      <span style="color: #409eff; font-size: 15px; margin-left: 20px" @click.stop="handleOpenWeaEmbDtl">織胚明細</span>
+      <span style="color: #409eff; font-size: 15px; margin-left: 20px" @click.stop="handleOpenMachineInfo">機臺</span>
+    </div>
+
+    <el-dialog :visible.sync="meaEmbVisible" fullscreen append-to-body :close-on-click-modal="false"
+      :close-on-press-escape="false">
+      <MeaveEmbyroDtl :weaveJobId="form.weaveJobId" ref="meaveEmbyroDtlRef" @cansave="true"
         @close="meaEmbVisible = false" />
     </el-dialog>
-    <el-dialog :visible.sync="machineInfoVisible" fullscreen  append-to-body :close-on-click-modal="false" :close-on-press-escape="false" >
-      <MachineInfo 
-        :weaveJobId="form.weaveJobId"
-        ref="machineInfoRef" 
-        @close="machineInfoVisible = false" />
+    <el-dialog :visible.sync="machineInfoVisible" fullscreen append-to-body :close-on-click-modal="false"
+      :close-on-press-escape="false">
+      <MachineInfo :weaveJobId="form.weaveJobId" ref="machineInfoRef" @close="machineInfoVisible = false" />
     </el-dialog>
   </div>
 </template>
@@ -255,6 +152,7 @@
 import choice from "@/components/proMng/index";
 import {
   mainCrud,
+  mainYJCrud,
   dlgForm,
   dlgCrud,
   yarnCrud,
@@ -299,6 +197,7 @@ import { getBf } from "../clothFly/api";
 import technology from "../proWeaveJob/technology"
 import MeaveEmbyroDtl from "./meaveEmbyroDtl.vue"
 import MachineInfo from "./machineInfo.vue"
+import { async } from 'q';
 export default {
   name: "",
   props: {
@@ -318,7 +217,11 @@ export default {
       wLoading: false,
       gytDlg: false,
       formOp: mainCrud(this),
-      form: {},
+      formYJOp: mainYJCrud(this),
+      form: {
+        loomType: 1
+      },
+      formYJ: {},
       page: {
         pageSize: 10,
         currentPage: 1,
@@ -356,7 +259,7 @@ export default {
       pdfUrl: "",
       yarnlist: [],
       canSave: true,
-
+      machineType: "yj",
       // 织胚明细 弹出窗状态
       meaEmbVisible: false,
       machineInfoVisible: false,
@@ -364,32 +267,47 @@ export default {
   },
   watch: {},
   computed: {
-    isOutFactory(){
-      return  !this.$store.getters.isOutFactory
+    isOutFactory() {
+      return !this.$store.getters.isOutFactory
     }
   },
   methods: {
     // 织胚明细DOM 移动
-    meaveDomMove(){
+    meaveDomMove() {
       let meaveDtlBtnDom = document.querySelectorAll(".other-dtl-wrapper")[0];
       let formGroupWrapper = document.querySelectorAll("#proWeaveJob .avue-group__header")[0];
       formGroupWrapper.appendChild(meaveDtlBtnDom)
     },
+    MoveElemntToHtml() {
+      let button = document.querySelectorAll(".other-dtl-wrapper1")[0];
+      let formGroupWrapper = document.querySelectorAll("#proWeaveJob .el-tab-pane")[0];
+      formGroupWrapper.appendChild(button)
+    },
+    async change(val) {
+      if (val == 'bj') {
+        this.form.loomType = 2;
+        if (!this.form.weaveJobId) return this.$tip.warning("请先保存通知单");
+        await this.$nextTick();
+        this.$refs.meaveEmbyroDtlRef.getDataList();
+      } else {
+        this.form.loomType = 1;
+      }
+    },
     // 打开织胚明细界面
-    async handleOpenWeaEmbDtl(){
-      if(!this.form.weaveJobId) return this.$tip.warning("请先保存通知单");
+    async handleOpenWeaEmbDtl() {
+      if (!this.form.weaveJobId) return this.$tip.warning("请先保存通知单");
       this.meaEmbVisible = true;
       await this.$nextTick();
       this.$refs.meaveEmbyroDtlRef.getDataList();
     },
     // 打开机台维护界面
-    async handleOpenMachineInfo(){
-      if(!this.form.weaveJobId) return this.$tip.warning("请先保存通知单");
+    async handleOpenMachineInfo() {
+      if (!this.form.weaveJobId) return this.$tip.warning("请先保存通知单");
       this.machineInfoVisible = true;
       await this.$nextTick();
       this.$refs.machineInfoRef.init();
     },
-    getData() {
+    async getData() {
       if (this.isAdd) {
         baseCodeSupplyEx({ code: "proWeaveJob" }).then((res) => {
           if (this.copyC) {
@@ -411,7 +329,13 @@ export default {
       } else {
         this.wLoading = true;
         this.form = this.detail;
+        this.machineType = (this.detail.loomType == 1) ? "yj" : "bj";
         this.getAllYarn();
+        if (this.detail.loomType == 2) {
+          await this.$nextTick();
+          this.$refs.meaveEmbyroDtlRef.getDataList();
+        }
+
         // this.getMachineList();
         // if (this.form.realEnd === "" || this.form.realEnd === null) {
         //   this.form.nowDate = this.form.planEnd.split(" ")[0];
@@ -428,11 +352,11 @@ export default {
             }
           }
           if (this.form.creator != parent.userID) {
-            
+
             this.formOp.column[this.formOp.column.length - 1].disabled = true;
           }
           // 控制操作
-          if(this.$store.getters.isOutFactory){
+          if (this.$store.getters.isOutFactory) {
             this.formOp.column.forEach(cItem => {
               cItem.disabled = true;
             })
@@ -451,15 +375,15 @@ export default {
         "/api/proWeaveJob/prinEntityPdf?id=" +
         this.form.weaveJobId;
     },
-    technologyRefresh(val){
-      this.form.pinColumn = val.pinColumn 
-      this.form.diskNum = val.diskNum 
-      this.form.syringeNum = val.syringeNum 
-      this.form.totalColumn = val.totalColumn 
-      this.form.needlePlaceType = val.needlePlaceType 
+    technologyRefresh(val) {
+      this.form.pinColumn = val.pinColumn
+      this.form.diskNum = val.diskNum
+      this.form.syringeNum = val.syringeNum
+      this.form.totalColumn = val.totalColumn
+      this.form.needlePlaceType = val.needlePlaceType
       this.refresh = true
     },
-    operatProcessClick(){
+    operatProcessClick() {
       if (!this.form.weaveJobId) {
         this.$tip.warning("请先保存主表信息！")
         return
@@ -507,10 +431,15 @@ export default {
           try {
             this.wLoading = true;
             // this.form.amount = Number(this.form.amount).toFixed(2);
-
             for (let key in this.form) {
               if (this.form[key] == "undefined") {
                 this.form[key] = "";
+              }
+            }
+
+            for (let key in this.formYJ) {
+              if (this.formYJ[key] == "undefined") {
+                this.formYJ[key] = "";
               }
             }
             // return;
@@ -518,7 +447,15 @@ export default {
             if (this.form.weaveJobId) {
               // update
               this.form.upateTime = this.$getNowTime("datetime");
-              update(this.form).then((res) => {
+              const loomTypes = (this.machineType == 'yj') ? 1 : 2;
+              let params = this.form;
+              if (this.form.loomType == 1) {
+                params = Object.assign(
+                  this.form,
+                  this.formYJ
+                );
+              }
+              update(params).then((res) => {
                 if (res.data.code == 200) {
                   this.$tip.success(this.$t("public.bccg"));
                 } else {
@@ -533,12 +470,20 @@ export default {
             } else {
               // add
               this.form.createTime = this.$getNowTime("datetime");
-              add(this.form).then((res) => {
+              let params = this.form;
+              if (this.form.loomType == 1) {
+                params = Object.assign(
+                  this.form,
+                  this.formYJ
+                );
+              }
+              console.log(params)
+              add(params).then((res) => {
                 if (res.data.code == 200) {
                   this.form.weaveJobId = res.data.data;
                   this.$tip.success(this.$t("public.bccg"));
                 } else {
-                  this.$tip.error(this.$t("public.bcsb"));
+                  this.$tip.error(res.data.msg);
                 }
                 setTimeout(() => {
                   this.wLoading = false;
@@ -757,7 +702,7 @@ export default {
       //   }
       // });
     },
-    saveDtl() {},
+    saveDtl() { },
     checkOrder() {
       this.tabs = "選擇訂單";
       this.crudOp = dlgCrud(this);
@@ -831,12 +776,12 @@ export default {
               this.tabs === "更改紗長"
                 ? this.chooseData.changedId
                 : this.tabs === "用紗明细"
-                ? this.chooseData.useYarnId
-                : this.tabs === "洗後規格"
-                ? this.chooseData.washedId
-                : this.tabs === "機號信息"
-                ? this.chooseData.useId
-                : this.chooseData.strainId
+                  ? this.chooseData.useYarnId
+                  : this.tabs === "洗後規格"
+                    ? this.chooseData.washedId
+                    : this.tabs === "機號信息"
+                      ? this.chooseData.useId
+                      : this.chooseData.strainId
             )
             .then((res) => {
               if (res.data.code === 200) {
@@ -1060,12 +1005,13 @@ export default {
       }
     },
   },
-  created() {},
+  created() { },
   mounted() {
-    this.meaveDomMove();
+    //this.MoveElemntToHtml();
+    // this.meaveDomMove();
     this.getData();
   },
-  beforeDestroy() {},
+  beforeDestroy() { },
 };
 </script>
 <style lang='stylus'>
