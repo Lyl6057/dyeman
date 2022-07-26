@@ -72,7 +72,7 @@ export default {
             path = "/404"
           }
           setTimeout(() => {
-            // this.$router.push({ path: path });
+             this.$router.push({ path: path });
             this.loading = false;
           }, 200);
         });

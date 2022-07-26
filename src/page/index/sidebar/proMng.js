@@ -118,6 +118,10 @@ export function proMng(_this) {
         {
           menuName: "9.织单用纱汇总",
           index: "proWeaveJobSummary"
+        },
+        {
+          menuName: "10.收货台账",
+          index: "collarNote"
         }
       ]
     },
