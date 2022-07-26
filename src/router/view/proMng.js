@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-01-29 14:14:56
- * @LastEditors: Lyl
- * @LastEditTime: 2022-06-29 08:06:40
+ * @LastEditors: Symbol_Yang
+ * @LastEditTime: 2022-07-25 14:39:32
  * @Description:
  */
 export default [
@@ -338,6 +338,15 @@ export default [
     name: "运转单备布统计",
     component: resolve =>
       require(["@/view/quaLity/qcProBleadyeRunJob/index"], resolve),
+    meta: {
+      keepAlive: true
+    }
+  },
+  {
+    path: "/proProcess",
+    name: "生产进度表",
+    component: resolve =>
+      require(["@/view/proMng/ProProcess/index"], resolve),
     meta: {
       keepAlive: true
     }

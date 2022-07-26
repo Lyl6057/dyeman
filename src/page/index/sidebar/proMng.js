@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-04-01 13:39:35
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-06-14 10:33:02
+ * @LastEditTime: 2022-07-25 14:36:10
  * @Description:
  */
 
@@ -71,6 +71,10 @@ export function proMng(_this) {
         {
           menuName: "10.出库送货单",
           index: "dyeDeliveryNote"
+        },
+        {
+          menuName: "11.生产进度表",
+          index: "proProcess"
         }
       ]
     },
