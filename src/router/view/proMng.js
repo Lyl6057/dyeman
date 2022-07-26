@@ -350,6 +350,15 @@ export default [
     meta: {
       keepAlive: true
     }
+  },
+  {
+    path: "/collarNote",
+    name: "生产进度表",
+    component: resolve =>
+      require(["@/view/proMng/collarNote/index"], resolve),
+    meta: {
+      keepAlive: true
+    }
   }
   // {
   //   path: '/EquipmentSchedule',

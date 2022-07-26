@@ -125,7 +125,7 @@ export function mainCrud(_this) {
     menuWidth: 80,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 280px)",
+    height: "calc(100vh - 320px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
@@ -134,7 +134,7 @@ export function mainCrud(_this) {
     selection: true,
     showSummary: true,
     menuTitle: "trọng lượng",
-    excelBtn: true,
+    excelBtn: false,
     rowKey: "noteId",
     sumColumnList: [
       {

@@ -43,7 +43,7 @@
             <span slot-scope="{ option }">{{ option.vatNo }} - {{ option.pidNo }} -
               {{ option.netWeight + "KG" }}</span>
           </el-transfer>
-          
+
         </el-row>
       </el-tab-pane>
       <el-tab-pane label="删除/恢复数据" name="second">
@@ -52,7 +52,7 @@
               this.$t("public.query")
           }}</el-button>
           <el-button :type="secondF.delFlag ? 'success' : 'danger'" @click="del" :disabled="!selectList.length">{{
-              secondF.delFlag ? "恢复" : "删除"
+              (secondF.delFlag)? "恢复" : "删除"
           }}</el-button>
           <el-button type="primary" @click="splitNote" v-if="!secondF.delFlag" :disabled="!detail.cardId">拆布</el-button>
         </el-row>
@@ -102,7 +102,7 @@ import {
   getFinish,
   del,
   addFinished,
-  
+  updateFinishedRCV
 } from "./api";
 export default {
   name: "qcDeatilReport",

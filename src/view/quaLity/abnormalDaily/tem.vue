@@ -10,13 +10,26 @@
   <div class="qcChcekPlanTem">
     <view-container title="QA产能统计管理" element-loading-text="正在拼命加载中..." v-loading="loading">
       <div class="btnList">
-        <el-button type="success" @click="handleSave">{{this.$t("public.save")}}</el-button>
-        <el-button type="warning" @click="handleClose">{{this.$t("public.close")}}</el-button>
+        <el-tooltip class="item" effect="dark" content="Lưu lại" placement="bottom">
+          <el-button type="success" @click="handleSave">{{ this.$t("public.save") }}</el-button>
+        </el-tooltip>
+        <el-tooltip class="item" effect="dark" content="In báo cáo bất thường" placement="bottom">
+          <el-button type="primary" @click="handleCreateAbnormal()" :disabled="!id">打印异常报告</el-button>
+        </el-tooltip>
+        <el-tooltip class="item" effect="dark" content="In đơn sửa chữa" placement="bottom">
+          <el-button type="primary" @click="handleCreateOrder()" :disabled="!id">打印回修单</el-button>
+        </el-tooltip>
+        <el-tooltip class="item" effect="dark" content="Thoát" placement="bottom">
+          <el-button type="warning" @click="handleClose">{{ this.$t("public.close") }}</el-button>
+        </el-tooltip>
+
       </div>
       <div class="formBox">
         <avue-form ref="qcCheckPlanForm" :option="qcCheckPlanFormOp" v-model="qcCheckPlanFormData">
           <template slot-scope="scope" slot="vatNo">
-            <el-select v-model="qcCheckPlanFormData.vatNo" filterable remote reserve-keyword clearable default-first-option placeholder="请输入缸号" :remote-method="remoteMethod" :loading="vatLoading" @change="handleVatnoChange">
+            <el-select v-model="qcCheckPlanFormData.vatNo" filterable remote reserve-keyword clearable
+              default-first-option placeholder="请输入缸号" :remote-method="remoteMethod" :loading="vatLoading"
+              @change="handleVatnoChange">
               <el-option v-for="item in options" :key="item.runJobId" :label="item.vatNo" :value="item.vatNo">
               </el-option>
             </el-select>
@@ -28,7 +41,14 @@
 </template>
 <script>
 import {
-  fetchQcCheckClothDayDetailByPage, addQcCheckClothDayDetail, updateQcCheckClothDayDetail, getRunJobByPage, getFinishedNoteList,
+  fetchQcCheckClothDayDetailByPage,
+  addQcCheckClothDayDetail,
+  updateQcCheckClothDayDetail,
+  getRunJobByPage,
+  getFinishedNoteList,
+  fetchQcClothBackRepairByPage,
+  updateQcClothBackRepair,
+  addQcClothBackRepair
 } from "./api.js";
 import { mainCrud, qcCheckStorePlanCrud } from "./data.js";
 export default {
@@ -45,11 +65,12 @@ export default {
       vatOptions: [],
       hasRefresh: false,
       options: [],
+      id: "",
     };
   },
   watch: {},
   computed: {},
-  created() {},
+  created() { },
   mounted() {
     this.remoteMethod("")
   },
@@ -69,7 +90,7 @@ export default {
             this.qcCheckPlanFormData.fabName = res.data.records[0].fabName;
             this.qcCheckPlanFormData.colorName = res.data.records[0].colorName;
             this.getVatNoWeightAndSumpid(res.data.records[0].vatNo)
-          }else{
+          } else {
             this.vatLoading = false;
           }
         });
@@ -84,20 +105,20 @@ export default {
         page: 1,
       }).then((vatRes) => {
         if (vatRes.data.records.length) {
-          let data =  vatRes.data.records[0];
+          let data = vatRes.data.records[0];
           this.qcCheckPlanFormData.salPo = data.salPoNo;
           this.qcCheckPlanFormData.deliveryDate = data.deliveDate;
           this.qcCheckPlanFormData.custId = data.custCode;
           this.qcCheckPlanFormData.fabName = data.fabName;
           this.qcCheckPlanFormData.colorName = data.colorName;
           this.getVatNoWeightAndSumpid(data.vatNo)
-        }else{
+        } else {
           this.loading = false
         }
       })
     },
-    getVatNoWeightAndSumpid(vatNo){
-      getFinishedNoteList({vatNo: vatNo}).then( res =>{
+    getVatNoWeightAndSumpid(vatNo) {
+      getFinishedNoteList({ vatNo: vatNo }).then(res => {
         if (!res.data.length) {
           this.qcCheckPlanFormData.chkQty = 0
           this.qcCheckPlanFormData.checkPcount = 0
@@ -105,8 +126,8 @@ export default {
           this.loading = false
           return
         }
-        this.qcCheckPlanFormData.chkQty = res.data.reduce((pre,cur) =>{
-          return  pre + cur.grossWeightLbs
+        this.qcCheckPlanFormData.chkQty = res.data.reduce((pre, cur) => {
+          return pre + cur.grossWeightLbs
         }, 0)
         this.qcCheckPlanFormData.checkPcount = res.data.length
         this.vatLoading = false;
@@ -119,6 +140,7 @@ export default {
         detailId,
       })
         .then(async (res) => {
+          this.id = res.data.records[0].detailId
           res.data.total && (this.qcCheckPlanFormData = res.data.records[0]);
           !res.data.total && this.handleClose();
         })
@@ -149,6 +171,7 @@ export default {
         qcChecker: parent.userID,
         qcConfirDate: this.$getNowTime("datetime")
       };
+      this.id=""
     },
     handleStoreRowClick(val) {
       this.dtlCurIdx = val.$index + 1;
@@ -186,6 +209,24 @@ export default {
           this.$tip.error(err);
         }
       });
+    },
+    handleCreateAbnormal() {
+      window.open(process.env.API_HOST + '/api/qcCheckClothDayDetail/qaDailyPdf?id=' + this.qcCheckPlanFormData.detailId); //row.detailId
+    },
+    async handleCreateOrder() {
+      this.wloading = true
+      let detailRes = await fetchQcClothBackRepairByPage({ dayDetailfFk: this.qcCheckPlanFormData.detailId })
+      let params = {
+        dayDetailfFk: this.qcCheckPlanFormData.detailId,
+        ...this.qcCheckPlanFormData
+      }
+      if (detailRes.data.total) {
+        await updateQcClothBackRepair(params)
+        window.open(process.env.API_HOST + '/api/qcClothBackRepair/repairPdf?id=' + detailRes.data.records[0].repairId)
+      } else {
+        let addRes = await addQcClothBackRepair(params)
+        window.open(process.env.API_HOST + '/api/qcClothBackRepair/repairPdf?id=' + addRes.data.data)
+      }
     },
     handleClose() {
       this.$emit("close", this.hasRefresh);

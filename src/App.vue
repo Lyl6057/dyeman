@@ -35,10 +35,12 @@ export default {
       // 登錄用戶oid
       // this.$store.dispatch("setUsers", Res.data.ucmlUseroid);
       this.setUsers(Res.data[0].ucmlUseroid);
-      
+
       // this.$store.getters.getUser  --- this.$store.state.userOid
 
-      this.validHasOutFactory() 
+      this.validHasOutFactory()
+
+      this.reConnectIOT();
 
     });
     // 獲取多語言
@@ -54,15 +56,25 @@ export default {
     // window.sessionStorage.setItem("tagView", "[]");
   },
   methods: {
-    ...mapActions(["setUsers", "setLangs", "setSpowerClient","setLoginUser"]),
+    ...mapActions(["setUsers", "setLangs", "setSpowerClient", "setLoginUser"]),
     // 获取当前账号是否为外发厂账号
-    validHasOutFactory(){
+    validHasOutFactory() {
       axios({
         url: "/api/ucmlUser/valid/outFactory",
         method: "get",
       }).then((res) => {
         this.$store.commit("SET_IS_OUT_FACTORY", res.data.data)
       })
+    },
+    reConnectIOT() {
+      const spowerClient = this.$store.state.spowerClient;
+      if (!spowerClient.readyState || spowerClient.readyState == 3 || spowerClient.readyState == 0) {
+        webSocket.setClient(this);
+        this.setSpowerClient(this.spowerClient);
+      }
+      setTimeout(() => {
+        this.reConnectIOT();
+      }, 5000);
     }
   },
 };
