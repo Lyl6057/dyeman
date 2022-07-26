@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-04-01 13:39:35
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-25 14:36:10
+ * @LastEditTime: 2022-07-26 15:20:16
  * @Description:
  */
 
@@ -41,13 +41,17 @@ export function proMng(_this) {
           index: "proScheduling"
         },
         {
-          menuName: "3.LD通知单",
-          index: "ldOrder"
+          menuName: "3.生产进度表",
+          index: "proProcess"
         },
         {
-          menuName: "4.染整通知单",
-          index: "dyeNotice"
+          menuName: "4.LD通知单",
+          index: "ldOrder"
         },
+        // {
+        //   menuName: "4.染整通知单",
+        //   index: "dyeNotice"
+        // },
         {
           menuName: "5.定型指令单",
           index: "finalizeDesign"
@@ -72,10 +76,7 @@ export function proMng(_this) {
           menuName: "10.出库送货单",
           index: "dyeDeliveryNote"
         },
-        {
-          menuName: "11.生产进度表",
-          index: "proProcess"
-        }
+       
       ]
     },
     {
