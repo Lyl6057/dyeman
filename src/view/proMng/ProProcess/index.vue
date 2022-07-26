@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-07-25 14:36:57
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-26 08:25:42
+ * @LastEditTime: 2022-07-26 13:44:23
 -->
 <template>
   <view-container title="生产进度资料" v-loading="loading"  element-loading-text="拼命加载中..." >
@@ -90,6 +90,9 @@ export default {
       this.loading = true;
       fetchGstPoFData(params).then(res => {
         this.crudDataList = res.data.records.map(item => {
+          if(item.shipQtyKg){
+            item.shipQtyKg = Number(item.shipQtyKg).toFixed(1)
+          }
           Object.assign(item,item.processData)
           return item;
         })

@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:08:41
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-26 11:59:09
+ * @LastEditTime: 2022-07-26 13:45:26
  */
 
 
@@ -71,6 +71,7 @@ export function mainCrudOp(_this) {
         prop: "shipDate",
         width: 100,
         overHidden: true,
+        align: "center"
       },
       {
         label: "走货数量(kg)",
