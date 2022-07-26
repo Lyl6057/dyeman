@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:08:41
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-26 10:08:04
+ * @LastEditTime: 2022-07-26 11:59:09
  */
 
 
@@ -74,7 +74,7 @@ export function mainCrudOp(_this) {
       },
       {
         label: "走货数量(kg)",
-        prop: "shipQtyLbs",
+        prop: "shipQtyKg",
         width: 120,
         overHidden: true,
         align: "right"
@@ -167,7 +167,7 @@ export function dataFormOp(_this) {
     },
     {
       label: "走货数量(kg)",
-      prop: "shipQtyLbs",
+      prop: "shipQtyKg",
       span: 4,
       disabled: true,
       labelWidth: "110",
