@@ -16,7 +16,7 @@
               $t("public.save")
           }}</el-button>
           <el-button type="danger" @click="deleteDlg">删除</el-button>
-          <el-button type="primary" @click="queryDlg">{{
+          <el-button type="primary" @click="queryDlg" :disabled="Dlgloading">{{
               $t("public.query")
           }}</el-button>
           <el-button type="warning" @click="dialogVisiable = false">{{
@@ -31,14 +31,14 @@
             <el-col :span="11">
               <view-container title="可选择成品">
                 <avue-crud ref="crudPreDlg" :option="crudOpDlg" :data="crudPreDlg" :page.sync="pageDlgPrePB"
-                  @selection-change="selectionChangePre">
+                  @selection-change="selectionChangePre" v-loading="Dlgloading">
                 </avue-crud>
               </view-container>
             </el-col>
-            <el-col :span="2" style="justify-content: center;align-items: center;">
-              <el-row style="flex:1;justify-content: center;align-items: center;">
-                <el-button type="primary" @click="movetoLeft">{{ '<<<' }} </el-button>
-                    <el-button type="primary" @click="movetoRight">{{ '>>>' }}</el-button>
+            <el-col :span="2" style="justify-content: center;align-items: center; ">
+              <el-row style="flex:1;justify-content: center;align-content: center;padding:17px">
+                <el-button type="primary" @click="movetoLeft" style="margin-left:7px">{{ '<<<' }} </el-button>
+                    <el-button type="primary" @click="movetoRight" style="">{{ '>>>' }}</el-button>
               </el-row>
             </el-col>
             <el-col :span="11">
