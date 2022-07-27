@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:18:51
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-25 11:54:16
+ * @LastEditTime: 2022-07-27 10:32:21
 -->
 <template>
   <div id="stkin-memo-dtl-container">
@@ -108,6 +108,10 @@ export default {
       if (oid) {
         await updateStkinMemoData(this.stkinMemoData);
       } else {
+        Object.assign(this.stkinMemoData,{
+          sysCreated: timeConversion(new Date()),
+          sysCreatedby: this.$store.state.userOid
+        })
         oid = await addStkinMemoData(this.stkinMemoData).then(
           (res) => res.data.data
         );

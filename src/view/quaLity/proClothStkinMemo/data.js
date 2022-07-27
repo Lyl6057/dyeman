@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:08:41
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-25 11:09:29
+ * @LastEditTime: 2022-07-27 10:43:25
  */
 
 // 表格通用配置
@@ -64,6 +64,12 @@ export function stkinMemoCrudOp(_this) {
         prop: "whseInWeight",
         width: 150,
         align: "right"
+      },
+      {
+        label: "生成时间",
+        prop: "sysCreated",
+        width: 170,
+        align: "center"
       },
     ]
   }
