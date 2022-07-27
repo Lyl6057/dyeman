@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-18 11:07:08
+ * @LastEditTime: 2022-07-27 08:29:06
  * @Description:
  */
 
@@ -1891,6 +1891,12 @@ export function unCreateCrudOp(_this){
         width: 100,
       },
       {
+        prop: "bomId",
+        label: "BOM编号",
+        width: 120,
+        overHidden: true,
+      },
+      {
         prop: 'fabCode',
         label: "布料编号",
         width: 100,
@@ -2008,6 +2014,12 @@ export function weaveDtlCrudOp(_this){
         width: 120
       },
       {
+        prop: "bomId",
+        label: "BOM编号",
+        width: 120,
+        overHidden: true,
+      },
+      {
         prop: "fabCode",
         label: "布类代码",
         width: 120
@@ -2015,10 +2027,12 @@ export function weaveDtlCrudOp(_this){
       {
         prop: "fabName",
         label: "布料名称",
+        overHidden: true,
       },
       {
         prop: "fabConst",
         label: "布类成份",
+        overHidden: true,
       },
       {
         prop: "colorChnName",

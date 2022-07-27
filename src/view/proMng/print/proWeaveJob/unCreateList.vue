@@ -71,11 +71,13 @@ export default {
         // 选中改变
         handleSelect(rows,row){
             if(!this.curSelKey){
-                this.curSelKey = row.custId + row.fabCode
+                // this.curSelKey = row.custId + row.fabCode
+                this.curSelKey = row.bomId
             }else if(rows.length == 0){
                 this.curSelKey = ""
             }else{
-                if(this.curSelKey != row.custId + row.fabCode){
+                // if(this.curSelKey != row.custId + row.fabCode){
+                if(this.curSelKey != row.bomId){
                     return this.$refs.crudRef.toggleRowSelection(row, false);
                 }
             }
