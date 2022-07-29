@@ -121,7 +121,7 @@ export function proMng(_this) {
           index: "proWeaveJobSummary"
         },
         {
-          menuName: "10.收货台账",
+          menuName: "10.扁机收货台账",
           index: "collarNote"
         }
       ]

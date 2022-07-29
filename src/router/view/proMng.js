@@ -353,7 +353,7 @@ export default [
   },
   {
     path: "/collarNote",
-    name: "生产进度表",
+    name: "扁机收货台账",
     component: resolve =>
       require(["@/view/proMng/collarNote/index"], resolve),
     meta: {
