@@ -16,6 +16,10 @@
         }}</el-button>
         <el-button type="primary" @click="print" :disabled="!selectList.length">打印</el-button>
         <el-button type="primary" @click="batchEdit" :disabled="!selectList.length">修改载具</el-button>
+        <el-select v-model="printType" placeholder="打印模板">
+          <el-option label="SPOWER 通用模板" value="1" />
+          <el-option label="KANE TOP 定制码卡" value="2" />
+        </el-select>
         <!-- <el-button type="danger" @click="del" :disabled="!selectList.length">{{
           this.$t("public.del")
         }}</el-button> -->
@@ -168,6 +172,7 @@ export default {
       detail: {
         weightUnit: "KG",
       },
+      printType: '1',
       spowerClient: "",
       weight: 0,
       changeList: [],
@@ -365,17 +370,19 @@ export default {
         this.dlgOp.column[4].disabled = true;
         this.dlgOp.column[7].disabled = false;
       }
-      getCodeHistory({
-        productCardFk: this.detail.cardId,
-        // rows: this.historyPage.pageSize,
-        // start: this.historyPage.currentPage,
-        // pages: this.historyPage.currentPage,
-      }).then((res) => {
-        this.history = res.data.sort((a, b) => {
-          return a.clothCheckTime > b.clothCheckTime ? -1 : 1;
+      if (this.detail.cardId != null) {
+        getCodeHistory({
+          productCardFk: this.detail.cardId,
+          // rows: this.historyPage.pageSize,
+          // start: this.historyPage.currentPage,
+          // pages: this.historyPage.currentPage,
+        }).then((res) => {
+          this.history = res.data.sort((a, b) => {
+            return a.clothCheckTime > b.clothCheckTime ? -1 : 1;
+          });
+          // this.historyPage.total = res.data.total;
         });
-        // this.historyPage.total = res.data.total;
-      });
+      }
     },
     historyCellClick(val) {
       this.historyCheck = val;
@@ -959,7 +966,11 @@ export default {
         return;
       }
       this.selectList.forEach((item, i) => {
-        this.spowerClient.send("print=finishCard:" + item.cardId);
+        if (this.printType == 1) {
+          this.spowerClient.send("print=finishCard:" + item.cardId);
+        } else {
+          this.spowerClient.send("print= finishCardCustomer:" + item.cardId);
+        }
         if (i == this.selectList.length - 1) {
           this.$tip.success("已发送全部打印请求!");
         }

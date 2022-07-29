@@ -11,9 +11,10 @@
   <div class="abnormalDaily">
     <view-container title="剪办记录">
       <el-row class="btnList">
-        <el-button type="success" :disabled="chooseData.upFlag" @click="update"> {{this.$t("public.update")}} </el-button>
-        <el-button type="primary" @click="add"> {{this.$t("public.add")}} </el-button>
-        <el-button type="danger" :disabled="chooseData.upFlag" @click="del"> {{this.$t("public.del")}} </el-button>
+        <el-button type="success" :disabled="chooseData.upFlag" @click="update"> {{ this.$t("public.update") }}
+        </el-button>
+        <el-button type="primary" @click="add"> {{ this.$t("public.add") }} </el-button>
+        <el-button type="danger" :disabled="chooseData.upFlag" @click="del"> {{ this.$t("public.del") }} </el-button>
         <el-popconfirm title="是否确定更新数据?" @onConfirm="handleUpdate" style="margin: 0 10px">
           <el-button slot="reference" type="primary" :disabled="chooseData.upFlag || !chooseData.cutId">更新码卡</el-button>
         </el-popconfirm>
@@ -21,9 +22,15 @@
           <el-button slot="reference" type="primary" :disabled="!chooseData.upFlag">打印</el-button>
         </el-popconfirm>
         <el-button type="primary" @click="handleOutreport"> 报表 </el-button>
-        <el-button type="primary" @click="query"> {{this.$t("public.query")}} </el-button>
+        <el-button type="primary" @click="query"> {{ this.$t("public.query") }} </el-button>
+
         <div style="float: right">
-          打印张数：<el-input type="number" v-model="printCount" max="5" min="1" style="width: 80px;margin-right: 15px"></el-input>
+          <el-select v-model="printType" placeholder="打印模板">
+            <el-option label="SPOWER 通用模板" value="1" />
+            <el-option label="KANE TOP 定制码卡" value="2" />
+          </el-select>
+          打印张数：<el-input type="number" v-model="printCount" max="5" min="1" style="width: 80px;margin-right: 15px">
+          </el-input>
           码卡信息： <el-switch v-model="hasCardData" active-text="显示" inactive-text="隐藏">
           </el-switch>
         </div>
@@ -33,7 +40,8 @@
       </el-row>
       <el-row class="crudBox">
         <el-col :span="hasCardData ? 20 : 24">
-          <avue-crud ref="crud" :option="crudOp" :data="crud" :page.sync="page" v-loading="loading" element-loading-text="正在拼命加载中..." @on-load="query" @row-click="rowClick" @row-dblclick="handleRowDBLClick">
+          <avue-crud ref="crud" :option="crudOp" :data="crud" :page.sync="page" v-loading="loading"
+            element-loading-text="正在拼命加载中..." @on-load="query" @row-click="rowClick" @row-dblclick="handleRowDBLClick">
           </avue-crud>
         </el-col>
         <el-col :span="4" v-if="hasCardData">
@@ -42,19 +50,19 @@
               <span>码卡信息</span>
             </div>
             <p>
-              <span style="font-weight: 600;">客户: </span> {{cardData.custName}}
+              <span style="font-weight: 600;">客户: </span> {{ cardData.custName }}
             </p>
             <p style="">
-              <span style="font-weight: 600; ">布类: </span>{{cardData.fabName}}
+              <span style="font-weight: 600; ">布类: </span>{{ cardData.fabName }}
             </p>
             <p>
-              <span style="font-weight: 600;">颜色: </span>{{cardData.colorName}}
+              <span style="font-weight: 600;">颜色: </span>{{ cardData.colorName }}
             </p>
             <p>
-              <span style="font-weight: 600;">缸号: </span>{{cardData.vatNo}}
+              <span style="font-weight: 600;">缸号: </span>{{ cardData.vatNo }}
             </p>
             <p>
-              <span style="font-weight: 600;">疋号: </span>{{cardData.pidNo}}
+              <span style="font-weight: 600;">疋号: </span>{{ cardData.pidNo }}
             </p>
           </el-card>
         </el-col>
@@ -102,13 +110,14 @@ export default {
       hasCardData: true,
       spowerClient: null,
       chooseData: {},
-      printCount: 1
+      printCount: 1,
+      printType: '1'
     };
   },
   watch: {},
   computed: {},
   created() {
-    
+
   },
   beforeRouteEnter(to, form, next) {
     next((vm) => {
@@ -116,7 +125,7 @@ export default {
       self.spowerClient = self.$store.state.spowerClient;
     });
   },
-  mounted() {},
+  mounted() { },
   methods: {
     query() {
       this.loading = true;
@@ -193,13 +202,13 @@ export default {
     handleOutreport() {
       let url = encodeURI(
         "http://" +
-          document.domain +
-          ":91/api/proFinalProductCardCut/exportForm?cutDept=" +
-          (this.form.cutDept || "") +
-          "&cutDate=" +
-          (this.form.cutDate || "") +
-          "&productNo=" +
-          (this.form.productNo || "")
+        document.domain +
+        ":91/api/proFinalProductCardCut/exportForm?cutDept=" +
+        (this.form.cutDept || "") +
+        "&cutDate=" +
+        (this.form.cutDate || "") +
+        "&productNo=" +
+        (this.form.productNo || "")
       );
       window.open(url);
     },
@@ -211,7 +220,11 @@ export default {
       let printData = this.crud[this.curIdx - 1];
       printData.printTime = this.$getNowTime("datetime");
       for (let i = 0; i < this.printCount; i++) {
-        this.spowerClient.send("print=finishCard:" + printData.proCardFk);
+        if (this.printType == 1) {
+          this.spowerClient.send("print=finishCard:" + printData.proCardFk);
+        } else {
+          this.spowerClient.send("print= finishCardCustomer:" + printData.proCardFk);
+        }
       }
       updateProFinalProductCardCut(printData);
       this.$tip.success("已发送打印动作!");
@@ -284,7 +297,7 @@ export default {
     },
     handleRowDBLClick(row) {
       this.curIdx = row.$index + 1;
-      if(row.upFlag){
+      if (row.upFlag) {
         this.$tip.warning("已更新码卡不可修改！");
         return;
       }
@@ -301,9 +314,9 @@ export default {
         (command < 10 ? "0" + command : command);
       let name = encodeURI(
         "http:" +
-          process.env.API_HOST.split(":")[1] +
-          ":92/api/qaDayOutput/qareport?dayId=" +
-          dayId
+        process.env.API_HOST.split(":")[1] +
+        ":92/api/qaDayOutput/qareport?dayId=" +
+        dayId
       );
       window.open(name);
       this.wloading = false;

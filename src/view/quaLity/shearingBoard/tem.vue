@@ -21,7 +21,12 @@
           <el-button slot="reference" type="primary" :disabled="!qcShearingBoardData.upFlag">打印</el-button>
         </el-popconfirm>
         <el-button type="warning" @click="handleClose">{{ this.$t("public.close") }}</el-button>
+
         <div style="float: right; margin-right: 10px">
+          <el-select v-model="printType" placeholder="打印模板">
+            <el-option label="SPOWER 通用模板" value="1" />
+            <el-option label="KANE TOP 定制码卡" value="2" />
+          </el-select>
           打印张数：<el-input type="number" v-model="printCount" max="5" min="1" style="width: 80px;margin-right: 15px">
           </el-input>
           电子秤： <el-switch v-model="turnOnGetWeight" style="margin-right: 10px" active-text="开启" inactive-text="关闭">
@@ -76,6 +81,7 @@ export default {
       isBoard: true,
       spowerClient: null,
       printCount: 1,
+      printType:'1'
     };
   },
   watch: {},
@@ -348,7 +354,11 @@ export default {
       let printData = this.qcShearingBoardData;
       printData.printTime = this.$getNowTime("datetime");
       for (let i = 0; i < this.printCount; i++) {
-        this.spowerClient.send("print=finishCard:" + printData.proCardFk);
+         if (this.printType == 1) {
+          this.spowerClient.send("print=finishCard:" + printData.proCardFk);
+        } else {
+          this.spowerClient.send("print= finishCardCustomer:" + printData.proCardFk);
+        }
       }
       updateProFinalProductCardCut(printData);
       this.hasRefresh = true;
