@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
- * @LastEditors: Lyl
- * @LastEditTime: 2022-07-02 08:57:58
+ * @LastEditors: Symbol_Yang
+ * @LastEditTime: 2022-07-28 09:06:21
  * @Description:
  */
 
@@ -348,6 +348,7 @@ export function mainCrud(_this) {
         placeholder: " ",
         width: 180,
         sortable: true,
+        formslot: true,
         overHidden: true,
         span: 6
       },
@@ -1700,6 +1701,119 @@ export function dlgCrud(_this) {
   };
 }
 
+
+// TODO 颜色选择
+export function colSelCrudOp(_this){
+  return {
+    menu: false,
+    addBtn: false,
+    border: true,
+    highlightCurrentRow: true,
+    height: "calc(100vh - 5.2rem)",
+    refreshBtn: false,
+    columnBtn: false,
+    page: false,
+    column:[
+      {
+        label: "织单号",
+        prop: "weaveJobCode",
+        width: "130",
+        overHidden: true,
+      },
+      {
+        label: "颜色",
+        prop: "colorName",
+        width: "140",
+        overHidden: true,
+      },
+      {
+        label: "排织数量",
+        prop: "weavePoQty",
+        width: "100",
+        overHidden: true,
+        align: "right"
+      },
+      {
+        label: "已排运转单",
+        prop: "clothWeight",
+        width: "120",
+        overHidden: true,
+        align: "right"
+      },
+      {
+        label: "余胚",
+        prop: "balWeight",
+        width: "100",
+        overHidden: true,
+        align: "right"
+      },
+      {
+        label: "生产通知单号",
+        prop: "poNo",
+        width: "130",
+        overHidden: true,
+      },
+      {
+        label: "BOM编号",
+        prop: "bomId",
+        width: "120",
+        overHidden: true,
+      },
+      {
+        label: "规格参考",
+        prop: "okGh",
+        width: "120",
+        overHidden: true,
+      },
+      {
+        label: "本厂色号",
+        prop: "colorNo",
+        width: "100",
+        overHidden: true,
+      },
+      {
+        label: "OK LD",
+        prop: "okLd",
+        width: "100",
+        overHidden: true,
+      },
+      {
+        label: "头缸描述",
+        prop: "oneRem",
+        width: "100",
+        overHidden: true,
+      },
+      {
+        label: "缸差描述",
+        prop: "twoRem",
+        width: "100",
+        overHidden: true,
+      },
+      {
+        label: "测试办描述",
+        prop: "thrRem",
+        width: "120",
+        overHidden: true,
+      },
+      {
+        label: "PP办描述",
+        prop: "fourRem",
+        width: "100",
+        overHidden: true,
+      },
+      {
+        label: "对色标准",
+        prop: "light",
+        width: "100",
+        overHidden: true,
+      },
+    ]
+  }
+}
+
+
+
+
 // {
 //   icon: 'el-icon-info',
 //   label: '生产项目',
@@ -2032,3 +2146,8 @@ export function dlgCrud(_this) {
 //     },
 //   ]
 // },
+
+
+
+
+

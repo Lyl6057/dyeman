@@ -1,12 +1,32 @@
 /*
  * @Author: Lyl
  * @Date: 2021-02-01 14:06:25
- * @LastEditors: Lyl
- * @LastEditTime: 2022-03-30 10:50:41
+ * @LastEditors: Symbol_Yang
+ * @LastEditTime: 2022-07-28 08:19:42
  * @Description:
  */
 
 import axios from "axios";
+
+// 获取颜色颜色选择数据
+export function fetchColorSelectData(params){
+  return axios({
+    url: "/api/proWeaveJob/color/select/byWeaveCode",
+    method: "get",
+    params: params
+  });
+}
+
+// 获取测试标准缺省数据数据
+export function fetchTestStandardData(params){
+  return axios({
+    url: "/api/proWeaveJob/test/standard/byPoNo",
+    method: "get",
+    params: params
+  });
+}
+
+
 
 // 修改
 export function updateFinished(data) {

@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
- * @LastEditors: PMP
- * @LastEditTime: 2022-07-25 13:21:23
+ * @LastEditors: Symbol_Yang
+ * @LastEditTime: 2022-07-29 17:00:22
  * @Description:
 -->
 <template>
@@ -93,7 +93,14 @@
                     </el-option>
                   </el-select>
                 </template>
-              </avue-form>
+
+              <!-- 2022.07.28 + -->
+              <template  slot="colorName">
+                <el-input v-model="form.colorName">
+                    <el-button v-if="showColSelBtn" slot="append" icon="el-icon-search" @click="handleOpenColSel" />
+                </el-input>
+              </template>
+              </avue-form>  
               <el-row>
                 <el-col :span="14">
                   <view-container title="测试标准 Yêu cầu kiểm tra">
@@ -162,6 +169,9 @@
     </el-dialog>
     <choice :choiceV="choiceV" :choiceTle="choiceTle" :choiceQ="choiceQ" dlgWidth="100%" @choiceData="choiceData"
       @close="closeChoice" v-if="choiceV"></choice>
+
+    <!-- 2022.07.28 + -->
+    <color-select  ref="colSelRef" :dataList="colSelData" @select="handleColSelCb"  />
   </div>
 </template>
 <script>
@@ -211,11 +221,12 @@ import {
   getWeave,
   getFinishList,
   updateFinished,
-
+  fetchColorSelectData,
+  fetchTestStandardData
 } from "./api";
 
 import { get as getRL, getLog } from "../dptReciveLog/api";
-
+import ColorSelect from "./colorSelect.vue"
 export default {
   name: "",
   props: {
@@ -228,7 +239,8 @@ export default {
   },
   components: {
     choice: choice,
-    flowChartPro
+    flowChartPro,
+    ColorSelect
   },
   data() {
     return {
@@ -294,7 +306,12 @@ export default {
       vatLoading: false,
       options: [],
       hasFinied: 0,
-      dialogVisible: false
+      dialogVisible: false,
+
+      // 颜色选择
+      showColSelBtn: false,
+      colSelData: []
+
     };
   },
   watch: {
@@ -487,11 +504,71 @@ export default {
               );
             }
           });
+
+          this.getTestStandard();
         }
         setTimeout(() => {
           this.wLoading = false;
         }, 500);
       });
+
+      this.getColSelData();
+      
+    },
+    // 获取颜色选择数据
+    getColSelData(){
+      fetchColorSelectData({weaveJobCode:this.form.weaveJobCode}).then(res => {
+        this.colSelData = res.data;
+        this.showColSelBtn = res.data.length > 0;
+
+        // 存在颜色可抽取数据时，置空某些栏位
+        if(this.showColSelBtn){
+          Object.assign(this.form,{
+            colorName: "",
+            compVatNo: "",
+            specParam: "",
+            compLightSource: [],
+            remark: "",
+          })
+        }
+      })
+    },
+    // 开启颜色选择面板
+    handleOpenColSel(){
+      this.$refs.colSelRef.visible = true;
+    },
+    // 颜色选择回调
+    handleColSelCb(row){ 
+      // 容错处理
+      let props = ["colorName","colorNo","okLd","okGh","light","oneRem","twoRem","thrRem","fourRem"]
+      props.forEach(key => {
+        if(!row[key]){
+          row[key] = ""
+        }
+      })
+      
+      Object.assign(this.form,{
+        colorName: row.colorName,
+        compVatNo: `${row.colorNo}-${row.okLd}`,
+        specParam: row.okGh,
+        compLightSource: row.light.split(","),
+        remark: `${row.oneRem},${row.twoRem};\n${row.thrRem},${row.fourRem};`,
+      });
+    },
+    // 获取测试标准
+    getTestStandard(){
+      fetchTestStandardData({poNo: this.form.salPoNo}).then(res => {
+        this.form.test = (res.data || []).map((item,index) => {
+          return {
+            testItemCode: item.itemName,
+            testName: item.itemContent,
+            testItemName: item.testStandard,
+            dataStyle: 'string',
+            sn: index + 1,
+            $cellEdit: true,
+          }
+        })
+      })
     },
     query() {
       get({
