@@ -1,83 +1,61 @@
 <template>
   <div id="colorMng_Tem">
-    <view-container
-      title="出库送货单管理"
-      :element-loading-text="$t('public.loading')"
-      v-loading="wLoading"
-    >
+    <view-container title="出库送货单管理" :element-loading-text="$t('public.loading')" v-loading="wLoading">
       <div class="btnList">
         <el-button type="success" @click="save">{{
-          this.$t("public.save")
+            this.$t("public.save")
         }}</el-button>
 
         <el-button type="warning" @click="close">{{
-          this.$t("public.close")
+            this.$t("public.close")
         }}</el-button>
       </div>
-      <div class="formBox">
+      <div >
         <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
       </div>
+      
       <el-row>
-        <el-col :span="12"
-          ><view-container title="送货单缸号信息">
+        <el-col :span="12">
+          <view-container title="送货单缸号信息">
             <div class="btnList">
               <el-button type="primary" @click="add(0)">{{
-                this.$t("public.add")
+                  this.$t("public.add")
               }}</el-button>
               <el-button type="danger" @click="del">{{
-                this.$t("public.del")
+                  this.$t("public.del")
               }}</el-button>
             </div>
             <div class="crudBox" style="margin-top: 5px">
-              <avue-crud
-                ref="vatcrud"
-                :option="crudOp"
-                :data="crud"
-                :page.sync="page"
-                v-loading="loading"
-                @on-load="getShipdetail"
-                @current-row-change="cellClick"
-              ></avue-crud>
-            </div> </view-container
-        ></el-col>
+              <avue-crud ref="vatcrud" :option="crudOp" :data="crud" :page.sync="page" v-loading="loading"
+                @on-load="getShipdetail" @current-row-change="cellClick"></avue-crud>
+            </div>
+          </view-container>
+        </el-col>
         <el-col :span="12">
           <view-container title="送货单缸号明细">
             <div class="btnList">
               <el-button type="primary" @click="add(1)">{{
-                this.$t("public.add")
+                  this.$t("public.add")
               }}</el-button>
               <el-button type="danger" @click="delDtl">{{
-                this.$t("public.del")
+                  this.$t("public.del")
               }}</el-button>
             </div>
             <div class="crudBox" style="margin-top: 5px">
-              <avue-crud
-                ref="dltcrud"
-                :option="detailOp"
-                :data="chooseData.list"
-                v-loading="loading"
-                @current-row-change="cellDtlClick"
-              ></avue-crud>
+              <avue-crud ref="dltcrud" :option="detailOp" :data="chooseData.list" v-loading="loading"
+                @current-row-change="cellDtlClick"></avue-crud>
             </div>
           </view-container>
         </el-col>
       </el-row>
     </view-container>
 
-    <choice
-      :choiceV="choiceV"
-      :choiceTle="choiceTle"
-      :choiceQ="choiceQ"
-      marginTop="5vh"
-      dlgWidth="80%"
-      @choiceData="choiceData"
-      @close="choiceV = false"
-      v-if="choiceV"
-    ></choice>
+    <choice :choiceV="choiceV" :choiceTle="choiceTle" :choiceQ="choiceQ" marginTop="5vh" dlgWidth="80%"
+      @choiceData="choiceData" @close="choiceV = false" v-if="choiceV"></choice>
   </div>
 </template>
 <script>
-import { mainCrud, noteCrud, finishedCrud } from "./data";
+import { mainCrud, noteCrud, finishedCrud, mainDlgForm } from "./data";
 import {
   getCodeSupply,
   add,
@@ -108,7 +86,7 @@ export default {
     return {
       wLoading: false,
       loading: false,
-      formOp: mainCrud(this),
+      formOp: mainDlgForm(this),
       form: {},
       crudOp: noteCrud(this),
       crud: [],
@@ -223,7 +201,7 @@ export default {
               add(this.form)
                 .then((res) => {
                   baseCodeSupply({ code: "dye_deliveryNote" }).then(
-                    (res) => {}
+                    (res) => { }
                   );
                   this.form.orderId = res.data.data;
                   this.refresh = true;
@@ -312,8 +290,8 @@ export default {
       this.$tip
         .cofirm(
           "是否确定删除缸号为 【 " +
-            this.chooseData.vatNo +
-            this.$t("iaoMng.delTle2"),
+          this.chooseData.vatNo +
+          this.$t("iaoMng.delTle2"),
           this,
           {}
         )
@@ -359,8 +337,8 @@ export default {
       this.$tip
         .cofirm(
           "是否确定删除成品编号为 【 " +
-            this.cellDtlChoose.productNo +
-            this.$t("iaoMng.delTle2"),
+          this.cellDtlChoose.productNo +
+          this.$t("iaoMng.delTle2"),
           this,
           {}
         )
@@ -472,11 +450,11 @@ export default {
       }
     });
   },
-  created() {},
+  created() { },
   mounted() {
     this.getData();
   },
-  beforeDestroy() {},
+  beforeDestroy() { },
 };
 </script>
 <style lang='stylus'></style>

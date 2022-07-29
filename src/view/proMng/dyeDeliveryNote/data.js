@@ -44,13 +44,113 @@ export function mainForm(_this) {
   };
 }
 
+export function mainDlgForm(_this) {
+  return {
+    submitBtn: false,
+    emptyBtn: false,
+    labelWidth: 120,
+    column: [
+      {
+        label: "#",
+        prop: "index",
+        width: 50,
+        align: "center",
+        display: false
+      },
+      {
+        label: "出货编号",
+        prop: "outCode",
+        width: 130,
+        disabled: true,
+        overHidden: true,
+        span: 6
+      },
+      {
+        label: "出货日期",
+        prop: "outDate",
+        width: 160,
+        span: 6,
+        type: "date",
+        disabled: false,
+        overHidden: true,
+        align: "center",
+        format: "yyyy-MM-dd",
+        valueFormat: "yyyy-MM-dd HH:mm:ss",
+        rules: [
+          {
+            required: true,
+            message: "請輸入接收日期",
+            trigger: "blur"
+          }
+        ]
+      },
+      {
+        label: "货柜编号",
+        prop: "containNo",
+        width: 130,
+        disabled: false,
+        overHidden: true,
+        span: 6
+      },
+      {
+        label: "申请人",
+        prop: "applicant",
+        width: 120,
+        overHidden: true,
+        filterable: true,
+        span: 6,
+        rules: [
+          {
+            required: true,
+            message: "請輸入申请人",
+            trigger: "blur"
+          }
+        ],
+        type: "select",
+        dicData: userList
+      },
+      {
+        label: "仓管员",
+        prop: "wareMana",
+        width: 120,
+        filterable: true,
+        overHidden: true,
+        span: 6,
+        type: "select",
+        dicData: getDicT("ucmlUser", "employeename", "ucmlUseroid")
+      },
+      {
+        label: "审核人",
+        prop: "reviewer",
+        width: 120,
+        overHidden: true,
+        span: 6,
+        type: "select",
+        filterable: true,
+        dicData: getDicT("ucmlUser", "employeename", "ucmlUseroid")
+      },
+      {
+        label: "收货人",
+        prop: "receiver",
+        width: 120,
+        filterable: true,
+        overHidden: true,
+        span: 6,
+        type: "select",
+        dicData: getDicT("ucmlUser", "employeename", "ucmlUseroid")
+      }
+    ]
+  };
+}
+
+
 export function mainCrud(_this) {
   return {
     menu: false,
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 280px)",
+    height: "calc(100vh - 300px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
