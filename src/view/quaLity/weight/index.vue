@@ -82,7 +82,7 @@
           </div>
           <div class="formBox">
             <avue-crud ref="dlgCrud" :option="historyOp" :data="history" @current-row-change="historyCellClick"
-              v-loading="loading" @selection-change="selectionChange" :page.sync="historyPage"  />
+              v-loading="loading" @selection-change="selectionChange" :page.sync="historyPage"/>
           </div>
         </el-tab-pane>
       </el-tabs>
@@ -134,7 +134,7 @@ export default {
       historyPage: {
         pageSize: 20,
         pageSizes: [20, 50, 100, 200, 500],
-         currentPage: 1,
+        currentPage: 1,
         total: 0,
       },
       loading: false,
@@ -348,6 +348,7 @@ export default {
     },
     print() {
       let url = qs.stringify(this.form);
+      let username = parent.userID || "ADMIN";
       if (this.crud.length) {
         this.pdfDlg = true;
         this.pdfUrl =
@@ -358,7 +359,8 @@ export default {
           this.page.pageSize +
           "&start=" +
           this.page.currentPage +
-          "&isPrinted=true";
+          "&isPrinted=true&userName=" + username;
+        ;
       } else {
         this.$tip.error("请先選擇布飞信息!");
         return;
