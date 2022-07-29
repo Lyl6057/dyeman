@@ -20,14 +20,15 @@ export function dlgForm(_this){
         tip: "Mã đơn dệt",
         prop: "weaveJobCode",
         width: 150,
-        span: 8,
+        span: 6,
       },
       {
         label: "颜色",
         tip: "Màu sắc",
         prop: "colorName",
         width: 150,
-        span: 8,
+        span: 6,
+        disabled:true,
         overHidden: true,
         placeholder: " ",
         rules: [
@@ -38,113 +39,113 @@ export function dlgForm(_this){
           }
         ]
       },
-      {
-        label: "尺寸（inch）",
-        tip: "Kích thước(Inch)",
-        prop: "sizeInch",
-        width: 150,
-        span: 8,
-        overHidden: true,
-        placeholder: " ",
-        rules: [
-          {
-            required: true,
-            message: "请输入尺寸（inch）",
-            trigger: "blur"
-          }
-        ]
-      },
-      {
-        label: "尺寸（CM）",
-        tip: "Kích thước(cm)",
-        prop: "sizeCm",
-        width: 150,
-        span: 8,
-        overHidden: true,
-        placeholder: " ",
-        rules: [
-          {
-            required: true,
-            message: "请输入尺寸（CM）",
-            trigger: "blur"
-          }
-        ]
-      },
-       {
-        label: "净重",
-        tip: "Khối lượng tịnh",
-        prop: "nw",
-        width: 150,
-        span: 8,
-        overHidden: true,
-        placeholder: " ",
-        rules: [
-          {
-            required: true,
-            message: "请输入净重",
-            trigger: "blur"
-          }
-        ]
-      },
-      {
-        label: "毛重",
-        tip: "Khối lượn thô",
-        prop: "gw",
-        width: 150,
-        span: 8,
-        overHidden: true,
-        placeholder: " ",
-        rules: [
-          {
-            required: true,
-            message: "请输入毛重",
-            trigger: "blur"
-          }
-        ]
-      },
-      {
-        label: "数量（条）",
-        tip: "Số lượng",
-        prop: "amount",
-        width: 150,
-        span: 8,
-        overHidden: true,
-        placeholder: " ",
-        rules: [
-          {
-            required: true,
-            message: "请输入数量（条）",
-            trigger: "blur"
-          }
-        ]
-      },
-      {
-        label: "纱线描述",
-        tip: "Mô tả sợ",
-        prop: "yarnDesc",
-        width: 150,
-        span: 8,
-        overHidden: true,
-        placeholder: " ",
+      // {
+      //   label: "尺寸（inch）",
+      //   tip: "Kích thước(Inch)",
+      //   prop: "sizeInch",
+      //   width: 150,
+      //   span: 8,
+      //   overHidden: true,
+      //   placeholder: " ",
+      //   rules: [
+      //     {
+      //       required: true,
+      //       message: "请输入尺寸（inch）",
+      //       trigger: "blur"
+      //     }
+      //   ]
+      // },
+      // {
+      //   label: "尺寸（CM）",
+      //   tip: "Kích thước(cm)",
+      //   prop: "sizeCm",
+      //   width: 150,
+      //   span: 8,
+      //   overHidden: true,
+      //   placeholder: " ",
+      //   rules: [
+      //     {
+      //       required: true,
+      //       message: "请输入尺寸（CM）",
+      //       trigger: "blur"
+      //     }
+      //   ]
+      // },
+      //  {
+      //   label: "净重",
+      //   tip: "Khối lượng tịnh",
+      //   prop: "nw",
+      //   width: 150,
+      //   span: 8,
+      //   overHidden: true,
+      //   placeholder: " ",
+      //   rules: [
+      //     {
+      //       required: true,
+      //       message: "请输入净重",
+      //       trigger: "blur"
+      //     }
+      //   ]
+      // },
+      // {
+      //   label: "毛重",
+      //   tip: "Khối lượn thô",
+      //   prop: "gw",
+      //   width: 150,
+      //   span: 8,
+      //   overHidden: true,
+      //   placeholder: " ",
+      //   rules: [
+      //     {
+      //       required: true,
+      //       message: "请输入毛重",
+      //       trigger: "blur"
+      //     }
+      //   ]
+      // },
+      // {
+      //   label: "数量（条）",
+      //   tip: "Số lượng",
+      //   prop: "amount",
+      //   width: 150,
+      //   span: 8,
+      //   overHidden: true,
+      //   placeholder: " ",
+      //   rules: [
+      //     {
+      //       required: true,
+      //       message: "请输入数量（条）",
+      //       trigger: "blur"
+      //     }
+      //   ]
+      // },
+      // {
+      //   label: "纱线描述",
+      //   tip: "Mô tả sợ",
+      //   prop: "yarnDesc",
+      //   width: 150,
+      //   span: 8,
+      //   overHidden: true,
+      //   placeholder: " ",
         
-      },
+      // },
      
-      {
-        label: "打包数量",
-        tip: "Số lượng đóng gói",
-        prop: "packageCount",
-        width: 150,
-        span: 8,
-        overHidden: true,
-        placeholder: " ",
-        rules: [
-          {
-            required: true,
-            message: "请输入打包数量",
-            trigger: "blur"
-          }
-        ]
-      }
+      // {
+      //   label: "打包数量",
+      //   tip: "Số lượng đóng gói",
+      //   prop: "packageCount",
+      //   width: 150,
+      //   span: 8,
+      //   overHidden: true,
+      //   placeholder: " ",
+      //   rules: [
+      //     {
+      //       required: true,
+      //       message: "请输入打包数量",
+      //       trigger: "blur"
+      //     }
+      //   ]
+      // }
     ]
   }
 }
@@ -238,7 +239,8 @@ export function mainCrud(_this) {
         width: 150,
         span: 8,
         overHidden: true,
-        placeholder: " "
+        placeholder: " ",
+        cell: true,
       },
       {
         label: "颜色",
@@ -247,7 +249,8 @@ export function mainCrud(_this) {
         width: 150,
         span: 8,
         overHidden: true,
-        placeholder: " "
+        placeholder: " ",
+        cell: true,
       },
       {
         label: "尺寸（inch）",
@@ -256,6 +259,7 @@ export function mainCrud(_this) {
         width: 150,
         span: 8,
         overHidden: true,
+        cell: true,
         placeholder: " "
       },
       {
@@ -265,6 +269,7 @@ export function mainCrud(_this) {
         width: 150,
         span: 8,
         overHidden: true,
+        cell: true,
         placeholder: " "
       },
        {
@@ -274,6 +279,7 @@ export function mainCrud(_this) {
         width: 150,
         span: 8,
         overHidden: true,
+        cell: true,
         placeholder: " "
       },
       {
@@ -283,6 +289,7 @@ export function mainCrud(_this) {
         width: 150,
         span: 8,
         overHidden: true,
+        cell: true,
         placeholder: " "
       },
       {
@@ -292,6 +299,7 @@ export function mainCrud(_this) {
         width: 150,
         span: 8,
         overHidden: true,
+        cell: true,
         placeholder: " "
       },
       {
@@ -301,6 +309,7 @@ export function mainCrud(_this) {
         width: 150,
         span: 8,
         overHidden: true,
+        cell: true,
         placeholder: " "
       },
      
@@ -311,8 +320,106 @@ export function mainCrud(_this) {
         width: 150,
         span: 8,
         overHidden: true,
+        cell: true,
         placeholder: " "
       }
+    ]
+  };
+}
+
+
+
+export function mainDlgCrud(_this) {
+  return {
+    menu: false,
+    addBtn: true,
+    border: true,
+    highlightCurrentRow: true,
+    height: "calc(100vh - 235px)",
+    refreshBtn: false,
+    columnBtn: false,
+    page: true,
+    labelWidth: 120,
+    column: [
+      {
+        label: "#",
+        prop: "index",
+        width: 50,
+        align: "center",
+        display: false
+      },
+      {
+        label: "尺寸（inch）",
+        tip: "Kích thước(Inch)",
+        prop: "sizeInch",
+        width: 150,
+        span: 8,
+        overHidden: true,
+        cell: true,
+        placeholder: " "
+      },
+      {
+        label: "尺寸（CM）",
+        tip: "Kích thước(cm)",
+        prop: "sizeCm",
+        width: 150,
+        span: 8,
+        overHidden: true,
+        cell: true,
+        placeholder: " "
+      },
+       {
+        label: "净重",
+        tip: "Khối lượng tịnh",
+        prop: "nw",
+        width: 150,
+        span: 8,
+        overHidden: true,
+        cell: true,
+        placeholder: " "
+      },
+      {
+        label: "毛重",
+        tip: "Khối lượn thô",
+        prop: "gw",
+        width: 150,
+        span: 8,
+        overHidden: true,
+        cell: true,
+        placeholder: " "
+      },
+      {
+        label: "数量（条）",
+        tip: "Số lượng",
+        prop: "amount",
+        width: 150,
+        span: 8,
+        overHidden: true,
+        cell: true,
+        placeholder: " "
+      },
+     
+      {
+        label: "打包数量",
+        tip: "Số lượng đóng gói",
+        prop: "packageCount",
+        width: 150,
+        span: 8,
+        overHidden: true,
+        cell: true,
+        placeholder: " "
+      },
+      {
+        label: "纱线描述",
+        tip: "Mô tả sợ",
+        prop: "yarnDesc",
+        width: 400,
+        span: 8,
+        overHidden: true,
+        cell: true,
+        placeholder: " "
+      },
+     
     ]
   };
 }
