@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-29 17:00:22
+ * @LastEditTime: 2022-07-30 08:43:41
  * @Description:
 -->
 <template>
@@ -505,6 +505,7 @@ export default {
             }
           });
 
+          this.getColSelData();
           this.getTestStandard();
         }
         setTimeout(() => {
@@ -512,8 +513,6 @@ export default {
         }, 500);
       });
 
-      this.getColSelData();
-      
     },
     // 获取颜色选择数据
     getColSelData(){
@@ -550,9 +549,10 @@ export default {
       Object.assign(this.form,{
         colorName: row.colorName,
         compVatNo: `${row.colorNo}-${row.okLd}`,
+        colorCode: `${row.colorNo}-${row.okLd}`,
         specParam: row.okGh,
         compLightSource: row.light.split(","),
-        remark: `${row.oneRem},${row.twoRem};\n${row.thrRem},${row.fourRem};`,
+        remark: `${row.oneRem}\n${row.twoRem}\n${row.thrRem}\n${row.fourRem};`,
       });
     },
     // 获取测试标准
