@@ -3,6 +3,9 @@ let unit = getDIC("bas_matUnit"); // 單位
 let basChemicalmat = getXDicT("BasChemicalmatNew"); // 化工原料
 let basPigment = getXDicT("basPigment"); // 颜料
 
+import { num2ThousandthFormat } from "@/utils/tools"
+
+
 export function rhl1F(_this) {
   return {
     submitBtn: false,
@@ -71,6 +74,7 @@ export function rhl1F(_this) {
         span: 6,
         placeholder: " ",
         type: "date",
+        align: "center",
         format: "yyyy-MM-dd",
         valueFormat: "yyyy-MM-dd",
         display:
@@ -208,6 +212,7 @@ export function rhl1C(_this) {
         prop: "sysCreated",
         hide: true,
         type: "date",
+        align: "center",
         format: "yyyy-MM-dd",
         valueFormat: "yyyy-MM-dd",
         align: "center"
@@ -243,6 +248,7 @@ export function rhl1C(_this) {
       {
         label: _this.$t("whseField.cclx"),
         prop: "retType",
+        align: "center",
         cell: false,
         width: 100,
         type: "select",
@@ -259,6 +265,7 @@ export function rhl1C(_this) {
         prop: "woDate",
         hide: _this.data != "成品布",
         cell: false,
+        align: "center",
         type: "date",
         format: "yyyy-MM-dd",
         valueFormat: "yyyy-MM-dd",
@@ -273,6 +280,7 @@ export function rhl1C(_this) {
           _this.data != _this.$t("iaoMng.pb"),
         cell: false,
         type: "date",
+        align: "center",
         format: "yyyy-MM-dd",
         valueFormat: "yyyy-MM-dd",
         width: 120,
@@ -289,6 +297,7 @@ export function rhl1C(_this) {
           _this.data != _this.$t("choicDlg.rl"),
         cell: false,
         type: "date",
+        align: "center",
         format: "yyyy-MM-dd",
         valueFormat: "yyyy-MM-dd",
         width: 120,
@@ -297,6 +306,7 @@ export function rhl1C(_this) {
       {
         label: "出仓状态",
         prop: "stockState",
+        align: "center",
         cell: false,
         width: 100,
         type: "select",
@@ -508,6 +518,9 @@ export function rhl2C(_this) {
         cell: false,
         width: 100,
         align: "right",
+        formatter(r,v){
+          return num2ThousandthFormat(v)
+        },
         hide:
           _this.datas === _this.$t("iaoMng.hgyl") ||
           _this.datas === _this.$t("iaoMng.yl")
@@ -532,6 +545,9 @@ export function rhl2C(_this) {
         prop: "poQty",
         cell: false,
         width: 100,
+        formatter(r,v){
+          return num2ThousandthFormat(v)
+        },
         align: "right",
         hide:
           _this.datas != _this.$t("iaoMng.hgyl") &&
@@ -628,7 +644,10 @@ export function sx2C(_this) {
         cell: true,
         width: 110,
         align: "right",
-        type: "number"
+        type: "number",
+        formatter(r,v){
+          return num2ThousandthFormat(v)
+        },
       },
       {
         label: _this.$t("whseField.dw"),
@@ -785,14 +804,20 @@ export function cpb3C(_this) {
         prop: "countingNo",
         cell: false,
         width: 80,
-        align: "right"
+        align: "right",
+        formatter(r,v){
+          return num2ThousandthFormat(v,0)
+        },
       },
       {
         label: _this.$t("whseField.zl"),
         prop: "woWeights",
         cell: true,
         width: 100,
-        align: "right"
+        align: "right",
+        formatter(r,v){
+          return num2ThousandthFormat(v)
+        },
       },
       {
         label: _this.$t("whseField.dw"),
@@ -965,7 +990,10 @@ export function yl2C(_this) {
         prop: "stockQty",
         cell: true,
         width: 120,
-        align: "right"
+        align: "right",
+        formatter(r,v){
+          return num2ThousandthFormat(v)
+        },
       },
       {
         label: _this.$t("whseField.dw"),
@@ -1066,7 +1094,10 @@ export function yjxz2C(_this) {
         prop: "stockQty",
         cell: true,
         width: 120,
-        align: "right"
+        align: "right",
+        formatter(r,v){
+          return num2ThousandthFormat(v)
+        },
       },
       {
         label: _this.$t("whseField.dw"),
@@ -1125,7 +1156,10 @@ export function rhl3C(_this) {
         prop: "weight",
         cell: true,
         width: 120,
-        align: "right"
+        align: "right",
+        formatter(r,v){
+          return num2ThousandthFormat(v)
+        },
       },
       {
         label: _this.$t("whseField.dw"),
@@ -1186,14 +1220,20 @@ export function wjxz3C(_this) {
         prop: "cartonNum",
         cell: true,
         width: 120,
-        align: "right"
+        align: "right",
+        formatter(r,v){
+          return num2ThousandthFormat(v,0)
+        },
       },
       {
         label: _this.$t("energy.sl"),
         prop: "weight",
         cell: true,
         width: 120,
-        align: "right"
+        align: "right",
+        formatter(r,v){
+          return num2ThousandthFormat(v)
+        },
       }
     ]
   };
@@ -1239,7 +1279,10 @@ export function rhl4C(_this) {
         prop: "applyNum",
         cell: true,
         width: 120,
-        align: "right"
+        align: "right",
+        formatter(r,v){
+          return num2ThousandthFormat(v)
+        },
       }
     ]
   };
@@ -1404,6 +1447,9 @@ export function planCrud(_this) {
         cell: false,
         width: 80,
         align: "right",
+        formatter(r,v){
+          return num2ThousandthFormat(v)
+        },
         hide:
           _this.data != _this.$t("iaoMng.hgyl") &&
           _this.data != _this.$t("iaoMng.yl")
@@ -1426,7 +1472,10 @@ export function planCrud(_this) {
         width: 80,
         overHidden: true,
         align: "right",
-        hide: _this.data != _this.$t("iaoMng.sx")
+        hide: _this.data != _this.$t("iaoMng.sx"),
+        formatter(r,v){
+          return num2ThousandthFormat(v,0)
+        },
       },
 
       {
@@ -1438,6 +1487,9 @@ export function planCrud(_this) {
         cell: false,
         width: 80,
         align: "right",
+        formatter(r,v){
+          return num2ThousandthFormat(v)
+        },
         hide:
           _this.data != _this.$t("iaoMng.sx") &&
           _this.data != _this.$t("iaoMng.pb")

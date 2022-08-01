@@ -3,6 +3,8 @@ let matUnit = getDIC("bas_matUnit");
 let rlData = getXDicT("BasChemicalmatNew");
 let user = getDicT("ucmlUser", "employeename", "ucmlUseroid");
 
+import { num2ThousandthFormat } from "@/utils/tools"
+
 function fillZero(row, value) {
   return value && (+value).toFixed(2);
 }
@@ -207,6 +209,7 @@ export function rsxkr1C(_this) {
         cell: false,
         width: 90,
         type: "select",
+        align: "center",
         dicData: getDIC("Whse_out_type")
       },
       {
@@ -215,6 +218,7 @@ export function rsxkr1C(_this) {
         cell: false,
         width: 120,
         type: "select",
+        align: "center",
         dicData: getDIC("whse_stock_type")
       },
       {
@@ -222,6 +226,7 @@ export function rsxkr1C(_this) {
         prop: "retDate",
         cell: true,
         type: "date",
+        align: "center",
         format: "yyyy-MM-dd",
         valueFormat: "yyyy-MM-dd",
         align: "center",
@@ -253,6 +258,7 @@ export function rsxkr1C(_this) {
         cell: true,
         placeholder: " ",
         type: "select",
+        align: "center",
         dicData: getDIC("whse_outStatus"),
         width: 120
       }
@@ -356,7 +362,9 @@ export function rsxkr2C(_this) {
         width: 120,
         align: "right",
         precision: 2,
-        formatter: fillZero
+        formatter(r,v){
+          return num2ThousandthFormat(v)
+        }
 
       },
       {
@@ -367,7 +375,9 @@ export function rsxkr2C(_this) {
         align: "right",
         placeholder: " ",
         hide: _this.type === _this.$t("iaoMng.sx") ? false : true,
-        formatter: fillZero
+        formatter(r,v){
+          return num2ThousandthFormat(v)
+        }
       },
       {
         label: "出货数量",
@@ -378,7 +388,9 @@ export function rsxkr2C(_this) {
         align: "right",
         // type: "number",
         precision: 1,
-        formatter: fillZero,
+        formatter(r,v){
+          return num2ThousandthFormat(v,1)
+        },
         placeholder: " ",
         change: val => {
           if (val.value > _this.chooseData.applyNum) {
@@ -396,6 +408,7 @@ export function rsxkr2C(_this) {
         width: 90,
         cell: false,
         type: "select",
+        align: "center",
         dicData: matUnit
       }
     ]
@@ -437,7 +450,10 @@ export function rcpb3C(_this) {
         prop: "weight",
         cell: true,
         width: 100,
-        align: "right"
+        align: "right",
+        formatter(r,v){
+          return num2ThousandthFormat(v)
+        }
       },
       {
         label: "件数",
@@ -445,7 +461,10 @@ export function rcpb3C(_this) {
         cell: true,
         width: 100,
         align: "right",
-        hide: _this.type === _this.$t("iaoMng.sx") ? false : true
+        hide: _this.type === _this.$t("iaoMng.sx") ? false : true,
+        formatter(r,v){
+          return num2ThousandthFormat(v,0)
+        }
       },
       {
         label: "包装规格",
@@ -580,6 +599,9 @@ export function whseRetreatCrud(_this) {
         align: "right",
         click: val => {
           _this.iptChange(_this.chooseData);
+        },
+        formatter(r,v){
+          return num2ThousandthFormat(v)
         }
       },
       {

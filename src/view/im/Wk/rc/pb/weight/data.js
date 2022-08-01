@@ -1,11 +1,14 @@
 /*
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
- * @LastEditors: Lyl
- * @LastEditTime: 2022-02-26 10:46:37
+ * @LastEditors: Symbol_Yang
+ * @LastEditTime: 2022-08-01 11:32:27
  * @Description:
  */
+
 import { getDIC, getDicT, getXDicT, postDicT, getDicNS } from "@/config";
+import { num2ThousandthFormat } from "@/utils/tools"
+
 let matUnit = getDIC("bas_matUnit");
 export function mainForm(_this) {
   return {
@@ -73,6 +76,7 @@ export function mainForm(_this) {
         overHidden: true,
         width: 120,
         type: "select",
+        align: "center",
         dicData: [
           // {
           //   label: "已称重装笼",
@@ -271,7 +275,10 @@ export function mainCrud(_this) {
         align: "right",
         sortable: true,
         span: 6,
-        type: "number"
+        type: "number",
+        formatter(r,v){
+          return num2ThousandthFormat(v,0)
+        }
       },
       {
         label: "毛重(trọng lượng cả b)",
@@ -280,7 +287,10 @@ export function mainCrud(_this) {
         align: "right",
         span: 6,
         cell: false,
-        placeholder: " "
+        placeholder: " ",
+        formatter(r,v){
+          return num2ThousandthFormat(v,1)
+        }
         // type: "number",
         // precision: 1
       },
@@ -415,6 +425,7 @@ export function mainCrud(_this) {
         overHidden: true,
         width: 120,
         type: "select",
+        align: "center",
         dicData: [
           {
             label: "已入仓",

@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:08:41
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-06-06 09:08:05
+ * @LastEditTime: 2022-07-30 09:12:24
  */
 import {
   getDIC,
@@ -15,6 +15,9 @@ import {
 function fillZero(row, value) {
   return value && value.toFixed(2);
 }
+
+import { num2ThousandthFormat } from "@/utils/tools"
+
 
 let examState = getDIC("whse_retState");
 let opreator = getDicT("ucmlUser", "employeename", "ucmlUseroid");
@@ -56,6 +59,7 @@ export function whseInCrudOp(_this) {
       {
         label: "入仓类型",
         prop: "yinType",
+        align: "center",
         width: 100,
         type: "select",
         dicData: getDIC("whse_yinType")
@@ -63,6 +67,7 @@ export function whseInCrudOp(_this) {
       {
         label: "入仓日期",
         prop: "yinDate",
+        align: "center",
         width: 100,
       },
       {
@@ -80,6 +85,7 @@ export function whseInCrudOp(_this) {
       {
         label: "财务状态",
         prop: "finStatus",
+        align: "center",
         width: 100,
         type: "select",
         dicData: getDIC("whse_finStatus")
@@ -88,6 +94,7 @@ export function whseInCrudOp(_this) {
         label: "入仓状态",
         prop: "stockState",
         type: "select",
+        align: "center",
         dicData: examState,
         width: 100,
       },
@@ -149,7 +156,7 @@ export function yarnForSampleCrudOp(_this) {
         label: "纱线名称",
         prop: "yarnsName",
         overHidden: true,
-        width: 250,
+        // width: 250,
       },
       {
         label: "纱牌",
@@ -276,7 +283,7 @@ export function whseYarnInDtlCrudOp(_this) {
     }, {
       label: "纱线名称",
       prop: "yarnsName",
-      width: 200,
+      // width: 200,
       overHidden: true
     }, {
       label: "纱牌",
@@ -298,7 +305,8 @@ export function whseYarnInDtlCrudOp(_this) {
       align: "right",
       type: "number",
       formatter: (row,value) => {
-        return row.aChildren.reduce((a,b) => a + +(b.weight || 0), 0).toFixed(2)
+        let weight = row.aChildren.reduce((a,b) => a + +(b.weight || 0), 0)
+        return num2ThousandthFormat(weight)
       },
     },{
       label: "重量单位",
@@ -313,12 +321,14 @@ export function whseYarnInDtlCrudOp(_this) {
       width: 100,
       align: "right",
       formatter: (row,value) => {
-        return row.aChildren.reduce((a,b) => a + +(b.cartonNum || 0), 0).toFixed(2)
+        let  cartonNum = row.aChildren.reduce((a,b) => a + +(b.cartonNum || 0), 0)
+        return num2ThousandthFormat(cartonNum)
       },
     },{
       label: "检验状态",
       prop: "checkStatus",
       width: 100,
+      align: "center",
       type: "select",
       dicData: getDIC("whse_yinStatus"),
       default: 1,
@@ -340,7 +350,9 @@ export function whseYarnInDtlaCrudOp(_this) {
       cell: true,
       type: "number",
       align: "right",
-      formatter: fillZero
+      formatter(r,v){
+        return num2ThousandthFormat(v)
+      }
     }, {
       label: "件数",
       prop: "cartonNum",

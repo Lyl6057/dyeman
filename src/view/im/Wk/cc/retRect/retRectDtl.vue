@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-12 10:34:33
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-21 17:16:36
+ * @LastEditTime: 2022-08-01 14:04:22
 -->
 <template>
   <div class="with-drawal-dlt-container">
@@ -317,7 +317,7 @@ export default {
           });
         });
       });
-      let validRes = await fetchValidOutWeight(dataList).then(res => res.data);
+      let validRes = await fetchValidOutWeight({dataList, params: {includeUnqualified: true}}).then(res => res.data);
       if (!validRes.data.status) {
         validRes.data.resultList.forEach((item, index) => {
           let notifyData = {

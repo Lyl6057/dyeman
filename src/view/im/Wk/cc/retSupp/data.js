@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-12 09:07:11
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-05 16:15:12
+ * @LastEditTime: 2022-07-30 10:57:25
  */
 import {
   getDIC,
@@ -13,6 +13,7 @@ import {
 } from "@/config/index";
 
 let retType = getDIC("whse_retState");
+import { num2ThousandthFormat } from "@/utils/tools"
 
 const mainCrudOpCommon = {
   menu: false,
@@ -110,11 +111,13 @@ export function crudOp(_this) {
         prop: "retType",
         width: 160,
         type: "select",
+        align: "center",
         dicData: getDIC("whse_out_type")
       },
       {
         label: "出仓日期",
         prop: "retDate",
+        align: "center",
         width: 160,
       },
       {
@@ -127,6 +130,7 @@ export function crudOp(_this) {
         prop: "stockState",
         width: 160,
         type: "select",
+        align: "center",
         dicData:retType
       },
       {
@@ -210,7 +214,11 @@ export function retReatCrudOp(_this) {
       {
         label: `退货${moduleParamsEnum[_this.imWkType].unitLabel}` ,
         prop: "returnQty",
-        width: 120
+        width: 120,
+        align: "right",
+        formatter(r,v){
+          return num2ThousandthFormat(v);
+        }
       },
       {
         label: "单位",
@@ -310,7 +318,7 @@ export function retReatDtlCrudOp(_this){
         align: "right",
         precision: 2,
         formatter: (row,value) => {
-          return value && value.toFixed(2)
+          return num2ThousandthFormat(value)
         }
       },{ 
         label: `退货${moduleParamsEnum[_this.imWkType].unitLabel}`,
@@ -321,7 +329,7 @@ export function retReatDtlCrudOp(_this){
         align: "right",
         precision: 2,
         formatter: (row,value) => {
-          return value && value.toFixed(2)
+          return  num2ThousandthFormat(value)
         }
       },{
         label: "单位",
@@ -346,7 +354,7 @@ export function retReatDtlaCrudOp(_this){
         type: "number",
         align: "right",
         formatter: (row,value) => {
-          return value && value.toFixed(2)
+          return  num2ThousandthFormat(value)
         }
       },{
         label: "退纱件数",
@@ -354,7 +362,10 @@ export function retReatDtlaCrudOp(_this){
         type: "number",
         align: "right",
         width: 100,
-        cell: true
+        cell: true,
+        formatter: (row,value) => {
+          return  num2ThousandthFormat(value,0)
+        }
       },{
         label: "包装规格",
         prop: "packSize",

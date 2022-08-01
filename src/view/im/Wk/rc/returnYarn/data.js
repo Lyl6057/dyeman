@@ -4,17 +4,19 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:08:41
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-20 10:18:53
+ * @LastEditTime: 2022-07-30 09:20:21
  */
 import {
   getDIC,
   getDicT,
   getDicNS
 } from "@/config/index";
+import { num2ThousandthFormat } from "@/utils/tools"
 
 function fillZero(row, value) {
   return value && value.toFixed(2);
 }
+
 
 let examState = getDIC("whse_retState");
 let opreator = getDicT("ucmlUser", "employeename", "ucmlUseroid");
@@ -47,7 +49,7 @@ const formOpCommon = {
 export function whseInCrudOp(_this) {
   return {
     ...mainCrudOpCommon,
-    height: "calc(100vh - 225px)",
+    height: "calc(100vh - 205px)",
     column: [{
         label: "入仓编号",
         prop: "yinId",
@@ -57,6 +59,7 @@ export function whseInCrudOp(_this) {
         label: "入仓类型",
         prop: "yinType",
         width: 100,
+        align: "center",
         type: "select",
         dicData: getDIC("whse_yinType")
       },
@@ -64,6 +67,7 @@ export function whseInCrudOp(_this) {
         label: "入仓日期",
         prop: "yinDate",
         width: 100,
+        align: "center",
       },
       {
         label: "退纱通知单编号",
@@ -75,6 +79,7 @@ export function whseInCrudOp(_this) {
         prop: "yinStatus",
         width: 100,
         type: "select",
+        align: "center",
         dicData: getDIC("whse_yinStatus")
       },
       {
@@ -82,11 +87,13 @@ export function whseInCrudOp(_this) {
         prop: "finStatus",
         width: 100,
         type: "select",
+        align: "center",
         dicData: getDIC("whse_finStatus")
       },
       {
         label: "入仓状态",
         prop: "stockState",
+        align: "center",
         type: "select",
         dicData: examState,
         width: 100,
@@ -133,7 +140,7 @@ export function whseInFormOp(_this) {
 export function retYarnNoticCrudOp(_this) {
   return {
     ...mainCrudOpCommon,
-    height: "calc(100vh - 225px)",
+    height: "calc(100vh - 205px)",
     selection: true,
     column: [{
         label: "退纱通知单号",
@@ -149,6 +156,7 @@ export function retYarnNoticCrudOp(_this) {
       {
         label: "退纱日期",
         prop: "happenDate",
+        align: "center",
         width: 100,
       },
       {
@@ -166,7 +174,7 @@ export function retYarnNoticCrudOp(_this) {
         label: "纱线名称",
         prop: "yarnsName",
         overHidden: true,
-        width: 250,
+        // width: 250,
       },
       {
         label: "纱牌",
@@ -191,12 +199,15 @@ export function retYarnNoticCrudOp(_this) {
         type: "number",
         align: "right",
         precision: 2,
-        formatter: fillZero
+        formatter(r,v){
+          return num2ThousandthFormat(v);
+        }
       },
       {
         label: "单位",
         prop: "unitName",
         width: 100,
+        overHidden: true
       },
       {
         label: "件数",
@@ -208,10 +219,12 @@ export function retYarnNoticCrudOp(_this) {
         label: "包装规格",
         prop: "packName",
         width: 100,
+        overHidden: true
       },
       {
         label: "备注",
         prop: "remarks",
+        overHidden: true,
         width: 100,
       },
 
@@ -275,7 +288,7 @@ export function whseYarnInDtlCrudOp(_this) {
     }, {
       label: "纱线名称",
       prop: "yarnsName",
-      width: 200,
+      // width: 200,
       overHidden: true
     }, {
       label: "纱牌",
@@ -296,7 +309,9 @@ export function whseYarnInDtlCrudOp(_this) {
       width: 100,
       align: "right",
       type: "number",
-      formatter: fillZero
+      formatter(r, v){
+        return num2ThousandthFormat(v);
+      }
     }, {
       label: "入仓数量",
       prop: "inWeight",
@@ -304,7 +319,8 @@ export function whseYarnInDtlCrudOp(_this) {
       align: "right",
       type: "number",
       formatter: (row,value) => {
-        return row.aChildren.reduce((a,b) => a + +(b.weight || 0), 0).toFixed(2)
+        let inWeight = row.aChildren.reduce((a,b) => a + +(b.weight || 0), 0)
+        return num2ThousandthFormat(inWeight)
       },
       // cell: true,
     }, {
@@ -320,7 +336,8 @@ export function whseYarnInDtlCrudOp(_this) {
     }, {
       label: "备注",
       prop: "remarks",
-      width: 100
+      width: 100,
+      overHidden: true
     }]
   }
 }
@@ -338,7 +355,9 @@ export function whseYarnInDtlaCrudOp(_this) {
       cell: true,
       type: "number",
       align: "right",
-      formatter: fillZero
+      formatter(r, v){
+        return num2ThousandthFormat(v);
+      }
     }, {
       label: "件数",
       prop: "cartonNum",
@@ -346,7 +365,9 @@ export function whseYarnInDtlaCrudOp(_this) {
       cell: true,
       type: "number",
       align: "right",
-      formatter: fillZero
+      formatter(r, v){
+        return num2ThousandthFormat(v);
+      }
     }, {
       label: "包装规格",
       prop: "packSize",

@@ -4,13 +4,15 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-12 09:07:11
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-05-03 10:33:46
+ * @LastEditTime: 2022-07-30 10:57:48
  */
 import {
   getDIC,
   getDicT,
   getDicNS
 } from "@/config/index";
+
+import { num2ThousandthFormat } from "@/utils/tools"
 
 let retType = getDIC("whse_retState");
 
@@ -36,6 +38,7 @@ const mainCrudOpCommon = {
 export function crudOp(_this) {
   return {
     ...mainCrudOpCommon,
+    height: "calc(100vh - 205px)",
     column: [{
         label: "出仓单编号",
         prop: "retCode",
@@ -44,12 +47,14 @@ export function crudOp(_this) {
       {
         label: "出仓类型",
         prop: "retType",
+        align: "center",
         width: 160,
         type: "select",
         dicData: getDIC("whse_out_type")
       },
       {
         label: "出仓日期",
+        align: "center",
         prop: "retDate",
         width: 160,
       },
@@ -62,6 +67,7 @@ export function crudOp(_this) {
         label: "出仓状态",
         prop: "retState",
         width: 160,
+        align: "center",
         type: "select",
         dicData:retType
       },
@@ -122,6 +128,7 @@ export function retReatCrudOp(_this) {
     ...mainCrudOpCommon,
     selection:true,
     index:false,
+    height: "calc(100vh - 150px)",
     column: [{
         label: "退纱通知单编号",
         prop: "remeoNo",
@@ -165,7 +172,6 @@ export function retReatCrudOp(_this) {
       {
         label: "备注",
         prop: "returnReason",
-        width: 120
       },
     ]
   }
@@ -236,7 +242,7 @@ export function retReatDtlCrudOp(_this){
       },{
         label: "纱线名称",
         prop: "yarnsName",
-        width: 200,
+        // width: 200,
         overHidden: true
       },{
         label: "纱牌",
@@ -258,7 +264,7 @@ export function retReatDtlCrudOp(_this){
         align: "right",
         precision: 2,
         formatter: (row,value) => {
-          return value && value.toFixed(2)
+          return num2ThousandthFormat(value)
         }
       },{ 
         label: "退纱重量",
@@ -269,7 +275,8 @@ export function retReatDtlCrudOp(_this){
         align: "right",
         precision: 2,
         formatter: (row,value) => {
-          return row.retreatDtlaList.reduce((a,b) => a + +(b.retWeight || 0), 0).toFixed(2)
+          let retWeight = row.retreatDtlaList.reduce((a,b) => a + +(b.retWeight || 0), 0)
+          return num2ThousandthFormat(retWeight)
         }
       },{
         label: "单位",
@@ -282,7 +289,8 @@ export function retReatDtlCrudOp(_this){
         type: "number",
         align: "right",
         formatter: (row,value) => {
-          return row.retreatDtlaList.reduce((a,b) => a + +(b.retPcs || 0), 0)
+          let retPcsNum = row.retreatDtlaList.reduce((a,b) => a + +(b.retPcs || 0), 0)
+          return num2ThousandthFormat(retPcsNum)
         }
       }
     ]
@@ -303,7 +311,7 @@ export function retReatDtlaCrudOp(_this){
         type: "number",
         align: "right",
         formatter: (row,value) => {
-          return value && value.toFixed(2)
+          return num2ThousandthFormat(value)
         }
       },{
         label: "退纱件数",
@@ -311,7 +319,10 @@ export function retReatDtlaCrudOp(_this){
         type: "number",
         align: "right",
         width: 100,
-        cell: true
+        cell: true,
+        formatter: (row,value) => {
+          return num2ThousandthFormat(value,0)
+        }
       },{
         label: "包装规格",
         prop: "packSize",

@@ -1,4 +1,5 @@
 import { getDIC, getDicT, postDicT, getDicNS } from "@/config/index";
+import { num2ThousandthFormat } from "@/utils/tools"
 
 export function rcpb1F(_this) {
   return {
@@ -152,6 +153,7 @@ export function rcpb2F(_this) {
         prop: "yinType",
         cell: false,
         type: "select",
+        align: "center",
         dicData: getDIC("Whse_CalicoType"),
         span: 6,
         display: _this.hide === "6" || _this.hide === "4" || _this.hide === "7",
@@ -207,6 +209,7 @@ export function rcpb2F(_this) {
         prop: "finStatus",
         display: _this.hide === "2" ? true : false,
         span: 6,
+        align: "center",
         placeholder: " ",
         type: "select",
         dicData: getDIC("whse_finStatus"),
@@ -334,6 +337,7 @@ export function rcpb1C(_this) {
         label: _this.$t("whseField.rclx"),
         prop: "yinType",
         cell: false,
+        align: "center",
         width: 140,
         type: "select",
         dicData: getDIC("Whse_CalicoType")
@@ -343,6 +347,7 @@ export function rcpb1C(_this) {
         prop: "yinDate",
         cell: true,
         type: "datetime",
+        align: "center",
         format: "yyyy-MM-dd",
         valueFormat: "yyyy-MM-dd",
         width: 190,
@@ -413,6 +418,7 @@ export function rcpb1C(_this) {
         cell: true,
         width: 120,
         type: "select",
+        align: "center",
         dicData: getDIC("whse_yinstatus")
       },
 
@@ -452,6 +458,7 @@ export function rcpb1C(_this) {
         width: 135,
         hide: _this.hide === "1" || _this.hide === "2" ? false : true,
         type: "select",
+        align: "center",
         dicData: getDIC("whse_finStatus")
       },
       {
@@ -572,7 +579,11 @@ export function rcpb2C(_this) {
             : true,
         cell: true,
         width: 100,
-        align: "right"
+        align: "right",
+        formatter(r,v){
+          return num2ThousandthFormat(v,0)
+        }
+
       },
       
       // {
@@ -658,14 +669,20 @@ export function rcpb3C(_this) {
         prop: "pidNo",
         cell: true,
         width: 70,
-        align: "right"
+        align: "right",
+        formatter(r,v){
+          return num2ThousandthFormat(v,0)
+        }
       },
       {
         label: _this.$t("whseField.zl"),
         prop: "weight",
         cell: true,
         width: 100,
-        align: "right"
+        align: "right",
+        formatter(r,v){
+          return num2ThousandthFormat(v,1)
+        }
       },
       {
         label: _this.$t("whseField.zldw"),

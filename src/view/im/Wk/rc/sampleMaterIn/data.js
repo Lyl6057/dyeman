@@ -4,13 +4,14 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:08:41
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-06-01 16:22:32
+ * @LastEditTime: 2022-07-30 10:20:06
  */
 import {
   getDIC,
   getDicT,
   getDicNS
 } from "@/config/index";
+import { num2ThousandthFormat } from "@/utils/tools"
 
 function fillZero(row, value) {
   return value && value.toFixed(2);
@@ -100,6 +101,7 @@ export function whseInCrudOp(_this) {
       {
         label: "入仓日期",
         prop: "yinDate",
+        align: "center",
         width: 100,
       },
       {
@@ -128,6 +130,7 @@ export function whseInCrudOp(_this) {
         label: "财务状态",
         prop: "finStatus",
         width: 100,
+        align: "center",
         type: "select",
         dicData: getDIC("whse_finStatus")
       },
@@ -135,6 +138,7 @@ export function whseInCrudOp(_this) {
         label: "入仓状态",
         prop: "stockState",
         type: "select",
+        align: "center",
         dicData: examState,
         width: 100,
       },
@@ -218,7 +222,7 @@ export function unStockSampleCrudOp(_this) {
         label: "样品名称",
         prop: samNameKey,
         overHidden: true,
-        width: 250,
+        // width: 250,
       },
       {
         label: "供应商批号",
@@ -239,7 +243,9 @@ export function unStockSampleCrudOp(_this) {
         type: "number",
         align: "right",
         precision: 2,
-        formatter: fillZero
+        formatter(r,v){
+          return num2ThousandthFormat(v)
+        }
       },
       {
         label: "单位",
@@ -344,19 +350,22 @@ export function whseYarnInDtlCrudOp(_this) {
       align: "right",
       type: "number",
       formatter: (row,value) => {
-        return row.dtlBChildren.reduce((a,b) => a + +(b.weight || 0), 0).toFixed(2)
+        let weight = row.dtlBChildren.reduce((a,b) => a + +(b.weight || 0), 0)
+        return num2ThousandthFormat(weight)
       },
     },{
       label: "重量单位",
       prop: "weightUnit",
       width: 100,
       type: "select",
+      align: "center",
       dicData: getDIC("bas_matUnit"),
     },{
       label: "检验状态",
       prop: "checkStatus",
       width: 100,
       type: "select",
+      align: "center",
       dicData: getDIC("whse_yinStatus"),
       default: 1,
       cell: true,
@@ -379,7 +388,9 @@ export function whseYarnInDtlaCrudOp(_this) {
       cell: true,
       type: "number",
       align: "right",
-      formatter: fillZero
+      formatter(r, v){
+        return num2ThousandthFormat(v);
+      }
     },{
       label: "货位码",
       prop: "storageNo",

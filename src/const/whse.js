@@ -2,6 +2,8 @@ import { getDIC, getDicT, postDicT, getXDicT, getDbDicT } from "@/config/index";
 import axios from "axios";
 import i18n from "../lang/index";
 import store from "@/store/index"; // 多語言 store.state
+import { num2ThousandthFormat } from "@/utils/tools"
+
 const lang = store.state.lang;
 let cust1 = getDicT("basCustomer", "custName", "custCode");
 let cust2 = getDicT("basCustomer", "custCode", "custCode");
@@ -1988,20 +1990,27 @@ export const WhseCalicoPackBarCodeC = {
       label: i18n.t("whseField.ps"),
       prop: "countingNo",
       width: 100,
-      align: "right"
+      align: "right",
+      formatter(r,v){
+        return num2ThousandthFormat(v, 0)
+      }
     },
 
     {
       label: i18n.t("whseField.zl"),
       prop: "weight",
       width: 100,
-      align: "right"
+      align: "right",
+      formatter(r,v){
+        return num2ThousandthFormat(v, 1)
+      }
     },
     {
       label: i18n.t("whseField.zldw"),
       prop: "weightUnit",
       width: 100,
       type: "select",
+      align: "center",
       dicData: matUnit
     },
     {
