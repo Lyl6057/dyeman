@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-12 10:34:33
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-19 09:07:52
+ * @LastEditTime: 2022-08-01 14:18:42
 -->
 <template>
   <div class="with-drawal-dlt-container">
@@ -228,7 +228,7 @@ export default {
           retQty: item.retQty || 0,
         });
       });
-      let validRes = await fetchValidOutWeight(dataList,this).then(res => res.data);
+      let validRes = await fetchValidOutWeight({dataList, params: {includeUnqualified: true}},this).then(res => res.data);
       if (!validRes.data.status) {
         this.$tip.warning("保存无效~");
         validRes.data.resultList.forEach((item, index) => {
