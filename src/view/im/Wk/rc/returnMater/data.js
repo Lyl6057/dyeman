@@ -4,13 +4,15 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:08:41
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-20 16:25:29
+ * @LastEditTime: 2022-07-30 10:17:10
  */
 import {
   getDIC,
   getDicT,
   getDicNS
 } from "@/config/index";
+
+import { num2ThousandthFormat } from "@/utils/tools"
 
 function fillZero(row, value) {
   return value && value.toFixed(2);
@@ -115,11 +117,13 @@ export function whseInCrudOp(_this) {
         prop: "yinType",
         width: 100,
         type: "select",
+        align: "center",
         dicData: getDIC("whse_yinType")
       },
       {
         label: "入仓日期",
         prop: "yinDate",
+        align: "center",
         width: 100,
       },
       {
@@ -130,6 +134,7 @@ export function whseInCrudOp(_this) {
       {
         label: "检验状态",
         prop: "yinStatus",
+        align: "center",
         width: 100,
         type: "select",
         dicData: getDIC("whse_yinStatus")
@@ -137,6 +142,7 @@ export function whseInCrudOp(_this) {
       {
         label: "财务状态",
         prop: "finStatus",
+        align: "center",
         width: 100,
         type: "select",
         dicData: getDIC("whse_finStatus")
@@ -144,6 +150,7 @@ export function whseInCrudOp(_this) {
       {
         label: "入仓状态",
         prop: "stockState",
+        align: "center",
         type: "select",
         dicData: examState,
         width: 100,
@@ -208,6 +215,7 @@ export function retMatNoticCrudOp(_this) {
         label: "返仓日期",
         prop: "happenDate",
         width: 100,
+        align: "center",
         type: "date",
         format: "yyyy-MM-dd",
         valueFormat: "yyyy-MM-dd"
@@ -221,7 +229,7 @@ export function retMatNoticCrudOp(_this) {
         label: dataPropEnum[type].materNameLabel,
         prop: "materialName",
         overHidden: true,
-        width: 250,
+        // width: 250,
       },
       {
         label: "本厂批号",
@@ -235,7 +243,9 @@ export function retMatNoticCrudOp(_this) {
         type: "number",
         align: "right",
         precision: 2,
-        formatter: fillZero
+        formatter(r, v){
+          return num2ThousandthFormat(v);
+        }
       },
       {
         label: "单位",
@@ -319,7 +329,9 @@ export function whseMaterInDtlCrudOp(_this) {
       width: 100,
       align: "right",
       type: "number",
-      formatter: fillZero
+      formatter(r, v){
+        return num2ThousandthFormat(v);
+      }
     }, {
       label: "入仓重量",
       prop: weightKey,
@@ -327,7 +339,8 @@ export function whseMaterInDtlCrudOp(_this) {
       align: "right",
       type: "number",
       formatter: (row,value) => {
-        return row.dtlBChildren.reduce((a,b) => a + +(b.weight || 0), 0).toFixed(2)
+        let weight = row.dtlBChildren.reduce((a,b) => a + +(b.weight || 0), 0)
+        return num2ThousandthFormat(weight)
       },
       // cell: true,
     }, {
@@ -360,7 +373,9 @@ export function whseMaterInDtlaCrudOp(_this) {
       cell: true,
       type: "number",
       align: "right",
-      formatter: fillZero
+      formatter(r, v){
+        return num2ThousandthFormat(v);
+      }
     }]
   }
 }

@@ -1,5 +1,8 @@
 import { getDIC, getXDicT, getDicT, postDicT } from "@/config/index";
 
+import { num2ThousandthFormat } from "@/utils/tools"
+
+
 let whsehouse = getDicT("whseWarehouse", "warehouseName", "whseWarehouseoid");
 export function rsxkr1F(_this) {
   return {
@@ -18,6 +21,7 @@ export function rsxkr1F(_this) {
         prop: "retDate",
         span: 6,
         placeholder: " ",
+        align: "center",
         type: "datetime",
         format: "yyyy-MM-dd",
         valueFormat: "yyyy-MM-dd"
@@ -155,6 +159,7 @@ export function rsxkr1C(_this) {
         label: "出仓类型",
         prop: "retType",
         cell: false,
+        align: "center",
         width: 90,
         type: "select",
         dicData: getDIC("Whse_out_type")
@@ -164,6 +169,7 @@ export function rsxkr1C(_this) {
         prop: "retDate",
         cell: true,
         type: "date",
+        align: "center",
         format: "yyyy-MM-dd",
         valueFormat: "yyyy-MM-dd",
         align: "center",
@@ -289,14 +295,20 @@ export function rsxkr2C(_this) {
         prop: "everySpindle",
         cell: true,
         width: 100,
-        align: "right"
+        align: "right",
+        formatter(r,v){
+          return num2ThousandthFormat(v,0)
+        }
       },
       {
         label: _this.$t("whseField.zl"),
         prop: "weight",
         cell: true,
         width: 100,
-        align: "right"
+        align: "right",
+        formatter(r,v){
+          return num2ThousandthFormat(v)
+        }
       },
       {
         label: _this.$t("whseField.dw"),
@@ -428,7 +440,10 @@ export function rsxkr3C(_this) {
           value: "whseYarninDtloid"
         },
         dicData: yarninDtl,
-        hide: _this.hide == "4" || _this.hide == "3" ? false : true
+        hide: _this.hide == "4" || _this.hide == "3" ? false : true,
+        formatter(r,v){
+          return num2ThousandthFormat(v)
+        }
       },
       {
         label: "退回重量",
@@ -436,7 +451,10 @@ export function rsxkr3C(_this) {
         cell: true,
         width: 140,
         align: "right",
-        hide: _this.hide == "4" || _this.hide == "3" ? false : true
+        hide: _this.hide == "4" || _this.hide == "3" ? false : true,
+        formatter(r,v){
+          return num2ThousandthFormat(v)
+        }
       },
       {
         label: _this.$t("whseField.dw"),
@@ -453,6 +471,9 @@ export function rsxkr3C(_this) {
         cell: true,
         width: 140,
         align: "right",
+        formatter(r,v){
+          return num2ThousandthFormat(v)
+        },
         hide: _this.hide != "5"
       },
       {
@@ -562,14 +583,20 @@ export function planCrud(_this) {
         prop: "weight",
         cell: false,
         width: 100,
-        align: "right"
+        align: "right",
+        formatter(r,v){
+          return num2ThousandthFormat(v)
+        }
       },
       {
         label: _this.$t("whseField.ds"),
         prop: "everySpindle",
         cell: false,
         align: "right",
-        width: 100
+        width: 100,
+        formatter(r,v){
+          return num2ThousandthFormat(v,0)
+        }
       }
     ]
   };
@@ -663,14 +690,20 @@ export function PlanOutCrud(_this) {
         prop: "weight",
         cell: true,
         width: 100,
-        align: "right"
+        align: "right",
+        formatter(r,v){
+          return num2ThousandthFormat(v)
+        }
       },
       {
         label: _this.$t("whseField.ds"),
         prop: "everySpindle",
         cell: true,
         align: "right",
-        width: 100
+        width: 100,
+        formatter(r,v){
+          return num2ThousandthFormat(v,0)
+        }
       }
     ]
   };
@@ -843,14 +876,20 @@ export function whseRetreatCrud(_this) {
         prop: "weight",
         cell: true,
         width: 100,
-        align: "right"
+        align: "right",
+        formatter(r,v){
+          return num2ThousandthFormat(v)
+        }
       },
       {
         label: _this.$t("whseField.ds"),
         prop: "everySpindle",
         cell: true,
         align: "right",
-        width: 100
+        width: 100,
+        formatter(r,v){
+          return num2ThousandthFormat(v,0)
+        }
       }
     ]
   };

@@ -4,8 +4,11 @@
  * @Author: Symbol_Yang
  * @Date: 2022-06-29 17:22:42
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-06-30 08:37:26
+ * @LastEditTime: 2022-08-01 11:30:31
  */
+
+
+import { num2ThousandthFormat } from "@/utils/tools"
 
 // 表格通用配置
 const mainCrudOpCommon = {
@@ -40,12 +43,16 @@ export function stkinMemoUnWhseInCrudOp(_this) {
           label: "通知单日期",
           prop: "memoDate",
           width: 150,
+          align: "center",
         },
         {
           label: "胚布疋数",
           prop: "piCount",
           width: 150,
           align: "right",
+          formatter(r,v){
+            return num2ThousandthFormat(v,0)
+          }
         },
         {
           label: "胚布总重量(kg)",
@@ -53,7 +60,7 @@ export function stkinMemoUnWhseInCrudOp(_this) {
           width: 150,
           align: "right",
           formatter(row,value){
-            return (+value || 0).toFixed(1)
+            return num2ThousandthFormat(value,1)
           }
         },
       ]

@@ -1,5 +1,7 @@
 import { getDIC, getDicT, postDicT, getXDicT } from "@/config/index";
 
+import { num2ThousandthFormat } from "@/utils/tools"
+
 let matUnit = getDIC("bas_matUnit");
 let whsehouse = getDicT("whseWarehouse", "warehouseName", "whseWarehouseoid");
 export function rsxkr1F(_this) {
@@ -287,6 +289,7 @@ export function rsxkr1C(_this) {
         cell: false,
         width: 90,
         type: "select",
+        align: "center",
         dicData: getDIC("Whse_out_type"),
         change: val => {
           _this.iptChange(_this.chooseData);
@@ -298,6 +301,7 @@ export function rsxkr1C(_this) {
         prop: "retDate",
         cell: true,
         type: "date",
+        align: "center",
         format: "yyyy-MM-dd",
         valueFormat: "yyyy-MM-dd",
         align: "center",
@@ -307,6 +311,7 @@ export function rsxkr1C(_this) {
       {
         label: "出倉日期",
         prop: "woDate",
+        align: "center",
         cell: true,
         type: "datetime",
         format: "yyyy-MM-dd",
@@ -367,6 +372,7 @@ export function rsxkr1C(_this) {
         cell: true,
         placeholder: " ",
         type: "select",
+        align: "center",
         dicData: getDIC("whse_finStatus"),
         hide: _this.hide != "6",
         width: 120
@@ -590,7 +596,10 @@ export function rcpb3C(_this) {
         prop: "batchNo",
         cell: true,
         width: 180,
-        hide: _this.hide === "6" ? true : false
+        hide: _this.hide === "6" ? true : false,
+        formatter(r,v){
+          return num2ThousandthFormat(v,0)
+        }
       },
       {
         label: _this.$t("whseField.scdh"),
@@ -606,7 +615,10 @@ export function rcpb3C(_this) {
         prop: "countingNo",
         cell: true,
         width: 80,
-        align: "right"
+        align: "right",
+        formatter(r,v){
+          return num2ThousandthFormat(v,0)
+        }
         // click: (val) => {
         //   _this.iptPhChange(_this.choosePhData);
         // },
@@ -617,7 +629,10 @@ export function rcpb3C(_this) {
         cell: true,
         width: 100,
         align: "right",
-        hide: _this.hide === "6"
+        hide: _this.hide === "6",
+        formatter(r,v){
+          return num2ThousandthFormat(v,1)
+        }
         // click: (val) => {
         //   _this.iptPhChange(_this.choosePhData);
         // },
@@ -628,7 +643,10 @@ export function rcpb3C(_this) {
         cell: true,
         width: 100,
         align: "right",
-        hide: _this.hide != "6"
+        hide: _this.hide != "6",
+        formatter(r,v){
+          return num2ThousandthFormat(v,1)
+        }
         // click: (val) => {
         //   _this.iptPhChange(_this.choosePhData);
         // },
@@ -794,7 +812,10 @@ export function rsxkr3C(_this) {
           value:
             _this.hide === "5" ? "whseCalicoinDtlboid" : "whseCalicoinDtlaoid"
         },
-        dicData: _this.hide === "5" ? Dtlb : rsxkr3CDic
+        dicData: _this.hide === "5" ? Dtlb : rsxkr3CDic,
+        formatter(r,v){
+          return num2ThousandthFormat(v, 0)
+        }
         // hide: _this.hide === '5' ? true : false
       },
 
@@ -810,7 +831,10 @@ export function rsxkr3C(_this) {
           value:
             _this.hide === "5" ? "whseCalicoinDtlboid" : "whseCalicoinDtlaoid"
         },
-        dicData: _this.hide === "5" ? Dtlb : rsxkr3CDic
+        dicData: _this.hide === "5" ? Dtlb : rsxkr3CDic,
+        formatter(r,v){
+          return num2ThousandthFormat(v,1)
+        }
       },
       {
         label: "退回总疋数",
@@ -818,7 +842,10 @@ export function rsxkr3C(_this) {
         cell: true,
         width: 140,
         align: "right",
-        hide: _this.hide === "5" ? true : false
+        hide: _this.hide === "5" ? true : false,
+        formatter(r,v){
+          return num2ThousandthFormat(v)
+        }
       },
       {
         label: "退回重量",
@@ -826,7 +853,10 @@ export function rsxkr3C(_this) {
         cell: true,
         width: 140,
         align: "right",
-        hide: _this.hide === "5" ? true : false
+        hide: _this.hide === "5" ? true : false,
+        formatter(r,v){
+          return num2ThousandthFormat(v,1)
+        }
       },
       {
         label: "调仓重量",
@@ -834,7 +864,10 @@ export function rsxkr3C(_this) {
         cell: true,
         width: 140,
         align: "right",
-        hide: _this.hide != "5" ? true : false
+        hide: _this.hide != "5" ? true : false,
+        formatter(r,v){
+          return num2ThousandthFormat(v,1)
+        }
       },
       {
         label: _this.$t("whseField.dw"),
@@ -947,7 +980,10 @@ export function planCrud(_this) {
         prop: "weight",
         cell: true,
         width: 120,
-        align: "right"
+        align: "right",
+        formatter(r,v){
+          return num2ThousandthFormat(v,1)
+        }
       },
       {
         label: _this.$t("whseField.dw"),
@@ -1061,14 +1097,20 @@ export function PlanOutCrud(_this) {
         prop: "weight",
         cell: true,
         width: 100,
-        align: "right"
+        align: "right",
+        formatter(r,v){
+          return num2ThousandthFormat(v,1)
+        }
       },
       {
         label: _this.$t("whseField.ds"),
         prop: "everySpindle",
         cell: true,
         align: "right",
-        width: 100
+        width: 100,
+        formatter(r,v){
+          return num2ThousandthFormat(v,0)
+        }
       }
     ]
   };
@@ -1293,14 +1335,20 @@ export function whseRetreatCrud(_this) {
         prop: "weight",
         cell: true,
         width: 100,
-        align: "right"
+        align: "right",
+        formatter(r,v){
+          return num2ThousandthFormat(v,1)
+        }
       },
       {
         label: _this.$t("whseField.ds"),
         prop: "everySpindle",
         cell: true,
         align: "right",
-        width: 100
+        width: 100,
+        formatter(r,v){
+          return num2ThousandthFormat(v,0)
+        }
       }
     ]
   };

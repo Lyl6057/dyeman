@@ -1,5 +1,7 @@
 import { getDIC, getDicT, getXDicT, postDicT, getDicNS } from "@/config";
 let unit = getDIC("bas_matUnit");
+import { num2ThousandthFormat } from "@/utils/tools"
+
 export function rhl1F(_this) {
   return {
     submitBtn: false,
@@ -175,6 +177,7 @@ export function rhl1C(_this) {
         prop: "sysCreated",
         hide: true,
         type: "date",
+        align: "center",
         format: "yyyy-MM-dd",
         valueFormat: "yyyy-MM-dd",
         align: "center"
@@ -192,6 +195,7 @@ export function rhl1C(_this) {
         cell: false,
         width: 100,
         type: "select",
+        align: "center",
         dicData:
           _this.data === _this.$t("iaoMng.hgyl") ||
           _this.data === _this.$t("iaoMng.yl")
@@ -222,6 +226,7 @@ export function rhl1C(_this) {
         prop: "suppId",
         cell: false,
         width: 110,
+        align: "center",
         type: "select",
         overHidden: true,
         dicData: getDicT("purSinglepo", "suppId", "poNo")
@@ -260,6 +265,7 @@ export function rhl1C(_this) {
         prop: "finStatus",
         cell: false,
         width: 135,
+        align: "center",
         type: "select",
         dicData: getDIC("whse_finStatus")
       },
@@ -269,6 +275,7 @@ export function rhl1C(_this) {
         span: 6,
         cell: false,
         placeholder: " ",
+        align: "center",
         type: "select",
         dicData: getDIC("whse_outStatus"),
         // hide: _this.hide != "6",
@@ -484,6 +491,9 @@ export function rhl2C(_this) {
         cell: false,
         width: 100,
         align: "right",
+        formatter(r,v){
+          return num2ThousandthFormat(v)
+        },
         hide:
           _this.datas === _this.$t("iaoMng.hgyl") ||
           _this.datas === _this.$t("iaoMng.yl") ||
@@ -496,6 +506,7 @@ export function rhl2C(_this) {
         label: _this.$t("whseField.dw"),
         prop: "weightUnit",
         cell: false,
+        align: "center",
         width: 100,
         type: "select",
         overHidden: true,
@@ -513,6 +524,9 @@ export function rhl2C(_this) {
         cell: false,
         width: 100,
         align: "right",
+        formatter(r,v){
+          return num2ThousandthFormat(v)
+        },
         hide:
           _this.datas != _this.$t("iaoMng.hgyl") &&
           _this.datas != _this.$t("iaoMng.yl") &&
@@ -556,6 +570,7 @@ export function rhl2C(_this) {
         cell: true,
         width: 120,
         type: "select",
+        align: "center",
         dicData: getDIC("whse_yinstatus")
       },
     ]
@@ -621,7 +636,11 @@ export function rhl3C(_this) {
         width: 80,
         overHidden: true,
         hide: _this.datas == _this.$t("iaoMng.sx") ? false : true,
-        align: "right"
+        align: "right",
+        formatter(r,v){
+          return num2ThousandthFormat(v)
+        },
+
       },
 
       // {
@@ -714,7 +733,10 @@ export function rhl4C(_this) {
         prop: "applyNum",
         cell: true,
         width: 120,
-        align: "right"
+        align: "right",
+        formatter(r,v){
+          return num2ThousandthFormat(v)
+        },
       }
     ]
   };
@@ -859,7 +881,10 @@ export function planCrud(_this) {
         prop: "deliQty",
         cell: false,
         width: 80,
-        align: "right"
+        align: "right",
+        formatter(r,v){
+          return num2ThousandthFormat(v)
+        },
       },
       {
         label: _this.$t("whseField.dw"),

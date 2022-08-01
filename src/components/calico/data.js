@@ -1,12 +1,14 @@
 /*
  * @Author: Lyl
  * @Date: 2021-02-24 08:12:20
- * @LastEditors: Lyl
- * @LastEditTime: 2022-07-06 16:22:37
+ * @LastEditors: Symbol_Yang
+ * @LastEditTime: 2022-07-30 12:03:13
  * @Description:
  */
 import { getDIC,getDicNS } from "@/config";
 import axios from "axios";
+
+import { num2ThousandthFormat } from "@/utils/tools"
 
 export function creatForm(_this) {
   return {
@@ -133,14 +135,20 @@ export function loc1C(_this) {
         prop: "pidNo",
         cell: true,
         width: 70,
-        align: "right"
+        align: "right",
+        formatter(r,v){
+          return num2ThousandthFormat(v,0)
+        }
       },
       {
         label: _this.$t("whseField.zl"), // "重量",
         prop: "weight",
         cell: true,
         width: 80,
-        align: "right"
+        align: "right",
+        formatter(r,v){
+          return num2ThousandthFormat(v)
+        }
       },
       {
         label: _this.$t("whseField.dw"), // "單位",

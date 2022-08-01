@@ -3,6 +3,8 @@ let unit = getDIC("bas_matUnit"); // 單位
 let basChemicalmat = getXDicT("BasChemicalmatNew"); // 化工原料
 let basPigment = getXDicT("basPigment"); // 颜料
 
+import { num2ThousandthFormat } from "@/utils/tools"
+
 export function rhl1F(_this) {
   return {
     submitBtn: false,
@@ -187,6 +189,7 @@ export function rhl1C(_this) {
         cell: false,
         width: 100,
         type: "select",
+        align: "center",
         dicData:
           _this.data === _this.$t("iaoMng.hgyl") ||
           _this.data === _this.$t("iaoMng.yl")
@@ -198,6 +201,7 @@ export function rhl1C(_this) {
         prop: "yinDate",
         cell: false,
         type: "date",
+        align: "center",
         format: "yyyy-MM-dd",
         valueFormat: "yyyy-MM-dd",
         width: 120,
@@ -235,6 +239,7 @@ export function rhl1C(_this) {
         cell: false,
         width: 135,
         type: "select",
+        align: "center",
         dicData: getDIC("whse_finStatus")
       },
       {
@@ -244,6 +249,7 @@ export function rhl1C(_this) {
         cell: false,
         placeholder: " ",
         type: "select",
+        align: "center",
         dicData: getDIC("whse_outStatus"),
         // hide: _this.hide != "6",
         width: 120
@@ -381,7 +387,8 @@ export function rhl2C(_this) {
         prop: "materialType",
         cell: false,
         width: 180,
-        hide: true
+        hide: true,
+        align: "center",
       },
       // {
       //   label: "化工原料英文名稱 ",
@@ -455,6 +462,9 @@ export function rhl2C(_this) {
         width: 100,
         align: "right",
         type: "number",
+        formatter(r,v){
+          return num2ThousandthFormat(v);
+        },
         hide:
           _this.datas === _this.$t("iaoMng.hgyl") ||
           _this.datas === _this.$t("iaoMng.yl")
@@ -481,6 +491,9 @@ export function rhl2C(_this) {
         type: "number",
         width: 100,
         align: "right",
+        formatter(r,v){
+          return num2ThousandthFormat(v);
+        },
         hide:
           _this.datas != _this.$t("iaoMng.hgyl") &&
           _this.datas != _this.$t("iaoMng.yl")
@@ -506,6 +519,7 @@ export function rhl2C(_this) {
         cell: true,
         width: 120,
         type: "select",
+        align: "center",
         dicData: getDIC("whse_yinstatus")
       },
     ]
@@ -591,21 +605,30 @@ export function sx2C(_this) {
         prop: "cartonNum", //cartNum
         cell: true,
         width: 110,
-        align: "right"
+        align: "right",
+        formatter(r,v){
+          return num2ThousandthFormat(v,0);
+        },
       },
       {
         label: _this.$t("whseField.shdzl"), //"送貨單重量",
         prop: "cartonWei", // netWei
         cell: true,
         width: 110,
-        align: "right"
+        align: "right",
+        formatter(r,v){
+          return num2ThousandthFormat(v);
+        },
       },
       {
         label: _this.$t("whseField.rcxs"), // "入倉箱數",
         prop: "whseNum",
         cell: true,
         width: 110,
-        align: "right"
+        align: "right",
+        formatter(r,v){
+          return num2ThousandthFormat(v,0);
+        },
       },
       {
         label: _this.$t("whseField.rczl"), //"入倉重量",
@@ -613,7 +636,10 @@ export function sx2C(_this) {
         cell: true,
         width: 110,
         type: "number",
-        align: "right"
+        align: "right",
+        formatter(r,v){
+          return num2ThousandthFormat(v);
+        },
       },
       {
         label: _this.$t("whseField.dw"),
@@ -642,7 +668,8 @@ export function sx2C(_this) {
         prop: "price",
         cell: true,
         type: "number",
-        width: 120
+        align: "right",
+        width: 120,
       },
       {
         label: _this.$t("whseField.sp"), //"紗牌",
@@ -665,6 +692,7 @@ export function sx2C(_this) {
       {
         label: _this.$t("whseField.jyzt"),
         prop: "checkStatus",
+        align: "center",
         cell: true,
         width: 120,
         type: "select",
@@ -755,7 +783,10 @@ export function pb2C(_this) {
         prop: "countingNo",
         cell: true,
         width: 80,
-        align: "right"
+        align: "right",
+        formatter(r,v){
+          return num2ThousandthFormat(v,0);
+        },
       },
       {
         label: _this.$t("whseField.zl"),
@@ -831,7 +862,10 @@ export function cpb2C(_this) {
         prop: "countingNo",
         cell: true,
         width: 120,
-        align: "right"
+        align: "right",
+        formatter(r,v){
+          return num2ThousandthFormat(v,0);
+        },
       },
       {
         label: _this.$t("whseField.zl"),
@@ -839,7 +873,10 @@ export function cpb2C(_this) {
         cell: true,
         width: 120,
         type: "number",
-        align: "right"
+        align: "right",
+        formatter(r,v){
+          return num2ThousandthFormat(v);
+        },
       },
       {
         label: _this.$t("whseField.dw"),
@@ -854,7 +891,11 @@ export function cpb2C(_this) {
         prop: "price",
         cell: true,
         type: "number",
-        width: 120
+        align: "right",
+        width: 120,
+        formatter(r,v){
+          return num2ThousandthFormat(v);
+        },
       },
       {
         label: _this.$t("whseField.hwm"),
@@ -963,7 +1004,10 @@ export function hgyl2C(_this) {
         cell: true,
         width: 120,
         type: "number",
-        align: "right"
+        align: "right",
+        formatter(r,v){
+          return num2ThousandthFormat(v);
+        },
       },
       {
         label: _this.$t("whseField.dw"),
@@ -978,7 +1022,11 @@ export function hgyl2C(_this) {
         prop: "price",
         cell: true,
         type: "number",
-        width: 120
+        align: "right",
+        width: 120,
+        formatter(r,v){
+          return num2ThousandthFormat(v);
+        },
       },
       {
         label: _this.$t("whseField.hblx"), //"货币类型",
@@ -986,6 +1034,7 @@ export function hgyl2C(_this) {
         cell: true,
         width: 120,
         type: "select",
+        align: "center",
         dicData: getDIC("whse_money_type")
       },
       // {
@@ -1018,6 +1067,7 @@ export function hgyl2C(_this) {
         cell: true,
         width: 120,
         type: "select",
+        align: "center",
         dicData: getDIC("whse_yinstatus")
       },
     ]
@@ -1086,7 +1136,10 @@ export function yl2C(_this) {
         cell: true,
         width: 120,
         type: "number",
-        align: "right"
+        align: "right",
+        formatter(r,v){
+          return num2ThousandthFormat(v);
+        },
       },
       {
         label: _this.$t("whseField.dw"),
@@ -1109,7 +1162,11 @@ export function yl2C(_this) {
         prop: "price",
         cell: true,
         type: "number",
-        width: 120
+        align: "right",
+        width: 120,
+        formatter(r,v){
+          return num2ThousandthFormat(v);
+        },
       },
       {
         label: _this.$t("whseField.hblx"), // "货币类型",
@@ -1117,6 +1174,7 @@ export function yl2C(_this) {
         cell: true,
         width: 120,
         type: "select",
+        align: "center",
         dicData: getDIC("whse_money_type")
       },
       {
@@ -1125,6 +1183,7 @@ export function yl2C(_this) {
         cell: true,
         width: 120,
         type: "select",
+        align: "center",
         dicData: getDIC("whse_yinstatus")
       },
       // {
@@ -1243,7 +1302,10 @@ export function yjxz2C(_this) {
         cell: true,
         width: 120,
         type: "number",
-        align: "right"
+        align: "right",
+        formatter(r,v){
+          return num2ThousandthFormat(v);
+        },
       },
       {
         label: _this.$t("whseField.dw"),
@@ -1259,7 +1321,10 @@ export function yjxz2C(_this) {
         cell: true,
         width: 100,
         align: "right",
-        type: "number"
+        type: "number",
+        formatter(r,v){
+          return num2ThousandthFormat(v);
+        },
       },
       {
         label: _this.$t("whseField.jyzt"),
@@ -1267,6 +1332,7 @@ export function yjxz2C(_this) {
         cell: true,
         width: 120,
         type: "select",
+        align: "center",
         dicData: getDIC("whse_yinstatus")
       },
     ]
@@ -1310,6 +1376,10 @@ export function rhl3C(_this) {
         prop: "price",
         cell: true,
         type: "number",
+        align: "right",
+        formatter(r,v){
+          return num2ThousandthFormat(v);
+        },
         width: 120,
         hide: _this.datas === _this.$t("iaoMng.sx") ? false : true
       },
@@ -1328,7 +1398,10 @@ export function rhl3C(_this) {
         cell: true,
         width: 120,
         align: "right",
-        type: "number"
+        type: "number",
+        formatter(r,v){
+          return num2ThousandthFormat(v);
+        },
       },
       {
         label: _this.$t("whseField.hwm"), //"貨位碼",
@@ -1432,7 +1505,10 @@ export function wjxz3C(_this) {
         prop: "cartonNum",
         cell: true,
         width: 120,
-        align: "right"
+        align: "right",
+        formatter(r,v){
+          return num2ThousandthFormat(v,0);
+        },
       },
       {
         label: _this.$t("energy.sl"),
@@ -1440,7 +1516,10 @@ export function wjxz3C(_this) {
         cell: true,
         width: 120,
         type: "number",
-        align: "right"
+        align: "right",
+        formatter(r,v){
+          return num2ThousandthFormat(v);
+        },
       }
     ]
   };
@@ -1486,7 +1565,10 @@ export function rhl4C(_this) {
         prop: "applyNum",
         cell: true,
         width: 120,
-        align: "right"
+        align: "right",
+        formatter(r,v){
+          return num2ThousandthFormat(v);
+        },
       }
     ]
   };
@@ -1651,6 +1733,9 @@ export function planCrud(_this) {
         cell: false,
         width: 80,
         align: "right",
+        formatter(r,v){
+          return num2ThousandthFormat(v);
+        },
         hide:
           _this.data != _this.$t("iaoMng.hgyl") &&
           _this.data != _this.$t("iaoMng.yl")
@@ -1673,7 +1758,10 @@ export function planCrud(_this) {
         width: 80,
         overHidden: true,
         align: "right",
-        hide: _this.data != _this.$t("iaoMng.sx")
+        hide: _this.data != _this.$t("iaoMng.sx"),
+        formatter(r,v){
+          return num2ThousandthFormat(v,0);
+        },
       },
 
       {
@@ -1685,6 +1773,9 @@ export function planCrud(_this) {
         cell: false,
         width: 80,
         align: "right",
+        formatter(r,v){
+          return num2ThousandthFormat(v);
+        },
         hide:
           _this.data != _this.$t("iaoMng.sx") &&
           _this.data != _this.$t("iaoMng.pb")

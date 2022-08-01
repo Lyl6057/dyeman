@@ -303,6 +303,7 @@ export function rsxkr1C(_this) {
         prop: "sysCreated",
         hide: true,
         type: "datetime",
+        align: "center",
         format: "yyyy-MM-dd HH:mm:ss",
         valueFormat: "yyyy-MM-dd HH:mm:ss",
         focus: val => {
@@ -336,6 +337,7 @@ export function rsxkr1C(_this) {
         prop: "yinType",
         cell: false,
         width: 120,
+        align: "center",
         type: "select",
         dicData: getDIC("Whse_yinType")
       },
@@ -344,6 +346,7 @@ export function rsxkr1C(_this) {
         prop: "yinDate",
         cell: true,
         type: "datetime",
+        align: "center",
         format: "yyyy-MM-dd",
         valueFormat: "yyyy-MM-dd",
         width: 140,
@@ -442,6 +445,7 @@ export function rsxkr1C(_this) {
         cell: true,
         width: 120,
         type: "select",
+        align: "center",
         dicData: getDIC("whse_yinstatus"),
         change: val => {
           _this.iptChange(_this.chooseData);
@@ -474,6 +478,7 @@ export function rsxkr1C(_this) {
         prop: "finStatus",
         cell: true,
         width: 135,
+        align: "center",
         hide: _this.hide != "5" && _this.hide != "4" ? false : true,
         type: "select",
         dicData: getDIC("whse_finStatus"),
@@ -702,6 +707,9 @@ export function rsxkr2C(_this) {
         click: val => {
           _this.iptChange(_this.chooseData);
         },
+        formatter(r,v){
+          return num2ThousandthFormat(v,0)
+        },
         hide: _this.hide === "4" || _this.hide === "5" ? true : false
       },
       {
@@ -716,6 +724,9 @@ export function rsxkr2C(_this) {
         align: "right",
         click: val => {
           _this.iptChange(_this.chooseData);
+        },
+        formatter(r,v){
+          return num2ThousandthFormat(v,1)
         }
       },
       {
@@ -728,6 +739,9 @@ export function rsxkr2C(_this) {
         hide: _this.hide === "4" ? true : false,
         width: 100,
         align: "right",
+        formatter(r,v){
+          return num2ThousandthFormat(v)
+        },
         click: val => {
           _this.iptChange(_this.chooseData);
         }
@@ -737,7 +751,9 @@ export function rsxkr2C(_this) {
         prop: "weight",
         cell: true,
         width: 100,
-
+        formatter(r,v){
+          return num2ThousandthFormat(v)
+        },
         align: "right",
         click: val => {
           _this.iptChange(_this.chooseData);
@@ -838,6 +854,9 @@ export function backYarn(_this) {
         cell: true,
         width: 120,
         align: "right",
+        formatter(r,v){
+          return num2ThousandthFormat(v,0)
+        },
         click: val => {
           _this.iptChange(_this.chooseData);
         }
@@ -868,6 +887,9 @@ export function backYarn(_this) {
         cell: true,
         width: 120,
         align: "right",
+        formatter(r,v){
+          return num2ThousandthFormat(v)
+        },
         click: val => {
           _this.iptChange(_this.chooseData);
         }
@@ -909,6 +931,9 @@ export function backYarn(_this) {
         cell: true,
         width: 120,
         align: "right",
+        formatter(r,v){
+          return num2ThousandthFormat(v)
+        },
         click: val => {
           _this.iptChange(_this.chooseData);
         }
@@ -935,6 +960,9 @@ export function backYarn(_this) {
         cell: true,
         width: 120,
         align: "right",
+        formatter(r,v){
+          return num2ThousandthFormat(v)
+        },
         click: val => {
           _this.iptChange(_this.chooseData);
         }

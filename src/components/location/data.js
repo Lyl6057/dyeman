@@ -1,11 +1,13 @@
 /*
  * @Author: Lyl
  * @Date: 2021-02-24 08:12:20
- * @LastEditors: Lyl
- * @LastEditTime: 2022-03-19 10:39:24
+ * @LastEditors: Symbol_Yang
+ * @LastEditTime: 2022-07-30 11:59:34
  * @Description:
  */
 import { getDIC, getDicT, getXDicT, postDicT, getDicNS } from "@/config";
+import { num2ThousandthFormat } from "@/utils/tools"
+
 import axios from "axios";
 export function loc1C(_this) {
   return {
@@ -44,7 +46,10 @@ export function loc1C(_this) {
         cell: true,
         width: 100,
         align: "right",
-        hide: _this.type != _this.$t("iaoMng.sx")
+        hide: _this.type != _this.$t("iaoMng.sx"),
+        formatter(r,v){
+          return num2ThousandthFormat(v,0)
+        }
         // change: () => {
         //   _this.$refs["crud"].doLayout();
         // }
@@ -54,7 +59,10 @@ export function loc1C(_this) {
         prop: "weight",
         cell: true,
         width: 100,
-        align: "right"
+        align: "right",
+        formatter(r,v){
+          return num2ThousandthFormat(v)
+        }
         // change: () => {
         //   _this.$refs["crud"].doLayout();
         // }
