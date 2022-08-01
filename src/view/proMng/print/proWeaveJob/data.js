@@ -8,8 +8,8 @@
 
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
 
-export const picTop = [{value:"━",label:"━"},{value:"V",label:"V"},{value:"U",label:"U"}],
-picBottom = [{value:"━",label:"━"},{value:"Λ",label:"Λ"},{value:"Π",label:"Π"}]
+export const picTop = [{ value: "━", label: "━" }, { value: "V", label: "V" }, { value: "U", label: "U" }],
+  picBottom = [{ value: "━", label: "━" }, { value: "Λ", label: "Λ" }, { value: "Π", label: "Π" }]
 
 export function mainForm(_this) {
   return {
@@ -170,8 +170,8 @@ export function mainCrud(_this, audit) {
         disabled: audit
           ? false
           : _this.detail.auditState && !_this.isAdd
-          ? true
-          : false,
+            ? true
+            : false,
         rules: [
           {
             required: true,
@@ -190,8 +190,8 @@ export function mainCrud(_this, audit) {
         disabled: audit
           ? false
           : _this.detail.auditState && !_this.isAdd
-          ? true
-          : false,
+            ? true
+            : false,
         overHidden: true,
         // rules: [
         //   {
@@ -213,8 +213,8 @@ export function mainCrud(_this, audit) {
         disabled: audit
           ? false
           : _this.detail.auditState && !_this.isAdd
-          ? true
-          : false,
+            ? true
+            : false,
         align: "center",
         format: "yyyy-MM-dd",
         valueFormat: "yyyy-MM-dd",
@@ -236,8 +236,8 @@ export function mainCrud(_this, audit) {
         disabled: audit
           ? false
           : _this.detail.auditState && !_this.isAdd
-          ? true
-          : false,
+            ? true
+            : false,
         span: 6,
         type: "date",
         tip: "Kỳ hạn thành phẩm",
@@ -263,8 +263,8 @@ export function mainCrud(_this, audit) {
         disabled: audit
           ? false
           : _this.detail.auditState && !_this.isAdd
-          ? true
-          : false,
+            ? true
+            : false,
         overHidden: true,
         placeholder: " "
       },
@@ -277,8 +277,8 @@ export function mainCrud(_this, audit) {
         disabled: audit
           ? false
           : _this.detail.auditState && !_this.isAdd
-          ? true
-          : false,
+            ? true
+            : false,
         overHidden: true,
         placeholder: " ",
         click: () => {
@@ -291,7 +291,7 @@ export function mainCrud(_this, audit) {
           _this.choiceV = true;
         }
       },
-      
+
       {
         label: "客人訂單編號",
         prop: "custPoNo",
@@ -299,8 +299,8 @@ export function mainCrud(_this, audit) {
         disabled: audit
           ? false
           : _this.detail.auditState && !_this.isAdd
-          ? true
-          : false,
+            ? true
+            : false,
         width: 120,
         placeholder: " ",
         tip: "Ckhách hàng PO",
@@ -315,8 +315,8 @@ export function mainCrud(_this, audit) {
         disabled: audit
           ? false
           : _this.detail.auditState && !_this.isAdd
-          ? true
-          : false,
+            ? true
+            : false,
         span: 6,
         placeholder: " ",
         type: "select",
@@ -341,8 +341,8 @@ export function mainCrud(_this, audit) {
         disabled: audit
           ? false
           : _this.detail.auditState && !_this.isAdd
-          ? true
-          : false,
+            ? true
+            : false,
         placeholder: "请選擇開機日期",
         sortable: true,
         span: 6,
@@ -360,8 +360,8 @@ export function mainCrud(_this, audit) {
         disabled: audit
           ? false
           : _this.detail.auditState && !_this.isAdd
-          ? true
-          : false,
+            ? true
+            : false,
         tip: "Màu sắc",
         width: 180,
         span: 6,
@@ -384,8 +384,8 @@ export function mainCrud(_this, audit) {
         disabled: audit
           ? false
           : _this.detail.auditState && !_this.isAdd
-          ? true
-          : false,
+            ? true
+            : false,
         overHidden: true,
         tip: "Số màu"
         // row: true
@@ -401,11 +401,11 @@ export function mainCrud(_this, audit) {
         disabled: audit
           ? false
           : _this.detail.auditState && !_this.isAdd
-          ? true
-          : false,
+            ? true
+            : false,
         hide: true
       },
-      
+
       {
         label: "合同数量",
         prop: "contractAmount",
@@ -416,8 +416,8 @@ export function mainCrud(_this, audit) {
         disabled: audit
           ? false
           : _this.detail.auditState && !_this.isAdd
-          ? true
-          : false,
+            ? true
+            : false,
         align: "left",
         tip: "Số lượng của hợp đồng"
       },
@@ -428,8 +428,8 @@ export function mainCrud(_this, audit) {
         disabled: audit
           ? false
           : _this.detail.auditState && !_this.isAdd
-          ? true
-          : false,
+            ? true
+            : false,
         placeholder: " ",
         span: 6,
         // rules: [
@@ -454,8 +454,8 @@ export function mainCrud(_this, audit) {
         disabled: audit
           ? false
           : _this.detail.auditState && !_this.isAdd
-          ? true
-          : false,
+            ? true
+            : false,
         tip: " Số lượng sợi "
       },
       {
@@ -468,8 +468,8 @@ export function mainCrud(_this, audit) {
         disabled: audit
           ? false
           : _this.detail.auditState && !_this.isAdd
-          ? true
-          : false,
+            ? true
+            : false,
         hide: true
         // row: true
       },
@@ -484,12 +484,12 @@ export function mainCrud(_this, audit) {
         disabled: audit
           ? false
           : _this.detail.auditState && !_this.isAdd
-          ? true
-          : false,
+            ? true
+            : false,
         hide: true
       },
-      
-      
+
+
 
       {
         label: "布類描述",
@@ -498,8 +498,8 @@ export function mainCrud(_this, audit) {
         disabled: audit
           ? false
           : _this.detail.auditState && !_this.isAdd
-          ? true
-          : false,
+            ? true
+            : false,
         width: 250,
         span: 12,
         placeholder: "请選擇布類描述",
@@ -522,8 +522,8 @@ export function mainCrud(_this, audit) {
         disabled: audit
           ? false
           : _this.detail.auditState && !_this.isAdd
-          ? true
-          : false,
+            ? true
+            : false,
         span: 4,
         // type: "number",
         // minRows: 0,
@@ -540,8 +540,8 @@ export function mainCrud(_this, audit) {
         disabled: audit
           ? false
           : _this.detail.auditState && !_this.isAdd
-          ? true
-          : false,
+            ? true
+            : false,
         span: 2,
         type: "select",
         dicData: getDIC("sal_gramUnit"),
@@ -558,8 +558,8 @@ export function mainCrud(_this, audit) {
         disabled: audit
           ? false
           : _this.detail.auditState && !_this.isAdd
-          ? true
-          : false,
+            ? true
+            : false,
         span: 2,
         type: "number",
         placeholder: " ",
@@ -575,8 +575,8 @@ export function mainCrud(_this, audit) {
         disabled: audit
           ? false
           : _this.detail.auditState && !_this.isAdd
-          ? true
-          : false,
+            ? true
+            : false,
         span: 2,
         // type: "number",
         placeholder: " ",
@@ -592,8 +592,8 @@ export function mainCrud(_this, audit) {
         disabled: audit
           ? false
           : _this.detail.auditState && !_this.isAdd
-          ? true
-          : false,
+            ? true
+            : false,
         span: 2,
         type: "select",
         dicData: [
@@ -612,8 +612,8 @@ export function mainCrud(_this, audit) {
         disabled: audit
           ? false
           : _this.detail.auditState && !_this.isAdd
-          ? true
-          : false,
+            ? true
+            : false,
         tip: "Thực dụng",
         width: 90,
         // minRows: 0,
@@ -630,8 +630,8 @@ export function mainCrud(_this, audit) {
         disabled: audit
           ? false
           : _this.detail.auditState && !_this.isAdd
-          ? true
-          : false,
+            ? true
+            : false,
         span: 2,
         clearable: false,
         type: "select",
@@ -648,8 +648,8 @@ export function mainCrud(_this, audit) {
         disabled: audit
           ? false
           : _this.detail.auditState && !_this.isAdd
-          ? true
-          : false,
+            ? true
+            : false,
         span: 2,
         type: "number",
         placeholder: " ",
@@ -664,8 +664,8 @@ export function mainCrud(_this, audit) {
         disabled: audit
           ? false
           : _this.detail.auditState && !_this.isAdd
-          ? true
-          : false,
+            ? true
+            : false,
         span: 2,
         type: "number",
         placeholder: " ",
@@ -679,8 +679,8 @@ export function mainCrud(_this, audit) {
         disabled: audit
           ? false
           : _this.detail.auditState && !_this.isAdd
-          ? true
-          : false,
+            ? true
+            : false,
         span: 2,
         type: "select",
         dicData: [
@@ -701,8 +701,8 @@ export function mainCrud(_this, audit) {
         disabled: audit
           ? false
           : _this.detail.auditState && !_this.isAdd
-          ? true
-          : false,
+            ? true
+            : false,
         width: 80,
         placeholder: " "
       },
@@ -716,8 +716,8 @@ export function mainCrud(_this, audit) {
         disabled: audit
           ? false
           : _this.detail.auditState && !_this.isAdd
-          ? true
-          : false,
+            ? true
+            : false,
         placeholder: " "
       },
       {
@@ -734,8 +734,8 @@ export function mainCrud(_this, audit) {
         disabled: audit
           ? false
           : _this.detail.auditState && !_this.isAdd
-          ? true
-          : false,
+            ? true
+            : false,
         prop: "weaveState",
         type: "switch",
         dicData: [
@@ -859,7 +859,7 @@ export function mainCrud(_this, audit) {
             type: "number"
           },
 
-          
+
           {
             label: "針寸數",
             prop: "needleInch",
@@ -1001,7 +1001,7 @@ export function mainCrud(_this, audit) {
             placeholder: " ",
             span: 6
           },
-         
+
           {
             label: "循環(自動間)",
             tip: "Tuần hoàn (vải sọc tự động)",
@@ -1116,7 +1116,7 @@ export function mainCrud(_this, audit) {
             span: 6,
             formslot: true,
             placeholder: " ",
-            click: ()=>{
+            click: () => {
               if (!_this.form.weaveJobId) {
                 this.$tip.warning("请先保存主表信息！")
                 return
@@ -1307,7 +1307,7 @@ export function yarnCrud(_this, audit) {
         cell: false,
         placeholder: " "
       },
-     
+
       {
         label: "用纱比例",
         prop: "yarnRatio",
@@ -1318,11 +1318,15 @@ export function yarnCrud(_this, audit) {
         maxRows: 100,
         cell: true, // audit ? false : _this.detail.auditState ? false : true,
         placeholder: " ",
-        change:({ value })=>{
+        change: ({ value }) => {
           if (!value) {
             return
           }
-          _this.chooseData.amount = Number((_this.form.amount * (value + _this.chooseData.lossRate) / 100).toFixed(1))
+          let b = _this.form.amount;
+          let x = (1 - _this.chooseData.lossRate / 100);
+          let y = (value / 100)
+          let result = b / x * y;
+          _this.chooseData.amount = Number(result).toFixed(1);
         }
       },
       {
@@ -1336,11 +1340,16 @@ export function yarnCrud(_this, audit) {
         maxRows: 20,
         placeholder: " ",
         cell: true,
-        change:({ value })=>{
+        change: ({ value }) => {
           if (!value) {
             return
           }
-          _this.chooseData.amount = Number((_this.form.amount * (value + _this.chooseData.yarnRatio) / 100).toFixed(1)) 
+          // _this.chooseData.amount = Number((_this.form.amount * (value + _this.chooseData.yarnRatio) / 100).toFixed(1));
+          let b = _this.form.amount;
+          let x = (1 - value / 100);
+          let y = (_this.chooseData.yarnRatio / 100)
+          let result = b / x * y;
+          _this.chooseData.amount = Number(result).toFixed(1);
         }
       },
       {
@@ -1365,7 +1374,7 @@ export function yarnCrud(_this, audit) {
         cell: true,
         minRows: 0,
       },
-      
+
       {
         label: "单位",
         prop: "unit",
@@ -1412,7 +1421,7 @@ export function yarnCrud(_this, audit) {
         span: 6,
         placeholder: " "
       },
-      
+
     ]
   };
 }
@@ -1619,14 +1628,14 @@ export function technologyForm(_this) {
         dicData: [
           {
             value: 1,
-            label:"单面"
+            label: "单面"
           },
           {
             value: 2,
-            label:"双面/罗纹"
+            label: "双面/罗纹"
           }
         ],
-        change: ({value}) =>{
+        change: ({ value }) => {
           _this.formOp.column[3].disabled = value == 1 ? true : false;
           _this.arrangementOp.column[0].hide = value == 1 ? true : false;
           if (value == 1) {
@@ -1643,8 +1652,8 @@ export function technologyForm(_this) {
         align: 'right',
         minRows: 0,
         maxRows: 20,
-        change: (val)=>{
-          if(!val.value){
+        change: (val) => {
+          if (!val.value) {
             _this.arrangement = []
             return
           }
@@ -1660,7 +1669,7 @@ export function technologyForm(_this) {
         align: 'right',
         minRows: 0,
         maxRows: 20,
-        change: (val)=>{
+        change: (val) => {
           _this.cycleChange(val.value)
         }
       },
@@ -1674,7 +1683,7 @@ export function technologyForm(_this) {
         minRows: 0,
         maxRows: 12,
         disabled: false,
-        change: (val)=>{
+        change: (val) => {
           _this.NumChange(val.value, 1)
         }
       },
@@ -1687,7 +1696,7 @@ export function technologyForm(_this) {
         align: 'right',
         minRows: 0,
         maxRows: 12,
-        change: (val)=>{
+        change: (val) => {
           _this.NumChange(val.value, 2)
         }
       },
@@ -1701,11 +1710,11 @@ export function technologyForm(_this) {
         dicData: [
           {
             value: 0,
-            label:"对位"
+            label: "对位"
           },
           {
             value: 1,
-            label:"错位"
+            label: "错位"
           }
         ],
         minRows: 0,
@@ -1817,12 +1826,12 @@ export function fabricCrud(_this) {
 
 //  Symbol_Yang 2022.07.09
 // 待生产
-export function unCreateFormOp(_this){
+export function unCreateFormOp(_this) {
   return {
     submitBtn: false,
     emptyBtn: false,
     labelWidth: 120,
-    column:[
+    column: [
       {
         prop: 'custId',
         label: "客户",
@@ -1856,13 +1865,13 @@ export function unCreateFormOp(_this){
 }
 
 // 数字千分位转化
-function num2Thousadth(num,decimal){
+function num2Thousadth(num, decimal) {
   let reg = /\B(?=(\d{3})+(?!\d))/g
-  return (+num || 0).toFixed(decimal).replace(reg,",")
+  return (+num || 0).toFixed(decimal).replace(reg, ",")
 }
 
 
-export function unCreateCrudOp(_this){
+export function unCreateCrudOp(_this) {
   return {
     menu: false,
     addBtn: false,
@@ -1873,7 +1882,7 @@ export function unCreateCrudOp(_this){
     columnBtn: false,
     labelWidth: 130,
     selection: true,
-    column:[
+    column: [
       {
         prop: 'poNo',
         label: "生产通知单号",
@@ -1918,7 +1927,7 @@ export function unCreateCrudOp(_this){
         prop: 'colorChnName',
         label: "颜色",
         width: 100,
-        formatter(r,v){
+        formatter(r, v) {
           return `${v} (${r.colorEngName})`
         },
         overHidden: true
@@ -1940,8 +1949,8 @@ export function unCreateCrudOp(_this){
         label: "数量(kg)",
         width: 100,
         align: "right",
-        formatter(r,v){
-          return num2Thousadth(v,1)
+        formatter(r, v) {
+          return num2Thousadth(v, 1)
         },
       },
       {
@@ -1955,17 +1964,17 @@ export function unCreateCrudOp(_this){
         label: "已排织单数量(kg)",
         width: 100,
         align: "right",
-        formatter(r,v){
-          return num2Thousadth(v,1)
+        formatter(r, v) {
+          return num2Thousadth(v, 1)
         },
       },
       {
         prop: 'nuWeavePoQty',
         label: "未排织单数量(kg)",
         width: 100,
-        formatter(r,v){
+        formatter(r, v) {
           let value = r.poQtyKg - r.weavePoQty
-          return num2Thousadth(value,1) 
+          return num2Thousadth(value, 1)
         },
         align: "right"
       },
@@ -1996,7 +2005,7 @@ export function unCreateCrudOp(_this){
 }
 
 // 织单明细
-export function weaveDtlCrudOp(_this){
+export function weaveDtlCrudOp(_this) {
   return {
     menu: false,
     addBtn: false,
@@ -2052,7 +2061,7 @@ export function weaveDtlCrudOp(_this){
         align: 'right',
         type: "number",
         width: 120,
-        change(){
+        change() {
           _this.reComputed()
         }
       }
@@ -2062,11 +2071,11 @@ export function weaveDtlCrudOp(_this){
 
 
 // 下栏明细数据
-export function xiaLanDtlCrudOp(_this){
+export function xiaLanDtlCrudOp(_this) {
   return {
     height: "500px",
     page: false,
-    menu: false,  
+    menu: false,
     border: true,
     showHeader: false,
     column: [
