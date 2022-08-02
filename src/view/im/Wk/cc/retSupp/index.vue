@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-12 09:03:40
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-04-27 16:15:04
+ * @LastEditTime: 2022-08-01 16:22:26
 -->
 <template>
   <div id="ret-reat-container">
@@ -192,10 +192,11 @@ export default {
         retMemo: "%" + (retMemo || ""),
         retState: retState,
         retCode: "%" + (retCode || ""),
+        dataSortRules: "retDate|desc,retCode",
       };
       if(retDate && retDate.length == 2 ){
-        params.retSDate = retDate[0];
-        params.retEDate = retDate[1];
+        params.retDate_begin = retDate[0];
+        params.retDate_end = retDate[1];
       }
       this.loading = true;
       fetchRetRectDataByPage(params,this)

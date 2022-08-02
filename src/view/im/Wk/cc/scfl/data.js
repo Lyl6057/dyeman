@@ -1,5 +1,7 @@
 import { getDIC, getDicT, postDicT, getXDicT, getDbDicT } from "@/config";
 
+import { num2ThousandthFormat } from "@/utils/tools"
+
 let rsxkr3CDic = getXDicT("whseAccessoriesDtl");
 let basScfl = getXDicT("basProductivesupplies");
 let matUnit = getDIC("bas_matUnit");
@@ -223,6 +225,7 @@ export function rsxkr1C(_this) {
         prop: "retType",
         span: 6,
         type: "select",
+        align: "center",
         width: 90,
         dicData: getDIC("Whse_out_type")
       },
@@ -232,6 +235,7 @@ export function rsxkr1C(_this) {
         cell: false,
         width: 90,
         type: "select",
+        align: "center",
         dicData: getDIC("whse_stock_type"),
         hide: _this.hide != "1"
       },
@@ -293,6 +297,7 @@ export function rsxkr1C(_this) {
         cell: true,
         placeholder: " ",
         type: "select",
+        align: "center",
         dicData: getDIC("whse_finStatus"),
         hide: _this.hide != "6",
         width: 120
@@ -380,7 +385,10 @@ export function rsxkr2C(_this) {
         label: _this.$t("energy.sl"),
         prop: "qty",
         hide: false,
-        width: 110
+        width: 110,
+        formatter(r,v){
+          return num2ThousandthFormat(v);
+        }
       },
       {
         label: _this.$t("whseField.dw"),
@@ -388,6 +396,7 @@ export function rsxkr2C(_this) {
         hide: false,
         width: 110,
         type: "select",
+        align: "center",
         dicData: matUnit
       }
     ]
@@ -424,7 +433,10 @@ export function dtlaCrud(_this) {
         prop: "weight",
         cell: true,
         width: 100,
-        align: "right"
+        align: "right",
+        formatter(r,v){
+          return num2ThousandthFormat(v);
+        }
       },
       {
         label: _this.$t("whseField.hwm"),
@@ -575,7 +587,10 @@ export function rsxkr3C(_this) {
         cell: true,
         width: 110,
         align: "right",
-        hide: _this.hide === "5" ? true : false
+        hide: _this.hide === "5" ? true : false,
+        formatter(r,v){
+          return num2ThousandthFormat(v);
+        }
       },
       {
         label: _this.$t("whseField.tcsl"), //"调仓數量",
@@ -583,7 +598,10 @@ export function rsxkr3C(_this) {
         cell: true,
         width: 140,
         align: "right",
-        hide: _this.hide != "5" ? true : false
+        hide: _this.hide != "5" ? true : false,
+        formatter(r,v){
+          return num2ThousandthFormat(v);
+        }
       },
       {
         label: _this.$t("whseField.dw"),
@@ -682,7 +700,10 @@ export function planCrud(_this) {
         prop: "qty",
         cell: true,
         width: 120,
-        align: "right"
+        align: "right",
+        formatter(r,v){
+          return num2ThousandthFormat(v);
+        }
       },
       {
         label: _this.$t("whseField.dw"),
@@ -787,7 +808,10 @@ export function PlanOutCrud(_this) {
         prop: "weight",
         cell: true,
         width: 100,
-        align: "right"
+        align: "right",
+        formatter(r,v){
+          return num2ThousandthFormat(v);
+        }
       },
       {
         label: _this.$t("whseField.ds"),
@@ -936,14 +960,20 @@ export function whseRetreatCrud(_this) {
         prop: "weight",
         cell: true,
         width: 100,
-        align: "right"
+        align: "right",
+        formatter(r,v){
+          return num2ThousandthFormat(v,1);
+        }
       },
       {
         label: _this.$t("whseField.ds"),
         prop: "everySpindle",
         cell: true,
         align: "right",
-        width: 100
+        width: 100,
+        formatter(r,v){
+          return num2ThousandthFormat(v,0);
+        }
       }
     ]
   };

@@ -1,5 +1,5 @@
 import { getDIC, getDicT, postDicT, getXDicT } from "@/config/index";
-
+import { num2ThousandthFormat } from "@/utils/tools"
 export function rsxkr1F(_this) {
   return {
     submitBtn: false,
@@ -204,6 +204,7 @@ export function rsxkr1C(_this) {
         cell: false,
         width: 90,
         type: "select",
+        align: "center",
         dicData: getDIC("Whse_out_type"),
         hide: _this.hide === "6"
       },
@@ -212,6 +213,7 @@ export function rsxkr1C(_this) {
         prop: "woDate",
         cell: true,
         type: "date",
+        align: "center",
         format: "yyyy-MM-dd",
         valueFormat: "yyyy-MM-dd",
         align: "center",
@@ -288,6 +290,7 @@ export function rsxkr1C(_this) {
         span: 6,
         placeholder: " ",
         type: "select",
+        align: "center",
         width: 120,
         display: _this.hide === "6" ? true : false,
         dicData: [
@@ -341,7 +344,10 @@ export function rsxkr2C(_this) {
         prop: "pidCount",
         cell: false,
         width: 120,
-        hide: _this.hide === "6" ? false : true
+        hide: _this.hide === "6" ? false : true,
+        formatter(r,v){
+          return num2ThousandthFormat(v,0);
+        }
       },
       {
         label: "订单号",
@@ -432,7 +438,10 @@ export function rcpb3C(_this) {
         prop: "countingNo",
         cell: true,
         width: 80,
-        align: "right"
+        align: "right",
+        formatter(r,v){
+          return num2ThousandthFormat(v,0);
+        }
         // click: (val) => {
         //   _this.iptPhChange(_this.choosePhData);
         // },
@@ -442,7 +451,10 @@ export function rcpb3C(_this) {
         prop: "weight",
         cell: true,
         width: 100,
-        align: "right"
+        align: "right",
+        formatter(r,v){
+          return num2ThousandthFormat(v,1);
+        }
         // click: (val) => {
         //   _this.iptPhChange(_this.choosePhData);
         // },
@@ -453,6 +465,7 @@ export function rcpb3C(_this) {
         cell: true,
         width: 100,
         type: "select",
+        align: "center",
         dicData: getDIC("bas_matUnit")
         // click: (val) => {
         //   _this.iptPhChange(_this.choosePhData);
@@ -571,7 +584,10 @@ export function planCrud(_this) {
         prop: "weight",
         cell: true,
         width: 120,
-        align: "right"
+        align: "right",
+        formatter(r,v){
+          return num2ThousandthFormat(v,1);
+        }
       },
       {
         label: _this.$t("whseField.dw"),
@@ -579,6 +595,7 @@ export function planCrud(_this) {
         cell: true,
         width: 120,
         type: "select",
+        align: "center",
         dicData: getDIC("bas_matUnit")
       }
     ]
@@ -678,21 +695,30 @@ export function PlanOutCrud(_this) {
         prop: "batchNo",
         cell: true,
         width: 180,
-        align: "right"
+        align: "right",
+        formatter(r,v){
+          return num2ThousandthFormat(v,0);
+        }
       },
       {
         label: _this.$t("whseField.zl"),
         prop: "weight",
         cell: true,
         width: 100,
-        align: "right"
+        align: "right",
+        formatter(r,v){
+          return num2ThousandthFormat(v,1);
+        }
       },
       {
         label: _this.$t("whseField.ds"),
         prop: "everySpindle",
         cell: true,
         align: "right",
-        width: 100
+        width: 100,
+        formatter(r,v){
+          return num2ThousandthFormat(v,0);
+        }
       }
     ]
   };
@@ -862,14 +888,20 @@ export function whseRetreatCrud(_this) {
         prop: "weight",
         cell: true,
         width: 100,
-        align: "right"
+        align: "right",
+        formatter(r,v){
+          return num2ThousandthFormat(v,1);
+        }
       },
       {
         label: _this.$t("whseField.ds"),
         prop: "everySpindle",
         cell: true,
         align: "right",
-        width: 100
+        width: 100,
+        formatter(r,v){
+          return num2ThousandthFormat(v,0);
+        }
       }
     ]
   };
