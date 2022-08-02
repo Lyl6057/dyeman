@@ -487,14 +487,16 @@ export default {
 
       let queryD = JSON.parse(JSON.stringify(this.form));
       queryD.yinDate = queryD.yinDate ? queryD.yinDate + " 00:00:00" : "";
-      queryD.r_yinDate_r = "!^%" + queryD.yinDate;
-      queryD.yinId = "^^%" + (queryD.yinId || "");
+      queryD.r_yinDate_r = "%" + queryD.yinDate;
+      queryD.yinId = "%" + (queryD.yinId || "");
       this.everyThing
         .get(
           Object.assign(queryD, {
             rows: this.page.pageSize,
             start: this.page.currentPage,
             yinType: this.hide,
+            dateOrder: true,
+            dataSortRules: "yinDate|desc,yinId",
           })
         )
         .then((res) => {
