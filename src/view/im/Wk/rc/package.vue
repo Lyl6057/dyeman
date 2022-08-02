@@ -52,6 +52,7 @@ import {
   updateWhseFinishedclothpackBarcode,
   delWhseFinishedclothpackBarcode,
 } from "@/const/whse";
+import { num2ThousandthFormat } from "@/utils/tools"
 export default {
   name: "",
   components: {},
@@ -299,7 +300,14 @@ export default {
       if (index != 0) {
         item.cell = true;
       }
+      if(item.prop === 'countingNo'){
+        item.formatter = (r,v) => num2ThousandthFormat(v,0);
+      }
+      if(item.prop === 'weight'){
+        item.formatter = (r,v) => num2ThousandthFormat(v,1);
+      }
     });
+    
   },
   mounted() {},
   beforeDestroy() {

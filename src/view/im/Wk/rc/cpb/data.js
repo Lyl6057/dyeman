@@ -1,4 +1,7 @@
 import { getDIC, getDicT, getDicNS } from "@/config/index";
+
+import { num2ThousandthFormat } from "@/utils/tools"
+
 export function rsxkr1F(_this) {
   return {
     submitBtn: false,
@@ -190,6 +193,7 @@ export function rsxkr1C(_this) {
         cell: false,
         width: 120,
         type: "select",
+        align: "center",
         dicData: getDIC("Whse_FinishedclothType")
       },
       {
@@ -198,6 +202,7 @@ export function rsxkr1C(_this) {
         cell: true,
         type: "datetime",
         format: "yyyy-MM-dd",
+        align: "center",
         valueFormat: "yyyy-MM-dd",
         width: 140,
         align: "center"
@@ -241,6 +246,7 @@ export function rsxkr1C(_this) {
         width: 120,
         hide: _this.hide != "2" ? false : true,
         type: "select",
+        align: "center",
         dicData: getDIC("whse_yinstatus")
       },
       {
@@ -249,6 +255,7 @@ export function rsxkr1C(_this) {
         cell: true,
         width: 135,
         type: "select",
+        align: "center",
         hide: _this.hide === "1" ? false : true,
         dicData: getDIC("whse_finStatus")
       },
@@ -258,6 +265,7 @@ export function rsxkr1C(_this) {
         cell: true,
         width: 135,
         type: "select",
+        align: "center",
         dicData: getDIC("whse_outStatus")
       },
       {
@@ -273,6 +281,7 @@ export function rsxkr1C(_this) {
         cell: true,
         width: 120,
         type: "select",
+        align: "center",
         dicData: [
           {
             value: true,
@@ -431,7 +440,10 @@ export function rsxkr2C(_this) {
         prop: "sumWeight",
         cell: true,
         width: 120,
-        align: "right"
+        align: "right",
+        formatter(r,v){
+          return num2ThousandthFormat(v,1)
+        }
       },
       {
         label: _this.$t("whseField.dw"),
@@ -439,7 +451,7 @@ export function rsxkr2C(_this) {
         cell: true,
         width: 100,
         type: "select",
-
+        align: "center",
         dicData: getDIC("bas_matUnit")
       },
 
@@ -520,7 +532,10 @@ export function rsxkr3C(_this) {
         prop: "weight",
         cell: true,
         width: 120,
-        align: "right"
+        align: "right",
+        formatter(r,v){
+          return num2ThousandthFormat(v,1)
+        }
       },
       {
         label: _this.$t("whseField.dw"),
