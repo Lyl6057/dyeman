@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-24 08:12:20
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-08-03 10:09:02
+ * @LastEditTime: 2022-08-03 10:24:46
  * @Description:
  */
 import { getDIC,getDicNS } from "@/config";
@@ -115,14 +115,14 @@ export function loc1C(_this) {
         label: _this.$t("whseField.scdh"),
         prop: "weaveJobCode",
         cell: false,
-        width: 120,
+        width: 130,
         placeholder: _this.$t("whseField.qxzscdh"), //"請選擇生產單號",
       },
       {
         label: _this.$t("whseField.bph"), //"客人布票号",
         prop: "noteCode",
         cell: true,
-        width: 160
+        width: 180
       },
       // {
       //   label: _this.$t("whseField.ph"), //"批號",
