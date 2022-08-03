@@ -7,22 +7,13 @@
 -->
 <template>
   <div id="ityInventory">
-    <view-container
-      title="库存查询"
-      :element-loading-text="loadLabel"
-      v-loading="loading"
-    >
+    <view-container title="库存查询" :element-loading-text="loadLabel" v-loading="loading">
       <div class="btnList">
         <el-button type="primary" @click="getData">{{
-          this.$t("public.query")
+            this.$t("public.query")
         }}</el-button>
         <el-button type="primary" @click="outTransit">导出</el-button>
-        <el-button
-          type="warning"
-          :disabled="!form.type"
-          @click="handleCreateInventory"
-          >生成盘点清单</el-button
-        >
+        <el-button type="warning" :disabled="!form.type" @click="handleCreateInventory">生成盘点清单</el-button>
         <div style="display: inline; float: right; margin-right: 20px">
           <span>过滤空库存</span>
           <el-switch v-model="filterEmpty" @change="getData"> </el-switch>
@@ -32,22 +23,11 @@
         <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
       </div>
       <div class="crudBox">
-        <avue-crud
-          ref="crud"
-          :option="crudOp"
-          :data="crud"
-          :page.sync="page"
-          @on-load="getData"
-          @row-dblclick="handleRowDBLClick"
-          @current-row-change="cellClick"
-        ></avue-crud>
+        <avue-crud ref="crud" :option="crudOp" :data="crud" :page.sync="page" @on-load="getData"
+          @row-dblclick="handleRowDBLClick" @current-row-change="cellClick"></avue-crud>
       </div>
 
-      <el-drawer
-        title="库存出入明细"
-        :visible.sync="drawerVisible"
-        append-to-body
-      >
+      <el-drawer title="库存出入明细" :visible.sync="drawerVisible" append-to-body>
         <whse-dtl ref="whseDtlRef"></whse-dtl>
       </el-drawer>
     </view-container>
@@ -242,7 +222,7 @@ export default {
           this.loading = false;
           return;
       }
-      
+
       query.yarnsId = "!^%" + (query.chemicalId || "");
       query.batId = "!^%" + (query.batId || "");
       query.chemicalId = query.yarnsId;
@@ -259,6 +239,7 @@ export default {
       query.noteCode = "%" + (query.noteCode || "");
       query.storeLoadCode = "%" + (query.storeLoadCode || "");
       query.batchNo = "%" + (query.batchNo || "");
+
       this.getFun(
         Object.assign(query, {
           rows: this.page.pageSize,
@@ -269,43 +250,49 @@ export default {
         this.page.total = res.data.total;
         let data = this.filterEmpty
           ? res.data.records.filter((item) => {
-              return item.weight || item.stock || item.clothWeight;
-            })
+            return item.weight || item.stock || item.clothWeight;
+          })
           : res.data.records;
+
         let group = this.$grouping(
           data,
           this.form.type == "SX"
             ? "yarnsId"
             : this.form.type == "CPB"
-            ? "vatNo"
-            : this.form.type == "PB"
-            ? "proName"
-            : this.form.type == "RHL" || this.form.type == "RLL"
-            ? "chemicalId"
-            : this.form.type == "XZ"
-            ? "officeId"
-            :this.form.type == "SB"
-            ? "equipmentId" : "accessoriesId"
+              ? "vatNo"
+              : this.form.type == "PB"
+                ? "proName"
+                : this.form.type == "RHL" || this.form.type == "RLL"
+                  ? "chemicalId"
+                  : this.form.type == "XZ"
+                    ? "officeId"
+                    : this.form.type == "SB"
+                      ? "equipmentId" : "accessoriesId"
         );
+
         group.forEach((item, i) => {
           item.children.sort((a, b) =>
             a[this.typeObj.sort] > b[this.typeObj.sort] ? 1 : -1
           );
           item.index = i + 1;
           item.yarnsName = item.children[0].yarnsName;
+          item.yinStatus = item.children[0].yinStatus;
           item.chemicalId =
             item.children[0].accessoriesId ||
             item.children[0].chemicalId ||
-            item.children[0].officeId|| item.children[0].equipmentId
-          item.chemicalName =
+            item.children[0].officeId || item.children[0].equipmentId
+            item.chemicalName =
             item.children[0].accessoriesName ||
             item.children[0].chemicalName ||
-            item.children[0].officeName|| item.children[0].equipmentName
+            item.children[0].officeName || item.children[0].equipmentName
           item.weightUnit = item.children[0].weightUnit;
           item.proName = item.children[0].proName;
           item.clothWeight = 0;
+          item.storageNo = item.children[0].storageNo;
+          item.batchNo = item.children[0].batchNo;
           if (!item.weight) item.weight = 0;
           if (!item.stock) item.stock = 0;
+
           item.children.forEach((child, j) => {
             child.index = item.index + "-" + (j + 1);
             child.weight = child.weight ? child.weight.toFixed(2) : 0;
@@ -322,6 +309,7 @@ export default {
             item.weight += Number(child.weight) || Number(child.stock);
             item.clothWeight += Number(child.clothWeight || 0);
           });
+
           item.weight = item.weight.toFixed(2);
           item.stock = item.weight;
           item.clothWeight = item.clothWeight.toFixed(2);
@@ -330,7 +318,7 @@ export default {
         this.crud.forEach((item, i) => {
           item.index = i + 1;
         });
-      }).finally(() =>{
+      }).finally(() => {
         this.loading = false;
       })
     },
@@ -385,7 +373,7 @@ export default {
               item.chemicalId ||
               item.yarnsId ||
               item.accessoriesId ||
-              item.officeId||
+              item.officeId ||
               item.equipmentId;
             item.chemicalName =
               item.chemicalName ||
@@ -413,12 +401,12 @@ export default {
             fun1().then((res) => {
               setTimeout(() => {
                 this.$tip.success("导出成功!");
-                
+
                 this.getData();
               }, 1000);
             });
           });
-        }).finally(() =>{
+        }).finally(() => {
           this.loading = false;
         })
       } catch (e) {
@@ -433,7 +421,7 @@ export default {
       let idxs = row.index.toString().split("-");
       if (idxs.length == 1) return;
       let type = this.form.type;
-      if (!["SX","RHL","RLL","WJ","FL","SB"].includes(type)) return;
+      if (!["SX", "RHL", "RLL", "WJ", "FL", "SB"].includes(type)) return;
       this.drawerVisible = true;
       await this.$nextTick();
       let params = {};
@@ -481,8 +469,8 @@ export default {
         this.$tip
           .cofirm(
             "是否确定删除材料編號为 【 " +
-              this.chooseData.materialId +
-              this.$t("iaoMng.delTle2"),
+            this.chooseData.materialId +
+            this.$t("iaoMng.delTle2"),
             this,
             {}
           )
@@ -526,7 +514,7 @@ export default {
       document.getElementsByClassName("el-dialog__headerbtn")[0].click();
     },
   },
-  created() {},
+  created() { },
   updated() {
     this.$nextTick(() => {
       if (this.crud.length) {
@@ -534,8 +522,8 @@ export default {
       }
     });
   },
-  mounted() {},
-  beforeDestroy() {},
+  mounted() { },
+  beforeDestroy() { },
 };
 </script>
 <style lang='stylus'>
