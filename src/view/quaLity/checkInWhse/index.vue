@@ -1,15 +1,15 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
- * @LastEditors: Lyl
- * @LastEditTime: 2022-07-06 16:04:03
+ * @LastEditors: Symbol_Yang
+ * @LastEditTime: 2022-08-03 09:51:08
  * @Description:
 -->
 <template>
   <div id="clothFlyWeight" :element-loading-text="$t('public.loading')" v-loading="wLoading">
     <view-container title="胚布信息">
       <el-row class="btnList">
-        <el-button type="success" @click="pass" :disabled="!selectList.length || this.form.clothState === 2">审核</el-button>
+        <!-- <el-button type="success" @click="pass" :disabled="!selectList.length || this.form.clothState === 2">审核</el-button> -->
         <el-button type="primary" @click="query">{{
           this.$t("public.query")
         }}</el-button>
