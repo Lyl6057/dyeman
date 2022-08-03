@@ -199,7 +199,7 @@ export default {
       let cIdx = this.mxOp.column.findIndex(item => item.prop == 'countingNo');
       let fIdx = this.mxOp.column.findIndex(item => item.prop == 'fabticket');
       [cIdx,fIdx].forEach(idx => {
-        this.mxOp.column[idx].cell = !value
+        this.mxOp.column[idx] && (this.mxOp.column[idx].cell = !value)
       });
     },
     // 通知单数据抽取
@@ -230,7 +230,7 @@ export default {
             loc: [],
             countingNo: 0,
             prodNo: weaveJobCode,
-            fabticket: storeLoadCode,
+            storeLoadCode: storeLoadCode,
             index: mIndex++,
             locationCode: ""
           }
@@ -238,11 +238,13 @@ export default {
 
         targetData[key].loc.push({
           batchNo: "",
-          countingNo: item.eachNumber,
+          pidNo: item.eachNumber,
           weight: item.clothWeight,
           weightUnit: "KG",
-          custTicket: item.noteCode,
-          locationCode: ""
+          noteCode: item.noteCode,
+          weaveJobCode: item.weaveJobCode,
+          locationCode: "",
+          index: targetData[key].loc.length + 1
         })
         targetData[key].countingNo++;
 

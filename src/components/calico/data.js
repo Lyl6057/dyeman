@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-24 08:12:20
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-30 12:03:13
+ * @LastEditTime: 2022-08-03 10:09:02
  * @Description:
  */
 import { getDIC,getDicNS } from "@/config";
@@ -119,7 +119,7 @@ export function loc1C(_this) {
         placeholder: _this.$t("whseField.qxzscdh"), //"請選擇生產單號",
       },
       {
-        label: _this.$t("whseField.krbph"), //"客人布票号",
+        label: _this.$t("whseField.bph"), //"客人布票号",
         prop: "noteCode",
         cell: true,
         width: 160
@@ -136,9 +136,6 @@ export function loc1C(_this) {
         cell: true,
         width: 70,
         align: "right",
-        formatter(r,v){
-          return num2ThousandthFormat(v,0)
-        }
       },
       {
         label: _this.$t("whseField.zl"), // "重量",
@@ -147,7 +144,7 @@ export function loc1C(_this) {
         width: 80,
         align: "right",
         formatter(r,v){
-          return num2ThousandthFormat(v)
+          return num2ThousandthFormat(v,1)
         }
       },
       {
