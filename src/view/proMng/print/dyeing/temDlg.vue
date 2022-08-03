@@ -522,7 +522,7 @@ export default {
     },
     remoteMethod(val) {
       this.vatLoading = true;
-      getRunJob({ vatNo: val }).then((res) => {
+      getRunJob((val != null && val != "") ? { vatNo: val } : null).then((res) => {
         this.vatOptions = res.data;
         this.vatLoading = false;
       });
@@ -692,7 +692,7 @@ export default {
             this.revolve.proBleadyeRunJobFk = val.runJobId;
 
             if (!(val.mergVatNo instanceof Array) && val.mergVatNo) {
-              val.mergVatNo = val.mergVatNo.split("/");
+              val.mergVatNo = val.mergVatNo.split(",");
             }
             // val.dyeJarCount = Number(val.dyeVatType);
             // if (!(val.compLightSource instanceof Array) && val.compLightSource) {
@@ -734,7 +734,7 @@ export default {
           }
         });
         if (!(this.form.mergVatNo instanceof Array) && this.form.mergVatNo) {
-          this.form.mergVatNo = this.form.mergVatNo.split("/");
+          this.form.mergVatNo = this.form.mergVatNo.split(",");
         }
         this.oldW = Number(this.form.clothWeight || 0);
 
@@ -804,10 +804,10 @@ export default {
             if (arr.length) {
               getRevolveList({ vatNo: this.form.vatNo }).then((revolveRes) => {
                 if (revolveRes.data.length) {
-                  arr.unshift(
-                    `${this.form.vatNo}:${revolveRes.data[0].runJobId}`
-                  );
-                  // console.log(arr.length);
+                  // arr.unshift(
+                  //   `${this.form.vatNo}:${revolveRes.data[0].runJobId}`
+                  // );
+
                   getBleadyeJobMerge({
                     proBleadyeJobFk: this.form.bleadyeJobId,
                   }).then((res) => {
@@ -959,7 +959,7 @@ export default {
               if (i == this.form.mergVatNo.length - 1) {
                 vat += item.split(":")[0];
               } else {
-                vat += item.split(":")[0] + "/";
+                vat += item.split(":")[0] + ",";
               }
             });
           }
@@ -1064,7 +1064,7 @@ export default {
                     }
                   });
                   if (this.form.mergVatNo) {
-                    this.form.mergVatNo = this.form.mergVatNo.split("/");
+                    this.form.mergVatNo = this.form.mergVatNo.split(",");
                   }
                 })
                 .catch((err) => {
@@ -1088,7 +1088,7 @@ export default {
                     }
                   });
                   if (this.form.mergVatNo) {
-                    this.form.mergVatNo = this.form.mergVatNo.split("/");
+                    this.form.mergVatNo = this.form.mergVatNo.split(",");
                   }
                 });
             } else {
@@ -1107,7 +1107,7 @@ export default {
                   this.$tip.error(this.$t("public.bcsb"));
                 }
                 if (this.form.mergVatNo) {
-                  this.form.mergVatNo = this.form.mergVatNo.split("/");
+                  this.form.mergVatNo = this.form.mergVatNo.split(",");
                 }
               });
             }
@@ -1323,6 +1323,9 @@ export default {
             this.crud.sort((a, b) => {
               return a.sn < b.sn ? -1 : 1;
             });
+            this.crud.map((e, i) => {
+              e.index = i + 1;
+            })
           }
           if (this.crud.length > 0) {
             this.$refs.crud.setCurrentRow(this.crud[0]);
@@ -1355,13 +1358,15 @@ export default {
     getVat() {
       // 获取合染缸号的重量
       this.vatWeight = this.form.clothWeight;
-      this.form.mergVatNo.forEach((item, i) => {
-        get({ rows: 10, start: 1, vatNo: item }).then((res) => {
-          res.data.records.forEach((vat) => {
-            this.vatWeight += Number(vat.clothWeight);
+      if (this.form.mergVatNo != null) {
+        this.form.mergVatNo.map((item, i) => {
+          get({ rows: 10, start: 1, vatNo: item }).then((res) => {
+            res.data.records.forEach((vat) => {
+              this.vatWeight += Number(vat.clothWeight);
+            });
           });
         });
-      });
+      }
     },
     saveOther() {
       if (this.crud.length == 0) {
