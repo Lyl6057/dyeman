@@ -15,7 +15,7 @@
               $t("public.save")
           }}</el-button>
         </el-tooltip>
-
+        
         <!-- <el-button type="primary" @click="checkOrder">选择订单号</el-button> -->
         <el-tooltip class="item" effect="dark" content="Mục sản xuất" placement="top-start">
           <el-button type="primary" @click="checkProject" :disabled="!this.form.bleadyeJobId">生产项目</el-button>
@@ -51,9 +51,16 @@
           }}</el-button>
         </el-tooltip>
       </div>
-
       <div class="formBox">
         <avue-form ref="form" :option="formOp" v-model="form">
+          <template slot-scope="scope" slot="dyeMathine">
+            <el-select v-model="form.dyeMathine" filterable remote clearable default-first-option placeholder="请输入染缸機台號"
+              @change="changeDyeMathine">
+              <el-option v-for="item in dyeMathineList" :key="item.equIdentCode" :label="item.equIdentCode"
+                :value="item.equIdentCode">
+              </el-option>
+            </el-select>
+          </template>
           <template slot-scope="scope" slot="mergVatNo">
             <el-select v-model="form.mergVatNo" filterable remote clearable default-first-option placeholder="请输入缸号"
               multiple :remote-method="remoteMethod" :loading="vatLoading">
@@ -357,6 +364,7 @@ import {
   updateBleadyeJobMerge,
   addBleadyeJobMerge,
   delBleadyeJobMerge,
+  postBaseEquipmentList
 } from "./api";
 import { getTest as getTestList, getItem } from "../../revolve/api";
 import SelectProcess from "./selectProcess.vue";
@@ -466,6 +474,7 @@ export default {
         },
       ],
       printList: [],
+      dyeMathineList: []
     };
   },
   watch: {},
@@ -894,7 +903,6 @@ export default {
               });
             }
           } catch (error) {
-            console.log(error);
             this.wLoading = false;
             this.$tip.error(this.$t("public.bcsb"));
             done();
@@ -1708,7 +1716,6 @@ export default {
     // 单击列表数据
     handleRowclick(row) {
       if (this.tabs == "生產工藝") {
-        console.log("enter row click")
         this.crud.forEach(item => {
           item.$cellEdit = false;
         })
@@ -2217,12 +2224,28 @@ export default {
         return false;
       }
     },
+    changeDyeMathine(val) {
+      try {
+        let index = this.dyeMathineList.findIndex(e => e.equIdentCode == val);
+        this.form.tubeCount = (index != -1) ? this.dyeMathineList[index].tubeCount : "";
+      } catch (error) {
+        console.error(error);
+      }
+    }
   },
   created() { },
   mounted() {
     this.vatLoading = true;
     this.getData();
     this.remoteMethod("");
+    postBaseEquipmentList().then((res) => {
+      res.data.sort((a, b) => {
+        {
+          return (a.equIdentCode.replace(/[^0-9]/g, '') > b.equIdentCode.replace(/[^0-9]/g, '')) ? 1 : -1;
+        }
+      });
+      this.dyeMathineList = res.data;
+    })
   },
   beforeDestroy() { },
 };

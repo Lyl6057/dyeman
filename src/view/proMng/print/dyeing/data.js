@@ -5,7 +5,6 @@
  * @LastEditTime: 2022-07-13 15:00:18
  * @Description:
  */
-
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
 
 const unit = getDIC("sal_breadthUnit");
@@ -137,7 +136,7 @@ export function revolveForm(_this) {
               return (
                 item.vatNo.indexOf(_this.revolveForm.vatNo) != -1 &&
                 item.weaveJobCode.indexOf(_this.revolveForm.weaveJobCode) !=
-                  -1 &&
+                -1 &&
                 item.serviceOperator.indexOf(
                   _this.revolveForm.serviceOperator
                 ) != -1
@@ -157,7 +156,7 @@ export function revolveForm(_this) {
               return (
                 item.vatNo.indexOf(_this.revolveForm.vatNo) != -1 &&
                 item.weaveJobCode.indexOf(_this.revolveForm.weaveJobCode) !=
-                  -1 &&
+                -1 &&
                 item.serviceOperator.indexOf(
                   _this.revolveForm.serviceOperator
                 ) != -1
@@ -177,7 +176,7 @@ export function revolveForm(_this) {
               return (
                 item.vatNo.indexOf(_this.revolveForm.vatNo) != -1 &&
                 item.weaveJobCode.indexOf(_this.revolveForm.weaveJobCode) !=
-                  -1 &&
+                -1 &&
                 item.serviceOperator.indexOf(
                   _this.revolveForm.serviceOperator
                 ) != -1
@@ -240,27 +239,43 @@ export function mainCrud(_this) {
         align: "center",
         display: false
       },
+      // {
+      //   label: "染缸機台號",
+      //   prop: "dyeMathine",
+      //   overHidden: true,
+      //   tip: "Mã máy",
+      //   width: 130,
+      //   span: 6,
+      //   disabled: false,
+      //   sortable: true,
+      //   type: "select",
+      //   filterable: true,
+      //   dicData: postDicT(
+      //     "baseEquipmentList?categoryId=dev-12",
+      //     "equipmentCode",
+      //     "equipmentCode"
+      //   )
+      //   // rules: [{
+      //   //   required: true,
+      //   //   message: "請輸入染缸機台號",
+      //   //   trigger: "blur"
+      //   // }],
+      // },
       {
         label: "染缸機台號",
+        tip: "Số bồn nhuộm chung",
         prop: "dyeMathine",
         overHidden: true,
-        tip: "Mã máy",
         width: 130,
         span: 6,
-        disabled: false,
-        sortable: true,
+        disabled: true,
         type: "select",
+        dicData: [],
+        formslot: true,
         filterable: true,
-        dicData: postDicT(
-          "baseEquipmentList?categoryId=dev-12",
-          "equipmentCode",
-          "equipmentCode"
-        )
-        // rules: [{
-        //   required: true,
-        //   message: "請輸入染缸機台號",
-        //   trigger: "blur"
-        // }],
+        allowCreate: true,
+        defaultFirstOption: true,
+        placeholder: " "
       },
       {
         label: "缸號",
@@ -330,13 +345,25 @@ export function mainCrud(_this) {
         ]
       },
       {
+        label: "染缸管数",
+        prop: "tubeCount",
+        tip: "",
+        overHidden: true,
+        width: 100,
+        span: 6,
+        disabled: true,
+        placeholder: " ",
+        type: "number",
+        align: "right"
+      },
+      {
         label: "管數量",
         prop: "dyeJarCount",
         tip: "Số lượng ống",
         overHidden: true,
         width: 100,
         span: 6,
-        disabled: true,
+        disabled: false,
         placeholder: " ",
         type: "number",
         align: "right"
@@ -1384,7 +1411,7 @@ export function techargueCrud(_this) {
       {
         label: "工艺代碼",
         prop: "proBleadyeTechCodeFk",
-        width: 90 ,
+        width: 90,
         cell: false,
         span: 6,
         props: {
@@ -1399,7 +1426,7 @@ export function techargueCrud(_this) {
         prop: "bleadyeName",
         width: 120,
         cell: false,
-        overHidden:true,
+        overHidden: true,
         span: 6,
         props: {
           label: "bleadyeName",
@@ -1435,7 +1462,7 @@ export function techargueCrud(_this) {
             _this.$nextTick(() => {
               _this.chooseData.totalWater = Number(
                 Number(_this.vatWeight) *
-                  Number(_this.chooseData.liquorRatio).toFixed(0)
+                Number(_this.chooseData.liquorRatio).toFixed(0)
               );
               _this.chooseData.totalWater = _this.chooseData.totalWater.toFixed(
                 0
@@ -1452,8 +1479,8 @@ export function techargueCrud(_this) {
         span: 6,
         type: "number",
         align: "right",
-        formatter(r,v){
-          return v && Number(v).toString().replace(/\B(?=(\d{3})+(?!\d))/g,",");
+        formatter(r, v) {
+          return v && Number(v).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         },
         placeholder: " ",
         change: val => {
@@ -1470,10 +1497,10 @@ export function techargueCrud(_this) {
                   "haltWater",
                   Number(
                     Number(_this.chooseData.totalWater) -
-                      Number(_this.chooseData.wetClothWater) *
-                        0.01 *
-                        _this.vatWeight -
-                      Number(_this.chooseData.shotgunWater)
+                    Number(_this.chooseData.wetClothWater) *
+                    0.01 *
+                    _this.vatWeight -
+                    Number(_this.chooseData.shotgunWater)
                   ).toFixed(0)
                 );
                 // _this.chooseData.haltWater = Number(_this.chooseData.totalWater) - Number(_this.chooseData.wetClothWater) - Number(_this.chooseData.shotgunWater)
@@ -1485,10 +1512,10 @@ export function techargueCrud(_this) {
                   "haltWater",
                   Number(
                     Number(_this.chooseData.totalWater) -
-                      Number(_this.chooseData.wetClothWater) *
-                        0.01 *
-                        _this.vatWeight -
-                      Number(_this.chooseData.shotgunWater)
+                    Number(_this.chooseData.wetClothWater) *
+                    0.01 *
+                    _this.vatWeight -
+                    Number(_this.chooseData.shotgunWater)
                   ).toFixed(0)
                 );
                 // _this.chooseData.haltWater = Number(_this.chooseData.totalWater) - Number(_this.chooseData.wetClothWater) - Number(_this.chooseData.shotgunWater)
@@ -1525,8 +1552,8 @@ export function techargueCrud(_this) {
         span: 6,
         type: "number",
         align: "right",
-        formatter(r,v){
-          return v && Number(v).toString().replace(/\B(?=(\d{3})+(?!\d))/g,",");
+        formatter(r, v) {
+          return v && Number(v).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         },
         placeholder: " ",
         change: val => {
@@ -1542,10 +1569,10 @@ export function techargueCrud(_this) {
                 "haltWater",
                 Number(
                   Number(_this.chooseData.totalWater) -
-                    Number(_this.chooseData.wetClothWater) *
-                      0.01 *
-                      _this.vatWeight -
-                    Number(_this.chooseData.shotgunWater)
+                  Number(_this.chooseData.wetClothWater) *
+                  0.01 *
+                  _this.vatWeight -
+                  Number(_this.chooseData.shotgunWater)
                 ).toFixed(0)
               );
               // _this.chooseData.haltWater = Number(_this.chooseData.totalWater) - Number(_this.chooseData.wetClothWater) - Number(_this.chooseData.shotgunWater)
@@ -1561,8 +1588,8 @@ export function techargueCrud(_this) {
         type: "number",
         span: 6,
         align: "right",
-        formatter(r,v){
-          return v && Number(v).toString().replace(/\B(?=(\d{3})+(?!\d))/g,",");
+        formatter(r, v) {
+          return v && Number(v).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         },
         placeholder: " ",
         change: val => {
@@ -1580,10 +1607,10 @@ export function techargueCrud(_this) {
                 "haltWater",
                 Number(
                   Number(_this.chooseData.totalWater) -
-                    Number(_this.chooseData.wetClothWater) *
-                      0.01 *
-                      _this.vatWeight -
-                    Number(_this.chooseData.shotgunWater)
+                  Number(_this.chooseData.wetClothWater) *
+                  0.01 *
+                  _this.vatWeight -
+                  Number(_this.chooseData.shotgunWater)
                 ).toFixed(0)
               );
               // _this.chooseData.haltWater = Number(_this.chooseData.totalWater) - Number(_this.chooseData.wetClothWater) - Number(_this.chooseData.shotgunWater)
@@ -1599,8 +1626,8 @@ export function techargueCrud(_this) {
         type: "number",
         span: 6,
         align: "right",
-        formatter(r,v){
-          return v && Number(v).toString().replace(/\B(?=(\d{3})+(?!\d))/g,",");
+        formatter(r, v) {
+          return v && Number(v).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         },
         placeholder: " ",
         change: val => {
@@ -1708,15 +1735,15 @@ export function codeItemCrud(_this) {
                   _this.chooseDtlData.useAmount = Number(
                     Number(
                       _this.chooseDtlData.formulaAmount *
-                        _this.chooseData.totalWater *
-                        0.001
+                      _this.chooseData.totalWater *
+                      0.001
                     ).toFixed(2)
                   );
                 } else {
                   _this.chooseDtlData.useAmount = Number(
                     Number(
                       _this.chooseDtlData.formulaAmount *
-                        _this.chooseData.totalWater
+                      _this.chooseData.totalWater
                     ).toFixed(2)
                   );
                 }

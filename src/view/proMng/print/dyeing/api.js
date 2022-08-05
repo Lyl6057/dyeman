@@ -96,7 +96,7 @@ export function getBom(params) {
 
 export function get(params) {
   return axios({
-    url: "/api/proBleadyeJob/page",
+    url: "/api/proBleadyeJob/pageEx",
     method: "get",
     params: params
   });
@@ -269,6 +269,14 @@ export function getTechargue(params) {
   });
 }
 
+export function getProBleadyeJobTechargue(params) {
+  return axios({
+    url: "/api/proBleadyeJobTechargue",
+    method: "get",
+    params: params
+  });
+}
+
 // 新增
 export function addTechargue(data) {
   return axios({
@@ -369,3 +377,11 @@ export function delWash(id) {
     method: "delete"
   });
 }
+// 
+export function postBaseEquipmentList() {
+  return axios({
+    url: "/api/baseEquipmentList?categoryId=dev-12",
+    method: "post"
+  });
+}
+

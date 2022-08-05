@@ -8,24 +8,12 @@
 <template>
   <div id="clothFlyPrint">
     <el-tabs type="border-card">
-      <el-tab-pane
-        label="漂染工作單打印"
-        v-loading="wloading"
-        element-loading-text="拼命加载中..."
-      >
+      <el-tab-pane label="漂染工作單打印" v-loading="wloading" element-loading-text="拼命加载中...">
         <el-row class="btnList">
-          <el-tooltip
-            class="item"
-            effect="dark"
-            content="cập nhật"
-            placement="top-start"
-          >
-            <el-button
-              type="success"
-              :disabled="!detail.bleadyeJobId"
-              @click="handleRowDBLClick(detail)"
-              >{{ this.$t("public.update") }}</el-button
-            >
+          <el-tooltip class="item" effect="dark" content="cập nhật" placement="top-start">
+            <el-button type="success" :disabled="!detail.bleadyeJobId" @click="handleRowDBLClick(detail)">{{
+                this.$t("public.update")
+            }}</el-button>
           </el-tooltip>
           <!-- <el-tooltip
             class="item"
@@ -56,22 +44,10 @@
             content="thêm mới "
             placement="top-start"
           > -->
-          <el-button
-            type="warning"
-            :disabled="!detail.bleadyeJobId"
-            @click="addCopy"
-            >返工</el-button
-          >
+          <el-button type="warning" :disabled="!detail.bleadyeJobId" @click="addCopy">返工</el-button>
           <!-- </el-tooltip> -->
-          <el-tooltip
-            class="item"
-            effect="dark"
-            content=" in"
-            placement="top-start"
-          >
-            <el-button type="primary" @click="print" :loading="wloading"
-              >打印</el-button
-            >
+          <el-tooltip class="item" effect="dark" content=" in" placement="top-start">
+            <el-button type="primary" @click="print" :loading="wloading">打印</el-button>
           </el-tooltip>
           <!-- <el-tooltip
             class="item"
@@ -93,14 +69,9 @@
               >打印染缸参数</el-button
             >
           </el-tooltip> -->
-          <el-tooltip
-            class="item"
-            effect="dark"
-            content="tìm kiếm"
-            placement="top-start"
-          >
+          <el-tooltip class="item" effect="dark" content="tìm kiếm" placement="top-start">
             <el-button type="primary" @click="query">{{
-              this.$t("public.query")
+                this.$t("public.query")
             }}</el-button>
           </el-tooltip>
           <!-- <el-button type="warning" @click="close">{{
@@ -111,47 +82,16 @@
           <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
         </el-row>
         <el-row class="crudBox">
-          <avue-crud
-            ref="crud"
-            id="crud"
-            :option="crudOp"
-            :data="crud"
-            :page.sync="page"
-            v-loading="loading"
-            @on-load="query"
-            @row-dblclick="handleRowDBLClick"
-            @current-row-change="cellClick"
-          ></avue-crud>
+          <avue-crud ref="crud" id="crud" :option="crudOp" :data="crud" :page.sync="page" v-loading="loading"
+            @on-load="query" @row-dblclick="handleRowDBLClick" @current-row-change="cellClick"></avue-crud>
         </el-row>
-        <el-dialog
-          id="colorMng_Dlg"
-          :visible.sync="dialogVisible"
-          fullscreen
-          width="100%"
-          append-to-body
-          :close-on-click-modal="false"
-          :close-on-press-escape="false"
-        >
-          <tem-dlg
-            v-if="dialogVisible"
-            ref="tem"
-            :detail="detail"
-            :isAdd="isAdd"
-            :revolve="revolveData"
-            :copyCtr="copyCtr"
-            @close="dialogVisible = false"
-            @refresh="refresh"
-          ></tem-dlg>
+        <el-dialog id="colorMng_Dlg" :visible.sync="dialogVisible" fullscreen width="100%" append-to-body
+          :close-on-click-modal="false" :close-on-press-escape="false">
+          <tem-dlg v-if="dialogVisible" ref="tem" :detail="detail" :isAdd="isAdd" :revolve="revolveData"
+            :copyCtr="copyCtr" @close="dialogVisible = false" @refresh="refresh"></tem-dlg>
         </el-dialog>
-        <el-dialog
-          id="colorMng_Dlg"
-          :visible.sync="pdfDlg"
-          fullscreen
-          width="100%"
-          append-to-body
-          :close-on-click-modal="false"
-          :close-on-press-escape="false"
-        >
+        <el-dialog id="colorMng_Dlg" :visible.sync="pdfDlg" fullscreen width="100%" append-to-body
+          :close-on-click-modal="false" :close-on-press-escape="false">
           <view-container title="打印預覽">
             <!-- <div class="btnList">
             <el-button type="warning" @click="pdfDlg = false">{{
@@ -160,56 +100,30 @@
             <el-button type="primary" @click="print2">打印</el-button>
           </div> -->
             <!--startprint-->
-            <embed
-              id="pdf"
-              style="width: 100vw; height: calc(100vh - 80px)"
-              :src="pdfUrl"
-            />
+            <embed id="pdf" style="width: 100vw; height: calc(100vh - 80px)" :src="pdfUrl" />
             <!--endprint-->
           </view-container>
-        </el-dialog></el-tab-pane
-      >
+        </el-dialog>
+      </el-tab-pane>
       <el-tab-pane label="未生成漂染单的运转单">
         <div class="btnList">
-          <el-tooltip
-            class="item"
-            effect="dark"
-            content="tìm kiếm"
-            placement="top-start"
-          >
+          <el-tooltip class="item" effect="dark" content="tìm kiếm" placement="top-start">
             <el-button type="success" @click="add(revolveChoose)">{{
-              this.$t("public.sc")
+                this.$t("public.sc")
             }}</el-button>
           </el-tooltip>
-          <el-tooltip
-            class="item"
-            effect="dark"
-            content="tìm kiếm"
-            placement="top-start"
-          >
+          <el-tooltip class="item" effect="dark" content="tìm kiếm" placement="top-start">
             <el-button type="primary" @click="revolveQuery">{{
-              this.$t("public.query")
+                this.$t("public.query")
             }}</el-button>
           </el-tooltip>
         </div>
         <el-row class="formBox">
-          <avue-form
-            ref="revolveForm"
-            :option="revolveFOp"
-            v-model="revolveForm"
-          ></avue-form>
+          <avue-form ref="revolveForm" :option="revolveFOp" v-model="revolveForm"></avue-form>
         </el-row>
         <el-row class="crudBox">
-          <avue-crud
-            ref="revolveCrud"
-            id="revolveCrud"
-            :option="revolveCOp"
-            :data="revolves"
-            v-loading="revolveLoading"
-            @row-dblclick="revolveDBLClick"
-            @current-row-change="revolveCellClick"
-            :row-style="rowStyle"
-          ></avue-crud>
+          <avue-crud ref="revolveCrud" id="revolveCrud" :option="revolveCOp" :data="revolves" v-loading="revolveLoading"
+            @row-dblclick="revolveDBLClick" @current-row-change="revolveCellClick" :row-style="rowStyle"></avue-crud>
         </el-row>
       </el-tab-pane>
     </el-tabs>
@@ -275,15 +189,14 @@ export default {
           delete this.form[key];
         }
       }
-      this.form.vatNo = "%" + (this.form.vatNo ? this.form.vatNo : "");
-      this.form.weaveJobCode =
-        "%" + (this.form.weaveJobCode ? this.form.weaveJobCode : "");
-      this.form.salPoNo = "%" + (this.form.salPoNo ? this.form.salPoNo : "");
+      this.form.vatNo = (this.form.vatNo ? `%${this.form.vatNo}` : "");
+      this.form.weaveJobCode = (this.form.weaveJobCode ? `%${this.form.weaveJobCode}` : "");
+      this.form.salPoNo = (this.form.salPoNo ? `%${this.form.salPoNo}` : "");
       get(
         Object.assign(this.form, {
           rows: this.page.pageSize,
           start: this.page.currentPage,
-          dataSortRules:"workDate|desc,vatNo"
+          dataSortRules: "workDate|desc,vatNo"
         })
       ).then((res) => {
         this.crud = res.data.records;
@@ -294,13 +207,14 @@ export default {
           // item.custName = item.custCode;
           item.clothWeight = item.clothWeight ? item.clothWeight.toFixed(2) : 0;
           item.index = i + 1;
+          item.mergVatNo = item.vatNos
         });
 
         if (this.crud.length > 0) {
           this.$refs.crud.setCurrentRow(this.crud[0]);
         }
-        if (this.form.vatNo.indexOf("!^%") != -1) {
-          this.form.vatNo = this.form.vatNo.split("!^%")[1] || "";
+        if (this.form.vatNo.indexOf("%") != -1) {
+          this.form.vatNo = this.form.vatNo.split("%")[1] || "";
         }
         if (this.form.weaveJobCode.indexOf("%") != -1) {
           this.form.weaveJobCode = this.form.weaveJobCode.split("%")[1];
@@ -340,7 +254,7 @@ export default {
               item.vatNo.indexOf(this.revolveForm.vatNo) != -1 &&
               item.weaveJobCode.indexOf(this.revolveForm.weaveJobCode) != -1 &&
               item.serviceOperator.indexOf(this.revolveForm.serviceOperator) !=
-                -1
+              -1
             );
           });
         });
@@ -405,8 +319,8 @@ export default {
       this.$tip
         .cofirm(
           this.$t("iaoMng.delTle7") +
-            this.detail.dyeMathine +
-            this.$t("iaoMng.delTle2"),
+          this.detail.dyeMathine +
+          this.$t("iaoMng.delTle2"),
           this,
           {}
         )
@@ -442,14 +356,14 @@ export default {
       this.detail = val;
     },
   },
-  created() {},
+  created() { },
   mounted() {
     // this.query();
     this.revolveQuery();
     this.revolveCOp.page = false;
     this.revolveCOp.height = "calc(100vh - 200px)";
   },
-  beforeDestroy() {},
+  beforeDestroy() { },
 };
 </script>
 <style lang='stylus'>
