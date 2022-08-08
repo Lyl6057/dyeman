@@ -148,7 +148,8 @@ export default {
       dialogVisiable: false,
       Dlgloading: false,
       data: [],
-      transfer: [1, 4]
+      transfer: [1, 4],
+      canSave: false
     };
   },
   watch: {},
@@ -178,6 +179,7 @@ export default {
           }
           this.page.total = res.data.length;
           this.crud = res.data;
+          this.canSave = true;
           this.crud.forEach((item, i) => {
             item.index = i + 1;
           });
@@ -190,9 +192,9 @@ export default {
         this.wloading = false;
         fetchPBSellout({ code, entrance })
           .then((res) => {
-
             this.crudPB = res.data;
             this.pagePB.total = res.data.length;
+            this.canSave = true;
             //console.log(this.crudPB)
           })
       }
@@ -295,6 +297,7 @@ export default {
 
     },
     handleInWhseTest() {
+      // console.log(this.canSave);
       // this.$tip.warning("测试功能正在开发...!");
       // return;
       // let { code, entrance, layer } = this.form;
@@ -323,6 +326,10 @@ export default {
       let length = this.crud.length;
       if (!code || !entrance || !length) {
         this.$tip.warning("请先输入载具编号和库口!");
+        return;
+      }
+      if (!this.canSave) {
+        this.$tip.warning("您需要先查询然后才能提交， Bạn vui lòng tra cứu lại để thực hiện thao tác này!");
         return;
       }
       this.visiblePB = false;
@@ -406,6 +413,20 @@ export default {
         this.wloading = false;
       }, 500);
     },
+    changeState() {
+      this.canSave = false;
+    },
+     setLayer() {
+      if (this.form.entrance == null) {
+        this.form.layer = 1
+      } else {
+        this.form.layer = (
+          this.form.entrance.slice(0, 1) == "Q" || 
+          this.form.entrance.slice(0, 1) == "S" ||
+          this.form.entrance.slice(0, 1) == "Y"
+          ) ? 1 : 2;
+      }
+    }
   },
 };
 </script>

@@ -163,19 +163,19 @@ const inExit = [
 
 const crudCommonConfig = {
   menu: false,
-    addBtn: false,
-    cancelBtn: false,
-    editBtn: false,
-    delBtn: false,
-    menuWidth: 180,
-    border: true,
-    stripe: true,
-    index: false,
-    highlightCurrentRow: true,
-    refreshBtn: false,
-    columnBtn: false,
-    labelWidth: 100,
-    page: false,
+  addBtn: false,
+  cancelBtn: false,
+  editBtn: false,
+  delBtn: false,
+  menuWidth: 180,
+  border: true,
+  stripe: true,
+  index: false,
+  highlightCurrentRow: true,
+  refreshBtn: false,
+  columnBtn: false,
+  labelWidth: 100,
+  page: false,
 }
 
 export function inCheckListOp(_this) {
@@ -342,7 +342,10 @@ export function inWhseFormOp(_this) {
         label: "载具编号",
         prop: "code",
         span: 6,
-        placeholder: " "
+        placeholder: " ",
+        change: () => {
+          _this.changeState();
+        }
       },
       {
         label: "库口编号",
@@ -350,7 +353,14 @@ export function inWhseFormOp(_this) {
         span: 6,
         placeholder: " ",
         type: 'select',
-        dicData: getDicT("whseWayIoState","passwayName","passwayName",{},"sn")
+        dicData: getDicT("whseWayIoState", "passwayName", "passwayName", {}, "sn"),
+        change: () => {
+          _this.$nextTick(() => {
+            _this.setLayer();
+            _this.changeState();
+          });
+
+        }
       },
       {
         label: "层数",
@@ -386,7 +396,7 @@ export function inWhseFormDlgOp(_this) {
         span: 6,
         placeholder: " "
       },
-    
+
     ]
   };
 }
@@ -658,14 +668,14 @@ export function inWhseCrudOp(_this) {
         placeholder: " "
       },
       {
-        label:"重量",
+        label: "重量",
         prop: "woWeights",
         cell: false,
         width: 100,
         align: "right"
       },
       {
-        label:"单位",
+        label: "单位",
         prop: "woUnit",
         cell: false,
         width: 100,
@@ -700,17 +710,17 @@ export function inWhseCrudPBOp(_this) {
         prop: "index",
         width: 50,
         align: "center",
-        display:true ,
+        display: true,
         fixed: true
       },
       {
-        label:"织单号",
+        label: "织单号",
         prop: "weaveJobCode",
         cell: false,
         width: 170,
         align: "right"
       },
-     
+
       {
         label: "重量",
         prop: "woWeights",
@@ -718,7 +728,7 @@ export function inWhseCrudPBOp(_this) {
         span: 6,
         placeholder: " ",
         disabled: true,
-     
+
         fixed: true
       },
       {
@@ -742,11 +752,11 @@ export function inWhseCrudPBOp(_this) {
         span: 8,
         placeholder: " ",
         cell: true,
-   
+
         width: 120,
         fixed: true
       },
-    
+
     ]
   };
 }
@@ -1196,7 +1206,7 @@ export function taskHistoryCrud(_this) {
         cell: true,
         overHidden: true
       },
-     
+
       {
         label: "货位码",
         prop: "storageCode",
@@ -1270,7 +1280,7 @@ export function taskHistoryCrud(_this) {
         width: 125,
         overHidden: true
       },
-     
+
       {
         label: "响应时间",
         prop: "updateTime",
@@ -1317,7 +1327,7 @@ export function dlgCrud(_this) {
     selection: true,
     showSummary: false,
     menuTitle: "称重",
-  
+
     column: [
       // {
       //   label: "#",
@@ -1346,7 +1356,7 @@ export function dlgCrud(_this) {
         disabled: true,
         overHidden: true
       },
-  
+
       {
         label: "匹號(Số cây vải)",
         prop: "pidNo",
@@ -1357,10 +1367,10 @@ export function dlgCrud(_this) {
         type: "number",
         precision: 0
       },
-     
-    
 
-   
+
+
+
       {
         label: "净重(trọng lượng tịnh KG)",
         prop: "netWeight",
@@ -1385,9 +1395,9 @@ export function dlgCrud(_this) {
         align: "right",
         placeholder: " "
       },
-    
 
-   
+
+
       // {
       //   label: "备注(ghi chú)",
       //   prop: "remark",
@@ -1612,8 +1622,8 @@ export function DlgtaskCrud(_this) {
         placeholder: " ",
         overHidden: true,
       },
-      
-  
+
+
       // {
       //   label: "指令类型",
       //   prop: "orderType",
@@ -1681,7 +1691,7 @@ export function DlgtaskCrud(_this) {
       //   cell: true,
       //   overHidden: true
       // },
-     
+
       // {
       //   label: "货位码",
       //   prop: "storageCode",
@@ -1755,7 +1765,7 @@ export function DlgtaskCrud(_this) {
       //   width: 125,
       //   overHidden: true
       // },
-     
+
       // {
       //   label: "响应时间",
       //   prop: "updateTime",
