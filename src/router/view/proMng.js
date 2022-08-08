@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-29 14:14:56
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-25 14:39:32
+ * @LastEditTime: 2022-08-04 14:43:28
  * @Description:
  */
 export default [
@@ -351,11 +351,20 @@ export default [
       keepAlive: true
     }
   },
+  // {
+  //   path: "/collarNote",
+  //   name: "扁机收货台账",
+  //   component: resolve =>
+  //     require(["@/view/proMng/collarNote/index"], resolve),
+  //   meta: {
+  //     keepAlive: true
+  //   }
+  // },
   {
     path: "/collarNote",
     name: "扁机收货台账",
     component: resolve =>
-      require(["@/view/proMng/collarNote/index"], resolve),
+      require(["@/view/proMng/proCollarAccount/index"], resolve),
     meta: {
       keepAlive: true
     }
