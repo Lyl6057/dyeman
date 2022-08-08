@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-08 17:19:47
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-08-08 10:29:49
+ * @LastEditTime: 2022-08-08 10:41:53
 -->
 <template>
   <div class="collar-account-container" :element-loading-text="loadLabel" v-loading="loading">
@@ -147,7 +147,8 @@ export default {
       let params = {
         rows: this.page.pageSize,
         start: this.page.currentPage,
-        stockState: this.form.stockState
+        stockState: this.form.stockState,
+        dataSortRules: "receiveDate|desc,receiveNo"
       };
       let props = ["receiveNo","deliveryNo"];
       props.forEach(key => {
