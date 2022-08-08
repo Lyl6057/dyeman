@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-08 17:19:47
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-08-08 08:14:40
+ * @LastEditTime: 2022-08-08 14:27:31
 -->
 <template>
   <div id="collar-account-container">
@@ -39,8 +39,8 @@ export default {
     handleRefreshUnCreate(){
       this.$refs.unCreateListRef.handleQuery();
     },
-    handleSelectCreate(salPoNo){
-      this.$refs.collarAccountRef.initAndExtractData(salPoNo)
+    handleSelectCreate(data){
+      this.$refs.collarAccountRef.initAndExtractData(data)
     },
   }
 };

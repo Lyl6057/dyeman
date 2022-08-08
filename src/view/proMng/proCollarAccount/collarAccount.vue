@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-08 17:19:47
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-08-08 10:41:53
+ * @LastEditTime: 2022-08-08 14:27:33
 -->
 <template>
   <div class="collar-account-container" :element-loading-text="loadLabel" v-loading="loading">
@@ -70,11 +70,11 @@ export default {
   },
   methods: {
     // 初始化明细数据并抽取织单数据
-    initAndExtractData(salPoNo){
+    initAndExtractData(data){
       this.collarAccountData = {};
       let oDtlRef = this.$refs.collarAccountDtlRef;
      
-      oDtlRef.extractDataByWeave(salPoNo)
+      oDtlRef.extractDataByWeave(data)
     },
     handleQuery(){
       this.page.currentPage = 1;

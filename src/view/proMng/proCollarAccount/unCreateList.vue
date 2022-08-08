@@ -46,6 +46,8 @@ export default {
             },
             // 当前选择key 客户编号+布料编号
             curSelKey: "",
+            // 其他配置参数
+            otherSelParams: {},
             // 选中的值
             selectRows: [],
 
@@ -66,6 +68,7 @@ export default {
                 this.$refs.crudRef.toggleRowSelection(item, item.salPoNo === row.salPoNo)
             })
             this.curSelKey = row.salPoNo
+            this.otherSelParams.outFactoryId = row.outFactoryId
             this.selectRows = rows;
         },
         handleSelectAll(){
@@ -79,7 +82,10 @@ export default {
                 return this.$tip.warning("请选择数据");
             }
             // this.$emit("select-create",this.selectRows);
-            this.$emit("select-create",this.curSelKey);
+            this.$emit("select-create",{
+                salPoNo: this.curSelKey,
+                params: this.otherSelParams,
+            });
         },
         // 查询
         handleQuery(){
