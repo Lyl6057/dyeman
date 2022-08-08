@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-08 17:26:12
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-08-08 10:19:30
+ * @LastEditTime: 2022-08-08 14:58:58
  */
 
 import {
@@ -58,7 +58,7 @@ export function queryFormOp(_this){
             placeholder: " ",
            },
            {
-            label: "厂家送货单",
+            label: "送货单号",
             prop: "deliveryNo",
             labelWidth: 150,
             span: 5,
@@ -91,7 +91,19 @@ export function crudOp(_this) {
         align: "center",
       },
       {
-        label: "厂家发货码",
+        label: "加工厂",
+        prop: "basProcessingUnitFk",
+        type: "select",
+        dicData: getDicT(
+          "basProcessingUnit",
+          "processingName",
+          "basProcessingUnitoid"
+        ),
+        width: "120",
+        overHidden: true
+      },
+      {
+        label: "送货单号",
         prop: "deliveryNo",
         width: 160,
       },
@@ -146,7 +158,7 @@ export function formOp(_this, isEdit = false){
                 type: "date",
                 valueFormat: "yyyy-MM-dd",
                 labelWidth: 150,
-                span: 5,
+                span: 4,
                 placeholder: " ",
                 rules:[
                     {required: true, message: "收货日期不能为空", triggle: "blue"}
@@ -154,13 +166,26 @@ export function formOp(_this, isEdit = false){
                 disabled: isEdit
             },
             {
-                label: "厂家送货单",
+                label: "加工厂",
+                prop: "basProcessingUnitFk",
+                type: "select",
+                span: 5,
+                disabled: true,
+                placeholder: "",
+                dicData: getDicT(
+                  "basProcessingUnit",
+                  "processingName",
+                  "basProcessingUnitoid"
+                ),
+            },
+            {
+                label: "送货单号",
                 prop: "deliveryNo",
                 labelWidth: 150,
                 span: 5,
                 placeholder: " ",
                 rules:[
-                    {required: true, message: "厂家送货单不能为空", triggle: "blue"}
+                    {required: true, message: "送货单号不能为空", triggle: "blue"}
                 ],
                 disabled: isEdit
             },

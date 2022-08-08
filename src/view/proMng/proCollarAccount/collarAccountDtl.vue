@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-09 09:06:25
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-08-08 10:27:56
+ * @LastEditTime: 2022-08-08 14:57:12
 -->
 <template>
   <div class="with-drawal-dlt-container">
@@ -129,6 +129,7 @@ export default {
         proCollarAccountoid: "",
         deliveryNo: "",
         receiveDate: "",
+        basProcessingUnitFk: "",
       };
       this.crudDataList = [];
       this.delOidList = [];
@@ -249,7 +250,7 @@ export default {
         row.$cellEdit = true;
     },
     // 数据抽取
-    extractDataByWeave(salPoNo){
+    extractDataByWeave({salPoNo,params}){
         this.visible = true;
         this.loading = true;
         fetchCollarAccDtlBySalPoNo(salPoNo).then(res => {
@@ -260,6 +261,9 @@ export default {
                 item.$cellEdit = (index == 0);
                 return item;
             });
+            Object.assign(this.collarAccountFormData,{
+              basProcessingUnitFk: params.outFactoryId
+            })
         }).finally(res => {
             this.loading = false;
         })
