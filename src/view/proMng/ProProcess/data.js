@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:08:41
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-26 13:45:26
+ * @LastEditTime: 2022-08-09 11:05:02
  */
 
 
@@ -78,7 +78,10 @@ export function mainCrudOp(_this) {
         prop: "shipQtyKg",
         width: 120,
         overHidden: true,
-        align: "right"
+        align: "right",
+        formatter(r,v){
+          return _this.$num2ThousandthFormat(v,1);
+        }
       },
     ]
   }
