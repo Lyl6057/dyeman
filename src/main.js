@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-02-24 08:12:20
- * @LastEditors: Lyl
- * @LastEditTime: 2022-03-18 14:15:42
+ * @LastEditors: Symbol_Yang
+ * @LastEditTime: 2022-08-09 11:04:28
  * @Description:
  */
 // The Vue build version to load with the `import` command
@@ -39,6 +39,7 @@ Vue.use(Directives);
 import "./instruct/v-drap";
 // import './styles/element-variables.scss'
 import { success, error, warning, info, cofirm } from "./config/seal";
+import { num2ThousandthFormat } from "./utils/tools"
 import {
   getDIC,
   getDicT,
@@ -70,6 +71,7 @@ Vue.prototype.$grouping = group;
 Vue.prototype.$sortable = Sortable;
 Vue.prototype.$toTableLow = toTableLow;
 Vue.prototype.$preFixInt = preFixInt;
+Vue.prototype.$num2ThousandthFormat = num2ThousandthFormat;
 Vue.prototype._ = _;
 
 Vue.prototype.$tip = {
