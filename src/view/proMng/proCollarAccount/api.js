@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-09 08:21:45
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-08-08 10:00:29
+ * @LastEditTime: 2022-08-08 16:09:17
  */
 
 import axios from "axios";
@@ -47,14 +47,24 @@ export function fetchCollarAccDtlDataByList(params){
     })
 }
 
-// 数据抽取
+// 数据抽取(根据订单号)
 export function fetchCollarAccDtlBySalPoNo(salPoNo){
     return axios({
-        url: "/api/proCollarAccountDtl/extract/weaveJob",
+        url: "/api/proCollarAccountDtl/extract/salPoNo",
         method: "get",
         params:{salPoNo}
     })
 }
+
+// 根据织单号进行织单明细抽取数据
+export function fetchCollarAccDtlByWeaveJobCode(weaveJobCodeList){
+    return axios({
+        url: "/api/proCollarAccountDtl/extract/weaveCodeJobs",
+        method: "post",
+        data: weaveJobCodeList
+    })
+}
+
 
 // 删除收货数据
 export function removeProCollarAccById(id){

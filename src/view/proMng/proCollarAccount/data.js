@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-08 17:26:12
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-08-08 14:58:58
+ * @LastEditTime: 2022-08-09 09:44:29
  */
 
 import {
@@ -45,14 +45,18 @@ export function queryFormOp(_this){
         column: [{
             label: "收货单号",
             prop: "receiveNo",
-            labelWidth: 150,
-            span: 5,
+            span: 4,
+            placeholder: " ",
+           },
+           {
+            label: "订单编号",
+            prop: "salPoNo",
+            span: 4,
             placeholder: " ",
            },
            {
             label: "收货日期",
             prop: "receiveDate",
-            labelWidth: 150,
             type: "daterange",
             span: 6,
             placeholder: " ",
@@ -60,15 +64,15 @@ export function queryFormOp(_this){
            {
             label: "送货单号",
             prop: "deliveryNo",
-            labelWidth: 150,
-            span: 5,
+            span: 4,
             placeholder: " ",
            },
            {
             label: "审核状态",
             prop: "stockState",
+            placeholder: " ",
             type: "select",
-            span: 5,
+            span: 4,
             dicData: getDIC("pro_stockState"),
           },
         ]
@@ -84,6 +88,12 @@ export function crudOp(_this) {
         prop: "receiveNo",
         width: 160
       },
+      {
+        label: "订单编号",
+        prop: "salPoNo",
+        width: 120,
+        overHidden: true
+       },
       {
         label: "收货日期",
         prop: "receiveDate",
@@ -294,8 +304,14 @@ export function unCreateFormOp(_this){
             {
                 label: "织单号",
                 prop: "weaveJobCode",
-                span: 6
+                span: 5
+            },
+            {
+                label: "订单编号",
+                prop: "salPoNo",
+                span: 5
             }
+            
         ]
     }
 }
@@ -309,6 +325,13 @@ export function unCreateCrudOp(_this){
                 label: "织单号",
                 prop: "weaveJobCode",
                 width: "140"
+            },
+            {
+                label: "交货情况(PCS)",
+                prop: "deliveryInfo",
+                slot: true,
+                width: 130,
+                align: "center"
             },
             {
                 label: "加工厂",

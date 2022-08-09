@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-09 09:06:25
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-08-08 14:57:12
+ * @LastEditTime: 2022-08-08 16:05:57
 -->
 <template>
   <div class="with-drawal-dlt-container">
@@ -46,7 +46,8 @@ import {
   batchSaveOrUpdateData,
   batchDelDtlDataById,
   fetchCollarAccDtlDataByList,
-  fetchCollarAccDtlBySalPoNo
+  fetchCollarAccDtlBySalPoNo,
+  fetchCollarAccDtlByWeaveJobCode
 } from "./api";
 import { baseCodeSupplyEx, baseCodeSupply } from "@/api/index";
 import { timeConversion } from "@/config/util";
@@ -121,7 +122,6 @@ export default {
       deep: true
     }
   },
-  created: {},
   methods: {
     // 初始化数据
     initData() {
@@ -130,6 +130,7 @@ export default {
         deliveryNo: "",
         receiveDate: "",
         basProcessingUnitFk: "",
+        salPoNo: ""
       };
       this.crudDataList = [];
       this.delOidList = [];
@@ -250,10 +251,11 @@ export default {
         row.$cellEdit = true;
     },
     // 数据抽取
-    extractDataByWeave({salPoNo,params}){
+    extractDataByWeave({weaveJobCodes,params}){
         this.visible = true;
         this.loading = true;
-        fetchCollarAccDtlBySalPoNo(salPoNo).then(res => {
+        // fetchCollarAccDtlBySalPoNo(salPoNo).then(res => {
+        fetchCollarAccDtlByWeaveJobCode(weaveJobCodes).then(res => {
             this.$refs.form && this.$refs.form.clearValidate();
             this.crudDataList = res.data.map((item,index) => {
                 item.proCollarAccountDtloid = v1();
@@ -262,7 +264,8 @@ export default {
                 return item;
             });
             Object.assign(this.collarAccountFormData,{
-              basProcessingUnitFk: params.outFactoryId
+              basProcessingUnitFk: params.outFactoryId,
+              salPoNo: params.salPoNo
             })
         }).finally(res => {
             this.loading = false;

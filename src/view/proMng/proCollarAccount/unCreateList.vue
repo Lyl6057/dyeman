@@ -21,7 +21,15 @@
                 @row-dblclick="handleRowDblClick"
                @select="handleSelect"
                 @select-all="handleSelectAll"
-               @on-load="getDataList"></avue-crud>
+               @on-load="getDataList">
+                <template slot="deliveryInfo" slot-scope="{row}">
+                    <div style="font-weight: blod">
+                        <span style="color: green;">{{ row.planPcsNum || 0 }}</span>
+                        <span style="display: inline-block; padding: 0px 5px">|</span>
+                        <span style="color: red;">{{ row.realPcsNum || 0 }}</span>
+                    </div>
+                </template>
+               </avue-crud>
         </el-row>
     </div>
 </template>
@@ -64,17 +72,55 @@ export default {
         // 选中改变
         handleSelect(rows,row){
 
-            this.crudData.forEach(item => {
-                this.$refs.crudRef.toggleRowSelection(item, item.salPoNo === row.salPoNo)
-            })
+            // this.crudData.forEach(item => {
+            //     this.$refs.crudRef.toggleRowSelection(item, item.salPoNo === row.salPoNo)
+            // })
+            if(rows.length == 1){
+                this.curSelKey = ""
+            }
+            // 只能选同一个订单号的数据
+            if(this.curSelKey && row.salPoNo != this.curSelKey){
+                this.$refs.crudRef.toggleRowSelection(row,false)
+                return this.$tip.warning("只能选择相同订单号的数据")
+            }
+
             this.curSelKey = row.salPoNo
-            this.otherSelParams.outFactoryId = row.outFactoryId
+            this.otherSelParams = {
+                outFactoryId: row.outFactoryId,
+                salPoNo: row.salPoNo,
+            }
             this.selectRows = rows;
         },
-        handleSelectAll(){
-            this.curSelKey = ""
-            this.selectRows = [];
-            this.$refs.crudRef.selectClear();
+        handleSelectAll(rows){
+            // 当未选择数据时
+            if(this.selectRows.length == 0){
+                let tSalPoNo = this.crudData[0].salPoNo;
+                let isDiff = this.crudData.some(item => item.salPoNo != tSalPoNo);
+                if(isDiff){
+                    this.$refs.crudRef.selectClear();
+                    return this.$tip.warning("只能选择相同的订单号数据");
+                }
+
+                // 赋值
+                let row = rows[0] || {}
+                this.curSelKey = row.salPoNo
+                this.otherSelParams = {
+                    outFactoryId: row.outFactoryId,
+                    salPoNo: row.salPoNo,
+                }
+                this.selectRows = rows;
+            }else if(this.selectRows.length >= 1){
+                this.$refs.crudRef.selectClear();
+                this.selectRows = []
+            }else{
+                this.$refs.crudRef.selectClear();
+                this.selectRows.forEach(item => {
+                    this.$refs.crudRef.toggleRowSelection(item,true)
+                })
+            }
+            // this.curSelKey = ""
+            // this.selectRows = [];
+            
         },
         // 生成织单
         handleCreateProWeaveJob(){
@@ -83,7 +129,7 @@ export default {
             }
             // this.$emit("select-create",this.selectRows);
             this.$emit("select-create",{
-                salPoNo: this.curSelKey,
+                weaveJobCodes: this.selectRows.map(item => item.weaveJobCode),
                 params: this.otherSelParams,
             });
         },
@@ -97,11 +143,13 @@ export default {
             let params =  {
                 rows: this.page.pageSize,
                 start: this.page.currentPage,
-                weaveJobCode: this.queryParams.weaveJobCode
+                weaveJobCode: this.queryParams.weaveJobCode,
+                salPoNo: this.queryParams.salPoNo
                 // dataSortRules: "exDate|desc,poNo,type,colorSeq",
             }
             this.loading = true;
             fetchUnCreateDataPage(params).then(res => {
+                this.$refs.crudRef.selectClear();
                 this.crudData = res.data.records;
                 this.page.total = res.data.total;
             }).finally(_ => {
