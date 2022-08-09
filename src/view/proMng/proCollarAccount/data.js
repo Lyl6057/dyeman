@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-08 17:26:12
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-08-09 09:44:29
+ * @LastEditTime: 2022-08-09 14:25:47
  */
 
 import {
@@ -214,7 +214,7 @@ export function formOp(_this, isEdit = false){
 export function dtlCrudOp(_this){
     return {
         ...mainCrudOpCommon,
-        selection: true,
+        selection: false,
         page:false,
         rowKey: "proCollarAccountDtloid",
         column: [
@@ -251,15 +251,6 @@ export function dtlCrudOp(_this){
                 placeholder: " "
             },
             {
-                label: "实际条数",
-                prop: "realPcsNum",
-                width: 100,
-                cell: true,
-                align: "right",
-                placeholder: " ",
-                type: "number"
-            },
-            {
                 label: "重量",
                 prop: "weight",
                 cell: true,
@@ -269,6 +260,15 @@ export function dtlCrudOp(_this){
                     return num2ThousandthFormat(v,1)
                 },
                 overHidden: true,
+                placeholder: " ",
+                type: "number"
+            },
+            {
+                label: "实际条数",
+                prop: "realPcsNum",
+                width: 100,
+                cell: true,
+                align: "right",
                 placeholder: " ",
                 type: "number"
             },

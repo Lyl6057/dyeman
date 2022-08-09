@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-08 17:19:47
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-08-08 14:27:33
+ * @LastEditTime: 2022-08-09 14:20:37
 -->
 <template>
   <div class="collar-account-container" :element-loading-text="loadLabel" v-loading="loading">
@@ -94,7 +94,7 @@ export default {
           this.loading = true;
           return fetchDataExamine(proCollarAccountoid)
         }).then(res => {
-          if(res.data == true){
+          if(res.data.data == true){
             this.$tip.success(res.data.msg)
             this.getDataList();
           }else{

@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-09 09:06:25
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-08-08 16:05:57
+ * @LastEditTime: 2022-08-09 15:31:40
 -->
 <template>
   <div class="with-drawal-dlt-container">
@@ -68,7 +68,7 @@ export default {
       visible: false,
       loadLabel: "加载中...",
       loading: false,
-      collAccFormOp: formOp(this),
+      collAccFormOp: formOp(this,false),
       collarAccountFormData: {},
       tabName: "dtl",
       page: {
@@ -96,7 +96,7 @@ export default {
   watch: {
     "collarAccountData.stockState": {
       handler(value){
-        console.log("enter watch stock status", typeof value, value)
+        console.log("enter form option show or hide", typeof value, value)
         switch(value){
           case '1' : // 未检验
             this.collAccFormOp = formOp(this, false);
@@ -104,9 +104,9 @@ export default {
           case '2' : // 已检验
             this.collAccFormOp = formOp(this, true);
             break;
-          default:; break;
+          default: ; break;
         }
-        this.$forceUpdate();
+        // this.$forceUpdate();
       }
     },
     collarAccountData: {
@@ -152,6 +152,7 @@ export default {
             item.isAdd = false;
             return item;
           });
+          this.$refs.crud.setCurrentRow(this.crudDataList[0])
         })
         .finally(() => {
           this.loading = false;
@@ -183,7 +184,6 @@ export default {
           receiveNo: res.data.data,
           receiveDate: timeConversion(new Date()),
           sysCreatedby: this.$store.state.userOid,
-          //   proCollarAccountoid: v1()
         });
       });
     },
@@ -197,7 +197,7 @@ export default {
         await updateCollarAccountData(this.collarAccountFormData);
       } else {
         // 赋值初始审核状态值为1 
-        this.collarAccountFormData.stockState = 1;
+        this.collarAccountFormData.stockState = '1';
         oid = await addCollarAccountData(this.collarAccountFormData).then(
           res => res.data.data
         );
@@ -218,12 +218,13 @@ export default {
       this.loading = false;
       this.hasRefresh = true;
       this.$tip.success("操作成功");
+      // 新增后刷新列表数据
       this.isAdd && this.$emit("save-success")
     },
     // 保存校验
     async saveValid() {
     
-      let formDataValid = await new Promise(resolve => this.$refs.form.validate(valid =>  resolve(valid)) )
+      let formDataValid =  await new Promise(resolve => this.$refs.form.validate((valid,done) =>   resolve(valid) || done()) )
       if(!formDataValid)  {
           this.$tip.warning("请完善数据");
           return false
@@ -260,13 +261,18 @@ export default {
             this.crudDataList = res.data.map((item,index) => {
                 item.proCollarAccountDtloid = v1();
                 item.unit = "PCS"
+                item.realPcsNum = item.pcsNum;
                 item.$cellEdit = (index == 0);
                 return item;
             });
+            this.$refs.crud.setCurrentRow(this.crudDataList[0])
             Object.assign(this.collarAccountFormData,{
               basProcessingUnitFk: params.outFactoryId,
-              salPoNo: params.salPoNo
+              salPoNo: params.salPoNo,
+              stockState: 1,
             })
+            // 借此触发表单的编辑状态
+            this.collAccFormOp = formOp(this, false);
         }).finally(res => {
             this.loading = false;
         })
