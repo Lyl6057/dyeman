@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:18:51
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-27 10:32:21
+ * @LastEditTime: 2022-08-10 08:57:05
 -->
 <template>
   <div id="stkin-memo-dtl-container">
@@ -131,7 +131,7 @@ export default {
       this.stlkinMemoDtlDataList.forEach(item => {
         item.children.forEach(item => {
           targetDataList.push({
-            proClothStkinMemoDtloid: item.proClothStkinMemoDtloid ||  v1(),
+            proClothStkinMemoDtloid: item.proClothStkinMemoDtloid,
             proClothStkinMemoFk: oid, 
             noteIdFk: item.noteId
           })
@@ -176,6 +176,7 @@ export default {
             clothWeight: 0,
             weaveJobCode: weaveJobCode,
             storeLoadCode: storeLoadCode,
+           
             id: index + 1,
           }
         }
@@ -183,7 +184,8 @@ export default {
         targetData[key].children.push(Object.assign(item, {
           weaveJobCode: "",
           storeLoadCode: "",
-          id: `${targetData[key].id}+${index}` 
+          id: `${targetData[key].id}+${index}`,
+          proClothStkinMemoDtloid:v1(),
         }))
         targetData[key].eachNumber++;
         targetData[key].clothWeight += +item.clothWeight
