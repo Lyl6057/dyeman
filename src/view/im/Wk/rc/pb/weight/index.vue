@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
- * @LastEditors: Lyl
- * @LastEditTime: 2022-07-07 10:06:26
+ * @LastEditors: Symbol_Yang
+ * @LastEditTime: 2022-08-10 10:03:02
  * @Description: 
 -->
 <template>
@@ -31,6 +31,7 @@
     <el-row class="crudBox">
       <avue-crud
         ref="crud"
+        class="pro-warehouse-crud"
         :option="crudOp"
         :data="crud"
         :page.sync="page"
@@ -245,7 +246,9 @@ export default {
   .el-table {
     overflow: visible !important;
   }
-
+  .pro-warehouse-crud .avue-crud__menu{
+    height: 0 !important;
+  }
   .el-tag--mini {
     display: none !important;
   }

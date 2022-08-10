@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-08-01 11:32:27
+ * @LastEditTime: 2022-08-10 09:55:24
  * @Description:
  */
 
@@ -123,7 +123,7 @@ export function mainCrud(_this) {
     border: true,
     index: false,
     highlightCurrentRow: true,
-    height: "calc(100vh - 240px)",
+    height: "calc(100vh - 275px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,

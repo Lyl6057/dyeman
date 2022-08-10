@@ -295,7 +295,7 @@ export function rcpb1C(_this) {
       _this.hide === "4" ||
       _this.hide === "5" ||
       _this.hide === "7"
-        ? "calc(100vh - 233px)"
+        ? "calc(100vh - 260px)"
         : "calc(100vh - 275px)",
     refreshBtn: false,
     columnBtn: false,

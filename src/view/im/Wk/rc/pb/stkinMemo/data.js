@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-06-29 17:22:42
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-08-01 11:30:31
+ * @LastEditTime: 2022-08-10 09:54:33
  */
 
 
@@ -31,7 +31,7 @@ const mainCrudOpCommon = {
 export function stkinMemoUnWhseInCrudOp(_this) {
     return {
       ...mainCrudOpCommon,
-      height: "calc(100vh - 225px)",
+      height: "calc(100vh - 175px)",
       selection: true,
       index: false,
       column: [{
