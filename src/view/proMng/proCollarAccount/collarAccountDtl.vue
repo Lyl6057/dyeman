@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-09 09:06:25
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-08-09 15:31:40
+ * @LastEditTime: 2022-08-10 08:45:46
 -->
 <template>
   <div class="with-drawal-dlt-container">
@@ -29,6 +29,7 @@
                 @on-load="getDataList"
                 @row-click="handleRowClick"
                 @selection-change="handleSelectionChange"
+                :summary-method="handleSummaryMethod"
                 ></avue-crud>
             </div>
             </el-tab-pane>
@@ -96,7 +97,6 @@ export default {
   watch: {
     "collarAccountData.stockState": {
       handler(value){
-        console.log("enter form option show or hide", typeof value, value)
         switch(value){
           case '1' : // 未检验
             this.collAccFormOp = formOp(this, false);
@@ -106,7 +106,7 @@ export default {
             break;
           default: ; break;
         }
-        // this.$forceUpdate();
+        this.$forceUpdate();
       }
     },
     collarAccountData: {
@@ -117,12 +117,26 @@ export default {
           this.initData();
         }
         this.hasRefresh = false;
+        this.$forceUpdate();
       },
       immediate: true,
       deep: true
     }
   },
   methods: {
+    // 合計
+    handleSummaryMethod({columns, data}){
+      let sums = columns.map((column,index) => {
+        if(index == 0) return "合計"
+        if(!["pcsNum","weight","realPcsNum",].includes(column.property)){
+          return "-"
+        }
+        let tValue = data.reduce((a,b) => a += (+b[column.property]),  0);
+        return this.$num2ThousandthFormat(tValue, column.property == 'weight' ? 1 : 0 );
+      })
+
+      return sums;
+    },
     // 初始化数据
     initData() {
       this.collarAccountFormData = {
@@ -145,6 +159,7 @@ export default {
     // 获取数据
     getWithDrawalDtlDataList(oid) {
       this.loading = true;
+      this.crudDataList = [{}];
       fetchCollarAccDtlDataByList({ proCollarAccountFk: oid })
         .then(res => {
           this.crudDataList = res.data.map((item,index) => {
@@ -255,6 +270,7 @@ export default {
     extractDataByWeave({weaveJobCodes,params}){
         this.visible = true;
         this.loading = true;
+        this.crudDataList = [{}];
         // fetchCollarAccDtlBySalPoNo(salPoNo).then(res => {
         fetchCollarAccDtlByWeaveJobCode(weaveJobCodes).then(res => {
             this.$refs.form && this.$refs.form.clearValidate();

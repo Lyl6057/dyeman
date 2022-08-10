@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-08 17:19:47
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-08-09 14:20:37
+ * @LastEditTime: 2022-08-10 08:15:29
 -->
 <template>
   <div class="collar-account-container" :element-loading-text="loadLabel" v-loading="loading">
@@ -69,6 +69,7 @@ export default {
     }
   },
   methods: {
+    
     // 初始化明细数据并抽取织单数据
     initAndExtractData(data){
       this.collarAccountData = {};

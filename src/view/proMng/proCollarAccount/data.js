@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-08 17:26:12
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-08-09 14:25:47
+ * @LastEditTime: 2022-08-10 08:43:20
  */
 
 import {
@@ -214,9 +214,12 @@ export function formOp(_this, isEdit = false){
 export function dtlCrudOp(_this){
     return {
         ...mainCrudOpCommon,
+        height: "calc(100vh - 205px)",
         selection: false,
         page:false,
         rowKey: "proCollarAccountDtloid",
+        showSummary: true,
+        sumColumnList: [],
         column: [
             {
                 label: "织单号",
@@ -239,7 +242,10 @@ export function dtlCrudOp(_this){
                 prop: "pcsNum",
                 width: 120,
                 align: "right",
-                overHidden: true
+                overHidden: true,
+                formatter(r,v){
+                    return num2ThousandthFormat(v,0)
+                },
             },
             {
                 label: "单位",
@@ -270,7 +276,10 @@ export function dtlCrudOp(_this){
                 cell: true,
                 align: "right",
                 placeholder: " ",
-                type: "number"
+                type: "number",
+                formatter(r,v){
+                    return num2ThousandthFormat(v,0)
+                },
             },
             {
                 label: "包号",
