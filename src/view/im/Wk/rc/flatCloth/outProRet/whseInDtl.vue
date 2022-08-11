@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-09 09:06:25
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-08-11 09:47:25
+ * @LastEditTime: 2022-08-11 16:19:56
 -->
 <template>
   <div class="with-drawal-dlt-container">
@@ -259,6 +259,7 @@ export default {
             this.$refs.form && this.$refs.form.clearValidate();
             this.crudDataList = res.data.map((item,index) => {
                 return {
+                  weaveJobCode: item.weaveJobCode,
                   pos: item.pos,
                   size: item.size,
                   packageNo: item.packageNo,

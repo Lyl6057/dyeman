@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-08 17:26:12
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-08-11 09:23:25
+ * @LastEditTime: 2022-08-11 16:22:57
  */
 
 import {
@@ -236,6 +236,11 @@ export function dtlCrudOp(_this){
             {label: " ",name: "inPcsNum", type: "sum"},
         ],
         column: [
+            {
+                label: "织单号",
+                prop: "weaveJobCode",
+                width: 130,
+            },
             {
                 label: "部位",
                 prop: "pos",
