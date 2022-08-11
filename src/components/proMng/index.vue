@@ -1,49 +1,28 @@
 <template>
   <div id="choice">
-    <el-dialog
-      id="choiceDlg"
-      :visible.sync="choiceV"
-      :width="dlgWidth"
-      :top="marginTop"
-      :fullscreen="dlgWidth === '100%'"
-      append-to-body
-      :close-on-click-modal="false"
-      :before-close="closeBefore"
-      v-if="choiceV"
-    >
+    <el-dialog id="choiceDlg" :visible.sync="choiceV" :width="dlgWidth" :top="marginTop"
+      :fullscreen="dlgWidth === '100%'" append-to-body :close-on-click-modal="false" :before-close="closeBefore"
+      v-if="choiceV">
       <!-- <view-container :title="choiceTle"> -->
       <el-tabs type="border-card" v-model="tab">
         <el-tab-pane name="tab1" :label="choiceTle">
           <div class="btnList">
             <el-button type="primary" @click="choice">{{
-              this.$t("public.choose")
+                this.$t("public.choose")
             }}</el-button>
-            <el-button
-              type="primary"
-              @click="query"
-              v-if="choiceTle != $t('choicDlg.shdmx')"
-              >{{ $t("public.query") }}</el-button
-            >
+            <el-button type="primary" @click="query" v-if="choiceTle != $t('choicDlg.shdmx')">{{ $t("public.query") }}
+            </el-button>
             <el-button type="warning" @click="close">{{
-              $t("public.close")
+                $t("public.close")
             }}</el-button>
           </div>
           <div class="formBox">
             <avue-form ref="form" :option="choiceF" v-model="form"></avue-form>
           </div>
           <div class="crudBox">
-            <avue-crud
-              id="proChoice"
-              ref="proChoice"
-              :option="choiceC"
-              :data="crud"
-              :page.sync="page"
-              v-loading="loading"
-              @on-load="query"
-              @row-dblclick="handleRowDBLClick"
-              @current-row-change="cellClick"
-              @selection-change="selectionChange"
-            >
+            <avue-crud id="proChoice" ref="proChoice" :option="choiceC" :data="crud" :page.sync="page"
+              v-loading="loading" @on-load="query" @row-dblclick="handleRowDBLClick" @current-row-change="cellClick"
+              @selection-change="selectionChange">
             </avue-crud>
           </div>
         </el-tab-pane>
@@ -140,7 +119,8 @@ import {
   getEnergStock,
   fetchBomData,
   bomDataC,
-  bomDataF
+  bomDataF,
+  getBaseWorkStep
 } from "./data";
 
 export default {
@@ -194,25 +174,25 @@ export default {
       }
       if (this.choiceTle == "選擇生产项目") {
         this.getData().then((res) => {
-          res.data.forEach((item) => {
-            if (item.stepName === "生产过程") {
-              item.nodes.forEach((t) => {
-                if (t.stepName === "染整中心") {
-                  // this.crud = t.nodes;
-                  t.nodes.forEach((rz) => {
-                    this.crud.push(rz);
-                    if (rz.nodes.length) {
-                      rz.nodes.forEach((rs) => {
-                        this.crud.push(rs);
-                      });
-                    }
-                  });
-                  this.backups = JSON.parse(JSON.stringify(this.crud));
-                }
-              });
-            }
-          });
-
+          this.crud = res.data;
+          // res.data.forEach((item) => {
+          //   if (item.stepName === "生产过程") {
+          //     item.nodes.forEach((t) => {
+          //       if (t.stepName === "染整中心") {
+          //         // this.crud = t.nodes;
+          //         t.nodes.forEach((rz) => {
+          //           this.crud.push(rz);
+          //           if (rz.nodes.length) {
+          //             rz.nodes.forEach((rs) => {
+          //               this.crud.push(rs);
+          //             });
+          //           }
+          //         });
+          //         this.backups = JSON.parse(JSON.stringify(this.crud));
+          //       }
+          //     });
+          //   }
+          // });
           this.loading = false;
         });
       }
@@ -496,7 +476,7 @@ export default {
       case "選擇生产项目":
         this.choiceC = WorkStepC(this);
         this.choiceF = WorkStepF(this);
-        this.getData = getWorkStep;
+        this.getData = getBaseWorkStep;
         break;
       case "选择生产工序":
         this.choiceC = baseStepC(this);
@@ -508,13 +488,13 @@ export default {
     }
     this.query();
   },
-  mounted() {},
+  mounted() { },
   updated() {
     // this.$nextTick(() => {
     //   this.$refs["crud"].doLayout();
     // });
   },
-  beforeDestroy() {},
+  beforeDestroy() { },
 };
 </script>
 <style lang='stylus'>

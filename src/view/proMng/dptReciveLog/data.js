@@ -269,7 +269,7 @@ export function dlgForm(_this) {
           value: "stepId"
         },
         cascaderIndex: 0,
-        dicUrl: `${baseUrl}/api/baseWorkStep/List?orgCodes=%25{{dptworkProcessFk}}`
+        dicUrl: `${baseUrl}/api/baseWorkStep/parent?parentId=2A88BB439A7E4B4EBB899E0D2E10742F%2C0D315AE933AE43C1B6963B6E84989827`
         // dicData: postDicT(
         //   "baseWorkStepList",
         //   "stepName",
