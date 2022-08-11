@@ -181,6 +181,8 @@ export default {
               title: this.$t("iaoMng.bcsc"),
               icon: "el-icon-s-home",
               color: "#409EFF",
+              badgeKey: "innerWithCount",
+              badge:"",
             },
             {
               id: "2-5",
@@ -236,7 +238,7 @@ export default {
         {
           id: "3",
           label: "成品布",
-          name: "CPB",
+          name: "CPB|FC",
           span: 3,
           data: [
             {
@@ -265,7 +267,6 @@ export default {
               icon: "el-icon-s-home",
               color: "#409EFF",
             },
-
             {
               id: "3-4",
               click: () => {
@@ -296,6 +297,29 @@ export default {
               title: this.$t("iaoMng.sgrc"),
               icon: "el-icon-thumb",
               color: "#409EFF",
+            },
+            // 扁机
+            {
+              click: () => {},
+              id: "3-2-1",
+              title: this.$t("iaoMng.bjrc"),
+              icon: "yx-icf-bupi",
+              color: "#606266",
+              bgColor: "#ccc",
+              name: "FC"
+            },
+            {
+              click: () => {},
+              id: "3-2-2",
+              title: this.$t("iaoMng.wfjghc"),
+              click: () => {
+                this.toView("fc_outProRet", "扁机" + "_1", 'FC');
+              },
+              icon: "el-icon-s-home",
+              color: "#409EFF",
+              name: "FC",
+              badgeKey: "outsideWithCount",
+              badge:"",
             },
           ],
         },
@@ -1214,7 +1238,7 @@ export default {
     getUnInStockCountData(refreshAll = false){
       let types = [];
       if(refreshAll){
-        types = ["SX","RHL","RLL", "FL", "WJ", "XZ", "ENG","EQU"];
+        types = ["SX","RHL","RLL", "FL", "WJ", "XZ", "ENG","EQU", "FC","PB"];
       }else{
         this.curWhseType && types.push(this.curWhseType);
       }

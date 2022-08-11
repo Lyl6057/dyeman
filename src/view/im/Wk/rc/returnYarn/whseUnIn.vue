@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:18:36
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-05-17 15:17:38
+ * @LastEditTime: 2022-08-08 11:32:21
 -->
 <template>
   <div id="whse-unIn-container">
@@ -113,6 +113,9 @@ export default {
     .avue-crud__menu {
       min-height: 5px !important;
       height: 5px !important;
+    }
+    .el-table__fixed-body-wrapper{
+        top: 38px !important
     }
   }
 </style>

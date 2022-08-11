@@ -92,6 +92,8 @@ export default {
     saveTle11: "入倉貨位的批號/疋號不能為空!"
   },
   iaoMng: {
+    // 扁机
+    bjrc: "扁機入仓",
     // 出入庫
     sb: "设备",
     sbrc: "设备入仓",

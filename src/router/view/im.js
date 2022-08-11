@@ -393,7 +393,17 @@ export default [
         meta: {
           keepAlive: false
         }
-      }
+      },
+      // 扁机
+      {
+        path: "/fc_outProRet",
+        name: "fc_outProRet",
+        component: resolve =>
+          require(["@/view/im/Wk/rc/flatCloth/outProRet/index"], resolve),
+        meta: {
+          keepAlive: false
+        }
+      },
     ]
   },
   //手动操作
