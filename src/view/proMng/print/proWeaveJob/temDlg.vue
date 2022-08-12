@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-19 15:41:40
+ * @LastEditTime: 2022-08-12 11:51:09
  * @Description: 
 -->
 <template>
@@ -32,6 +32,7 @@
           <el-button type="primary" @click="print" :disabled="!this.form.weaveJobId || form.auditState === 0" v-if="canSave">打印</el-button>
         </el-tooltip>
         <el-button type="primary" @click="auditHandle(form.auditState ? 0 : 1)" v-if="audit">{{ form.auditState ? "取消审核" : "审核" }}</el-button>
+        <el-button type="danger" @click="handleEditColorDef" >适用染色色系定义</el-button>
         <el-tooltip class="item" effect="dark" content="đóng" placement="top-start">
           <el-button type="warning" @click="close">{{
             this.$t("public.close")
@@ -117,6 +118,9 @@
     <el-dialog :visible.sync="yarnTestVisible" append-to-body :close-on-click-modal="false" :close-on-press-escape="false" >
       <YarnTest ref="yarnTestRef"  />
     </el-dialog>
+    
+    <ColorDefine ref="colorDefineRef"  :weaveJobId="form.weaveJobId"  />
+
   </div>
 </template>
 <script>
@@ -124,6 +128,7 @@ import choice from "@/components/proMng/index";
 import technology from "./technology"
 import WeaveDtl from "./weaveDtl.vue"
 import YarnTest from "./yarnTest.vue"
+import ColorDefine from "../components/ColorDefine"
 import {
   mainCrud,
   dlgForm,
@@ -195,7 +200,8 @@ export default {
     technology,
     "weave-dtl": WeaveDtl,
     MeaveEmbyroDtl,
-    YarnTest
+    YarnTest,
+    ColorDefine
   },
   data() {
     return {
@@ -262,6 +268,10 @@ export default {
     },
   },
   methods: {
+    // 色系定义
+    handleEditColorDef(){
+      this.$refs.colorDefineRef.visible = true;
+    },
     // 织胚明细DOM 移动
     meaveDomMove(){
       let meaveDtlBtnDom = document.querySelectorAll(".other-dtl-wrapper")[0];
