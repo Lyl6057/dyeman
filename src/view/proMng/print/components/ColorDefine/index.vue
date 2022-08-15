@@ -163,6 +163,11 @@ export default {
             rows.forEach(item => {
                 item.isSelect = true;
             })
+            if(rows.length == 0){
+                this.dataList.forEach(item => {
+                    item.isSelect = false;
+                })
+            }
             this.curSelRows = rows;
         }
 
