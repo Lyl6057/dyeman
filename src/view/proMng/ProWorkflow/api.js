@@ -10,7 +10,7 @@ import axios from 'axios'
 
 export function get(params) {
   return axios({
-    url: '/api/baseWorkStepTree',
+    url: '/api/baseWorkStep/tree',
     method: 'get',
     params: params
   })

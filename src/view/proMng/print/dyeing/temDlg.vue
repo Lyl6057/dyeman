@@ -56,8 +56,8 @@
           <template slot-scope="scope" slot="dyeMathine">
             <el-select v-model="form.dyeMathine" filterable remote clearable default-first-option placeholder="请输入染缸機台號"
               @change="changeDyeMathine">
-              <el-option v-for="item in dyeMathineList" :key="item.equIdentCode" :label="item.equIdentCode"
-                :value="item.equIdentCode">
+              <el-option v-for="item in dyeMathineList" :key="item.equipmentCode" :label="item.equipmentCode"
+                :value="item.equipmentCode">
               </el-option>
             </el-select>
           </template>
@@ -488,6 +488,7 @@ export default {
     //   // this.chooseData.mateName = val.split("-")[1];
     // },
     remoteMate(val, type) {
+      console.log(this.detail);
       if (this.chooseDtlData.bleadyeType == "run") {
         return;
       }
@@ -2226,7 +2227,7 @@ export default {
     },
     changeDyeMathine(val) {
       try {
-        let index = this.dyeMathineList.findIndex(e => e.equIdentCode == val);
+        let index = this.dyeMathineList.findIndex(e => e.equipmentCode == val);
         this.form.tubeCount = (index != -1) ? this.dyeMathineList[index].tubeCount : "";
       } catch (error) {
         console.error(error);
@@ -2252,10 +2253,7 @@ export default {
 </script>
 <style lang='stylus'>
 .crudBox {
-  -webkit-user-select:none;
-  -moz-user-select:none;
-  -ms-user-select:none;
-  user-select:none;
+
 }
 .el-tag--mini {
   height: 28px !important;

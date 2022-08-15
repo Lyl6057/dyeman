@@ -8,22 +8,44 @@
 <template>
   <div id="prowovenrealWeight" v-loading="loading" :element-loading-text="$t('public.loading')">
     <view-container title="生产进度统计">
-      <div style="margin: 10px !important">
+      <!-- <div class="other-dtl-wrapper">
+        <el-tooltip class="item" effect="dark" content="tìm kiếm" placement="top-start">
+          <el-button type="primary" @click="meaveDomMove()">{{handleQueryexportExcel this.$t("public.query") }}</el-button>
+        </el-tooltip>
+      </div> -->
+      <el-form class="form-wrapper" :model="form" inline size="medium">
+        <el-form-item label="织造生产单号">
+          <el-input v-model="form.weaveJobCode" clearable="true"></el-input>
+        </el-form-item>
+        <el-form-item label="是否外发单">
+          <el-select v-model="form.isWorkOut" placeholder="" clearable="true">
+            <el-option label="是" value="1"></el-option>
+            <el-option label="否" value="0"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" size="medium" @click="handleQuery"> {{ $t("public.query") }}</el-button>
+          <el-button type="success" size="medium" @click="exportExcel()"> 报表</el-button>
+        </el-form-item>
+      </el-form>
+      <!-- <div style="margin: 10px !important">
         <avue-form ref="form" :option="formOp" v-model="form" @submit="handleQuery"> </avue-form>
-      </div>
+      </div> -->
       <div class="crudBox">
         <el-row>
           <el-col :span="24">
-            <avue-crud ref="crud" :option="crudOp" :data="crudData" :page.sync="page" @on-load="handleQuery"> </avue-crud>
+            <avue-crud ref="crud" :option="crudOp" :data="crudData" :page.sync="page" @on-load="handleQuery">
+            </avue-crud>
           </el-col>
         </el-row>
       </div>
     </view-container>
+
   </div>
 </template>
 <script>
 import { mainForm, mainCrud } from "./data";
-import { fetchProSchuduleData } from "./api";
+import { fetchProSchuduleData, getReport } from "./api";
 export default {
   name: "prowovenrealWeight",
   components: {},
@@ -31,7 +53,7 @@ export default {
     return {
       formOp: mainForm(this),
       form: {
-        isWorkOut:"",
+        isWorkOut: "",
         weaveJobCode: ""
       },
       crudOp: mainCrud(this),
@@ -48,15 +70,15 @@ export default {
   watch: {},
   methods: {
     handleQuery(form, done) {
-      
+
       this.loading = true;
       let params = {
         rows: this.page.pageSize,
         start: this.page.currentPage,
-        weaveJobCode:this.form.weaveJobCode,
-        isWorkOut:this.form.isWorkOut
+        weaveJobCode: this.form.weaveJobCode,
+        isWorkOut: this.form.isWorkOut
       }
-     
+
       fetchProSchuduleData(params).then((res) => {
         this.anslysisData(res.data.records);
         this.page.total = res.data.total;
@@ -66,10 +88,10 @@ export default {
       });
     },
     // 数据解析
-    anslysisData(resData){
+    anslysisData(resData) {
       let tDataMap = {}
-      resData.forEach((item,index) => {
-        if(!tDataMap[item.weaveJobCode]){
+      resData.forEach((item, index) => {
+        if (!tDataMap[item.weaveJobCode]) {
           tDataMap[item.weaveJobCode] = {
             id: item.weaveJobCode,
             weaveJobCode: item.weaveJobCode,
@@ -82,21 +104,21 @@ export default {
             qcDeductQty: 0,
             amount: item.amount,
             diffQty: 0,
-            children:[]
+            children: []
           }
         }
         let tData = tDataMap[item.weaveJobCode];
         tData.children.push({
-            isWorkOut: item.recordMonth,
-            grossWeight: item.grossWeight,
-            clothWeight: item.clothWeight,
-            weightedQty: item.weightedQty,
-            inStockQty: item.inStockQty,
-            outStockQty: item.outStockQty,
-            qcDeductQty: item.qcDeductQty,
-            // amount: item.amount,
-            id: item.weaveJobCode + index,
-            // diffQty: item.amount - item.clothWeight
+          isWorkOut: item.recordMonth,
+          grossWeight: item.grossWeight,
+          clothWeight: item.clothWeight,
+          weightedQty: item.weightedQty,
+          inStockQty: item.inStockQty,
+          outStockQty: item.outStockQty,
+          qcDeductQty: item.qcDeductQty,
+          // amount: item.amount,
+          id: item.weaveJobCode + index,
+          // diffQty: item.amount - item.clothWeight
         })
 
         tData.grossWeight += item.grossWeight;
@@ -112,11 +134,29 @@ export default {
 
       let resultData = Object.values(tDataMap);
       resultData.forEach(item => {
-        item.children.sort((a,b) => b.isWorkOut - a.isWorkOut) 
+        item.children.sort((a, b) => b.isWorkOut - a.isWorkOut)
         item.diffQty = item.amount - item.clothWeight
       });
 
       this.crudData = resultData;
+    },
+    exportExcel() {
+      try {
+        this.loading = true;
+        let url = process.env.API_HOST + //process.env.API_HOST
+          "/api/proWeaveJob/statisticalReport?" +
+          `weaveJobCode=${this.form.weaveJobCode}&` +
+          `isWorkOut=${this.form.isWorkOut}`
+        let oA = document.createElement("a");
+        oA.href = url;
+        oA.target = "_blank";
+        oA.click();
+        this.loading = false;
+        this.$tip.success("导出报表文件成功!")
+      } catch (error) {
+        this.$tip.error("操作失败！")
+      }
+
     }
   },
   created() { },
@@ -206,5 +246,12 @@ export default {
   .gantt-block-top-space {
     height: 0 !important;
   }
+}
+
+.form-wrapper{
+  display flex;
+  justify-content flex-start;
+  padding 10px 0 0 15px
+  margin-left 10px
 }
 </style>
