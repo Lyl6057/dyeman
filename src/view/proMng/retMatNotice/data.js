@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-08 17:26:12
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-05-18 11:18:26
+ * @LastEditTime: 2022-08-15 17:15:35
  */
 
 import {
@@ -13,7 +13,7 @@ import {
   } from "@/config/index";
 
 let typeOfDict = getDIC("pro_typeOf")
-
+let operator = getDicT("ucmlUser", "employeename", "ucmlUseroid")
 export const dataTyptEnum = {
     3: {
         viewTitle: "化工原料退货通知单",
@@ -96,7 +96,7 @@ export function crudOp(_this) {
         prop: "sysCreatedby",
         width: 160,
         type: "select",
-        dicData: getDicT("ucmlUser", "employeename", "ucmlUseroid"),
+        dicData: operator,
       },
       {
         label: "已入仓",

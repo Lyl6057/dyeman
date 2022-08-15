@@ -185,8 +185,9 @@ export async function getDbDicT(url, url2) {
 export function getDicT(url, label, value, form = {}, sort) {
   // let resultMap = _this.$store.getters.getDic(codeTableId);
   let resultMap = [];
-  if (store.state.DIC.dicMap[url]) {
-    return store.state.DIC.dicMap[url];
+  let dictKey = `${url}_${label}_${value}`
+  if (store.state.DIC.dicMap[dictKey]) {
+    return store.state.DIC.dicMap[dictKey];
   } else {
     axios({
       url: "/api/" + url,
@@ -228,7 +229,7 @@ export function getDicT(url, label, value, form = {}, sort) {
       });
     });
     store.commit("setDicItem", {
-      key: url,
+      key: dictKey,
       value: resultMap
     });
     return resultMap;
