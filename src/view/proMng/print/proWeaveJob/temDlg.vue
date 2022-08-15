@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-08-12 11:51:09
+ * @LastEditTime: 2022-08-12 15:20:20
  * @Description: 
 -->
 <template>
@@ -257,6 +257,8 @@ export default {
 
       // 试纱
       yarnTestVisible: false,
+      // 色系定义
+      colorNameMap: {},
 
     };
   },
@@ -271,6 +273,7 @@ export default {
     // 色系定义
     handleEditColorDef(){
       this.$refs.colorDefineRef.visible = true;
+
     },
     // 织胚明细DOM 移动
     meaveDomMove(){
@@ -399,6 +402,7 @@ export default {
       let poNoMap = {};
       let contractAmount = 0;
       let xiaLanDtls = [];
+      let colorNameEnum = {};
 
       let dtlCrudData = this.extractRows.map(item => {
         poNoMap[item.poNo] = true;
@@ -411,12 +415,17 @@ export default {
         }
         let weavePoQty = item.poQtyKg - item.weavePoQty
         contractAmount += weavePoQty;
+        colorNameEnum[item.colorDept] = true
         return Object.assign({}, item, {
           weavePoQty: weavePoQty,
           $cellEdit: true,
           proWeaveJobGstpodetailoid: v1(),
         });
       });
+
+      // 颜色列表值存储
+      this.colorNameMap = colorNameEnum;
+      this.$refs.colorDefineRef.setSelColData(this.colorNameMap)
 
       let poNos = Object.keys(poNoMap).join(",");
       let itemData = this.extractRows[0];
@@ -517,7 +526,27 @@ export default {
         });
       });
     },
-    save() {
+    // 保存前检验
+    beforeVaildSave(){
+      let weaveDtlDataLen = this.$refs.weaveDtlRef.crudData.length;
+      if(weaveDtlDataLen == 0){
+        this.$tip.warning("明细数据不能为空")
+        return false;
+      }
+
+      let dcsDataLen = this.$refs.colorDefineRef.curSelRows.length;
+      if(dcsDataLen == 0){
+        this.$tip.warning("适用染色色系定义不能为空")
+        return false;
+      }
+      
+      return true;
+    },
+    // 保存
+    async save() {
+      // 保存前检验
+      let validRes = await this.beforeVaildSave();
+      if(!validRes) return;
       this.$refs.form.validate((valid, done) => {
         if (valid) {
           try {
@@ -656,6 +685,9 @@ export default {
     // 保存织单明细
     saveWeavaDtlData(){
       this.$refs.weaveDtlRef.saveWeaveDltData(this.form.weaveJobId);
+      // 保存色系定义数据
+      this.$refs.colorDefineRef.setSelColData(this.colorNameMap);
+      this.$refs.colorDefineRef.handleSave(this.form.weaveJobId);
       if(this.isExtract){
         saveFlatknitByUnCreate({
           weaveJobId: this.form.weaveJobId,

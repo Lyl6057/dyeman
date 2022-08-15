@@ -1,5 +1,5 @@
 <template>
-    <div class="un-create-list-container" v-loading="loading">
+    <div class="un-pro-collar-account-container" v-loading="loading">
         <el-row class="btnList">
             <el-tooltip class="item" effect="dark" content="cập nhật" placement="top-start">
                 <el-button type="success"   @click="handleCreateProWeaveJob">生成台账</el-button>
@@ -161,7 +161,7 @@ export default {
 
 </script>
 <style lang="stylus">
-.un-create-list-container{
+.un-pro-collar-account-container{
     .avue-crud__tip{
         display: none !important
     }

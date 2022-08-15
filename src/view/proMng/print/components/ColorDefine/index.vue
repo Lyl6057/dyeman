@@ -3,7 +3,7 @@
         <view-container title="适用染色色系"  >
             <div class="weave-color-define-container" v-loading="loading">
                 <div class="btn-wrapper">
-                    <el-tooltip  effect="dark" content="Bảo tồn" placement="top-start" >
+                    <el-tooltip v-if="weaveJobId"  effect="dark" content="Bảo tồn" placement="top-start" >
                         <el-button type="success" @click="handleSave" >{{ $t("public.save") }}</el-button>
                     </el-tooltip>
                     <el-button type="primary" @click="handleAllSel">全选</el-button>
@@ -52,9 +52,15 @@ export default {
         // this.getInitCodeList();
     },
     watch: {
+        weaveJobId: {
+            handler(value){
+                this.getInitCodeList();
+            },
+            immediate: true
+        },
         visible: {
             handler(value){
-                value && this.getInitCodeList();
+                value && this.setSel2Table();
             },
             immediate: true
         }
@@ -72,26 +78,41 @@ export default {
                         proWeaveJobDcsoid: v1(),
                     }
                 });
-                 let params = {
+                let params = {
                     proWeaveJobFk: this.weaveJobId
                 }
-                return fetchWeaveDcsByWeaveJobId(params);
+                return  this.weaveJobId && fetchWeaveDcsByWeaveJobId(params);
             }).then(async res => {
-                let dcsEnum = res.data.reduce((a,b) => Object.assign(a, {[b.dcsNo]: b.proWeaveJobDcsoid}), {});
+                let dcsEnum = (res.data || []).reduce((a,b) => Object.assign(a, {[b.dcsNo]: b.proWeaveJobDcsoid}), {});
                 this.dataList.forEach(item => {
                     if(dcsEnum[item.codeId]){
                         item.isSelect = true;
                         item.proWeaveJobDcsoid = dcsEnum[item.codeId];
                     }
                 });
-                await this.$nextTick();
-                this.dataList.filter(item => item.isSelect).forEach(item => {
-                    this.$refs.colDefRef && this.$refs.colDefRef.toggleRowSelection(item, true)
-                })
+                this.curSelRows = this.dataList.filter(item => item.isSelect)
+                this.visible &&  this.setSel2Table();
             }).finally(() => {
                 this.loading = false;
             })
            
+        },
+        // 赋值选中项
+        async setSel2Table(){
+            await this.$nextTick();
+            this.dataList.filter(item => item.isSelect).forEach(item => {
+                this.$refs.colDefRef.toggleRowSelection(item, true)
+            })
+        },
+        // 赋值抽取到的数据集合
+        setSelColData(colNameMap){
+            console.log("colNameMap",colNameMap)
+            this.dataList.forEach(item => {
+                if(colNameMap[item.codeName]){
+                    item.isSelect = true;
+                }
+            });
+            this.curSelRows = this.dataList.filter(item => item.isSelect)
         },
         // 全选
         handleAllSel(){
@@ -111,18 +132,17 @@ export default {
             this.curSelRows = this.dataList.filter(item => item.isSelect);
         },
         // 保存
-        handleSave(){
+        handleSave(weaveJobId){
             if(this.curSelRows.length == 0){
                 return this.$tip.warning("请选择数据")
             }
             let dcsDataList = this.curSelRows.map(item => {
                 return {
                     proWeaveJobDcsoid: item.proWeaveJobDcsoid,
-                    proWeaveJobFk: this.weaveJobId,
+                    proWeaveJobFk: this.weaveJobId || weaveJobId,
                     dcsNo: item.codeId,
                 }
             });
-            console.log("dcsDataList", dcsDataList)
             this.loading = true;
             batchSaveWeaveDcsData(dcsDataList).then(res => {
                 this.$tip.success("保存成功")
