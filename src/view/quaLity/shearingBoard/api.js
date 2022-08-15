@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-05-03 16:09:39
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-23 16:21:36
+ * @LastEditTime: 2022-08-15 14:15:13
  * @FilePath: \iot.vue\src\view\quaLity\shearingBoard\api.js
  * @Description:
  */
@@ -65,14 +65,28 @@ export function removeProFinalProductCardCut(id){
 
 export function createRepairPdf(id){
   return axios({
-    url:"/api/qcClothBackRepair/repairPdf?id=" + id,
+    url: "/api/qcClothBackRepair/repairPdf?id=" + id,
     method: "get"
   })
 }
 
 export function getallDpt(){
   return axios({
-    url:"/api/proDptworkProcess",
+    url: "/api/proDptworkProcess",
+    method: "get"
+  })
+}
+
+export function fetchBasDefectTypeList(){
+  return axios({
+    url: "/api/getcodeValue?codeTableId=BAS_DEFECT",
+    method: "get"
+  })
+}
+
+export function fetchBasDefectList(){
+  return axios({
+    url: "/api/basDefectdata/list",
     method: "get"
   })
 }

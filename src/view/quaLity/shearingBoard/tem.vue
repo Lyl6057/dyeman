@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-05-03 16:29:13
  * @LastEditors: Lyl
- * @LastEditTime: 2022-07-07 10:59:13
+ * @LastEditTime: 2022-08-15 18:55:09
  * @FilePath: \iot.vue\src\view\quaLity\shearingBoard\tem.vue
  * @Description: 
 -->
@@ -48,6 +48,27 @@
           </template>
         </avue-form>
       </div>
+      <div class="defect-detail">
+        <!-- <view-container title="疵点明细"> -->
+          <div >
+            <!-- <el-checkbox-group v-model="defectType" @change="handleDefeceTypeChange">
+              <el-checkbox v-for="item in defectTypeData" :label="item.codeid" :key="item.codevalueoid">{{item.codename}}</el-checkbox>
+            </el-checkbox-group> -->
+            <div class="defect-group">
+              <el-card shadow="hover" class="defect-card" v-for="(val, key) in defectShowData" :key="key" :style="{'flex-grow': val.length > 20 ? 1 : 0 }">
+                <div slot="header" class="clearfix">
+                  <span class="title-small-bold">{{ defectTypeObj[key] }}</span>
+                </div>
+                <div class="defect-list" >
+                  <span class="defect-text text-small not-select" v-for="item in val" :key="item.basDefectdataoid"  :title="`${item.defectNo}-${item.chnName}-${item.vetName}`" @click="handelClickDefectNode(item)">
+                    {{`${item.defectNo}-${item.chnName}-${item.vetName}`}}
+                  </span>
+                </div>
+              </el-card>
+            </div>
+          </div>
+        <!-- </view-container> -->
+      </div>
     </view-container>
   </div>
 </template>
@@ -60,7 +81,9 @@ import {
   updateProFinalProductCardCut,
   getFinishedNoteByPage,
   updateFinishedNoteData,
-  getallDpt
+  getallDpt,
+  fetchBasDefectTypeList,
+  fetchBasDefectList
 } from "./api.js";
 import { crateDataForm } from "./data.js";
 export default {
@@ -81,10 +104,22 @@ export default {
       isBoard: true,
       spowerClient: null,
       printCount: 1,
-      printType:'1'
+      printType:'1',
+      defectTypeData: [],
+      defectType: [],
+      defectData: [],
+      defectTypeObj: {},
+      defectShowData: []
     };
   },
-  watch: {},
+  watch: {
+    isBoard(n,o){
+      this.qcShearingBoardFormOp.column[6].disabled = !n;
+      this.qcShearingBoardFormOp.column[8].disabled = n;
+      n && (this.qcShearingBoardData.cutDefeWeight = 0);
+      !n && (this.qcShearingBoardData.cutSamWeight = 0);
+    }
+  },
   computed: {},
   created() {
     let _this = this;
@@ -101,10 +136,10 @@ export default {
         ? (_this.qcShearingBoardData.cutSamWeight = weight)
         : (_this.qcShearingBoardData.cutDefeWeight = weight);
     };
+    this.initDefect();
   },
   mounted() {
     this.remoteMethod("");
-
   },
   methods: {
     remoteMethod(val) {
@@ -153,6 +188,31 @@ export default {
         }, 0);
       });
     },
+    async handleDefeceTypeChange(){
+      let obj = {};
+      this.defectData.forEach((item) => {
+        if(!this.defectType.includes(item.defectClass)){ return; }
+        !obj[item.defectClass] && (obj[item.defectClass] = []);
+        obj[item.defectClass].push(item);
+      });
+      this.defectShowData = obj;
+    },
+    handelClickDefectNode(val){
+      if(!this.qcShearingBoardData.cutRemarks){
+        this.qcShearingBoardData.cutRemarks = [];
+        return;
+      }
+      !this.qcShearingBoardData.cutRemarks.includes(val.defectNo) && this.qcShearingBoardData.cutRemarks.push(val.defectNo)
+    },
+    async initDefect(){
+      this.loading = true;
+      this.defectTypeData = await fetchBasDefectTypeList().then(res => res.data);
+      this.defectType = this.defectTypeData.map((item) =>{ !this.defectTypeObj[item.codeid] && ( this.defectTypeObj[item.codeid] = item.codename ); return item.codeid }); // 默认全选
+      this.defectData = await fetchBasDefectList().then(res => res.data);
+      this.qcShearingBoardFormOp.column[ this.qcShearingBoardFormOp.column.length - 1].dicData = this.defectData.map((item) =>{ return { label: `${item.chnName}-${item.vetName}`, value: item.defectNo}})
+      await this.handleDefeceTypeChange();
+      this.loading = false;
+    },
     async initData(cutId) {
       this.loading = true;
       fetchProFinalProductCardCutByPage({
@@ -161,6 +221,7 @@ export default {
         .then(async (res) => {
           res.data.total && (this.qcShearingBoardData = res.data.records[0]);
           !res.data.total && this.handleClose();
+          this.qcShearingBoardData.cutRemarks && ( this.qcShearingBoardData.cutRemarks = this.qcShearingBoardData.cutRemarks.split(","));
         })
         .finally(() => {
           setTimeout(() => {
@@ -268,7 +329,6 @@ export default {
             this.$tip.warning("请补充查布计划表信息!");
             return;
           }
-
           let params = {
             rows: 20,
             start: 1,
@@ -282,13 +342,18 @@ export default {
             this.qcShearingBoardData.cutRemarks.toString();
           if (cutId) {
             await updateProFinalProductCardCut(this.qcShearingBoardData).then();
+            await this.initData(cutId);
+            this.$tip.success("保存成功!");
+            setTimeout(() => {
+              this.loading = false;
+              done();
+            }, 200);
           } else {
             let dayRecords = await fetchProFinalProductCardCutByPage(
               params
             ).then((res) => {
               return res.data.total;
             });
-
             if (dayRecords > 0) {
               this.$tip.cofirm("成品编号【 " +
                 this.qcShearingBoardData.productNo +
@@ -415,6 +480,29 @@ export default {
 };
 </script>
 <style lang="stylus" scoped>
-.qcChcekPlanTem {
+>>>.el-card__header {
+  padding: 2px 10px;  
+}
+.defect-group {
+  display: flex;
+  flex-direction: row;
+  
+}
+.defect-group >div {
+  height: calc(100vh - 320px);
+  margin: 5px 5px;
+  width: 20%;
+  border: 1px solid #eee !important;
+}
+.defect-list{
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  height: calc(100vh - 345px);
+  overflow: auto
+}
+.defect-text {
+  margin: 2px 5px;
+  cursor pointer
 }
 </style>

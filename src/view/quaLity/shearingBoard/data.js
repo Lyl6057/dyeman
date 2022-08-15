@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-05-03 16:09:34
  * @LastEditors: Lyl
- * @LastEditTime: 2022-07-06 09:50:15
+ * @LastEditTime: 2022-08-15 18:56:39
  * @FilePath: \iot.vue\src\view\quaLity\shearingBoard\data.js
  * @Description:
  */
@@ -217,6 +217,7 @@ export function crateDataForm(_this) {
         minRows: 0,
         type: "number",
         placeholder: " ",
+        disabled: false,
         align: "right",
         precision: 1,
         rules: [
@@ -269,6 +270,7 @@ export function crateDataForm(_this) {
         prop: "cutDefeWeight",
         span: 6,
         width: 120,
+        disabled: true,
         type: "number",
         align: "right",
         placeholder: " ",
@@ -366,9 +368,9 @@ export function crateDataForm(_this) {
         type: "select",
         multiple: true,
         filterable: true,
-        allowCreate: true,
-        defaultFirstOption: true,
-        dicData: getDicT("qcClothCheckItem", "itemName", "itemName", {}, 'sn')
+        // allowCreate: true,
+        // defaultFirstOption: true,
+        dicData: [] //getDicT("basDefectdata/list ", "chnName", "defectNo", {}, 'defectNo')
       }
     ]
   };
@@ -613,6 +615,10 @@ export function mainCrud(_this) {
         placeholder: " ",
         span: 12,
         overHidden: true,
+      },
+      {
+        prop: "savetime",
+        label: "保存时间"
       }
     ]
   };

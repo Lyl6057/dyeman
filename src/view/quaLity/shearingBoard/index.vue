@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-05-03 16:09:29
  * @LastEditors: Lyl
- * @LastEditTime: 2022-07-07 10:50:34
+ * @LastEditTime: 2022-08-15 09:43:55
  * @FilePath: \iot.vue\src\view\quaLity\shearingBoard\index.vue
  * @Description: 
 -->
@@ -11,18 +11,18 @@
   <div class="abnormalDaily">
     <view-container title="剪办记录">
       <el-row class="btnList">
-        <el-button type="success" :disabled="chooseData.upFlag" @click="update"> {{ this.$t("public.update") }}
+        <el-button type="success" :disabled="chooseData.upFlag" @click="update"> {{ $t("public.update") }}
         </el-button>
-        <el-button type="primary" @click="add"> {{ this.$t("public.add") }} </el-button>
-        <el-button type="danger" :disabled="chooseData.upFlag" @click="del"> {{ this.$t("public.del") }} </el-button>
-        <el-popconfirm title="是否确定更新数据?" @onConfirm="handleUpdate" style="margin: 0 10px">
+        <el-button type="primary" @click="add"> {{ $t("public.add") }} </el-button>
+        <el-button type="danger" :disabled="chooseData.upFlag" @click="del"> {{ $t("public.del") }} </el-button>
+        <el-popconfirm title="是否确定更新数据?" @onConfirm="handleUpdate" class="mh-small">
           <el-button slot="reference" type="primary" :disabled="chooseData.upFlag || !chooseData.cutId">更新码卡</el-button>
         </el-popconfirm>
-        <el-popconfirm title="是否确定打印?" @onConfirm="handlePrint" style="margin-right: 10px">
+        <el-popconfirm title="是否确定打印?" @onConfirm="handlePrint" class="mr-small">
           <el-button slot="reference" type="primary" :disabled="!chooseData.upFlag">打印</el-button>
         </el-popconfirm>
         <el-button type="primary" @click="handleOutreport"> 报表 </el-button>
-        <el-button type="primary" @click="query"> {{ this.$t("public.query") }} </el-button>
+        <el-button type="primary" @click="query"> {{ $t("public.query") }} </el-button>
 
         <div style="float: right">
           <el-select v-model="printType" placeholder="打印模板">
@@ -40,30 +40,21 @@
       </el-row>
       <el-row class="crudBox">
         <el-col :span="hasCardData ? 20 : 24">
-          <avue-crud ref="crud" :option="crudOp" :data="crud" :page.sync="page" v-loading="loading"
-            element-loading-text="正在拼命加载中..." @on-load="query" @row-click="rowClick" @row-dblclick="handleRowDBLClick">
+          <avue-crud ref="crud" :option="crudOp" :data="crud" :page.sync="page" v-loading="loading" element-loading-text="正在拼命加载中..." @on-load="query" @row-click="rowClick" @row-dblclick="handleRowDBLClick">
           </avue-crud>
         </el-col>
         <el-col :span="4" v-if="hasCardData">
-          <el-card class="box-card" style="text-align: left;padding-left: 10px;width:97%;height: calc(100vh - 200px)">
+          <el-card class="box-card" style="">
             <div slot="header" class="clearfix">
               <span>码卡信息</span>
             </div>
-            <p>
-              <span style="font-weight: 600;">客户: </span> {{ cardData.custName }}
-            </p>
-            <p style="">
-              <span style="font-weight: 600; ">布类: </span>{{ cardData.fabName }}
-            </p>
-            <p>
-              <span style="font-weight: 600;">颜色: </span>{{ cardData.colorName }}
-            </p>
-            <p>
-              <span style="font-weight: 600;">缸号: </span>{{ cardData.vatNo }}
-            </p>
-            <p>
-              <span style="font-weight: 600;">疋号: </span>{{ cardData.pidNo }}
-            </p>
+            <div class="cardData">
+              <p><b>客户: </b> {{ cardData.custName }}</p>
+              <p><b>布类: </b>{{ cardData.fabName }}</p>
+              <p><b>颜色: </b>{{ cardData.colorName }}</p>
+              <p><b>缸号: </b>{{ cardData.vatNo }}</p>
+              <p><b>疋号: </b>{{ cardData.pidNo }}</p>
+            </div>
           </el-card>
         </el-col>
       </el-row>
@@ -75,7 +66,6 @@
 </template>
 
 <script>
-import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
 import temDlg from "./tem.vue";
 import {
   fetchProFinalProductCardCutByPage,
@@ -111,21 +101,19 @@ export default {
       spowerClient: null,
       chooseData: {},
       printCount: 1,
-      printType: '1'
+      printType: "1",
     };
   },
   watch: {},
   computed: {},
-  created() {
-
-  },
+  created() {},
   beforeRouteEnter(to, form, next) {
     next((vm) => {
       let self = vm;
       self.spowerClient = self.$store.state.spowerClient;
     });
   },
-  mounted() { },
+  mounted() {},
   methods: {
     query() {
       this.loading = true;
@@ -133,7 +121,7 @@ export default {
         cutDept: "%" + (this.form.cutDept || ""),
         productNo: "%" + (this.form.productNo || ""),
         cutDate: this.form.cutDate,
-        dataSortRules: "cutDate|desc,cutDept",
+        dataSortRules: "saveTime|desc,productNo|desc",
       };
       fetchProFinalProductCardCutByPage(params)
         .then(async (res) => {
@@ -202,29 +190,27 @@ export default {
     handleOutreport() {
       let url = encodeURI(
         "http://" +
-        document.domain +
-        ":91/api/proFinalProductCardCut/exportForm?cutDept=" +
-        (this.form.cutDept || "") +
-        "&cutDate=" +
-        (this.form.cutDate || "") +
-        "&productNo=" +
-        (this.form.productNo || "")
+          document.domain +
+          ":91/api/proFinalProductCardCut/exportForm?cutDept=" +
+          (this.form.cutDept || "") +
+          "&cutDate=" +
+          (this.form.cutDate || "") +
+          "&productNo=" +
+          (this.form.productNo || "")
       );
       window.open(url);
     },
     handlePrint() {
-      if (this.spowerClient.readyState == 3 || this.spowerClient.readyState == 0) {
+      if (!this.spowerClient || this.spowerClient.readyState == 3 || this.spowerClient.readyState == 0 ) {
         this.$tip.error("打印服务离线，请启动服务后刷新页面!");
         return;
       }
       let printData = this.crud[this.curIdx - 1];
       printData.printTime = this.$getNowTime("datetime");
       for (let i = 0; i < this.printCount; i++) {
-        if (this.printType == 1) {
-          this.spowerClient.send("print=finishCard:" + printData.proCardFk);
-        } else {
-          this.spowerClient.send("print= finishCardCustomer:" + printData.proCardFk);
-        }
+        let sendTemp = (this.printType == 1 ? "print=finishCard:" : "print=finishCardCustomer:") + printData.proCardFk;
+        console.log("printInfo:" + sendTemp);
+        this.spowerClient.send(sendTemp);
       }
       updateProFinalProductCardCut(printData);
       this.$tip.success("已发送打印动作!");
@@ -314,9 +300,9 @@ export default {
         (command < 10 ? "0" + command : command);
       let name = encodeURI(
         "http:" +
-        process.env.API_HOST.split(":")[1] +
-        ":92/api/qaDayOutput/qareport?dayId=" +
-        dayId
+          process.env.API_HOST.split(":")[1] +
+          ":92/api/qaDayOutput/qareport?dayId=" +
+          dayId
       );
       window.open(name);
       this.wloading = false;
@@ -327,5 +313,16 @@ export default {
 <style lang="stylus" scoped>
 >>>.el-card__header {
   padding: 8px 10px;
+}
+
+.cardData p span:first-child {
+  font-weight: 600;
+}
+
+.box-card {
+  text-align: left;
+  padding-left: 10px;
+  width: 97%;
+  height: calc(100vh - 200px);
 }
 </style>
