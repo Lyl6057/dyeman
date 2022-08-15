@@ -107,12 +107,14 @@ export default {
         // 赋值抽取到的数据集合
         setSelColData(colNameMap){
             console.log("colNameMap",colNameMap)
-            this.dataList.forEach(item => {
-                if(colNameMap[item.codeName]){
-                    item.isSelect = true;
-                }
-            });
-            this.curSelRows = this.dataList.filter(item => item.isSelect)
+            setTimeout(() => {
+               this.dataList.forEach(item => {
+                    if(colNameMap[item.codeName]){
+                        item.isSelect = true;
+                    }
+                });
+                this.curSelRows = this.dataList.filter(item => item.isSelect)     
+            }, 500);
         },
         // 全选
         handleAllSel(){
