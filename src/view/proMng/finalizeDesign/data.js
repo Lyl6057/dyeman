@@ -119,7 +119,7 @@ export function mainCrud(_this) {
           }
         ],
         click: () => {
-          _this.choiceTle = "选择染整工单";
+          _this.choiceTle = "选择运转单";
           _this.choiceV = true;
         }
       },
