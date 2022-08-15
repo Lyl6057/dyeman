@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-09 09:54:30
+ * @LastEditTime: 2022-08-12 11:52:22
  * @Description: 
 -->
 <template>
@@ -35,6 +35,7 @@
           <el-tooltip class="item" effect="dark" content="in" placement="top-start">
             <el-button type="primary" @click="print" :disabled="!this.form.weaveJobId" v-if="canSave">打印</el-button>
           </el-tooltip>
+          <el-button type="danger" @click="handleEditColorDef" >适用染色色系定义</el-button>
         </template>
         <el-tooltip class="item" effect="dark" content="đóng" placement="top-start">
           <el-button type="warning" @click="close">{{
@@ -146,6 +147,9 @@
       :close-on-press-escape="false">
       <MachineInfo :weaveJobId="form.weaveJobId" ref="machineInfoRef" @close="machineInfoVisible = false" />
     </el-dialog>
+
+    <ColorDefine ref="colorDefineRef"  :weaveJobId="form.weaveJobId"  />
+
   </div>
 </template>
 <script>
@@ -197,6 +201,7 @@ import { getBf } from "../clothFly/api";
 import technology from "../proWeaveJob/technology"
 import MeaveEmbyroDtl from "./meaveEmbyroDtl.vue"
 import MachineInfo from "./machineInfo.vue"
+import ColorDefine from "../components/ColorDefine"
 import { async } from 'q';
 export default {
   name: "",
@@ -210,7 +215,8 @@ export default {
     choice: choice,
     technology,
     MeaveEmbyroDtl,
-    MachineInfo
+    MachineInfo,
+    ColorDefine
   },
   data() {
     return {
@@ -272,6 +278,10 @@ export default {
     }
   },
   methods: {
+    // 色系定义
+    handleEditColorDef(){
+      this.$refs.colorDefineRef.visible = true;
+    },
     // 织胚明细DOM 移动
     meaveDomMove() {
       let meaveDtlBtnDom = document.querySelectorAll(".other-dtl-wrapper")[0];
