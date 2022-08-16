@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-03-24 14:15:12
- * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-21 17:20:56
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-08-16 09:33:18
  * @Description: 
 -->
 <template>
@@ -362,8 +362,29 @@ export default {
         // Replacements take place on first sheet
         var sheetNumber = "Sheet1";
         // Set up some placeholder values matching the placeholders in the template
-        this.getList().then((res) => {
-          this.crud = res.data;
+        let query = JSON.parse(JSON.stringify(this.form));
+        query.yarnsId = "!^%" + (query.chemicalId || "");
+        query.batId = "!^%" + (query.batId || "");
+        query.chemicalId = query.yarnsId;
+        query.officeId = query.yarnsId;
+        query.accessoriesId = query.yarnsId;
+        query.yarnsName = "%" + (query.chemicalName || "");
+        query.chemicalName = query.yarnsName;
+        query.officeName = query.yarnsName;
+        query.fabricName = query.yarnsName;
+        query.accessoriesName = query.yarnsName;
+        query.fabName = query.yarnsName;
+        query.proName = "%" + (query.proName || "");
+        query.vatNo = "!^%" + (query.vatNo || "");
+        query.noteCode = "%" + (query.noteCode || "");
+        query.storeLoadCode = "%" + (query.storeLoadCode || "");
+        query.batchNo = "%" + (query.batchNo || "");
+        this.getFun(Object.assign(query, {
+          rows: 999999,
+          start: 1,
+          clothState: 2,
+        })).then((res) => {
+          this.crud = res.data.records;
           this.crud.sort((a, b) =>
             a[this.typeObj.sort] > b[this.typeObj.sort] ? -1 : 1
           );
@@ -400,13 +421,10 @@ export default {
             fun1().then((res) => {
               setTimeout(() => {
                 this.$tip.success("导出成功!");
-
                 this.getData();
               }, 1000);
             });
           });
-        }).finally(() => {
-          this.loading = false;
         })
       } catch (e) {
         console.log(e);
