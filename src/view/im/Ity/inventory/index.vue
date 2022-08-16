@@ -179,7 +179,6 @@ export default {
           this.getList = getCpbList;
           this.crudOp = finishedCrud(this);
           this.typeObj.sort = "productNo";
-          query.vatNo = "!^%"; // 成品编号升序
           this.typeObj.outAdr = "./static/xlxsTemplate/inventory.xlsx";
           break;
         case "PB":

@@ -3,7 +3,7 @@
         <view-container title="适用染色色系"  >
             <div class="weave-color-define-container" v-loading="loading">
                 <div class="btn-wrapper">
-                    <el-tooltip v-if="weaveJobId"  effect="dark" content="Bảo tồn" placement="top-start" >
+                    <el-tooltip  effect="dark" content="Bảo tồn" placement="top-start" >
                         <el-button type="success" @click="handleSave" >{{ $t("public.save") }}</el-button>
                     </el-tooltip>
                     <el-button type="primary" @click="handleAllSel">全选</el-button>
@@ -107,12 +107,14 @@ export default {
         // 赋值抽取到的数据集合
         setSelColData(colNameMap){
             console.log("colNameMap",colNameMap)
-            this.dataList.forEach(item => {
-                if(colNameMap[item.codeName]){
-                    item.isSelect = true;
-                }
-            });
-            this.curSelRows = this.dataList.filter(item => item.isSelect)
+            setTimeout(() => {
+               this.dataList.forEach(item => {
+                    if(colNameMap[item.codeName]){
+                        item.isSelect = true;
+                    }
+                });
+                this.curSelRows = this.dataList.filter(item => item.isSelect)     
+            }, 500);
         },
         // 全选
         handleAllSel(){
@@ -133,6 +135,10 @@ export default {
         },
         // 保存
         handleSave(weaveJobId){
+            if(!this.weaveJobId){
+                this.$tip.success("已保存")
+                return this.handleClose();
+            }
             if(this.curSelRows.length == 0){
                 return this.$tip.warning("请选择数据")
             }
@@ -159,6 +165,11 @@ export default {
             rows.forEach(item => {
                 item.isSelect = true;
             })
+            if(rows.length == 0){
+                this.dataList.forEach(item => {
+                    item.isSelect = false;
+                })
+            }
             this.curSelRows = rows;
         }
 

@@ -162,6 +162,10 @@ export function proMng(_this) {
         {
           menuName: "8.运转单备布统计",
           index: "proBleadyeRunJob"
+        },
+        {
+          menuName: "9.染整中控任务",
+          index: "proBleadjobDcctask"
         }
         // {
         //   menuName: "3.布飞打印",

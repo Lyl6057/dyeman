@@ -23,6 +23,22 @@ export function mainForm(_this) {
         span: 6,
         placeholder: "請選擇缸號",
       },
+      {
+        label: "染缸機台號",
+        tip: "Số bồn nhuộm chung",
+        prop: "fdataid",
+        overHidden: true,
+        width: 130,
+        span: 6,
+        disabled: true,
+        type: "select",
+        dicData: [],
+        formslot: true,
+        filterable: true,
+        allowCreate: true,
+        defaultFirstOption: true,
+        placeholder: " "
+      },
     ]
   };
 }
@@ -89,6 +105,27 @@ export function taskCrud(_this) {
         sortable: true,
       },
       {
+        label: "染缸機台號",
+        prop: "fdataid",
+        overHidden: true,
+        width: 100,
+        align: 'center',
+        span: 6,
+        disabled: true,
+        placeholder: "請選擇缸號",
+        sortable: true,
+      },
+      {
+        label: "工艺集合",
+        prop: "fno",
+        overHidden: true,
+        width: 200,
+        span: 6,
+        disabled: true,
+        placeholder: "請選擇缸號",
+        sortable: true,
+      },
+      {
         label: "色号",
         prop: "fcolorno",
         overHidden: true,
@@ -108,16 +145,7 @@ export function taskCrud(_this) {
         placeholder: "請選擇缸號",
         sortable: true,
       },
-      {
-        label: "工艺集合",
-        prop: "fno",
-        overHidden: true,
-        width: 200,
-        span: 6,
-        disabled: true,
-        placeholder: "請選擇缸號",
-        sortable: true,
-      },
+
       {
         label: "布类名称",
         prop: "fitemname",
@@ -134,6 +162,7 @@ export function taskCrud(_this) {
         prop: "fqtyprice",
         overHidden: true,
         width: 100,
+        align: 'center',
         span: 6,
         disabled: true,
         placeholder: "請選擇缸號",
@@ -547,7 +576,7 @@ export function codeItemCrud(_this) {
         align: 'center',
         span: 6,
         placeholder: " ",
-        
+
       },
       {
         label: "材料度量",
@@ -718,7 +747,7 @@ export function techargueCrud(_this) {
         type: "number",
         align: "right",
         span: 6,
-       
+
       },
       {
         label: "总水量",
@@ -732,7 +761,7 @@ export function techargueCrud(_this) {
           return v && Number(v).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         },
         placeholder: " ",
-        
+
       },
       {
         label: "布含水量(%)",
@@ -746,7 +775,7 @@ export function techargueCrud(_this) {
           return v && Number(v).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         },
         placeholder: " ",
-       
+
       },
       {
         label: "副缸外加水量",
@@ -760,7 +789,7 @@ export function techargueCrud(_this) {
           return v && Number(v).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         },
         placeholder: " ",
-        
+
       },
       {
         label: "停机水量",
@@ -773,7 +802,7 @@ export function techargueCrud(_this) {
         formatter(r, v) {
           return v && Number(v).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         },
-       
+
       }
     ]
   };

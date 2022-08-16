@@ -7,11 +7,12 @@
 -->
 <template>
   <div id="proWeaveJob">
-    <view-container :title="(isAdd ? '新增' : '修改') + '織造通知單'" :element-loading-text="$t('public.loading')" v-loading="wLoading">
+    <view-container :title="(isAdd ? '新增' : '修改') + '織造通知單'" :element-loading-text="$t('public.loading')"
+      v-loading="wLoading">
       <div class="btnList">
         <el-tooltip class="item" effect="dark" content="Bảo tồn" placement="top-start">
           <el-button type="success" @click="save" title="save" v-if="canSave">{{
-            $t("public.save")
+              $t("public.save")
           }}</el-button>
         </el-tooltip>
 
@@ -20,7 +21,8 @@
           <el-button type="primary" @click="checkYarn" :disabled="!this.form.weaveJobId" v-if="canSave">用紗明細</el-button>
         </el-tooltip>
         <el-tooltip class="item" effect="dark" content="After washing" placement="top-start">
-          <el-button type="primary" @click="checkCalico" :disabled="!this.form.weaveJobId" v-if="canSave">洗後規格</el-button>
+          <el-button type="primary" @click="checkCalico" :disabled="!this.form.weaveJobId" v-if="canSave">洗後規格
+          </el-button>
         </el-tooltip>
         <!-- <el-button
           type="primary"
@@ -29,13 +31,16 @@
           >輸送張力</el-button
         > -->
         <el-tooltip class="item" effect="dark" content="in" placement="top-start">
-          <el-button type="primary" @click="print" :disabled="!this.form.weaveJobId || form.auditState === 0" v-if="canSave">打印</el-button>
+          <el-button type="primary" @click="print" :disabled="!this.form.weaveJobId || form.auditState === 0"
+            v-if="canSave">打印</el-button>
         </el-tooltip>
-        <el-button type="primary" @click="auditHandle(form.auditState ? 0 : 1)" v-if="audit">{{ form.auditState ? "取消审核" : "审核" }}</el-button>
-        <el-button type="danger" @click="handleEditColorDef" >适用染色色系定义</el-button>
+        <el-button type="primary" @click="auditHandle(form.auditState ? 0 : 1)" v-if="audit">{{ form.auditState ? "取消审核"
+            : "审核"
+        }}</el-button>
+        <el-button type="danger" @click="handleEditColorDef">适用染色色系定义</el-button>
         <el-tooltip class="item" effect="dark" content="đóng" placement="top-start">
           <el-button type="warning" @click="close">{{
-            this.$t("public.close")
+              this.$t("public.close")
           }}</el-button>
         </el-tooltip>
       </div>
@@ -54,12 +59,14 @@
       </div>
     </view-container>
 
-    <el-dialog :visible.sync="visible" fullscreen append-to-body id="viewDlg" :element-loading-text="$t('public.loading')" v-loading="dlgLoading" v-if="visible">
+    <el-dialog :visible.sync="visible" fullscreen append-to-body id="viewDlg"
+      :element-loading-text="$t('public.loading')" v-loading="dlgLoading" v-if="visible">
       <el-row>
         <el-col :span="24">
           <view-container :title="tabs">
             <div class="btnList">
-              <el-button @click="check" type="success" v-if="tabs == '選擇訂單' || tabs == '更改紗長'">{{ $t("public.choose") }}</el-button>
+              <el-button @click="check" type="success" v-if="tabs == '選擇訂單' || tabs == '更改紗長'">{{ $t("public.choose") }}
+              </el-button>
               <el-tooltip class="item" effect="dark" content="Bảo tồn" placement="top-start">
                 <el-button @click="saveOther" type="success" v-if="tabs != '選擇訂單'">{{ $t("public.save") }}</el-button>
               </el-tooltip>
@@ -79,7 +86,7 @@
               <el-button @click="query" type="primary" v-if="tabs == '選擇訂單'">{{ $t("public.query") }}</el-button>
               <el-tooltip class="item" effect="dark" content="đóng" placement="top-start">
                 <el-button @click="visible = false" type="warning">{{
-                  $t("public.close")
+                    $t("public.close")
                 }}</el-button>
               </el-tooltip>
             </div>
@@ -87,39 +94,42 @@
               <avue-form v-if="tabs == '選擇訂單'" ref="dlgform" :option="dlgFormOp" v-model="dlgForm"></avue-form>
             </div>
             <div class="crudBox">
-              <avue-crud ref="crud" :option="crudOp" :data="crud" :page.sync="page" v-loading="loading" @on-load="query" @row-dblclick="handleRowDBLClick" @current-row-change="cellClick"></avue-crud>
+              <avue-crud ref="crud" :option="crudOp" :data="crud" :page.sync="page" v-loading="loading" @on-load="query"
+                @row-dblclick="handleRowDBLClick" @current-row-change="cellClick"></avue-crud>
             </div>
           </view-container>
         </el-col>
       </el-row>
     </el-dialog>
-    <el-dialog id="colorMng_Dlg" :visible.sync="pdfDlg" fullscreen width="100%" append-to-body :close-on-click-modal="false" :close-on-press-escape="false">
+    <el-dialog id="colorMng_Dlg" :visible.sync="pdfDlg" fullscreen width="100%" append-to-body
+      :close-on-click-modal="false" :close-on-press-escape="false">
       <view-container title="打印預覽">
         <embed id="pdf" style="width: 100vw; height: calc(100vh - 80px)" :src="pdfUrl" />
       </view-container>
     </el-dialog>
-    <el-dialog id="colorMng_Dlg" :visible.sync="gytDlg" fullscreen width="100%" append-to-body :close-on-click-modal="false" :close-on-press-escape="false">
+    <el-dialog id="colorMng_Dlg" :visible.sync="gytDlg" fullscreen width="100%" append-to-body
+      :close-on-click-modal="false" :close-on-press-escape="false">
       <view-container title="上机工艺维护">
         <technology v-if="gytDlg" :weave="form" @refresh="technologyRefresh" @close="gytDlg = false"></technology>
       </view-container>
     </el-dialog>
-    <choice :choiceV="choiceV" :choiceTle="choiceTle" :choiceQ="choiceQ" dlgWidth="100%" @choiceData="choiceData" @close="choiceV = false" v-if="choiceV"></choice>
-  
+    <choice :choiceV="choiceV" :choiceTle="choiceTle" :choiceQ="choiceQ" dlgWidth="100%" @choiceData="choiceData"
+      @close="choiceV = false" v-if="choiceV"></choice>
 
-    <div class="other-dtl-wrapper" >
-      <span style="color: #409eff; font-size: 15px; margin-left: 20px" @click.stop="handleOpenWeaEmbDtl" >織胚明細</span>
+
+    <div class="other-dtl-wrapper">
+      <span style="color: #409eff; font-size: 15px; margin-left: 20px" @click.stop="handleOpenWeaEmbDtl">織胚明細</span>
     </div>
-    <el-dialog :visible.sync="meaEmbVisible" fullscreen  append-to-body :close-on-click-modal="false" :close-on-press-escape="false" >
-      <MeaveEmbyroDtl 
-        :weaveJobId="form.weaveJobId"
-        ref="meaveEmbyroDtlRef" 
-        @close="meaEmbVisible = false" />
+    <el-dialog :visible.sync="meaEmbVisible" fullscreen append-to-body :close-on-click-modal="false"
+      :close-on-press-escape="false">
+      <MeaveEmbyroDtl :weaveJobId="form.weaveJobId" ref="meaveEmbyroDtlRef" @close="meaEmbVisible = false" />
     </el-dialog>
-    <el-dialog :visible.sync="yarnTestVisible" append-to-body :close-on-click-modal="false" :close-on-press-escape="false" >
-      <YarnTest ref="yarnTestRef"  />
+    <el-dialog :visible.sync="yarnTestVisible" append-to-body :close-on-click-modal="false"
+      :close-on-press-escape="false">
+      <YarnTest ref="yarnTestRef" />
     </el-dialog>
-    
-    <ColorDefine ref="colorDefineRef"  :weaveJobId="form.weaveJobId"  />
+
+    <ColorDefine ref="colorDefineRef" :weaveJobId="form.weaveJobId" />
 
   </div>
 </template>
@@ -271,24 +281,24 @@ export default {
   },
   methods: {
     // 色系定义
-    handleEditColorDef(){
+    handleEditColorDef() {
       this.$refs.colorDefineRef.visible = true;
 
     },
     // 织胚明细DOM 移动
-    meaveDomMove(){
+    meaveDomMove() {
       let meaveDtlBtnDom = document.querySelectorAll(".other-dtl-wrapper")[0];
       let formGroupWrapper = document.querySelectorAll("#proWeaveJob .avue-group__header")[0];
       formGroupWrapper.appendChild(meaveDtlBtnDom)
     },
     // 打开织胚明细界面
-    async handleOpenWeaEmbDtl(){
-      if(!this.isExtract && !this.form.weaveJobId) return this.$tip.warning("请先保存通知单");
+    async handleOpenWeaEmbDtl() {
+      if (!this.isExtract && !this.form.weaveJobId) return this.$tip.warning("请先保存通知单");
       this.meaEmbVisible = true;
       await this.$nextTick();
-      if(this.isExtract){
+      if (this.isExtract) {
         this.$refs.meaveEmbyroDtlRef.extractDtl(this.xiaLanDtls);
-      }else{
+      } else {
         this.$refs.meaveEmbyroDtlRef.getDataList();
       }
     },
@@ -357,7 +367,7 @@ export default {
             this.form.auditState = 0;
             this.form.creator = parent.userID;
           }).then(res => {
-            if(this.isExtract){
+            if (this.isExtract) {
               this.analysisExtractData();
             }
           });
@@ -393,11 +403,11 @@ export default {
       }
     },
     // 获取织单明细数据
-    getWeaveDtlData(){
+    getWeaveDtlData() {
       this.$refs.weaveDtlRef.getWeaveDtlData(this.form.weaveJobId)
     },
     // 解析抽取到的数据
-    analysisExtractData(){
+    analysisExtractData() {
 
       let poNoMap = {};
       let contractAmount = 0;
@@ -406,7 +416,7 @@ export default {
 
       let dtlCrudData = this.extractRows.map(item => {
         poNoMap[item.poNo] = true;
-        if(item.type == 3){
+        if (item.type == 3) {
           xiaLanDtls.push({
             poNo: item.poNo,
             bomId: item.bomId,
@@ -449,17 +459,17 @@ export default {
       })
       this.$refs.weaveDtlRef.crudData = dtlCrudData;
       this.xiaLanDtls = xiaLanDtls;
-      
+
     },
-    technologyRefresh(val){
-      this.form.pinColumn = val.pinColumn 
-      this.form.diskNum = val.diskNum 
-      this.form.syringeNum = val.syringeNum 
-      this.form.totalColumn = val.totalColumn 
-      this.form.needlePlaceType = val.needlePlaceType 
+    technologyRefresh(val) {
+      this.form.pinColumn = val.pinColumn
+      this.form.diskNum = val.diskNum
+      this.form.syringeNum = val.syringeNum
+      this.form.totalColumn = val.totalColumn
+      this.form.needlePlaceType = val.needlePlaceType
       this.refresh = true
     },
-    operatProcessClick(){
+    operatProcessClick() {
       if (!this.form.weaveJobId) {
         this.$tip.warning("请先保存主表信息！")
         return
@@ -527,26 +537,26 @@ export default {
       });
     },
     // 保存前检验
-    beforeVaildSave(){
+    beforeVaildSave() {
       let weaveDtlDataLen = this.$refs.weaveDtlRef.crudData.length;
-      if(weaveDtlDataLen == 0){
+      if (weaveDtlDataLen == 0 && this.isAdd) {
         this.$tip.warning("明细数据不能为空")
         return false;
       }
 
       let dcsDataLen = this.$refs.colorDefineRef.curSelRows.length;
-      if(dcsDataLen == 0){
+      if (dcsDataLen == 0 && this.isAdd) {
         this.$tip.warning("适用染色色系定义不能为空")
         return false;
       }
-      
+
       return true;
     },
     // 保存
     async save() {
       // 保存前检验
       let validRes = await this.beforeVaildSave();
-      if(!validRes) return;
+      if (!validRes) return;
       this.$refs.form.validate((valid, done) => {
         if (valid) {
           try {
@@ -655,7 +665,7 @@ export default {
                       this.$tip.success(this.$t("public.bccg"));
                     });
                   } else {
-                    baseCodeSupply({ code: "proWeaveJob" }).then((res) => {});
+                    baseCodeSupply({ code: "proWeaveJob" }).then((res) => { });
                     this.saveWeavaDtlData();
                     this.$tip.success(this.$t("public.bccg"));
                     this.refresh = true;
@@ -683,12 +693,18 @@ export default {
       });
     },
     // 保存织单明细
-    saveWeavaDtlData(){
-      this.$refs.weaveDtlRef.saveWeaveDltData(this.form.weaveJobId);
+    saveWeavaDtlData() {
+      if (this.$refs.weaveDtlRef.crudData.length > 0) {
+        this.$refs.weaveDtlRef.saveWeaveDltData(this.form.weaveJobId);
+      }
+
       // 保存色系定义数据
       this.$refs.colorDefineRef.setSelColData(this.colorNameMap);
-      this.$refs.colorDefineRef.handleSave(this.form.weaveJobId);
-      if(this.isExtract){
+      if (this.$refs.colorDefineRef.curSelRows.length > 0 && this.isAdd) {
+        this.$refs.colorDefineRef.handleSave(this.form.weaveJobId);
+      }
+      
+      if (this.isExtract) {
         saveFlatknitByUnCreate({
           weaveJobId: this.form.weaveJobId,
           data: this.xiaLanDtls
@@ -889,7 +905,7 @@ export default {
               item.useYarnId = res.data.data;
             });
           } else {
-            updateYarn(item).then((res) => {});
+            updateYarn(item).then((res) => { });
           }
           if (i == this.crud.length - 1) {
             this.$tip.success("保存成功!");
@@ -949,7 +965,7 @@ export default {
         maxOutput: equInfo.maxOutput,
         equState: equInfo.equState,
       };
-      addProEquipmentSchedule(params).then((res) => {});
+      addProEquipmentSchedule(params).then((res) => { });
     },
     checkOrder() {
       this.choiceTle = "选择订单资料";
@@ -1026,12 +1042,12 @@ export default {
               this.tabs === "更改紗長"
                 ? this.chooseData.changedId
                 : this.tabs === "用紗明细"
-                ? this.chooseData.useYarnId
-                : this.tabs === "洗後規格"
-                ? this.chooseData.washedId
-                : this.tabs === "機號信息"
-                ? this.chooseData.useId
-                : this.chooseData.strainId
+                  ? this.chooseData.useYarnId
+                  : this.tabs === "洗後規格"
+                    ? this.chooseData.washedId
+                    : this.tabs === "機號信息"
+                      ? this.chooseData.useId
+                      : this.chooseData.strainId
             )
             .then((res) => {
               if (res.data.code === 200) {
@@ -1196,9 +1212,9 @@ export default {
       } else if (this.tabs === "更改紗長") {
         this.form.yarnLenghtChanged = this.chooseData.yarnLength;
         this.visible = false;
-      }else if (this.tabs === "用紗明细"){
+      } else if (this.tabs === "用紗明细") {
         // 不存在本厂批号则不进行操作
-        if(!this.chooseData.factoryYarnBatch) return;
+        if (!this.chooseData.factoryYarnBatch) return;
         this.yarnTestVisible = true;
         this.$nextTick(() => {
           this.$refs.yarnTestRef.getYarnTestData(this.chooseData.factoryYarnBatch);
@@ -1337,12 +1353,12 @@ export default {
       }
     },
   },
-  created() {},
+  created() { },
   mounted() {
     this.meaveDomMove();
     this.getData();
   },
-  beforeDestroy() {},
+  beforeDestroy() { },
 };
 </script>
 <style lang='stylus'>

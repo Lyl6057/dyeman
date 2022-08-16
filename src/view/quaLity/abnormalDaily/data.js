@@ -48,14 +48,19 @@ export function mainForm(_this) {
       {
         label: "汇总日期",
         prop: "checkDate",
-        span: 6,
-        type: "datetime",
+        span: 10,
+        type: "datetimerange",
         format: "yyyy-MM-dd HH:mm:ss",
         valueFormat: "yyyy-MM-dd HH:mm:ss",
       },
       {
         label: "缸号",
         prop: "vatNo",
+        span: 6,
+      },
+      {
+        label: "反馈人员",
+        prop: "qcChecker",
         span: 6,
       },
       

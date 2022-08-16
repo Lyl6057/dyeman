@@ -10,7 +10,7 @@
           this.$t("public.close")
         }}</el-button>
       </div>
-      <div class="formBox">
+      <div>
         <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
       </div>
       <view-container title="胚布明细">

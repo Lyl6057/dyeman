@@ -104,10 +104,6 @@ export default {
   font-size: 14px;
   border-left: 1px solid #E4E7ED;
   border-right: 1px solid #E4E7ED;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
 
   .is-open {
     background: rgba(25, 118, 210, 0.0618);

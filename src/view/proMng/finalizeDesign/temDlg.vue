@@ -185,7 +185,7 @@ export default {
       dlgLoading: false,
       dlgChoose: {},
       choiceV: false,
-      choiceTle: "选择染整工单",
+      choiceTle: "选择运转单",
       choiceTarget: {},
       choiceField: "",
       choiceQ: {
@@ -678,7 +678,7 @@ export default {
         this.choiceV = false;
         return;
       }
-      if (this.choiceTle == "选择染整工单") {
+      if (this.choiceTle == "选择运转单") {
         this.form.vatNo = val.vatNo;
         this.form.weaveJobCode = val.weaveJobCode;
         this.form.custCode = val.custCode;

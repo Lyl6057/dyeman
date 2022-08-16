@@ -458,6 +458,11 @@ export default {
         this.choiceF = dyeF(this);
         this.getData = getDye;
         break;
+      case "选择运转单":
+        this.choiceC = dyeC(this);
+        this.choiceF = dyeF(this);
+        this.getData = getDye;
+        break;
       case "选择染整运转单":
         this.choiceC = resolveC(this);
         this.choiceF = resolveF(this);
