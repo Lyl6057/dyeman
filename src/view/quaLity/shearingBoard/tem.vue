@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-05-03 16:29:13
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-15 18:55:09
+ * @LastEditTime: 2022-08-16 08:12:54
  * @FilePath: \iot.vue\src\view\quaLity\shearingBoard\tem.vue
  * @Description: 
 -->
@@ -48,7 +48,7 @@
           </template>
         </avue-form>
       </div>
-      <div class="defect-detail">
+      <div class="defect-detail" v-if="!isBoard">
         <!-- <view-container title="疵点明细"> -->
           <div >
             <!-- <el-checkbox-group v-model="defectType" @change="handleDefeceTypeChange">
@@ -75,6 +75,8 @@
 
 <script>
 import { getLoginOrg } from "@/api/index";
+import { getDIC } from "../../../config";
+import { form } from "../../im/Wk/count/warehouse/option";
 import {
   fetchProFinalProductCardCutByPage,
   addProFinalProductCardCut,
@@ -109,7 +111,8 @@ export default {
       defectType: [],
       defectData: [],
       defectTypeObj: {},
-      defectShowData: []
+      defectShowData: [],
+      defectDicData: []
     };
   },
   watch: {
@@ -118,6 +121,9 @@ export default {
       this.qcShearingBoardFormOp.column[8].disabled = n;
       n && (this.qcShearingBoardData.cutDefeWeight = 0);
       !n && (this.qcShearingBoardData.cutSamWeight = 0);
+      n && (this.qcShearingBoardFormOp.column[this.qcShearingBoardFormOp.column.length - 1].dicData = getDIC("bas_sampleType"));
+      !n && (this.qcShearingBoardFormOp.column[this.qcShearingBoardFormOp.column.length - 1].dicData = this.defectDicData);
+      this.qcShearingBoardData.cutRemarks = []
     }
   },
   computed: {},
@@ -209,7 +215,9 @@ export default {
       this.defectTypeData = await fetchBasDefectTypeList().then(res => res.data);
       this.defectType = this.defectTypeData.map((item) =>{ !this.defectTypeObj[item.codeid] && ( this.defectTypeObj[item.codeid] = item.codename ); return item.codeid }); // 默认全选
       this.defectData = await fetchBasDefectList().then(res => res.data);
-      this.qcShearingBoardFormOp.column[ this.qcShearingBoardFormOp.column.length - 1].dicData = this.defectData.map((item) =>{ return { label: `${item.chnName}-${item.vetName}`, value: item.defectNo}})
+      let data =  this.defectData.map((item) =>{ return { label: `${item.chnName}-${item.vetName}`, value: item.defectNo}});
+      // this.qcShearingBoardFormOp.column[ this.qcShearingBoardFormOp.column.length - 1].dicData = data;
+      this.defectDicData = data;
       await this.handleDefeceTypeChange();
       this.loading = false;
     },

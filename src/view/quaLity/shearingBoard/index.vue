@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-05-03 16:09:29
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-15 09:43:55
+ * @LastEditTime: 2022-08-16 07:39:56
  * @FilePath: \iot.vue\src\view\quaLity\shearingBoard\index.vue
  * @Description: 
 -->
@@ -122,6 +122,8 @@ export default {
         productNo: "%" + (this.form.productNo || ""),
         cutDate: this.form.cutDate,
         dataSortRules: "saveTime|desc,productNo|desc",
+        rows: this.page.pageSize,
+        start: this.page.currentPage
       };
       fetchProFinalProductCardCutByPage(params)
         .then(async (res) => {

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-05-03 16:09:34
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-15 18:56:39
+ * @LastEditTime: 2022-08-16 08:11:44
  * @FilePath: \iot.vue\src\view\quaLity\shearingBoard\data.js
  * @Description:
  */
@@ -370,7 +370,7 @@ export function crateDataForm(_this) {
         filterable: true,
         // allowCreate: true,
         // defaultFirstOption: true,
-        dicData: [] //getDicT("basDefectdata/list ", "chnName", "defectNo", {}, 'defectNo')
+        dicData: getDIC("bas_sampleType") //getDicT("basDefectdata/list ", "chnName", "defectNo", {}, 'defectNo')
       }
     ]
   };
@@ -616,10 +616,11 @@ export function mainCrud(_this) {
         span: 12,
         overHidden: true,
       },
-      {
-        prop: "savetime",
-        label: "保存时间"
-      }
+      // {
+      //   prop: "saveTime",
+      //   width: 120,
+      //   label: "保存时间"
+      // }
     ]
   };
 }
