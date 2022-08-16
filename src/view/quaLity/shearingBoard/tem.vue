@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-05-03 16:29:13
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-16 08:12:54
+ * @LastEditTime: 2022-08-16 09:05:39
  * @FilePath: \iot.vue\src\view\quaLity\shearingBoard\tem.vue
  * @Description: 
 -->
@@ -55,13 +55,13 @@
               <el-checkbox v-for="item in defectTypeData" :label="item.codeid" :key="item.codevalueoid">{{item.codename}}</el-checkbox>
             </el-checkbox-group> -->
             <div class="defect-group">
-              <el-card shadow="hover" class="defect-card" v-for="(val, key) in defectShowData" :key="key" :style="{'flex-grow': val.length > 20 ? 1 : 0 }">
+              <el-card shadow="hover" class="defect-card" v-for="(val, key) in defectShowData" :key="key" :style="{'flex-grow': val.length > 20 ? val.length > 35 ? 6 : 2 : 0 }">
                 <div slot="header" class="clearfix">
                   <span class="title-small-bold">{{ defectTypeObj[key] }}</span>
                 </div>
                 <div class="defect-list" >
                   <span class="defect-text text-small not-select" v-for="item in val" :key="item.basDefectdataoid"  :title="`${item.defectNo}-${item.chnName}-${item.vetName}`" @click="handelClickDefectNode(item)">
-                    {{`${item.defectNo}-${item.chnName}-${item.vetName}`}}
+                    {{`${item.defectNo}${item.chnName}${item.vetName}`}}
                   </span>
                 </div>
               </el-card>
@@ -76,7 +76,6 @@
 <script>
 import { getLoginOrg } from "@/api/index";
 import { getDIC } from "../../../config";
-import { form } from "../../im/Wk/count/warehouse/option";
 import {
   fetchProFinalProductCardCutByPage,
   addProFinalProductCardCut,
@@ -213,7 +212,7 @@ export default {
     async initDefect(){
       this.loading = true;
       this.defectTypeData = await fetchBasDefectTypeList().then(res => res.data);
-      this.defectType = this.defectTypeData.map((item) =>{ !this.defectTypeObj[item.codeid] && ( this.defectTypeObj[item.codeid] = item.codename ); return item.codeid }); // 默认全选
+      this.defectType = this.defectTypeData.map((item) =>{ !this.defectTypeObj[item.codeid] && ( this.defectTypeObj[item.codeid] = `${item.codename}` ); return item.codeid }); // 默认全选  ${item.scendlanlabel}
       this.defectData = await fetchBasDefectList().then(res => res.data);
       let data =  this.defectData.map((item) =>{ return { label: `${item.chnName}-${item.vetName}`, value: item.defectNo}});
       // this.qcShearingBoardFormOp.column[ this.qcShearingBoardFormOp.column.length - 1].dicData = data;
@@ -499,7 +498,7 @@ export default {
 .defect-group >div {
   height: calc(100vh - 320px);
   margin: 5px 5px;
-  width: 20%;
+  width: 260px;
   border: 1px solid #eee !important;
 }
 .defect-list{
@@ -511,6 +510,7 @@ export default {
 }
 .defect-text {
   margin: 2px 5px;
-  cursor pointer
+  cursor pointer;
+  font-size: 15px
 }
 </style>

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-05-03 16:09:34
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-16 08:11:44
+ * @LastEditTime: 2022-08-16 09:03:59
  * @FilePath: \iot.vue\src\view\quaLity\shearingBoard\data.js
  * @Description:
  */
@@ -50,10 +50,10 @@ export function mainForm(_this) {
         type: "select",
         filterable: true,
         remote: true,
-        props:{
-          label: 'orgname',
-          value: 'orgname'
-        },
+        // props:{
+        //   label: 'orgname',
+        //   value: 'orgname'
+        // },
         dicData: getDicT("proDptworkProcess", "dptName", "dptCode", {}, "sn"),
         rules: [
           {
@@ -419,6 +419,8 @@ export function mainCrud(_this) {
         span: 6,
         placeholder: " ",
         overHidden: true,
+        type: "select",
+        dicData: getDicT("proDptworkProcess", "dptName", "dptCode", {}, "sn"),
       },
       
       {
