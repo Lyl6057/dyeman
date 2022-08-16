@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-24 14:21:15
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-28 11:12:26
+ * @LastEditTime: 2022-08-16 10:21:09
  * @Description:
  */
 
@@ -209,12 +209,12 @@ export function crudOp(_this) {
       // },
       {
         label: _this.$t("whseField.clbh"),
-        prop: "chemicalId",
+        prop: "chemicalIds",
         width: 140
       },
       {
         label: _this.$t("whseField.clmc"),
-        prop: "chemicalName",
+        prop: "chemicalNames",
         type: "select",
         overHidden: true,
         width: 400
@@ -509,13 +509,13 @@ export function sxOp(_this) {
       },
       {
         label: _this.$t("whseField.clbh"),
-        prop: "yarnsId",
+        prop: "chemicalIds",
         width: 120,
         fixed: true
       },
       {
         label: _this.$t("whseField.clmc"),
-        prop: "yarnsName",
+        prop: "chemicalNames",
         type: "select",
         overHidden: true,
         width: 400

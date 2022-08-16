@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-24 14:15:12
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-16 09:33:18
+ * @LastEditTime: 2022-08-16 10:21:57
  * @Description: 
 -->
 <template>
@@ -106,6 +106,7 @@ export default {
       type: "SX",
       drawerVisible: false,
       filterEmpty: true,
+      outData: []
     };
   },
   watch: {},
@@ -221,7 +222,6 @@ export default {
           this.loading = false;
           return;
       }
-
       query.yarnsId = "!^%" + (query.chemicalId || "");
       query.batId = "!^%" + (query.batId || "");
       query.chemicalId = query.yarnsId;
@@ -252,7 +252,7 @@ export default {
             return item.weight || item.stock || item.clothWeight;
           })
           : res.data.records;
-
+        this.outData = data;
         let group = this.$grouping(
           data,
           this.form.type == "SX"
@@ -275,20 +275,20 @@ export default {
           );
           item.index = i + 1;
           item.yarnsName = item.children[0].yarnsName;
-          item.yinStatus = item.children[0].yinStatus;
-          item.chemicalId =
+          // item.yinStatus = item.children[0].yinStatus;
+          item.chemicalIds =
             item.children[0].accessoriesId ||
             item.children[0].chemicalId ||
-            item.children[0].officeId || item.children[0].equipmentId
-            item.chemicalName =
+            item.children[0].officeId || item.children[0].equipmentId || item.children[0].yarnsId
+          item.chemicalNames =
             item.children[0].accessoriesName ||
             item.children[0].chemicalName ||
-            item.children[0].officeName || item.children[0].equipmentName
+            item.children[0].officeName || item.children[0].equipmentName || item.children[0].yarnsName
           item.weightUnit = item.children[0].weightUnit;
           item.proName = item.children[0].proName;
           item.clothWeight = 0;
-          item.storageNo = item.children[0].storageNo;
-          item.batchNo = item.children[0].batchNo;
+          // item.storageNo = item.children[0].storageNo;
+          // item.batchNo = item.children[0].batchNo;
           if (!item.weight) item.weight = 0;
           if (!item.stock) item.stock = 0;
 
@@ -299,12 +299,6 @@ export default {
             child.clothWeight = child.clothWeight
               ? child.clothWeight.toFixed(2)
               : 0;
-            child.vatNo = "";
-            child.yarnsId = "";
-            child.yarnsName = "";
-            child.chemicalId = "";
-            child.chemicalName = "";
-            child.proName = "";
             item.weight += Number(child.weight) || Number(child.stock);
             item.clothWeight += Number(child.clothWeight || 0);
           });
@@ -362,50 +356,48 @@ export default {
         // Replacements take place on first sheet
         var sheetNumber = "Sheet1";
         // Set up some placeholder values matching the placeholders in the template
-        let query = JSON.parse(JSON.stringify(this.form));
-        query.yarnsId = "!^%" + (query.chemicalId || "");
-        query.batId = "!^%" + (query.batId || "");
-        query.chemicalId = query.yarnsId;
-        query.officeId = query.yarnsId;
-        query.accessoriesId = query.yarnsId;
-        query.yarnsName = "%" + (query.chemicalName || "");
-        query.chemicalName = query.yarnsName;
-        query.officeName = query.yarnsName;
-        query.fabricName = query.yarnsName;
-        query.accessoriesName = query.yarnsName;
-        query.fabName = query.yarnsName;
-        query.proName = "%" + (query.proName || "");
-        query.vatNo = "!^%" + (query.vatNo || "");
-        query.noteCode = "%" + (query.noteCode || "");
-        query.storeLoadCode = "%" + (query.storeLoadCode || "");
-        query.batchNo = "%" + (query.batchNo || "");
-        this.getFun(Object.assign(query, {
-          rows: 999999,
-          start: 1,
-          clothState: 2,
-        })).then((res) => {
-          this.crud = res.data.records;
-          this.crud.sort((a, b) =>
-            a[this.typeObj.sort] > b[this.typeObj.sort] ? -1 : 1
-          );
-          this.crud.forEach((item, i) => {
+        // let query = JSON.parse(JSON.stringify(this.form));
+        // query.yarnsId = "!^%" + (query.chemicalId || "");
+        // query.batId = "!^%" + (query.batId || "");
+        // query.chemicalId = query.yarnsId;
+        // query.officeId = query.yarnsId;
+        // query.accessoriesId = query.yarnsId;
+        // query.yarnsName = "%" + (query.chemicalName || "");
+        // query.chemicalName = query.yarnsName;
+        // query.officeName = query.yarnsName;
+        // query.fabricName = query.yarnsName;
+        // query.accessoriesName = query.yarnsName;
+        // query.fabName = query.yarnsName;
+        // query.proName = "%" + (query.proName || "");
+        // query.vatNo = "!^%" + (query.vatNo || "");
+        // query.noteCode = "%" + (query.noteCode || "");
+        // query.storeLoadCode = "%" + (query.storeLoadCode || "");
+        // query.batchNo = "%" + (query.batchNo || "");
+        // this.getFun(Object.assign(query, {
+        //   rows: 999999,
+        //   start: 1,
+        //   clothState: 2,
+        // })).then((res) => {
+        //   this.crud = res.data.records;
+        //   this.crud.sort((a, b) =>
+        //     a[this.typeObj.sort] > b[this.typeObj.sort] ? -1 : 1
+        //   );
+          let data = JSON.parse(JSON.stringify(this.outData)) ;
+          data.forEach((item, i) => {
             item.chemicalId =
-              item.chemicalId ||
-              item.yarnsId ||
               item.accessoriesId ||
-              item.officeId ||
-              item.equipmentId;
+              item.chemicalId ||
+              item.officeId || item.equipmentId || item.yarnsId
             item.chemicalName =
-              item.chemicalName ||
-              item.yarnsName ||
               item.accessoriesName ||
-              item.officeName || item.equipmentName
-            item.stock = item.weight || item.stock;
-            item.locationCode = item.locationCode || item.storageNo;
-            item.index = i + 1;
+              item.chemicalName ||
+              item.officeName || item.equipmentName || item.yarnsName
+              item.stock = item.weight || item.stock;
+              item.locationCode = item.locationCode || item.storageNo ;
+              item.index = i + 1;
           });
           var values = {
-            arr: this.crud,
+            arr: data,
           };
           this.$nextTick(() => {
             template.substitute(sheetNumber, values);
@@ -421,10 +413,10 @@ export default {
             fun1().then((res) => {
               setTimeout(() => {
                 this.$tip.success("导出成功!");
-                this.getData();
-              }, 1000);
+                this.loading = false
+              }, 500);
             });
-          });
+          // });
         })
       } catch (e) {
         console.log(e);
