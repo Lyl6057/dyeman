@@ -268,7 +268,15 @@ export default {
                     : this.form.type == "SB"
                       ? "equipmentId" : "accessoriesId"
         );
-
+        if (this.form.type == "WJ") {
+          this.crud = data;
+          this.crud.forEach((item, i) => {
+            item.index = i + 1;
+            item.chemicalIds = item.accessoriesId;
+            item.chemicalNames = item.accessoriesName;
+          });
+          return;
+        }
         group.forEach((item, i) => {
           item.children.sort((a, b) =>
             a[this.typeObj.sort] > b[this.typeObj.sort] ? 1 : -1
@@ -382,40 +390,40 @@ export default {
         //   this.crud.sort((a, b) =>
         //     a[this.typeObj.sort] > b[this.typeObj.sort] ? -1 : 1
         //   );
-          let data = JSON.parse(JSON.stringify(this.outData)) ;
-          data.forEach((item, i) => {
-            item.chemicalId =
-              item.accessoriesId ||
-              item.chemicalId ||
-              item.officeId || item.equipmentId || item.yarnsId
-            item.chemicalName =
-              item.accessoriesName ||
-              item.chemicalName ||
-              item.officeName || item.equipmentName || item.yarnsName
-              item.stock = item.weight || item.stock;
-              item.locationCode = item.locationCode || item.storageNo ;
-              item.index = i + 1;
-          });
-          var values = {
-            arr: data,
-          };
-          this.$nextTick(() => {
-            template.substitute(sheetNumber, values);
-            // Get binary data.
-            var out = template.generate({ type: "blob" });
-            let _this = this;
-            var fun1 = function () {
-              return new Promise((resolve, reject) => {
-                saveAs(out, _this.form.$type + "库存明细" + ".xlsx");
-                resolve();
-              });
-            };
-            fun1().then((res) => {
-              setTimeout(() => {
-                this.$tip.success("导出成功!");
-                this.loading = false
-              }, 500);
+        let data = JSON.parse(JSON.stringify(this.outData)) ;
+        data.forEach((item, i) => {
+          item.chemicalId =
+            item.accessoriesId ||
+            item.chemicalId ||
+            item.officeId || item.equipmentId || item.yarnsId
+          item.chemicalName =
+            item.accessoriesName ||
+            item.chemicalName ||
+            item.officeName || item.equipmentName || item.yarnsName
+          item.stock = item.weight || item.stock;
+          item.locationCode = item.locationCode || item.storageNo ;
+          item.index = i + 1;
+        });
+        var values = {
+          arr: data,
+        };
+        this.$nextTick(() => {
+          template.substitute(sheetNumber, values);
+          // Get binary data.
+          var out = template.generate({ type: "blob" });
+          let _this = this;
+          var fun1 = function () {
+            return new Promise((resolve, reject) => {
+              saveAs(out, _this.form.$type + "库存明细" + ".xlsx");
+              resolve();
             });
+          };
+          fun1().then((res) => {
+            setTimeout(() => {
+              this.$tip.success("导出成功!");
+              this.loading = false
+            }, 500);
+          });
           // });
         })
       } catch (e) {
