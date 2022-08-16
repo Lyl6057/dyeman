@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-05-03 16:09:29
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-16 07:39:56
+ * @LastEditTime: 2022-08-16 14:21:30
  * @FilePath: \iot.vue\src\view\quaLity\shearingBoard\index.vue
  * @Description: 
 -->
@@ -73,8 +73,10 @@ import {
   getFinishedNoteByPage,
   updateFinishedNoteData,
   updateProFinalProductCardCut,
+  fetchBasDefectList
 } from "./api.js";
 import { mainForm, mainCrud } from "./data.js";
+import { getDIC } from '../../../config';
 export default {
   components: {
     temDlg,
@@ -106,7 +108,9 @@ export default {
   },
   watch: {},
   computed: {},
-  created() {},
+  created() {
+    this.initDefectAndSampleDicData()
+  },
   beforeRouteEnter(to, form, next) {
     next((vm) => {
       let self = vm;
@@ -115,6 +119,12 @@ export default {
   },
   mounted() {},
   methods: {
+    async initDefectAndSampleDicData(){
+      let defectData = await fetchBasDefectList().then( res => res.data);
+      let defectDicData = defectData.map((item) => { return { label: `${item.chnName}-${item.vetName}`, value: item.defectNo }})
+      let sampleData = await getDIC("bas_sampleType");
+      this.crudOp.column[this.crudOp.column.length - 1].dicData = defectDicData.concat(sampleData);
+    },
     query() {
       this.loading = true;
       let params = {
@@ -157,6 +167,8 @@ export default {
       this.$refs.qcCheckPlanTem.addAndcreateData(
         this.crud[this.curIdx - 1].cutId
       );
+      // this.$set(this.$refs.qcCheckPlanTem, "isBoard", this.crud[this.curIdx - 1].cutDefeWeight ? false : true)
+      // this.$refs.qcCheckPlanTem.isBoard = this.crud[this.curIdx - 1].cutDefeWeight ? false : true
     },
     async add() {
       this.dialogVisible = true;
