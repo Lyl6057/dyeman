@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-05-03 16:09:29
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-16 14:21:30
+ * @LastEditTime: 2022-08-16 16:17:07
  * @FilePath: \iot.vue\src\view\quaLity\shearingBoard\index.vue
  * @Description: 
 -->
@@ -102,7 +102,7 @@ export default {
       hasCardData: true,
       spowerClient: null,
       chooseData: {},
-      printCount: 1,
+      printCount: 5,
       printType: "1",
     };
   },
@@ -117,13 +117,13 @@ export default {
       self.spowerClient = self.$store.state.spowerClient;
     });
   },
-  mounted() {},
+  mounted() {}, 
   methods: {
     async initDefectAndSampleDicData(){
+      let sampleData = await getDIC("bas_sampleType");
       let defectData = await fetchBasDefectList().then( res => res.data);
       let defectDicData = defectData.map((item) => { return { label: `${item.chnName}-${item.vetName}`, value: item.defectNo }})
-      let sampleData = await getDIC("bas_sampleType");
-      this.crudOp.column[this.crudOp.column.length - 1].dicData = defectDicData.concat(sampleData);
+      this.$set(this.crudOp.column[this.crudOp.column.length - 1],"dicData", sampleData.concat(defectDicData))
     },
     query() {
       this.loading = true;
