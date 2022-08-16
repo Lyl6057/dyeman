@@ -256,27 +256,37 @@ export function dlgForm(_this) {
       //   disabled: false,
       //   filterable: true
       // },
+      // {
+      //   label: "工序",
+      //   prop: "stepId",
+      //   tip: "quá trình",
+      //   span: 6,
+      //   placeholder: " ",
+      //   type: "select",
+      //   tipPlacement: "right",
+      //   props: {
+      //     label: "stepName",
+      //     value: "stepId"
+      //   },
+      //   cascaderIndex: 0,
+      //   dicUrl: `${baseUrl}/api/baseWorkStep/parent?parentId=2A88BB439A7E4B4EBB899E0D2E10742F%2C0D315AE933AE43C1B6963B6E84989827`
+      //   // dicData: postDicT(
+      //   //   "baseWorkStepList",
+      //   //   "stepName",
+      //   //   "stepId",
+      //   //   _this.form ? _this.form.dptworkProcessFk || "" : ""
+      //   // )
+      // },
       {
         label: "工序",
         prop: "stepId",
-        tip: "quá trình",
-        span: 6,
-        placeholder: " ",
         type: "select",
+        span: 6,
+        tip: "quá trình",
+        placeholder: " ",
         tipPlacement: "right",
-        props: {
-          label: "stepName",
-          value: "stepId"
+        formslot: true
         },
-        cascaderIndex: 0,
-        dicUrl: `${baseUrl}/api/baseWorkStep/parent?parentId=2A88BB439A7E4B4EBB899E0D2E10742F%2C0D315AE933AE43C1B6963B6E84989827`
-        // dicData: postDicT(
-        //   "baseWorkStepList",
-        //   "stepName",
-        //   "stepId",
-        //   _this.form ? _this.form.dptworkProcessFk || "" : ""
-        // )
-      },
       {
         label: "说明",
         prop: "acceptDesc",
@@ -439,7 +449,7 @@ export function dlgCrud(_this) {
           label: "stepName",
           value: "stepId"
         },
-        dicUrl: `${baseUrl}/api/baseWorkStep/List`
+        dicUrl: `${baseUrl}/api/baseWorkStep/parent?parentId=2A88BB439A7E4B4EBB899E0D2E10742F%2C0D315AE933AE43C1B6963B6E84989827`
       },
       {
         label: "发单部门",
