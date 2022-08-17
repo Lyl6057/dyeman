@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-24 14:15:12
  * @LastEditors: PMP
- * @LastEditTime: 2022-08-17 09:59:59
+ * @LastEditTime: 2022-08-17 10:05:23
  * @Description: 
 -->
 <template>
@@ -173,6 +173,7 @@ export default {
     getData() {
       this.loading = true;
       this.crud = [];
+      this.wjDlt=[];
       for (var key in this.form) {
         if (this.form[key] === "") {
           delete this.form[key];
