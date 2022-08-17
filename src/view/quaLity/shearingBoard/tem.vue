@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-05-03 16:29:13
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-17 07:57:26
+ * @LastEditTime: 2022-08-17 10:50:38
  * @FilePath: \iot.vue\src\view\quaLity\shearingBoard\tem.vue
  * @Description: 
 -->
@@ -440,7 +440,7 @@ export default {
       this.$emit("close", this.hasRefresh);
       this.hasRefresh = false;
     },
-    handlePrint() {
+    async handlePrint() {
       if (
         this.spowerClient.readyState == 3 ||
         this.spowerClient.readyState == 0
@@ -460,7 +460,7 @@ export default {
       }
       updateProFinalProductCardCut(printData);
       this.hasRefresh = true;
-      this.initData(printData.cutId)
+      await this.initData(printData.cutId)
       this.$tip.success("已发送打印动作!");
     },
     handleUpdate() {
@@ -503,7 +503,7 @@ export default {
               printData.upDate = this.$getNowTime("datetime");
               await updateProFinalProductCardCut(printData);
               this.hasRefresh = true;
-              this.initData(printData.cutId)
+              await this.initData(printData.cutId)
               this.$tip.success("更新成功!");
             }
           }

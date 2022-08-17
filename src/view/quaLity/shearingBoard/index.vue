@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-05-03 16:09:29
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-17 07:42:00
+ * @LastEditTime: 2022-08-17 10:50:46
  * @FilePath: \iot.vue\src\view\quaLity\shearingBoard\index.vue
  * @Description: 
 -->
@@ -266,7 +266,6 @@ export default {
               );
               data.yardLength = printData.cutYds;
               await updateFinishedNoteData(data);
-              printData.upFlag = true;
               printData.upFlag = true;
               printData.upDate = this.$getNowTime("datetime");
               printData.cutRemarks = printData.cutRemarks.toString();
