@@ -1,6 +1,6 @@
 <template>
     <div class="grey-cloth-seit-add-container">
-        <view-container title="胚布整理" v-loading="loading">
+        <view-container title="载具整理" v-loading="loading">
             <div class="btn-wwrapper">
                 <el-button type="success" @click="handleSave">{{ this.$t("public.save") }}</el-button>
                 <el-button type="primary" @click="handleQuery">{{ this.$t("public.query") }}</el-button>
