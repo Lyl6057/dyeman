@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-05-03 16:29:13
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-17 07:35:49
+ * @LastEditTime: 2022-08-17 07:57:26
  * @FilePath: \iot.vue\src\view\quaLity\shearingBoard\tem.vue
  * @Description: 
 -->
@@ -148,6 +148,10 @@ export default {
       if (!_this.turnOnGetWeight) {
         return;
       }
+      if(e.data.indexOf("scan") != -1){
+        // 扫描事件
+        _this.remoteMethod(e.data.split("=")[1])
+      }
       let weight =
         e.data.indexOf(":") != -1
           ? Number(e.data.replace(/[^\d.]/g, ""))
@@ -172,6 +176,14 @@ export default {
         cardType: 1,
       }).then((res) => {
         this.options = res.data.records;
+        if (this.options.length == 1) {
+          let data = this.options[0];
+          this.qcShearingBoardData.netWeight = data.netWeight;
+          this.qcShearingBoardData.netWeightLbs = data.netWeightLbs;
+          this.qcShearingBoardData.befcutYds = data.yardLength;
+          this.qcShearingBoardData.proCardFk = data.cardId;
+          this.qcShearingBoardData.productNo = data.productNo;
+        }
         this.vatLoading = false;
       });
     },
