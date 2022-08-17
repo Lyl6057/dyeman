@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-03-24 14:15:12
- * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-21 17:20:56
+ * @LastEditors: PMP
+ * @LastEditTime: 2022-08-17 10:05:23
  * @Description: 
 -->
 <template>
@@ -22,11 +22,33 @@
       <div class="formBox">
         <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
       </div>
-      <div class="crudBox">
-        <avue-crud ref="crud" :option="crudOp" :data="crud" :page.sync="page" @on-load="getData"
-          @row-dblclick="handleRowDBLClick" @current-row-change="cellClick"></avue-crud>
-      </div>
-
+      <el-row>
+        <el-col :span="(form.type === 'WJ') ? 17 : 24">
+          <div class="crudBox">
+            <avue-crud ref="crud" :option="crudOp" :data="crud" :page.sync="page" @on-load="getData"
+              @row-dblclick="handleRowDBLClick" @current-row-change="cellClick"></avue-crud>
+          </div>
+        </el-col>
+        <el-col :span="(form.type === 'WJ') ? 7 : 0">
+          <view-container title="五金库存出入记录" :element-loading-text="loadLabel" v-loading="loading">
+            <avue-crud ref="crudWjDlt" :option="wjDltOp" :data="wjDlt">
+              <template slot="yinType" slot-scope="scope">
+                <div style="margin-top: -3px;">
+                  <el-tag :type="(scope.row.yinType == '入仓') ? 'success' : 'danger'" size="medium">
+                    {{ scope.row.yinType }}</el-tag>
+                </div>
+              </template>
+              <template slot="poqty" slot-scope="scope">
+                <div style="color: #008000;" v-if="(scope.row.yinType == '入仓')">+{{ scope.row.poqty }}</div>
+                <div style="color: #f20;" v-else>-{{ scope.row.poqty }}</div>
+              </template>
+            </avue-crud>
+            <div style="margin-bottom: 7px ;margin-top: 7px;">
+              剩余数量:{{chooseData.stock}}
+            </div>
+          </view-container>
+        </el-col>
+      </el-row>
       <el-drawer title="库存出入明细" :visible.sync="drawerVisible" append-to-body>
         <whse-dtl ref="whseDtlRef"></whse-dtl>
       </el-drawer>
@@ -55,6 +77,7 @@ import {
   getEquipmentList,
   fetchCheckHasExistByNow,
   createSnapshot2StockType,
+  getViewHardwareStockDetails
 } from "./api";
 import { getDIC, getDicT, getXDicT } from "@/config/index";
 import {
@@ -64,6 +87,7 @@ import {
   finishedCrud,
   sxOp,
   noteCrud,
+  wjDetailcrudOp,
 } from "./data";
 import XlsxTemplate from "xlsx-template";
 import JSZipUtils from "jszip-utils";
@@ -92,6 +116,8 @@ export default {
       },
       crudOp: crudOp(this),
       crud: [],
+      wjDltOp: wjDetailcrudOp(this),
+      wjDlt: [],
       detail: {},
       chooseData: {},
       isAdd: false,
@@ -106,6 +132,7 @@ export default {
       type: "SX",
       drawerVisible: false,
       filterEmpty: true,
+      outData: []
     };
   },
   watch: {},
@@ -146,6 +173,7 @@ export default {
     getData() {
       this.loading = true;
       this.crud = [];
+      this.wjDlt=[];
       for (var key in this.form) {
         if (this.form[key] === "") {
           delete this.form[key];
@@ -179,7 +207,6 @@ export default {
           this.getList = getCpbList;
           this.crudOp = finishedCrud(this);
           this.typeObj.sort = "productNo";
-          query.vatNo = "!^%"; // 成品编号升序
           this.typeObj.outAdr = "./static/xlxsTemplate/inventory.xlsx";
           break;
         case "PB":
@@ -222,7 +249,6 @@ export default {
           this.loading = false;
           return;
       }
-
       query.yarnsId = "!^%" + (query.chemicalId || "");
       query.batId = "!^%" + (query.batId || "");
       query.chemicalId = query.yarnsId;
@@ -253,7 +279,7 @@ export default {
             return item.weight || item.stock || item.clothWeight;
           })
           : res.data.records;
-
+        this.outData = data;
         let group = this.$grouping(
           data,
           this.form.type == "SX"
@@ -269,27 +295,35 @@ export default {
                     : this.form.type == "SB"
                       ? "equipmentId" : "accessoriesId"
         );
-
+        if (this.form.type == "WJ") {
+          this.crud = data;
+          this.crud.forEach((item, i) => {
+            item.index = i + 1;
+            item.chemicalIds = item.accessoriesId;
+            item.chemicalNames = item.accessoriesName;
+          });
+          return;
+        }
         group.forEach((item, i) => {
           item.children.sort((a, b) =>
             a[this.typeObj.sort] > b[this.typeObj.sort] ? 1 : -1
           );
           item.index = i + 1;
           item.yarnsName = item.children[0].yarnsName;
-          item.yinStatus = item.children[0].yinStatus;
-          item.chemicalId =
+          // item.yinStatus = item.children[0].yinStatus;
+          item.chemicalIds =
             item.children[0].accessoriesId ||
             item.children[0].chemicalId ||
-            item.children[0].officeId || item.children[0].equipmentId
-            item.chemicalName =
+            item.children[0].officeId || item.children[0].equipmentId || item.children[0].yarnsId
+          item.chemicalNames =
             item.children[0].accessoriesName ||
             item.children[0].chemicalName ||
-            item.children[0].officeName || item.children[0].equipmentName
+            item.children[0].officeName || item.children[0].equipmentName || item.children[0].yarnsName
           item.weightUnit = item.children[0].weightUnit;
           item.proName = item.children[0].proName;
           item.clothWeight = 0;
-          item.storageNo = item.children[0].storageNo;
-          item.batchNo = item.children[0].batchNo;
+          // item.storageNo = item.children[0].storageNo;
+          // item.batchNo = item.children[0].batchNo;
           if (!item.weight) item.weight = 0;
           if (!item.stock) item.stock = 0;
 
@@ -300,12 +334,6 @@ export default {
             child.clothWeight = child.clothWeight
               ? child.clothWeight.toFixed(2)
               : 0;
-            child.vatNo = "";
-            child.yarnsId = "";
-            child.yarnsName = "";
-            child.chemicalId = "";
-            child.chemicalName = "";
-            child.proName = "";
             item.weight += Number(child.weight) || Number(child.stock);
             item.clothWeight += Number(child.clothWeight || 0);
           });
@@ -363,51 +391,67 @@ export default {
         // Replacements take place on first sheet
         var sheetNumber = "Sheet1";
         // Set up some placeholder values matching the placeholders in the template
-        this.getList().then((res) => {
-          this.crud = res.data;
-          this.crud.sort((a, b) =>
-            a[this.typeObj.sort] > b[this.typeObj.sort] ? -1 : 1
-          );
-          this.crud.forEach((item, i) => {
-            item.chemicalId =
-              item.chemicalId ||
-              item.yarnsId ||
-              item.accessoriesId ||
-              item.officeId ||
-              item.equipmentId;
-            item.chemicalName =
-              item.chemicalName ||
-              item.yarnsName ||
-              item.accessoriesName ||
-              item.officeName || item.equipmentName
-            item.stock = item.weight || item.stock;
-            item.locationCode = item.locationCode || item.storageNo;
-            item.index = i + 1;
-          });
-          var values = {
-            arr: this.crud,
-          };
-          this.$nextTick(() => {
-            template.substitute(sheetNumber, values);
-            // Get binary data.
-            var out = template.generate({ type: "blob" });
-            let _this = this;
-            var fun1 = function () {
-              return new Promise((resolve, reject) => {
-                saveAs(out, _this.form.$type + "库存明细" + ".xlsx");
-                resolve();
-              });
-            };
-            fun1().then((res) => {
-              setTimeout(() => {
-                this.$tip.success("导出成功!");
-
-                this.getData();
-              }, 1000);
+        // let query = JSON.parse(JSON.stringify(this.form));
+        // query.yarnsId = "!^%" + (query.chemicalId || "");
+        // query.batId = "!^%" + (query.batId || "");
+        // query.chemicalId = query.yarnsId;
+        // query.officeId = query.yarnsId;
+        // query.accessoriesId = query.yarnsId;
+        // query.yarnsName = "%" + (query.chemicalName || "");
+        // query.chemicalName = query.yarnsName;
+        // query.officeName = query.yarnsName;
+        // query.fabricName = query.yarnsName;
+        // query.accessoriesName = query.yarnsName;
+        // query.fabName = query.yarnsName;
+        // query.proName = "%" + (query.proName || "");
+        // query.vatNo = "!^%" + (query.vatNo || "");
+        // query.noteCode = "%" + (query.noteCode || "");
+        // query.storeLoadCode = "%" + (query.storeLoadCode || "");
+        // query.batchNo = "%" + (query.batchNo || "");
+        // this.getFun(Object.assign(query, {
+        //   rows: 999999,
+        //   start: 1,
+        //   clothState: 2,
+        // })).then((res) => {
+        //   this.crud = res.data.records;
+        //   this.crud.sort((a, b) =>
+        //     a[this.typeObj.sort] > b[this.typeObj.sort] ? -1 : 1
+        //   );
+        let data = JSON.parse(JSON.stringify(this.outData)) ;
+        data.forEach((item, i) => {
+          item.chemicalId =
+            item.accessoriesId ||
+            item.chemicalId ||
+            item.officeId || item.equipmentId || item.yarnsId
+          item.chemicalName =
+            item.accessoriesName ||
+            item.chemicalName ||
+            item.officeName || item.equipmentName || item.yarnsName
+          item.stock = item.weight || item.stock;
+          item.locationCode = item.locationCode || item.storageNo ;
+          item.index = i + 1;
+        });
+        var values = {
+          arr: data,
+        };
+        this.$nextTick(() => {
+          template.substitute(sheetNumber, values);
+          // Get binary data.
+          var out = template.generate({ type: "blob" });
+          let _this = this;
+          var fun1 = function () {
+            return new Promise((resolve, reject) => {
+              saveAs(out, _this.form.$type + "库存明细" + ".xlsx");
+              resolve();
             });
+          };
+          fun1().then((res) => {
+            setTimeout(() => {
+              this.$tip.success("导出成功!");
+              this.loading = false
+            }, 500);
           });
-        }).finally(() => {
-          this.loading = false;
+          // });
         })
       } catch (e) {
         console.log(e);
@@ -451,6 +495,18 @@ export default {
     },
     cellClick(val) {
       this.chooseData = val;
+      if (this.form.type == "WJ") {
+        let param = {
+          batchNo: val.batchNo,
+          materialNum: val.accessoriesId
+        };
+        getViewHardwareStockDetails(param).then((res) => {
+          this.wjDlt = res.data;
+          this.wjDlt.map((e, i) => {
+            e.index = i + 1;
+          })
+        })
+      }
     },
     del() {
       if (Object.keys(this.chooseData).length === 0) {

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-05-03 16:29:13
  * @LastEditors: Lyl
- * @LastEditTime: 2022-07-07 10:59:13
+ * @LastEditTime: 2022-08-16 16:09:32
  * @FilePath: \iot.vue\src\view\quaLity\shearingBoard\tem.vue
  * @Description: 
 -->
@@ -48,19 +48,49 @@
           </template>
         </avue-form>
       </div>
+      <div class="defect-detail" v-if="!isBoard">
+        <!-- <view-container title="疵点明细"> -->
+          <div >
+            <!-- <el-checkbox-group v-model="defectType" @change="handleDefeceTypeChange">
+              <el-checkbox v-for="item in defectTypeData" :label="item.codeid" :key="item.codevalueoid">{{item.codename}}</el-checkbox>
+            </el-checkbox-group> -->
+            <div class="defect-group">
+              <el-card shadow="hover" class="defect-card" v-for="(val, key) in defectShowData" :key="key" :style="{'flex-grow': val.length > 20 ? val.length > 35 ? 6 : 2 : 0 }">
+                <div slot="header" class="clearfix">
+                  <span class="title-small-bold">{{ defectTypeObj[key] }}</span>
+                </div>
+                <div class="defect-list" >
+                  <span class="defect-text text-small not-select" v-for="item in val" :key="item.basDefectdataoid"  :title="`${item.defectNo}-${item.chnName}-${item.vetName}`" @click="handelClickDefectNode(item, 'defectNo')">
+                    {{`${item.defectNo}${item.chnName}${item.vetName}`}}
+                  </span>
+                </div>
+              </el-card>
+            </div>
+          </div>
+        <!-- </view-container> -->
+      </div>
+      <div v-else class="sample-container not-select">
+        <!-- {{sampleData}} -->
+        <div v-for="(item,index) in sampleData" :key="index">
+          <p @click="handelClickDefectNode(item, 'value')">{{item.label}}</p>
+        </div>
+      </div>
     </view-container>
   </div>
 </template>
 
 <script>
 import { getLoginOrg } from "@/api/index";
+import { getDIC } from "../../../config";
 import {
   fetchProFinalProductCardCutByPage,
   addProFinalProductCardCut,
   updateProFinalProductCardCut,
   getFinishedNoteByPage,
   updateFinishedNoteData,
-  getallDpt
+  getallDpt,
+  fetchBasDefectTypeList,
+  fetchBasDefectList
 } from "./api.js";
 import { crateDataForm } from "./data.js";
 export default {
@@ -80,11 +110,36 @@ export default {
       turnOnGetWeight: true,
       isBoard: true,
       spowerClient: null,
-      printCount: 1,
-      printType:'1'
+      printCount: 5,
+      printType:'1',
+      defectTypeData: [],
+      defectType: [],
+      defectData: [],
+      defectTypeObj: {},
+      defectShowData: [],
+      defectDicData: [],
+      sampleData: [],
+      isInit: true
     };
   },
-  watch: {},
+  watch: {
+    async isBoard(n,o){
+      this.qcShearingBoardFormOp.column[6].disabled = !n;
+      this.qcShearingBoardFormOp.column[8].disabled = n;
+      if(!this.isInit){
+        n && (this.qcShearingBoardData.cutDefeWeight = 0);
+        !n && (this.qcShearingBoardData.cutSamWeight = 0);
+        this.qcShearingBoardData.cutRemarks = []
+      }
+      if (!this.defectDicData.length) {
+        await this.initDefect()
+      }
+      this.$nextTick(() =>{
+        n && (this.qcShearingBoardFormOp.column[this.qcShearingBoardFormOp.column.length - 1].dicData = getDIC("bas_sampleType"));
+        !n && (this.qcShearingBoardFormOp.column[this.qcShearingBoardFormOp.column.length - 1].dicData = this.defectDicData);
+      })
+    }
+  },
   computed: {},
   created() {
     let _this = this;
@@ -101,10 +156,10 @@ export default {
         ? (_this.qcShearingBoardData.cutSamWeight = weight)
         : (_this.qcShearingBoardData.cutDefeWeight = weight);
     };
+    this.initDefect();
   },
   mounted() {
-    this.remoteMethod("");
-
+    
   },
   methods: {
     remoteMethod(val) {
@@ -117,20 +172,10 @@ export default {
         cardType: 1,
       }).then((res) => {
         this.options = res.data.records;
-        // if(this.options.length == 1) {
-        //   let data = res.data.records[0];
-        //   this.qcShearingBoardData.netWeight = data.netWeight;
-        //   this.qcShearingBoardData.netWeightLbs = data.netWeightLbs;
-        //   this.qcShearingBoardData.befcutYds = data.yardLength;
-        // this.qcShearingBoardData.proCardFk = data.cardId;
-        //   this.qcShearingBoardData.$proCardFk = data.productNo + '  (' + data.vatNo + ')';
-        //   this.qcShearingBoardData.productNo = data.productNo
-        // }
         this.vatLoading = false;
       });
     },
     handleVatnoChange(cardId) {
-      this.loading = true;
       getFinishedNoteByPage({
         cardId,
         rows: 10,
@@ -148,10 +193,33 @@ export default {
         } else {
           this.qcShearingBoardData.proCardFk = "";
         }
-        setTimeout(() => {
-          this.loading = false;
-        }, 0);
       });
+    },
+    async handleDefeceTypeChange() {
+      let obj = {};
+      this.defectData.forEach((item) => {
+        // if(!this.defectType.includes(item.defectClass)){ return; }
+        !obj[item.defectClass] && (obj[item.defectClass] = []);
+        obj[item.defectClass].push(item);
+      });
+      this.defectShowData = obj;
+    },
+    handelClickDefectNode(val, type) {
+      if(!this.qcShearingBoardData.cutRemarks){
+        this.qcShearingBoardData.cutRemarks = [];
+        return;
+      }
+      !this.qcShearingBoardData.cutRemarks.includes(val[type]) && this.qcShearingBoardData.cutRemarks.push(val[type])
+    },
+    async initDefect() {
+      this.sampleData = await getDIC("bas_sampleType");
+      this.defectTypeData = await fetchBasDefectTypeList().then(res => res.data);
+      this.defectType = this.defectTypeData.map((item) =>{ !this.defectTypeObj[item.codeid] && ( this.defectTypeObj[item.codeid] = `${item.codename} ${item.secondlanlabel}` ); return item.codeid }); // 默认全选
+      this.defectData = await fetchBasDefectList().then(res => res.data);
+      let data =  this.defectData.map((item) =>{ return { label: `${item.chnName}-${item.vetName}`, value: item.defectNo}});
+      // this.qcShearingBoardFormOp.column[ this.qcShearingBoardFormOp.column.length - 1].dicData = data;
+      this.defectDicData = data;
+      await this.handleDefeceTypeChange();
     },
     async initData(cutId) {
       this.loading = true;
@@ -160,10 +228,14 @@ export default {
       })
         .then(async (res) => {
           res.data.total && (this.qcShearingBoardData = res.data.records[0]);
+          this.isBoard = this.qcShearingBoardData.cutSamWeight ? true : false;
           !res.data.total && this.handleClose();
+          await this.remoteMethod(this.qcShearingBoardData.productNo);
+          this.qcShearingBoardData.cutRemarks && ( this.qcShearingBoardData.cutRemarks = this.qcShearingBoardData.cutRemarks.split(","));
         })
         .finally(() => {
           setTimeout(() => {
+            this.isInit = false;
             this.loading = false;
           }, 200);
         });
@@ -171,7 +243,9 @@ export default {
     async addAndcreateData(cutId) {
       this.loading = true;
       if (cutId) {
-        return this.initData(cutId);
+        this.isInit = true;
+        this.initData(cutId);
+        return;
       }
       if (!this.cutDept) {
         let result = await getallDpt();
@@ -210,6 +284,7 @@ export default {
         upFlag: false,
       };
       await this.$nextTick();
+      this.isInit = false;
       this.loading = false;
     },
     handleStoreRowClick(val) {
@@ -259,16 +334,20 @@ export default {
       });
     },
     handleSave() {
+      if(!this.qcShearingBoardData.cutSamWeight && !this.qcShearingBoardData.cutDefeWeight) {
+        this.$tip.warning("重量不能为0!");
+        return;
+      }
+      if (!this.qcShearingBoardData.productNo) {
+        this.$tip.warning("成品码卡不能为空!");
+        return;
+      }
       this.$refs.qcShearingBoardForm.validate(async (valid, done) => {
         try {
-          if (!this.qcShearingBoardData.productNo) {
-            this.$tip.warning("成品码卡不能为空!");
-          }
           if (!valid) {
-            this.$tip.warning("请补充查布计划表信息!");
+            this.$tip.warning("请补充QA剪办记录信息!");
             return;
           }
-
           let params = {
             rows: 20,
             start: 1,
@@ -281,14 +360,20 @@ export default {
           this.qcShearingBoardData.cutRemarks =
             this.qcShearingBoardData.cutRemarks.toString();
           if (cutId) {
+            this.hasRefresh = true;
             await updateProFinalProductCardCut(this.qcShearingBoardData).then();
+            await this.initData(cutId);
+            this.$tip.success("保存成功!");
+            setTimeout(() => {
+              this.loading = false;
+              done();
+            }, 200);
           } else {
             let dayRecords = await fetchProFinalProductCardCutByPage(
               params
             ).then((res) => {
               return res.data.total;
             });
-
             if (dayRecords > 0) {
               this.$tip.cofirm("成品编号【 " +
                 this.qcShearingBoardData.productNo +
@@ -398,11 +483,13 @@ export default {
                 (data.grossWeight * 2.2046).toFixed(1)
               );
               data.yardLength = printData.cutYds;
+              printData.cutRemarks = printData.cutRemarks.toString();
               await updateFinishedNoteData(data);
               printData.upFlag = true;
               this.qcShearingBoardData.upFlag = true;
               await updateProFinalProductCardCut(printData);
               this.hasRefresh = true;
+              this.initData(printData.cutId)
               this.$tip.success("更新成功!");
             }
           }
@@ -415,6 +502,38 @@ export default {
 };
 </script>
 <style lang="stylus" scoped>
-.qcChcekPlanTem {
+>>>.el-card__header {
+  padding: 2px 10px;  
+}
+.sample-container{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  font-size: 22px;
+  font-weight: 600;
+  text-align: center;
+  
+}
+.defect-group {
+  display: flex;
+  flex-direction: row;
+}
+.defect-group >div {
+  height: calc(100vh - 320px);
+  margin: 5px 5px;
+  width: 260px;
+  border: 1px solid #eee !important;
+}
+.defect-list{
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  height: calc(100vh - 345px);
+  overflow: auto
+}
+.defect-text {
+  margin: 2px 5px;
+  cursor pointer;
+  font-size: 15px
 }
 </style>

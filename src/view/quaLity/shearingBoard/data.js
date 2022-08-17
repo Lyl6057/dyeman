@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-05-03 16:09:34
  * @LastEditors: Lyl
- * @LastEditTime: 2022-07-06 09:50:15
+ * @LastEditTime: 2022-08-16 13:49:32
  * @FilePath: \iot.vue\src\view\quaLity\shearingBoard\data.js
  * @Description:
  */
@@ -50,10 +50,10 @@ export function mainForm(_this) {
         type: "select",
         filterable: true,
         remote: true,
-        props:{
-          label: 'orgname',
-          value: 'orgname'
-        },
+        // props:{
+        //   label: 'orgname',
+        //   value: 'orgname'
+        // },
         dicData: getDicT("proDptworkProcess", "dptName", "dptCode", {}, "sn"),
         rules: [
           {
@@ -217,6 +217,7 @@ export function crateDataForm(_this) {
         minRows: 0,
         type: "number",
         placeholder: " ",
+        disabled: false,
         align: "right",
         precision: 1,
         rules: [
@@ -269,6 +270,7 @@ export function crateDataForm(_this) {
         prop: "cutDefeWeight",
         span: 6,
         width: 120,
+        disabled: true,
         type: "number",
         align: "right",
         placeholder: " ",
@@ -365,10 +367,17 @@ export function crateDataForm(_this) {
         overHidden: true,
         type: "select",
         multiple: true,
+        rules: [
+          {
+            required: true,
+            message: "",
+            trigger: "blur"
+          }
+        ],
         filterable: true,
-        allowCreate: true,
-        defaultFirstOption: true,
-        dicData: getDicT("qcClothCheckItem", "itemName", "itemName", {}, 'sn')
+        // allowCreate: true,
+        // defaultFirstOption: true,
+        dicData: getDIC("bas_sampleType") //getDicT("basDefectdata/list ", "chnName", "defectNo", {}, 'defectNo')
       }
     ]
   };
@@ -417,6 +426,8 @@ export function mainCrud(_this) {
         span: 6,
         placeholder: " ",
         overHidden: true,
+        type: "select",
+        dicData: getDicT("proDptworkProcess", "dptName", "dptCode", {}, "sn"),
       },
       
       {
@@ -613,148 +624,10 @@ export function mainCrud(_this) {
         placeholder: " ",
         span: 12,
         overHidden: true,
-      }
+        type: "select",
+        dicData: []
+      },
     ]
   };
 }
 
-export function qcCheckStorePlanCrud(_this) {
-  return {
-    ...mainCrudOpCommon,
-    height: "calc(100vh - 310px)",
-    index: false,
-    column: [
-      {
-        label: "序号",
-        prop: "waitOutSn",
-        cell: true,
-        placeholder: " ",
-        span: 6,
-        width: 60,
-        align: "center",
-        overHidden: true
-      },
-      {
-        label: "布笼号",
-        prop: "storeLoadCode",
-        placeholder: " ",
-        span: 6,
-        width: 200,
-        cell: true,
-        overHidden: true
-      },
-
-      {
-        label: "出库完成",
-        prop: "outFlag",
-        cell: true,
-        disabled: false,
-        placeholder: " ",
-        span: 6,
-        width: 120,
-        type: "switch",
-        align: "center",
-        dicData: [
-          {
-            label: "否",
-            value: false
-          },
-          {
-            label: "是",
-            value: true
-          }
-        ],
-        overHidden: true,
-        change: val => {
-          _this.$nextTick(() => {
-            setTimeout(() => {
-              if (!_this.dtlCurIdx) return;
-              val.value
-                ? (_this.qcCheckStorePlanList[
-                    _this.dtlCurIdx - 1
-                  ].outTime = _this.$getNowTime("datetime"))
-                : (_this.qcCheckStorePlanList[_this.dtlCurIdx - 1].outTime =
-                    "");
-            });
-          });
-        }
-      },
-      {
-        label: "出库日期",
-        prop: "outTime",
-        type: "datetime",
-        cell: true,
-        width: 180,
-        format: "yyyy-MM-dd HH:mm:ss",
-        valueFormat: "yyyy-MM-dd HH:mm:ss",
-        span: 6,
-        placeholder: " "
-      },
-      {
-        label: "是否回仓",
-        prop: "returnFlag",
-        disabled: false,
-        placeholder: " ",
-        span: 6,
-        width: 120,
-        type: "switch",
-        align: "center",
-        cell: true,
-        dicData: [
-          {
-            label: "否",
-            value: false
-          },
-          {
-            label: "是",
-            value: true
-          }
-        ],
-        overHidden: true,
-        change: val => {
-          _this.$nextTick(() => {
-            setTimeout(() => {
-              if (!_this.dtlCurIdx) return;
-              val.value
-                ? (_this.qcCheckStorePlanList[
-                    _this.dtlCurIdx - 1
-                  ].returnTime = _this.$getNowTime("datetime"))
-                : (_this.qcCheckStorePlanList[_this.dtlCurIdx - 1].returnTime =
-                    "");
-            });
-          });
-        }
-      },
-      {
-        label: "回仓日期",
-        prop: "returnTime",
-        type: "datetime",
-        format: "yyyy-MM-dd HH:mm:ss",
-        valueFormat: "yyyy-MM-dd HH:mm:ss",
-        span: 6,
-        width: 180,
-        cell: true,
-        placeholder: " "
-      },
-      {
-        label: "总疋数",
-        prop: "pidCount",
-        placeholder: " ",
-        span: 6,
-        width: 90,
-        cell: false,
-        align: "right",
-        overHidden: true
-      },
-      {
-        label: "疋号",
-        prop: "piNos",
-        placeholder: " ",
-        span: 6,
-        // width: 200,
-        cell: false,
-        overHidden: true
-      }
-    ]
-  };
-}

@@ -624,7 +624,7 @@ export default {
     fn_Info() {
       // this.loading = true;
       this.$http({
-        url: "/api/baseEquipmentList",
+        url: "/api/baseWorkStep/page",
         methods: "get",
         params: {
           rows: this.page.pageSize,

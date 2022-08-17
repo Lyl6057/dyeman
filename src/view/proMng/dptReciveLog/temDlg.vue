@@ -7,17 +7,18 @@
 -->
 <template>
   <div id="techCodeTem">
-    <view-container title="新增日志" :element-loading-text="$t('public.loading')" v-loading="wLoading" class="not-number-icon">
+    <view-container title="新增日志" :element-loading-text="$t('public.loading')" v-loading="wLoading"
+      class="not-number-icon">
       <div class="btnList">
         <el-tooltip class="item" effect="dark" content="Bảo tồn" placement="top-start">
           <el-button type="success" @click="save(0)" :loading="wLoading">{{
-            $t("public.save")
+              $t("public.save")
           }}</el-button>
         </el-tooltip>
         <el-button type="success" @click="save(1)" :loading="wLoading">保存并继续新增</el-button>
         <el-tooltip class="item" effect="dark" content="đóng" placement="top-start">
           <el-button type="warning" @click="close">{{
-            $t("public.close")
+              $t("public.close")
           }}</el-button>
         </el-tooltip>
         <!-- <el-button type="primary" @click="checkOrder">选择订单号</el-button> -->
@@ -25,32 +26,44 @@
       <div class="formBox">
         <avue-form ref="form" :option="formOp" v-model="form">
           <template slot-scope="scope" slot="runJobFk">
-            <el-select v-model="form.runJobFk" filterable remote reserve-keyword clearable default-first-option placeholder="请输入缸号" :remote-method="remoteMethod" :loading="vatLoading" @change="getLogWeight">
+            <el-select v-model="form.runJobFk" filterable remote reserve-keyword clearable default-first-option
+              placeholder="请输入缸号" :remote-method="remoteMethod" :loading="vatLoading" @change="getLogWeight">
               <el-option v-for="item in options" :key="item.runJobId" :label="item.vatNo" :value="item.runJobId">
               </el-option>
             </el-select>
           </template>
           <template slot-scope="scope" slot="weaveJobId">
-            <el-select v-model="form.weaveJobId" filterable remote reserve-keyword clearable default-first-option placeholder="请输入织单号" :remote-method="remoteMethod" :loading="vatLoading" @change="getLogWeight">
-              <el-option v-for="item in options" :key="item.weaveJobId" :label="item.weaveJobCode" :value="item.weaveJobId">
+            <el-select v-model="form.weaveJobId" filterable remote reserve-keyword clearable default-first-option
+              placeholder="请输入织单号" :remote-method="remoteMethod" :loading="vatLoading" @change="getLogWeight">
+              <el-option v-for="item in options" :key="item.weaveJobId" :label="item.weaveJobCode"
+                :value="item.weaveJobId">
               </el-option>
             </el-select>
           </template>
           <template slot-scope="scope" slot="aloYarntestoid">
-            <el-select v-model="form.aloYarntestoid" filterable remote reserve-keyword clearable default-first-option placeholder="请输入试纱通知单号" :remote-method="remoteMethod" :loading="vatLoading" @change="getLogWeight">
-              <el-option v-for="item in options" :key="item.aloYarntestoid" :label="item.yarntestNote" :value="item.aloYarntestoid">
+            <el-select v-model="form.aloYarntestoid" filterable remote reserve-keyword clearable default-first-option
+              placeholder="请输入试纱通知单号" :remote-method="remoteMethod" :loading="vatLoading" @change="getLogWeight">
+              <el-option v-for="item in options" :key="item.aloYarntestoid" :label="item.yarntestNote"
+                :value="item.aloYarntestoid">
               </el-option>
             </el-select>
           </template>
+          <template slot-scope="scope" slot="stepId">
+            <el-cascader v-model="form.stepId" :options="dataSelect" :props="{ expandTrigger: 'hover' }"
+              :show-all-levels="false">
+            </el-cascader>
+          </template>
+
         </avue-form>
       </div>
+
     </view-container>
   </div>
 </template>
 <script>
 import choice from "@/components/proMng/index";
 import { mainCrud, dlgForm, dlgCrud } from "./data";
-import { add, getRunJobByPage, getWeave, getLog, getYarntest } from "./api";
+import { add, getRunJobByPage, getWeave, getLog, getYarntest, getBaseWorkStep } from "./api";
 export default {
   name: "techCodeTem",
   props: {
@@ -78,6 +91,7 @@ export default {
       options: [],
       acceptStaff: parent.userID,
       lastLog: {},
+      dataSelect: [],
     };
   },
   watch: {},
@@ -180,7 +194,7 @@ export default {
                 this.form.realOutput = weight;
               }
             });
-          } else if(this.tabs == "zd") {
+          } else if (this.tabs == "zd") {
             getWeave({
               weaveJobId: id,
               rows: 10,
@@ -218,6 +232,7 @@ export default {
             } else {
               this.form.runJobFk = this.form.aloYarntestoid;
             }
+            this.form.stepId = this.form.stepId[this.form.stepId.length - 1];
             add(this.form).then((res) => {
               if (res.data.code == 200) {
                 this.wLoading = false;
@@ -270,10 +285,57 @@ export default {
         return false;
       }
     },
+    getDataCascader() {
+      getBaseWorkStep().then((res) => {
+        let data = res.data;
+        data.map((e, i) => {
+          const isRoot = (data.findIndex(item => item.stepId == e.pareantId) === -1);
+          if (isRoot) {
+            const children = data.filter(item => item.pareantId === e.stepId);
+            if (children.length == 0) {
+              this.dataSelect.push({
+                value: e.stepId,
+                label: e.stepName,
+              });
+            } else {
+              this.dataSelect.push({
+                value: e.stepId,
+                label: e.stepName,
+                children: this.convertData(children)
+              });
+            }
+          }
+        });
+      })
+    },
+    convertData(data) {
+      let children = [];
+      if (data.length == 0) { return; }
+      for (let index = 0; index < data.length; index++) {
+        const e = data[index];
+        let object = {};
+        const cd = data.filter(item => item.pareantId === e.stepId)
+        if (cd.length == 0) {
+          object = {
+            label: e.stepName,
+            value: e.stepId,
+          }
+        } else {
+          object = {
+            label: e.stepName,
+            value: e.stepId,
+            children: this.convertData(cd)
+          }
+        }
+        children.push(object);
+      }
+      return children;
+    }
   },
   created() {},
   mounted() {
     this.getData();
+    this.getDataCascader();
     this.remoteMethod("");
   },
   beforeDestroy() {},

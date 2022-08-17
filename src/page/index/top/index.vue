@@ -219,10 +219,6 @@ export default {
   font-family: '4';
   text-align: center;
   margin-right: 10%;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
 }
 
 .menuTle2 {
@@ -231,10 +227,6 @@ export default {
   font-size: 24px;
   font-weight: bold;
   margin-right: 5%;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
 }
 
 .menu-right .el-icon-s-home, .el-icon-error, .el-icon-view {

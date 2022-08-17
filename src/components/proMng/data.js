@@ -3795,7 +3795,7 @@ export function dyeC(_this) {
 }
 export function getDye(params) {
   return axios({
-    url: "/api/proBleadyeJob/page",
+    url: "/api/proBleadyeRunJob/page", // proBleadyeJob
     method: "get",
     params: params
   });
@@ -5094,7 +5094,7 @@ export function TechItemC(_this) {
 
 export function getWorkStep(params) {
   return axios({
-    url: "/api/baseWorkStepTree",
+    url: "/api/baseWorkStep/tree",
     method: "get",
     params: params
   });

@@ -1423,7 +1423,7 @@ export function techargueCrud(_this) {
       },
       {
         label: "工艺名稱",
-        prop: "bleadyeName",
+        prop: "bleadyeCode",
         width: 120,
         cell: false,
         overHidden: true,
@@ -1838,7 +1838,7 @@ export function codeItemCrud(_this) {
             value: "add_chemicalmat"
           },
           {
-            label: "增加颜料",
+            label: "增加颜料",no
             value: "add_pigment"
           },
           {

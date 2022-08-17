@@ -1,10 +1,10 @@
 <template>
     <div id="task" :element-loading-text="loadLabel" v-loading="loading">
         <div class="btnList">
-            <el-tooltip class="item" effect="dark" content="Bottom Center 提示文字" placement="bottom">
+            <el-tooltip class="item" effect="dark" content="Chọn" placement="bottom">
                 <el-button type="success" @click="add()">绑定</el-button>
             </el-tooltip>
-            <el-tooltip class="item" effect="dark" content="Bottom Center 提示文字" placement="bottom">
+            <el-tooltip class="item" effect="dark" content="Tra cứu" placement="bottom">
                 <el-button type="primary" @click="getData()">{{ this.$t("public.query") }}</el-button>
             </el-tooltip>
         </div>
@@ -19,13 +19,11 @@
             v-if="dialogVisible">
             <craft :bleadyeJobId="detailID" @close="dialogVisible = false" />
         </el-dialog>
-
     </div>
 </template>
 <script>
 import { unTaskCrud, QueryForm } from "./data";
-import { getproBleadyeJobPage, postProBleadjobDcctask, getProBleadjobDcctask } from "./api";
-import { itemCrud } from "../dyeNotice/data";
+import { getproBleadyeJobPage, postProBleadjobDcctask } from "./api";
 import craft from "./craft.vue";
 import temDlg from "../print/dyeing/temDlg.vue";
 
@@ -119,8 +117,6 @@ export default {
         handleCellClick(val) {
             this.detailID = val.bleadyeJobId;
             this.dialogVisible = true;
-
-
         },
         selectionChange(val) {
             this.selection = val;

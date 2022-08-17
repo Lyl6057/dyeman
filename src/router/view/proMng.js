@@ -368,7 +368,17 @@ export default [
     meta: {
       keepAlive: true
     }
-  }
+  },
+  {
+    path: "/proBleadjobDcctask",
+    name: "染整中控任务",
+    component: resolve =>
+      require(["@/view/proMng/proBleadjobDcctask/index"], resolve),
+    meta: {
+      keepAlive: true
+    }
+  },
+
   // {
   //   path: '/EquipmentSchedule',
   //   name: '设备排期',

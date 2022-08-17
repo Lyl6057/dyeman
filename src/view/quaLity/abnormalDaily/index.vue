@@ -11,29 +11,21 @@
   <div class="abnormalDaily">
     <view-container title="异常报告总表">
       <el-row class="btnList">
-        <el-button type="success" @click="update"> {{this.$t("public.update")}} </el-button>
-        <el-button type="primary" @click="add"> {{this.$t("public.add")}} </el-button>
-        <el-button type="danger" @click="del"> {{this.$t("public.del")}} </el-button>
-        <el-button type="primary" @click="query"> {{this.$t("public.query")}} </el-button>
+        <el-button type="success" @click="update"> {{ this.$t("public.update") }} </el-button>
+        <el-button type="primary" @click="add"> {{ this.$t("public.add") }} </el-button>
+        <el-button type="danger" @click="del"> {{ this.$t("public.del") }} </el-button>
+        <el-button type="primary" @click="query"> {{ this.$t("public.query") }} </el-button>
+        <el-button type="success" @click="handleExport"> {{ this.$t("public.report") }} </el-button>
       </el-row>
       <el-row class="formBox">
         <avue-form ref="form" :option="formOp" v-model="form"> </avue-form>
       </el-row>
       <el-row class="crudBox">
-        <avue-crud 
-          ref="crud" 
-          :option="crudOp" 
-          :data="crud" 
-          :page.sync="page" 
-          v-loading="loading"
-          element-loading-text="正在拼命加载中..."
-          @on-load="query" 
-          @row-click="rowClick"
-          @row-dblclick="handleRowDBLClick"
-        >
+        <avue-crud ref="crud" :option="crudOp" :data="crud" :page.sync="page" v-loading="loading"
+          element-loading-text="正在拼命加载中..." @on-load="query" @row-click="rowClick" @row-dblclick="handleRowDBLClick">
           <template slot-scope="scope" slot="menu">
-            <el-button type="primary" plain  @click="handleCreateAbnormal(scope)">异常报告</el-button>
-            <el-button type="primary" plain  @click="handleCreateOrder(scope)">回修单</el-button>
+            <el-button type="primary" plain @click="handleCreateAbnormal(scope)">异常报告</el-button>
+            <el-button type="primary" plain @click="handleCreateOrder(scope)">回修单</el-button>
           </template>
         </avue-crud>
       </el-row>
@@ -73,16 +65,28 @@ export default {
   },
   watch: {},
   computed: {},
-  created() {},
-  mounted() {},
+  created() { },
+  mounted() { },
   methods: {
     query() {
       this.loading = true;
-      let params = {
-        vatNo: "%" + (this.form.vatNo || ''),
-        checkDate: this.form.checkDate,
-        dataSortRules: 'checkDate|desc,yind'
+      let params = {};
+      if (this.form.checkDate !== undefined) {
+        params = {
+          vatNo: "%" + (this.form.vatNo || ''),
+          checkDate_begin: this.form.checkDate[0],
+          checkDate_end: this.form.checkDate[1],
+          qcChecker: this.form.qcChecker,
+          dataSortRules: 'checkDate|desc,yind'
+        }
+      } else {
+        params = {
+          vatNo: "%" + (this.form.vatNo || ''),
+          qcChecker: this.form.qcChecker,
+          dataSortRules: 'checkDate|desc,yind'
+        }
       }
+
       fetchQcCheckClothDayDetailByPage(params).then(async res => {
         let { records, total } = res.data;
         this.crud = records;
@@ -91,17 +95,17 @@ export default {
         await this.$nextTick();
         this.$refs["crud"].doLayout();
         this.curIdx = null;
-      }).finally(() =>{
+      }).finally(() => {
         setTimeout(() => {
           this.loading = false;
         }, 200);
       })
     },
-    async update(){
-      if(!this.curIdx){
+    async update() {
+      if (!this.curIdx) {
         this.$tip.warning("请先选择要修改的数据!");
         return
-      } 
+      }
       this.dialogVisible = true;
       await this.$nextTick();
       this.$refs.qcCheckPlanTem.addAndcreateData(this.crud[this.curIdx - 1].detailId);
@@ -111,56 +115,78 @@ export default {
       await this.$nextTick();
       this.$refs.qcCheckPlanTem.addAndcreateData()
     },
-    async del(){
+    async del() {
       if (!this.curIdx) { return this.$tip.warning("请先选择要删除的数据!") }
       let idx = this.curIdx - 1;
-      let cofResult = await this.$tip.cofirm("是否确定删除缸号为【 " +  this.crud[idx].vatNo  + " 】的数据?").then(() => {return true}).catch((e) => {return false});
-      if(!cofResult) return false;
+      let cofResult = await this.$tip.cofirm("是否确定删除缸号为【 " + this.crud[idx].vatNo + " 】的数据?").then(() => { return true }).catch((e) => { return false });
+      if (!cofResult) return false;
       this.loading = true;
-      removeQcCheckClothDayDetail(this.crud[idx].detailId).then(res =>{
+      removeQcCheckClothDayDetail(this.crud[idx].detailId).then(res => {
         this.query();
         this.$tip.success("删除成功");
-      }).finally(()=>{ this.loading = false });
+      }).finally(() => { this.loading = false });
     },
     rowClick(row) {
       this.curIdx = row.$index + 1;
     },
-    handleRowDBLClick(row){
+    handleRowDBLClick(row) {
       this.curIdx = row.$index + 1;
       this.update()
     },
-    temClose(hasRefresh){
+    temClose(hasRefresh) {
       this.dialogVisible = false;
       hasRefresh && this.query();
     },
-    handleCreateAbnormal({ row }){
+    handleCreateAbnormal({ row }) {
       window.open(process.env.API_HOST + '/api/qcCheckClothDayDetail/qaDailyPdf?id=' + row.detailId);
     },
-    async handleCreateOrder({ row }){
+    async handleCreateOrder({ row }) {
       this.wloading = true
-      let detailRes =  await fetchQcClothBackRepairByPage({ dayDetailfFk: row.detailId})
+      let detailRes = await fetchQcClothBackRepairByPage({ dayDetailfFk: row.detailId })
       let params = {
-          noticeDate: row.checkDate,
-          dayDetailfFk: row.detailId,
-          ...row
+        noticeDate: row.checkDate,
+        dayDetailfFk: row.detailId,
+        ...row
       }
-      if(detailRes.data.total){ 
+      if (detailRes.data.total) {
         await updateQcClothBackRepair(params)
         window.open(process.env.API_HOST + '/api/qcClothBackRepair/repairPdf?id=' + detailRes.data.records[0].repairId)
-      }else{
+      } else {
         let addRes = await addQcClothBackRepair(params)
         window.open(process.env.API_HOST + '/api/qcClothBackRepair/repairPdf?id=' + addRes.data.data)
       }
     },
-    handleReport(command){
+    handleReport(command) {
       let dayId = new Date().getFullYear() + '' + (command < 10 ? '0' + command : command);
       let name = encodeURI(
-      "http:" +
+        "http:" +
         process.env.API_HOST.split(":")[1] +
         ":92/api/qaDayOutput/qareport?dayId=" + dayId
       );
       window.open(name);
       this.wloading = false;
+    },
+    handleExport() {
+      let url = "";
+
+      if (this.form.checkDate.length > 0) {
+        url = "http://192.168.102.151:91/api/qcCheckClothDayDetail/qaDailyXlsx?" +
+          `vatNo=%25${this.form.vatNo}&` +
+          `checkDate_begin=${this.form.checkDate[0]}&` +
+          `checkDate_end= ${this.form.checkDate[1]}&` +
+          `qcChecker=${this.form.qcChecker}`
+      } else {
+        url = "http://192.168.102.151:91/api/qcCheckClothDayDetail/qaDailyXlsx?" +
+          `vatNo=%25${this.form.vatNo}&` +
+          `qcChecker=${this.form.qcChecker}`
+      };
+      console.log(url)
+      let oA = document.createElement("a");
+      oA.href = url;
+      oA.target = "_blank";
+      oA.click();
+      this.loading = false;
+      this.$tip.success("导出报表文件成功!")
     }
   },
 };
