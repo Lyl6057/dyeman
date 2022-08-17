@@ -4,11 +4,11 @@
  * @Author: Symbol_Yang
  * @Date: 2022-08-16 10:26:37
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-08-17 14:44:11
+ * @LastEditTime: 2022-08-17 16:14:05
 -->
 <template>
     <div class="grey-cloth-veh-container">
-        <view-container title="载具整理">
+        <view-container title="货位整理">
             <div class="btnList">
                 <el-button type="success" @click="handleAdd">{{ this.$t("public.add") }}</el-button>
                 <el-button type="primary" @click="handleQuery">{{ this.$t("public.query") }}</el-button>
