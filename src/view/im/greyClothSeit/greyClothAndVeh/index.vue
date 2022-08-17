@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-08-16 10:26:37
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-08-17 11:24:03
+ * @LastEditTime: 2022-08-17 14:45:01
 -->
 <template>
     <div class="grey-cloth-veh-container">
@@ -84,7 +84,7 @@ export default {
                 rows: this.page.pageSize,
                 start: this.page.currentPage,
                 noteCode: noteCode,
-                proName: weaveJobCode ? "%" + weaveJobCode : '',
+                weaveJobCode: weaveJobCode ? "%" + weaveJobCode : '',
             };
             if(organizeDate && organizeDate.length == 2){
                 params.organizeDate_begin = organizeDate[0];
