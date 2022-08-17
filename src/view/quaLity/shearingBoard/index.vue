@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-05-03 16:09:29
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-16 16:17:07
+ * @LastEditTime: 2022-08-17 07:42:00
  * @FilePath: \iot.vue\src\view\quaLity\shearingBoard\index.vue
  * @Description: 
 -->
@@ -214,19 +214,21 @@ export default {
       );
       window.open(url);
     },
-    handlePrint() {
+    async handlePrint() {
       if (!this.spowerClient || this.spowerClient.readyState == 3 || this.spowerClient.readyState == 0 ) {
         this.$tip.error("打印服务离线，请启动服务后刷新页面!");
         return;
       }
       let printData = this.crud[this.curIdx - 1];
       printData.printTime = this.$getNowTime("datetime");
+      printData.cutRemarks = printData.cutRemarks.toString();
       for (let i = 0; i < this.printCount; i++) {
         let sendTemp = (this.printType == 1 ? "print=finishCard:" : "print=finishCardCustomer:") + printData.proCardFk;
         console.log("printInfo:" + sendTemp);
         this.spowerClient.send(sendTemp);
       }
-      updateProFinalProductCardCut(printData);
+      await updateProFinalProductCardCut(printData);
+      this.query();
       this.$tip.success("已发送打印动作!");
     },
     handleUpdate() {
@@ -265,7 +267,11 @@ export default {
               data.yardLength = printData.cutYds;
               await updateFinishedNoteData(data);
               printData.upFlag = true;
+              printData.upFlag = true;
+              printData.upDate = this.$getNowTime("datetime");
+              printData.cutRemarks = printData.cutRemarks.toString();
               await updateProFinalProductCardCut(printData);
+              this.query();
               this.$tip.success("更新成功!");
             }
           }
