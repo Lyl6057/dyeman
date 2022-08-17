@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-24 08:12:20
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-06-30 17:13:02
+ * @LastEditTime: 2022-08-15 13:38:44
  * @Description: 
 -->
 <template>
@@ -18,11 +18,14 @@
         $t("choicDlg.plsc")
       }}</el-button>
 
-      <span style="display:inline-block; padding: 0px 10px">|</span>
-      <el-select v-model="curSelLocCode" clearable placeholder="选择货位码进行批量操作">
-        <el-option v-for="(item, index) in locationCodeDict" :key="index" :label="item.label" :value="item.value"></el-option>
-      </el-select>
-      <el-button type="primary" @click="handleBatchSelLocCode">批量选择货位码</el-button>
+      <template v-if="loc">
+          <span style="display:inline-block; padding: 0px 10px">|</span>
+          <el-select v-model="curSelLocCode" clearable placeholder="选择货位码进行批量操作">
+            <el-option v-for="(item, index) in locationCodeDict" :key="index" :label="item.label" :value="item.value"></el-option>
+          </el-select>
+          <el-button type="primary" @click="handleBatchSelLocCode">批量选择货位码</el-button>
+      </template>
+     
     </div>
 
     <div class="crudBox">

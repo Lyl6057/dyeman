@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-04-01 13:39:35
- * @LastEditors: Lyl
- * @LastEditTime: 2022-05-24 15:56:32
+ * @LastEditors: Symbol_Yang
+ * @LastEditTime: 2022-08-16 10:16:59
  * @Description:
  */
 
@@ -72,6 +72,22 @@ export function whseMng(_this) {
         {
           menuName: "5.库存整理",
           index: "seitLocation"
+        },
+        {
+          menuName: "6.胚布仓整理",
+          index: "greyClothSeit",
+          icon: "el-icon-s-operation",
+          name: "geryClothSeit",
+          children: [
+            {
+              menuName: "6.1.胚布载具整理",
+              index: "greyClothVehSeit",
+            },
+            {
+              menuName: "6.2.载具货位整理",
+              index: "vehLocSeit",
+            }
+          ]
         }
         // {
         //   menuName: "2.生产运转出仓", //'2.生产运转'

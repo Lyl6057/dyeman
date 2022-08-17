@@ -96,6 +96,22 @@ export default [
     }
   },
   {
+    path: "/greyClothVehSeit",
+    name: "胚布载具整理",
+    component: resolve => require(["@/view/im/greyClothSeit/greyClothAndVeh/index"], resolve),
+    meta: {
+      keepAlive: true
+    },
+  },
+  {
+    path: "/vehLocSeit",
+    name: "载具货位整理",
+    component: resolve => require(["@/view/im/greyClothSeit/vehAndLoc/index"], resolve),
+    meta: {
+      keepAlive: true
+    },
+  },
+  {
     path: "/whseVehicle",
     name: "仓库载具管理",
     component: resolve => require(["@/view/im/Ity/vehicle/index"], resolve),
