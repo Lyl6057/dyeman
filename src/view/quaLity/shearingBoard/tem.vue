@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-05-03 16:29:13
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-16 16:09:32
+ * @LastEditTime: 2022-08-17 07:35:49
  * @FilePath: \iot.vue\src\view\quaLity\shearingBoard\tem.vue
  * @Description: 
 -->
@@ -438,6 +438,7 @@ export default {
       }
       let printData = this.qcShearingBoardData;
       printData.printTime = this.$getNowTime("datetime");
+      printData.cutRemarks = printData.cutRemarks.toString();
       for (let i = 0; i < this.printCount; i++) {
          if (this.printType == 1) {
           this.spowerClient.send("print=finishCard:" + printData.proCardFk);
@@ -447,6 +448,7 @@ export default {
       }
       updateProFinalProductCardCut(printData);
       this.hasRefresh = true;
+      this.initData(printData.cutId)
       this.$tip.success("已发送打印动作!");
     },
     handleUpdate() {
@@ -486,7 +488,7 @@ export default {
               printData.cutRemarks = printData.cutRemarks.toString();
               await updateFinishedNoteData(data);
               printData.upFlag = true;
-              this.qcShearingBoardData.upFlag = true;
+              printData.upDate = this.$getNowTime("datetime");
               await updateProFinalProductCardCut(printData);
               this.hasRefresh = true;
               this.initData(printData.cutId)
