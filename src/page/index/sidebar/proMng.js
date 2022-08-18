@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-04-01 13:39:35
- * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-26 15:20:16
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-08-18 09:25:34
  * @Description:
  */
 
@@ -193,7 +193,11 @@ export function proMng(_this) {
         {
           menuName: "3.批色回修单",
           index: "colorRepair"
-        }
+        },
+        {
+          menuName: "4.批色台账",
+          index: "batchColorLedger"
+        },
         // {
         //   menuName: "2.定后码卡",
         //   index: `outcodeCard/${1}`
