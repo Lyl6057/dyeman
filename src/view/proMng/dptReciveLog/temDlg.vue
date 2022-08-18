@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-29 13:16:34
+ * @LastEditTime: 2022-08-18 08:19:20
  * @Description: 
 -->
 <template>
@@ -232,7 +232,7 @@ export default {
             } else {
               this.form.runJobFk = this.form.aloYarntestoid;
             }
-            this.form.stepId = this.form.stepId[this.form.stepId.length - 1];
+            this.form.stepId = this.form.stepId? this.form.stepId[this.form.stepId.length - 1] : '';
             add(this.form).then((res) => {
               if (res.data.code == 200) {
                 this.wLoading = false;
