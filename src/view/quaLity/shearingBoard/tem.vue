@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-05-03 16:29:13
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-17 14:07:31
+ * @LastEditTime: 2022-08-18 10:31:08
  * @FilePath: \iot.vue\src\view\quaLity\shearingBoard\tem.vue
  * @Description: 
 -->
@@ -29,9 +29,9 @@
           </el-select>
           打印张数：<el-input type="number" v-model="printCount" max="5" min="1" style="width: 80px;margin-right: 15px">
           </el-input>
-          电子秤： <el-switch v-model="turnOnGetWeight" style="margin-right: 10px" active-text="开启" inactive-text="关闭">
+          电子秤： <el-switch v-model="turnOnGetWeight" :disabled="qcShearingBoardData.upFlag" style="margin-right: 10px" active-text="开启" inactive-text="关闭">
           </el-switch>
-          类型： <el-switch v-model="isBoard" active-text="剪办" inactive-text="剪疵">
+          类型： <el-switch v-model="isBoard" :disabled="qcShearingBoardData.upFlag" active-text="剪办" inactive-text="剪疵">
           </el-switch>
         </div>
       </div>
@@ -240,6 +240,7 @@ export default {
       })
         .then(async (res) => {
           res.data.total && (this.qcShearingBoardData = res.data.records[0]);
+          this.qcShearingBoardData.upFlag && (this.turnOnGetWeight = false);
           this.isBoard = this.qcShearingBoardData.cutSamWeight ? true : false;
           !res.data.total && this.handleClose();
           await this.remoteMethod(this.qcShearingBoardData.productNo);

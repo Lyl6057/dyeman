@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-05-03 16:09:29
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-17 10:50:46
+ * @LastEditTime: 2022-08-18 10:27:48
  * @FilePath: \iot.vue\src\view\quaLity\shearingBoard\index.vue
  * @Description: 
 -->
@@ -11,7 +11,7 @@
   <div class="abnormalDaily">
     <view-container title="剪办记录">
       <el-row class="btnList">
-        <el-button type="success" :disabled="chooseData.upFlag" @click="update"> {{ $t("public.update") }}
+        <el-button type="success" @click="update"> {{ $t("public.update") }}
         </el-button>
         <el-button type="primary" @click="add"> {{ $t("public.add") }} </el-button>
         <el-button type="danger" :disabled="chooseData.upFlag" @click="del"> {{ $t("public.del") }} </el-button>
@@ -302,10 +302,10 @@ export default {
     },
     handleRowDBLClick(row) {
       this.curIdx = row.$index + 1;
-      if (row.upFlag) {
-        this.$tip.warning("已更新码卡不可修改！");
-        return;
-      }
+      // if (row.upFlag) {
+      //   this.$tip.warning("已更新码卡不可修改！");
+      //   return;
+      // }
       this.update();
     },
     temClose(hasRefresh) {
