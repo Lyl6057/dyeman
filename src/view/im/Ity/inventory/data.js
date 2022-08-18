@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-03-24 14:21:15
- * @LastEditors: Lyl
- * @LastEditTime: 2022-08-16 10:21:09
+ * @LastEditors: PMP
+ * @LastEditTime: 2022-08-17 09:40:27
  * @Description:
  */
 
@@ -196,7 +196,7 @@ export function crudOp(_this) {
       {
         label: "#",
         prop: "index",
-        width: 80,
+        width: 50,
         align: "left",
         overHidden: true
       },
@@ -789,6 +789,61 @@ export function whseDtlCrudOp(_this) {
         width: 100,
         overHidden: true
       }
+    ]
+  };
+}
+
+//五金用品出入信息
+export function wjDetailcrudOp(_this) {
+  return {
+    menu: false,
+    addBtn: false,
+    border: true,
+    highlightCurrentRow: true,
+    refreshBtn: false,
+    columnBtn: false,
+    showOverflowTooltip: true,
+    excelBtn: false,
+    rowKey: "index",
+    tree: true,
+    height: "calc(100vh - 315px)",
+    showSummary: false,
+    page: false,
+    column: [
+      {
+        label: "#",
+        prop: "index",
+        width: 50,
+        align: "left",
+        overHidden: true,
+        align: 'center'
+      },
+      {
+        label: "出入时间",
+        prop: "yinDate",
+        span: 6,
+        placeholder: " ",
+        width: 160,
+        type: "select",
+        //   dicData: getDIC("whse_yinStatus"),
+      },
+      {
+        label: "类型",
+        prop: "yinType",
+        slot: true,
+        align: 'center'
+      },
+      {
+        label: "数量",
+        prop: "poqty",
+        slot: true,
+        align: 'center'
+      },
+      {
+        label: "单位",
+        prop: "codeName",
+        width: 100
+      },
     ]
   };
 }

@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-03-24 14:15:12
- * @LastEditors: Lyl
- * @LastEditTime: 2022-08-16 10:21:57
+ * @LastEditors: PMP
+ * @LastEditTime: 2022-08-17 10:05:23
  * @Description: 
 -->
 <template>
@@ -22,11 +22,33 @@
       <div class="formBox">
         <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
       </div>
-      <div class="crudBox">
-        <avue-crud ref="crud" :option="crudOp" :data="crud" :page.sync="page" @on-load="getData"
-          @row-dblclick="handleRowDBLClick" @current-row-change="cellClick"></avue-crud>
-      </div>
-
+      <el-row>
+        <el-col :span="(form.type === 'WJ') ? 17 : 24">
+          <div class="crudBox">
+            <avue-crud ref="crud" :option="crudOp" :data="crud" :page.sync="page" @on-load="getData"
+              @row-dblclick="handleRowDBLClick" @current-row-change="cellClick"></avue-crud>
+          </div>
+        </el-col>
+        <el-col :span="(form.type === 'WJ') ? 7 : 0">
+          <view-container title="五金库存出入记录" :element-loading-text="loadLabel" v-loading="loading">
+            <avue-crud ref="crudWjDlt" :option="wjDltOp" :data="wjDlt">
+              <template slot="yinType" slot-scope="scope">
+                <div style="margin-top: -3px;">
+                  <el-tag :type="(scope.row.yinType == '入仓') ? 'success' : 'danger'" size="medium">
+                    {{ scope.row.yinType }}</el-tag>
+                </div>
+              </template>
+              <template slot="poqty" slot-scope="scope">
+                <div style="color: #008000;" v-if="(scope.row.yinType == '入仓')">+{{ scope.row.poqty }}</div>
+                <div style="color: #f20;" v-else>-{{ scope.row.poqty }}</div>
+              </template>
+            </avue-crud>
+            <div style="margin-bottom: 7px ;margin-top: 7px;">
+              剩余数量:{{chooseData.stock}}
+            </div>
+          </view-container>
+        </el-col>
+      </el-row>
       <el-drawer title="库存出入明细" :visible.sync="drawerVisible" append-to-body>
         <whse-dtl ref="whseDtlRef"></whse-dtl>
       </el-drawer>
@@ -55,6 +77,7 @@ import {
   getEquipmentList,
   fetchCheckHasExistByNow,
   createSnapshot2StockType,
+  getViewHardwareStockDetails
 } from "./api";
 import { getDIC, getDicT, getXDicT } from "@/config/index";
 import {
@@ -64,6 +87,7 @@ import {
   finishedCrud,
   sxOp,
   noteCrud,
+  wjDetailcrudOp,
 } from "./data";
 import XlsxTemplate from "xlsx-template";
 import JSZipUtils from "jszip-utils";
@@ -92,6 +116,8 @@ export default {
       },
       crudOp: crudOp(this),
       crud: [],
+      wjDltOp: wjDetailcrudOp(this),
+      wjDlt: [],
       detail: {},
       chooseData: {},
       isAdd: false,
@@ -147,6 +173,7 @@ export default {
     getData() {
       this.loading = true;
       this.crud = [];
+      this.wjDlt=[];
       for (var key in this.form) {
         if (this.form[key] === "") {
           delete this.form[key];
@@ -468,6 +495,18 @@ export default {
     },
     cellClick(val) {
       this.chooseData = val;
+      if (this.form.type == "WJ") {
+        let param = {
+          batchNo: val.batchNo,
+          materialNum: val.accessoriesId
+        };
+        getViewHardwareStockDetails(param).then((res) => {
+          this.wjDlt = res.data;
+          this.wjDlt.map((e, i) => {
+            e.index = i + 1;
+          })
+        })
+      }
     },
     del() {
       if (Object.keys(this.chooseData).length === 0) {

@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-03-24 14:21:09
- * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-21 17:24:42
+ * @LastEditors: PMP
+ * @LastEditTime: 2022-08-17 09:57:23
  * @Description:
  */
 import axios from "axios";
@@ -218,6 +218,14 @@ export function getNote(params) {
 export function getNoteList(params) {
   return axios({
     url: "/api/proClothNote",
+    method: "get",
+    params: params
+  });
+}
+
+export function getViewHardwareStockDetails(params) {
+  return axios({
+    url: "/api/viewHardwareStock/ware/details",
     method: "get",
     params: params
   });
