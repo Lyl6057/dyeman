@@ -2,12 +2,20 @@
  * @Author: Lyl
  * @Date: 2021-02-01 14:06:25
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-19 15:39:56
+ * @LastEditTime: 2022-08-18 10:59:49
  * @Description:
  */
 
 import axios from "axios";
 
+
+// 织单已织完
+export function fetchUpdateWeaveState(weaveJobId){
+  return axios({
+    url: "/api/proWeaveJob/finish/" +weaveJobId,
+    method: "put",
+  });
+}
 
 // 用纱明细中通过本厂纱批号获取试纱记录
 export function fetchYarnTestByYarnBatch(params){
