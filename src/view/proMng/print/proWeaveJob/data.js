@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-27 08:29:06
+ * @LastEditTime: 2022-08-18 15:35:56
  * @Description:
  */
 
@@ -139,7 +139,7 @@ export function dlgForm(_this) {
 
 let cust = getDicT("basCustomer", "custName", "custCode");
 
-export function mainCrud(_this, audit) {
+export function mainCrud(_this, audit, isExtract = false) {
   return {
     menu: false,
     addBtn: false,
@@ -187,11 +187,11 @@ export function mainCrud(_this, audit) {
         span: 6,
         placeholder: " ",
         sortable: true,
-        disabled: audit
+        disabled: isExtract ||  (audit
           ? false
           : _this.detail.auditState && !_this.isAdd
             ? true
-            : false,
+            : false),
         overHidden: true,
         // rules: [
         //   {
@@ -260,11 +260,11 @@ export function mainCrud(_this, audit) {
         tip: "Mã số dệt bộ phận Sales",
         span: 6,
         width: 200,
-        disabled: audit
+        disabled: isExtract || (audit 
           ? false
           : _this.detail.auditState && !_this.isAdd
             ? true
-            : false,
+            : false),
         overHidden: true,
         placeholder: " "
       },
