@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-05-03 16:29:13
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-17 07:57:26
+ * @LastEditTime: 2022-08-18 10:31:08
  * @FilePath: \iot.vue\src\view\quaLity\shearingBoard\tem.vue
  * @Description: 
 -->
@@ -29,9 +29,9 @@
           </el-select>
           打印张数：<el-input type="number" v-model="printCount" max="5" min="1" style="width: 80px;margin-right: 15px">
           </el-input>
-          电子秤： <el-switch v-model="turnOnGetWeight" style="margin-right: 10px" active-text="开启" inactive-text="关闭">
+          电子秤： <el-switch v-model="turnOnGetWeight" :disabled="qcShearingBoardData.upFlag" style="margin-right: 10px" active-text="开启" inactive-text="关闭">
           </el-switch>
-          类型： <el-switch v-model="isBoard" active-text="剪办" inactive-text="剪疵">
+          类型： <el-switch v-model="isBoard" :disabled="qcShearingBoardData.upFlag" active-text="剪办" inactive-text="剪疵">
           </el-switch>
         </div>
       </div>
@@ -119,7 +119,7 @@ export default {
       defectShowData: [],
       defectDicData: [],
       sampleData: [],
-      isInit: true
+      isInit: true,
     };
   },
   watch: {
@@ -148,10 +148,10 @@ export default {
       if (!_this.turnOnGetWeight) {
         return;
       }
-      if(e.data.indexOf("scan") != -1){
-        // 扫描事件
-        _this.remoteMethod(e.data.split("=")[1])
-      }
+      // if(e.data.indexOf("scan") != -1){
+      //   // 扫描事件
+      //   _this.qcShearingBoardData.proCardFk = e.data.split("=")[1] //;
+      // }
       let weight =
         e.data.indexOf(":") != -1
           ? Number(e.data.replace(/[^\d.]/g, ""))
@@ -176,14 +176,14 @@ export default {
         cardType: 1,
       }).then((res) => {
         this.options = res.data.records;
-        if (this.options.length == 1) {
-          let data = this.options[0];
-          this.qcShearingBoardData.netWeight = data.netWeight;
-          this.qcShearingBoardData.netWeightLbs = data.netWeightLbs;
-          this.qcShearingBoardData.befcutYds = data.yardLength;
-          this.qcShearingBoardData.proCardFk = data.cardId;
-          this.qcShearingBoardData.productNo = data.productNo;
-        }
+        // if (this.options.length == 1) {
+        //   let data = this.options[0];
+        //   // this.qcShearingBoardData.netWeight = data.netWeight;
+        //   // this.qcShearingBoardData.netWeightLbs = data.netWeightLbs;
+        //   // this.qcShearingBoardData.befcutYds = data.yardLength;
+        //   this.qcShearingBoardData.proCardFk = data.cardId;
+        //   // this.qcShearingBoardData.productNo = data.productNo;
+        // }
         this.vatLoading = false;
       });
     },
@@ -240,6 +240,7 @@ export default {
       })
         .then(async (res) => {
           res.data.total && (this.qcShearingBoardData = res.data.records[0]);
+          this.qcShearingBoardData.upFlag && (this.turnOnGetWeight = false);
           this.isBoard = this.qcShearingBoardData.cutSamWeight ? true : false;
           !res.data.total && this.handleClose();
           await this.remoteMethod(this.qcShearingBoardData.productNo);
@@ -440,7 +441,7 @@ export default {
       this.$emit("close", this.hasRefresh);
       this.hasRefresh = false;
     },
-    handlePrint() {
+    async handlePrint() {
       if (
         this.spowerClient.readyState == 3 ||
         this.spowerClient.readyState == 0
@@ -460,7 +461,7 @@ export default {
       }
       updateProFinalProductCardCut(printData);
       this.hasRefresh = true;
-      this.initData(printData.cutId)
+      await this.initData(printData.cutId)
       this.$tip.success("已发送打印动作!");
     },
     handleUpdate() {
@@ -503,7 +504,7 @@ export default {
               printData.upDate = this.$getNowTime("datetime");
               await updateProFinalProductCardCut(printData);
               this.hasRefresh = true;
-              this.initData(printData.cutId)
+              await this.initData(printData.cutId)
               this.$tip.success("更新成功!");
             }
           }
