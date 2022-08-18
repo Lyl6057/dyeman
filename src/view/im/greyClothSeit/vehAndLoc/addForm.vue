@@ -18,6 +18,7 @@
                 >
                     <template slot-scope="{row}" slot="operate">
                         <el-button type="danger" size="mini" @click="handleDelRow(row.noteId)" >删除</el-button>
+                        <el-button type="primary" size="mini" @click="handleSync(row)" >一键同步</el-button>
                     </template>
                 </avue-crud>
             </div>
@@ -42,6 +43,14 @@ export default {
         }
     },
     methods: {
+        // 一键同步
+        handleSync(row){
+            let locationCodeNew = row.locationCodeNew;
+            if(!locationCodeNew) return this.$tip.warning("请填写数据");
+            this.crudDataList.forEach(item => {
+                item.locationCodeNew = locationCodeNew;
+            })
+        },
         // 初始化
         init(){
             this.formData = {

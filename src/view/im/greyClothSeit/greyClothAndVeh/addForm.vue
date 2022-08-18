@@ -13,11 +13,13 @@
                 <avue-crud
                     ref="mainCrudRef"
                     :option="dtlCrudOp"
-                    :data="crudDataList"
+                    :data="pageCrudDataList"
+                    :page="page"
                     @on-load="getDataList"
                 >
                     <template slot-scope="{row}" slot="operate">
                         <el-button type="danger" size="mini" @click="handleDelRow(row.noteId)" >删除</el-button>
+                        <el-button type="primary" size="mini" @click="handleSync(row)" >一键同步</el-button>
                     </template>
                 </avue-crud>
             </div>
@@ -38,10 +40,35 @@ export default {
             },
             addFormOp: addFormOp(this),
             dtlCrudOp: dtlCrudOp(this),
-            crudDataList: []
+            crudDataList: [],
+            page: {
+                total: 0,
+                pageSize: 50,
+                pageSizes: [50,100,200,300],
+                currentPage: 1
+            }
+        }
+    },
+    computed:{
+        pageCrudDataList(){
+            if(this.crudDataList.length < 100){
+                return this.crudDataList.length
+            }
+            let { currentPage, pageSize } = this.page;
+            let start = (currentPage - 1) * pageSize;
+            let end = currentPage * pageSize - 1
+            return this.crudDataList.filter(item => item.index >= start && item.index <= end )
         }
     },
     methods: {
+        // 一键同步
+        handleSync(row){
+            let vehicleNoNew = row.vehicleNoNew;
+            if(!vehicleNoNew) return this.$tip.warning("请填写数据");
+            this.crudDataList.forEach(item => {
+                item.vehicleNoNew = vehicleNoNew;
+            })
+        },
         // 初始化
         init(){
             this.formData = {
@@ -97,16 +124,23 @@ export default {
             }
             this.loading = true;
             fetchNoteDataByCode(params).then(res => {
-                this.crudDataList = res.data.map(item => {
+                this.crudDataList = res.data.map((item, index) => {
                     item.$cellEdit = true;
+                    item.index = index;
                     return item;
                 })
+                this.page.total = this.crudDataList.length;
+                this.dtlCrudOp.page = this.page.total > 100
             }).finally(() => {
                 this.loading = false;
             })
         },
         // 获取数据
-        getDataList(){},
+        getDataList({currentPage, pageSize}){
+            Object.assign(this.page,{
+                currentPage, pageSize
+            })
+        },
         // 关闭
         handleClose(isRefresh = false){
             this.$emit("dtl-close", isRefresh)

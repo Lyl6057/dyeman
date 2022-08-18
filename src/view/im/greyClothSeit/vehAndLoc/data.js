@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-08-16 10:26:51
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-08-17 13:40:54
+ * @LastEditTime: 2022-08-17 18:09:58
  */
 import { getDicNS } from "@/config/index";
 
@@ -137,7 +137,7 @@ export function addFormOp(_this){
 export function dtlCrudOp(_this){
     return {
         ...mainCrudOpCommon,
-        page: false,
+        page: true,
         column: [{
             label: "载具编号",
             prop: "storeLoadCode",
@@ -162,7 +162,7 @@ export function dtlCrudOp(_this){
               label: "",
               prop: "operate",
               slot: true,
-              width: 100
+              width: 180
           }
         ]
     }
