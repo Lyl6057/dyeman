@@ -173,7 +173,10 @@ export default {
         }
       }
       if (this.choiceTle == "選擇生产项目") {
-        this.getData().then((res) => {
+        this.getData(Object.assign({
+          stepCode:(this.form.stepCode)?`%${this.form.stepCode}`:"%",
+          stepName:(this.form.stepName)?`%${this.form.stepName}`:"%",
+        })).then((res) => {
           this.crud = res.data;
           // res.data.forEach((item) => {
           //   if (item.stepName === "生产过程") {
