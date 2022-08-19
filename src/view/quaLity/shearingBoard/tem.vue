@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-05-03 16:29:13
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-18 11:25:58
+ * @LastEditTime: 2022-08-19 16:21:16
  * @FilePath: \iot.vue\src\view\quaLity\shearingBoard\tem.vue
  * @Description: 
 -->
@@ -60,7 +60,7 @@
                   <span class="title-small-bold">{{ defectTypeObj[key] }}</span>
                 </div>
                 <div class="defect-list" >
-                  <span class="defect-text text-small not-select" v-for="item in val" :key="item.basDefectdataoid"  :title="`${item.defectNo}-${item.chnName}-${item.vetName}`" @click="handelClickDefectNode(item)">
+                  <span class="defect-text text-small not-select" v-for="item in val" :key="item.basDefectdataoid"  :title="`${item.defectNo}-${item.chnName}-${item.vetName}`" @click="handelClickDefectNode(item, 'defectNo')">
                     {{`${item.defectNo}${item.chnName}${item.vetName}`}}
                   </span>
                 </div>
@@ -68,6 +68,12 @@
             </div>
           </div>
         <!-- </view-container> -->
+      </div>
+      <div v-else class="sample-container not-select">
+        <!-- {{sampleData}} -->
+        <div v-for="(item,index) in sampleData" :key="index">
+          <p @click="handelClickDefectNode(item, 'value')">{{item.label}}</p>
+        </div>
       </div>
     </view-container>
   </div>
@@ -104,25 +110,34 @@ export default {
       turnOnGetWeight: true,
       isBoard: true,
       spowerClient: null,
-      printCount: 1,
+      printCount: 5,
       printType:'1',
       defectTypeData: [],
       defectType: [],
       defectData: [],
       defectTypeObj: {},
       defectShowData: [],
-      defectDicData: []
+      defectDicData: [],
+      sampleData: [],
+      isInit: true
     };
   },
   watch: {
-    isBoard(n,o){
+    async isBoard(n,o){
       this.qcShearingBoardFormOp.column[6].disabled = !n;
       this.qcShearingBoardFormOp.column[8].disabled = n;
-      n && (this.qcShearingBoardData.cutDefeWeight = 0);
-      !n && (this.qcShearingBoardData.cutSamWeight = 0);
-      n && (this.qcShearingBoardFormOp.column[this.qcShearingBoardFormOp.column.length - 1].dicData = getDIC("bas_sampleType"));
-      !n && (this.qcShearingBoardFormOp.column[this.qcShearingBoardFormOp.column.length - 1].dicData = this.defectDicData);
-      this.qcShearingBoardData.cutRemarks = []
+      if(!this.isInit){
+        n && (this.qcShearingBoardData.cutDefeWeight = 0);
+        !n && (this.qcShearingBoardData.cutSamWeight = 0);
+        this.qcShearingBoardData.cutRemarks = []
+      }
+      if (!this.defectDicData.length) {
+        await this.initDefect()
+      }
+      this.$nextTick(() =>{
+        n && (this.qcShearingBoardFormOp.column[this.qcShearingBoardFormOp.column.length - 1].dicData = getDIC("bas_sampleType"));
+        !n && (this.qcShearingBoardFormOp.column[this.qcShearingBoardFormOp.column.length - 1].dicData = this.defectDicData);
+      })
     }
   },
   computed: {},
@@ -132,6 +147,10 @@ export default {
     _this.spowerClient.onmessage = function (e) {
       if (!_this.turnOnGetWeight) {
         return;
+      }
+      if(e.data.indexOf("scan") != -1){
+        // 扫描事件
+        _this.remoteMethod(e.data.split("=")[1])
       }
       let weight =
         e.data.indexOf(":") != -1
@@ -144,7 +163,7 @@ export default {
     this.initDefect();
   },
   mounted() {
-    this.remoteMethod("");
+    
   },
   methods: {
     remoteMethod(val) {
@@ -157,15 +176,14 @@ export default {
         cardType: 1,
       }).then((res) => {
         this.options = res.data.records;
-        // if(this.options.length == 1) {
-        //   let data = res.data.records[0];
-        //   this.qcShearingBoardData.netWeight = data.netWeight;
-        //   this.qcShearingBoardData.netWeightLbs = data.netWeightLbs;
-        //   this.qcShearingBoardData.befcutYds = data.yardLength;
-        // this.qcShearingBoardData.proCardFk = data.cardId;
-        //   this.qcShearingBoardData.$proCardFk = data.productNo + '  (' + data.vatNo + ')';
-        //   this.qcShearingBoardData.productNo = data.productNo
-        // }
+        if (this.options.length == 1) {
+          let data = this.options[0];
+          this.qcShearingBoardData.netWeight = data.netWeight;
+          this.qcShearingBoardData.netWeightLbs = data.netWeightLbs;
+          this.qcShearingBoardData.befcutYds = data.yardLength;
+          this.qcShearingBoardData.proCardFk = data.cardId;
+          this.qcShearingBoardData.productNo = data.productNo;
+        }
         this.vatLoading = false;
       });
     },
@@ -189,37 +207,33 @@ export default {
         } else {
           this.qcShearingBoardData.proCardFk = "";
         }
-        setTimeout(() => {
-          this.loading = false;
-        }, 0);
       });
     },
-    async handleDefeceTypeChange(){
+    async handleDefeceTypeChange() {
       let obj = {};
       this.defectData.forEach((item) => {
-        if(!this.defectType.includes(item.defectClass)){ return; }
+        // if(!this.defectType.includes(item.defectClass)){ return; }
         !obj[item.defectClass] && (obj[item.defectClass] = []);
         obj[item.defectClass].push(item);
       });
       this.defectShowData = obj;
     },
-    handelClickDefectNode(val){
+    handelClickDefectNode(val, type) {
       if(!this.qcShearingBoardData.cutRemarks){
         this.qcShearingBoardData.cutRemarks = [];
         return;
       }
-      !this.qcShearingBoardData.cutRemarks.includes(val.defectNo) && this.qcShearingBoardData.cutRemarks.push(val.defectNo)
+      !this.qcShearingBoardData.cutRemarks.includes(val[type]) && this.qcShearingBoardData.cutRemarks.push(val[type])
     },
-    async initDefect(){
-      this.loading = true;
+    async initDefect() {
+      this.sampleData = await getDIC("bas_sampleType");
       this.defectTypeData = await fetchBasDefectTypeList().then(res => res.data);
-      this.defectType = this.defectTypeData.map((item) =>{ !this.defectTypeObj[item.codeid] && ( this.defectTypeObj[item.codeid] = `${item.codename}` ); return item.codeid }); // 默认全选  ${item.scendlanlabel}
+      this.defectType = this.defectTypeData.map((item) =>{ !this.defectTypeObj[item.codeid] && ( this.defectTypeObj[item.codeid] = `${item.codename} ${item.secondlanlabel}` ); return item.codeid }); // 默认全选
       this.defectData = await fetchBasDefectList().then(res => res.data);
       let data =  this.defectData.map((item) =>{ return { label: `${item.defectNo}-${item.chnName}-${item.vetName}`, value: item.defectNo}});
       // this.qcShearingBoardFormOp.column[ this.qcShearingBoardFormOp.column.length - 1].dicData = data;
       this.defectDicData = data;
       await this.handleDefeceTypeChange();
-      this.loading = false;
     },
     async initData(cutId) {
       this.loading = true;
@@ -228,11 +242,14 @@ export default {
       })
         .then(async (res) => {
           res.data.total && (this.qcShearingBoardData = res.data.records[0]);
+          this.isBoard = this.qcShearingBoardData.cutSamWeight ? true : false;
           !res.data.total && this.handleClose();
+          await this.remoteMethod(this.qcShearingBoardData.productNo);
           this.qcShearingBoardData.cutRemarks && ( this.qcShearingBoardData.cutRemarks = this.qcShearingBoardData.cutRemarks.split(","));
         })
         .finally(() => {
           setTimeout(() => {
+            this.isInit = false;
             this.loading = false;
           }, 200);
         });
@@ -240,7 +257,9 @@ export default {
     async addAndcreateData(cutId) {
       this.loading = true;
       if (cutId) {
-        return this.initData(cutId);
+        this.isInit = true;
+        this.initData(cutId);
+        return;
       }
       if (!this.cutDept) {
         let result = await getallDpt();
@@ -279,6 +298,7 @@ export default {
         upFlag: false,
       };
       await this.$nextTick();
+      this.isInit = false;
       this.loading = false;
     },
     handleStoreRowClick(val) {
@@ -329,13 +349,18 @@ export default {
       });
     },
     handleSave() {
+      if(!this.qcShearingBoardData.cutSamWeight && !this.qcShearingBoardData.cutDefeWeight) {
+        this.$tip.warning("重量不能为0!");
+        return;
+      }
+      if (!this.qcShearingBoardData.productNo) {
+        this.$tip.warning("成品码卡不能为空!");
+        return;
+      }
       this.$refs.qcShearingBoardForm.validate(async (valid, done) => {
         try {
-          if (!this.qcShearingBoardData.productNo) {
-            this.$tip.warning("成品码卡不能为空!");
-          }
           if (!valid) {
-            this.$tip.warning("请补充查布计划表信息!");
+            this.$tip.warning("请补充QA剪办记录信息!");
             return;
           }
           let params = {
@@ -350,6 +375,7 @@ export default {
           this.qcShearingBoardData.cutRemarks =
             this.qcShearingBoardData.cutRemarks.toString();
           if (cutId) {
+            this.hasRefresh = true;
             await updateProFinalProductCardCut(this.qcShearingBoardData).then();
             await this.initData(cutId);
             this.$tip.success("保存成功!");
@@ -427,6 +453,7 @@ export default {
       }
       let printData = this.qcShearingBoardData;
       printData.printTime = this.$getNowTime("datetime");
+      printData.cutRemarks = printData.cutRemarks.toString();
       for (let i = 0; i < this.printCount; i++) {
          if (this.printType == 1) {
           this.spowerClient.send("print=finishCard:" + printData.proCardFk);
@@ -436,6 +463,7 @@ export default {
       }
       updateProFinalProductCardCut(printData);
       this.hasRefresh = true;
+      this.initData(printData.cutId)
       this.$tip.success("已发送打印动作!");
     },
     handleUpdate() {
@@ -472,11 +500,13 @@ export default {
                 (data.grossWeight * 2.2046).toFixed(1)
               );
               data.yardLength = printData.cutYds;
+              printData.cutRemarks = printData.cutRemarks.toString();
               await updateFinishedNoteData(data);
               printData.upFlag = true;
-              this.qcShearingBoardData.upFlag = true;
+              printData.upDate = this.$getNowTime("datetime");
               await updateProFinalProductCardCut(printData);
               this.hasRefresh = true;
+              this.initData(printData.cutId)
               this.$tip.success("更新成功!");
             }
           }
@@ -492,10 +522,18 @@ export default {
 >>>.el-card__header {
   padding: 2px 10px;  
 }
+.sample-container{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  font-size: 22px;
+  font-weight: 600;
+  text-align: center;
+  
+}
 .defect-group {
   display: flex;
   flex-direction: row;
-  
 }
 .defect-group >div {
   height: calc(100vh - 320px);

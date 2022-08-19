@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-19 14:04:50
+ * @LastEditTime: 2022-08-17 13:45:24
  * @Description:
 -->
 <template>
@@ -699,6 +699,7 @@ export default {
               data.mergVatNo = data.mergVatNo.join("/");
               data.compLightSource = data.compLightSource.join(",");
               data.dyeJarCount = Number(data.dyeVatType || 0);
+              data.bf = null
               Object.keys(data).forEach((item) => {
                 if (this.isEmpty(data[item])) {
                   delete data[item];

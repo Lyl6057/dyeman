@@ -80,6 +80,7 @@
               :api="everyThing"
               :form="form"
               :hasEdit="hasEdit"
+              :loc="false"
             ></inwhse-ph> </view-container
         ></el-col>
       </el-row>

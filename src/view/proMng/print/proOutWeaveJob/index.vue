@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-08 11:25:52
+ * @LastEditTime: 2022-08-18 16:52:53
  * @Description: 
 -->
 <template>
@@ -78,6 +78,7 @@
             >复制</el-button
           >
         </el-tooltip>
+        <el-button type="primary" @click="handleFinish" :disabled="detail.weaveState == 2" >已織完</el-button>
         <el-tooltip
           class="item"
           effect="dark"
@@ -156,6 +157,7 @@
 <script>
 import { mainForm, mainCrud } from "./data";
 import { get, add, update, del, print } from "./api";
+import { fetchUpdateWeaveState } from "../proWeaveJob/api"
 import tem from "./temDlg";
 export default {
   name: "",
@@ -193,6 +195,22 @@ export default {
     }
   },
   methods: {
+    // 已织完
+    handleFinish(){
+      // this.detail
+      let {weaveState,weaveJobId, weaveJobCode } = this.detail;
+      if(weaveState == 2){
+        return this.$tip.warning("该单号已确认织完");
+      }
+      this.$confirm(`是否对该 ${weaveJobCode} 织单进行确认织完`,"提示",{type: "warning"}).then(res => {
+        this.loading = true;
+        fetchUpdateWeaveState(weaveJobId).then(res => {
+          this.query();
+        }).finally(() => {
+          this.loading = false;
+        })
+      })
+    },
     query() {
       this.loading = true;
       this.detail = {};

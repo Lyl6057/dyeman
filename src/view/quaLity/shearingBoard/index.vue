@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-05-03 16:09:29
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-19 08:08:15
+ * @LastEditTime: 2022-08-17 07:42:00
  * @FilePath: \iot.vue\src\view\quaLity\shearingBoard\index.vue
  * @Description: 
 -->
@@ -72,8 +72,10 @@ import {
   getFinishedNoteByPage,
   updateFinishedNoteData,
   updateProFinalProductCardCut,
+  fetchBasDefectList
 } from "./api.js";
 import { mainForm, mainCrud } from "./data.js";
+import { getDIC } from '../../../config';
 export default {
   components: {
     temDlg,
@@ -99,21 +101,29 @@ export default {
       hasCardData: true,
       spowerClient: null,
       chooseData: {},
-      printCount: 1,
+      printCount: 5,
       printType: "1",
     };
   },
   watch: {},
   computed: {},
-  created() {},
+  created() {
+    this.initDefectAndSampleDicData()
+  },
   beforeRouteEnter(to, form, next) {
     next((vm) => {
       let self = vm;
       self.spowerClient = self.$store.state.spowerClient;
     });
   },
-  mounted() {},
+  mounted() {}, 
   methods: {
+    async initDefectAndSampleDicData(){
+      let sampleData = await getDIC("bas_sampleType");
+      let defectData = await fetchBasDefectList().then( res => res.data);
+      let defectDicData = defectData.map((item) => { return { label: `${item.chnName}-${item.vetName}`, value: item.defectNo }})
+      this.$set(this.crudOp.column[this.crudOp.column.length - 1],"dicData", sampleData.concat(defectDicData))
+    },
     query() {
       this.loading = true;
       let params = {
@@ -156,6 +166,8 @@ export default {
       this.$refs.qcCheckPlanTem.addAndcreateData(
         this.crud[this.curIdx - 1].cutId
       );
+      // this.$set(this.$refs.qcCheckPlanTem, "isBoard", this.crud[this.curIdx - 1].cutDefeWeight ? false : true)
+      // this.$refs.qcCheckPlanTem.isBoard = this.crud[this.curIdx - 1].cutDefeWeight ? false : true
     },
     async add() {
       this.dialogVisible = true;
@@ -201,19 +213,21 @@ export default {
       );
       window.open(url);
     },
-    handlePrint() {
+    async handlePrint() {
       if (!this.spowerClient || this.spowerClient.readyState == 3 || this.spowerClient.readyState == 0 ) {
         this.$tip.error("打印服务离线，请启动服务后刷新页面!");
         return;
       }
       let printData = this.crud[this.curIdx - 1];
       printData.printTime = this.$getNowTime("datetime");
+      printData.cutRemarks = printData.cutRemarks.toString();
       for (let i = 0; i < this.printCount; i++) {
         let sendTemp = (this.printType == 1 ? "print=finishCard:" : "print=finishCardCustomer:") + printData.proCardFk;
         console.log("printInfo:" + sendTemp);
         this.spowerClient.send(sendTemp);
       }
-      updateProFinalProductCardCut(printData);
+      await updateProFinalProductCardCut(printData);
+      this.query();
       this.$tip.success("已发送打印动作!");
     },
     handleUpdate() {
@@ -252,7 +266,11 @@ export default {
               data.yardLength = printData.cutYds;
               await updateFinishedNoteData(data);
               printData.upFlag = true;
+              printData.upFlag = true;
+              printData.upDate = this.$getNowTime("datetime");
+              printData.cutRemarks = printData.cutRemarks.toString();
               await updateProFinalProductCardCut(printData);
+              this.query();
               this.$tip.success("更新成功!");
             }
           }

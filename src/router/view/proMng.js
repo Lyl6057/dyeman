@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-29 14:14:56
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-19 13:29:34
+ * @LastEditTime: 2022-08-19 16:20:07
  * @Description:
  */
 export default [
@@ -11,6 +11,15 @@ export default [
     path: "/",
     name: "主页",
     //redirect: "/ProWorkflowInfo"
+  },
+  {
+    path: "/batchColorLedger",
+    name: "批色台账",
+    component: resolve =>
+      require(["@/view/proMng/batchColor/ledger/index"], resolve),
+    meta: {
+      keepAlive: true
+    }
   },
   {
     path: "/dyeDeliveryNote",

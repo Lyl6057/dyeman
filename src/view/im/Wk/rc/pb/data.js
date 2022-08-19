@@ -585,23 +585,22 @@ export function rcpb2C(_this) {
         }
 
       },
-      
-      // {
-      //   label: _this.$t("whseField.hwm"),
-      //   prop: "locationCode",
-      //   cell: true,
-      //   hide: _this.hide === "6" || _this.hide === "7" ? false : true,
-      //   width: 180,
-      //   filterable: true,
-      //   allowCreate: true,
-      //   defaultFirstOption: true,
-      //   type: "select",
-      //   dicData: getDicNS(
-      //     "whseLocation?warehouseType=1",
-      //     "locationCode",
-      //     "locationCode"
-      //   )
-      // },
+      {
+        label: _this.$t("whseField.hwm"),
+        prop: "locationCode",
+        cell: true,
+        hide: _this.hide === "6" || _this.hide === "7" ? false : true,
+        width: 180,
+        filterable: true,
+        allowCreate: true,
+        defaultFirstOption: true,
+        type: "select",
+        dicData: getDicNS(
+          "whseLocation?warehouseType=1",
+          "locationCode",
+          "locationCode"
+        )
+      },
       // {
       //   label: _this.$t("whseField.zl"),
       //   prop: "weight",

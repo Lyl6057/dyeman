@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-08-12 15:20:20
+ * @LastEditTime: 2022-08-18 15:28:47
  * @Description: 
 -->
 <template>
@@ -439,6 +439,7 @@ export default {
 
       let poNos = Object.keys(poNoMap).join(",");
       let itemData = this.extractRows[0];
+      this.formOp = mainCrud(this, false, true);
       Object.assign(this.form, {
         salPoNo: poNos,
         marketOrder: poNos,

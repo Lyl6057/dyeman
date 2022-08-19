@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-13 15:00:18
+ * @LastEditTime: 2022-08-18 09:11:06
  * @Description:
  */
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
@@ -1838,7 +1838,7 @@ export function codeItemCrud(_this) {
             value: "add_chemicalmat"
           },
           {
-            label: "增加颜料",no
+            label: "增加颜料",
             value: "add_pigment"
           },
           {
