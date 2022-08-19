@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-04-01 13:39:35
- * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-26 15:20:16
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-08-19 13:27:18
  * @Description:
  */
 
@@ -216,6 +216,25 @@ export function proMng(_this) {
         // },
       ]
     },
+    {
+      menuName: "六.开发管理",
+      index: "developMng",
+      icon: "el-icon-edit-outline",
+      children: [
+        {
+          menuName: "1.织造工单",
+          index: "developWeaveJob"
+        },
+        {
+          menuName: "2.染整生产运转单",
+          index: "developRevolveOrder"
+        },
+        {
+          menuName: "3.染整工单",
+          index: "dyeing"
+        },
+      ]
+    }
     // {
     //   menuName: "六.染单管理",
     //   index: "bleadyeMng",

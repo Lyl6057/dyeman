@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-05-03 16:09:29
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-16 07:39:56
+ * @LastEditTime: 2022-08-19 08:08:15
  * @FilePath: \iot.vue\src\view\quaLity\shearingBoard\index.vue
  * @Description: 
 -->
@@ -11,8 +11,7 @@
   <div class="abnormalDaily">
     <view-container title="剪办记录">
       <el-row class="btnList">
-        <el-button type="success" :disabled="chooseData.upFlag" @click="update"> {{ $t("public.update") }}
-        </el-button>
+        <el-button type="success" @click="update"> {{ $t("public.update") }} </el-button>
         <el-button type="primary" @click="add"> {{ $t("public.add") }} </el-button>
         <el-button type="danger" :disabled="chooseData.upFlag" @click="del"> {{ $t("public.del") }} </el-button>
         <el-popconfirm title="是否确定更新数据?" @onConfirm="handleUpdate" class="mh-small">

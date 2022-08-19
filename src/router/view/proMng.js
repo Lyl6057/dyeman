@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-01-29 14:14:56
- * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-08-04 14:43:28
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-08-19 13:29:34
  * @Description:
  */
 export default [
@@ -222,6 +222,15 @@ export default [
     }
   },
   {
+    path: "/developWeaveJob", // 織造通知單打印
+    name: "織造通知單(开发)",
+    component: resolve =>
+      require(["@/view/proMng/developMng/weaveOrder/index"], resolve),
+    meta: {
+      keepAlive: true
+    }
+  },
+  {
     path: "/proOutWeaveJob", // 外发織造通知單打印
     name: "外发織造通知單",
     component: resolve =>
@@ -261,6 +270,14 @@ export default [
     path: "/revolve", // 染整生产运转单
     name: "生产运转单",
     component: resolve => require(["@/view/proMng/revolve/index"], resolve),
+    meta: {
+      keepAlive: true
+    }
+  },
+  {
+    path: "/developRevolveOrder", // 生产生产运转单
+    name: "生产运转单",
+    component: resolve => require(["@/view/proMng/developMng/revolveOrder/index"], resolve),
     meta: {
       keepAlive: true
     }
