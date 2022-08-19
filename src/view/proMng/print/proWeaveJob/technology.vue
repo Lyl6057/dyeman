@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-06-16 10:22:40
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-27 09:31:58
+ * @LastEditTime: 2022-08-19 16:37:14
  * @FilePath: \iot.vue\src\view\proMng\print\proWeaveJob\technology.vue
  * @Description: 
 -->
@@ -126,7 +126,9 @@ export default {
       await getYarn({
         proWeaveJobFk: this.weave.weaveJobId,
       }).then((res) => {
-        this.yarnList = this.$unique(res.data.records, 'yarnCode');
+        this.yarnList = res.data.records.sort((a,b) =>{
+          return a.sn - b.sn;
+        })  
         this.yarnList.forEach((item, i) => {
           this.fabric.push({
             prop1: item.yarnName,
@@ -139,6 +141,7 @@ export default {
         this.loading = false;
       }, 200);
     },
+
     async getTechonlogyData(val, type) {
       this.form.levelNo = val.levelNo || 1;
       this.form.pinColumn = val.pinColumn || 0;
@@ -179,6 +182,7 @@ export default {
         }
       );
     },
+
     pincolumnChange(val) {
       // 排针列数
       this.arrangement = [];
@@ -192,6 +196,7 @@ export default {
         num--;
       }
     },
+
     NumChange(val, type) {
       // 上下针
       // 如果是空数组 直接添加本次数据
@@ -270,6 +275,7 @@ export default {
       }
       return;
     },
+
     async cycleChange(val) {
       if (!val) {
         this.technologyOp = technologyCrud(this);
@@ -412,6 +418,7 @@ export default {
       this.$tip.success("保存成功!");
       this.loading = false;
     },
+
     filterDelData(oList, nList) {
       let result = [];
       oList.forEach((o, i) => {
@@ -430,6 +437,7 @@ export default {
       });
       return result;
     },
+
     async handleCheck(val) {
       if (!val || !val.weaveJobId) return;
       this.loading = true;
