@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
- * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-19 10:17:50
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-08-19 10:26:57
  * @Description:
 -->
 <template>
@@ -246,6 +246,7 @@ export default {
             rows: this.page.pageSize,
             start: this.page.currentPage,
             pages: this.page.currentPage,
+            jobType: 2,
             // isWorkOut: 0,
             // runState: 1,
              dataSortRules: "workDate|desc,vatNo"
@@ -311,6 +312,7 @@ export default {
             start: this.wpage.currentPage,
             isWorkOut: 0,
             weaveState: 0,
+            jobType: 2,
             dataSortRules: "weaveJobCode|desc"
           })
         ).then((res) => {

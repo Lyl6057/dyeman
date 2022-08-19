@@ -1,12 +1,12 @@
 /*
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
- * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-08-18 15:35:56
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-08-19 09:45:29
  * @Description:
  */
 
-import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
+import { getDIC, getDicT, postDicT } from "@/config";
 
 export const picTop = [{ value: "━", label: "━" }, { value: "V", label: "V" }, { value: "U", label: "U" }],
   picBottom = [{ value: "━", label: "━" }, { value: "Λ", label: "Λ" }, { value: "Π", label: "Π" }]
@@ -15,7 +15,7 @@ export function mainForm(_this) {
   return {
     submitBtn: false,
     emptyBtn: false,
-    labelWidth: 150,
+    labelWidth: 100,
     column: [
       {
         label: "生產單號",
@@ -30,7 +30,6 @@ export function mainForm(_this) {
         span: 6,
         placeholder: " ",
         tip: "MS đơn sản xuất bp Dệt"
-        // dicData: getDicT("basCustomer", "custName", "custCode")
       },
       {
         label: "客戶名稱",
@@ -139,7 +138,7 @@ export function dlgForm(_this) {
 
 let cust = getDicT("basCustomer", "custName", "custCode");
 
-export function mainCrud(_this, audit, isExtract = false) {
+export function mainCrud(_this, audit) {
   return {
     menu: false,
     addBtn: false,
@@ -150,15 +149,9 @@ export function mainCrud(_this, audit, isExtract = false) {
     columnBtn: false,
     // labelPosition: 'top',
     page: true,
+    index: true,
     labelWidth: 120,
     column: [
-      {
-        label: "#",
-        prop: "index",
-        width: 50,
-        align: "center",
-        display: false
-      },
       {
         label: "生產單號",
         prop: "weaveJobCode",
@@ -187,11 +180,11 @@ export function mainCrud(_this, audit, isExtract = false) {
         span: 6,
         placeholder: " ",
         sortable: true,
-        disabled: isExtract ||  (audit
+        disabled: audit
           ? false
           : _this.detail.auditState && !_this.isAdd
             ? true
-            : false),
+            : false,
         overHidden: true,
         // rules: [
         //   {
@@ -260,11 +253,11 @@ export function mainCrud(_this, audit, isExtract = false) {
         tip: "Mã số dệt bộ phận Sales",
         span: 6,
         width: 200,
-        disabled: isExtract || (audit 
+        disabled: audit
           ? false
           : _this.detail.auditState && !_this.isAdd
             ? true
-            : false),
+            : false,
         overHidden: true,
         placeholder: " "
       },
@@ -525,10 +518,13 @@ export function mainCrud(_this, audit, isExtract = false) {
             ? true
             : false,
         span: 4,
-        // type: "number",
+        type: "number",
         // minRows: 0,
         placeholder: " ",
-        tip: "Trọng lượng trước giặt"
+        tip: "Trọng lượng trước giặt",
+        change: () =>{
+          _this.handleGramWeightChange();
+        }
       },
       {
         label: "单位",
@@ -563,7 +559,10 @@ export function mainCrud(_this, audit, isExtract = false) {
         span: 2,
         type: "number",
         placeholder: " ",
-        tip: "Trọng lượng trước giặt"
+        tip: "Trọng lượng trước giặt",
+        change: () =>{
+          _this.handleGramWeightChange();
+        }
       },
       {
         label: "-",
@@ -580,7 +579,10 @@ export function mainCrud(_this, audit, isExtract = false) {
         span: 2,
         // type: "number",
         placeholder: " ",
-        tip: "Trọng lượng trước giặt"
+        tip: "Trọng lượng trước giặt",
+        change: () =>{
+          _this.handleGramWeightChange();
+        }
       },
 
       {
@@ -598,13 +600,45 @@ export function mainCrud(_this, audit, isExtract = false) {
         type: "select",
         dicData: [
           {
-            label: "%",
-            value: "%"
+            label: " %",
+            value: " %"
           }
         ],
         placeholder: " ",
         defaultIndex: 1,
+        tip: "Trọng lượng trước giặt",
+        change: () =>{
+          _this.handleBreathChange();
+        }
+      },
+      {
+        label: "克重",
+        prop: "gramWeight",
+        width: 120,
+        minRows: 0,
+        hide: true,
+        disabled: audit
+          ? false
+          : _this.detail.auditState && !_this.isAdd
+            ? true
+            : false,
+        span: 6,
+        placeholder: " ",
         tip: "Trọng lượng trước giặt"
+      },
+      {
+        label: "橫縮",
+        prop: "horizonShrink",
+        tip: "Co rút ngang",
+        span: 6,
+        hide: true,
+        disabled: audit
+          ? false
+          : _this.detail.auditState && !_this.isAdd
+            ? true
+            : false,
+        width: 80,
+        placeholder: " "
       },
       {
         label: "門幅",
@@ -620,7 +654,10 @@ export function mainCrud(_this, audit, isExtract = false) {
         hide: true,
         span: 4,
         type: "number",
-        placeholder: " "
+        placeholder: " ",
+        change: () =>{
+          _this.handleBreathChange();
+        }
       },
       {
         label: "单位",
@@ -653,7 +690,10 @@ export function mainCrud(_this, audit, isExtract = false) {
         span: 2,
         type: "number",
         placeholder: " ",
-        tip: "Trọng lượng trước giặt"
+        tip: "Trọng lượng trước giặt",
+        change: () =>{
+          _this.handleBreathChange();
+        }
       },
       {
         label: "-",
@@ -669,7 +709,10 @@ export function mainCrud(_this, audit, isExtract = false) {
         span: 2,
         type: "number",
         placeholder: " ",
-        tip: "Trọng lượng trước giặt"
+        tip: "Trọng lượng trước giặt",
+        change: () =>{
+          _this.handleBreathChange();
+        }
       },
       {
         label: "单位",
@@ -685,27 +728,32 @@ export function mainCrud(_this, audit, isExtract = false) {
         type: "select",
         dicData: [
           {
-            label: "%",
-            value: "%"
+            label: " %",
+            value: " %"
           }
         ],
         placeholder: " ",
-        tip: "Trọng lượng trước giặt"
+        tip: "Trọng lượng trước giặt",
+        change: () =>{
+          _this.handleBreathChange();
+        }
       },
+      
       {
-        label: "橫縮",
-        prop: "horizonShrink",
-        tip: "Co rút ngang",
-        span: 6,
-        hide: true,
+        label: "門幅",
+        prop: "breadth",
         disabled: audit
           ? false
           : _this.detail.auditState && !_this.isAdd
             ? true
             : false,
-        width: 80,
+        tip: "Thực dụng",
+        width: 90,
+        hide: true,
+        span: 6,
         placeholder: " "
       },
+     
       {
         label: "直縮",
         prop: "verticalShrink",
@@ -1125,11 +1173,6 @@ export function mainCrud(_this, audit, isExtract = false) {
             }
           },
         ]
-      },
-      {
-        icon: "el-icon-s-help",
-        label: "织单明细",
-        prop: "weaveDtl",
       }
     ],
   };

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-05-03 16:29:13
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-18 10:31:08
+ * @LastEditTime: 2022-08-19 16:22:47
  * @FilePath: \iot.vue\src\view\quaLity\shearingBoard\tem.vue
  * @Description: 
 -->
@@ -188,6 +188,8 @@ export default {
       });
     },
     handleVatnoChange(cardId) {
+      if(this.qcShearingBoardData.upFlag) return;
+      this.loading = true;
       getFinishedNoteByPage({
         cardId,
         rows: 10,
@@ -228,7 +230,7 @@ export default {
       this.defectTypeData = await fetchBasDefectTypeList().then(res => res.data);
       this.defectType = this.defectTypeData.map((item) =>{ !this.defectTypeObj[item.codeid] && ( this.defectTypeObj[item.codeid] = `${item.codename} ${item.secondlanlabel}` ); return item.codeid }); // 默认全选
       this.defectData = await fetchBasDefectList().then(res => res.data);
-      let data =  this.defectData.map((item) =>{ return { label: `${item.chnName}-${item.vetName}`, value: item.defectNo}});
+      let data =  this.defectData.map((item) =>{ return { label: `${item.defectNo}-${item.chnName}-${item.vetName}`, value: item.defectNo}});
       // this.qcShearingBoardFormOp.column[ this.qcShearingBoardFormOp.column.length - 1].dicData = data;
       this.defectDicData = data;
       await this.handleDefeceTypeChange();
@@ -304,6 +306,7 @@ export default {
       this.dtlCurIdx = val.$index + 1;
     },
     async calculateYardLength() {
+      if( this.qcShearingBoardData.upFlag || this.qcShearingBoardData.upFlag == undefined ) return;
       if (this.loading) {
         await this.$nextTick();
       }

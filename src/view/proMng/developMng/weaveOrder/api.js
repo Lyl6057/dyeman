@@ -1,21 +1,13 @@
 /*
  * @Author: Lyl
  * @Date: 2021-02-01 14:06:25
- * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-08-18 10:59:49
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-08-19 08:03:50
  * @Description:
  */
 
 import axios from "axios";
 
-
-// 织单已织完
-export function fetchUpdateWeaveState(weaveJobId){
-  return axios({
-    url: "/api/proWeaveJob/finish/" +weaveJobId,
-    method: "put",
-  });
-}
 
 // 用纱明细中通过本厂纱批号获取试纱记录
 export function fetchYarnTestByYarnBatch(params){
@@ -164,8 +156,8 @@ export function getBomFa(params) {
   });
 }
 
-// 通过排期类型查找工作包
-export function get(params) {
+// 查询织单
+export function fetchWeaveOrderByPage(params) {
   return axios({
     url: "/api/proWeaveJob/page",
     method: "get",
@@ -174,7 +166,7 @@ export function get(params) {
 }
 
 // 新增
-export function add(data) {
+export function addWeaveOrder(data) {
   return axios({
     url: "/api/proWeaveJob",
     method: "post",
@@ -183,16 +175,15 @@ export function add(data) {
 }
 
 // 修改
-export function update(data) {
+export function updateWeaveOrder(data) {
   return axios({
     url: "/api/proWeaveJob",
     method: "put",
     params: data
   });
 }
-
 // 修改
-export function del(id) {
+export function removeWeaveOrder(id) {
   return axios({
     url: "/api/proWeaveJob?weaveJobId=" + id,
     method: "delete"

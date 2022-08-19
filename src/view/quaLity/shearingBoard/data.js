@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-05-03 16:09:34
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-16 13:49:32
+ * @LastEditTime: 2022-08-19 16:20:48
  * @FilePath: \iot.vue\src\view\quaLity\shearingBoard\data.js
  * @Description:
  */

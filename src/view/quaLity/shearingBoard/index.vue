@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-05-03 16:09:29
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-18 10:27:48
+ * @LastEditTime: 2022-08-19 16:22:42
  * @FilePath: \iot.vue\src\view\quaLity\shearingBoard\index.vue
  * @Description: 
 -->

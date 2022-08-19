@@ -5102,7 +5102,7 @@ export function getWorkStep(params) {
 
 export function getBaseWorkStep(params) {
   return axios({
-    url: "/api/baseWorkStep/parent?parentId=2A88BB439A7E4B4EBB899E0D2E10742F%2C0D315AE933AE43C1B6963B6E84989827",
+    url: "/api/baseWorkStep",
     method: "get",
    // params: params
   });

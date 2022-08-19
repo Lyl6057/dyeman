@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
- * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-08-15 08:37:17
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-08-19 16:20:28
  * @Description: 
 -->
 <template>
@@ -28,6 +28,7 @@
         <el-tooltip class="item" effect="dark" content="拆单" placement="top-start">
           <el-button type="primary" @click="splitWeave" :loading="wloading">拆单</el-button>
         </el-tooltip>
+        <el-button type="primary" @click="handleFinish" :disabled="detail.weaveState == 2" >已織完</el-button>
         <el-tooltip class="item" effect="dark" content="tìm kiếm" placement="top-start">
           <el-button type="primary" @click="query">{{
             this.$t("public.query")
@@ -59,7 +60,7 @@
 </template>
 <script>
 import { mainForm, mainCrud } from "./data";
-import { get, add, update, del, print } from "./api";
+import { get, add, update, del, print, fetchUpdateWeaveState } from "./api";
 import tem from "./temDlg";
 export default {
   name: "",
@@ -100,6 +101,22 @@ export default {
   },
   watch: {},
   methods: {
+    // 已织完
+    handleFinish(){
+      // this.detail
+      let {weaveState,weaveJobId, weaveJobCode } = this.detail;
+      if(weaveState == 2){
+        return this.$tip.warning("该单号已确认织完");
+      }
+      this.$confirm(`是否对该 ${weaveJobCode} 织单进行确认织完`,"提示",{type: "warning"}).then(res => {
+        this.loading = true;
+        fetchUpdateWeaveState(weaveJobId).then(res => {
+          this.query();
+        }).finally(() => {
+          this.loading = false;
+        })
+      })
+    },
     query() {
       this.loading = true;
       this.detail = {};
@@ -120,6 +137,7 @@ export default {
           rows: this.page.pageSize,
           start: this.page.currentPage,
           isWorkOut: 0,
+          jobType: 2
         })
       ).then((res) => {
         this.crud = res.data.records;
