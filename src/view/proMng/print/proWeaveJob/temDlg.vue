@@ -366,6 +366,7 @@ export default {
             this.form.isWorkOut = 0;
             this.form.auditState = 0;
             this.form.creator = parent.userID;
+            this.form.jobType = 2;
           }).then(res => {
             if (this.isExtract) {
               this.analysisExtractData();
