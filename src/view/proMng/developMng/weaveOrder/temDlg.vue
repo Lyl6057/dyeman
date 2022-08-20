@@ -228,7 +228,7 @@ export default {
             this.form.isWorkOut = 0;
             this.form.startDate = this.$getNowTime("datetime"),
             // this.form.auditState = 0;
-            this.form.creator = "test" //parent.userID;
+            this.form.creator = parent.userID;
           }).finally( () =>{
             this.wLoading = false;
           })

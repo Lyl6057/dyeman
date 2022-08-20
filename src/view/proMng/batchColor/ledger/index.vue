@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-05-03 16:09:29
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-17 17:00:17
+ * @LastEditTime: 2022-08-20 07:44:30
  * @FilePath: \iot.vue\src\view\proMng\batchColor\ledger\index.vue
  * @Description: 
 -->
@@ -169,7 +169,7 @@ export default {
 </script>
 <style lang="stylus" scoped>
 >>>.el-card__header {
-  padding: 8px 10px;
+  padding: .5rem .625rem;
 }
 
 .cardData p span:first-child {
@@ -178,8 +178,8 @@ export default {
 
 .box-card {
   text-align: left;
-  padding-left: 10px;
+  padding-left: .625rem;
   width: 97%;
-  height: calc(100vh - 200px);
+  height: calc(100vh - 12.5rem);
 }
 </style>

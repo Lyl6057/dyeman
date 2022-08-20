@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-19 16:15:23
+ * @LastEditTime: 2022-08-19 16:54:26
  * @Description:
 -->
 <template>
@@ -19,7 +19,7 @@
           <el-button type="danger" :disabled="!selectList.length" @click="del">{{ this.$t("public.del") }}</el-button>
         </el-tooltip>
         <el-tooltip class="item" effect="dark" content=" in" placement="top-start">
-          <el-button type="primary" @click="print" :loading="wloading" :disabled="detail.runState == '0'">打印</el-button>
+          <el-button type="primary" @click="print" :loading="wloading" :disabled="detail.runState == '0' || !detail.runJobId">打印</el-button>
         </el-tooltip>
         <el-tooltip class="item" effect="dark" content="copy" placement="top-start">
           <el-button type="primary" :disabled="!detail.runJobId" @click="copyEvent" :loading="wloading">复制</el-button>
@@ -27,7 +27,7 @@
         <el-tooltip class="item" effect="dark" content="tìm kiếm" placement="top-start">
           <el-button type="primary" @click="handleQuery">{{ this.$t("public.query") }}</el-button>
         </el-tooltip>
-        <el-dropdown split-button type="primary" @click="splitVatNo('A')" :loading="wloading" :disabled="!detail.runJobId" style="margin-left: 10px">
+        <el-dropdown split-button type="primary" @click="splitVatNo('A')" :disabled="!detail.runJobId" :loading="wloading" style="margin-left: 10px">
           拆缸
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item @click.native="splitVatNo('A')">A 改单拆缸</el-dropdown-item>
@@ -156,6 +156,7 @@ export default {
       this.handleOpenTem();
     },
     splitVatNo(type) {
+      if(!this.detail.runJobId) return this.$tip.warning("请选择一条运转单!");
       this.splitType = type;
       this.isSplit = true;
       this.isAdd = true;

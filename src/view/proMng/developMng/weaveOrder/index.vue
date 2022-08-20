@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-19 11:20:23
+ * @LastEditTime: 2022-08-19 16:51:28
  * @Description: 
 -->
 <template>
@@ -19,10 +19,10 @@
                   <el-button type="danger" :disabled="!detail.weaveJobId" @click="handleRemoveWeaveOrder"> {{ this.$t("public.del") }} </el-button>
               </el-tooltip>
               <el-tooltip class="item" effect="dark" content="in" placement="top-start">
-                  <el-button type="primary" @click="handlePrint" :loading="wloading">打印</el-button>
+                  <el-button type="primary" @click="handlePrint" :disabled="!detail.weaveJobId" :loading="wloading">打印</el-button>
               </el-tooltip>
               <el-tooltip class="item" effect="dark" content="copy" placement="top-start">
-                  <el-button type="primary" @click="handleCopy" :loading="wloading">复制</el-button>
+                  <el-button type="primary" @click="handleCopy" :loading="wloading" :disabled="!detail.weaveJobId">复制</el-button>
               </el-tooltip>
               <el-tooltip class="item" effect="dark" content="tìm kiếm" placement="top-start">
                   <el-button type="primary" @click="handleQuery"> {{ this.$t("public.query") }} </el-button>
