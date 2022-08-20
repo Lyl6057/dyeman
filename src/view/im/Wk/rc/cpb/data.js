@@ -494,6 +494,7 @@ export function rsxkr3C(_this) {
     refreshBtn: false,
     columnBtn: false,
     page: false,
+    index:true,
     showSummary: true,
     sumColumnList: [
       {
@@ -509,16 +510,11 @@ export function rsxkr3C(_this) {
     ],
     column: [
       {
-        prop: "index",
-        label: "#",
-        width: 50,
-        align: "center"
-      },
-      {
         label: "成品编号",
         prop: "productNo",
         cell: true,
-        width: 230
+        width: 230,
+        align:"center"
       },
       // {
       //   label: _this.$t("whseField.ph2"),
@@ -532,7 +528,7 @@ export function rsxkr3C(_this) {
         prop: "weight",
         cell: true,
         width: 120,
-        align: "right",
+        align: "center",
         formatter(r,v){
           return num2ThousandthFormat(v,1)
         }
