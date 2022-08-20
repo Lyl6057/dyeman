@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
- * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-08-18 10:58:59
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-08-19 16:20:28
  * @Description: 
 -->
 <template>
@@ -137,6 +137,7 @@ export default {
           rows: this.page.pageSize,
           start: this.page.currentPage,
           isWorkOut: 0,
+          jobType: 2
         })
       ).then((res) => {
         this.crud = res.data.records;
