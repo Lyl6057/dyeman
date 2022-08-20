@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-05-03 16:29:13
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-19 16:22:47
+ * @LastEditTime: 2022-08-20 08:46:28
  * @FilePath: \iot.vue\src\view\quaLity\shearingBoard\tem.vue
  * @Description: 
 -->
@@ -530,7 +530,12 @@ export default {
   font-size: 22px;
   font-weight: 600;
   text-align: center;
-  
+  flex-wrap: wrap;
+  div {
+    width: 19%;
+    border-right: 1px solid #eee;
+    border-bottom: 1px solid #eee
+  }
 }
 .defect-group {
   display: flex;
