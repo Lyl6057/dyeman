@@ -389,7 +389,7 @@ export function rsxkr2C(_this) {
         // type: "number",
         precision: 1,
         formatter(r,v){
-          return num2ThousandthFormat(v,1)
+          return num2ThousandthFormat(v,2)
         },
         placeholder: " ",
         change: val => {
