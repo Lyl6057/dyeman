@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
- * @LastEditors: Lyl
- * @LastEditTime: 2022-08-18 08:19:20
+ * @LastEditors: PMP
+ * @LastEditTime: 2022-08-19 17:03:20
  * @Description: 
 -->
 <template>
@@ -49,9 +49,11 @@
             </el-select>
           </template>
           <template slot-scope="scope" slot="stepId">
-            <el-cascader v-model="form.stepId" :options="dataSelect" :props="{ expandTrigger: 'hover' }"
-              :show-all-levels="false">
-            </el-cascader>
+            <el-select v-model="form.stepId" filterable remote reserve-keyword clearable default-first-option
+              placeholder="请输入工序" :remote-method="remoteMethodCX" :loading="vatLoading" @change="getCX">
+              <el-option v-for="item in dataSelect" :key="item.value" :label="item.label" :value="item.value">
+              </el-option>
+            </el-select>
           </template>
 
         </avue-form>
@@ -92,6 +94,7 @@ export default {
       acceptStaff: parent.userID,
       lastLog: {},
       dataSelect: [],
+      stepId: ""
     };
   },
   watch: {},
@@ -165,6 +168,19 @@ export default {
           });
       }
     },
+    remoteMethodCX(val) {
+      getBaseWorkStep({
+        stepName: "%" + val
+      }).then((res) => {
+        this.dataSelect = [];
+        res.data.map((e, i) => {
+          this.dataSelect.push({
+            label: e.stepName,
+            value: e.stepId
+          })
+        });
+      })
+    },
     getLogWeight(id) {
       getLog({
         runJobId: id,
@@ -224,7 +240,7 @@ export default {
       this.$refs.form.validate((valid, done) => {
         if (valid) {
           try {
-            this.wLoading = true;
+             this.wLoading = true;
             if (this.tabs == "rd") {
               this.form.vatNo = this.form.$runJobFk;
             } else if (this.tabs == "zd") {
@@ -232,7 +248,7 @@ export default {
             } else {
               this.form.runJobFk = this.form.aloYarntestoid;
             }
-            this.form.stepId = this.form.stepId? this.form.stepId[this.form.stepId.length - 1] : '';
+            this.form.stepId = this.stepId;
             add(this.form).then((res) => {
               if (res.data.code == 200) {
                 this.wLoading = false;
@@ -259,6 +275,9 @@ export default {
           return;
         }
       });
+    },
+    getCX(val) {
+      this.stepId = val;
     },
     handleRowDBLClick(val) {
       this.chooseData = val;
@@ -289,56 +308,23 @@ export default {
       getBaseWorkStep().then((res) => {
         let data = res.data;
         data.map((e, i) => {
-          const isRoot = (data.findIndex(item => item.stepId == e.pareantId) === -1);
-          if (isRoot) {
-            const children = data.filter(item => item.pareantId === e.stepId);
-            if (children.length == 0) {
-              this.dataSelect.push({
-                value: e.stepId,
-                label: e.stepName,
-              });
-            } else {
-              this.dataSelect.push({
-                value: e.stepId,
-                label: e.stepName,
-                children: this.convertData(children)
-              });
-            }
-          }
-        });
+          this.dataSelect.push({
+            value: e.stepId,
+            label: e.stepName,
+          })
+        })
+      
       })
     },
-    convertData(data) {
-      let children = [];
-      if (data.length == 0) { return; }
-      for (let index = 0; index < data.length; index++) {
-        const e = data[index];
-        let object = {};
-        const cd = data.filter(item => item.pareantId === e.stepId)
-        if (cd.length == 0) {
-          object = {
-            label: e.stepName,
-            value: e.stepId,
-          }
-        } else {
-          object = {
-            label: e.stepName,
-            value: e.stepId,
-            children: this.convertData(cd)
-          }
-        }
-        children.push(object);
-      }
-      return children;
-    }
+    
   },
-  created() {},
+  created() { },
   mounted() {
     this.getData();
     this.getDataCascader();
     this.remoteMethod("");
   },
-  beforeDestroy() {},
+  beforeDestroy() { },
 };
 </script>
 <style lang='stylus'>

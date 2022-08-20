@@ -3,10 +3,10 @@
     <view-container :title="datas.type.split('_')[0] + this.$t('iaoMng.rc')">
       <div class="btnList">
         <el-button type="success" @click="save">{{
-          this.$t("public.save")
+            this.$t("public.save")
         }}</el-button>
         <el-button type="warning" @click="close">{{
-          this.$t("public.close")
+            this.$t("public.close")
         }}</el-button>
       </div>
       <div class="formBox">
@@ -17,85 +17,56 @@
           <view-container :title="datas.type.split('_')[0] + $t('iaoMng.rcmx')">
             <div class="btnList">
               <el-button type="primary" @click="add">{{
-                this.$t("public.add")
+                  this.$t("public.add")
               }}</el-button>
               <el-button type="danger" @click="del">{{
-                this.$t("public.del")
+                  this.$t("public.del")
               }}</el-button>
             </div>
             <div class="crudBox">
-              <avue-crud
-                ref="dlgcrud"
-                :option="mxOp"
-                v-loading="loading"
-                :data="mx"
-                :page.sync="page"
-                @current-row-change="cellClick"
-                @on-load="getDetail"
-                ><template slot="batchNo" slot-scope="scope">
-                  <el-select
-                    v-model="scope.row.batchNo"
-                    placeholder="请选择"
-                    filterable
-                    default-first-option
-                    clearable
-                    class="customize-select"
-                    @change="selectChange(scope.row)"
-                  >
+              <avue-crud ref="dlgcrud" :option="mxOp" v-loading="loading" :data="mx" :page.sync="page"
+                @current-row-change="cellClick" @on-load="getDetail"><template slot="batchNo" slot-scope="scope">
+                  <el-select v-model="scope.row.batchNo" placeholder="请选择" filterable default-first-option clearable
+                    class="customize-select" @change="selectChange(scope.row)">
                     <!--  -->
-                    <el-option
-                      v-for="item in resolveData"
-                      :key="item.runJobId"
-                      :label="item.label"
-                      :value="item.value"
-                    >
+                    <el-option v-for="item in resolveData" :key="item.runJobId" :label="item.label" :value="item.value">
                       <span style="float: left">
                         <!-- -->
-                        {{ item.value }}</span
-                      >
+                        {{ item.value }}
+                      </span>
                     </el-option>
                   </el-select>
-                </template></avue-crud
-              >
+                </template></avue-crud>
             </div>
-          </view-container></el-col
-        >
+          </view-container>
+        </el-col>
         <el-col :span="12">
           <view-container :title="datas.type.split('_')[0] + '货物包'">
             <div class="btnList">
               <el-button type="primary" @click="addPh">{{
-                this.$t("public.add")
+                  this.$t("public.add")
               }}</el-button>
               <el-button type="danger" @click="delPh">{{
-                this.$t("public.del")
+                  this.$t("public.del")
               }}</el-button>
             </div>
             <div class="crudBox">
-              <avue-crud
-                ref="crud"
-                :option="crudOp"
-                v-loading="loading"
-                :data="chooseData.list"
-                @current-row-change="cellPhClick"
-              ></avue-crud>
+              <avue-crud ref="crud" :option="crudOp" v-loading="loading" :data="chooseData.list"
+                @current-row-change="cellPhClick"></avue-crud>
             </div>
           </view-container>
         </el-col>
       </el-row>
-      <choice
-        :choiceV="choiceV"
-        :choiceTle="choiceTle"
-        :choiceQ="choiceQ"
-        :dlgWidth="dlgWidth"
-        @choiceData="choiceData"
-        @close="choiceV = false"
-        v-if="choiceV"
-      ></choice>
+      <choice :choiceV="choiceV" :choiceTle="choiceTle" :choiceQ="choiceQ" :dlgWidth="dlgWidth" @choiceData="choiceData"
+        @close="choiceV = false" v-if="choiceV"></choice>
+      <pro-choice :choiceV="choiceP" :choiceTle="choicePTle" :choiceQ="choiceQ" marginTop="3vh" dlgWidth="80%"
+        @choiceData="choiceDataP" @close="choiceP = false" v-if="choiceP"></pro-choice>
     </view-container>
   </div>
 </template>
 <script>
 import { rsxkr2C, rsxkr2F, rsxkr3C } from "./data";
+import proChoice from "@/components/proMng/index";
 import choice from "@/components/choice";
 import {
   addCpb,
@@ -122,6 +93,7 @@ export default {
   name: "",
   components: {
     choice: choice,
+    proChoice: proChoice
   },
   data() {
     return {
@@ -147,9 +119,11 @@ export default {
       chooseData: {},
       choiceV: false,
       choiceTle: this.$t("iaoMng.xzlsdj"),
+      choicePTle: "选择成品布信息",
       choiceTarget: {},
       choiceField: "",
       choiceQ: {},
+      choiceP: false,
       dlgWidth: "60%",
       resolveData: getDicTs("proBleadyeRunJob", "vatNo", "vatNo", "etSn"),
       // resolveData: [],
@@ -303,20 +277,29 @@ export default {
           this.$tip.warning(this.$t("public.qxcz"));
         });
     },
+    choiceDataP(array) {
+      array.map((e, i) => {
+        if (this.chooseData.list.findIndex(item => item.productNo === e.productNo) == -1) {
+          this.chooseData.list.push({
+            productNo: e.productNo,
+            weight: (e.weightUnit == "KG") ? e.netWeight : e.netWeightLbs,
+            weightUnit: e.weightUnit
+          });
+        } else {
+          this.$tip.warning(`成品编号【${e.productNo}】已经有了, Bạn đã thêm mã này rồi!`)
+        }
+      })
+      this.$refs.crud.setCurrentRow(
+        this.chooseData.list[this.chooseData.list.length - 1]
+      );
+      this.choiceP = false;
+    },
     addPh() {
       if (Object.keys(this.chooseData).length === 0) {
         this.$tip.error("请选择要新增的入仓明细");
         return;
       }
-      this.chooseData.list.push({
-        index: this.chooseData.list.length + 1,
-        weightUnit: this.chooseData.list.length
-          ? this.chooseData.list[this.chooseData.list.length - 1].weightUnit
-          : "KG",
-      });
-      this.$refs.crud.setCurrentRow(
-        this.chooseData.list[this.chooseData.list.length - 1]
-      );
+      this.choiceP = true;
     },
     delPh() {
       // if (Object.keys(this.choosePhData).length === 0) {
@@ -428,6 +411,19 @@ export default {
         this.$tip.error(this.$t("iaoMng.saveTle11"));
         return;
       }
+      if (this.hide === "1" && this.mx.length == 0) {
+        this.$tip.error('请选择要新增的入仓明细！');
+        return;
+      }
+      for (let index = 0; index < this.mx.length; index++) {
+        const e = this.mx[index];
+        if (e.storeLoadCode === undefined || e.sumWeight === undefined || e.weightUnit === undefined) {
+          this.$tip.warning("请检查数据载具编号，重量，单位不能为空! Vui lòng kiểm tra lại dữ liệu");
+          this.$refs.dlgcrud.setCurrentRow(this.mx[index]);
+          return;
+        }
+      }
+
       for (let i = 0; i < this.mx.length; i++) {
         // if (!this.mx[i].batchNo) {
         //   this.$tip.error(this.$t("iaoMng.saveTle12"));
@@ -444,9 +440,13 @@ export default {
         if (this.mx[i].list) {
           for (let j = 0; j < this.mx[i].list.length; j++) {
             if (!this.mx[i].list[j].weight || !this.mx[i].list[j].weightUnit) {
+              this.$refs.dlgcrud.setCurrentRow(this.mx[i]);
+              this.$refs.crud.setCurrentRow(this.mx[j]);
               this.$tip.error("成品布重量不能为空!");
               return;
             } else if (!this.mx[i].list[j].productNo) {
+              this.$refs.dlgcrud.setCurrentRow(this.mx[i]);
+              this.$refs.crud.setCurrentRow(this.mx[j]);
               this.$tip.error("成品编号不能为空!");
               return;
             }
@@ -459,9 +459,11 @@ export default {
       }
       this.saved = true;
 
+      this.form.yinDate = `${this.form.yinDate} 00:00:00`;
       if (this.form.finStatus === "" || this.form.finStatus === "null") {
         this.form.finStatus = "";
       }
+
       if (this.form.whseFinishedclothinoid) {
         updateCpb(this.form).then((Res) => {
           if (this.mx.length === 0) {

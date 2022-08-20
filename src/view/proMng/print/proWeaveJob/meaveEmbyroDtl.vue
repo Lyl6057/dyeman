@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-06-20 11:17:59
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-19 07:59:40
+ * @LastEditTime: 2022-08-19 16:08:56
 -->
 <template>
     <view-container title="织胚明细" >
@@ -86,13 +86,14 @@
                     this.crudOp.column.forEach((propItem, oIndex) => {
                         if(oIndex == 0) return;
                         if((index % 3 == 0) && oIndex != 1 ) return
-
+                        let value = item[propItem.prop]
+                        if(!value) return;
                         result.push({
                             proWeaveJobFk: this.weaveJobId,
                             colId: oIndex,
                             rowId: index,
                             rowName: item.key,
-                            cpValue: item[propItem.prop]
+                            cpValue: value
                         })
                     })
                 });
