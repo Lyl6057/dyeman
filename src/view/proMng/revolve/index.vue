@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
- * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-23 09:51:26
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-08-19 13:21:56
  * @Description:
 -->
 <template>
@@ -255,6 +255,7 @@ export default {
           pages: this.page.currentPage,
           workDate: this.form.workDate,
           custCode: this.form.custCode,
+          jobType: 2,
           delFlag: 0,
           dataSortRules:"workDate|desc,vatNo"
         })
