@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-20 14:36:24
+ * @LastEditTime: 2022-08-20 14:52:20
  * @Description: 
 -->
 <template>
@@ -440,7 +440,6 @@ export default {
 
       let poNos = Object.keys(poNoMap).join(",");
       let itemData = this.extractRows[0];
-      console.log(itemData)
       this.formOp = mainCrud(this, false, true);
       Object.assign(this.form, {
         salPoNo: poNos,

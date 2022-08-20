@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
- * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-08-18 15:35:56
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-08-20 15:15:36
  * @Description:
  */
 
@@ -15,20 +15,18 @@ export function mainForm(_this) {
   return {
     submitBtn: false,
     emptyBtn: false,
-    labelWidth: 150,
+    labelWidth: 100,
     column: [
       {
         label: "生產單號",
         prop: "weaveJobCode",
         span: 6,
-        placeholder: " ",
         tip: "MS đơn sản xuất bp Dệt"
       },
       {
         label: "訂單編號",
         prop: "salPoNo",
         span: 6,
-        placeholder: " ",
         tip: "MS đơn sản xuất bp Dệt"
         // dicData: getDicT("basCustomer", "custName", "custCode")
       },
@@ -37,7 +35,6 @@ export function mainForm(_this) {
         prop: "custCode",
         tip: "Khách hàng",
         span: 6,
-        placeholder: " ",
         type: "select",
         dicData: cust
       },
@@ -48,36 +45,30 @@ export function mainForm(_this) {
         type: "date",
         format: "yyyy-MM-dd",
         valueFormat: "yyyy-MM-dd",
-        placeholder: " ",
         tip: "Sắp xếp ngày dệt"
       },
       {
         label: "色號",
         prop: "colorCode",
         span: 6,
-        placeholder: " ",
         tip: "color number"
       },
       {
         label: "機號",
         prop: "mathineCode",
         span: 6,
-        placeholder: " ",
-
         tip: "Mã số máy dệt"
       },
       {
         label: "制單人",
         prop: "creator",
         span: 6,
-        placeholder: " ",
         tip: "Lập đơn"
       },
       {
         label: "审核状态",
         prop: "auditState",
         span: 6,
-        placeholder: " ",
         type: "select",
         dicData: [
           {
@@ -1830,20 +1821,20 @@ export function unCreateFormOp(_this) {
   return {
     submitBtn: false,
     emptyBtn: false,
-    labelWidth: 120,
+    labelWidth: 100,
     column: [
       {
         prop: 'custId',
         label: "客户",
         type: "select",
         dicData: cust,
-        span: 4
+        span: 6
       },
       {
         prop: 'poNo',
         label: "生产通知单",
         dicData: [],
-        span: 4
+        span: 6
       },
       {
         prop: 'exDate',
@@ -1857,7 +1848,7 @@ export function unCreateFormOp(_this) {
         label: "布类选择",
         type: "select",
         dicData: getDIC("pro_cloth_type"),
-        span: 4,
+        span: 6,
         placeholder: "请选择布类",
       }
     ]
@@ -1877,7 +1868,7 @@ export function unCreateCrudOp(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 274px)",
+    height: "calc(100vh - 260px)",
     refreshBtn: false,
     columnBtn: false,
     labelWidth: 130,
@@ -1956,13 +1947,14 @@ export function unCreateCrudOp(_this) {
       {
         prop: 'dyeClass',
         label: "染色类别",
-        width: 100,
-        align: "center"
+        width: 120,
+        align: "center",
+        overHidden: true
       },
       {
         prop: 'weavePoQty',
-        label: "已排织单数量(kg)",
-        width: 100,
+        label: "已排数量(kg)",
+        width: 115,
         align: "right",
         formatter(r, v) {
           return num2Thousadth(v, 1)
@@ -1970,8 +1962,8 @@ export function unCreateCrudOp(_this) {
       },
       {
         prop: 'nuWeavePoQty',
-        label: "未排织单数量(kg)",
-        width: 100,
+        label: "未排数量(kg)",
+        width: 115,
         formatter(r, v) {
           let value = r.poQtyKg - r.weavePoQty
           return num2Thousadth(value, 1)

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-19 16:15:02
+ * @LastEditTime: 2022-08-20 15:11:14
  * @Description:
 -->
 <template>
@@ -246,7 +246,7 @@ export default {
         rows: 10,
         start: 1,
         isWorkOut: 0,
-        jobType: 1,
+        // jobType: 1,
       }).then((res) => {
         this.options = res.data.records;
         this.vatLoading = false;

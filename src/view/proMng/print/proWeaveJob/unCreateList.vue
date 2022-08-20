@@ -19,9 +19,9 @@
                 :page.sync="page" 
                 v-loading="loading" 
                 @row-dblclick="handleRowDblClick"
-               @select="handleSelect"
+                @select="handleSelect"
                 @select-all="handleSelectAll"
-               @on-load="getDataList"></avue-crud>
+                @on-load="getDataList"></avue-crud>
         </el-row>
         <el-dialog :visible.sync="xiaLanDtlVisible" title="下栏明细数据" append-to-body >
             <xia-lan-dtl ref="xiaLanDtlRef"></xia-lan-dtl>
@@ -98,6 +98,7 @@ export default {
         // 查询
         handleQuery(){
             this.page.currentPage = 1;
+            
             this.getDataList();
         },
         // 查询数据
@@ -135,6 +136,7 @@ export default {
                 });
                 this.page.total = res.data.total;
             }).finally(_ => {
+                this.curSelKey = ""; // 重置勾选状态
                 this.loading = false;
             })
         }
