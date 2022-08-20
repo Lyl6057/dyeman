@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
- * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-08-18 15:28:47
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-08-20 14:36:24
  * @Description: 
 -->
 <template>
@@ -440,6 +440,7 @@ export default {
 
       let poNos = Object.keys(poNoMap).join(",");
       let itemData = this.extractRows[0];
+      console.log(itemData)
       this.formOp = mainCrud(this, false, true);
       Object.assign(this.form, {
         salPoNo: poNos,
@@ -452,7 +453,7 @@ export default {
         gramWeightValue: itemData.fabWeight11,
         gwMaxValue: itemData.fabWeight13,
         gwMinValue: itemData.fabWeight14,
-        breadthValue: itemData.fabWidth11,
+        breadthValue: itemData.fabWidth21, // 实际幅宽
         breadthUpper: itemData.fabWidth13,
         breadthLower: itemData.fabWidth14,
         horizonShrink: itemData.shrinkHorizontal,
