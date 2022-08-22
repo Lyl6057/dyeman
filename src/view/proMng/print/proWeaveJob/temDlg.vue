@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-08-22 09:35:11
+ * @LastEditTime: 2022-08-22 15:13:35
  * @Description: 
 -->
 <template>
@@ -329,15 +329,22 @@ export default {
               this.form.amount = Number((this.detail.amount / 2).toFixed(0));
             }
           });
+          let tWeaveJobId = this.form.weaveJobId;
           this.form.weaveJobId = "";
           this.form.weaveState = 0;
           this.form.isWorkOut = 0;
           this.form.auditState = 0;
-          this.form.creator = parent.userID;
+          this.form.creator = parent.userID || "ADMIN";
           get({ weaveJobCode: "!^%" + this.form.weaveJobCode }).then((res) => {
             this.form.weaveJobCode =
               this.detail.weaveJobCode +
               String.fromCharCode(res.data.records.length + 64);
+          }).then(res => {
+            this.getWeaveDtlData(tWeaveJobId);
+            let params = {
+                    proWeaveJobFk: tWeaveJobId
+                }
+            this.$refs.colorDefineRef.getWeaveDcsByWeaveJobId(params)
           });
         } else {
           baseCodeSupplyEx({ code: "proWeaveJob" }).then((res) => {
@@ -381,7 +388,7 @@ export default {
         this.form = this.detail;
         this.getAllYarn();
         this.getMachineList();
-        this.getWeaveDtlData();
+        this.getWeaveDtlData(this.form.weaveJobId);
         // if (this.form.realEnd === "" || this.form.realEnd === null) {
         //   this.form.nowDate = this.form.planEnd.split(" ")[0];
         // } else {
@@ -404,8 +411,8 @@ export default {
       }
     },
     // 获取织单明细数据
-    getWeaveDtlData() {
-      this.$refs.weaveDtlRef.getWeaveDtlData(this.form.weaveJobId)
+    getWeaveDtlData(weaveJobId) {
+      this.$refs.weaveDtlRef.getWeaveDtlData(weaveJobId)
     },
     // 解析抽取到的数据
     analysisExtractData() {
@@ -666,6 +673,7 @@ export default {
                       }
                       this.$tip.success(this.$t("public.bccg"));
                     });
+                    this.saveWeavaDtlData();
                   } else {
                     baseCodeSupply({ code: "proWeaveJob" }).then((res) => { });
                     this.saveWeavaDtlData();
@@ -697,14 +705,13 @@ export default {
     // 保存织单明细
     saveWeavaDtlData() {
       if (this.$refs.weaveDtlRef.crudData.length > 0) {
-        this.$refs.weaveDtlRef.saveWeaveDltData(this.form.weaveJobId);
+        this.$refs.weaveDtlRef.saveWeaveDltData(this.form.weaveJobId, this.splitW);
       }
 
       // 保存色系定义数据
       this.$refs.colorDefineRef.setSelColData(this.colorNameMap);
       if (this.$refs.colorDefineRef.curSelRows.length > 0 && this.isAdd) {
-        console.log("enter color data ref")
-        this.$refs.colorDefineRef.handleSave(this.form.weaveJobId);
+        this.$refs.colorDefineRef.handleSave(this.form.weaveJobId, this.splitW);
       }
       
       if (this.isExtract) {
