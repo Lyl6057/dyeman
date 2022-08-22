@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-08-07 07:57:44
  * @LastEditors: Lyl
- * @LastEditTime: 2022-07-06 08:15:59
+ * @LastEditTime: 2022-08-22 08:00:45
  * @Description: 
 -->
 <template>
@@ -249,10 +249,10 @@ export default {
                 this.form.realGramWeight =
                   this.form.gramWeightValue || this.form.afterWeightValue || 0;
                 this.form.actualGramWeight = this.form.realGramWeight;
-
+                
                 this.form.breadth = val.breadthActual || val.breadth;
                 this.form.breadthValue = this.form.breadth
-                  ? Number(this.form.breadth.match(/\d+/g)[0]) || 0
+                  ? this.form.breadth.match(/\d+/g) ? Number(this.form.breadth.match(/\d+/g)[0]) : 0
                   : 0;
                 this.form.clothWidth = this.form.breadthValue;
                 this.form.sideBreadth = this.form.breadthBorder || "";
@@ -380,12 +380,10 @@ export default {
                       delete data[item];
                     }
                   });
-                  console.log(res);
                   if (res.data.length) {
 
                     data.cardId = res.data[0].cardId;
                     this.form.cardId = data.cardId;
-                    ;
                     // 存在记录  更新 => 打印
                     // update(data).then((upRes) => {
                     // this.history.unshift(data);
