@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-17 13:45:24
+ * @LastEditTime: 2022-08-22 08:28:47
  * @Description:
 -->
 <template>
@@ -46,6 +46,13 @@
             !form.runJobId || form.auditState != 1 || form.runState == 0
           ">打印</el-button>
         </el-tooltip>
+        <el-button
+          type="primary"
+          :disabled=" !form.runJobId"
+          @click="exhaustPrint"
+          :loading="wloading"
+          >排缸咭</el-button
+        >
         <el-button v-if="audit" type="primary" @click="auditHandle(form.auditState ? 0 : 1)">{{ form.auditState ? "取消审核"
             : "审核"
         }}</el-button>
@@ -1421,13 +1428,22 @@ export default {
     },
     print() {
       this.pdfDlg = true;
+      this.isExhaust = false;
       this.pdfUrl =
         process.env.API_HOST +
         "/api/proBleadyeRunJob/createBleadyeRunJobPdf?id=" +
         this.form.runJobId;
     },
+    exhaustPrint(){
+      this.pdfDlg = true;
+      this.isExhaust = true;
+      this.pdfUrl =
+        process.env.API_HOST +
+        "/api/proBleadyeRunJob/smallCard?id=" +
+        this.detail.runJobId;
+    },
     pdfClose() {
-      if (this.form.runState == "1") {
+      if (this.form.runState == "1" && !this.isExhaust) {
         this.$tip
           .cofirm(
             "是否更新打印状态(có cập nhật trạng thái in mới không)?",
