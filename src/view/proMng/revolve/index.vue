@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-19 13:21:56
+ * @LastEditTime: 2022-08-22 08:25:03
  * @Description:
 -->
 <template>
@@ -64,6 +64,12 @@
             >打印</el-button
           >
         </el-tooltip>
+        <el-button
+          type="primary"
+          @click="exhaustPrint"
+          :loading="wloading"
+          >排缸咭</el-button
+        >
         <el-tooltip
           class="item"
           effect="dark"
@@ -155,7 +161,6 @@
           :isSplit="isSplit"
           :splitType="splitType"
           @close="dialogVisible = false"
-          @print="print"
           @refresh="query"
         ></tem-dlg>
       </el-dialog>
@@ -170,19 +175,11 @@
         @close="pdfClose"
       >
         <view-container title="打印預覽">
-          <!-- <div class="btnList">
-            <el-button type="warning" @click="pdfDlg = false">{{
-              this.$t("public.close")
-            }}</el-button>
-            <el-button type="primary" @click="print2">打印</el-button>
-          </div> -->
-          <!--startprint-->
           <embed
             id="pdf"
             style="width: 100vw; height: calc(100vh - 80px)"
             :src="pdfUrl"
           />
-          <!--endprint-->
         </view-container>
       </el-dialog>
     </view-container>
@@ -190,10 +187,8 @@
 </template>
 <script>
 import { mainForm, mainCrud } from "./data";
-import { get, add, update, del, delDye, getDye, print } from "./api";
+import { get, update, del, delDye, getDye, print } from "./api";
 import tem from "./temDlg";
-import html2Canvas from "html2canvas";
-import JsPDF from "jspdf";
 export default {
   name: "",
   components: {
@@ -208,7 +203,7 @@ export default {
       },
       crudOp: mainCrud(this),
       crud: [],
-
+      isExhaust: false,
       page: {
         pageSize: 20,
         currentPage: 1,
@@ -270,8 +265,17 @@ export default {
         this.loading = false;
       });
     },
+    exhaustPrint(){
+      this.pdfDlg = true;
+      this.isExhaust = true;
+      this.pdfUrl =
+        process.env.API_HOST +
+        "/api/proBleadyeRunJob/smallCard?id=" +
+        this.detail.runJobId;
+    },
     print() {
       this.pdfDlg = true;
+      this.isExhaust = false;
       this.pdfUrl =
         process.env.API_HOST +
         "/api/proBleadyeRunJob/createBleadyeRunJobPdf?id=" +
@@ -373,7 +377,7 @@ export default {
       this.selectList = val;
     },
     pdfClose() {
-      if (this.detail.runState == "1") {
+      if (this.detail.runState == "1" && !this.isExhaust) {
         this.$tip
           .cofirm(
             "是否更新打印状态(có cập nhật trạng thái in mới không)?",
