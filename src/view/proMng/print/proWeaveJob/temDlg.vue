@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
- * @LastEditors: Lyl
- * @LastEditTime: 2022-08-20 14:52:20
+ * @LastEditors: Symbol_Yang
+ * @LastEditTime: 2022-08-22 09:35:11
  * @Description: 
 -->
 <template>
@@ -703,6 +703,7 @@ export default {
       // 保存色系定义数据
       this.$refs.colorDefineRef.setSelColData(this.colorNameMap);
       if (this.$refs.colorDefineRef.curSelRows.length > 0 && this.isAdd) {
+        console.log("enter color data ref")
         this.$refs.colorDefineRef.handleSave(this.form.weaveJobId);
       }
       

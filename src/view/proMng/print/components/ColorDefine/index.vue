@@ -3,8 +3,8 @@
         <view-container title="适用染色色系"  >
             <div class="weave-color-define-container" v-loading="loading">
                 <div class="btn-wrapper">
-                    <el-tooltip  effect="dark" content="Bảo tồn" placement="top-start" >
-                        <el-button type="success" @click="handleSave" >{{ $t("public.save") }}</el-button>
+                    <el-tooltip v-if="weaveJobId"  effect="dark" content="Bảo tồn" placement="top-start" >
+                        <el-button type="success" @click="handleSave(weaveJobId)" >{{ $t("public.save") }}</el-button>
                     </el-tooltip>
                     <el-button type="primary" @click="handleAllSel">全选</el-button>
                     <el-button type="danger" @click="handleRevSel" >反选</el-button>
@@ -106,14 +106,13 @@ export default {
         },
         // 赋值抽取到的数据集合
         setSelColData(colNameMap){
-            console.log("colNameMap",colNameMap)
             setTimeout(() => {
                this.dataList.forEach(item => {
                     if(colNameMap[item.codeName]){
                         item.isSelect = true;
                     }
                 });
-                this.curSelRows = this.dataList.filter(item => item.isSelect)     
+                this.curSelRows = this.dataList.filter(item => item.isSelect)  
             }, 500);
         },
         // 全选
@@ -135,10 +134,10 @@ export default {
         },
         // 保存
         handleSave(weaveJobId){
-            if(!this.weaveJobId){
-                this.$tip.success("已保存")
-                return this.handleClose();
-            }
+            // if(!this.weaveJobId){
+            //     this.$tip.success("已保存")
+            //     return this.handleClose();
+            // }
             if(this.curSelRows.length == 0){
                 return this.$tip.warning("请选择数据")
             }

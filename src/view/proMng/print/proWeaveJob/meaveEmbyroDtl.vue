@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-06-20 11:17:59
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-08-19 16:08:56
+ * @LastEditTime: 2022-08-22 09:30:11
 -->
 <template>
     <view-container title="织胚明细" >
@@ -87,7 +87,7 @@
                         if(oIndex == 0) return;
                         if((index % 3 == 0) && oIndex != 1 ) return
                         let value = item[propItem.prop]
-                        if(!value) return;
+                        // if(!value) return;
                         result.push({
                             proWeaveJobFk: this.weaveJobId,
                             colId: oIndex,
@@ -164,10 +164,25 @@
                     }
                     itemData[`prop_${item.colId}`] = item.cpValue;
                 });
+                console.log("propEnum",propEnum)
                 let targetDataList = Object.values(propEnum);
                 if(targetDataList.length != 0){
-                    let props = Object.keys(targetDataList[1]).sort()
-                    let option = props.map(prop => {
+                    // let props = Object.keys(targetDataList[1]).sort()
+                    let dataSize = targetDataList.length / 3;
+                    let maxPropLen = 0;
+                    let propData = [];
+                    new Array(dataSize).fill(1).forEach((_,i) => {
+                        let index = i * 3 + 1;
+                        let tItems = Object.keys(targetDataList[index]);
+                        let tLen = tItems.length;
+                        if(tLen > maxPropLen){
+                            maxPropLen = tLen;
+                            propData = tItems;
+                        }
+
+                    })
+                    
+                    let option = propData.map(prop => {
                         return {
                             width: 150,
                             prop: prop,
