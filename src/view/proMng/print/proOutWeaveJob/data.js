@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-06-27 10:16:44
+ * @LastEditTime: 2022-08-22 17:28:00
  * @Description:
  */
 
@@ -1385,12 +1385,22 @@ export function mainYJCrud(_this) {
             tip: "Trọng lượng trước giặt"
           },
           {
-            label: "門幅",
+            label: "門幅(實用)",
             prop: "breadth",
             tip: "Thực dụng",
             width: 90,
             hide: true,
-            span: 6,
+            span: 3,
+            // type: "number",
+            placeholder: " "
+          },
+          {
+            label: "門幅(邊至邊)",
+            prop: "cylinderHeight",
+            tip: "Thực dụng",
+            width: 90,
+            hide: true,
+            span: 3,
             // type: "number",
             placeholder: " "
           },

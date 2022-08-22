@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
- * @LastEditors: Lyl
- * @LastEditTime: 2022-08-20 15:22:03
+ * @LastEditors: Symbol_Yang
+ * @LastEditTime: 2022-08-22 17:28:09
  * @Description:
  */
 
@@ -598,7 +598,7 @@ export function mainCrud(_this, audit, isExtract = false) {
         tip: "Trọng lượng trước giặt"
       },
       {
-        label: "門幅",
+        label: "門幅(實用)",
         prop: "breadthValue",
         disabled: audit
           ? false
@@ -711,13 +711,23 @@ export function mainCrud(_this, audit, isExtract = false) {
             : false,
         placeholder: " "
       },
+      // 2022.08.22
       {
-        label: "其他要求",
-        prop: "otherRequire",
-        tip: "Yêu cầu khác",
-        placeholder: " ",
+        label: "門幅(邊至邊)",
+        prop: "cylinderHeight",
+        disabled: audit
+          ? false
+          : _this.detail.auditState && !_this.isAdd
+            ? true
+            : false,
+        tip: "Thực dụng",
+        width: 90,
+        // minRows: 0,
         hide: true,
-        span: 12
+        span: 4,
+        row: 6,
+        type: "number",
+        placeholder: " "
       },
       {
         label: "织单状态",
@@ -761,7 +771,15 @@ export function mainCrud(_this, audit, isExtract = false) {
         // type: "select",
         // dicData:
         //   postDicT('ucmlUser', 'employeename', 'ucmlUseroid')
-      }
+      },
+      {
+        label: "其他要求",
+        prop: "otherRequire",
+        tip: "Yêu cầu khác",
+        placeholder: " ",
+        hide: true,
+        span: 12
+      },
     ],
     group: [
       {

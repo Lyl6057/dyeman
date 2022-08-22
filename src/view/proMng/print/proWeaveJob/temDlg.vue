@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-08-22 15:13:35
+ * @LastEditTime: 2022-08-22 17:30:54
  * @Description: 
 -->
 <template>
@@ -460,6 +460,7 @@ export default {
         gwMaxValue: itemData.fabWeight13,
         gwMinValue: itemData.fabWeight14,
         breadthValue: itemData.fabWidth21, // 实际幅宽
+        cylinderHeight: itemData.fabWidth11, // 門幅（边至边）
         breadthUpper: itemData.fabWidth13,
         breadthLower: itemData.fabWidth14,
         horizonShrink: itemData.shrinkHorizontal,
