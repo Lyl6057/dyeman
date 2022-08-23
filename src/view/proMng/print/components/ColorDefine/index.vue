@@ -81,9 +81,16 @@ export default {
                 let params = {
                     proWeaveJobFk: this.weaveJobId
                 }
-                return  this.weaveJobId && fetchWeaveDcsByWeaveJobId(params);
-            }).then(async res => {
-                let dcsEnum = (res.data || []).reduce((a,b) => Object.assign(a, {[b.dcsNo]: b.proWeaveJobDcsoid}), {});
+                return  this.weaveJobId && this.getWeaveDcsByWeaveJobId(params);
+            }).finally(() => {
+                this.loading = false;
+            })
+           
+        },
+        // 获取色系数据
+        getWeaveDcsByWeaveJobId(params){
+            return fetchWeaveDcsByWeaveJobId(params).then(res => {
+                 let dcsEnum = (res.data || []).reduce((a,b) => Object.assign(a, {[b.dcsNo]: b.proWeaveJobDcsoid}), {});
                 this.dataList.forEach(item => {
                     if(dcsEnum[item.codeId]){
                         item.isSelect = true;
@@ -92,10 +99,7 @@ export default {
                 });
                 this.curSelRows = this.dataList.filter(item => item.isSelect)
                 this.visible &&  this.setSel2Table();
-            }).finally(() => {
-                this.loading = false;
             })
-           
         },
         // 赋值选中项
         async setSel2Table(){
@@ -133,7 +137,7 @@ export default {
             this.curSelRows = this.dataList.filter(item => item.isSelect);
         },
         // 保存
-        handleSave(weaveJobId){
+        handleSave(weaveJobId, isCreateId = false){
             // if(!this.weaveJobId){
             //     this.$tip.success("已保存")
             //     return this.handleClose();
@@ -143,8 +147,8 @@ export default {
             }
             let dcsDataList = this.curSelRows.map(item => {
                 return {
-                    proWeaveJobDcsoid: item.proWeaveJobDcsoid,
-                    proWeaveJobFk: this.weaveJobId || weaveJobId,
+                    proWeaveJobDcsoid: isCreateId ? v1() : item.proWeaveJobDcsoid,
+                    proWeaveJobFk: weaveJobId,
                     dcsNo: item.codeId,
                 }
             });

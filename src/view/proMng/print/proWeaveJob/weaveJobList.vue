@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-08-22 10:04:59
+ * @LastEditTime: 2022-08-23 08:44:55
  * @Description: 
 -->
 <template>
@@ -128,7 +128,7 @@ export default {
       let params = JSON.parse(JSON.stringify(this.form));
       if (this.hasFuzzy) {
         params.weaveJobCode =
-          "!^%" + (params.weaveJobCode ? params.weaveJobCode : "");
+          "%" + (params.weaveJobCode ? params.weaveJobCode : "");
         params.salPoNo = "%" + (params.salPoNo ? params.salPoNo : "");
         params.colorCode = "%" + (params.colorCode ? params.colorCode : "");
       }
@@ -137,7 +137,8 @@ export default {
           rows: this.page.pageSize,
           start: this.page.currentPage,
           isWorkOut: 0,
-          jobType: 2
+          jobType: 2,
+          dataSortRules: "weaveJobCode|desc"
         })
       ).then((res) => {
         this.crud = res.data.records;
@@ -186,10 +187,10 @@ export default {
       this.dialogVisible = true;
     },
     del() {
-      if (this.detail.creator != parent.userID) {
-        this.$tip.warning("你无权限删除该条数据!");
-        return;
-      }
+      // if (this.detail.creator != parent.userID) {
+      //   this.$tip.warning("你无权限删除该条数据!");
+      //   return;
+      // }
       if (this.detail.auditState) {
         this.$tip.warning("通过审核的数据不可删除,请联系主管取消审核!");
         return;

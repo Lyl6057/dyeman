@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
- * @LastEditors: Lyl
- * @LastEditTime: 2022-08-20 15:22:03
+ * @LastEditors: Symbol_Yang
+ * @LastEditTime: 2022-08-23 10:23:10
  * @Description:
  */
 
@@ -154,7 +154,7 @@ export function mainCrud(_this, audit, isExtract = false) {
         label: "生產單號",
         prop: "weaveJobCode",
         overHidden: true,
-        width: 180,
+        width: 140,
         span: 6,
         tip: "MS đơn sản xuất bp Dệt",
         sortable: true,
@@ -174,7 +174,7 @@ export function mainCrud(_this, audit, isExtract = false) {
       {
         label: "訂單編號",
         prop: "salPoNo",
-        width: 180,
+        width: 110,
         span: 6,
         placeholder: " ",
         sortable: true,
@@ -184,6 +184,7 @@ export function mainCrud(_this, audit, isExtract = false) {
             ? true
             : false),
         overHidden: true,
+        hide: false,
         // rules: [
         //   {
         //     required: true,
@@ -198,7 +199,7 @@ export function mainCrud(_this, audit, isExtract = false) {
       {
         label: "齐胚期",
         prop: "calicoDate",
-        width: 130,
+        width: 110,
         span: 6,
         type: "date",
         disabled: audit
@@ -251,6 +252,7 @@ export function mainCrud(_this, audit, isExtract = false) {
         tip: "Mã số dệt bộ phận Sales",
         span: 6,
         width: 200,
+        hide: true,
         disabled: isExtract || (audit 
           ? false
           : _this.detail.auditState && !_this.isAdd
@@ -263,6 +265,7 @@ export function mainCrud(_this, audit, isExtract = false) {
         label: "BOM编号",
         prop: "bomId",
         tip: "bom code",
+        hide: true,
         span: 6,
         width: 120,
         disabled: audit
@@ -354,7 +357,7 @@ export function mainCrud(_this, audit, isExtract = false) {
             ? true
             : false,
         tip: "Màu sắc",
-        width: 180,
+        width: 120,
         span: 6,
         placeholder: "请選擇顏色名稱",
         rules: [
@@ -409,8 +412,11 @@ export function mainCrud(_this, audit, isExtract = false) {
           : _this.detail.auditState && !_this.isAdd
             ? true
             : false,
-        align: "left",
-        tip: "Số lượng của hợp đồng"
+        align: "right",
+        tip: "Số lượng của hợp đồng",
+        formatter(r,v){
+          return v && _this.$num2ThousandthFormat(v,1)
+        }
       },
       {
         label: "織胚數量",
@@ -431,8 +437,11 @@ export function mainCrud(_this, audit, isExtract = false) {
         //   }
         // ],
         type: "number",
-        align: "left",
-        tip: "Số lượng vải mộc"
+        align: "right",
+        tip: "Số lượng vải mộc",
+        formatter(r,v){
+          return v && _this.$num2ThousandthFormat(v,1)
+        }
       },
       {
         label: "纱线数量",
@@ -441,13 +450,16 @@ export function mainCrud(_this, audit, isExtract = false) {
         placeholder: " ",
         span: 6,
         type: "number",
-        align: "left",
+        align: "right",
         disabled: audit
           ? false
           : _this.detail.auditState && !_this.isAdd
             ? true
             : false,
-        tip: " Số lượng sợi "
+        tip: " Số lượng sợi ",
+        formatter(r,v){
+          return v && _this.$num2ThousandthFormat(v,1)
+        }
       },
       {
         label: "季节",
@@ -598,7 +610,7 @@ export function mainCrud(_this, audit, isExtract = false) {
         tip: "Trọng lượng trước giặt"
       },
       {
-        label: "門幅",
+        label: "門幅(實用)",
         prop: "breadthValue",
         disabled: audit
           ? false
@@ -711,13 +723,23 @@ export function mainCrud(_this, audit, isExtract = false) {
             : false,
         placeholder: " "
       },
+      // 2022.08.22
       {
-        label: "其他要求",
-        prop: "otherRequire",
-        tip: "Yêu cầu khác",
-        placeholder: " ",
+        label: "門幅(邊至邊)",
+        prop: "cylinderHeight",
+        disabled: audit
+          ? false
+          : _this.detail.auditState && !_this.isAdd
+            ? true
+            : false,
+        tip: "Thực dụng",
+        width: 90,
+        // minRows: 0,
         hide: true,
-        span: 12
+        span: 4,
+        row: true,
+        type: "number",
+        placeholder: " "
       },
       {
         label: "织单状态",
@@ -761,7 +783,15 @@ export function mainCrud(_this, audit, isExtract = false) {
         // type: "select",
         // dicData:
         //   postDicT('ucmlUser', 'employeename', 'ucmlUseroid')
-      }
+      },
+      {
+        label: "其他要求",
+        prop: "otherRequire",
+        tip: "Yêu cầu khác",
+        placeholder: " ",
+        hide: true,
+        span: 12
+      },
     ],
     group: [
       {
