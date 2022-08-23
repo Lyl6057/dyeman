@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-23 09:43:57
+ * @LastEditTime: 2022-08-23 13:10:45
  * @Description: 
 -->
 <template>
@@ -171,10 +171,10 @@ export default {
       getRevolve({
         rows: this.revolvePage.pageSize,
         start: this.revolvePage.currentPage,
-        runState: "1",
-        // vatNo: "!^%" + (this.revolveForm.vatNo || ''),
-        // weaveJobCode: "!^%" + (this.revolveForm.weaveJobCode || ''),
-        // serviceOperator: "!^%" + (this.revolveForm.serviceOperator || '')
+        // runState: "1",
+        vatNo: "%" + (this.revolveForm.vatNo || ''),
+        weaveJobCode: "%" + (this.revolveForm.weaveJobCode || ''),
+        serviceOperator: "%" + (this.revolveForm.serviceOperator || '')
         // auditState: 1,
       }).then((res) => {
         this.revolves = res.data.records;

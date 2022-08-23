@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-19 16:54:26
+ * @LastEditTime: 2022-08-23 16:01:23
  * @Description:
 -->
 <template>
@@ -21,9 +21,11 @@
         <el-tooltip class="item" effect="dark" content=" in" placement="top-start">
           <el-button type="primary" @click="print" :loading="wloading" :disabled="detail.runState == '0' || !detail.runJobId">打印</el-button>
         </el-tooltip>
+        <el-button type="primary" @click="exhaustPrint" :loading="wloading">排缸咭</el-button>
         <el-tooltip class="item" effect="dark" content="copy" placement="top-start">
           <el-button type="primary" :disabled="!detail.runJobId" @click="copyEvent" :loading="wloading">复制</el-button>
         </el-tooltip>
+        
         <el-tooltip class="item" effect="dark" content="tìm kiếm" placement="top-start">
           <el-button type="primary" @click="handleQuery">{{ this.$t("public.query") }}</el-button>
         </el-tooltip>
@@ -91,6 +93,7 @@ export default {
       selectList: [],
       splitType: "A",
       hasFinied: 0,
+      isExhaust: false
     };
   },
   watch: {},
@@ -132,9 +135,18 @@ export default {
     },
     print() {
       this.pdfDlg = true;
+      this.isExhaust = false;
       this.pdfUrl =
         process.env.API_HOST +
         "/api/proBleadyeRunJob/createBleadyeRunJobPdf?id=" +
+        this.detail.runJobId;
+    },
+    exhaustPrint() {
+      this.pdfDlg = true;
+      this.isExhaust = true;
+      this.pdfUrl =
+        process.env.API_HOST +
+        "/api/proBleadyeRunJob/smallCard?id=" +
         this.detail.runJobId;
     },
     async handleOpenTem(){
@@ -208,7 +220,7 @@ export default {
       this.selectList = val;
     },
     pdfClose() {
-      if (this.detail.runState == "1") {
+      if (this.detail.runState == "1" && !this.isExhaust) {
         this.$tip
           .cofirm(
             "是否更新打印状态(có cập nhật trạng thái in mới không)?",
