@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
- * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-08-18 09:11:06
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-08-23 09:41:54
  * @Description:
  */
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
@@ -123,71 +123,786 @@ export function revolveForm(_this) {
   return {
     submitBtn: false,
     emptyBtn: false,
-    labelWidth: 150,
+    labelWidth: 120,
     column: [
       {
         label: "缸號",
         prop: "vatNo",
         span: 6,
         placeholder: " ",
-        change: () => {
-          _this.$nextTick(() => {
-            _this.revolve = _this.revolves.filter(item => {
-              return (
-                item.vatNo.indexOf(_this.revolveForm.vatNo) != -1 &&
-                item.weaveJobCode.indexOf(_this.revolveForm.weaveJobCode) !=
-                -1 &&
-                item.serviceOperator.indexOf(
-                  _this.revolveForm.serviceOperator
-                ) != -1
-              );
-            });
-          });
-        }
       },
       {
         label: "织造生產單號",
         prop: "weaveJobCode",
         span: 6,
         placeholder: " ",
-        change: () => {
-          _this.$nextTick(() => {
-            _this.revolve = _this.revolves.filter(item => {
-              return (
-                item.vatNo.indexOf(_this.revolveForm.vatNo) != -1 &&
-                item.weaveJobCode.indexOf(_this.revolveForm.weaveJobCode) !=
-                -1 &&
-                item.serviceOperator.indexOf(
-                  _this.revolveForm.serviceOperator
-                ) != -1
-              );
-            });
-          });
-        }
       },
       {
         label: "开单员",
         prop: "serviceOperator",
         span: 6,
         placeholder: " ",
-        change: () => {
-          _this.$nextTick(() => {
-            _this.revolve = _this.revolves.filter(item => {
-              return (
-                item.vatNo.indexOf(_this.revolveForm.vatNo) != -1 &&
-                item.weaveJobCode.indexOf(_this.revolveForm.weaveJobCode) !=
-                -1 &&
-                item.serviceOperator.indexOf(
-                  _this.revolveForm.serviceOperator
-                ) != -1
-              );
-            });
-          });
-        }
       }
     ]
   };
 }
+
+export function revolveCrud(_this) {
+  return {
+    menu: false,
+    addBtn: false,
+    border: true,
+    highlightCurrentRow: true,
+    height: "calc(100vh - 235px)",
+    refreshBtn: false,
+    selection: false,
+    page: true,
+    labelWidth: 120,
+    columnBtn: true,
+    showSummary: true,
+    sumColumnList: [
+      {
+        label: "合计:",
+        name: "clothWeight",
+        type: "sum",
+        decimals: 1
+      }
+    ],
+    column: [
+      {
+        label: "#",
+        prop: "index",
+        width: 50,
+        align: "center",
+        display: false
+      },
+
+      {
+        label: "生產單號",
+        prop: "weaveJobCode",
+        tip: "MS sản xuất bp dệt",
+        overHidden: true,
+        width: 180,
+        span: 6,
+        disabled: false,
+        formslot: true,
+        placeholder: "請選擇織造生產單號",
+        rules: [
+          {
+            required: true,
+            message: "请输入生產單號",
+            trigger: "blur"
+          }
+        ]
+      },
+      {
+        label: "缸號",
+        prop: "vatNo",
+        tip: "Số lô nhuộm",
+        overHidden: true,
+        width: 140,
+        span: 6,
+        disabled: false,
+        sortable: true,
+        rules: [
+          {
+            required: true,
+            message: "請輸入缸號",
+            trigger: "blur"
+          }
+        ]
+      },
+      {
+        label: "开單日期",
+        tip: "Ngày lập đơn",
+        prop: "workDate",
+        width: 130,
+        span: 6,
+        type: "date",
+        align: "center",
+        format: "yyyy-MM-dd",
+        valueFormat: "yyyy-MM-dd",
+        placeholder: "请選擇發單日期",
+        sortable: true,
+        rules: [
+          {
+            required: true,
+            message: "请選擇發單日期",
+            trigger: "blur"
+          }
+        ]
+      },
+      {
+        label: "交货日期",
+        prop: "deliveDate",
+        tip: "Ngày giao hàng",
+        width: 130,
+        span: 6,
+        type: "date",
+        align: "center",
+        format: "yyyy-MM-dd",
+        valueFormat: "yyyy-MM-dd",
+        placeholder: "请選擇交货日期",
+        sortable: true,
+        rules: [
+          {
+            required: true,
+            message: "请選擇交货日期",
+            trigger: "blur"
+          }
+        ]
+      },
+
+      {
+        label: "客戶",
+        tip: "Khách hàng",
+        prop: "custCode",
+        overHidden: true,
+        sortable: true,
+        width: 200,
+        span: 6,
+        placeholder: " ",
+        filterable: true,
+        allowCreate: true,
+        defaultFirstOption: true,
+        type: "select",
+        dicData: cust
+      },
+      {
+        label: "訂單編號",
+        tip: "SỐ P.O",
+        prop: "salPoNo",
+        width: 180,
+        span: 6,
+        placeholder: " ",
+        sortable: true,
+        // sortable: true,
+        overHidden: true
+      },
+      {
+        label: "客人PO",
+        prop: "custPoNo",
+        tip: "PO khách hàng",
+        span: 6,
+        hide: true,
+        width: 80,
+        sortable: true,
+        placeholder: " "
+      },
+      {
+        label: "合同号",
+        prop: "contractNo",
+        tip: "Số hiệu hợp đồng",
+        span: 6,
+        hide: true,
+        width: 80,
+        sortable: true,
+        placeholder: " "
+      },
+      {
+        label: "FEPO",
+        prop: "thirdPo",
+        tip: "Mã đặt hàng",
+        span: 6,
+        hide: true,
+        width: 80,
+        placeholder: " "
+      },
+      {
+        label: "No",
+        prop: "thirdSn",
+        tip: "Mã nhận diện",
+        span: 6,
+        hide: true,
+        width: 80,
+        sortable: true,
+        placeholder: " "
+      },
+      {
+        label: "交货地址",
+        tip: "Địa chỉ giao hàng",
+        prop: "address",
+        overHidden: true,
+        width: 180,
+        span: 6,
+        disabled: false,
+        placeholder: " "
+      },
+      {
+        label: "顏色名稱",
+        tip: "Màu",
+        prop: "colorName",
+        placeholder: " ",
+        width: 180,
+        sortable: true,
+        formslot: true,
+        overHidden: true,
+        span: 6
+      },
+      {
+        label: "工厂色號",
+        tip: "Số màu",
+        prop: "colorCode",
+        width: 150,
+        sortable: true,
+        span: 6,
+        overHidden: true,
+        placeholder: " "
+      },
+      {
+        label: "客色號",
+        tip: "khách hàng số màu",
+        prop: "custColorNo",
+        width: 150,
+        span: 6,
+        sortable: true,
+        overHidden: true,
+        placeholder: " "
+      },
+
+      {
+        label: "訂單數量(kg)",
+        tip: "Số lượng đơn hàng",
+        prop: "poAmountKg",
+        width: 130,
+        span: 6,
+        type: "number",
+        align: "right",
+        placeholder: " ",
+      },
+      {
+        label: "投胚数量",
+        tip: "Tổng cộng(KG)",
+        prop: "clothWeight",
+        width: 130,
+        span: 6,
+        type: "number",
+        align: "right",
+        placeholder: " ",
+        rules: [
+          {
+            required: true,
+            message: "请输入投胚数量",
+            trigger: "blur"
+          }
+        ],
+      },
+      {
+        label: "疋重",
+        // tip: "state",
+        disabled: false,
+        prop: "avgEachWeightKg",
+        width: 120,
+        labelWidth: 60,
+        type: "switch",
+        dicData: [
+          {
+            label: "30",
+            value: 30
+          },
+          {
+            label: "58",
+            value: 58
+          }
+        ],
+        hide: false,
+        placeholder: " ",
+        span: 4,
+      },
+      {
+        label: "单位",
+        prop: "wmUnit",
+        tip: "unit",
+        labelWidth: 60,
+        width: 80,
+        span: 4,
+        placeholder: " ",
+        type: "select",
+        dicData: [
+          {
+            label: "KG",
+            value: "KG"
+          },
+          {
+            label: "LBS",
+            value: "LBS"
+          },
+          {
+            label: "套/Bộ",
+            value: "SET"
+          }
+        ]
+      },
+      {
+        label: "疋數",
+        prop: "pidCount",
+        tip: "Cây",
+        labelWidth: 70,
+        width: 100,
+        span: 4,
+        type: "number",
+        align: "right",
+        placeholder: " "
+      },
+      {
+        label: "染整数量",
+        prop: "dyeClothWeight",
+        tip: "Số lượng vải mộc",
+        span: 6,
+        width: 120,
+        placeholder: " ",
+        disabled: false,
+        hide: true,
+        rules: [
+          {
+            required: true,
+            message: "请输入染整数量",
+            trigger: "blur"
+          }
+        ]
+      },
+      {
+        label: "拆缸重量",
+        prop: "divdCw",
+        overHidden: true,
+        width: 120,
+        span: 6,
+        disabled: false,
+        type: "number",
+        placeholder: " "
+      },
+      {
+        label: "布类代码",
+        prop: "fabricCode",
+        tip: "Fabric Code",
+        span: 6,
+        width: 120,
+        placeholder: " ",
+        sortable: true,
+        disabled: false,
+        hide: true
+      },
+      {
+        label: "批号",
+        prop: "yarnBatchNo",
+        tip: "Mã vải",
+        span: 6,
+        width: 120,
+        placeholder: " ",
+        sortable: true,
+        disabled: false,
+        hide: true
+      },
+
+      {
+        label: "紗缸",
+        tip: "Lô sợi nhà máy",
+        prop: "yarnCylinder",
+        span: 6,
+        width: 120,
+        placeholder: " ",
+        disabled: false,
+        sortable: true,
+        hide: true
+      },
+      {
+        label: "紗牌",
+        prop: "yarnCard",
+        tip: "Nhãn hiệu sợi",
+        span: 6,
+        width: 120,
+        placeholder: " ",
+        disabled: false,
+        hide: true
+      },
+      {
+        label: "紗批",
+        tip: "Lót sợi",
+        prop: "yarnNumber",
+        span: 6,
+        width: 120,
+        placeholder: " ",
+        disabled: false,
+        hide: true
+      },
+
+      {
+        label: "合染缸號",
+        tip: "Số bồn nhuộm chung",
+        prop: "mergVatNo",
+        overHidden: true,
+        width: 180,
+        span: 6,
+        disabled: false,
+        hide: true,
+        type: "select",
+        dicData: [],
+        multiple: true,
+        filterable: true,
+        allowCreate: true,
+        defaultFirstOption: true,
+        placeholder: " "
+      },
+      {
+        label: "布匹成份",
+        prop: "fabElements",
+        tip: "Thành phần",
+        placeholder: " ",
+        overHidden: true,
+        width: 250,
+        span: 12,
+        hide: true
+      },
+
+      {
+        label: "布類描述",
+        prop: "fabName",
+        placeholder: " ",
+        tip: "Loại vải",
+        overHidden: true,
+        width: 250,
+        span: 12
+      },
+
+     
+
+      {
+        label: "织厂",
+        tip: "Xưởng dệt",
+        prop: "weaveFactoryName",
+        span: 6,
+        width: 120,
+        placeholder: " ",
+        disabled: false,
+        hide: true,
+        filterable: true,
+        allowCreate: true,
+        defaultFirstOption: true,
+        type: "select",
+        dicData: [
+          {
+            label: "S.POWER",
+            value: "S.POWER"
+          },
+          {
+            label: "Rise Sun",
+            value: "Rise Sun"
+          }
+        ]
+      },
+
+      {
+        label: "顏色種類數量",
+        tip: "Số lượng màu",
+        prop: "poColorCount",
+        width: 120,
+        span: 6,
+        type: "number",
+        hide: true,
+        align: "right",
+        placeholder: " "
+      },
+      {
+        label: "訂單總缸數",
+        prop: "poVatCount",
+        tip: "TC ? Bồn",
+        width: 120,
+        span: 6,
+        type: "number",
+        align: "right",
+        placeholder: " "
+      },
+      {
+        label: "当前第幾缸",
+        prop: "vatIndex",
+        tip: "Bồn thứ",
+        width: 120,
+        span: 6,
+        type: "number",
+        align: "right",
+        placeholder: " "
+      },
+      {
+        label: "筒徑(Inch)",
+        prop: "tubeDiam",
+        tip: "Khổ máy",
+        span: 6,
+        hide: true,
+        placeholder: " ",
+        width: 80,
+        type: "number"
+      },
+      {
+        label: "针距",
+        tip: "Gauge",
+        prop: "needleDist",
+        span: 6,
+        hide: true,
+        placeholder: " ",
+        width: 80,
+        type: "number"
+      },
+      {
+        label: "紗長",
+        tip: "Độ dài sợi",
+        prop: "yarnLength",
+        span: 6,
+        hide: true,
+        placeholder: " ",
+        width: 80
+        // tyep: "number"
+      },
+      {
+        label: "幅寬(Inch)",
+        tip: "Khổ rộng vải mộc",
+        prop: "breadth",
+        width: 90,
+        hide: true,
+        span: 6,
+        // type: "number",
+        placeholder: " "
+      },
+      {
+        label: "胚重g/m²",
+        tip: "Trọng lượng",
+        prop: "gramWeight",
+        width: 120,
+        hide: true,
+        span: 6,
+        // type: "number",
+        placeholder: " "
+      },
+      {
+        label: "对色标准/缸号",
+        tip: "Tiêu chuẩn so màu / số bồn nhuộm",
+        prop: "compVatNo",
+        width: 120,
+        hide: true,
+        span: 6,
+        placeholder: " "
+      },
+      {
+        label: "规格参考",
+        tip: "Tiêu chuẩn chất lượng",
+        prop: "specParam",
+        width: 120,
+        hide: true,
+        span: 6,
+        placeholder: " "
+      },
+
+      {
+        label: "生产用机种",
+        prop: "dyeVatType",
+        tip: "Mô hình",
+        span: 6,
+        hide: true,
+        width: 80,
+        placeholder: " ",
+        type: "select",
+        dicData: getDicT(
+          "baseEquipmentCategoryList",
+          "categoryName",
+          "setCapacity",
+          { parentId: "dev-12" }
+        )
+      },
+
+      {
+        label: "对色光源",
+        tip: "Nguồn sáng so màu",
+        prop: "compLightSource",
+        width: 120,
+        hide: true,
+        span: 12,
+        placeholder: " ",
+        multiple: true,
+        type: "select",
+        dicData: getDIC("sal_colorLights")
+      },
+      // {
+      //   label: "审核",
+      //   // tip:"Nhận hàng yêu cầu",
+      //   prop: "auditor",
+      //   width: 80,
+      //   span: 6,
+      //   hide: true,
+      //   placeholder: " "
+      // },
+      {
+        label: "收货要求",
+        tip: "Nhận hàng yêu cầu",
+        prop: "acceptRequirement",
+        span: 12,
+        hide: true,
+        width: 80,
+        placeholder: " "
+      },
+      {
+        label: "QC评语",
+        prop: "qcComments",
+        tip: "Nhận xét",
+        span: 12,
+        hide: true,
+        width: 80,
+        placeholder: " "
+      },
+      // {
+      //   label: "列印時間",
+      //   prop: "printDate",
+      //   placeholder: " ",
+      //   width: 90,
+      //   hide: true,
+      //   type: "datetime",
+      //   format: "yyyy-MM-dd HH:mm:ss",
+      //   valueFormat: "yyyy-MM-dd HH:mm:ss",
+      //   span: 6,
+      //   disabled: true,
+      //   display: true
+      // },
+
+      {
+        label: "STLYLE款号",
+        prop: "styleNo",
+        tip: "#STLYLE 款号",
+        span: 12,
+        hide: true,
+        width: 80,
+        placeholder: " "
+      },
+      // {
+      //   label: "ET序号",
+      //   prop: "etSn",
+      //   tip: "ET序号",
+      //   span: 6,
+      //   hide: true,
+      //   width: 80,
+      //   placeholder: " "
+      // },
+      {
+        label: "季节",
+        prop: "custStyleCode",
+        // tip: "MÃ CODE VẢI XUẤT HÀNG 代码",
+        span: 5,
+        hide: true,
+        width: 60,
+        placeholder: " "
+      },
+      {
+        label: "头缸/缸差",
+        // tip: "state",
+        disabled: false,
+        prop: "firstOrOther",
+        width: 100,
+        type: "radio",
+        dicData: [
+          {
+            label: "头缸",
+            value: "1"
+          },
+          {
+            label: "缸差",
+            value: "2"
+          },
+          {
+            label: "翻单头缸",
+            value: "3"
+          }
+        ],
+        hide: false,
+        placeholder: " ",
+        span: 6,
+      },
+      {
+        label: "办单/大货",
+        tip: "Hàng mẫu / Hàng đại trà",
+        disabled: false,
+        prop: "salType",
+        width: 150,
+        type: "switch",
+        dicData: [
+          {
+            label: "办单(Hàng mẫu)",
+            value: "sample"
+          },
+          {
+            label: "大货(Hàng đại trà)",
+            value: "big"
+          }
+        ],
+        hide: false,
+        placeholder: " ",
+        overHidden: true,
+        span: 7,
+        change: () => {
+          _this.$nextTick(() => {
+            _this.typeChange();
+          });
+        }
+      },
+      {
+        label: "运转单状态",
+        tip: "state",
+        disabled: false,
+        prop: "runState",
+        width: 120,
+        type: "switch",
+        dicData: [
+          {
+            label: "正常",
+            value: "1"
+          },
+          {
+            label: "草稿",
+            value: "0"
+          },
+          {
+            label: "已打印",
+            value: "3"
+          }
+        ],
+        hide: false,
+        placeholder: " ",
+        span: 6
+      },
+      {
+        label: "开单员",
+        tip: "开单员",
+        prop: "serviceOperator",
+        width: 80,
+        span: 6,
+        disabled: true,
+        display: false,
+        // hide: true,
+        placeholder: " "
+      },
+      {
+        label: "打印日期",
+        prop: "printDate",
+        span: 6,
+        placeholder: " ",
+        width: 150,
+        overHidden: true,
+        display: false,
+        type: "datetime",
+        format: "yyyy-MM-dd HH:mm:ss",
+        valueFormat: "yyyy-MM-dd HH:mm:ss"
+      },
+      {
+        label: "备注",
+        prop: "remark",
+        tip: "Ghi chú",
+        type: "textarea",
+        minRows: 2,
+        span: 24,
+        hide: true,
+        width: 80,
+        placeholder: " "
+      }
+    ],
+  };
+}
+
 
 export function dlgForm(_this) {
   return {

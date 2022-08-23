@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
- * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-23 09:56:02
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-08-23 09:43:57
  * @Description: 
 -->
 <template>
@@ -15,68 +15,16 @@
                 this.$t("public.update")
             }}</el-button>
           </el-tooltip>
-          <!-- <el-tooltip
-            class="item"
-            effect="dark"
-            content="thêm mới "
-            placement="top-start"
-          >
-            <el-button type="primary" @click="add({})">{{
-              this.$t("public.add")
-            }}</el-button>
-          </el-tooltip> -->
-          <!-- <el-tooltip
-            class="item"
-            effect="dark"
-            content="xóa"
-            placement="top-start"
-          >
-            <el-button
-              type="danger"
-              :disabled="!detail.bleadyeJobId"
-              @click="del"
-              >{{ this.$t("public.del") }}</el-button
-            >
-          </el-tooltip> -->
-          <!-- <el-tooltip
-            class="item"
-            effect="dark"
-            content="thêm mới "
-            placement="top-start"
-          > -->
           <el-button type="warning" :disabled="!detail.bleadyeJobId" @click="addCopy">返工</el-button>
           <!-- </el-tooltip> -->
           <el-tooltip class="item" effect="dark" content=" in" placement="top-start">
             <el-button type="primary" @click="print" :loading="wloading">打印</el-button>
           </el-tooltip>
-          <!-- <el-tooltip
-            class="item"
-            effect="dark"
-            content=" in"
-            placement="top-start"
-          >
-            <el-button type="primary" @click="printOther(1)" :loading="wloading"
-              >打印工艺</el-button
-            >
-          </el-tooltip>
-          <el-tooltip
-            class="item"
-            effect="dark"
-            content=" in"
-            placement="top-start"
-          >
-            <el-button type="primary" @click="printOther(2)" :loading="wloading"
-              >打印染缸参数</el-button
-            >
-          </el-tooltip> -->
           <el-tooltip class="item" effect="dark" content="tìm kiếm" placement="top-start">
             <el-button type="primary" @click="query">{{
                 this.$t("public.query")
             }}</el-button>
           </el-tooltip>
-          <!-- <el-button type="warning" @click="close">{{
-          this.$t("public.close")
-        }}</el-button> -->
         </el-row>
         <el-row class="formBox">
           <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
@@ -93,13 +41,6 @@
         <el-dialog id="colorMng_Dlg" :visible.sync="pdfDlg" fullscreen width="100%" append-to-body
           :close-on-click-modal="false" :close-on-press-escape="false">
           <view-container title="打印預覽">
-            <!-- <div class="btnList">
-            <el-button type="warning" @click="pdfDlg = false">{{
-              this.$t("public.close")
-            }}</el-button>
-            <el-button type="primary" @click="print2">打印</el-button>
-          </div> -->
-            <!--startprint-->
             <embed id="pdf" style="width: 100vw; height: calc(100vh - 80px)" :src="pdfUrl" />
             <!--endprint-->
           </view-container>
@@ -122,17 +63,16 @@
           <avue-form ref="revolveForm" :option="revolveFOp" v-model="revolveForm"></avue-form>
         </el-row>
         <el-row class="crudBox">
-          <avue-crud ref="revolveCrud" id="revolveCrud" :option="revolveCOp" :data="revolves" v-loading="revolveLoading"
-            @row-dblclick="revolveDBLClick" @current-row-change="revolveCellClick" :row-style="rowStyle"></avue-crud>
+          <avue-crud ref="revolveCrud" id="revolveCrud" :option="revolveCOp" :data="revolves" :revolve="revolveChoose" v-loading="revolveLoading"
+          @on-load="revolveQuery" :page.sync="revolvePage"  @row-dblclick="revolveDBLClick" @current-row-change="revolveCellClick" :row-style="rowStyle"></avue-crud>
         </el-row>
       </el-tab-pane>
     </el-tabs>
   </div>
 </template>
 <script>
-import { mainForm, mainCrud, revolveForm } from "./data";
-import { mainCrud as revolveCrudOp } from "../../revolve/data";
-import { get, add, update, del, print, getRevolve } from "./api";
+import { mainForm, mainCrud, revolveForm, revolveCrud } from "./data";
+import { get, del, getRevolve } from "./api";
 import tem from "./temDlg";
 export default {
   name: "",
@@ -167,7 +107,7 @@ export default {
       pdfUrl: "",
       revolveFOp: revolveForm(this),
       revolveForm: {},
-      revolveCOp: revolveCrudOp(this),
+      revolveCOp: revolveCrud(this),
       revolveChoose: {},
       revolve: [],
       revolves: [],
@@ -229,35 +169,22 @@ export default {
     revolveQuery() {
       this.revolveLoading = true;
       getRevolve({
-        rows: 99999,
-        start: 1,
+        rows: this.revolvePage.pageSize,
+        start: this.revolvePage.currentPage,
         runState: "1",
-        // auditState: 0,
+        // vatNo: "!^%" + (this.revolveForm.vatNo || ''),
+        // weaveJobCode: "!^%" + (this.revolveForm.weaveJobCode || ''),
+        // serviceOperator: "!^%" + (this.revolveForm.serviceOperator || '')
+        // auditState: 1,
       }).then((res) => {
-        this.revolves = res.data.records.filter((item) => {
-          return item.auditState == 1;
-        });
-        this.revolves.sort((a, b) => {
-          return a.workDate > b.workDate ? -1 : 1;
-        });
+        this.revolves = res.data.records;
         this.revolves.forEach((item, i) => {
           item.index = i + 1;
         });
-
         if (this.revolve.length > 0) {
           this.$refs.revolveCrud.setCurrentRow(this.revolve[0]);
         }
         this.revolvePage.total = res.data.total;
-        this.$nextTick(() => {
-          this.revolve = this.revolves.filter((item) => {
-            return (
-              item.vatNo.indexOf(this.revolveForm.vatNo) != -1 &&
-              item.weaveJobCode.indexOf(this.revolveForm.weaveJobCode) != -1 &&
-              item.serviceOperator.indexOf(this.revolveForm.serviceOperator) !=
-              -1
-            );
-          });
-        });
         this.revolveLoading = false;
       });
     },
@@ -356,12 +283,10 @@ export default {
       this.detail = val;
     },
   },
-  created() { },
+  created() {
+  },
   mounted() {
-    // this.query();
-    this.revolveQuery();
-    this.revolveCOp.page = false;
-    this.revolveCOp.height = "calc(100vh - 200px)";
+    
   },
   beforeDestroy() { },
 };
