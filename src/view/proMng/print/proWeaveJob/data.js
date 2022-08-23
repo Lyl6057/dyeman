@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-08-23 08:49:21
+ * @LastEditTime: 2022-08-23 10:23:10
  * @Description:
  */
 
@@ -174,7 +174,7 @@ export function mainCrud(_this, audit, isExtract = false) {
       {
         label: "訂單編號",
         prop: "salPoNo",
-        width: 180,
+        width: 110,
         span: 6,
         placeholder: " ",
         sortable: true,
@@ -184,7 +184,7 @@ export function mainCrud(_this, audit, isExtract = false) {
             ? true
             : false),
         overHidden: true,
-        hide: true,
+        hide: false,
         // rules: [
         //   {
         //     required: true,
@@ -199,7 +199,7 @@ export function mainCrud(_this, audit, isExtract = false) {
       {
         label: "齐胚期",
         prop: "calicoDate",
-        width: 130,
+        width: 110,
         span: 6,
         type: "date",
         disabled: audit
@@ -357,7 +357,7 @@ export function mainCrud(_this, audit, isExtract = false) {
             ? true
             : false,
         tip: "Màu sắc",
-        width: 140,
+        width: 120,
         span: 6,
         placeholder: "请選擇顏色名稱",
         rules: [
@@ -450,13 +450,16 @@ export function mainCrud(_this, audit, isExtract = false) {
         placeholder: " ",
         span: 6,
         type: "number",
-        align: "left",
+        align: "right",
         disabled: audit
           ? false
           : _this.detail.auditState && !_this.isAdd
             ? true
             : false,
-        tip: " Số lượng sợi "
+        tip: " Số lượng sợi ",
+        formatter(r,v){
+          return v && _this.$num2ThousandthFormat(v,1)
+        }
       },
       {
         label: "季节",
