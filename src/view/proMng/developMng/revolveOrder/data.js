@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-19 14:11:20
+ * @LastEditTime: 2022-08-22 16:21:28
  * @Description:
  */
 
@@ -156,7 +156,7 @@ export function mainCrud(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 315px)",
+    height: "calc(100vh - 325px)",
     refreshBtn: false,
     index: true,
     page: true,
@@ -251,7 +251,17 @@ export function mainCrud(_this) {
           }
         ]
       },
-
+      {
+        label: "訂單編號",
+        tip: "SỐ P.O",
+        prop: "salPoNo",
+        width: 180,
+        span: 6,
+        placeholder: " ",
+        sortable: true,
+        // sortable: true,
+        overHidden: true
+      },
       {
         label: "客戶",
         tip: "Khách hàng",
@@ -267,17 +277,7 @@ export function mainCrud(_this) {
         type: "select",
         dicData: cust
       },
-      {
-        label: "訂單編號",
-        tip: "SỐ P.O",
-        prop: "salPoNo",
-        width: 180,
-        span: 6,
-        placeholder: " ",
-        sortable: true,
-        // sortable: true,
-        overHidden: true
-      },
+      
       {
         label: "客人PO",
         prop: "custPoNo",
