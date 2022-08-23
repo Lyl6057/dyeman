@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-08-22 17:28:09
+ * @LastEditTime: 2022-08-23 08:49:21
  * @Description:
  */
 
@@ -154,7 +154,7 @@ export function mainCrud(_this, audit, isExtract = false) {
         label: "生產單號",
         prop: "weaveJobCode",
         overHidden: true,
-        width: 180,
+        width: 140,
         span: 6,
         tip: "MS đơn sản xuất bp Dệt",
         sortable: true,
@@ -184,6 +184,7 @@ export function mainCrud(_this, audit, isExtract = false) {
             ? true
             : false),
         overHidden: true,
+        hide: true,
         // rules: [
         //   {
         //     required: true,
@@ -251,6 +252,7 @@ export function mainCrud(_this, audit, isExtract = false) {
         tip: "Mã số dệt bộ phận Sales",
         span: 6,
         width: 200,
+        hide: true,
         disabled: isExtract || (audit 
           ? false
           : _this.detail.auditState && !_this.isAdd
@@ -263,6 +265,7 @@ export function mainCrud(_this, audit, isExtract = false) {
         label: "BOM编号",
         prop: "bomId",
         tip: "bom code",
+        hide: true,
         span: 6,
         width: 120,
         disabled: audit
@@ -354,7 +357,7 @@ export function mainCrud(_this, audit, isExtract = false) {
             ? true
             : false,
         tip: "Màu sắc",
-        width: 180,
+        width: 140,
         span: 6,
         placeholder: "请選擇顏色名稱",
         rules: [
@@ -409,8 +412,11 @@ export function mainCrud(_this, audit, isExtract = false) {
           : _this.detail.auditState && !_this.isAdd
             ? true
             : false,
-        align: "left",
-        tip: "Số lượng của hợp đồng"
+        align: "right",
+        tip: "Số lượng của hợp đồng",
+        formatter(r,v){
+          return v && _this.$num2ThousandthFormat(v,1)
+        }
       },
       {
         label: "織胚數量",
@@ -431,8 +437,11 @@ export function mainCrud(_this, audit, isExtract = false) {
         //   }
         // ],
         type: "number",
-        align: "left",
-        tip: "Số lượng vải mộc"
+        align: "right",
+        tip: "Số lượng vải mộc",
+        formatter(r,v){
+          return v && _this.$num2ThousandthFormat(v,1)
+        }
       },
       {
         label: "纱线数量",
@@ -725,7 +734,7 @@ export function mainCrud(_this, audit, isExtract = false) {
         // minRows: 0,
         hide: true,
         span: 4,
-        row: 6,
+        row: true,
         type: "number",
         placeholder: " "
       },

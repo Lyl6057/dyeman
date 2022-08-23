@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-08-22 14:57:45
+ * @LastEditTime: 2022-08-23 08:44:55
  * @Description: 
 -->
 <template>
@@ -128,7 +128,7 @@ export default {
       let params = JSON.parse(JSON.stringify(this.form));
       if (this.hasFuzzy) {
         params.weaveJobCode =
-          "!^%" + (params.weaveJobCode ? params.weaveJobCode : "");
+          "%" + (params.weaveJobCode ? params.weaveJobCode : "");
         params.salPoNo = "%" + (params.salPoNo ? params.salPoNo : "");
         params.colorCode = "%" + (params.colorCode ? params.colorCode : "");
       }
@@ -137,7 +137,8 @@ export default {
           rows: this.page.pageSize,
           start: this.page.currentPage,
           isWorkOut: 0,
-          jobType: 2
+          jobType: 2,
+          dataSortRules: "weaveJobCode|desc"
         })
       ).then((res) => {
         this.crud = res.data.records;
