@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-05-03 13:03:03
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-30 17:01:11
+ * @LastEditTime: 2022-08-22 15:16:10
  * @Description:
  */
 
@@ -1298,7 +1298,7 @@ export function baseStepPackageC(_this) {
 
 export function getBaseStep(params) {
   return axios({
-    url: "/api/baseWorkStepList",
+    url: "/api/baseWorkStep/page",
     method: "get",
     params: params
   });

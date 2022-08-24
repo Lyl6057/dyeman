@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-22 08:28:47
+ * @LastEditTime: 2022-08-23 10:25:45
  * @Description:
 -->
 <template>
@@ -50,7 +50,7 @@
           type="primary"
           :disabled=" !form.runJobId"
           @click="exhaustPrint"
-          :loading="wloading"
+          :loading="wLoading"
           >排缸咭</el-button
         >
         <el-button v-if="audit" type="primary" @click="auditHandle(form.auditState ? 0 : 1)">{{ form.auditState ? "取消审核"
@@ -1071,7 +1071,6 @@ export default {
     save() {
       this.wLoading = true;
       this.$refs.form.validate(async (valid, done) => {
-
         if (valid) {
           try {
             Object.keys(this.form).forEach((item) => {

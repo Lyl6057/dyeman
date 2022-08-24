@@ -1,19 +1,35 @@
 /*
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
- * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-28 09:06:21
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-08-23 15:08:18
  * @Description:
  */
 
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
 let cust = getDicT("basCustomer", "custName", "custCode");
 
+const commonFormConfig = {
+  submitBtn: false,
+  emptyBtn: false,
+  labelWidth: 150,
+}
+
+const commonCrudConfig = {
+    menu: false,
+    addBtn: false,
+    border: true,
+    highlightCurrentRow: true,
+    refreshBtn: false,
+    page: true,
+    labelWidth: 120,
+    selection: true,
+    columnBtn: true,
+}
+
 export function mainForm(_this) {
   return {
-    submitBtn: false,
-    emptyBtn: false,
-    labelWidth: 150,
+    ...commonFormConfig,
     column: [
       {
         label: "缸號",
@@ -122,9 +138,7 @@ export function mainForm(_this) {
 
 export function dlgForm(_this) {
   return {
-    submitBtn: false,
-    emptyBtn: false,
-    labelWidth: 150,
+    ...commonFormConfig,
     column: [
       {
         label: "訂單編號",
@@ -158,7 +172,6 @@ export function mainCrud(_this) {
     highlightCurrentRow: true,
     height: "calc(100vh - 315px)",
     refreshBtn: false,
-    // columnBtn: false,
     page: true,
     labelWidth: 120,
     selection: true,
@@ -318,7 +331,6 @@ export function mainCrud(_this) {
         span: 6,
         hide: true,
         width: 80,
-        sortable: true,
         placeholder: " "
       },
       {
@@ -1346,6 +1358,7 @@ export function mainCrud(_this) {
     ]
   };
 }
+
 export function bfOp(_this) {
   return {
     menu: false,
@@ -1811,342 +1824,246 @@ export function colSelCrudOp(_this){
   }
 }
 
-
-
-
-// {
-//   icon: 'el-icon-info',
-//   label: '生产项目',
-//   prop: 'basic',
-//   column: [
-//     {
-//       label: "洗水",
-//       prop: "xishui",
-//       width: 120,
-//       hide: true,
-//       span: 6,
-//       type: "number",
-//       placeholder: " "
-//     },
-//     {
-//       label: "单染",
-//       prop: "drm",
-//       width: 120,
-//       hide: true,
-//       span: 6,
-//       type: "number",
-//       placeholder: " "
-//     },
-//     {
-//       label: "双染",
-//       prop: "sr",
-//       width: 120,
-//       hide: true,
-//       span: 6,
-//       type: "number",
-//       placeholder: " "
-//     },
-//     {
-//       label: "三染",
-//       prop: "sanran",
-//       width: 120,
-//       hide: true,
-//       span: 6,
-//       type: "number",
-//       placeholder: " "
-//     },
-//     {
-//       label: "食毛",
-//       prop: "shimao",
-//       span: 6,
-//       hide: true,
-//       width: 80,
-//       placeholder: " ",
-//     },
-//     {
-//       label: "碱缩/丝光",
-//       prop: "jssg",
-//       span: 6,
-//       hide: true,
-//       width: 80,
-//       placeholder: " ",
-//     },
-//     {
-//       label: "定胚",
-//       prop: "dingpei",
-//       span: 6,
-//       hide: true,
-//       width: 80,
-//       placeholder: " ",
-//     },
-//     {
-//       label: "预缩",
-//       prop: "yusuo",
-//       span: 6,
-//       hide: true,
-//       width: 80,
-//       placeholder: " ",
-//     },
-//     {
-//       label: "面抓毛",
-//       prop: "mianzhuamao",
-//       span: 6,
-//       hide: true,
-//       width: 80,
-//       placeholder: " ",
-//     },
-//     {
-//       label: "底抓毛",
-//       prop: "dizhuamao",
-//       span: 6,
-//       hide: true,
-//       width: 80,
-//       placeholder: " ",
-//     },
-//     {
-//       label: "两面抓毛",
-//       prop: "liangmianzhuamao",
-//       span: 6,
-//       hide: true,
-//       width: 80,
-//       placeholder: " ",
-//     },
-
-//     {
-//       label: "面烧毛",
-//       prop: "msm",
-//       span: 6,
-//       hide: true,
-//       width: 80,
-//       placeholder: " ",
-//     },
-//     {
-//       label: "底烧毛",
-//       prop: "dismao",
-//       span: 6,
-//       hide: true,
-//       width: 80,
-//       placeholder: " ",
-//     },
-//     {
-//       label: "两面烧毛",
-//       prop: "liangmiansmao",
-//       span: 6,
-//       hide: true,
-//       width: 80,
-//       placeholder: " ",
-//     },
-
-//     {
-//       label: "普通剪毛",
-//       prop: "ptzhuamao",
-//       span: 6,
-//       hide: true,
-//       width: 80,
-//       placeholder: " ",
-//     },
-//     {
-//       label: "绒布胚布两刀",
-//       prop: "dizhudddamao",
-//       span: 6,
-//       hide: true,
-//       width: 80,
-//       placeholder: " ",
-//     },
-//     {
-//       label: "绒布成品三刀",
-//       prop: "liangmianssszhuamao",
-//       span: 6,
-//       hide: true,
-//       width: 80,
-//       placeholder: " ",
-//     },
-
-//     {
-//       label: "面磨毛",
-//       prop: "msmss",
-//       span: 6,
-//       hide: true,
-//       width: 80,
-//       placeholder: " ",
-//     },
-//     {
-//       label: "底磨毛",
-//       prop: "dismqqao",
-//       span: 6,
-//       hide: true,
-//       width: 80,
-//       placeholder: " ",
-//     },
-//     {
-//       label: "两面磨毛",
-//       prop: "liangmiassnsmao",
-//       span: 6,
-//       hide: true,
-//       width: 80,
-//       placeholder: " ",
-//     },
-
-//     {
-//       label: "面吸毛",
-//       prop: "mianxim",
-//       span: 6,
-//       hide: true,
-//       width: 80,
-//       placeholder: " ",
-//     },
-//     {
-//       label: "底吸毛",
-//       prop: "dizhudxxddamao",
-//       span: 6,
-//       hide: true,
-//       width: 80,
-//       placeholder: " ",
-//     },
-//     {
-//       label: "两面吸毛",
-//       prop: "lmximao",
-//       span: 6,
-//       hide: true,
-//       width: 80,
-//       placeholder: " ",
-//     },
-
-//     {
-//       label: "面刷毛",
-//       prop: "msmsss",
-//       span: 6,
-//       hide: true,
-//       width: 80,
-//       placeholder: " ",
-//     },
-//     {
-//       label: "底刷毛",
-//       prop: "dismqssqao",
-//       span: 6,
-//       hide: true,
-//       width: 80,
-//       placeholder: " ",
-//     },
-//     {
-//       label: "两面刷毛",
-//       prop: "liangmiassssnsmao",
-//       span: 6,
-//       hide: true,
-//       width: 80,
-//       placeholder: " ",
-//     },
-
-//     {
-//       label: "定成品",
-//       prop: "lmximdcpao",
-//       span: 6,
-//       hide: true,
-//       width: 80,
-//       placeholder: " ",
-//     },
-
-//     {
-//       label: "烘干",
-//       prop: "msmsssss",
-//       span: 6,
-//       hide: true,
-//       width: 80,
-//       placeholder: " ",
-//     },
-//     {
-//       label: "浆边",
-//       prop: "jiangbian",
-//       span: 6,
-//       hide: true,
-//       width: 80,
-//       placeholder: " ",
-//     },
-//     {
-//       label: "浆切边",
-//       prop: "jiangqiebian",
-//       span: 6,
-//       hide: true,
-//       width: 80,
-//       placeholder: " ",
-//     },
-//     {
-//       label: "活性印花",
-//       prop: "hxyh",
-//       span: 6,
-//       hide: true,
-//       width: 80,
-//       placeholder: " ",
-//     },
-//     {
-//       label: "胶浆印花",
-//       prop: "dismqssssqao",
-//       span: 6,
-//       hide: true,
-//       width: 80,
-//       placeholder: " ",
-//     },
-//     {
-//       label: "拔白",
-//       prop: "babsi",
-//       span: 6,
-//       hide: true,
-//       width: 80,
-//       placeholder: " ",
-//     },
-
-//     {
-//       label: "手感",
-//       prop: "lmxisgmdcpao",
-//       span: 6,
-//       hide: true,
-//       width: 80,
-//       placeholder: " ",
-//     },
-
-//     {
-//       label: "抗静电整理",
-//       prop: "kdjzl",
-//       span: 6,
-//       hide: true,
-//       width: 80,
-//       placeholder: " ",
-//     },
-//     {
-//       label: "抗紫外线整理",
-//       prop: "kzwxzl",
-//       span: 6,
-//       hide: true,
-//       width: 80,
-//       placeholder: " ",
-//     },
-//     {
-//       label: "抗菌防臭整理",
-//       prop: "kjfczl",
-//       span: 6,
-//       hide: true,
-//       width: 80,
-//       placeholder: " ",
-//     },
-//     {
-//       label: "保湿整理",
-//       prop: "bszl",
-//       span: 6,
-//       hide: true,
-//       width: 80,
-//       placeholder: " ",
-//     },
-//     {
-//       label: "吸湿速干整理",
-//       prop: "xssgzl",
-//       span: 6,
-//       hide: true,
-//       width: 80,
-//       placeholder: " ",
-//     },
-//   ]
-// },
-
+// 排期工作包
+export function scheduleDtlCrudOp(_this) {
+  return {
+    ...commonCrudConfig,
+    index: false,
+    page: false,
+    labelWidth: 100,
+    height: "calc(100vh - 375px)",
+    showSummary: true,
+    stripe: true,
+    sumColumnList: [
+      {
+        label: " ",
+        name: "workName",
+        type: "count",
+      }
+    ],
+    column: [
+      {
+        label: "工序名称",
+        prop: "workName",
+        align: "left",
+        width: 220,
+        display: false,
+        overHidden: true,
+        span: 6,
+        fixed: true
+      },
+      {
+        label: "序号",
+        prop: "schSn",
+        align: "left",
+        width: 60,
+        span: 6,
+        cell: true,
+        display: false,
+        fixed: true,
+        clearable: false
+      },
+      {
+        label: "缸号",
+        prop: "stepCode",
+        hide: true,
+        align: "left",
+        width: 140,
+        span: 6,
+        overHidden: true,
+        disabled: true
+      },
+      {
+        label: "颜色",
+        prop: "colorName",
+        // hide: true,
+        disabled: true,
+        align: "left",
+        width: 140,
+        overHidden: true,
+        span: 6,
+        cell: false,
+        hide: true
+      },
+      {
+        label: "数量",
+        prop: "workAmount",
+        disabled: true,
+        type: "number",
+        align: "right",
+        width: 100,
+        overHidden: true,
+        span: 6,
+        hide: true
+      },
+      {
+        label: "实际数量",
+        prop: "realAmount",
+        type: "number",
+        align: "right",
+        cell: true,
+        overHidden: true,
+        width: 100,
+        span: 6,
+        rules: [
+          {
+            required: true,
+            message: "",
+            trigger: "blur"
+          }
+        ]
+      },
+      {
+        label: "计划开始",
+        prop: "planStart",
+        width: 160,
+        span: 6,
+        cell: true,
+        type: "datetime",
+        align: "center",
+        format: "yyyy-MM-dd HH:mm:ss",
+        valueFormat: "yyyy-MM-dd HH:mm:ss",
+        overHidden: true,
+        sortable: true,
+        rules: [
+          {
+            required: true,
+            message: "",
+            trigger: "blur"
+          }
+        ]
+      },
+      {
+        label: "计划结束",
+        prop: "planEnd",
+        width: 160,
+        cell: true,
+        span: 6,
+        type: "date",
+        align: "center",
+        format: "yyyy-MM-dd HH:mm:ss",
+        valueFormat: "yyyy-MM-dd HH:mm:ss",
+        sortable: true,
+        rules: [
+          {
+            required: true,
+            message: "",
+            trigger: "blur"
+          }
+        ]
+      },
+      {
+        label: "实际开始",
+        prop: "realStart",
+        width: 160,
+        span: 6,
+        type: "date",
+        cell: true,
+        align: "center",
+        format: "yyyy-MM-dd HH:mm:ss",
+        valueFormat: "yyyy-MM-dd HH:mm:ss",
+        sortable: true,
+      },
+      {
+        label: "实际结束",
+        prop: "realEnd",
+        width: 160,
+        span: 6,
+        type: "date",
+        align: "center",
+        cell: true,
+        format: "yyyy-MM-dd HH:mm:ss",
+        valueFormat: "yyyy-MM-dd HH:mm:ss",
+        sortable: true,
+      },   
+      {
+        label: "估算耗时",
+        prop: "exampleUseTime",
+        type: "number",
+        align: "right",
+        cell: true,
+        width: 100,
+        span: 6
+      },
+      {
+        label: "实际耗时",
+        prop: "realUseTime",
+        type: "number",
+        align: "right",
+        width: 100,
+        cell: true,
+        span: 6
+      },
+      {
+        label: "宽放时间",
+        prop: "broadTime",
+        type: "number",
+        cell: true,
+        width: 100,
+        align: "right",
+        span: 6
+      },
+      {
+        label: "实际宽放",
+        prop: "realBroad",
+        type: "number",
+        width: 100,
+        align: "right",
+        cell: true,
+        span: 6
+      },
+      {
+        label: "转场时间",
+        prop: "transferTime",
+        type: "number",
+        width: 100,
+        align: "right",
+        cell: true,
+        span: 6
+      },
+      {
+        label: "完成比例",
+        prop: "finishProportion",
+        type: "number",
+        align: "right",
+        width: 100,
+        cell: true,
+        span: 6
+      },
+      {
+        label: "完成状态",
+        prop: "finishState",
+        width: 100,
+        align: "right",
+        span: 6,
+        cell: true,
+        type: "select",
+        dicData: [
+          {
+            label: "完成",
+            value: 1
+          },
+          {
+            label: "未完成",
+            value: 0
+          }
+        ]
+      },
+      {
+        label: "单位",
+        prop: "workUnit",
+        width: 100,
+        align: "left",
+        type: "select",
+        cell: true,
+        dicData: getDIC("bas_matUnit"),
+        span: 6
+      },
+      
+      
+    ]
+  };
+}
 
 
 
