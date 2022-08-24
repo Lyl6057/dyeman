@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-03-24 14:15:12
- * @LastEditors: PMP
- * @LastEditTime: 2022-08-17 10:05:23
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-08-24 08:05:59
  * @Description: 
 -->
 <template>
@@ -250,6 +250,7 @@ export default {
           return;
       }
       query.yarnsId = "!^%" + (query.chemicalId || "");
+      query.yarnsCard = "!^%" + (query.yarnsCard || "");
       query.batId = "!^%" + (query.batId || "");
       query.chemicalId = query.yarnsId;
       query.officeId = query.yarnsId;
@@ -386,37 +387,8 @@ export default {
       try {
         //获得Excel模板的buffer对象
         const exlBuf = await JSZipUtils.getBinaryContent(this.typeObj.outAdr);
-        // Create a template
         var template = new XlsxTemplate(exlBuf);
-        // Replacements take place on first sheet
         var sheetNumber = "Sheet1";
-        // Set up some placeholder values matching the placeholders in the template
-        // let query = JSON.parse(JSON.stringify(this.form));
-        // query.yarnsId = "!^%" + (query.chemicalId || "");
-        // query.batId = "!^%" + (query.batId || "");
-        // query.chemicalId = query.yarnsId;
-        // query.officeId = query.yarnsId;
-        // query.accessoriesId = query.yarnsId;
-        // query.yarnsName = "%" + (query.chemicalName || "");
-        // query.chemicalName = query.yarnsName;
-        // query.officeName = query.yarnsName;
-        // query.fabricName = query.yarnsName;
-        // query.accessoriesName = query.yarnsName;
-        // query.fabName = query.yarnsName;
-        // query.proName = "%" + (query.proName || "");
-        // query.vatNo = "!^%" + (query.vatNo || "");
-        // query.noteCode = "%" + (query.noteCode || "");
-        // query.storeLoadCode = "%" + (query.storeLoadCode || "");
-        // query.batchNo = "%" + (query.batchNo || "");
-        // this.getFun(Object.assign(query, {
-        //   rows: 999999,
-        //   start: 1,
-        //   clothState: 2,
-        // })).then((res) => {
-        //   this.crud = res.data.records;
-        //   this.crud.sort((a, b) =>
-        //     a[this.typeObj.sort] > b[this.typeObj.sort] ? -1 : 1
-        //   );
         let data = JSON.parse(JSON.stringify(this.outData)) ;
         data.forEach((item, i) => {
           item.chemicalId =
@@ -507,67 +479,6 @@ export default {
           })
         })
       }
-    },
-    del() {
-      if (Object.keys(this.chooseData).length === 0) {
-        this.$tip.error(this.$t("public.delTle"));
-        return;
-      }
-      if (!this.chooseData.whseMaterialopeningoid) {
-        this.crud.splice(this.chooseData.index - 1, 1);
-        if (this.crud.length > 0) {
-          this.$refs.crud.setCurrentRow(this.crud[this.crud.length - 1]);
-        }
-        this.crud.forEach((item, i) => {
-          item.index = i + 1;
-        });
-      } else {
-        this.$tip
-          .cofirm(
-            "是否确定删除材料編號为 【 " +
-            this.chooseData.materialId +
-            this.$t("iaoMng.delTle2"),
-            this,
-            {}
-          )
-          .then(() => {
-            this.chooseData.openingQty = 0;
-            this.chooseData.oldpooccupyqty = 0;
-            // update(this.chooseData).then((res) => {
-            //   if (res.data.code === 200) {
-            //     updateStock({
-            //       materialId: this.form.materialId,
-            //       unitId: this.form.unitId,
-            //     }).then((Rres) => {
-            //       del(this.chooseData.whseMaterialopeningoid)
-            //         .then((delRes) => {
-            //           if (delRes.data.code === 200) {
-            //             this.$tip.success(this.$t("public.sccg"));
-            //             this.getData();
-            //           } else {
-            //             this.$tip.error(this.$t("public.scsb"));
-            //           }
-            //         })
-            //         .catch((err) => {
-            //           this.$tip.error(this.$t("public.scsb"));
-            //         });
-            //     });
-            //   }
-            // });
-          })
-          .catch((err) => {
-            this.$tip.warning(this.$t("public.qxcz"));
-          });
-      }
-    },
-    temClose(val) {
-      if (val) {
-        this.getData();
-      }
-      this.dialogVisible = false;
-    },
-    close() {
-      document.getElementsByClassName("el-dialog__headerbtn")[0].click();
     },
   },
   created() { },
