@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-23 10:17:11
+ * @LastEditTime: 2022-08-25 11:17:19
  * @Description: 
 -->
 <template>
@@ -15,8 +15,6 @@
               $t("public.save")
           }}</el-button>
         </el-tooltip>
-
-        <el-button type="primary" @click="checkOrder" title="checkOrder" v-if="canSave">选择订单号</el-button>
         <el-tooltip class="item" effect="dark" content="Yarn detail" placement="top-start">
           <el-button type="primary" @click="checkYarn" :disabled="!this.form.weaveJobId" v-if="canSave">用紗明細</el-button>
         </el-tooltip>
@@ -24,12 +22,6 @@
           <el-button type="primary" @click="checkCalico" :disabled="!this.form.weaveJobId" v-if="canSave">洗後規格
           </el-button>
         </el-tooltip>
-        <!-- <el-button
-          type="primary"
-          @click="checkstrain"
-          :disabled="!this.form.weaveJobId"
-          >輸送張力</el-button
-        > -->
         <el-tooltip class="item" effect="dark" content="in" placement="top-start">
           <el-button type="primary" @click="print" :disabled="!this.form.weaveJobId || form.auditState === 0"
             v-if="canSave">打印</el-button>
@@ -38,10 +30,9 @@
             : "审核"
         }}</el-button>
         <el-button type="danger" @click="handleEditColorDef">适用染色色系定义</el-button>
+        <el-button type="primary" :disabled="!this.form.weaveJobId" @click="choiceTle = '选择织造通知单', choiceV = true, choiceQ.sortF = 'weaveJobCode'">复制工艺</el-button>
         <el-tooltip class="item" effect="dark" content="đóng" placement="top-start">
-          <el-button type="warning" @click="close">{{
-              this.$t("public.close")
-          }}</el-button>
+          <el-button type="warning" @click="close"> {{ this.$t("public.close") }}</el-button>
         </el-tooltip>
       </div>
 
@@ -65,25 +56,17 @@
         <el-col :span="24">
           <view-container :title="tabs">
             <div class="btnList">
-              <el-button @click="check" type="success" v-if="tabs == '選擇訂單' || tabs == '更改紗長'">{{ $t("public.choose") }}
+              <el-button @click="check" type="success" v-if="tabs == '更改紗長'">{{ $t("public.choose") }}
               </el-button>
               <el-tooltip class="item" effect="dark" content="Bảo tồn" placement="top-start">
-                <el-button @click="saveOther" type="success" v-if="tabs != '選擇訂單'">{{ $t("public.save") }}</el-button>
+                <el-button @click="saveOther" type="success">{{ $t("public.save") }}</el-button>
               </el-tooltip>
               <el-tooltip class="item" effect="dark" content="thêm mới " placement="top-start">
-                <!--  :disabled="
-                    !audit && form.auditState == 1 && tabs != '機號信息'
-                  " -->
-                <el-button @click="add" type="primary" v-if="tabs != '選擇訂單'">{{ $t("public.add") }}</el-button>
+                <el-button @click="add" type="primary">{{ $t("public.add") }}</el-button>
               </el-tooltip>
               <el-tooltip class="item" effect="dark" content="xóa" placement="top-start">
-                <!--  :disabled="
-                    Object.keys(chooseData).length == 0 ||
-                    (!audit && form.auditState == 1 && tabs != '機號信息')
-                  " -->
-                <el-button @click="del" type="danger" v-if="tabs != '選擇訂單'">{{ $t("public.del") }}</el-button>
+                <el-button @click="del" type="danger">{{ $t("public.del") }}</el-button>
               </el-tooltip>
-              <el-button @click="query" type="primary" v-if="tabs == '選擇訂單'">{{ $t("public.query") }}</el-button>
               <el-tooltip class="item" effect="dark" content="đóng" placement="top-start">
                 <el-button @click="visible = false" type="warning">{{
                     $t("public.close")
@@ -110,7 +93,7 @@
     <el-dialog id="colorMng_Dlg" :visible.sync="gytDlg" fullscreen width="100%" append-to-body
       :close-on-click-modal="false" :close-on-press-escape="false">
       <view-container title="上机工艺维护">
-        <technology v-if="gytDlg" :weave="form" @refresh="technologyRefresh" @close="gytDlg = false"></technology>
+        <technology ref="technology" v-if="gytDlg" :weave="form" @refresh="technologyRefresh" @close="gytDlg = false"></technology>
       </view-container>
     </el-dialog>
     <choice :choiceV="choiceV" :choiceTle="choiceTle" :choiceQ="choiceQ" dlgWidth="100%" @choiceData="choiceData"
@@ -898,19 +881,13 @@ export default {
         }
       }
       this.dlgLoading = true;
+      let yarnLength = '';
       // 判断是否存在分组
       if (this.form.groupId) {
-        // 存在分组，直接保存
-        // for (let i = 0; i < this.crud.length; i++) {
-        //   if (!this.crud[i].yarnRatio) {
-        //     this.$tip.error("用纱比例不能為空!");
-        //     this.dlgLoading = false;
-        //     return;
-        //   }
-        // }
         this.crud.forEach((item, i) => {
           item.proWeaveJobGroupFk = this.form.groupId;
           item.proWeaveJobFk = this.form.weaveJobId;
+          yarnLength +=  this.crud.length > 1 ? `${i + 1}.${item.yarnLengthChanged || item.yarnLength} ` : item.yarnLength
           if (!item.useYarnId) {
             addYarn(item).then((res) => {
               item.useYarnId = res.data.data;
@@ -919,18 +896,13 @@ export default {
             updateYarn(item).then((res) => { });
           }
           if (i == this.crud.length - 1) {
+            this.form.yarnLength = yarnLength;
+            this.save();
             this.$tip.success("保存成功!");
             this.dlgLoading = false;
           }
         });
       } else {
-        // for (let i = 0; i < this.crud.length; i++) {
-        //   if (!this.crud[i].yarnRatio) {
-        //     this.$tip.error("用纱比例不能為空!");
-        //     this.dlgLoading = false;
-        //     return;
-        //   }
-        // }
         this.func
           .add({
             proWeaveJobFk: this.form.weaveJobId,
@@ -941,12 +913,15 @@ export default {
           .then((res) => {
             this.form.groupId = res.data.data;
             this.crud.forEach((item, i) => {
+              yarnLength +=  this.crud.length > 1 ? `${i + 1}.${item.yarnLengthChanged || item.yarnLength} ` : item.yarnLength
               item.proWeaveJobGroupFk = res.data.data;
               item.proWeaveJobFk = this.form.weaveJobId;
               addYarn(item).then((res1) => {
                 item.useYarnId = res1.data.data;
               });
               if (i == this.crud.length - 1) {
+                this.form.yarnLength = yarnLength;
+                this.save()
                 this.$tip.success("保存成功!");
                 this.dlgLoading = false;
               }
@@ -978,12 +953,6 @@ export default {
       };
       addProEquipmentSchedule(params).then((res) => { });
     },
-    checkOrder() {
-      this.choiceTle = "选择订单资料";
-      this.choiceV = true;
-      // this.crudOp = dlgCrud(this);
-      // this.visible = true;
-    },
     checkYarn() {
       this.tabs = "用紗明细";
       this.crudOp = yarnCrud(this);
@@ -1001,6 +970,8 @@ export default {
     },
     add() {
       if (this.tabs == "用紗明细") {
+        this.choiceQ.sortF = 'yarnsId'
+        this.choiceTle = '选择纱线库存';
         this.choiceV = true;
         return;
       }
@@ -1188,39 +1159,7 @@ export default {
       });
     },
     check() {
-      if (this.tabs === "選擇訂單") {
-        this.wLoading = true;
-        this.visible = false;
-        this.form.weaveJobCode = this.code;
-        this.form.salPoNo = this.chooseData.poNo;
-        this.form.custCode = this.chooseData.custId;
-        this.form.custName = this.chooseData.custId;
-        getPoDtla({ salPoFk: this.chooseData.salPooid }).then((res) => {
-          if (res.data.rows.length) {
-            let poDtla = res.data.rows[0];
-            this.form.amount = poDtla.fabQty;
-            this.form.colorName = poDtla.colorName;
-            this.form.colorCode = poDtla.dyeColorNo;
-            this.form.fabricDesc = poDtla.fabYcount;
-            this.form.fallCloth = poDtla.fabBreadth;
-            // 获取面料
-            getBomFa({ salBomFabricoid: poDtla.salBomFabricFk }).then((bom) => {
-              let bomData = bom.data;
-              this.form.gramWeight = bomData.fabWeight;
-              this.form.breadth = bomData.fabWeight;
-              this.form.needleInch = bomData.inchNum;
-              this.form.needleNumber = bomData.totalNeedle;
-              this.form.yarnLength = bomData.yarnLong;
-              this.form.horizonShrink = bomData.shrinkHorizontal;
-              this.form.verticalShrink = bomData.shrinkVertical;
-              // this.form.cylinderHeight = bomData.shrinkVertical;
-            });
-          }
-          setTimeout(() => {
-            this.wLoading = false;
-          }, 200);
-        });
-      } else if (this.tabs === "更改紗長") {
+      if (this.tabs === "更改紗長") {
         this.form.yarnLenghtChanged = this.chooseData.yarnLength;
         this.visible = false;
       } else if (this.tabs === "用紗明细") {
@@ -1232,7 +1171,7 @@ export default {
         })
       }
     },
-    choiceData(val) {
+    async choiceData(val) {
       if (val.length === 0) {
         this.choiceV = false;
         return;
@@ -1255,105 +1194,40 @@ export default {
             $cellEdit: true,
           });
         });
-      } else if (this.choiceTle == "选择BOM资料") {
-        this.form.custCode = val.custId;
-        this.form.custFabricCode = val.guestFabId;
-        this.form.seasonCode = val.season;
-        this.form.fiberComp = val.guestComponents;
-        this.form.fabricDesc = val.guestFabNames;
-        this.form.bomId = val.$salNewbomFk;
-        // getBom({ bomId: val.bomId }).then((res) => {
-        //   if (res.data.length) {
-        //     getBomDtlb({ salNewbomFk: res.data[0].salNewbomoid }).then(
-        //       (dtlb) => {
-        //         if (dtlb.data.length) {
-        //           getBomDtlbSpecs({
-        //             salNewbomDtlbFk: val.salNewbomDtlbFk,
-        //           }).then((dtlbSpecs) => {
-        //             this.setSpecs(dtlbSpecs.data);
-        //           });
-        //         } else {
-        //           getBomDtlaSpecs({
-        //             salNewbomDtlaFk: val.salNewbomDtlaFk,
-        //           }).then((dtlaSpecs) => {
-        //             this.setSpecs(dtlaSpecs.data);
-        //           });
-        //         }
-        //       }
-        //     );
-        //   }
-        // })
-      } else {
-        this.form.custPoNo = val.custPoNo;
-        this.form.salPoNo = val.poNo;
-        this.form.productDate = val.poDate;
-        this.form.custCode = val.custBrandId;
-        this.form.colorName = val.custColorName;
-        this.form.colorCode = val.custColorNo;
-        this.form.custFabricCode = val.guestFabId;
-        this.form.seasonCode = val.season;
-        this.form.fiberComp = val.guestComponents;
-        this.form.fabricDesc = val.fabName;
-        this.form.otherRequire = val.finishingitem;
-        getBom({ bomId: val.bomId }).then((res) => {
-          if (res.data.length) {
-            getBomDtlb({ salNewbomFk: res.data[0].salNewbomoid }).then(
-              (dtlb) => {
-                if (dtlb.data.length) {
-                  getBomDtlbSpecs({
-                    salNewbomDtlbFk: val.salNewbomDtlbFk,
-                  }).then((dtlbSpecs) => {
-                    this.setSpecs(dtlbSpecs.data);
-                  });
-                } else {
-                  getBomDtlaSpecs({
-                    salNewbomDtlaFk: val.salNewbomDtlaFk,
-                  }).then((dtlaSpecs) => {
-                    this.setSpecs(dtlaSpecs.data);
-                  });
-                }
-              }
-            );
-          } else {
-            this.wLoading = false;
-          }
-        });
+      }else {
+        const list = [
+          "calicoFabricRequire",
+          "calicoShap",
+          "guage",
+          "cylinderInch",
+          "needleInch",
+          "needleNumber",
+          "calicoMiddle",
+          "readyMadeFabric",
+          "fallCloth",
+          "mathineSpeed",
+          "cylinderHeight",
+          "weaveEnter",
+          "clothRackWidth",
+          "rotaSpeed",
+          "loopSpace",
+          "clothRackDesc",
+          "transPlate",
+          // "yarnLength"
+        ]
+        list.forEach((item) => {
+          this.form[item] = val[item];
+        })
+        if(val.pinColumn) {
+            await this.operatProcessClick();
+            this.$refs.technology.loading = true;
+            setTimeout(() => {
+              this.$refs.technology.handleCheck(val, true);
+            }, 500);
+        }       
       }
       this.wLoading = false;
       this.choiceV = false;
-    },
-    setSpecs(list) {
-      if (!list.length) {
-        this.wLoading = false;
-      }
-      let data = {};
-      list.forEach((item, i) => {
-        data[item.specsType] = item.specsSeq || 0;
-        data[item.specsType + "+"] = item.tolerancePlus || 0;
-        data[item.specsType + "-"] = item.toleranceMinus || 0;
-        data[item.specsType + "unit"] = item.specsUnit;
-        data[item.specsType + "ycunit"] = item.toleranceUnit;
-      });
-      this.form.gramWeightValue = data["weight-XQ"];
-      this.form.gwMaxValue = data["weight-XQ+"];
-      this.form.gwMinValue = data["weight-XQ-"];
-      this.form.gramWeightUnit = data["weight-XQunit"];
-      this.form.gmAcceptUnit = data["weight-XQycunit"];
-
-      this.form.breadthValue = data["width-SJ"];
-      this.form.breadthUpper = data["width-SJ+"];
-      this.form.breadthLower = data["width-SJ+"];
-      this.form.breadthUnit = data["width-SJunit"];
-      this.form.breadthAcceptUnit = data["width-SJycunit"];
-      if (data["shrink-H"] && data["shrink-H+"]) {
-        this.form.horizonShrink = `${data["shrink-H"]}±${data["shrink-H+"]}`;
-      }
-      if (data["shrink-Z"] && data["shrink-Z+"]) {
-        this.form.verticalShrink = `${data["shrink-Z"]}±${data["shrink-Z+"]}`;
-      }
-      setTimeout(() => {
-        this.wLoading = false;
-      }, 200);
     },
     close() {
       if (this.refresh) {

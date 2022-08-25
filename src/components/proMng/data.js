@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-05-03 13:03:03
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-22 15:16:10
+ * @LastEditTime: 2022-08-24 10:21:49
  * @Description:
  */
 
@@ -4316,7 +4316,7 @@ export function weaveJobC(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 240px)",
+    height: "calc(100vh - 250px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,

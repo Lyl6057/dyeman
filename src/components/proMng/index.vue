@@ -241,7 +241,7 @@ export default {
         let queryData = JSON.parse(JSON.stringify(this.form));
         if (this.choiceQ.sortF) {
           queryData[this.choiceQ.sortF] =
-            "^^%" + (queryData[this.choiceQ.sortF] || "");
+            "!^%" + (queryData[this.choiceQ.sortF] || "");
         }
         if (this.choiceQ.fuzzy) {
           this.choiceQ.fuzzy.split(",").forEach((item) => {

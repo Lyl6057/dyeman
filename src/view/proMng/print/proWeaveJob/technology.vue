@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-06-16 10:22:40
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-19 16:37:14
+ * @LastEditTime: 2022-08-25 10:29:44
  * @FilePath: \iot.vue\src\view\proMng\print\proWeaveJob\technology.vue
  * @Description: 
 -->
