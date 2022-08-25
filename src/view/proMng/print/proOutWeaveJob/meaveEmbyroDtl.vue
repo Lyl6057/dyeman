@@ -3,8 +3,8 @@
  * @Version: 2.0
  * @Author: Symbol_Yang
  * @Date: 2022-06-20 11:17:59
- * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-08 14:52:18
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-08-24 09:59:00
 -->
 <template>
     <view-container title="织胚明细">
@@ -20,20 +20,26 @@
                     <el-button type="primary" @click="handleAddSize">添加尺寸</el-button>
                     <el-button type="danger" @click="handleRemoveSize">删除尺寸</el-button>
                 </template>
+                <el-button type="primary" @click="choiceV = true">复制织单</el-button>
                 <el-tooltip class="item" effect="dark" content="đóng" placement="top-start">
                     <el-button type="warning" @click="handleClose">{{ this.$t("public.close") }}</el-button>
                 </el-tooltip>
             </div>
             <avue-crud ref="meaveEmbyroRef" :option="crudOp" :data="meaEmbDtlData" :span-method="handleSpanMethod"
                 :row-style="handleRowStyle" @row-click="handleRowClick"></avue-crud>
+            <choice :choiceV="choiceV" :choiceTle="choiceTle" :choiceQ="choiceQ" dlgWidth="100%" @choiceData="handleCheckOrder" @close="choiceV = false" v-if="choiceV"></choice>
         </div>
     </view-container>
 </template>
 <script>
+import choice from "@/components/proMng/index";
 import { fetchWeaveJobFlatknitData, batchSaveOrUpdateFlatknit } from "./api"
 import { meaveEmbyroDtlCrud } from "./data"
 export default {
     name: "meaveEmbyroDtl",
+    components: {
+          choice
+    },
     props: {
         cansave: Boolean,
         weaveJobId: {
@@ -47,6 +53,11 @@ export default {
             meaEmbDtlData: [],
             crudOp: meaveEmbyroDtlCrud(this),
             curCliceRowIdx: 0,
+            choiceV: false,
+            choiceTle: "选择织造通知单",
+            choiceQ: {
+              sortF: "weaveJobCode",
+            },
         }
     },
     computed: {
@@ -115,6 +126,21 @@ export default {
                 return this.$tip.warning("已无多余尺寸;")
             }
             this.crudOp.column.splice(crudColLen - 1, 1)
+        },
+                    // 选择织单
+        handleCheckOrder(val) {
+            if (!val || !val.weaveJobId) return;
+            this.loading = true;
+            let params = {
+                  proWeaveJobFk: val.weaveJobId
+              }
+            console.log("weaveJobId",val.weaveJobId)
+            fetchWeaveJobFlatknitData(params).then(res => {
+                this.dataTransform(res.data);
+            }).finally(() => {
+                this.choiceV = false;
+                this.loading = false;
+            })
         },
         // 数据加载
         getDataList() {

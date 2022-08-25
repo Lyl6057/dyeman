@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-03-24 14:21:15
- * @LastEditors: PMP
- * @LastEditTime: 2022-08-17 09:40:27
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-08-24 08:00:05
  * @Description:
  */
 
@@ -74,6 +74,14 @@ export function formOp(_this) {
         cell: false,
         placeholder: " ",
         span: 6
+      },
+      {
+        label: "纱牌",
+        prop: "yarnsCard",
+        cell: false,
+        placeholder: " ",
+        span: 6,
+        display: _this.type == "SX" ? true : false
       },
       {
         label: "缸号",

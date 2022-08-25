@@ -167,7 +167,11 @@ export default {
               subSum: 0,
               amount: item.amount,
               totalWeight: item.totalWeight,
-              debtWeight: item.debtWeight
+              debtWeight: item.debtWeight,
+              fabricDesc:item.fabricDesc,
+              needleInch:item.needleInch,
+              cylinderInch:item.cylinderInch,
+              needleNumber:item.needleNumber
             };
           }
           tData[item.weaveJobCode][item.outputDate] = item.weight;

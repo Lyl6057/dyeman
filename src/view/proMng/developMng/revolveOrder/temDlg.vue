@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-20 15:11:14
+ * @LastEditTime: 2022-08-23 16:01:14
  * @Description:
 -->
 <template>
@@ -42,10 +42,10 @@
             !form.runJobId || form.runState == 0
           ">打印</el-button>
         </el-tooltip>
+        <el-button type="primary" :disabled=" !form.runJobId" @click="exhaustPrint" :loading="wLoading" >排缸咭</el-button>
         <el-tooltip class="item" effect="dark" content="Nhận đơn" placement="top-start">
           <el-button type="primary" @click="dialogVisible = true" :disabled="!fk">收单日志</el-button>
         </el-tooltip>
-
         <el-tooltip class="item" effect="dark" content="đóng" placement="top-start">
           <el-button type="warning" @click="close">{{this.$t("public.close") }}</el-button>
         </el-tooltip>
@@ -235,6 +235,7 @@ export default {
       options: [],
       hasFinied: 0,
       dialogVisible: false,
+      isExhaust: false
     };
   },
   watch: {},
@@ -966,13 +967,22 @@ export default {
     },
     print() {
       this.pdfDlg = true;
+      this.isExhaust = false;
       this.pdfUrl =
         process.env.API_HOST +
         "/api/proBleadyeRunJob/createBleadyeRunJobPdf?id=" +
         this.form.runJobId;
     },
+    exhaustPrint(){
+      this.pdfDlg = true;
+      this.isExhaust = true;
+      this.pdfUrl =
+        process.env.API_HOST +
+        "/api/proBleadyeRunJob/smallCard?id=" +
+        this.detail.runJobId;
+    },
     pdfClose() {
-      if (this.form.runState == "1") {
+      if (this.form.runState == "1" && !this.isExhaust) {
         this.$tip
           .cofirm(
             "是否更新打印状态(có cập nhật trạng thái in mới không)?",

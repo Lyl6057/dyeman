@@ -1,12 +1,52 @@
 /*
  * @Author: Lyl
  * @Date: 2021-02-01 14:06:25
- * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-28 08:19:42
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-08-23 15:09:17
  * @Description:
  */
 
 import axios from "axios";
+
+
+
+// 删除生产排期数据
+export function removeProSalScheduleDetailData(detailId){
+  return axios({
+    url: "/api/proSalScheduleDetail?detailId=" + detailId,
+    method: "delete"
+  });
+}
+
+
+// 更新生产排期数据
+export function updateProSalScheduleDetailData(params){
+  return axios({
+    url: "/api/proSalScheduleDetail",
+    method: "put",
+    params: params
+  });
+}
+
+
+// 新增生产排期数据
+export function createProSalScheduleDetailData(params){
+  return axios({
+    url: "/api/proSalScheduleDetail",
+    method: "post",
+    params: params
+  });
+}
+
+// 获取生产排期数据
+export function fetchProSalScheduleDetailData(params){
+  return axios({
+    url: "/api/proSalScheduleDetail",
+    method: "get",
+    params: params
+  });
+}
+
 
 // 获取颜色颜色选择数据
 export function fetchColorSelectData(params){

@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
- * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-15 13:31:23
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-08-23 09:50:46
  * @Description: 
 -->
 <template>
@@ -697,10 +697,8 @@ export default {
           // }
           this.getCopy();
         } else if (this.revolve.runJobId) {
-          getRevolveList({ runJobId: this.revolve.runJobId }).then((res) => {
-            let val = res.data[0];
+            let val = this.revolve
             this.revolve.proBleadyeRunJobFk = val.runJobId;
-
             if (!(val.mergVatNo instanceof Array) && val.mergVatNo) {
               val.mergVatNo = val.mergVatNo.split(",");
             }
@@ -720,7 +718,7 @@ export default {
             setTimeout(() => {
               this.wLoading = false;
             }, 200);
-          });
+          
         } else {
           this.form.workDate = this.$getNowTime();
           this.form.deliveDate = this.$getNowTime();

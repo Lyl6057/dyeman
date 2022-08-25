@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
- * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-08-22 17:30:54
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-08-23 10:17:11
  * @Description: 
 -->
 <template>
@@ -548,11 +548,11 @@ export default {
     },
     // 保存前检验
     beforeVaildSave() {
-      let weaveDtlDataLen = this.$refs.weaveDtlRef.crudData.length;
-      if (weaveDtlDataLen == 0 && this.isAdd) {
-        this.$tip.warning("明细数据不能为空")
-        return false;
-      }
+      // let weaveDtlDataLen = this.$refs.weaveDtlRef.crudData.length;
+      // if (weaveDtlDataLen == 0 && this.isAdd) {
+      //   this.$tip.warning("明细数据不能为空")
+      //   return false;
+      // }
 
       let dcsDataLen = this.$refs.colorDefineRef.curSelRows.length;
       if (dcsDataLen == 0 && this.isAdd) {
