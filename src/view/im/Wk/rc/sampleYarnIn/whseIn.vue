@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:18:23
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-06-06 09:12:03
+ * @LastEditTime: 2022-08-25 17:29:16
 -->
 <template>
   <div id="return-yarn-in-container">
@@ -67,14 +67,16 @@ export default {
   methods: {
     getDataList() {
       this.loading = true;
-      let { yinId, registerNo, yinDate } = this.queryForm;
+      let { yinId, registerNo, yinDate,batchNo } = this.queryForm;
       let params = {
         start: this.page.currentPage,
         rows: this.page.pageSize,
         yinType: this.imWkType, 
         yinId: "%" + (yinId || ""),
         registerNo: "%" + (registerNo || ""),
+        batchNo: "%" + (batchNo || ""),
         dateOrder: true,
+        includeBatchNo: true
       };
       if(yinDate && yinDate.length == 2){
         Object.assign(params,{

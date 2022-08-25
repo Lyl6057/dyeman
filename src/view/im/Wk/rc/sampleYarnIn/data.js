@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:08:41
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-30 09:12:24
+ * @LastEditTime: 2022-08-25 17:27:20
  */
 import {
   getDIC,
@@ -75,6 +75,12 @@ export function whseInCrudOp(_this) {
         prop: "registerNo",
         width: 150,
       },
+      {
+        label: "本厂批号",
+        prop: "batchNo",
+        overHidden: true,
+        width: 180
+      },
       // {
       //   label: "检验状态",
       //   prop: "yinStatus",
@@ -130,6 +136,11 @@ export function whseInFormOp(_this) {
       label: "样纱通知单编号",
       prop: "registerNo",
       labelWidth: 160,
+      span: 5,
+      placeholder: " ",
+    },{
+      label: "本厂批号",
+      prop: "batchNo",
       span: 5,
       placeholder: " ",
     }]
