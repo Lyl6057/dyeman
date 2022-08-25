@@ -20,13 +20,13 @@ export function mainForm(_this) {
         span: 8,
         placeholder: " "
       },
-     
+
     ]
   };
 }
 
-export function num2Thousadth(r,v){
-  return  v && Number(v).toFixed(1).replace(/\B(?=(\d{3})+(?!\d))/g,",");
+export function num2Thousadth(r, v) {
+  return v && Number(v).toFixed(1).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
 export function mainCrud(_this) {
@@ -120,8 +120,37 @@ export function mainCrud(_this) {
         slot: true,
         align: "right",
         formatter: num2Thousadth
-      }
-    
+      },
+      {
+        label: "筒径",
+        prop: "cylinderInch",
+        width: 70,
+        overHidden: true,
+        align: "center",
+      },
+      {
+        label: "针寸数",
+        prop: "needleInch",
+        width: 100,
+        overHidden: true,
+        align: "center",
+      },
+      {
+        label: "总针数",
+        prop: "needleNumber",
+        width: 100,
+        align: "center",
+      },
+      {
+        label: "布类",
+        prop: "fabricDesc",
+        width: 200,
+        overHidden: true,
+        align: "left",
+      },
+
+
+
     ]
   };
 }
