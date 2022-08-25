@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-04-01 14:08:13
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-06-28 16:06:28
+ * @LastEditTime: 2022-08-23 15:09:32
  * @Description:
  */
 
@@ -99,6 +99,10 @@ export function quality(_this) {
         {
           menuName: "14.成品布合并",
           index: "clothMerge"
+        },
+        {
+          menuName: "15.入仓通知单",
+          index: "finishStkinMemo"
         }
       ]
     },
