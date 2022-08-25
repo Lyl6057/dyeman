@@ -66,6 +66,7 @@
 </template>
 <script>
 import { rsxkr2C, rsxkr2F, rsxkr3C } from "./data";
+import { fetchStkinMemoDataByStkinOid } from "./stkinMemo/api"
 import proChoice from "@/components/proMng/index";
 import choice from "@/components/choice";
 import {
@@ -139,6 +140,49 @@ export default {
   },
   watch: {},
   methods: {
+    // 数据抽取
+    extractData(row){
+      // mx   mx.list
+      this.loading = true;
+      let params = {
+        stkinOid: row.proFinishStkinMemooid
+      }
+      fetchStkinMemoDataByStkinOid(params).then(res => {
+        
+        let storeCodeMap = {};
+        let pIdx = 0
+        res.data.forEach((item, index) => {
+          if(!storeCodeMap[item.storeLoadCode]){
+            storeCodeMap[item.storeLoadCode] = {
+              storeLoadCode: item.storeLoadCode,
+              sumWeight: 0,
+              locationCode: "",
+              weightUnit: item.weightUnit,
+              $cellEdit: index == 0,
+              list: [],
+              index: ++pIdx
+            }
+          }
+
+          let tData = storeCodeMap[item.storeLoadCode];
+          tData.list.push({
+            productNo: item.productNo,
+            weight: item.netWeight,
+            weightUnit: item.weightUnit,
+            $cellEdit: index == 0,
+          })
+          tData.sumWeight += +item.netWeight
+        })
+
+        this.mx = Object.values(storeCodeMap)
+        
+        this.$refs.dlgcrud.setCurrentRow(this.mx[0])
+
+
+      }).finally(() => {
+        this.loading = false;
+      })
+    },
     getDetail() {
       if (this.isAdd) {
         this.form = this.detail;

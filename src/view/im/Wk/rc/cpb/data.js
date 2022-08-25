@@ -528,7 +528,7 @@ export function rsxkr3C(_this) {
         prop: "weight",
         cell: true,
         width: 120,
-        align: "center",
+        align: "right",
         formatter(r,v){
           return num2ThousandthFormat(v,1)
         }

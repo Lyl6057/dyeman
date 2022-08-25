@@ -1,95 +1,101 @@
 <template>
   <div id="rc">
-    <view-container :title="data.type.split('_')[0]">
-      <div class="btnList">
-        <!-- <el-button type="warning" @click="getData">取消</el-button> -->
-        <!-- <el-button type="warning" @click="ruleV = true">編號規則配置</el-button> -->
+    <el-tabs v-model="tabActiveName" type="border-card">
+      <el-tab-pane :label="data.type.split('_')[0]" name="whseIned">
+     
+        <div class="btnList">
+          <!-- <el-button type="warning" @click="getData">取消</el-button> -->
+          <!-- <el-button type="warning" @click="ruleV = true">編號規則配置</el-button> -->
 
-        <el-button type="primary" @click="add">{{
-          this.$t("public.add")
-        }}</el-button>
-        <el-button
-          type="success"
-          :disabled="Object.keys(chooseData).length === 0"
-          @click="handleRowDBLClick(chooseData)"
-          >{{ this.$t("public.update") }}</el-button
-        >
-        <el-button
-          type="danger"
-          @click="del"
-          :disabled="Object.keys(chooseData).length === 0"
-          >{{ this.$t("public.del") }}</el-button
-        >
-        <el-button type="primary" @click="getData">{{
-          this.$t("public.query")
-        }}</el-button>
-        <el-button type="warning" @click="close">{{
-          this.$t("public.close")
-        }}</el-button>
-      </div>
-      <div class="formBox">
-        <avue-form
-          ref="form"
-          :option="everyThing.mainF"
-          v-model="form"
-        ></avue-form>
-      </div>
-      <el-row class="crudBox">
-        <el-col :span="24">
-          <view-container
-            :title="data.type.split('_')[0] + this.$t('iaoMng.rc')"
+          <el-button type="primary" @click="add()">{{
+            this.$t("public.add")
+          }}</el-button>
+          <el-button
+            type="success"
+            :disabled="Object.keys(chooseData).length === 0"
+            @click="handleRowDBLClick(chooseData)"
+            >{{ this.$t("public.update") }}</el-button
           >
-            <avue-crud
-              ref="crud"
-              id="crud"
-              v-loading="loading"
-              :option="everyThing.mainC"
-              :data="crud"
-              :page.sync="page"
-              :row-style="rowStyle"
-              @on-load="getData"
-              @current-row-change="cellClick"
-              @row-dblclick="handleRowDBLClick"
-            ></avue-crud> </view-container
-        ></el-col>
-        <!-- <el-col :span="12">
-          <view-container :title="data.type.split('_')[0] + $t('iaoMng.rcmx')">
-            <tem-dlg
-              ref="tem"
-              :datas="data"
-              :everyThing="everyThing"
-              :hide="hide"
-            ></tem-dlg></view-container
-        ></el-col> -->
-      </el-row>
-      <el-dialog
-        id="sxrcDlg"
-        :visible.sync="dialogVisible"
-        width="100%"
-        append-to-body
-        :close-on-click-modal="false"
-        :close-on-press-escape="false"
-        v-if="dialogVisible"
-      >
-        <tem-dlg
-          ref="tem"
-          :datas="data"
-          :detail="detail"
-          :hide="hide"
-          :isAdd="isAdd"
-          @close="temClose"
-        ></tem-dlg>
-      </el-dialog>
-      <choice
-        :choiceV="choiceV"
-        :choiceTle="choiceTle"
-        :choiceQ="choiceQ"
-        dlgWidth="60%"
-        @choiceData="choiceData"
-        @close="choiceV = false"
-        v-if="choiceV"
-      ></choice>
-    </view-container>
+          <el-button
+            type="danger"
+            @click="del"
+            :disabled="Object.keys(chooseData).length === 0"
+            >{{ this.$t("public.del") }}</el-button
+          >
+          <el-button type="primary" @click="getData">{{
+            this.$t("public.query")
+          }}</el-button>
+          <el-button type="warning" @click="close">{{
+            this.$t("public.close")
+          }}</el-button>
+        </div>
+        <div class="formBox">
+          <avue-form
+            ref="form"
+            :option="everyThing.mainF"
+            v-model="form"
+          ></avue-form>
+        </div>
+        <el-row class="crudBox">
+          <el-col :span="24">
+            <view-container
+              :title="data.type.split('_')[0] + this.$t('iaoMng.rc')"
+            >
+              <avue-crud
+                ref="crud"
+                id="crud"
+                v-loading="loading"
+                :option="everyThing.mainC"
+                :data="crud"
+                :page.sync="page"
+                :row-style="rowStyle"
+                @on-load="getData"
+                @current-row-change="cellClick"
+                @row-dblclick="handleRowDBLClick"
+              ></avue-crud> </view-container
+          ></el-col>
+          <!-- <el-col :span="12">
+            <view-container :title="data.type.split('_')[0] + $t('iaoMng.rcmx')">
+              <tem-dlg
+                ref="tem"
+                :datas="data"
+                :everyThing="everyThing"
+                :hide="hide"
+              ></tem-dlg></view-container
+          ></el-col> -->
+        </el-row>
+      </el-tab-pane>   
+      <el-tab-pane label="未入仓通知单" name="unCreateMemo">
+        <stkin-memo ref="stkinMemo2FinishRef" @selected="handleStkInSelect" />
+      </el-tab-pane> 
+    </el-tabs>
+    <el-dialog
+      id="sxrcDlg"
+      :visible.sync="dialogVisible"
+      width="100%"
+      append-to-body
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+      v-if="dialogVisible"
+    >
+      <tem-dlg
+        ref="tem"
+        :datas="data"
+        :detail="detail"
+        :hide="hide"
+        :isAdd="isAdd"
+        @close="temClose"
+      ></tem-dlg>
+    </el-dialog>
+    <choice
+      :choiceV="choiceV"
+      :choiceTle="choiceTle"
+      :choiceQ="choiceQ"
+      dlgWidth="60%"
+      @choiceData="choiceData"
+      @close="choiceV = false"
+      v-if="choiceV"
+    ></choice>
   </div>
 </template>
 <script>
@@ -104,14 +110,17 @@ import {
 } from "@/api/im/Wk/rc";
 import { rsxkr1F, rsxkr1C, rsxkr2C, rsxkr2F } from "./data";
 import choice from "@/components/choice";
+import StkinMemo from "./stkinMemo"
 export default {
   name: "",
   components: {
     temDlg: tem,
     choice: choice,
+    StkinMemo
   },
   data() {
     return {
+      tabActiveName: "whseIned",
       dialogVisible: false,
       loading: false,
       data: JSON.parse(localStorage.getItem("imWk")),
@@ -140,6 +149,16 @@ export default {
   },
   watch: {},
   methods: {
+    // 通知单选中回调
+    async handleStkInSelect(row){
+      let data = {
+        custNotice: row.memoNo,
+        stockState: "0"
+      }
+      await this.add(data);
+      await this.$nextTick();
+      this.$refs.tem.extractData(row);
+    },
     getData() {
       this.loading = true;
       this.everyThing = {
@@ -200,7 +219,7 @@ export default {
           this.loading = false;
         });
     },
-    add() {
+    add(params = {}) {
       let data = {
         index: this.crud.length + 1,
         $cellEdit: true,
@@ -209,8 +228,9 @@ export default {
         yinDate: this.$getNowTime(),
         yinStatus: "1",
         finStatus: "0",
+        ...params
       };
-      baseCodeSupplyEx({ code: "whse_in" }).then((res) => {
+      return baseCodeSupplyEx({ code: "whse_in" }).then((res) => {
         data.yinId = res.data.data;
         this.isAdd = true;
         this.detail = data;
@@ -273,6 +293,7 @@ export default {
                 this.$tip.success(this.$t("public.sccg"));
                 this.crud.splice(this.chooseData.index - 1, 1);
                 this.getData();
+                this.$refs.stkinMemo2FinishRef.getDataList();
               } else {
                 this.$tip.error(this.$t("public.scsb"));
               }
@@ -323,6 +344,7 @@ export default {
     temClose(val) {
       if (val) {
         this.getData();
+        this.$refs.stkinMemo2FinishRef.getDataList();
       }
       this.dialogVisible = false;
     },
