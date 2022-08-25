@@ -257,6 +257,9 @@ export default {
               title: this.$t("iaoMng.bcsc"),
               icon: "el-icon-s-home",
               color: "#409EFF",
+              name: "CPB",
+              badgeKey: "innerWithCount",
+              badge:"",
             },
             {
               id: "3-3",
@@ -1238,7 +1241,7 @@ export default {
     getUnInStockCountData(refreshAll = false){
       let types = [];
       if(refreshAll){
-        types = ["SX","RHL","RLL", "FL", "WJ", "XZ", "ENG","EQU", "FC","PB"];
+        types = ["SX","RHL","RLL", "FL", "WJ", "XZ", "ENG","EQU", "FC","PB","CPB"];
       }else{
         this.curWhseType && types.push(this.curWhseType);
       }
