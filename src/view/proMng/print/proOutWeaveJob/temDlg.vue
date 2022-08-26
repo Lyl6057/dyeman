@@ -370,9 +370,9 @@ export default {
             this.formOp.column.forEach(cItem => {
               cItem.disabled = true;
             })
-            this.formOp.group[0].column.forEach(cItem => {
-              cItem.disabled = true;
-            })
+            // this.formOp.group[0].column.forEach(cItem => {
+            //   cItem.disabled = true;
+            // })
           }
           this.wLoading = false;
         }, 500);
