@@ -29,7 +29,8 @@
           </el-select>
           打印张数：<el-input type="number" v-model="printCount" max="5" min="1" style="width: 80px;margin-right: 15px">
           </el-input>
-          电子秤： <el-switch v-model="turnOnGetWeight" :disabled="qcShearingBoardData.upFlag" style="margin-right: 10px" active-text="开启" inactive-text="关闭">
+          电子秤： <el-switch v-model="turnOnGetWeight" :disabled="qcShearingBoardData.upFlag" style="margin-right: 10px"
+            active-text="开启" inactive-text="关闭">
           </el-switch>
           类型： <el-switch v-model="isBoard" :disabled="qcShearingBoardData.upFlag" active-text="剪办" inactive-text="剪疵">
           </el-switch>
@@ -50,29 +51,31 @@
       </div>
       <div class="defect-detail" v-if="!isBoard">
         <!-- <view-container title="疵点明细"> -->
-          <div >
-            <!-- <el-checkbox-group v-model="defectType" @change="handleDefeceTypeChange">
+        <div>
+          <!-- <el-checkbox-group v-model="defectType" @change="handleDefeceTypeChange">
               <el-checkbox v-for="item in defectTypeData" :label="item.codeid" :key="item.codevalueoid">{{item.codename}}</el-checkbox>
             </el-checkbox-group> -->
-            <div class="defect-group">
-              <el-card shadow="hover" class="defect-card" v-for="(val, key) in defectShowData" :key="key" :style="{'flex-grow': val.length > 20 ? val.length > 35 ? 6 : 2 : 0 }">
-                <div slot="header" class="clearfix">
-                  <span class="title-small-bold">{{ defectTypeObj[key] }}</span>
-                </div>
-                <div class="defect-list" >
-                  <span class="defect-text text-small not-select" v-for="item in val" :key="item.basDefectdataoid"  :title="`${item.defectNo}-${item.chnName}-${item.vetName}`" @click="handelClickDefectNode(item, 'defectNo')">
-                    {{`${item.defectNo}${item.chnName}${item.vetName}`}}
-                  </span>
-                </div>
-              </el-card>
-            </div>
+          <div class="defect-group">
+            <el-card shadow="hover" class="defect-card" v-for="(val, key) in defectShowData" :key="key"
+              :style="{ 'flex-grow': val.length > 20 ? val.length > 35 ? 6 : 2 : 0 }">
+              <div slot="header" class="clearfix">
+                <span class="title-small-bold">{{ defectTypeObj[key] }}</span>
+              </div>
+              <div class="defect-list">
+                <span class="defect-text text-small not-select" v-for="item in val" :key="item.basDefectdataoid"
+                  :title="`${item.defectNo}-${item.chnName}-${item.vetName}`"
+                  @click="handelClickDefectNode(item, 'defectNo')">{{ `${item.defectNo}${item.chnName}${item.vetName}` }}
+                </span>
+              </div>
+            </el-card>
           </div>
+        </div>
         <!-- </view-container> -->
       </div>
       <div v-else class="sample-container not-select">
         <!-- {{sampleData}} -->
-        <div v-for="(item,index) in sampleData" :key="index">
-          <p @click="handelClickDefectNode(item, 'value')">{{item.label}}</p>
+        <div v-for="(item, index) in sampleData" :key="index">
+          <p @click="handelClickDefectNode(item, 'value')">{{ item.label }}</p>
         </div>
       </div>
     </view-container>
@@ -111,7 +114,7 @@ export default {
       isBoard: true,
       spowerClient: null,
       printCount: 5,
-      printType:'1',
+      printType: '1',
       defectTypeData: [],
       defectType: [],
       defectData: [],
@@ -123,10 +126,10 @@ export default {
     };
   },
   watch: {
-    async isBoard(n,o){
+    async isBoard(n, o) {
       this.qcShearingBoardFormOp.column[6].disabled = !n;
       this.qcShearingBoardFormOp.column[8].disabled = n;
-      if(!this.isInit){
+      if (!this.isInit) {
         n && (this.qcShearingBoardData.cutDefeWeight = 0);
         !n && (this.qcShearingBoardData.cutSamWeight = 0);
         this.qcShearingBoardData.cutRemarks = []
@@ -134,7 +137,7 @@ export default {
       if (!this.defectDicData.length) {
         await this.initDefect()
       }
-      this.$nextTick(() =>{
+      this.$nextTick(() => {
         n && (this.qcShearingBoardFormOp.column[this.qcShearingBoardFormOp.column.length - 1].dicData = getDIC("bas_sampleType"));
         !n && (this.qcShearingBoardFormOp.column[this.qcShearingBoardFormOp.column.length - 1].dicData = this.defectDicData);
       })
@@ -163,7 +166,7 @@ export default {
     this.initDefect();
   },
   mounted() {
-    
+
   },
   methods: {
     remoteMethod(val) {
@@ -188,7 +191,7 @@ export default {
       });
     },
     handleVatnoChange(cardId) {
-      if(this.qcShearingBoardData.upFlag) return;
+      if (this.qcShearingBoardData.upFlag) return;
       this.loading = true;
       getFinishedNoteByPage({
         cardId,
@@ -219,7 +222,7 @@ export default {
       this.defectShowData = obj;
     },
     handelClickDefectNode(val, type) {
-      if(!this.qcShearingBoardData.cutRemarks){
+      if (!this.qcShearingBoardData.cutRemarks) {
         this.qcShearingBoardData.cutRemarks = [];
         return;
       }
@@ -228,9 +231,9 @@ export default {
     async initDefect() {
       this.sampleData = await getDIC("bas_sampleType");
       this.defectTypeData = await fetchBasDefectTypeList().then(res => res.data);
-      this.defectType = this.defectTypeData.map((item) =>{ !this.defectTypeObj[item.codeid] && ( this.defectTypeObj[item.codeid] = `${item.codename} ${item.secondlanlabel}` ); return item.codeid }); // 默认全选
+      this.defectType = this.defectTypeData.map((item) => { !this.defectTypeObj[item.codeid] && (this.defectTypeObj[item.codeid] = `${item.codename} ${item.secondlanlabel}`); return item.codeid }); // 默认全选
       this.defectData = await fetchBasDefectList().then(res => res.data);
-      let data =  this.defectData.map((item) =>{ return { label: `${item.defectNo}-${item.chnName}-${item.vetName}`, value: item.defectNo}});
+      let data = this.defectData.map((item) => { return { label: `${item.defectNo}-${item.chnName}-${item.vetName}`, value: item.defectNo } });
       // this.qcShearingBoardFormOp.column[ this.qcShearingBoardFormOp.column.length - 1].dicData = data;
       this.defectDicData = data;
       await this.handleDefeceTypeChange();
@@ -246,7 +249,7 @@ export default {
           this.isBoard = this.qcShearingBoardData.cutSamWeight ? true : false;
           !res.data.total && this.handleClose();
           await this.remoteMethod(this.qcShearingBoardData.productNo);
-          this.qcShearingBoardData.cutRemarks && ( this.qcShearingBoardData.cutRemarks = this.qcShearingBoardData.cutRemarks.split(","));
+          this.qcShearingBoardData.cutRemarks && (this.qcShearingBoardData.cutRemarks = this.qcShearingBoardData.cutRemarks.split(","));
         })
         .finally(() => {
           setTimeout(() => {
@@ -268,11 +271,13 @@ export default {
           if (ress.data.orgno == null) return;
           if (result.data.length > 0) {
             result.data.map((e) => {
-              let children = e.orgNo.split(',');
-              if (children.length > 0) {
-                let index = children.findIndex(e => e == ress.data.orgno);
-                if (index != -1) {
-                  this.cutDept = e.dptCode;
+              if (e.orgNo != null) {
+                let children = e.orgNo.split(',');
+                if (children.length > 0) {
+                  let index = children.findIndex(e => e == ress.data.orgno);
+                  if (index != -1) {
+                    this.cutDept = e.dptCode;
+                  }
                 }
               }
             })
@@ -306,7 +311,7 @@ export default {
       this.dtlCurIdx = val.$index + 1;
     },
     async calculateYardLength() {
-      if( this.qcShearingBoardData.upFlag || this.qcShearingBoardData.upFlag == undefined ) return;
+      if (this.qcShearingBoardData.upFlag || this.qcShearingBoardData.upFlag == undefined) return;
       if (this.loading) {
         await this.$nextTick();
       }
@@ -350,7 +355,7 @@ export default {
       });
     },
     handleSave() {
-      if(!this.qcShearingBoardData.cutSamWeight && !this.qcShearingBoardData.cutDefeWeight) {
+      if (!this.qcShearingBoardData.cutSamWeight && !this.qcShearingBoardData.cutDefeWeight) {
         this.$tip.warning("重量不能为0!");
         return;
       }
@@ -456,7 +461,7 @@ export default {
       printData.printTime = this.$getNowTime("datetime");
       printData.cutRemarks = printData.cutRemarks.toString();
       for (let i = 0; i < this.printCount; i++) {
-         if (this.printType == 1) {
+        if (this.printType == 1) {
           this.spowerClient.send("print=finishCard:" + printData.proCardFk);
         } else {
           this.spowerClient.send("print= finishCardCustomer:" + printData.proCardFk);
