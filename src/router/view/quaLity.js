@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-10 13:20:44
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-06-28 16:05:59
+ * @LastEditTime: 2022-08-23 15:08:36
  * @Description:
  */
 export default [
@@ -102,8 +102,16 @@ export default [
   },
   {
     path: "/stkinMemo",
-    name: "入仓通知单",
+    name: "胚布入仓通知单",
     component: resolve => require(["@/view/quaLity/proClothStkinMemo/index"], resolve),
+    meta: {
+      keepAlive: true
+    }
+  },
+  {
+    path: "/finishStkinMemo",
+    name: "成品布入仓通知单",
+    component: resolve => require(["@/view/quaLity/proFinishStkinMemo/index"], resolve),
     meta: {
       keepAlive: true
     }
