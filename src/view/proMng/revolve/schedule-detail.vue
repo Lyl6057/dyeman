@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-08-22 10:24:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-25 16:36:00
+ * @LastEditTime: 2022-08-26 14:50:05
  * @FilePath: \iot.vue\src\view\proMng\revolve\schedule-detail.vue
  * @Description:  染单排期
 -->
@@ -118,18 +118,11 @@ export default {
         let childrenList = resData.filter((item) => item.schType == 1).sort((a, b) => a.schSn - b.schSn);
         let removeArr = [];
         childrenList.forEach((item, i) => {
-          item.hasChildrens = item.hasChildren;
-          delete item.hasChildren;
           item.children = [];
           item.children = childrenList.filter((obj) => { return obj.pareantId == item.detailId });
-          item.children.forEach((child, j) => {
-            child.hasChildrens = child.hasChildren;
-            delete child.hasChildren;
-          })
           removeArr = removeArr.concat(item.children);
         })
         this.scheduleDetailCrudData = childrenList.filter((item) => !removeArr.some((r) => r.detailId === item.detailId));
-        console.log(this.scheduleDetailCrudData);
         this.handleRestSn(this.scheduleDetailCrudData);
       } else {
         let nowData = this.$getNowTime("datetime");
@@ -182,7 +175,7 @@ export default {
               Object.assign(this.scheduleDetailFormData, {
                 schType: 2,
                 updateTime: this.$getNowTime("datetime"),
-                updator: "ITTEST" //parent.userID,
+                updator: parent.userID,
               })
             ).then(res => {
               return res.data.data;
@@ -192,7 +185,7 @@ export default {
               Object.assign(this.scheduleDetailFormData, {
                 schType: 2,
                 createTime: this.$getNowTime("datetime"),
-                creator: "ITTEST", //parent.userID,
+                creator: parent.userID,
                 workName: `${this.scheduleDetailFormData.stepCode}(${this.scheduleDetailFormData.colorName})工作包`
               })
             ).then(res => {
@@ -228,7 +221,7 @@ export default {
           await updateProSalScheduleDetailData(
             Object.assign(saveData, {
               updateTime: this.$getNowTime("datetime"),
-              updator: "ITEST",//parent.userID,
+              updator: parent.userID,
               children: null
             }).then(async _ => {
               await item.children.forEach(async (child) => {
@@ -241,7 +234,7 @@ export default {
                   await updateProSalScheduleDetailData(
                     Object.assign(child, {
                       updateTime: this.$getNowTime("datetime"),
-                      updator: "ITEST",//parent.userID,
+                      updator: parent.userID,
                       pareantId: item.detailId
                     })
                   );
@@ -250,7 +243,7 @@ export default {
                     Object.assign(child, {
                       schType: 1,
                       createTime: this.$getNowTime("datetime"),
-                      creator: "ITEST",//parent.userID,
+                      creator: parent.userID,
                       pareantId: item.detailId
                     })
                   ).then(res => { child.detailId = res.data.data })
@@ -264,7 +257,7 @@ export default {
               pareantId: oid,
               schType: 1,
               createTime: this.$getNowTime("datetime"),
-              creator: "ITEST",//parent.userID,
+              creator: parent.userID,
               children: null
             })
           ).then(async res => {
@@ -279,7 +272,7 @@ export default {
                 await updateProSalScheduleDetailData(
                   Object.assign(child, {
                     updateTime: this.$getNowTime("datetime"),
-                    updator: "ITEST",//parent.userID,
+                    updator: parent.userID,
                     pareantId: item.detailId
 
                   })
@@ -289,7 +282,7 @@ export default {
                   Object.assign(child, {
                     schType: 1,
                     createTime: this.$getNowTime("datetime"),
-                    creator: "ITEST",//parent.userID,
+                    creator: parent.userID,
                     pareantId: item.detailId
                   })
                 ).then(res => { child.detailId = res.data.data })
@@ -334,16 +327,16 @@ export default {
             : this.scheduleDetailFormData.planStart || nowData,
           planEnd: this.scheduleDetailCrudData.length
             ? "" : this.scheduleDetailFormData.planEnd,
-          realStart: this.scheduleDetailCrudData.length
-            ? this.scheduleDetailCrudData[
-              this.scheduleDetailCrudData.length - 1
-            ].realEnd ||
-            this.scheduleDetailCrudData[
-              this.scheduleDetailCrudData.length - 1
-            ].realStart ||
-            nowData
-            : this.scheduleDetailFormData.realStart || nowData,
-          realEnd: "",
+          // realStart: this.scheduleDetailCrudData.length
+          //   ? this.scheduleDetailCrudData[
+          //     this.scheduleDetailCrudData.length - 1
+          //   ].realEnd ||
+          //   this.scheduleDetailCrudData[
+          //     this.scheduleDetailCrudData.length - 1
+          //   ].realStart ||
+          //   nowData
+          //   : this.scheduleDetailFormData.realStart || nowData,
+          // realEnd: "",
           pareantId: item.pareantId,
           detailId: "",
           // schSn: sn + i + 1
@@ -366,7 +359,7 @@ export default {
         })
       })
       this.scheduleDetailCrudData = this.scheduleDetailCrudData.concat(stepList);
-      console.log("treeData", this.scheduleDetailCrudData);
+      this.handleRestSn(this.scheduleDetailCrudData);
       this.$refs.scheduleDetailCrud.setCurrentRow(this.scheduleDetailCrudData[this.scheduleDetailCrudData.length - 1]);
     },
     async handleDel () {
@@ -387,7 +380,7 @@ export default {
         if (item.detailId) {
           await removeProSalScheduleDetailData(item.detailId);
         }
-        item.hasChildren && this.scheduleDetailCrudData.splice(item.$index, 1);
+        item.hasChildrens && this.scheduleDetailCrudData.splice(item.$index, 1);
         this.scheduleDetailCrudData.forEach((data, i) => {
           data.detailId == item.detailId && this.scheduleDetailCrudData.splice(i, 1);
           data.children.forEach((child, j) => {
@@ -408,6 +401,8 @@ export default {
     handleRestSn (arr, sn = 1) {
       arr.forEach((item, i) => {
         item.schSn = i + sn;
+        item.hasChildrens = item.children.length ? true : false;
+        delete item.hasChildren
         item.children.length && this.handleRestSn(item.children, item.schSn + 1);
         sn += item.children.length;
       })

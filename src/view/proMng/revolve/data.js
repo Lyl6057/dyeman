@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-25 15:53:54
+ * @LastEditTime: 2022-08-26 14:35:16
  * @Description:
  */
 
@@ -1955,30 +1955,30 @@ export function scheduleDtlCrudOp(_this) {
           }
         ]
       },
-      {
-        label: "实际开始",
-        prop: "realStart",
-        width: 160,
-        span: 6,
-        type: "date",
-        cell: true,
-        align: "center",
-        format: "yyyy-MM-dd HH:mm:ss",
-        valueFormat: "yyyy-MM-dd HH:mm:ss",
-        sortable: true,
-      },
-      {
-        label: "实际结束",
-        prop: "realEnd",
-        width: 160,
-        span: 6,
-        type: "date",
-        align: "center",
-        cell: true,
-        format: "yyyy-MM-dd HH:mm:ss",
-        valueFormat: "yyyy-MM-dd HH:mm:ss",
-        sortable: true,
-      },   
+      // {
+      //   label: "实际开始",
+      //   prop: "realStart",
+      //   width: 160,
+      //   span: 6,
+      //   type: "date",
+      //   cell: true,
+      //   align: "center",
+      //   format: "yyyy-MM-dd HH:mm:ss",
+      //   valueFormat: "yyyy-MM-dd HH:mm:ss",
+      //   sortable: true,
+      // },
+      // {
+      //   label: "实际结束",
+      //   prop: "realEnd",
+      //   width: 160,
+      //   span: 6,
+      //   type: "date",
+      //   align: "center",
+      //   cell: true,
+      //   format: "yyyy-MM-dd HH:mm:ss",
+      //   valueFormat: "yyyy-MM-dd HH:mm:ss",
+      //   sortable: true,
+      // },   
       {
         label: "估算耗时",
         prop: "exampleUseTime",
