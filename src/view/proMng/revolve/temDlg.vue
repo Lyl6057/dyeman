@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-23 10:25:45
+ * @LastEditTime: 2022-08-25 16:40:25
  * @Description:
 -->
 <template>
@@ -412,7 +412,7 @@ export default {
       this.wLoading = true;
       getWeave({
         weaveJobCode: this.form.weaveJobCode,
-        isWorkOut: 0,
+        // isWorkOut: 0,
         rows: 10,
         start: 1,
       }).then((res) => {

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-08-22 15:20:20
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-24 09:13:05
+ * @LastEditTime: 2022-08-24 14:54:35
  * @FilePath: \iot.vue\src\components\select-workStep\index.vue
  * @Description: 
 -->
@@ -25,22 +25,13 @@
           <avue-form ref="selectWorkStepForm" :option="selectWorkStepFormOp" v-model="selectWorkStepFormData"> </avue-form>
         </div>
         <div class="crudBox">
-          <!-- <el-table height="calc(100vh - 175px)" :stripe="true"  tooltip-effect="dark"  style="width: 99%;margin: 0 auto" row-key="stepId" border  :data="selectWorkStepCrudData" @selection-change="handleSelectionChange" :tree-props="{children: 'nodes'}">
-            <el-table-column type="selection"  width="55" @change="test"> </el-table-column>
+          <el-table ref="selectWorkStepCrud" height="calc(100vh - 175px)" @select="handleTableSelect" :stripe="true"  tooltip-effect="dark"  style="width: 99%;margin: 0 auto" row-key="stepId" border  :data="selectWorkStepCrudData" @selection-change="handleSelectionChange"  :tree-props="{children: 'nodes'}">
+            <el-table-column type="selection"  width="55" > </el-table-column>
             <el-table-column prop="stepSn" label="序号" width="80" align="center"> </el-table-column>
-            <el-table-column prop="stepName" label="工序名称">
-            </el-table-column>
-            <el-table-column  prop="stepDescribe"  label="描述">
-            </el-table-column>
-            <el-table-column prop="standardFormula" label="标准公式">
-            </el-table-column>
-          </el-table> -->
-          <avue-crud ref="selectWorkStepCrud" 
-            v-loading="crudLoading" 
-            :option="selectWorkStepCrudOp"
-            :data="selectWorkStepCrudData" 
-            @selection-change="handleSelectionChange"> 
-          </avue-crud>
+            <el-table-column prop="stepName" label="工序名称"> </el-table-column>
+            <el-table-column  prop="stepDescribe"  label="描述"> </el-table-column>
+            <el-table-column prop="standardFormula" label="标准公式"> </el-table-column>
+          </el-table>
         </div>
       </view-container>
     </el-dialog>
@@ -72,30 +63,43 @@ export default {
   mounted() {},
   methods: {
     async handleQuery() {
-      // let res = await fetchfetchBaseWorkStepTreeData({ parentId: this.stepId });
+      let res = await fetchfetchBaseWorkStepTreeData({ parentId: this.stepId });
       this.crudLoading = true;
-      let stepList = await fetchBaseWorkStepList( Object.assign(this.selectWorkStepFormData, { pareantId: this.stepId }));
-      this.selectWorkStepCrudData = stepList.data // res.data[4].nodes[1].nodes //;
+      // let stepList = await fetchBaseWorkStepList( Object.assign(this.selectWorkStepFormData, { pareantId: this.stepId }));
+      this.selectWorkStepCrudData = res.data[4].nodes[1].nodes // stepList.data;
       // this.selectWorkStepCrudData.forEach((item) =>{
       //   item.children = item.nodes
       // })
       this.crudLoading = false;
       this.wLoading = false;
     },
-    test(val) {
-      console.log(val);
+    async handleTableSelect(list,row) {
+      let isSelect = list.filter(a => a.stepId == row.stepId); // 勾选 or 取消
+      let pareantDatas = list.filter(a => { return a.pareantId == row.pareantId && a.stepId != row.stepId}); // 判断是否存在父级的其他子级
+      await this.selectWorkStepCrudData.forEach((item) =>{
+        if(item.stepId == row.pareantId) {
+          this.$nextTick(() =>{
+            this.selectList.push(item);
+          })
+          this.$refs.selectWorkStepCrud.toggleRowSelection(item, isSelect.length ? true : pareantDatas.length ? true : false);
+        }
+      })
+      // 控制子级
+      this.$nextTick(() =>{
+        if (row.nodes.length) {
+          row.nodes.forEach((item, i) =>{
+            this.$refs.selectWorkStepCrud.toggleRowSelection(item, isSelect.length ? true : false);
+          })
+        }
+      })
     },
     handleCheckStep() {
       this.$emit("handleCheckStep", this.selectList);
       this.dialogVisible = false;
     },
     handleSelectionChange(list) {
-      console.log(list);
       this.selectList = list;
     },
-    workStepHasSelect(row, index) {
-      return row.nodes.length > 0 ? 0 : 1
-    }
   },
 };
 </script>

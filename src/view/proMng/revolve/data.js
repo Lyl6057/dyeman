@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-23 15:08:18
+ * @LastEditTime: 2022-08-25 15:53:54
  * @Description:
  */
 
@@ -1828,12 +1828,14 @@ export function colSelCrudOp(_this){
 export function scheduleDtlCrudOp(_this) {
   return {
     ...commonCrudConfig,
-    index: false,
     page: false,
     labelWidth: 100,
     height: "calc(100vh - 375px)",
     showSummary: true,
     stripe: true,
+    tree: true,
+    index: true,
+    rowKey: "schSn",
     sumColumnList: [
       {
         label: " ",
@@ -1842,6 +1844,17 @@ export function scheduleDtlCrudOp(_this) {
       }
     ],
     column: [
+      // {
+      //   label: "序号",
+      //   prop: "schSn",
+      //   align: "left",
+      //   width: 80,
+      //   span: 6,
+      //   cell: false,
+      //   display: false,
+      //   fixed: true,
+      //   clearable: false
+      // },
       {
         label: "工序名称",
         prop: "workName",
@@ -1852,17 +1865,7 @@ export function scheduleDtlCrudOp(_this) {
         span: 6,
         fixed: true
       },
-      {
-        label: "序号",
-        prop: "schSn",
-        align: "left",
-        width: 60,
-        span: 6,
-        cell: true,
-        display: false,
-        fixed: true,
-        clearable: false
-      },
+     
       {
         label: "缸号",
         prop: "stepCode",

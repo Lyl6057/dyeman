@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-23 16:01:14
+ * @LastEditTime: 2022-08-25 16:40:18
  * @Description:
 -->
 <template>
@@ -246,7 +246,7 @@ export default {
         weaveJobCode: "!^%" + val,
         rows: 10,
         start: 1,
-        isWorkOut: 0,
+        // isWorkOut: 0,
         // jobType: 1,
       }).then((res) => {
         this.options = res.data.records;
@@ -329,7 +329,7 @@ export default {
       this.wLoading = true;
       await getWeave({
         weaveJobCode: this.form.weaveJobCode,
-        isWorkOut: 0,
+        // isWorkOut: 0,
         rows: 10,
         start: 1,
       }).then((res) => {
