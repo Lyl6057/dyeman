@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
- * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-08-23 10:23:10
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-08-26 15:19:57
  * @Description:
  */
 
@@ -726,7 +726,7 @@ export function mainCrud(_this, audit, isExtract = false) {
       // 2022.08.22
       {
         label: "門幅(邊至邊)",
-        prop: "cylinderHeight",
+        prop: "sideBreadth",
         disabled: audit
           ? false
           : _this.detail.auditState && !_this.isAdd

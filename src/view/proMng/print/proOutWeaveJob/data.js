@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
- * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-08-22 17:28:00
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-08-26 15:20:11
  * @Description:
  */
 
@@ -1396,7 +1396,7 @@ export function mainYJCrud(_this) {
           },
           {
             label: "門幅(邊至邊)",
-            prop: "cylinderHeight",
+            prop: "sideBreadth",
             tip: "Thực dụng",
             width: 90,
             hide: true,
