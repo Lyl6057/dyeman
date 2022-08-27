@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-04-19 10:55:34
+ * @LastEditTime: 2022-08-27 08:46:11
  * @Description:
  */
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
@@ -142,7 +142,7 @@ export function mainCrud(_this) {
     border: true,
     index: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 280px)",
+    height: "calc(100vh - 290px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
@@ -799,6 +799,7 @@ export function dlgForm(_this) {
         type: "number",
         align: "left",
         minRows: 0,
+        disabled: true,
         placeholder: " "
       },
       {

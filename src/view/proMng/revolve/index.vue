@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-23 09:58:31
+ * @LastEditTime: 2022-08-27 08:11:30
  * @Description:
 -->
 <template>
@@ -300,16 +300,18 @@ export default {
   beforeDestroy() {},
 };
 </script>
-<style lang='stylus'>
-#runJob {
-  .avue-crud__tip {
+<style lang='stylus' scoped>
+>>>.avue-crud__menu {
+    height: 35px !important;
+}
+>>>.avue-crud__tip {
     display: none !important;
     height: 0px !important;
   }
+#runJob {
+  
 
-  .avue-crud__menu {
-    height: 35px !important;
-  }
+  
 }
 
 .el-dropdown-menu--mini .el-dropdown-menu__item {

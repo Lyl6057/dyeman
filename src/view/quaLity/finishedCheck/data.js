@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-18 08:53:42
+ * @LastEditTime: 2022-08-27 08:22:50
  * @Description:
  */
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
@@ -136,7 +136,7 @@ export function mainCrud(_this) {
     border: true,
     index: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 285px)",
+    height: "calc(100vh - 290px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
