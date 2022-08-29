@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-27 07:39:42
+ * @LastEditTime: 2022-08-29 09:38:40
  * @Description: 
 -->
 <template>
@@ -1249,7 +1249,7 @@ export default {
 <style lang='stylus'>
 #proWeaveJob {
   .formBox {
-    height: calc(100vh - 70px) !important;
+    height: calc(100vh - 120px) !important;
     overflow: auto;
   }
 

@@ -1,12 +1,12 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
- * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-08-12 11:52:22
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-08-29 09:44:02
  * @Description: 
 -->
 <template>
-  <div id="proWeaveJob">
+  <div id="proOutWeaveJob">
     <view-container :title="(isAdd ? '新增' : '修改') + '外发织造通知单'" :element-loading-text="$t('public.loading')"
       v-loading="wLoading">
       <div class="btnList">
@@ -1025,7 +1025,7 @@ export default {
 };
 </script>
 <style lang='stylus'>
-#proWeaveJob
+#proOutWeaveJob
   .avue-group__header
     height 15px
     line-height 15px

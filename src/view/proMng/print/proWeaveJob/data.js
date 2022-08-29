@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-26 15:19:57
+ * @LastEditTime: 2022-08-29 09:22:45
  * @Description:
  */
 
@@ -2033,7 +2033,7 @@ export function weaveDtlCrudOp(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 515px)",
+    height: "calc(100vh - 580px)",
     refreshBtn: false,
     columnBtn: false,
     labelWidth: 130,

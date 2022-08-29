@@ -2,11 +2,11 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2021-08-16 08:17:55
+ * @LastEditTime: 2022-08-29 09:47:34
  * @Description: 
 -->
 <template>
-  <div id="proWeaveJob">
+  <div id="yarnBatch">
     <view-container
       :title="(isAdd ? '新增' : '修改') + '織造通知單'"
       :element-loading-text="$t('public.loading')"
@@ -1064,7 +1064,7 @@ export default {
 };
 </script>
 <style lang='stylus'>
-#proWeaveJob {
+#yarnBatch {
   .formBox {
     height: 100vh !important;
   }
