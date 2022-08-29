@@ -2,8 +2,8 @@
  * @Author: Lyl
  * @Date: 2022-08-22 15:20:20
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-24 14:54:35
- * @FilePath: \iot.vue\src\components\select-workStep\index.vue
+ * @LastEditTime: 2022-08-29 10:43:56
+ * @FilePath: \iot.vue\src\components\select-workstep\index.vue
  * @Description: 
 -->
 <template>
@@ -70,8 +70,11 @@ export default {
       // this.selectWorkStepCrudData.forEach((item) =>{
       //   item.children = item.nodes
       // })
-      this.crudLoading = false;
-      this.wLoading = false;
+      await this.$nextTick();
+      setTimeout(() => {
+          this.crudLoading = false;
+          this.wLoading = false;
+      }, 200);
     },
     async handleTableSelect(list,row) {
       let isSelect = list.filter(a => a.stepId == row.stepId); // 勾选 or 取消
