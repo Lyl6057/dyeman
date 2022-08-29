@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-08-22 10:24:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-26 14:50:05
+ * @LastEditTime: 2022-08-29 11:20:48
  * @FilePath: \iot.vue\src\view\proMng\revolve\schedule-detail.vue
  * @Description:  染单排期
 -->
@@ -304,7 +304,7 @@ export default {
       if (!stepList.length) {
         return;
       }
-      stepList.sort((a, b) => { a.stepSn > b.stepSn ? 1 : -1 });
+      stepList = stepList.sort((a, b) => { a.stepSn > b.stepSn ? -1 : 1 });
       stepList = stepList.map((item, i) => {
         let nowData = this.$getNowTime("datetime");
         return {
@@ -352,12 +352,6 @@ export default {
       })
       stepList = stepList.filter((item) => !removeArr.some((r) => r.stepId === item.stepId));
       let sn = this.scheduleDetailCrudData.length;
-      stepList.forEach((item, i) => {
-        item.schSn = sn++ + 1;
-        item.children.forEach((child, j) => {
-          child.schSn = j + 1 //item.schSn + '-' + (j + 1)  ; 
-        })
-      })
       this.scheduleDetailCrudData = this.scheduleDetailCrudData.concat(stepList);
       this.handleRestSn(this.scheduleDetailCrudData);
       this.$refs.scheduleDetailCrud.setCurrentRow(this.scheduleDetailCrudData[this.scheduleDetailCrudData.length - 1]);
@@ -375,17 +369,16 @@ export default {
         delArr = delArr.concat(item.children);
         item.children = [];
       })
-      delArr = this.$unique(delArr.concat(this.selectionList), "detailId");
+      delArr = delArr.concat(this.selectionList); //this.$unique(, "detailId");
       delArr.forEach(async (item, i) => {
         if (item.detailId) {
           await removeProSalScheduleDetailData(item.detailId);
         }
-        item.hasChildrens && this.scheduleDetailCrudData.splice(item.$index, 1);
-        this.scheduleDetailCrudData.forEach((data, i) => {
-          data.detailId == item.detailId && this.scheduleDetailCrudData.splice(i, 1);
-          data.children.forEach((child, j) => {
-            child.detailId == item.detailId && data.children.splice(j, 1);
-          })
+        this.scheduleDetailCrudData.forEach((data, k) => {
+          data.children.forEach((child, j) => {  
+             ((child.detailId && child.detailId == item.detailId) || (!child.detailId && child.stepId == item.stepId)) && data.children.splice(j, 1);
+          });
+          ((data.detailId && data.detailId == item.detailId) || (!data.detailId && data.stepId == item.stepId)) && this.scheduleDetailCrudData.splice(k, 1);
         })
         if (i == delArr.length - 1) {
           this.$refs.scheduleDetailCrud.selectClear(); // 清除勾选
