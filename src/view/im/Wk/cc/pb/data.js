@@ -597,9 +597,6 @@ export function rcpb3C(_this) {
         cell: true,
         width: 180,
         hide: _this.hide === "6" ? true : false,
-        formatter(r,v){
-          return num2ThousandthFormat(v,0)
-        }
       },
       {
         label: _this.$t("whseField.scdh"),

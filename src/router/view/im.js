@@ -128,6 +128,14 @@ export default [
       keepAlive: false
     },
     children: [
+      {
+        path: "/cc_prepCloth",
+        name: "cc_prepCloth",
+        component: resolve => require(["@/view/im/Wk/cc/prepCloth/index"], resolve),
+        meta: {
+          keepAlive: false
+        }
+      },
       // 申购入库
       {
         path: "/rc_sg",
