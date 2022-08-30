@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
- * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-06-23 09:31:41
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-08-30 15:57:25
  * @Description: 
 -->
 <template>
@@ -94,10 +94,13 @@ export default {
           delete this.form[key];
         }
       }
-      this.form.weaveJobCode =
-        "!^%" + (this.form.weaveJobCode ? this.form.weaveJobCode : "");
+      let params = {
+        weaveJobCode: "!^%" + (this.form.weaveJobCode || ''),
+        salPoNo: "%" + (this.form.salPoNo || ''),
+        mathineCode: "%" + (this.form.mathineCode || ''),
+      }
       get(
-        Object.assign(this.form, {
+        Object.assign(params, {
           rows: this.page.pageSize,
           start: this.page.currentPage,
           auditState: 1,
@@ -109,9 +112,6 @@ export default {
         this.crud.forEach((item, i) => {
           item.index = i + 1;
         });
-        if (this.form.weaveJobCode.indexOf("!^%") != -1) {
-          this.form.weaveJobCode = this.form.weaveJobCode.split("!^%")[1] || "";
-        }
         this.page.total = res.data.total;
         this.loading = false;
       });

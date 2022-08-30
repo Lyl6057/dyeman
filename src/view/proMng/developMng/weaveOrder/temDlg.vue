@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-19 14:55:33
+ * @LastEditTime: 2022-08-30 15:55:18
  * @Description: 
 -->
 <template>
@@ -227,7 +227,7 @@ export default {
             this.form.weaveState = 0;
             this.form.isWorkOut = 0;
             this.form.startDate = this.$getNowTime("datetime"),
-            // this.form.auditState = 0;
+            this.form.auditState = 1;
             this.form.creator = parent.userID;
           }).finally( () =>{
             this.wLoading = false;
