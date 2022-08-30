@@ -2,13 +2,14 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-26 14:35:16
+ * @LastEditTime: 2022-08-30 11:15:59
  * @Description:
  */
 
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
-let cust = getDicT("basCustomer", "custName", "custCode");
 
+let cust = getDicT("basCustomer", "custName", "custCode");
+let proDptworkProcessList = getDicT("proDptworkProcess", "dptName", "dptCode", {}, "sn");
 const commonFormConfig = {
   submitBtn: false,
   emptyBtn: false,
@@ -214,11 +215,6 @@ export function mainCrud(_this) {
             trigger: "blur"
           }
         ]
-
-        // click: () => {
-        //   _this.choiceTle = "选择织造通知单";
-        //   _this.choiceV = true;
-        // }
       },
       {
         label: "缸號",
@@ -398,18 +394,7 @@ export function mainCrud(_this) {
           if (_this.form.poAmountKg) {
             return;
           }
-          // _this.$nextTick(() => {
-          //   _this.form.dyeVatType =
-          //     Number(_this.form.poAmountKg) / 350 >= 4
-          //       ? "4"
-          //       : Math.ceil(Number(_this.form.poAmountKg) / 350) + "";
-          // });
         }
-        // change: () => {
-        //   _this.$nextTick(() => {
-        //     _this.form.poAmountLb = (_this.form.poAmountKg * 2.2046226).toFixed(2)
-        //   })
-        // }
       },
       {
         label: "投胚数量",
@@ -632,25 +617,7 @@ export function mainCrud(_this) {
         overHidden: true,
         width: 250,
         span: 12
-        // rules: [{
-        //   required: true,
-        //   message: "请選擇布類描述",
-        //   trigger: "blur"
-        // }],
       },
-
-      // {
-      //   label: "訂單數量(磅)",
-      //   prop: "poAmountLb",
-      //   width: 120,
-      //   span: 6,
-      //   type: "number",
-      //   align: "right",
-      //   placeholder: " ",
-      //   hide: true,
-      //   disabled: true,
-      // },
-
       {
         label: "织厂",
         tip: "Xưởng dệt",
@@ -805,15 +772,6 @@ export function mainCrud(_this) {
         type: "select",
         dicData: getDIC("sal_colorLights")
       },
-      // {
-      //   label: "审核",
-      //   // tip:"Nhận hàng yêu cầu",
-      //   prop: "auditor",
-      //   width: 80,
-      //   span: 6,
-      //   hide: true,
-      //   placeholder: " "
-      // },
       {
         label: "收货要求",
         tip: "Nhận hàng yêu cầu",
@@ -832,20 +790,6 @@ export function mainCrud(_this) {
         width: 80,
         placeholder: " "
       },
-      // {
-      //   label: "列印時間",
-      //   prop: "printDate",
-      //   placeholder: " ",
-      //   width: 90,
-      //   hide: true,
-      //   type: "datetime",
-      //   format: "yyyy-MM-dd HH:mm:ss",
-      //   valueFormat: "yyyy-MM-dd HH:mm:ss",
-      //   span: 6,
-      //   disabled: true,
-      //   display: true
-      // },
-
       {
         label: "STLYLE款号",
         prop: "styleNo",
@@ -855,15 +799,6 @@ export function mainCrud(_this) {
         width: 80,
         placeholder: " "
       },
-      // {
-      //   label: "ET序号",
-      //   prop: "etSn",
-      //   tip: "ET序号",
-      //   span: 6,
-      //   hide: true,
-      //   width: 80,
-      //   placeholder: " "
-      // },
       {
         label: "季节",
         prop: "custStyleCode",
@@ -1417,73 +1352,7 @@ export function bfOp(_this) {
         // dicData: getDicT("proClothNote", "clothWeight", "noteCode"),
         align: "right",
         hide: false
-      }
-      // {
-      //   label: "剩余重量",
-      //   prop: "weight",
-      //   overHidden: true,
-      //   width: 90,
-      //   span: 6,
-      //   placeholder: " ",
-      //   type: "select",
-      //   props: {
-      //     label: "weight",
-      //     value: "custTicket"
-      //   },
-      //   dicData: whseData,
-      //   align: "right",
-      //   hide: false
-      // },
-      // {
-      //   label: "剩余重量",
-      //   prop: "$weigh1t",
-      //   overHidden: true,
-      //   width: 90,
-      //   span: 6,
-      //   placeholder: " ",
-      //   align: "right",
-      //   hide: true
-      // },
-      // {
-      //   label: "运转重量",
-      //   prop: "clothWeight",
-      //   overHidden: true,
-      //   precision: 1,
-      //   width: 90,
-      //   span: 6,
-      //   placeholder: " ",
-      //   type: "number",
-      //   align: "right",
-      //   cell: true,
-      //   change: val => {
-      //     _this.$nextTick(() => {
-      //       if (_this.choosebfData.clothWeight > _this.choosebfData.$bfWeight) {
-      //         _this.choosebfData.clothWeight = _this.choosebfData.$bfWeight;
-      //       } else if (_this.choosebfData.clothWeight < 0) {
-      //         _this.choosebfData.clothWeight = 0;
-      //       }
-      //       _this.choosebfData.weight =
-      //         _this.choosebfData.$bfWeight - _this.choosebfData.clothWeight;
-      //       _this.bfChange(_this.form.bf);
-      //     });
-      //   }
-      // },
-      // {
-      //   label: "入仓ID",
-      //   prop: "whseCalicoinDtlboid",
-      //   overHidden: true,
-      //   precision: 2,
-      //   width: 90,
-      //   span: 6,
-      //   placeholder: " ",
-      //   hide: false,
-      //   props: {
-      //     label: "whseCalicoinDtlboid",
-      //     value: "custTicket"
-      //   },
-      //   type: "select",
-      //   dicData: whseData
-      // }
+      } 
     ]
   };
 }
@@ -1537,8 +1406,6 @@ export function cpbOp(_this) {
         width: 70,
         span: 6,
         placeholder: " ",
-        // type: "select",
-        // dicData: getDicT("proClothNote", "clothWeight", "noteCode"),
         align: "right",
         hide: false
       }
@@ -1596,6 +1463,7 @@ export function testOp(_this) {
     ]
   };
 }
+
 export function itemOp(_this) {
   return {
     menu: false,
@@ -1629,21 +1497,9 @@ export function itemOp(_this) {
         label: "备注说明",
         prop: "remark",
         overHidden: false,
-        // width: 140,
         span: 6,
         placeholder: " ",
         align: "center",
-        // type: "switch",
-        // dicData: [
-        //   {
-        //     label: "否",
-        //     value: "0"
-        //   },
-        //   {
-        //     label: "是",
-        //     value: "1"
-        //   }
-        // ],
         cell: true
       }
     ]
@@ -1844,17 +1700,6 @@ export function scheduleDtlCrudOp(_this) {
       }
     ],
     column: [
-      // {
-      //   label: "序号",
-      //   prop: "schSn",
-      //   align: "left",
-      //   width: 80,
-      //   span: 6,
-      //   cell: false,
-      //   display: false,
-      //   fixed: true,
-      //   clearable: false
-      // },
       {
         label: "工序名称",
         prop: "workName",
@@ -1955,30 +1800,6 @@ export function scheduleDtlCrudOp(_this) {
           }
         ]
       },
-      // {
-      //   label: "实际开始",
-      //   prop: "realStart",
-      //   width: 160,
-      //   span: 6,
-      //   type: "date",
-      //   cell: true,
-      //   align: "center",
-      //   format: "yyyy-MM-dd HH:mm:ss",
-      //   valueFormat: "yyyy-MM-dd HH:mm:ss",
-      //   sortable: true,
-      // },
-      // {
-      //   label: "实际结束",
-      //   prop: "realEnd",
-      //   width: 160,
-      //   span: 6,
-      //   type: "date",
-      //   align: "center",
-      //   cell: true,
-      //   format: "yyyy-MM-dd HH:mm:ss",
-      //   valueFormat: "yyyy-MM-dd HH:mm:ss",
-      //   sortable: true,
-      // },   
       {
         label: "估算耗时",
         prop: "exampleUseTime",
@@ -2062,12 +1883,170 @@ export function scheduleDtlCrudOp(_this) {
         dicData: getDIC("bas_matUnit"),
         span: 6
       },
-      
-      
     ]
   };
 }
 
+
+export function dispathReceiveForm(_this) {
+  return {
+    menu: false,
+    addBtn: false,
+    border: true,
+    highlightCurrentRow: true,
+    height: "calc(100vh - 200px)",
+    refreshBtn: false,
+    columnBtn: false,
+    page: true,
+    labelWidth: 100,
+    column: [
+      {
+        label: "收/发单",
+        prop: "dispathReceive",
+        span: 6,
+        placeholder: " ",
+        tipPlacement: "right",
+        type: "select",
+        clearable: false,
+        tip: "nhận đơn / gửi đơn",
+        disabled: !_this.typechangeable,
+        rules: [
+          {
+            required: true,
+            message: "請选择收/发单",
+            trigger: "blur"
+          }
+        ],
+        dicData: [
+          {
+            value: 1,
+            label: "收单(nhận đơn)"
+          },
+          {
+            value: 2,
+            label: "发单(gửi đơn)"
+          }
+        ],
+        change: val => {
+          // if (val.value == 1) {
+          //   _this.dispathReceiveFormData.dptworkProcessFk = _this.userId || "";
+          //   _this.dispathReceiveFormData.acceptStaff = parent.userID;
+          //   _this.dispathReceiveFormData.sendProcessFk = "";
+          //   _this.dispathReceiveFormData.sendStaff = "";
+          //   _this.dispathReceiveFormData.sendProcessFk = _this.lastLog.sendProcessFk;
+          // } else {
+          //   _this.dispathReceiveFormData.dptworkProcessFk = "";
+          //   _this.dispathReceiveFormData.acceptStaff = "";
+          //   _this.dispathReceiveFormData.sendProcessFk = _this.userId || "";
+          //   _this.dispathReceiveFormData.sendStaff = parent.userID;
+          // }
+        }
+      },
+      {
+        label: "单号",
+        prop: "runJobFk",
+        span: 6,
+        tip: "Số lô nhuộm",
+        placeholder: " ",
+        type: "select",
+        tipPlacement: "right",
+        formslot: true,
+      },
+      {
+        label: "计划产量",
+        prop: "planOutput",
+        span: 6,
+        type: "number",
+        tip: "sản lượng kế hoạch",
+        tipPlacement: "right",
+        placeholder: " "
+      },
+      {
+        label: "实际产量",
+        prop: "realOutput",
+        type: "number",
+        span: 6,
+        tipPlacement: "right",
+        tip: "sản lượng thực tế",
+        placeholder: " "
+      },
+
+      {
+        label: "发单部门",
+        prop: "sendProcessFk",
+        tipPlacement: "right",
+        span: 6,
+        tip: "bộ phận gửi đơn",
+        placeholder: " ",
+        type: "select",
+        dicData: proDptworkProcessList,
+        rules: [
+          {
+            required: true,
+            message: "請选择部门",
+            trigger: "blur"
+          }
+        ],
+        change: () =>{
+          if(_this.dispathReceive == 2){
+            _this.remoteMethodCX();
+          }
+         
+        },
+      },
+      {
+        label: "收单部门",
+        prop: "dptworkProcessFk",
+        span: 6,
+        tip: "bộ phận nhận đơn",
+        placeholder: " ",
+        tipPlacement: "right",
+        type: "select",
+        dicData: proDptworkProcessList,
+        rules: [
+          {
+            required: true,
+            message: "請选择部门",
+            trigger: "blur"
+          }
+        ],
+        change: () =>{
+          if(_this.dispathReceive == 1){
+            _this.remoteMethodCX();
+          }
+         
+        },
+      },
+      {
+        label: "工序",
+        prop: "stepId",
+        type: "select",
+        span: 6,
+        tip: "quá trình",
+        placeholder: " ",
+        tipPlacement: "right",
+        formslot: true
+      },
+      {
+        label: "优先级",
+        prop: "priorityId",
+        tipPlacement: "right",
+        span: 6,
+        placeholder: " ",
+        type: "select",
+        dicData: getDIC("bas_PriorityId")
+      },
+      {
+        label: "说明",
+        prop: "acceptDesc",
+        tipPlacement: "right",
+        span: 24,
+        tip: "remark",
+        placeholder: " "
+      }
+    ]
+  };
+}
 
 
 

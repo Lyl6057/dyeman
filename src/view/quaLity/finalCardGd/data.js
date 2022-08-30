@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-08-07 07:58:01
  * @LastEditors: Lyl
- * @LastEditTime: 2022-02-18 14:26:41
+ * @LastEditTime: 2022-08-29 15:40:41
  * @Description:
  */
 
@@ -226,9 +226,6 @@ export function mainCrud(_this) {
         // type: "number",
         align: "left",
         placeholder: " "
-        // change: () => {
-        // _this.codeLength();
-        //  }
       },
       {
         label: "克重(洗后)",
@@ -239,9 +236,6 @@ export function mainCrud(_this) {
         // type: "number",
         align: "left",
         placeholder: " "
-        // change: () => {
-        // _this.codeLength();
-        //  }
       },
       {
         label: "实际克重",
@@ -252,11 +246,6 @@ export function mainCrud(_this) {
         type: "number",
         align: "left",
         placeholder: " ",
-        change: () => {
-          _this.$nextTick(() => {
-            _this.codeLength();
-          });
-        }
       },
       {
         label: "克重单位",
@@ -277,11 +266,6 @@ export function mainCrud(_this) {
           // }
         ],
         placeholder: " ",
-        change: () => {
-          _this.$nextTick(() => {
-            _this.codeLength();
-          });
-        }
       },
       {
         label: "幅宽",
@@ -292,9 +276,6 @@ export function mainCrud(_this) {
         // type: "number",
         align: "left",
         placeholder: " "
-        // change: () => {
-        //   _this.codeLength();
-        // }
       },
       {
         label: "实际幅宽",
@@ -305,11 +286,6 @@ export function mainCrud(_this) {
         type: "number",
         align: "left",
         placeholder: " ",
-        change: () => {
-          _this.$nextTick(() => {
-            _this.codeLength();
-          });
-        }
       },
       {
         label: "幅宽单位",
@@ -321,11 +297,6 @@ export function mainCrud(_this) {
         // dicData: matUnit,
         dicData: getDIC("sal_breadthUnit"),
         placeholder: " ",
-        change: () => {
-          _this.$nextTick(() => {
-            _this.codeLength();
-          });
-        }
       },
       {
         label: "码长",
@@ -385,12 +356,6 @@ export function mainCrud(_this) {
         minRows: 0,
         align: "left",
         placeholder: " ",
-
-        change: () => {
-          _this.$nextTick(() => {
-            _this.codeLength();
-          });
-        }
       },
       {
         label: "浮重(磅)",
@@ -437,11 +402,6 @@ export function mainCrud(_this) {
           }
         ],
         placeholder: " ",
-        change: () => {
-          _this.$nextTick(() => {
-            _this.codeLength();
-          });
-        }
       },
 
       // {

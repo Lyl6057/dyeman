@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-08-07 07:57:44
  * @LastEditors: Lyl
- * @LastEditTime: 2022-07-06 08:19:54
+ * @LastEditTime: 2022-08-29 16:44:20
  * @Description: 
 -->
 <template>
@@ -165,6 +165,7 @@ export default {
         clothWidth: 0,
         sideBreadthValue: 0,
         netWeight: 1,
+        yardLength: 1
       },
       crudOp: mainCrud(this),
       crud: [],
@@ -277,7 +278,7 @@ export default {
                 this.form.custColorNo = val.custColorNo;
                 this.form.factoryColorNo = val.colorCode;
                 this.form.gramWeightValue = this.form.gramWeight
-                  ? Number(this.form.gramWeight.match(/\d+/g)[0])
+                  ? Number(this.form.gramWeight.match(/\d+/g) ? this.form.gramWeight.match(/\d+/g)[0] : 0)
                   : "";
 
                 // 洗后
@@ -291,7 +292,7 @@ export default {
 
                 this.form.breadth = val.breadthActual || val.breadth;
                 this.form.breadthValue = this.form.breadth
-                  ? Number(this.form.breadth.match(/\d+/g)[0]) || 0
+                  ? Number(this.form.breadth.match(/\d+/g) ? this.form.breadth.match(/\d+/g)[0] : 0)
                   : 0;
                 this.form.clothWidth = this.form.breadthValue;
                 this.form.sideBreadth = this.form.breadthBorder || "";
@@ -455,12 +456,6 @@ export default {
           });
         }
       });
-
-      // this.pdfDlg = true;
-      // this.pdfUrl =
-      //   process.env.API_HOST +
-      //   "/api/proBleadyeRunJob/createBleadyeRunJobPdf?id=" +
-      //   this.detail.cardId;
     },
     print() {
       if (!this.spowerClient || this.spowerClient.readyState == 3) {
@@ -472,7 +467,7 @@ export default {
         this.$tip.error("成品重量不能为0!");
         return;
       }
-      getBleadye({ vatNo: this.form.vatNo }).then((dye) => {
+      getRevolve({ vatNo: this.form.vatNo }).then((dye) => {
         if (!dye.data.length) {
           this.$tip.error("暂无此缸号数据!");
         } else {
@@ -654,41 +649,6 @@ export default {
     },
     setCz() {
       this.spowerClient = this.$store.state.spowerClient;
-    },
-    codeLength() {
-      if (
-        !this.form.realGramWeight ||
-        !this.form.actualSideBreadth ||
-        !this.form.netWeight ||
-        this.form.realGramWeight == 0
-      ) {
-        return;
-      }
-      let gramWeight, breadth;
-      // this.$nextTick(() => {
-      if (this.form.gramWeightUnit == "Kg") {
-        // 默认是 g
-        gramWeight = Number(this.form.realGramWeight);
-      } else {
-        gramWeight = Number(this.form.realGramWeight / 1000);
-      }
-
-      if (this.form.widthUnit != "INCH") {
-        // 默认是 inch
-        breadth = Number(this.form.actualSideBreadth / 100);
-      } else {
-        breadth = Number((this.form.actualSideBreadth * 2.54) / 100);
-      }
-
-      let weight = this.form.netWeight;
-      // if (this.form.weightUnit == "LBS") {
-      //   weight = weight * 2.20462262;
-      // }
-      // gramWeight 单位为 g/m , breadth 单位为 inch 需要 * 2.54 转换成cm / 100 转换成 m
-      this.form.yardLength = parseInt(
-        Number(weight / gramWeight / breadth) * 1.0936
-      );
-      // });
     },
   },
   beforeRouteEnter(to, form, next) {

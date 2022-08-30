@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-27 08:11:30
+ * @LastEditTime: 2022-08-30 11:12:56
  * @Description:
 -->
 <template>
@@ -37,19 +37,20 @@
           </el-dropdown-menu>
         </el-dropdown>
         <el-button type="primary" @click="handleOpenSchedule">排期</el-button>
+        <el-button type="primary" @click="handleOpenSendOrder">发单</el-button>
         <el-tooltip class="item" effect="dark" content="tìm kiếm" placement="top-start">
-          <el-button type="primary" @click="query">{{  this.$t("public.query") }}</el-button>
+          <el-button type="primary" @click="handleQuery">{{  this.$t("public.query") }}</el-button>
         </el-tooltip>
       </el-row>
       <el-row class="formBox">
         <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
       </el-row>
       <el-row class="crudBox">
-        <avue-crud ref="crud" id="crud" :option="crudOp" :data="crud" :page.sync="page" v-loading="loading" :row-style="rowStyle" @on-load="query" @row-dblclick="handleRowDBLClick" @current-row-change="cellClick" @selection-change="selectionChange">
+        <avue-crud ref="crud" id="crud" :option="crudOp" :data="crud" :page.sync="page" v-loading="loading" :row-style="rowStyle" @on-load="handleQuery" @row-dblclick="handleRowDBLClick" @current-row-change="cellClick" @selection-change="selectionChange">
         </avue-crud>
       </el-row>
       <el-dialog id="colorMng_Dlg" :visible.sync="dialogVisible" fullscreen width="100%" append-to-body :close-on-click-modal="false" :close-on-press-escape="false">
-        <tem-dlg v-if="dialogVisible" ref="tem" :detail="detail" :isAdd="isAdd" :copyC="copyC" :isSplit="isSplit" :splitType="splitType" @close="dialogVisible = false" @refresh="query"></tem-dlg>
+        <tem-dlg v-if="dialogVisible" ref="tem" :detail="detail" :isAdd="isAdd" :copyC="copyC" :isSplit="isSplit" :splitType="splitType" @close="dialogVisible = false" @refresh="handleQuery"></tem-dlg>
       </el-dialog>
       <el-dialog id="colorMng_Dlg" :visible.sync="pdfDlg" fullscreen width="100%" append-to-body :close-on-click-modal="false" :close-on-press-escape="false" @close="pdfClose">
         <view-container title="打印預覽">
@@ -59,6 +60,8 @@
     </view-container>
     <!-- 排期工序 -->
     <schedule-detail ref="scheduleDetail" :scheduleType="2" :runJobInfo="detail"></schedule-detail>
+    <!-- 收发单 -->
+    <sendandreceive-order ref="sendandreceiveOrder" :typechangeable="false" :remote="{ key: 'runJobId', value: 'runJobId', label: 'vatNo', fetchApi: get }" dispathReceive="2" :runJobInfo="detail"></sendandreceive-order>
   </div>
 </template>
 <script>
@@ -66,11 +69,13 @@ import { mainForm, mainCrud } from "./data";
 import { get, update, del, delDye, getDye } from "./api";
 import tem from "./temDlg";
 import scheduleDetail from "./schedule-detail.vue";
+import sendandreceiveOrder from "./sendAndreceive-order.vue";
 export default {
   name: "runJob",
   components: {
     temDlg: tem,
-    scheduleDetail
+    scheduleDetail,
+    sendandreceiveOrder
   },
   data() {
     return {
@@ -101,11 +106,12 @@ export default {
       selectList: [],
       splitType: "A",
       hasFinied: 0,
+      get
     };
   },
   watch: {},
   methods: {
-    query() {
+    handleQuery() {
       this.loading = true;
       this.detail = {};
       for (let key in this.form) {
@@ -150,6 +156,13 @@ export default {
       this.$refs.scheduleDetail.handleQuery(); // 初始化排期信息
       this.loading = false;
     },
+    async handleOpenSendOrder(){
+      this.loading = true;
+      this.$refs.sendandreceiveOrder.dialogVisible = true;
+      await this.$nextTick();
+      this.$refs.sendandreceiveOrder.initData(); // 初始化发单信息
+      this.loading = false;
+    },
     exhaustPrint() {
       this.pdfDlg = true;
       this.isExhaust = true;
@@ -175,7 +188,7 @@ export default {
             update(item).then((res) => {
               if (i == this.selectList.length - 1) {
                 this.$tip.success(this.$t("public.sccg"));
-                this.query();
+                this.handleQuery();
               }
             });
           });
@@ -205,14 +218,6 @@ export default {
       this.dialogVisible = true;
     },
     del() {
-      // if (parent.userID != this.detail.serviceOperator) {
-      //   this.$tip.warning("当前用户没有权限删除该记录!");
-      //   return;
-      // }
-      // if (this.detail.auditState) {
-      //   this.$tip.warning("通过审核的数据不可删除,请联系主管取消审核!");
-      //   return;
-      // }
       this.$tip
         .cofirm("是否确定删除选中的数据?", this, {})
         .then(() => {
@@ -227,7 +232,7 @@ export default {
                   setTimeout(() => {
                     this.$tip.success("删除成功!");
                     this.wloading = false;
-                    this.query();
+                    this.handleQuery();
                   }, 200);
                 }
               });
@@ -295,7 +300,7 @@ export default {
   },
   created() {},
   mounted() {
-    this.query();
+    // this.handleQuery();
   },
   beforeDestroy() {},
 };
@@ -307,11 +312,6 @@ export default {
 >>>.avue-crud__tip {
     display: none !important;
     height: 0px !important;
-  }
-#runJob {
-  
-
-  
 }
 
 .el-dropdown-menu--mini .el-dropdown-menu__item {

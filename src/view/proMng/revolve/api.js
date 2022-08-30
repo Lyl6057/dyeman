@@ -2,13 +2,11 @@
  * @Author: Lyl
  * @Date: 2021-02-01 14:06:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-23 15:09:17
+ * @LastEditTime: 2022-08-30 11:34:13
  * @Description:
  */
 
 import axios from "axios";
-
-
 
 // 删除生产排期数据
 export function removeProSalScheduleDetailData(detailId){
