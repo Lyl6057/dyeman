@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-22 16:19:56
+ * @LastEditTime: 2022-08-31 10:28:11
  * @Description:
  */
 
@@ -160,9 +160,7 @@ export function mainCrud(_this, audit) {
         span: 6,
         tip: "MS đơn sản xuất bp Dệt",
         sortable: true,
-        disabled: audit
-          ? false
-          : _this.detail.auditState && !_this.isAdd
+        disabled: !_this.isAdd
             ? true
             : false,
         rules: [
@@ -182,7 +180,7 @@ export function mainCrud(_this, audit) {
         sortable: true,
         disabled: audit
           ? false
-          : _this.detail.auditState && !_this.isAdd
+          :  !_this.isAdd
             ? true
             : false,
         overHidden: true,
@@ -205,7 +203,7 @@ export function mainCrud(_this, audit) {
         type: "date",
         disabled: audit
           ? false
-          : _this.detail.auditState && !_this.isAdd
+          :  !_this.isAdd
             ? true
             : false,
         align: "center",
@@ -228,7 +226,7 @@ export function mainCrud(_this, audit) {
         width: 120,
         disabled: audit
           ? false
-          : _this.detail.auditState && !_this.isAdd
+          :  !_this.isAdd
             ? true
             : false,
         span: 6,
@@ -255,7 +253,7 @@ export function mainCrud(_this, audit) {
         width: 200,
         disabled: audit
           ? false
-          : _this.detail.auditState && !_this.isAdd
+          :  !_this.isAdd
             ? true
             : false,
         overHidden: true,
@@ -269,7 +267,7 @@ export function mainCrud(_this, audit) {
         width: 120,
         disabled: audit
           ? false
-          : _this.detail.auditState && !_this.isAdd
+          :  !_this.isAdd
             ? true
             : false,
         overHidden: true,
@@ -291,7 +289,7 @@ export function mainCrud(_this, audit) {
         span: 6,
         disabled: audit
           ? false
-          : _this.detail.auditState && !_this.isAdd
+          :  !_this.isAdd
             ? true
             : false,
         width: 120,
@@ -307,7 +305,7 @@ export function mainCrud(_this, audit) {
         width: 200,
         disabled: audit
           ? false
-          : _this.detail.auditState && !_this.isAdd
+          :  !_this.isAdd
             ? true
             : false,
         span: 6,
@@ -333,7 +331,7 @@ export function mainCrud(_this, audit) {
         valueFormat: "yyyy-MM-dd",
         disabled: audit
           ? false
-          : _this.detail.auditState && !_this.isAdd
+          :  !_this.isAdd
             ? true
             : false,
         placeholder: "请選擇開機日期",
@@ -352,7 +350,7 @@ export function mainCrud(_this, audit) {
         prop: "colorName",
         disabled: audit
           ? false
-          : _this.detail.auditState && !_this.isAdd
+          :  !_this.isAdd
             ? true
             : false,
         tip: "Màu sắc",
@@ -376,7 +374,7 @@ export function mainCrud(_this, audit) {
         span: 6,
         disabled: audit
           ? false
-          : _this.detail.auditState && !_this.isAdd
+          :  !_this.isAdd
             ? true
             : false,
         overHidden: true,
@@ -393,7 +391,7 @@ export function mainCrud(_this, audit) {
         tip: "Fabric Code",
         disabled: audit
           ? false
-          : _this.detail.auditState && !_this.isAdd
+          :  !_this.isAdd
             ? true
             : false,
         hide: true
@@ -408,7 +406,7 @@ export function mainCrud(_this, audit) {
         type: "number",
         disabled: audit
           ? false
-          : _this.detail.auditState && !_this.isAdd
+          :  !_this.isAdd
             ? true
             : false,
         align: "left",
@@ -420,7 +418,7 @@ export function mainCrud(_this, audit) {
         width: 100,
         disabled: audit
           ? false
-          : _this.detail.auditState && !_this.isAdd
+          :  !_this.isAdd
             ? true
             : false,
         placeholder: " ",
@@ -446,7 +444,7 @@ export function mainCrud(_this, audit) {
         align: "left",
         disabled: audit
           ? false
-          : _this.detail.auditState && !_this.isAdd
+          :  !_this.isAdd
             ? true
             : false,
         tip: " Số lượng sợi "
@@ -460,7 +458,7 @@ export function mainCrud(_this, audit) {
         tip: "Mùa hàng",
         disabled: audit
           ? false
-          : _this.detail.auditState && !_this.isAdd
+          :  !_this.isAdd
             ? true
             : false,
         hide: true
@@ -476,7 +474,7 @@ export function mainCrud(_this, audit) {
         span: 12,
         disabled: audit
           ? false
-          : _this.detail.auditState && !_this.isAdd
+          :  !_this.isAdd
             ? true
             : false,
         hide: true
@@ -490,7 +488,7 @@ export function mainCrud(_this, audit) {
         overHidden: true,
         disabled: audit
           ? false
-          : _this.detail.auditState && !_this.isAdd
+          :  !_this.isAdd
             ? true
             : false,
         width: 250,
@@ -514,7 +512,7 @@ export function mainCrud(_this, audit) {
         hide: true,
         disabled: audit
           ? false
-          : _this.detail.auditState && !_this.isAdd
+          :  !_this.isAdd
             ? true
             : false,
         span: 4,
@@ -535,7 +533,7 @@ export function mainCrud(_this, audit) {
         hide: true,
         disabled: audit
           ? false
-          : _this.detail.auditState && !_this.isAdd
+          :  !_this.isAdd
             ? true
             : false,
         span: 2,
@@ -553,7 +551,7 @@ export function mainCrud(_this, audit) {
         hide: true,
         disabled: audit
           ? false
-          : _this.detail.auditState && !_this.isAdd
+          :  !_this.isAdd
             ? true
             : false,
         span: 2,
@@ -573,7 +571,7 @@ export function mainCrud(_this, audit) {
         type: "number",
         disabled: audit
           ? false
-          : _this.detail.auditState && !_this.isAdd
+          :  !_this.isAdd
             ? true
             : false,
         span: 2,
@@ -593,7 +591,7 @@ export function mainCrud(_this, audit) {
         // clearable:false,
         disabled: audit
           ? false
-          : _this.detail.auditState && !_this.isAdd
+          :  !_this.isAdd
             ? true
             : false,
         span: 2,
@@ -619,7 +617,7 @@ export function mainCrud(_this, audit) {
         hide: true,
         disabled: audit
           ? false
-          : _this.detail.auditState && !_this.isAdd
+          :  !_this.isAdd
             ? true
             : false,
         span: 6,
@@ -634,7 +632,7 @@ export function mainCrud(_this, audit) {
         hide: true,
         disabled: audit
           ? false
-          : _this.detail.auditState && !_this.isAdd
+          :  !_this.isAdd
             ? true
             : false,
         width: 80,
@@ -645,7 +643,7 @@ export function mainCrud(_this, audit) {
         prop: "breadthValue",
         disabled: audit
           ? false
-          : _this.detail.auditState && !_this.isAdd
+          :  !_this.isAdd
             ? true
             : false,
         tip: "Thực dụng",
@@ -666,7 +664,7 @@ export function mainCrud(_this, audit) {
         hide: true,
         disabled: audit
           ? false
-          : _this.detail.auditState && !_this.isAdd
+          :  !_this.isAdd
             ? true
             : false,
         span: 2,
@@ -684,7 +682,7 @@ export function mainCrud(_this, audit) {
         minRows: 0,
         disabled: audit
           ? false
-          : _this.detail.auditState && !_this.isAdd
+          :  !_this.isAdd
             ? true
             : false,
         span: 2,
@@ -703,7 +701,7 @@ export function mainCrud(_this, audit) {
         minRows: 0,
         disabled: audit
           ? false
-          : _this.detail.auditState && !_this.isAdd
+          :  !_this.isAdd
             ? true
             : false,
         span: 2,
@@ -721,7 +719,7 @@ export function mainCrud(_this, audit) {
         hide: true,
         disabled: audit
           ? false
-          : _this.detail.auditState && !_this.isAdd
+          :  !_this.isAdd
             ? true
             : false,
         span: 2,
@@ -744,7 +742,7 @@ export function mainCrud(_this, audit) {
         prop: "breadth",
         disabled: audit
           ? false
-          : _this.detail.auditState && !_this.isAdd
+          :  !_this.isAdd
             ? true
             : false,
         tip: "Thực dụng",
@@ -763,7 +761,7 @@ export function mainCrud(_this, audit) {
         hide: true,
         disabled: audit
           ? false
-          : _this.detail.auditState && !_this.isAdd
+          :  !_this.isAdd
             ? true
             : false,
         placeholder: " "
@@ -781,7 +779,7 @@ export function mainCrud(_this, audit) {
         tip: "state",
         disabled: audit
           ? false
-          : _this.detail.auditState && !_this.isAdd
+          :  !_this.isAdd
             ? true
             : false,
         prop: "weaveState",
