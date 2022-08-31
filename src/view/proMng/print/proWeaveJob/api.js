@@ -1,12 +1,43 @@
 /*
  * @Author: Lyl
  * @Date: 2021-02-01 14:06:25
- * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-08-18 10:59:49
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-08-31 09:58:13
  * @Description:
  */
 
 import axios from "axios";
+
+// 查询实际用纱
+export function fetchProWeaveJobYarnallotData(weaveJobId){
+  return axios({
+    url: "/api/proWeaveJobYarnallot",
+    method: "get",
+  });
+}
+
+// 新增实际用纱
+export function CeateProWeaveJobYarnallotData(weaveJobId){
+  return axios({
+    url: "/api/proWeaveJobYarnallot",
+    method: "post",
+  });
+}
+
+// 更新实际用纱
+export function updateProWeaveJobYarnallotData(weaveJobId){
+  return axios({
+    url: "/api/proWeaveJobYarnallot",
+    method: "put",
+  });
+}
+
+// 删除实际用纱
+export function delProWeaveJobYarnallotData(id){
+  return axios({
+    url: "/api/proWeaveJobYarnallot?detailId=" + id,
+  });
+}
 
 
 // 织单已织完
