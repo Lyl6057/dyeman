@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-23 16:01:23
+ * @LastEditTime: 2022-08-31 15:26:30
  * @Description:
 -->
 <template>
@@ -138,7 +138,7 @@ export default {
       this.isExhaust = false;
       this.pdfUrl =
         process.env.API_HOST +
-        "/api/proBleadyeRunJob/createBleadyeRunJobPdf?id=" +
+        "/api/proBleadyeRunJob/createBleadyeRunJobPdfKF?id=" +
         this.detail.runJobId;
     },
     exhaustPrint() {
