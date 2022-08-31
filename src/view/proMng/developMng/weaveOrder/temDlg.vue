@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-30 15:55:18
+ * @LastEditTime: 2022-08-31 10:27:44
  * @Description: 
 -->
 <template>
@@ -137,10 +137,8 @@ export default {
   data() {
     return {
       wLoading: false,
-      formOp: mainCrud(this, false),
+      formOp: mainCrud(this, true),
       form: {
-       
-        creator: "TEST"
       },
       page: {
         pageSize: 10,

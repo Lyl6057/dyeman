@@ -211,28 +211,28 @@ export default {
               icon: "el-icon-s-home",
               color: "#409EFF",
             },
-            {
-              id: "2-8",
-              click: () => {
-                this.toView(
-                  "cc_package",
-                  this.$t("iaoMng.pbhwb") + "_whseCalicopackBarcodeoid",
-                  "PB"
-                );
-              },
-              title: this.$t("iaoMng.pbhwb"),
-              icon: "el-icon-s-claim",
-              color: "#409EFF",
-            },
-            {
-              id: "2-9",
-              click: () => {
-                this.toView("rc_manual", this.$t("iaoMng.pb") + "_0");
-              },
-              title: this.$t("iaoMng.sgrc"),
-              icon: "el-icon-thumb",
-              color: "#409EFF",
-            },
+            // {
+            //   id: "2-8",
+            //   click: () => {
+            //     this.toView(
+            //       "cc_package",
+            //       this.$t("iaoMng.pbhwb") + "_whseCalicopackBarcodeoid",
+            //       "PB"
+            //     );
+            //   },
+            //   title: this.$t("iaoMng.pbhwb"),
+            //   icon: "el-icon-s-claim",
+            //   color: "#409EFF",
+            // },
+            // {
+            //   id: "2-9",
+            //   click: () => {
+            //     this.toView("rc_manual", this.$t("iaoMng.pb") + "_0");
+            //   },
+            //   title: this.$t("iaoMng.sgrc"),
+            //   icon: "el-icon-thumb",
+            //   color: "#409EFF",
+            // },
           ],
         },
         {
@@ -838,7 +838,8 @@ export default {
             {
               id: "2-9",
               click: () => {
-                this.$router.push("proRevolve");
+                // this.$router.push("proRevolve");
+                 this.toView("cc_prepCloth", this.$t("iaoMng.pb") + "_0");
               },
               title: this.$t("iaoMng.bbcc"),
               icon: "el-icon-thumb",
