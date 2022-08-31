@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-31 10:05:19
+ * @LastEditTime: 2022-08-31 13:54:42
  * @Description:
  */
 
@@ -1281,7 +1281,8 @@ export function yarnCrud(_this, audit) {
         align: "center",
         display: false,
         cell: true, //audit ? false : _this.detail.auditState ? false : true,
-        placeholder: " "
+        placeholder: " ",
+        fixed: true
       },
       {
         label: "纱线编号",
@@ -1422,7 +1423,8 @@ export function yarnCrud(_this, audit) {
         span: 6,
         align: "left",
         cell: true,
-        placeholder: " "
+        placeholder: " ",
+        overHidden: true
       },
       {
         label: "变更纱长",
@@ -1458,17 +1460,9 @@ export function weaveJobyarnallotCrud(_this, audit) {
     refreshBtn: false,
     columnBtn: false,
     page: false,
+    index: true,
     labelWidth: 130,
     column: [
-      {
-        label: "#",
-        prop: "sn",
-        width: 80,
-        align: "center",
-        display: false,
-        cell: true, //audit ? false : _this.detail.auditState ? false : true,
-        placeholder: " "
-      },
       {
         label: "纱牌",
         prop: "yarnBrand",

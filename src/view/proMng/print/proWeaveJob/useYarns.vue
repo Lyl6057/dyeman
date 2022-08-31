@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-08-31 08:20:31
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-31 10:23:42
+ * @LastEditTime: 2022-08-31 15:04:31
  * @FilePath: \iot.vue\src\view\proMng\print\proWeaveJob\useYarns.vue
  * @Description: 
 -->
@@ -15,10 +15,10 @@
               <el-button @click="handleSave" type="success">{{ $t("public.save") }}</el-button>
             </el-tooltip>
             <el-tooltip class="item" effect="dark" content="thêm mới " placement="top-start">
-              <el-button @click="handleAdd" type="primary">{{ $t("public.add") }}</el-button>
+              <el-button @click="handleAdd(0)" type="primary">{{ $t("public.add") }}</el-button>
             </el-tooltip>
             <el-tooltip class="item" effect="dark" content="xóa" placement="top-start">
-              <el-button @click="handleDel" type="danger">{{ $t("public.del") }}</el-button>
+              <el-button @click="handleDelUseYarn" type="danger">{{ $t("public.del") }}</el-button>
             </el-tooltip>
             <el-tooltip class="item" effect="dark" content="đóng" placement="top-start">
               <el-button @click="visible = false" type="warning">{{  $t("public.close") }}</el-button>
@@ -36,10 +36,10 @@
         <view-container title="纱线实际分配信息">
           <el-row class="btnList">
             <el-tooltip class="item" effect="dark" content="thêm mới " placement="top-start">
-              <el-button @click="handleAdd" type="primary">{{ $t("public.add") }}</el-button>
+              <el-button @click="handleAdd(1)" type="primary">{{ $t("public.add") }}</el-button>
             </el-tooltip>
             <el-tooltip class="item" effect="dark" content="xóa" placement="top-start">
-              <el-button @click="handleDel" type="danger">{{ $t("public.del") }}</el-button>
+              <el-button @click="handleDelYarnAllot" type="danger">{{ $t("public.del") }}</el-button>
             </el-tooltip>
           </el-row>
           <avue-crud 
@@ -57,10 +57,13 @@
 </template>
 
 <script>
+import choice from "@/components/proMng/index";
 import { yarnCrud, weaveJobyarnallotCrud } from "./data"
 import { getYarn, addYarn, updateYarn, delYarn, fetchProWeaveJobYarnallotData, CeateProWeaveJobYarnallotData, updateProWeaveJobYarnallotData, delProWeaveJobYarnallotData } from "./api"
 export default {
-  components: {},
+  components: {
+    choice
+  },
   props: {
     weaveJobInfo: {}
   },
@@ -79,9 +82,9 @@ export default {
       useYarnsCrudData: [],
       weaveJobyarnallotCrudOp: weaveJobyarnallotCrud(this),
       weaveJobyarnallotCrudData: [],
-      rowSelectData: {},
-      allotRowSelectData: {},
-      addSgin: 0,
+      rowSelectData: null,
+      allotRowSelectData: null,
+      addSgin: 0, // 0 用纱明细 1实际用纱
       choiceV: false,
       choiceTle: "选择纱线库存",
       choiceQ: {}
@@ -103,13 +106,15 @@ export default {
   methods: {
     async initData() {
       this.useLoading = true;
+      this.rowSelectData = {};
+      this.useYarnsCrudData = [];
       let params = {
         proWeaveJobFk: this.weaveJobInfo.weaveJobId,
         rows: this.page.pageSize,
         start: this.page.currentPage,
       }
       let yarnsData = await getYarn(params);
-      this.useYarnsCrudData = yarnsData.data.records;
+      this.useYarnsCrudData = yarnsData.data.records.sort((a,b) => a.sn - b.sn);
       this.page.total = yarnsData.data.total;
       this.useYarnsCrudData.length && this.$refs.useYarnsCrud.setCurrentRow();
       this.useLoading = false;
@@ -121,29 +126,110 @@ export default {
       this.rowSelectData.weaveJobyarnallotCrudData = allotData.data
       this.allotLoading = false;
     },
-
     handleSave() {
 
     },
-
     handleAdd(sgin) {
       this.addSgin = sgin; // 新增类型标记
+      if (this.addSgin && !this.rowSelectData.sn) {
+        this.$tip.warning("请先选择用纱资料!")
+        return;
+      }
       this.choiceV = true;
     },
-
-    handleDel() {
-
+    handleDelUseYarn() {
+      this.$tip.cofirm("是否确定删除纱线编号为" + this.rowSelectData.yarnCode +"的數據?", this, {})
+        .then(() => {
+          if (!this.rowSelectData.useYarnId) {
+            this.useYarnsCrudData.splice(this.rowSelectData.$index, 1);
+            this.$tip.success(this.$t("public.sccg"));
+            return;
+          }
+          delYarn(this.rowSelectData.useYarnId)
+            .then((res) => {
+              if (res.data.code === 200) {
+                this.$tip.success(this.$t("public.sccg"));
+                this.initData();
+              } else {
+                this.$tip.error(this.$t("public.scsb"));
+              }
+            })
+            .catch((err) => {
+              this.$tip.error(this.$t("public.scsb"));
+            });
+        })
+        .catch((err) => {
+          this.$tip.warning(this.$t("public.qxcz"));
+        });
     },
-
+    handleDelYarnAllot(){
+      this.$tip.cofirm("是否确定删除纱批为" + this.allotRowSelectData.factoryYarnBatch +"的數據?", this, {})
+        .then(() => {
+          if (!this.allotRowSelectData.detailId) {
+            this.useYarnsCrudData.splice(1, this.allotRowSelectData.$index);
+            this.$tip.success(this.$t("public.sccg"));
+            return;
+          }
+          delProWeaveJobYarnallotData(this.allotRowSelectData.detailId)
+            .then((res) => {
+              if (res.data.code === 200) {
+                this.$tip.success(this.$t("public.sccg"));
+                this.initData();
+              } else {
+                this.$tip.error(this.$t("public.scsb"));
+              }
+            })
+            .catch((err) => {
+              this.$tip.error(this.$t("public.scsb"));
+            });
+        })
+        .catch((err) => {
+          this.$tip.warning(this.$t("public.qxcz"));
+        });
+    },
     handleCellClick(row) {
       this.rowSelectData = row;
-
+      !this.rowSelectData.weaveJobyarnallotCrudData && (this.rowSelectData.weaveJobyarnallotCrudData = []);
     },
     handleAllotCellClick(row) {
       this.allotRowSelectData = row;
     },
     choiceData(list) {
-
+      this.wLoading = true;
+      if(this.addSgin) {
+        list.forEach((item) => {
+          this.rowSelectData.weaveJobyarnallotCrudData.push({
+            yarnCode: item.yarnsId,
+            yarnName: item.yarnsName,
+            yarnBatch: item.batId,
+            yarnBrand: item.yarnsCard,
+            factoryYarnBatch: item.batchNo,
+            realAmount: 0,
+            $cellEdit: true,
+          });
+        });
+      }else{
+        list.forEach((item) => {
+          this.useYarnsCrudData.push({
+            sn: this.useYarnsCrudData.length + 1,
+            yarnCode: item.yarnsId,
+            yarnName: item.yarnsName,
+            yarnBatch: item.batId,
+            yarnBrand: item.yarnsCard,
+            factoryYarnBatch: item.batchNo,
+            amount: 0,
+            realAmount: 0,
+            lossRate: 0,
+            yarnRatio: 0,
+            unit: item.weightUnit,
+            $cellEdit: true,
+          });
+        });
+      }
+      setTimeout(() => {
+        this.choiceV = false;
+        this.wLoading = false;
+      }, 200);
     }
   },
 };
