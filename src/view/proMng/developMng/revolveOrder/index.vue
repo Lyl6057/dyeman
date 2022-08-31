@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-31 15:26:30
+ * @LastEditTime: 2022-08-31 16:02:22
  * @Description:
 -->
 <template>
@@ -25,11 +25,10 @@
         <el-tooltip class="item" effect="dark" content="copy" placement="top-start">
           <el-button type="primary" :disabled="!detail.runJobId" @click="copyEvent" :loading="wloading">复制</el-button>
         </el-tooltip>
-        
         <el-tooltip class="item" effect="dark" content="tìm kiếm" placement="top-start">
           <el-button type="primary" @click="handleQuery">{{ this.$t("public.query") }}</el-button>
         </el-tooltip>
-        <el-dropdown split-button type="primary" @click="splitVatNo('A')" :disabled="!detail.runJobId" :loading="wloading" style="margin-left: 10px">
+        <el-dropdown split-button type="primary" @click="splitVatNo('A')" :disabled="!detail.runJobId" :loading="wloading" style="margin: 0 10px">
           拆缸
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item @click.native="splitVatNo('A')">A 改单拆缸</el-dropdown-item>
@@ -37,6 +36,7 @@
             <el-dropdown-item @click.native="splitVatNo('W')">W 废布拆缸</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
+        <el-button type="primary" @click="handleOpenSendOrder">发单</el-button>
       </el-row>
       <el-row class="formBox">
         <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
@@ -54,16 +54,20 @@
         </view-container>
       </el-dialog>
     </view-container>
+    <!-- 收发单 -->
+    <sendandreceive-order ref="sendandreceiveOrder" :typechangeable="false" :remote="{ key: 'runJobId', value: 'runJobId', label: 'vatNo', fetchApi: get }" dispathReceive="2" :runJobInfo="detail"></sendandreceive-order>
   </div>
 </template>
 <script>
 import { mainForm, mainCrud } from "./data";
 import { get, update, del, delDye, getDye } from "../../revolve/api";
 import tem from "./temDlg";
+import sendandreceiveOrder from "../../revolve/sendAndreceive-order"
 export default {
   name: "developRunJob",
   components: {
     temDlg: tem,
+    sendandreceiveOrder,
   },
   data() {
     return {
@@ -93,7 +97,8 @@ export default {
       selectList: [],
       splitType: "A",
       hasFinied: 0,
-      isExhaust: false
+      isExhaust: false,
+      get
     };
   },
   watch: {},
@@ -153,6 +158,13 @@ export default {
       this.dialogVisible = true;
       await this.$nextTick();
       this.$refs.revolveOrderTem.getData();
+    },
+    async handleOpenSendOrder(){
+      this.loading = true;
+      this.$refs.sendandreceiveOrder.dialogVisible = true;
+      await this.$nextTick();
+      this.$refs.sendandreceiveOrder.initData(); // 初始化发单信息
+      this.loading = false;
     },
     copyEvent() {
       this.isAdd = true;
