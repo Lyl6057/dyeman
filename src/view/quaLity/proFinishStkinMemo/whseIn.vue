@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:18:23
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-09-01 09:22:00
+ * @LastEditTime: 2022-09-01 16:53:24
 -->
 <template>
   <div id="stkin-memo-container">
@@ -95,12 +95,13 @@ export default {
     },
     getDataList() {
       this.loading = true;
-      let { memoDate } = this.queryForm;
+      let { memoDate, vatNo } = this.queryForm;
       let params = {
         start: this.page.currentPage,
         rows: this.page.pageSize,
         // dataSortRules: "memoDate|desc,memoNo|desc"
-        dataSortRules: "sysCreated|desc"
+        // dataSortRules: "sysCreated|desc"
+        vatNo: vatNo ? "%" + vatNo: ""
       };
       if(memoDate && memoDate.length == 2){
         Object.assign(params,{

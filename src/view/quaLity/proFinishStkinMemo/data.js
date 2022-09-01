@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:08:41
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-08-24 10:33:27
+ * @LastEditTime: 2022-09-01 16:52:22
  */
 
 // 表格通用配置
@@ -47,6 +47,17 @@ export function stkinMemoCrudOp(_this) {
         align: "center"
       },
       {
+        label: "缸号",
+        prop: "vatNo",
+        width: 140
+      },
+      {
+        label: "通知单疋数",
+        prop: "memoPiCount",
+        width: 150,
+        align: "center"
+      },
+      {
         label: "通知单数量(kg)",
         prop: "memoWeight",
         width: 150,
@@ -58,6 +69,12 @@ export function stkinMemoCrudOp(_this) {
       {
         label: "入仓日期",
         prop: "yinDate",
+        width: 150,
+        align: "center"
+      },
+      {
+        label: "入仓疋数",
+        prop: "whseInPiCount",
         width: 150,
         align: "center"
       },
@@ -91,6 +108,12 @@ export function stkinMemoQueryFormOp(_this) {
       prop: "memoDate",
       type: "daterange",
       valueFormat: "yyyy-MM-dd",
+      span: 6,
+      placeholder: " ",
+    },
+    {
+      label: "缸号",
+      prop: "vatNo",
       span: 6,
       placeholder: " ",
     }]
