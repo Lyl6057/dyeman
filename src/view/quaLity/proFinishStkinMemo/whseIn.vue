@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:18:23
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-08-25 13:44:21
+ * @LastEditTime: 2022-09-01 09:22:00
 -->
 <template>
   <div id="stkin-memo-container">
@@ -84,7 +84,7 @@ export default {
           oA.target = "_blank";
           oA.click();
         } else {
-          warning("报表不存在");
+          this.$tip.warning("报表不存在");
         }
       })
 

@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-08 17:19:47
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-08-30 14:29:14
+ * @LastEditTime: 2022-09-01 09:21:04
 -->
 <template>
   <div class="whse-in_flat-container" :element-loading-text="loadLabel" v-loading="loading">
@@ -12,6 +12,7 @@
       <el-button type="primary" @click="getDataList">{{ this.$t("public.query") }}</el-button>
       <el-button type="warning" @click="handleClose">{{ this.$t("public.close") }}</el-button>
       <el-button type="primary" :disabled="hasNotEdit" @click="handleFinishPrep">完成备布</el-button>
+      <el-button type="success"  @click="handleExport">报表</el-button>
     </div>
     <div class="formBox">
       <avue-form ref="form" :option="queryFormOp" v-model="queryForm"></avue-form>
@@ -36,8 +37,9 @@
 
 <script>
 import { crudOp, queryFormOp } from "./data";
-import { fetchWhsePreclothSheetByPage, removeWhseInFlatById, fetchFinishPrepCloth} from "./api";
+import { fetchWhsePreclothSheetByPage, fetchFinishPrepCloth} from "./api";
 import WhseOutDtl from "./whseOutDtl.vue"
+import { fetchFineReportUrl } from "@/config/index"
 export default {
   name: "whseInFlatCloth",
   components: {
@@ -67,6 +69,31 @@ export default {
     }
   },
   methods: {
+    // 导出报表
+    handleExport(){
+      let { whsePreclothSheetoid, sheetNo }  = this.curRowSelect;
+      if(!whsePreclothSheetoid) return this.$tip.warning("请选择备布单");
+      let queryData = {
+        module: "WHSE",
+        id: "WHSE_PREP_CLOTH_SHEET",
+      };
+      fetchFineReportUrl(queryData).then(res => {
+        if (res.data) {
+          let url = res.data.url;
+          // 参数枚举
+          url += "&whsePreClothSheetOid=" + whsePreclothSheetoid
+          url += "&sheetNo=" + sheetNo
+       
+          let oA = document.createElement("a");
+          oA.href = url;
+          oA.target = "_blank";
+          oA.click();
+        } else {
+          this.$tip.warning("报表不存在");
+        }
+      })
+
+    },
     // 完成备布
     handleFinishPrep(){
       let { whsePreclothSheetoid, sheetNo, preState } = this.curRowSelect;
