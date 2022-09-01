@@ -22,7 +22,7 @@ export function mainForm(_this) {
         tip: "MS đơn sản xuất bp Dệt"
       },
       {
-        label: "訂單編號",
+        label: "生产单号",
         prop: "salPoNo",
         span: 6,
         placeholder: " ",
@@ -40,7 +40,7 @@ export function dlgForm(_this) {
     labelWidth: 150,
     column: [
       {
-        label: "訂單編號",
+        label: "生产单号",
         prop: "poNo",
         span: 6,
         placeholder: " "
@@ -103,17 +103,17 @@ export function mainCrud(_this) {
         ]
       },
       {
-        label: "訂單編號",
+        label: "生产单号",
         prop: "salPoNo",
         width: 180,
         span: 6,
-        placeholder: "请選擇訂單編號",
+        placeholder: "请選擇生产单号",
         sortable: true,
         overHidden: true
         // rules: [
         //   {
         //     required: true,
-        //     message: "请選擇訂單編號",
+        //     message: "请選擇生产单号",
         //     trigger: "blur"
         //   }
         // ]

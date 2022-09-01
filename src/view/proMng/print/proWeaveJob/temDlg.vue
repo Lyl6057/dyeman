@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-09-01 10:25:22
+ * @LastEditTime: 2022-08-29 09:38:40
  * @Description: 
 -->
 <template>
@@ -87,7 +87,7 @@
     <el-dialog id="colorMng_Dlg" :visible.sync="pdfDlg" fullscreen width="100%" append-to-body
       :close-on-click-modal="false" :close-on-press-escape="false">
       <view-container title="打印預覽">
-        <embed id="pdf" style="width: 100vw; height: calc(100vh - 80px)" :src="pdfUrl" />
+        <embed id="pdf" style="width: 100vw; height: calc(100vh - 5rem)" :src="pdfUrl" />
       </view-container>
     </el-dialog>
     <el-dialog id="colorMng_Dlg" :visible.sync="gytDlg" fullscreen width="100%" append-to-body
@@ -101,7 +101,7 @@
 
 
     <div class="other-dtl-wrapper">
-      <span style="color: #409eff; font-size: 15px; margin-left: 20px" @click.stop="handleOpenWeaEmbDtl">織胚明細</span>
+      <span style="color: #409eff; font-size: .9375rem; margin-left: 1.25rem" @click.stop="handleOpenWeaEmbDtl">織胚明細</span>
     </div>
     <el-dialog :visible.sync="meaEmbVisible" fullscreen append-to-body :close-on-click-modal="false"
       :close-on-press-escape="false">
@@ -111,9 +111,8 @@
       :close-on-press-escape="false">
       <YarnTest ref="yarnTestRef" />
     </el-dialog>
-
     <ColorDefine ref="colorDefineRef" :weaveJobId="form.weaveJobId" />
-
+    <use-yarns ref="useYarns" :weaveJobInfo="form"></use-yarns>
   </div>
 </template>
 <script>
@@ -122,6 +121,7 @@ import technology from "./technology"
 import WeaveDtl from "./weaveDtl.vue"
 import YarnTest from "./yarnTest.vue"
 import ColorDefine from "../components/ColorDefine"
+import useYarns from "./useYarns"
 import {
   mainCrud,
   dlgForm,
@@ -194,7 +194,8 @@ export default {
     "weave-dtl": WeaveDtl,
     MeaveEmbyroDtl,
     YarnTest,
-    ColorDefine
+    ColorDefine,
+    useYarns
   },
   data() {
     return {
@@ -954,10 +955,10 @@ export default {
       };
       addProEquipmentSchedule(params).then((res) => { });
     },
-    checkYarn() {
-      this.tabs = "用紗明细";
-      this.crudOp = yarnCrud(this);
-      this.visible = true;
+    async checkYarn() {
+      this.$refs.useYarns.visible = true;
+      await this.$nextTick();
+      this.$refs.useYarns.initData();
     },
     checkCalico() {
       this.tabs = "洗後規格";
@@ -1251,7 +1252,7 @@ export default {
 <style lang='stylus'>
 #proWeaveJob {
   .formBox {
-    height: calc(100vh - 120px) !important;
+    height: calc(100vh - 7.5rem) !important;
     overflow: auto;
   }
 
@@ -1264,7 +1265,7 @@ export default {
   }
 
   .el-input-number.is-controls-right .el-input__inner {
-    padding-left: 5px !important;
+    padding-left: .3125rem !important;
   }
 }
 
@@ -1278,34 +1279,34 @@ export default {
   }
 
   .el-dialog__headerbtn {
-    top: 3px;
-    font-size: 18px;
+    top: .1875rem;
+    font-size: 1.125rem;
     font-weight: bold;
     z-index: 9;
   }
 
   .el-dialog__headerbtn .el-dialog__close, #sxrcDlg .el-dialog__headerbtn .el-dialog__close, #wkDlg .el-dialog__headerbtn .el-dialog__close {
     color: #000;
-    font-size: 24px;
+    font-size: 1.5rem;
   }
 
   .el-tag--mini {
-    height: 24px;
-    padding: 0 5px;
-    line-height: 24px;
-    font-size: 14px;
+    height: 1.5rem;
+    padding: 0 .3125rem;
+    line-height: 1.5rem;
+    font-size: .875rem;
   }
 
   .el-select .el-tag__close.el-icon-close {
-    right: -5px;
-    height: 18px;
-    width: 18px;
-    line-height: 18px;
+    right: -0.3125rem;
+    height: 1.125rem;
+    width: 1.125rem;
+    line-height: 1.125rem;
   }
 
   .avue-form .el-input--mini input {
-    height: 35px !important;
-    line-height: 35px;
+    height: 2.1875rem !important;
+    line-height: 2.1875rem;
   }
 }
 </style>

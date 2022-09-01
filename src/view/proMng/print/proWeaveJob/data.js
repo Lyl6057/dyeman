@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-29 09:22:45
+ * @LastEditTime: 2022-09-01 14:23:27
  * @Description:
  */
 
@@ -24,7 +24,7 @@ export function mainForm(_this) {
         tip: "MS đơn sản xuất bp Dệt"
       },
       {
-        label: "訂單編號",
+        label: "生产单号",
         prop: "salPoNo",
         span: 6,
         tip: "MS đơn sản xuất bp Dệt"
@@ -105,7 +105,7 @@ export function dlgForm(_this) {
     labelWidth: 150,
     column: [
       {
-        label: "訂單編號",
+        label: "生产单号",
         prop: "poNo",
         span: 6,
         placeholder: " "
@@ -172,7 +172,7 @@ export function mainCrud(_this, audit, isExtract = false) {
         ]
       },
       {
-        label: "訂單編號",
+        label: "生产单号",
         prop: "salPoNo",
         width: 110,
         span: 6,
@@ -188,7 +188,7 @@ export function mainCrud(_this, audit, isExtract = false) {
         // rules: [
         //   {
         //     required: true,
-        //     message: "请選擇訂單編號",
+        //     message: "请選擇生产单号",
         //     trigger: "blur"
         //   }
         // ]
@@ -287,7 +287,7 @@ export function mainCrud(_this, audit, isExtract = false) {
       },
 
       {
-        label: "客人訂單編號",
+        label: "客人生产单号",
         prop: "custPoNo",
         span: 6,
         disabled: audit
@@ -1268,7 +1268,7 @@ export function yarnCrud(_this, audit) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 135px)",
+    height: "calc(100vh - 470px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
@@ -1281,7 +1281,8 @@ export function yarnCrud(_this, audit) {
         align: "center",
         display: false,
         cell: true, //audit ? false : _this.detail.auditState ? false : true,
-        placeholder: " "
+        placeholder: " ",
+        fixed: true
       },
       {
         label: "纱线编号",
@@ -1343,11 +1344,11 @@ export function yarnCrud(_this, audit) {
           if (!value) {
             return
           }
-          let b = _this.form.amount;
-          let x = (1 - _this.chooseData.lossRate / 100);
+          let b = _this.weaveJobInfo.amount;
+          let x = (1 - _this.rowSelectData.lossRate / 100);
           let y = (value / 100)
           let result = b / x * y;
-          _this.chooseData.amount = Number(result).toFixed(1);
+          _this.rowSelectData.amount = Number(result).toFixed(1);
         }
       },
       {
@@ -1366,11 +1367,11 @@ export function yarnCrud(_this, audit) {
             return
           }
           // _this.chooseData.amount = Number((_this.form.amount * (value + _this.chooseData.yarnRatio) / 100).toFixed(1));
-          let b = _this.form.amount;
+          let b = _this.weaveJobInfo.amount;
           let x = (1 - value / 100);
-          let y = (_this.chooseData.yarnRatio / 100)
+          let y = (_this.rowSelectData.yarnRatio / 100)
           let result = b / x * y;
-          _this.chooseData.amount = Number(result).toFixed(1);
+          _this.rowSelectData.amount = Number(result).toFixed(1);
         }
       },
       {
@@ -1422,7 +1423,8 @@ export function yarnCrud(_this, audit) {
         span: 6,
         align: "left",
         cell: true,
-        placeholder: " "
+        placeholder: " ",
+        overHidden: true
       },
       {
         label: "变更纱长",
@@ -1443,6 +1445,74 @@ export function yarnCrud(_this, audit) {
         placeholder: " "
       },
 
+    ]
+  };
+}
+
+/* 织单纱线实际指派数量 */
+export function weaveJobyarnallotCrud(_this, audit) {
+  return {
+    menu: false,
+    addBtn: false,
+    border: true,
+    highlightCurrentRow: true,
+    height: "calc(100vh - 470px)",
+    refreshBtn: false,
+    columnBtn: false,
+    page: false,
+    index: true,
+    labelWidth: 130,
+    showSummary: true,
+    sumColumnList: [
+      {
+        label: " ",
+        name: "realAmount",
+        type: "sum",
+        decimals: 2
+      }
+    ],
+    column: [
+      {
+        label: "纱牌",
+        prop: "yarnBrand",
+        width: 150,
+        span: 6,
+        cell: false,
+        type: "select",
+        dicData: getDIC("bas_yarnBrand"),
+        filterable: true,
+        allowCreate: true,
+        defaultFirstOption: true,
+        placeholder: " "
+      },
+      {
+        label: "供应商批号",
+        prop: "yarnBatch",
+        width: 140,
+        span: 6,
+        cell: false,
+        overHidden: true,
+        placeholder: " "
+      },
+      {
+        label: "本厂纱批号",
+        prop: "factoryYarnBatch",
+        width: 140,
+        span: 6,
+        cell: false,
+        placeholder: " "
+      },
+      {
+        label: "实际数量",
+        prop: "realAmount",
+        width: 120,
+        align: "right",
+        type: "number",
+        span: 6,
+        placeholder: " ",
+        cell: true,
+        minRows: 0,
+      },
     ]
   };
 }

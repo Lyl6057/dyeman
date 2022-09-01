@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-09-01 10:21:00
+ * @LastEditTime: 2022-08-31 10:27:44
  * @Description: 
 -->
 <template>
@@ -70,12 +70,14 @@
         <technology v-if="gytDlg" :weave="form" @refresh="technologyRefresh" @close="gytDlg = false"></technology>
       </view-container>
     </el-dialog>
+    <use-yarns ref="useYarns" :weaveJobInfo="form"></use-yarns>
     <choice :choiceV="choiceV" :choiceTle="choiceTle" :choiceQ="choiceQ" dlgWidth="100%" @choiceData="choiceData" @close="choiceV = false" v-if="choiceV"></choice>
   </div>
 </template>
 <script>
 import choice from "@/components/proMng/index";
 import technology from "./technology";
+import useYarns from "../../print/proWeaveJob/useYarns"
 import {
   mainCrud,
   dlgForm,
@@ -132,7 +134,8 @@ export default {
   },
   components: {
     choice: choice,
-    technology
+    technology,
+    useYarns
   },
   data() {
     return {
@@ -654,10 +657,10 @@ export default {
       // this.crudOp = dlgCrud(this);
       // this.visible = true;
     },
-    checkYarn() {
-      this.tabs = "用紗明细";
-      this.crudOp = yarnCrud(this);
-      this.visible = true;
+    async checkYarn() {
+      this.$refs.useYarns.visible = true;
+      await this.$nextTick();
+      this.$refs.useYarns.initData();
     },
     checkCalico() {
       this.tabs = "洗後規格";
@@ -823,20 +826,19 @@ export default {
       this.chooseDtlData = val;
     },
     getYarnList() {
-      // getGroup(
-      //   Object.assign({
-      //     rows: this.page.pageSize,
-      //     start: this.page.currentPage,
-      //     proWeaveJobFk: this.form.weaveJobId,
-      //   })
-      // ).then((group) => {
-      //   if (group.data.records.length) {
-      //     this.form.groupId = group.data.records[0].groupId; // 存在分组的依据
+      getGroup(
+        Object.assign({
+          rows: this.page.pageSize,
+          start: this.page.currentPage,
+          proWeaveJobFk: this.form.weaveJobId,
+        })
+      ).then((group) => {
+        if (group.data.records.length) {
+          this.form.groupId = group.data.records[0].groupId; // 存在分组的依据
           getYarn({
             star: 1,
             rows: 999,
-            // proWeaveJobGroupFk: group.data.records[0].groupId,
-            proWeaveJobFk: this.form.weaveJobId,
+            proWeaveJobGroupFk: group.data.records[0].groupId,
           }).then((res) => {
             this.crud = res.data.records;
             this.crud.forEach((item, i) => {
