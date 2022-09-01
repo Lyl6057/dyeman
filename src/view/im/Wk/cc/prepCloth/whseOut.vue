@@ -4,15 +4,15 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-08 17:19:47
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-09-01 09:21:04
+ * @LastEditTime: 2022-09-01 10:32:36
 -->
 <template>
   <div class="whse-in_flat-container" :element-loading-text="loadLabel" v-loading="loading">
     <div class="btnList">
       <el-button type="primary" @click="getDataList">{{ this.$t("public.query") }}</el-button>
-      <el-button type="warning" @click="handleClose">{{ this.$t("public.close") }}</el-button>
       <el-button type="primary" :disabled="hasNotEdit" @click="handleFinishPrep">完成备布</el-button>
       <el-button type="success"  @click="handleExport">报表</el-button>
+      <el-button type="warning" @click="handleClose">{{ this.$t("public.close") }}</el-button>
     </div>
     <div class="formBox">
       <avue-form ref="form" :option="queryFormOp" v-model="queryForm"></avue-form>
