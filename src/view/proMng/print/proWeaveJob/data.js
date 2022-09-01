@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-09-01 14:23:27
+ * @LastEditTime: 2022-09-01 15:15:40
  * @Description:
  */
 
@@ -1299,36 +1299,36 @@ export function yarnCrud(_this, audit) {
         span: 6,
         cell: false //audit ? false : _this.detail.auditState ? false : true
       },
-      {
-        label: "纱牌",
-        prop: "yarnBrand",
-        width: 150,
-        span: 6,
-        cell: false, // audit ? false : _this.detail.auditState ? false : true,
-        type: "select",
-        dicData: getDIC("bas_yarnBrand"),
-        filterable: true,
-        allowCreate: true,
-        defaultFirstOption: true,
-        placeholder: " "
-      },
-      {
-        label: "供应商批号",
-        prop: "yarnBatch",
-        width: 120,
-        span: 6,
-        cell: false,
-        overHidden: true,
-        placeholder: " "
-      },
-      {
-        label: "本厂纱批号",
-        prop: "factoryYarnBatch",
-        width: 120,
-        span: 6,
-        cell: false,
-        placeholder: " "
-      },
+      // {
+      //   label: "纱牌",
+      //   prop: "yarnBrand",
+      //   width: 150,
+      //   span: 6,
+      //   cell: false, // audit ? false : _this.detail.auditState ? false : true,
+      //   type: "select",
+      //   dicData: getDIC("bas_yarnBrand"),
+      //   filterable: true,
+      //   allowCreate: true,
+      //   defaultFirstOption: true,
+      //   placeholder: " "
+      // },
+      // {
+      //   label: "供应商批号",
+      //   prop: "yarnBatch",
+      //   width: 120,
+      //   span: 6,
+      //   cell: false,
+      //   overHidden: true,
+      //   placeholder: " "
+      // },
+      // {
+      //   label: "本厂纱批号",
+      //   prop: "factoryYarnBatch",
+      //   width: 120,
+      //   span: 6,
+      //   cell: false,
+      //   placeholder: " "
+      // },
 
       {
         label: "用纱比例",
@@ -1375,7 +1375,7 @@ export function yarnCrud(_this, audit) {
         }
       },
       {
-        label: "数量",
+        label: "计划数量",
         prop: "amount",
         width: 120,
         align: "right",
@@ -1503,7 +1503,7 @@ export function weaveJobyarnallotCrud(_this, audit) {
         placeholder: " "
       },
       {
-        label: "实际数量",
+        label: "配纱数量",
         prop: "realAmount",
         width: 120,
         align: "right",
@@ -1512,6 +1512,16 @@ export function weaveJobyarnallotCrud(_this, audit) {
         placeholder: " ",
         cell: true,
         minRows: 0,
+      },
+      {
+        label: "单位",
+        prop: "unit",
+        width: 100,
+        span: 6,
+        cell: false, // audit ? false : _this.detail.auditState ? false : true,
+        placeholder: " ",
+        type: "select",
+        dicData: getDIC("bas_matUnit")
       },
     ]
   };

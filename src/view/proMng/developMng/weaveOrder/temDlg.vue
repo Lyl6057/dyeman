@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-31 10:27:44
+ * @LastEditTime: 2022-09-01 14:39:45
  * @Description: 
 -->
 <template>
@@ -396,20 +396,7 @@ export default {
         this.func.add = addLong;
         this.func.update = updateLong;
         this.dlgForm.proWeaveJobFk = this.form.weaveJobId;
-      } else if (this.tabs == "用紗明细") {
-        this.func.get = getGroup;
-        this.func.del = delYarn;
-        this.func.add = addGroup;
-        this.func.update = updateGroup;
-        this.dlgForm.proWeaveJobFk = this.form.weaveJobId;
-        this.getYarnList();
-
-        return;
-        // this.func.get = getYarn;
-        // this.func.del = delYarn;
-        // this.func.add = addYarn;
-        // this.func.update = updateYarn;
-      } else if (this.tabs == "洗後規格") {
+      }else if (this.tabs == "洗後規格") {
         this.func.get = getCalico;
         this.func.del = delCalico;
         this.func.add = addCalico;
@@ -814,51 +801,9 @@ export default {
     cellClick(val) {
       this.chooseData = val;
       this.chooseDtlData = {};
-      // if (
-      //   this.tabs == "用紗明细" &&
-      //   this.chooseData.list.length == 0 &&
-      //   this.chooseData.groupId
-      // ) {
-      //   this.getYarnList();
-      // }
     },
     cellDtlClick(val) {
       this.chooseDtlData = val;
-    },
-    getYarnList() {
-      getGroup(
-        Object.assign({
-          rows: this.page.pageSize,
-          start: this.page.currentPage,
-          proWeaveJobFk: this.form.weaveJobId,
-        })
-      ).then((group) => {
-        if (group.data.records.length) {
-          this.form.groupId = group.data.records[0].groupId; // 存在分组的依据
-          getYarn({
-            star: 1,
-            rows: 999,
-            proWeaveJobGroupFk: group.data.records[0].groupId,
-          }).then((res) => {
-            this.crud = res.data.records;
-            this.crud.forEach((item, i) => {
-              item.$cellEdit = true;
-              item.index = i + 1;
-            });
-            this.crud.sort((a, b) => {
-              return a.sn - b.sn;
-            });
-            if (this.crud.length > 0) {
-              this.$refs.crud.setCurrentRow(this.crud[0]);
-            }
-            this.loading = false;
-            this.page.total = res.data.total;
-          });
-      //   } else {
-      //     this.loading = false;
-      //     this.crud = [];
-      //   }
-      // });
     },
     check() {
       if (this.tabs === "選擇訂單") {

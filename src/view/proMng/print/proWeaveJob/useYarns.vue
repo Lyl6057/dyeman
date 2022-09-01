@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-08-31 08:20:31
  * @LastEditors: Lyl
- * @LastEditTime: 2022-09-01 14:21:05
+ * @LastEditTime: 2022-09-01 15:40:39
  * @FilePath: \iot.vue\src\view\proMng\print\proWeaveJob\useYarns.vue
  * @Description: 
 -->
@@ -15,7 +15,7 @@
               <el-button @click="handleSave" type="success">{{ $t("public.save") }}</el-button>
             </el-tooltip>
             <el-tooltip class="item" effect="dark" content="thêm mới " placement="top-start">
-              <el-button @click="handleAdd(0)" type="primary">{{ $t("public.add") }}</el-button>
+              <el-button @click="handleAddUseYarn" type="primary">{{ $t("public.add") }}</el-button>
             </el-tooltip>
             <el-tooltip class="item" effect="dark" content="xóa" placement="top-start">
               <el-button @click="handleDelUseYarn" type="danger">{{ $t("public.del") }}</el-button>
@@ -86,10 +86,9 @@ export default {
         weaveJobyarnallotCrudData: []
       },
       allotRowSelectData: null,
-      addSgin: 0, // 0 用纱明细 1实际用纱
       choiceV: false,
       choiceTle: "选择纱线库存",
-      choiceQ: {}
+      choiceQ: {},
     };
   },
   watch: {
@@ -107,7 +106,7 @@ export default {
   mounted() {},
   updated() {
     this.$nextTick(() => {
-      if (this.rowSelectData.weaveJobyarnallotCrudData.length) this.$refs["weaveJobyarnallotCrud"].doLayout();
+      this.rowSelectData.weaveJobyarnallotCrudData && this.$refs["weaveJobyarnallotCrud"].doLayout();
     });
   },
   methods: {
@@ -140,11 +139,14 @@ export default {
       this.allotLoading = true;
       let allotData = await fetchProWeaveJobYarnallotData( { jobYarnFk: this.rowSelectData.useYarnId });
       this.rowSelectData.weaveJobyarnallotCrudData = allotData.data;
+      this.rowSelectData.weaveJobyarnallotCrudData.map((item,i) =>{
+        item.unit = this.rowSelectData.unit;
+      })
       this.allotLoading = false;
     },
     async handleSave() {
-      let validRes = await this.saveValid();
-      if(!validRes) return;
+      // let validRes = await this.saveValid();
+      // if(!validRes) return;
       if(!this.useYarnsCrudData.length) return;
       try {
           this.useYarnsCrudData.forEach(async (item, i) =>{
@@ -204,11 +206,20 @@ export default {
       return true
     },
     handleAdd(sgin) {
-      this.addSgin = sgin; // 新增类型标记
-      if (this.addSgin && !this.rowSelectData.sn) {
+      if (!this.rowSelectData.yarnCode) {
         this.$tip.warning("请先选择用纱资料!")
         return;
       }
+      this.choiceQ.yarnsId = this.rowSelectData.yarnCode;
+      this.choiceTle = "选择纱线库存";
+      
+      this.choiceV = true;
+    },
+    handleAddUseYarn() {
+      this.choiceQ.yarnsId = "";
+      this.choiceQ.sortF = "yarnsId"
+      this.choiceQ.fuzzy = "yarnsName"
+      this.choiceTle = "选择纱线资料";
       this.choiceV = true;
     },
     handleDelUseYarn() {
@@ -241,6 +252,7 @@ export default {
           this.$tip.warning(this.$t("public.qxcz"));
         });
     },
+
     handleDelYarnAllot(){
       this.$tip.cofirm("是否确定删除纱批为" + this.allotRowSelectData.factoryYarnBatch +"的數據?", this, {})
         .then(async () => {
@@ -271,6 +283,7 @@ export default {
           this.$tip.warning(this.$t("public.qxcz"));
         });
     },
+
     handleCellClick(row) {
       if(!row) return;
       this.rowSelectData = row;
@@ -279,9 +292,10 @@ export default {
     handleAllotCellClick(row) {
       this.allotRowSelectData = row;
     },
+
     choiceData(list) {
       this.wLoading = true;
-      if(this.addSgin) {
+      if(this.choiceTle == "选择纱线库存") {
         list.forEach((item) => {
           this.rowSelectData.weaveJobyarnallotCrudData.push({
             sn:  this.rowSelectData.weaveJobyarnallotCrudData.length + 1,
@@ -299,9 +313,6 @@ export default {
             sn: this.useYarnsCrudData.length + 1,
             yarnCode: item.yarnsId,
             yarnName: item.yarnsName,
-            yarnBatch: item.batId,
-            yarnBrand: item.yarnsCard,
-            factoryYarnBatch: item.batchNo,
             amount: 0,
             realAmount: 0,
             lossRate: 0,
