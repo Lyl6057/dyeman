@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-25 16:40:25
+ * @LastEditTime: 2022-08-31 16:40:17
  * @Description:
 -->
 <template>
@@ -918,6 +918,7 @@ export default {
             this.form.runState = "1";
             this.form.runJobId = "";
             this.form.jobType = 2;
+            this.form.runType = 1;
           });
         }, 200);
       } else {

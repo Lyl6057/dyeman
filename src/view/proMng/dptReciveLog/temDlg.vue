@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
- * @LastEditors: PMP
- * @LastEditTime: 2022-08-19 17:03:20
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-09-01 08:00:30
  * @Description: 
 -->
 <template>
@@ -108,6 +108,7 @@ export default {
           rows: 10,
           start: 1,
           page: 1,
+          runType: 0
         })
           .then((res) => {
             this.options = res.data.records;

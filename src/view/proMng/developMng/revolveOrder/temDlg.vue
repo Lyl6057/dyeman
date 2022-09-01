@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-31 15:26:55
+ * @LastEditTime: 2022-08-31 16:51:20
  * @Description:
 -->
 <template>
@@ -624,13 +624,13 @@ export default {
             this.form.bf = [];
             this.form.test = [];
             this.form.item = [];
-            
             this.form.salType = "sample";
             this.form.wmUnit = "KG";
             this.form.serviceOperator = parent.userID;
             this.form.runState = "1";
             this.form.runJobId = "";
             this.form.jobType = 1;
+            this.form.runType = 1;
           });
         }, 200);
       } else {
