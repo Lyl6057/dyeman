@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-29 09:44:02
+ * @LastEditTime: 2022-09-01 10:26:24
  * @Description: 
 -->
 <template>
@@ -401,24 +401,25 @@ export default {
       this.gytDlg = true
     },
     async getAllYarn() {
-      getGroup({
-        star: 1,
-        rows: 999,
-        proWeaveJobFk: this.form.weaveJobId,
-      }).then((group) => {
-        let data = group.data.records.sort((a, b) => {
-          return a.changeBatchTime > b.workchangeBatchTimeDate ? -1 : 1;
-        });
-        if (data.length) {
+      // getGroup({
+      //   star: 1,
+      //   rows: 999,
+      //   proWeaveJobFk: this.form.weaveJobId,
+      // }).then((group) => {
+      //   let data = group.data.records.sort((a, b) => {
+      //     return a.changeBatchTime > b.workchangeBatchTimeDate ? -1 : 1;
+      //   });
+      //   if (data.length) {
           getYarn({
             star: 1,
             rows: 999,
-            proWeaveJobGroupFk: data[0].useYarnId,
+            // proWeaveJobGroupFk: data[0].useYarnId,
+            proWeaveJobFk: this.form.weaveJobId,
           }).then((yarn) => {
             this.yarnlist = this.yarnlist.concat(yarn.data.records);
           });
-        }
-      });
+      //   }
+      // });
     },
     getMachineList() {
       getMachine({

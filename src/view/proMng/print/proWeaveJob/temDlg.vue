@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-29 09:38:40
+ * @LastEditTime: 2022-09-01 10:25:22
  * @Description: 
 -->
 <template>
@@ -495,24 +495,25 @@ export default {
         });
     },
     async getAllYarn() {
-      getGroup({
-        star: 1,
-        rows: 999,
-        proWeaveJobFk: this.form.weaveJobId,
-      }).then((group) => {
-        let data = group.data.records.sort((a, b) => {
-          return a.changeBatchTime > b.workchangeBatchTimeDate ? -1 : 1;
-        });
-        if (data.length) {
+      // getGroup({
+      //   star: 1,
+      //   rows: 999,
+      //   proWeaveJobFk: this.form.weaveJobId,
+      // }).then((group) => {
+      //   let data = group.data.records.sort((a, b) => {
+      //     return a.changeBatchTime > b.workchangeBatchTimeDate ? -1 : 1;
+      //   });
+      //   if (data.length) {
           getYarn({
             star: 1,
             rows: 999,
-            proWeaveJobGroupFk: data[0].groupId,
+            // proWeaveJobGroupFk: data[0].groupId,
+            proWeaveJobFk: this.form.weaveJobId,
           }).then((yarn) => {
             this.yarnlist = this.yarnlist.concat(yarn.data.records);
           });
-        }
-      });
+      //   }
+      // });
     },
     getMachineList() {
       getMachine({
@@ -645,13 +646,13 @@ export default {
                       proWeaveJobFk: this.detail.weaveJobId,
                     }).then((yarn) => {
                       if (yarn.data.records.length) {
-                        addGroup({ proWeaveJobFk: this.form.weaveJobId }).then(
-                          (group) => {
+                        // addGroup({ proWeaveJobFk: this.form.weaveJobId }).then(
+                        //   (group) => {
                             yarn.data.records.forEach((item) => {
                               item.proWeaveJobFk = this.form.weaveJobId;
-                              item.proWeaveJobGroupFk = group.data.data;
+                              // item.proWeaveJobGroupFk = group.data.data;
                               addYarn(item).then();
-                            });
+                            // });
                           }
                         );
                       }
@@ -883,9 +884,9 @@ export default {
       this.dlgLoading = true;
       let yarnLength = '';
       // 判断是否存在分组
-      if (this.form.groupId) {
+      // if (this.form.groupId) {
         this.crud.forEach((item, i) => {
-          item.proWeaveJobGroupFk = this.form.groupId;
+          // item.proWeaveJobGroupFk = this.form.groupId;
           item.proWeaveJobFk = this.form.weaveJobId;
           yarnLength +=  this.crud.length > 1 ? `${i + 1}.${item.yarnLengthChanged || item.yarnLength} ` : item.yarnLength
           if (!item.useYarnId) {
@@ -902,32 +903,32 @@ export default {
             this.dlgLoading = false;
           }
         });
-      } else {
-        this.func
-          .add({
-            proWeaveJobFk: this.form.weaveJobId,
-            sn: 1,
-            groupName: "01",
-            changeBatchTime: this.$getNowTime("datetime"),
-          })
-          .then((res) => {
-            this.form.groupId = res.data.data;
-            this.crud.forEach((item, i) => {
-              yarnLength +=  this.crud.length > 1 ? `${i + 1}.${item.yarnLengthChanged || item.yarnLength} ` : item.yarnLength
-              item.proWeaveJobGroupFk = res.data.data;
-              item.proWeaveJobFk = this.form.weaveJobId;
-              addYarn(item).then((res1) => {
-                item.useYarnId = res1.data.data;
-              });
-              if (i == this.crud.length - 1) {
-                this.form.yarnLength = yarnLength;
-                this.save()
-                this.$tip.success("保存成功!");
-                this.dlgLoading = false;
-              }
-            });
-          });
-      }
+      // } else {
+      //   this.func
+      //     .add({
+      //       proWeaveJobFk: this.form.weaveJobId,
+      //       sn: 1,
+      //       groupName: "01",
+      //       changeBatchTime: this.$getNowTime("datetime"),
+      //     })
+      //     .then((res) => {
+      //       this.form.groupId = res.data.data;
+      //       this.crud.forEach((item, i) => {
+      //         yarnLength +=  this.crud.length > 1 ? `${i + 1}.${item.yarnLengthChanged || item.yarnLength} ` : item.yarnLength
+      //         item.proWeaveJobGroupFk = res.data.data;
+      //         item.proWeaveJobFk = this.form.weaveJobId;
+      //         addYarn(item).then((res1) => {
+      //           item.useYarnId = res1.data.data;
+      //         });
+      //         if (i == this.crud.length - 1) {
+      //           this.form.yarnLength = yarnLength;
+      //           this.save()
+      //           this.$tip.success("保存成功!");
+      //           this.dlgLoading = false;
+      //         }
+      //       });
+      //     });
+      // }
     },
     async addEquipmentSchedule(row) {
       let equRes = await fetchEquipmentInfo({ equipmentCode: row.mathineCode });
@@ -1124,19 +1125,20 @@ export default {
       this.chooseDtlData = val;
     },
     getYarnList() {
-      getGroup(
-        Object.assign({
-          rows: this.page.pageSize,
-          start: this.page.currentPage,
-          proWeaveJobFk: this.form.weaveJobId,
-        })
-      ).then((group) => {
-        if (group.data.records.length) {
-          this.form.groupId = group.data.records[0].groupId; // 存在分组的依据
+      // getGroup(
+      //   Object.assign({
+      //     rows: this.page.pageSize,
+      //     start: this.page.currentPage,
+      //     proWeaveJobFk: this.form.weaveJobId,
+      //   })
+      // ).then((group) => {
+      //   if (group.data.records.length) {
+      //     this.form.groupId = group.data.records[0].groupId; // 存在分组的依据
           getYarn({
             star: 1,
             rows: 999,
-            proWeaveJobGroupFk: group.data.records[0].groupId,
+            // proWeaveJobGroupFk: group.data.records[0].groupId,
+            proWeaveJobFk: this.form.weaveJobId,
           }).then((res) => {
             this.crud = res.data.records;
             this.crud.forEach((item, i) => {
@@ -1152,11 +1154,11 @@ export default {
             this.loading = false;
             this.page.total = res.data.total;
           });
-        } else {
-          this.loading = false;
-          this.crud = [];
-        }
-      });
+        // } else {
+        //   this.loading = false;
+        //   this.crud = [];
+        // }
+      // });
     },
     check() {
       if (this.tabs === "更改紗長") {
