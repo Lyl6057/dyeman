@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-01 14:06:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-31 14:54:00
+ * @LastEditTime: 2022-09-01 09:54:54
  * @Description:
  */
 
@@ -17,7 +17,7 @@ export function fetchProWeaveJobYarnallotData(weaveJobId){
 }
 
 // 新增实际用纱
-export function CeateProWeaveJobYarnallotData(weaveJobId){
+export function CreateProWeaveJobYarnallotData(weaveJobId){
   return axios({
     url: "/api/proWeaveJobYarnallot",
     method: "post",
@@ -33,7 +33,7 @@ export function updateProWeaveJobYarnallotData(weaveJobId){
 }
 
 // 删除实际用纱
-export function delProWeaveJobYarnallotData(id){
+export function removeProWeaveJobYarnallotData(id){
   return axios({
     url: "/api/proWeaveJobYarnallot?detailId=" + id,
   });

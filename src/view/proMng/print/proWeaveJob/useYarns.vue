@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-08-31 08:20:31
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-31 15:04:31
+ * @LastEditTime: 2022-09-01 10:15:30
  * @FilePath: \iot.vue\src\view\proMng\print\proWeaveJob\useYarns.vue
  * @Description: 
 -->
@@ -59,7 +59,7 @@
 <script>
 import choice from "@/components/proMng/index";
 import { yarnCrud, weaveJobyarnallotCrud } from "./data"
-import { getYarn, addYarn, updateYarn, delYarn, fetchProWeaveJobYarnallotData, CeateProWeaveJobYarnallotData, updateProWeaveJobYarnallotData, delProWeaveJobYarnallotData } from "./api"
+import { getYarn, addYarn, updateYarn, delYarn, fetchProWeaveJobYarnallotData, CreateProWeaveJobYarnallotData, updateProWeaveJobYarnallotData, removeProWeaveJobYarnallotData } from "./api"
 export default {
   components: {
     choice
@@ -123,11 +123,32 @@ export default {
     async fetchYarnAllotData() {
       this.allotLoading = true;
       let allotData = await fetchProWeaveJobYarnallotData();
-      this.rowSelectData.weaveJobyarnallotCrudData = allotData.data
+      this.rowSelectData.weaveJobyarnallotCrudData = allotData.data;
       this.allotLoading = false;
     },
-    handleSave() {
-
+    async handleSave() {
+      this.wLoading = true;
+      let validRes = await this.saveValid();
+      if(!validRes) return;
+      this.useYarnsCrudData.forEach(async (item) =>{
+        if(item.useYarnId){
+          await updateYarn(item);
+          await item.weaveJobyarnallotCrudData.forEach((allot) =>{
+            if(allot.detailId){
+              updateProWeaveJobYarnallotData(item);
+            }else{}
+          })
+        }
+      })
+    },
+    saveValid() {
+      this.useYarnsCrudData.forEach((item,i) =>{
+        if(!item.amount){
+          this.$tip.warning("纱线数量不能为空!")
+          return false;
+        }
+      })
+      return true
     },
     handleAdd(sgin) {
       this.addSgin = sgin; // 新增类型标记
@@ -139,17 +160,15 @@ export default {
     },
     handleDelUseYarn() {
       this.$tip.cofirm("是否确定删除纱线编号为" + this.rowSelectData.yarnCode +"的數據?", this, {})
-        .then(() => {
+        .then(async () => {
+          this.wLoading = true;
           if (!this.rowSelectData.useYarnId) {
-            this.useYarnsCrudData.splice(this.rowSelectData.$index, 1);
             this.$tip.success(this.$t("public.sccg"));
-            return;
-          }
-          delYarn(this.rowSelectData.useYarnId)
+          }else{
+            await delYarn(this.rowSelectData.useYarnId)
             .then((res) => {
               if (res.data.code === 200) {
                 this.$tip.success(this.$t("public.sccg"));
-                this.initData();
               } else {
                 this.$tip.error(this.$t("public.scsb"));
               }
@@ -157,6 +176,13 @@ export default {
             .catch((err) => {
               this.$tip.error(this.$t("public.scsb"));
             });
+          }
+          this.useYarnsCrudData.splice(this.rowSelectData.sn - 1, 1);
+          this.useYarnsCrudData.forEach((item,i) =>{
+            item.sn = i + 1;
+          })
+          this.useYarnsCrudData.length && this.$refs.useYarnsCrud.setCurrentRow();
+          this.wLoading = false;
         })
         .catch((err) => {
           this.$tip.warning(this.$t("public.qxcz"));
@@ -164,17 +190,15 @@ export default {
     },
     handleDelYarnAllot(){
       this.$tip.cofirm("是否确定删除纱批为" + this.allotRowSelectData.factoryYarnBatch +"的數據?", this, {})
-        .then(() => {
+        .then(async () => {
+          this.wLoading = true;
           if (!this.allotRowSelectData.detailId) {
-            this.useYarnsCrudData.splice(1, this.allotRowSelectData.$index);
             this.$tip.success(this.$t("public.sccg"));
-            return;
-          }
-          delProWeaveJobYarnallotData(this.allotRowSelectData.detailId)
+          }else{
+            await removeProWeaveJobYarnallotData(this.allotRowSelectData.detailId)
             .then((res) => {
               if (res.data.code === 200) {
                 this.$tip.success(this.$t("public.sccg"));
-                this.initData();
               } else {
                 this.$tip.error(this.$t("public.scsb"));
               }
@@ -182,6 +206,13 @@ export default {
             .catch((err) => {
               this.$tip.error(this.$t("public.scsb"));
             });
+          }
+          this.rowSelectData.weaveJobyarnallotCrudData.splice(this.allotRowSelectData.sn - 1, 1);
+          this.rowSelectData.weaveJobyarnallotCrudData.forEach((item,i) =>{
+            item.sn = i + 1;
+          })
+          this.rowSelectData.weaveJobyarnallotCrudData.length && this.$refs.weaveJobyarnallotCrud.setCurrentRow();
+          this.wLoading = false;
         })
         .catch((err) => {
           this.$tip.warning(this.$t("public.qxcz"));
@@ -199,13 +230,13 @@ export default {
       if(this.addSgin) {
         list.forEach((item) => {
           this.rowSelectData.weaveJobyarnallotCrudData.push({
+            sn:  this.rowSelectData.weaveJobyarnallotCrudData.length + 1,
             yarnCode: item.yarnsId,
             yarnName: item.yarnsName,
             yarnBatch: item.batId,
             yarnBrand: item.yarnsCard,
             factoryYarnBatch: item.batchNo,
-            realAmount: 0,
-            $cellEdit: true,
+            realAmount: 0
           });
         });
       }else{
@@ -221,8 +252,7 @@ export default {
             realAmount: 0,
             lossRate: 0,
             yarnRatio: 0,
-            unit: item.weightUnit,
-            $cellEdit: true,
+            unit: item.weightUnit
           });
         });
       }

@@ -24,7 +24,7 @@ export function mainForm(_this) {
         tip: "MS đơn sản xuất bp Dệt"
       },
       {
-        label: "訂單編號",
+        label: "生产单号",
         prop: "salPoNo",
         span: 6,
         tip: "MS đơn sản xuất bp Dệt"
@@ -105,7 +105,7 @@ export function dlgForm(_this) {
     labelWidth: 150,
     column: [
       {
-        label: "訂單編號",
+        label: "生产单号",
         prop: "poNo",
         span: 6,
         placeholder: " "
@@ -172,7 +172,7 @@ export function mainCrud(_this, audit, isExtract = false) {
         ]
       },
       {
-        label: "訂單編號",
+        label: "生产单号",
         prop: "salPoNo",
         width: 110,
         span: 6,
@@ -188,7 +188,7 @@ export function mainCrud(_this, audit, isExtract = false) {
         // rules: [
         //   {
         //     required: true,
-        //     message: "请選擇訂單編號",
+        //     message: "请選擇生产单号",
         //     trigger: "blur"
         //   }
         // ]
@@ -287,7 +287,7 @@ export function mainCrud(_this, audit, isExtract = false) {
       },
 
       {
-        label: "客人訂單編號",
+        label: "客人生产单号",
         prop: "custPoNo",
         span: 6,
         disabled: audit

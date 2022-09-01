@@ -371,7 +371,7 @@ export function mainCrud(_this) {
         dicData: cust
       },
       {
-        label: "訂單編號",
+        label: "生产单号",
         tip: "SỐ P.O",
         prop: "salPoNo",
         width: 140,
@@ -575,7 +575,7 @@ export function weavecrud(_this) {
         sortable: true,
       },
       {
-        label: "訂單編號",
+        label: "生产单号",
         prop: "salPoNo",
         width: 140,
         span: 6,
@@ -621,7 +621,7 @@ export function weavecrud(_this) {
         placeholder: " "
       },
       {
-        label: "客人訂單編號",
+        label: "客人生产单号",
         prop: "custPoNo",
         span: 6,
 
