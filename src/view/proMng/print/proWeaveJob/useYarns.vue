@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-08-31 08:20:31
  * @LastEditors: Lyl
- * @LastEditTime: 2022-09-01 15:40:39
+ * @LastEditTime: 2022-09-01 16:15:29
  * @FilePath: \iot.vue\src\view\proMng\print\proWeaveJob\useYarns.vue
  * @Description: 
 -->
@@ -134,14 +134,17 @@ export default {
         return 
       }
       if(this.rowSelectData.weaveJobyarnallotCrudData.length > 0){
+        this.rowSelectData.weaveJobyarnallotCrudData.length && this.$refs.weaveJobyarnallotCrud.setCurrentRow(this.rowSelectData.weaveJobyarnallotCrudData[0]);
         return;
       }
       this.allotLoading = true;
       let allotData = await fetchProWeaveJobYarnallotData( { jobYarnFk: this.rowSelectData.useYarnId });
+      this.rowSelectData.weaveJobyarnallotCrudData = []
       this.rowSelectData.weaveJobyarnallotCrudData = allotData.data;
       this.rowSelectData.weaveJobyarnallotCrudData.map((item,i) =>{
         item.unit = this.rowSelectData.unit;
       })
+      this.rowSelectData.weaveJobyarnallotCrudData.length && this.$refs.weaveJobyarnallotCrud.setCurrentRow(this.rowSelectData.weaveJobyarnallotCrudData[0]);
       this.allotLoading = false;
     },
     async handleSave() {
@@ -292,7 +295,6 @@ export default {
     handleAllotCellClick(row) {
       this.allotRowSelectData = row;
     },
-
     choiceData(list) {
       this.wLoading = true;
       if(this.choiceTle == "选择纱线库存") {
