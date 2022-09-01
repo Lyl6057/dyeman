@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-31 10:27:44
+ * @LastEditTime: 2022-09-01 10:21:00
  * @Description: 
 -->
 <template>
@@ -272,24 +272,24 @@ export default {
         this.form.weaveJobId;
     },
     async getAllYarn() {
-      getGroup({
-        star: 1,
-        rows: 999,
-        proWeaveJobFk: this.form.weaveJobId,
-      }).then((group) => {
-        let data = group.data.records.sort((a, b) => {
-          return a.changeBatchTime > b.workchangeBatchTimeDate ? -1 : 1;
-        });
-        if (data.length) {
+      // getGroup({
+      //   star: 1,
+      //   rows: 999,
+      //   proWeaveJobFk: this.form.weaveJobId,
+      // }).then((group) => {
+      //   let data = group.data.records.sort((a, b) => {
+      //     return a.changeBatchTime > b.workchangeBatchTimeDate ? -1 : 1;
+      //   });
+      //   if (data.length) {
           getYarn({
             star: 1,
             rows: 999,
-            proWeaveJobGroupFk: data[0].groupId,
+            proWeaveJobFk: this.form.weaveJobId,
           }).then((yarn) => {
             this.yarnlist = this.yarnlist.concat(yarn.data.records);
           });
-        }
-      });
+        // }
+      // });
     },
     getMachineList() {
       getMachine({
@@ -823,19 +823,20 @@ export default {
       this.chooseDtlData = val;
     },
     getYarnList() {
-      getGroup(
-        Object.assign({
-          rows: this.page.pageSize,
-          start: this.page.currentPage,
-          proWeaveJobFk: this.form.weaveJobId,
-        })
-      ).then((group) => {
-        if (group.data.records.length) {
-          this.form.groupId = group.data.records[0].groupId; // 存在分组的依据
+      // getGroup(
+      //   Object.assign({
+      //     rows: this.page.pageSize,
+      //     start: this.page.currentPage,
+      //     proWeaveJobFk: this.form.weaveJobId,
+      //   })
+      // ).then((group) => {
+      //   if (group.data.records.length) {
+      //     this.form.groupId = group.data.records[0].groupId; // 存在分组的依据
           getYarn({
             star: 1,
             rows: 999,
-            proWeaveJobGroupFk: group.data.records[0].groupId,
+            // proWeaveJobGroupFk: group.data.records[0].groupId,
+            proWeaveJobFk: this.form.weaveJobId,
           }).then((res) => {
             this.crud = res.data.records;
             this.crud.forEach((item, i) => {
@@ -851,11 +852,11 @@ export default {
             this.loading = false;
             this.page.total = res.data.total;
           });
-        } else {
-          this.loading = false;
-          this.crud = [];
-        }
-      });
+      //   } else {
+      //     this.loading = false;
+      //     this.crud = [];
+      //   }
+      // });
     },
     check() {
       if (this.tabs === "選擇訂單") {
