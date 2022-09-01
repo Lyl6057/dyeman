@@ -64,7 +64,7 @@ export function QueryForm(_this) {
         span: 6,
       },
       {
-        label: "訂單編號",
+        label: "生产单号",
         tip: "Mã số đơn hàng",
         prop: "salPoNo",
         width: 150,
@@ -268,7 +268,7 @@ export function unTaskCrud(_this) {
         ]
       },
       {
-        label: "訂單編號",
+        label: "生产单号",
         tip: "Mã số đơn hàng",
         prop: "salPoNo",
         disabled: true,

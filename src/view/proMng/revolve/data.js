@@ -45,7 +45,7 @@ export function mainForm(_this) {
         placeholder: " "
       },
       {
-        label: "訂單編號",
+        label: "生产单号",
         prop: "salPoNo",
         span: 6,
         placeholder: " "
@@ -142,7 +142,7 @@ export function dlgForm(_this) {
     ...commonFormConfig,
     column: [
       {
-        label: "訂單編號",
+        label: "生产单号",
         prop: "poNo",
         span: 6,
         placeholder: " "
@@ -290,7 +290,7 @@ export function mainCrud(_this) {
         dicData: cust
       },
       {
-        label: "訂單編號",
+        label: "生产单号",
         tip: "SỐ P.O",
         prop: "salPoNo",
         width: 180,

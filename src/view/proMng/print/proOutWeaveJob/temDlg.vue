@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-29 09:44:02
+ * @LastEditTime: 2022-09-01 14:38:14
  * @Description: 
 -->
 <template>
@@ -149,11 +149,13 @@
     </el-dialog>
 
     <ColorDefine ref="colorDefineRef"  :weaveJobId="form.weaveJobId"  />
-
+    <use-yarns ref="useYarns" :weaveJobInfo="form"></use-yarns>
   </div>
 </template>
 <script>
+
 import choice from "@/components/proMng/index";
+import useYarns from "../proOutWeaveJob/useYarns"
 import {
   mainCrud,
   mainYJCrud,
@@ -202,7 +204,6 @@ import technology from "../proWeaveJob/technology"
 import MeaveEmbyroDtl from "./meaveEmbyroDtl.vue"
 import MachineInfo from "./machineInfo.vue"
 import ColorDefine from "../components/ColorDefine"
-import { async } from 'q';
 export default {
   name: "",
   props: {
@@ -216,7 +217,8 @@ export default {
     technology,
     MeaveEmbyroDtl,
     MachineInfo,
-    ColorDefine
+    ColorDefine,
+    useYarns
   },
   data() {
     return {
@@ -401,24 +403,25 @@ export default {
       this.gytDlg = true
     },
     async getAllYarn() {
-      getGroup({
-        star: 1,
-        rows: 999,
-        proWeaveJobFk: this.form.weaveJobId,
-      }).then((group) => {
-        let data = group.data.records.sort((a, b) => {
-          return a.changeBatchTime > b.workchangeBatchTimeDate ? -1 : 1;
-        });
-        if (data.length) {
+      // getGroup({
+      //   star: 1,
+      //   rows: 999,
+      //   proWeaveJobFk: this.form.weaveJobId,
+      // }).then((group) => {
+      //   let data = group.data.records.sort((a, b) => {
+      //     return a.changeBatchTime > b.workchangeBatchTimeDate ? -1 : 1;
+      //   });
+      //   if (data.length) {
           getYarn({
             star: 1,
             rows: 999,
-            proWeaveJobGroupFk: data[0].useYarnId,
+            // proWeaveJobGroupFk: data[0].useYarnId,
+            proWeaveJobFk: this.form.weaveJobId,
           }).then((yarn) => {
             this.yarnlist = this.yarnlist.concat(yarn.data.records);
           });
-        }
-      });
+      //   }
+      // });
     },
     getMachineList() {
       getMachine({
@@ -718,10 +721,10 @@ export default {
       this.crudOp = dlgCrud(this);
       this.visible = true;
     },
-    checkYarn() {
-      this.tabs = "用紗明细";
-      this.crudOp = yarnCrud(this);
-      this.visible = true;
+    async checkYarn() {
+      this.$refs.useYarns.visible = true;
+      await this.$nextTick();
+      this.$refs.useYarns.initData();
     },
     checkCalico() {
       this.tabs = "洗後規格";

@@ -57,7 +57,7 @@ export function dlgForm(_this) {
     labelWidth: 150,
     column: [
       {
-        label: "訂單編號",
+        label: "生产单号",
         prop: "poNo",
         span: 6,
         placeholder: " "
