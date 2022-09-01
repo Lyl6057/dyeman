@@ -122,7 +122,7 @@ import {
   bomDataF,
   getBaseWorkStep
 } from "./data";
-
+import {BasYarnsDataC, BasYarnsDataF, getBasYarnsData } from "@/const/whse";
 export default {
   name: "",
   components: {},
@@ -414,6 +414,11 @@ export default {
         this.choiceC = rlInC(this);
         this.choiceF = rlInF(this);
         this.getData = getRlIn;
+        break;
+      case "选择纱线资料": //"選擇紗線系統編號":
+        this.choiceC = BasYarnsDataC;
+        this.choiceF = BasYarnsDataF;
+        this.getData = getBasYarnsData;
         break;
       case "选择化工原料入仓信息":
         this.choiceC = hgylInC(this);

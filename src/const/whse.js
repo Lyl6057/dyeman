@@ -1148,42 +1148,20 @@ export const BasYarnsDataF = {
   menuBtn: false,
   menu: false,
   column: [
-    // {
-    //   label: "紗線系统编号",
-    //   prop: "yarnsId",
-    //   span: 6,
-    //   placeholder: " ",
-    // },
     {
-      label: i18n.t("whseField.ph"),
-      prop: "batchNo",
-      span: 6,
-      placeholder: " "
-    },
-    {
-      label: i18n.t("whseField.fsfs"),
-      prop: "spinningWay",
+      label: "系统编号",
+      prop: "yarnsId",
       span: 6,
       placeholder: " ",
-      type: "select",
-      dicData: getDIC("bas_spinningWay")
     },
     {
-      label: i18n.t("whseField.pz"),
-      prop: "yarnsKind",
+      label: "紗線名称",
+      prop: "yarnsName",
       span: 6,
       placeholder: " ",
-      type: "select",
-      dicData: getDIC("bas_yarnsKind")
-    }
-    // {
-    //   label: i18n.t("whseField.lb"),
-    //   prop: "yarnsType",
-    //   span: 6,
-    //   placeholder: " ",
-    //   type: "select",
-    //   dicData: getDIC("bas_yarnsType"),
-    // },
+    },
+    
+    
   ]
 };
 
@@ -1212,13 +1190,14 @@ export const BasYarnsDataC = {
     {
       label: i18n.t("whseField.sxmc"),
       prop: "yarnsName",
-      width: 500
+      width: 500,
+      overHidden: true
     },
-    {
-      label: i18n.t("whseField.ph"),
-      prop: "batchNo",
-      width: 150
-    },
+    // {
+    //   label: i18n.t("whseField.ph"),
+    //   prop: "batchNo",
+    //   width: 150
+    // },
     {
       label: i18n.t("whseField.sp"),
       prop: "yarnsCard",
@@ -1226,7 +1205,8 @@ export const BasYarnsDataC = {
     },
     {
       label: i18n.t("whseField.sh"),
-      prop: "colorNo"
+      prop: "colorNo",
+      width: 140
     },
     {
       label: i18n.t("whseField.gn"),

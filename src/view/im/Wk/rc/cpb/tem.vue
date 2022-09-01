@@ -169,6 +169,7 @@ export default {
             productNo: item.productNo,
             weight: item.netWeight,
             weightUnit: item.weightUnit,
+            vatNo: item.vatNo,
             $cellEdit: index == 0,
           })
           tData.sumWeight += +item.netWeight

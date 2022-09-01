@@ -86,7 +86,7 @@ export function mainCrud(_this) {
             ],
           },
           {
-            label: "訂單編號",
+            label: "生产单号",
             prop: "salPoNo",
             disabled: true,
             tipPlacement: "right",
@@ -98,7 +98,7 @@ export function mainCrud(_this) {
             rules: [
               {
                 required: true,
-                message: "请選擇訂單編號",
+                message: "请選擇生产单号",
                 trigger: "blur"
               }
             ]
