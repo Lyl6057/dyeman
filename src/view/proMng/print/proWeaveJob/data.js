@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-31 13:54:42
+ * @LastEditTime: 2022-09-01 14:23:27
  * @Description:
  */
 
@@ -1268,7 +1268,7 @@ export function yarnCrud(_this, audit) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 480px)",
+    height: "calc(100vh - 470px)",
     refreshBtn: false,
     columnBtn: false,
     page: true,
@@ -1344,11 +1344,11 @@ export function yarnCrud(_this, audit) {
           if (!value) {
             return
           }
-          let b = _this.form.amount;
-          let x = (1 - _this.chooseData.lossRate / 100);
+          let b = _this.weaveJobInfo.amount;
+          let x = (1 - _this.rowSelectData.lossRate / 100);
           let y = (value / 100)
           let result = b / x * y;
-          _this.chooseData.amount = Number(result).toFixed(1);
+          _this.rowSelectData.amount = Number(result).toFixed(1);
         }
       },
       {
@@ -1367,11 +1367,11 @@ export function yarnCrud(_this, audit) {
             return
           }
           // _this.chooseData.amount = Number((_this.form.amount * (value + _this.chooseData.yarnRatio) / 100).toFixed(1));
-          let b = _this.form.amount;
+          let b = _this.weaveJobInfo.amount;
           let x = (1 - value / 100);
-          let y = (_this.chooseData.yarnRatio / 100)
+          let y = (_this.rowSelectData.yarnRatio / 100)
           let result = b / x * y;
-          _this.chooseData.amount = Number(result).toFixed(1);
+          _this.rowSelectData.amount = Number(result).toFixed(1);
         }
       },
       {
@@ -1456,12 +1456,21 @@ export function weaveJobyarnallotCrud(_this, audit) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 480px)",
+    height: "calc(100vh - 470px)",
     refreshBtn: false,
     columnBtn: false,
     page: false,
     index: true,
     labelWidth: 130,
+    showSummary: true,
+    sumColumnList: [
+      {
+        label: " ",
+        name: "realAmount",
+        type: "sum",
+        decimals: 2
+      }
+    ],
     column: [
       {
         label: "纱牌",
@@ -1479,7 +1488,7 @@ export function weaveJobyarnallotCrud(_this, audit) {
       {
         label: "供应商批号",
         prop: "yarnBatch",
-        width: 120,
+        width: 140,
         span: 6,
         cell: false,
         overHidden: true,
@@ -1488,7 +1497,7 @@ export function weaveJobyarnallotCrud(_this, audit) {
       {
         label: "本厂纱批号",
         prop: "factoryYarnBatch",
-        width: 120,
+        width: 140,
         span: 6,
         cell: false,
         placeholder: " "

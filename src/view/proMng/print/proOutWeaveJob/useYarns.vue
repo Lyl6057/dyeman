@@ -2,8 +2,8 @@
  * @Author: Lyl
  * @Date: 2022-08-31 08:20:31
  * @LastEditors: Lyl
- * @LastEditTime: 2022-09-01 14:21:05
- * @FilePath: \iot.vue\src\view\proMng\print\proWeaveJob\useYarns.vue
+ * @LastEditTime: 2022-09-01 14:29:06
+ * @FilePath: \iot.vue\src\view\proMng\print\proOutWeaveJob\useYarns.vue
  * @Description: 
 -->
 <template>
@@ -58,8 +58,8 @@
 
 <script>
 import choice from "@/components/proMng/index";
-import { yarnCrud, weaveJobyarnallotCrud } from "./data"
-import { getYarn, addYarn, updateYarn, delYarn, fetchProWeaveJobYarnallotData, createProWeaveJobYarnallotData, updateProWeaveJobYarnallotData, removeProWeaveJobYarnallotData } from "./api"
+import { yarnCrud, weaveJobyarnallotCrud } from "../proWeaveJob/data"
+import { getYarn, addYarn, updateYarn, delYarn, fetchProWeaveJobYarnallotData, createProWeaveJobYarnallotData, updateProWeaveJobYarnallotData, removeProWeaveJobYarnallotData } from "../proWeaveJob/api"
 export default {
   components: {
     choice
@@ -143,12 +143,12 @@ export default {
       this.allotLoading = false;
     },
     async handleSave() {
-      let validRes = await this.saveValid();
-      if(!validRes) return;
+      // let validRes = await this.saveValid();
+      // if(!validRes) return;
       if(!this.useYarnsCrudData.length) return;
       try {
-          this.useYarnsCrudData.forEach(async (item, i) =>{
           this.wLoading = true;
+          this.useYarnsCrudData.forEach(async (item, i) =>{
           let data = JSON.parse(JSON.stringify(item));
           data.weaveJobyarnallotCrudData = [];
           if(data.useYarnId){

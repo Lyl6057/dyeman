@@ -2,33 +2,36 @@
  * @Author: Lyl
  * @Date: 2021-02-01 14:06:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-09-01 09:54:54
+ * @LastEditTime: 2022-09-01 11:31:37
  * @Description:
  */
 
 import axios from "axios";
 
 // 查询实际用纱
-export function fetchProWeaveJobYarnallotData(weaveJobId){
+export function fetchProWeaveJobYarnallotData(params){
   return axios({
     url: "/api/proWeaveJobYarnallot",
     method: "get",
+    params
   });
 }
 
 // 新增实际用纱
-export function CreateProWeaveJobYarnallotData(weaveJobId){
+export function createProWeaveJobYarnallotData(params){
   return axios({
     url: "/api/proWeaveJobYarnallot",
     method: "post",
+    params
   });
 }
 
 // 更新实际用纱
-export function updateProWeaveJobYarnallotData(weaveJobId){
+export function updateProWeaveJobYarnallotData(params){
   return axios({
     url: "/api/proWeaveJobYarnallot",
     method: "put",
+    params
   });
 }
 
@@ -36,6 +39,7 @@ export function updateProWeaveJobYarnallotData(weaveJobId){
 export function removeProWeaveJobYarnallotData(id){
   return axios({
     url: "/api/proWeaveJobYarnallot?detailId=" + id,
+    method: "delete"
   });
 }
 
