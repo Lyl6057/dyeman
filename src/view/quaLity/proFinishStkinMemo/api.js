@@ -4,11 +4,20 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:08:47
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-08-23 17:41:06
+ * @LastEditTime: 2022-09-02 09:28:45
  */
 
 import axios from "axios";
 
+
+// 通过布料外键检验缸号是否已存在
+export function fetchValidVatNo(data){
+    return axios({
+        url: "/api/proFinishStkinMemoDtl/valid/vatNo",
+        method: "post",
+        data: data
+    })
+}
 
 // 新增主数据
 export function addStkinMemoData(data){
