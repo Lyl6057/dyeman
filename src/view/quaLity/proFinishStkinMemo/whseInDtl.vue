@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-04-13 15:18:51
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-08-24 09:47:34
+ * @LastEditTime: 2022-09-02 10:02:48
 -->
 <template>
   <div id="stkin-memo-dtl-container">
@@ -48,7 +48,8 @@ import {
   fetchStkinMemoDataByStkinOid,
   fetchStkinMemoDataByVatNos,
   addStkinMemoData,
-  updateStkinMemoData
+  updateStkinMemoData,
+  fetchValidVatNo
 } from "./api";
 import { timeConversion } from "@/config/util";
 import { baseCodeSupplyEx, baseCodeSupply } from "@/api/index";
@@ -108,6 +109,12 @@ export default {
       if (oid) {
         await updateStkinMemoData(this.stkinMemoData);
       } else {
+        // 校验当前缸号数据是否存在过了
+        let validRes = await this.validVatNoData();
+        if(!validRes) {
+          this.loading = false;
+          return;
+        }
         Object.assign(this.stkinMemoData,{
           sysCreated: timeConversion(new Date()),
           sysCreatedby: this.$store.state.userOid
@@ -117,13 +124,36 @@ export default {
         );
         // 流水号递增
         baseCodeSupply({ code: "f_stkin_memo_notice" });
+         // 保存明细数据
+        await this.saveDtlData(oid);
       }
       Object.assign(this.stkinMemoData, { proFinishStkinMemooid: oid });
-      // 保存明细数据
-      await this.saveDtlData(oid);
+     
       this.loading = false;
       this.hasRefresh = true;
       this.$tip.success("保存成功");
+    },
+    // 检验数据是否存在了
+    async validVatNoData(){
+      let validEnum = {}
+      let validData = this.stlkinMemoDtlDataList.map(item => {
+        validEnum[item.children[0].proCardFk.toLocaleUpperCase()] = item.vatNo
+        return item.children[0].proCardFk;
+      });
+
+      let resData = await fetchValidVatNo(validData).then(res => res.data.data);
+      if(resData.length > 0){
+        let vatNos = resData.map(fk => `【${validEnum[fk]}】`).join(",");
+        this.$notify({
+          title: '警告',
+          message: `${vatNos}缸号数据已存在，请检查`,
+          type: 'warning'
+        });
+        return false;
+      }
+
+      return true;
+
     },
     // 保存明细数据
     saveDtlData(oid){
@@ -184,7 +214,7 @@ export default {
           vatNo: "",
           storeLoadCode: item.storeLoadCode,
           id: `${targetData[key].id}+${index}`,
-          proFinishStkinMemoDtloid:v1(),
+          proFinishStkinMemoDtloid: item.proFinishStkinMemoDtloid || v1(),
         }))
         targetData[key].pidNo++;
         targetData[key].netWeight += +item.netWeight
