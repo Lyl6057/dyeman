@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-24 14:15:12
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-24 08:05:59
+ * @LastEditTime: 2022-09-05 15:39:14
  * @Description: 
 -->
 <template>
@@ -14,7 +14,7 @@
         }}</el-button>
         <el-button type="primary" @click="outTransit">导出</el-button>
         <el-button type="warning" :disabled="!form.type" @click="handleCreateInventory">生成盘点清单</el-button>
-        <div style="display: inline; float: right; margin-right: 20px">
+        <div style="display: inline; float: right; margin-right: 1.25rem">
           <span>过滤空库存</span>
           <el-switch v-model="filterEmpty" @change="getData"> </el-switch>
         </div>
@@ -23,17 +23,17 @@
         <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
       </div>
       <el-row>
-        <el-col :span="(form.type === 'WJ') ? 17 : 24">
-          <div class="crudBox">
-            <avue-crud ref="crud" :option="crudOp" :data="crud" :page.sync="page" @on-load="getData"
-              @row-dblclick="handleRowDBLClick" @current-row-change="cellClick"></avue-crud>
-          </div>
+        <el-col :span="14" :element-loading-text="loadLabel" v-loading="loading">
+          <view-container title="材料信息" >
+              <avue-crud ref="materialsCrud" :option="crudOp" :data="crud" :page.sync="page" @on-load="getData"
+                @row-dblclick="handleRowDBLClick" @current-row-change="cellClick"></avue-crud>
+          </view-container>
         </el-col>
-        <el-col :span="(form.type === 'WJ') ? 7 : 0">
-          <view-container title="五金库存出入记录" :element-loading-text="loadLabel" v-loading="loading">
+        <!-- <el-col :span="10" v-if="form.type == 'WJ'">
+          <view-container title="库存信息">
             <avue-crud ref="crudWjDlt" :option="wjDltOp" :data="wjDlt">
               <template slot="yinType" slot-scope="scope">
-                <div style="margin-top: -3px;">
+                <div style="margin-top: -0.1875rem;">
                   <el-tag :type="(scope.row.yinType == '入仓') ? 'success' : 'danger'" size="medium">
                     {{ scope.row.yinType }}</el-tag>
                 </div>
@@ -43,9 +43,14 @@
                 <div style="color: #f20;" v-else>-{{ scope.row.poqty }}</div>
               </template>
             </avue-crud>
-            <div style="margin-bottom: 7px ;margin-top: 7px;">
-              剩余数量:{{chooseData.stock}}
+            <div style="padding: .4375rem;">
+              剩余数量:{{chooseData.stock}} 
             </div>
+          </view-container>
+        </el-col> -->
+        <el-col :span="10">
+          <view-container title="库存信息">
+            <avue-crud ref="materialsItyCrud" :option="materialsItyOp" :data="chooseData.nodes"></avue-crud>
           </view-container>
         </el-col>
       </el-row>
@@ -79,15 +84,15 @@ import {
   createSnapshot2StockType,
   getViewHardwareStockDetails
 } from "./api";
-import { getDIC, getDicT, getXDicT } from "@/config/index";
+import { getXDicT } from "@/config/index";
 import {
   formOp,
   crudOp,
-  formTemOp,
   finishedCrud,
   sxOp,
   noteCrud,
   wjDetailcrudOp,
+  materialsItyCrudOp
 } from "./data";
 import XlsxTemplate from "xlsx-template";
 import JSZipUtils from "jszip-utils";
@@ -132,7 +137,8 @@ export default {
       type: "SX",
       drawerVisible: false,
       filterEmpty: true,
-      outData: []
+      outData: [],
+      materialsItyOp: {},
     };
   },
   watch: {},
@@ -180,6 +186,7 @@ export default {
         }
       }
       let query = JSON.parse(JSON.stringify(this.form));
+      this.materialsItyOp = materialsItyCrudOp(this);
       switch (this.form.type) {
         case "SX":
           this.getFun = getSx;
@@ -261,7 +268,7 @@ export default {
       query.fabricName = query.yarnsName;
       query.accessoriesName = query.yarnsName;
       query.fabName = query.yarnsName;
-      query.proName = "%" + (query.proName || "");
+      query.proName = "!^%" + (query.proName || "");
       query.vatNo = "!^%" + (query.vatNo || "");
       query.noteCode = "%" + (query.noteCode || "");
       query.storeLoadCode = "%" + (query.storeLoadCode || "");
@@ -294,41 +301,43 @@ export default {
                   : this.form.type == "XZ"
                     ? "officeId"
                     : this.form.type == "SB"
-                      ? "equipmentId" : "accessoriesId"
+                      ? "equipmentId" : "accessoriesId", "nodes"
         );
-        if (this.form.type == "WJ") {
-          this.crud = data;
-          this.crud.forEach((item, i) => {
-            item.index = i + 1;
-            item.chemicalIds = item.accessoriesId;
-            item.chemicalNames = item.accessoriesName;
-          });
-          return;
-        }
+        // if (this.form.type == "WJ") {
+        //   this.crud = data;
+        //   this.crud.forEach((item, i) => {
+        //     item.index = i + 1;
+        //     item.chemicalIds = item.accessoriesId;
+        //     item.chemicalNames = item.accessoriesName;
+        //   });
+        //   return;
+        // }
         group.forEach((item, i) => {
-          item.children.sort((a, b) =>
-            a[this.typeObj.sort] > b[this.typeObj.sort] ? 1 : -1
+          item.nodes.sort((a, b) =>
+            a[this.typeObj.sort] > b[this.typeObj.sort] ? -1 : 1
           );
           item.index = i + 1;
-          item.yarnsName = item.children[0].yarnsName;
-          // item.yinStatus = item.children[0].yinStatus;
+          item.yarnsName = item.nodes[0].yarnsName;
           item.chemicalIds =
-            item.children[0].accessoriesId ||
-            item.children[0].chemicalId ||
-            item.children[0].officeId || item.children[0].equipmentId || item.children[0].yarnsId
+            item.nodes[0].accessoriesId ||
+            item.nodes[0].chemicalId ||
+            item.nodes[0].officeId || item.nodes[0].equipmentId || item.nodes[0].yarnsId
           item.chemicalNames =
-            item.children[0].accessoriesName ||
-            item.children[0].chemicalName ||
-            item.children[0].officeName || item.children[0].equipmentName || item.children[0].yarnsName
-          item.weightUnit = item.children[0].weightUnit;
-          item.proName = item.children[0].proName;
+            item.nodes[0].accessoriesName ||
+            item.nodes[0].chemicalName ||
+            item.nodes[0].officeName || item.nodes[0].equipmentName || item.nodes[0].yarnsName
+          item.weightUnit = item.nodes[0].weightUnit;
+          item.proName = item.nodes[0].proName;
           item.clothWeight = 0;
-          // item.storageNo = item.children[0].storageNo;
-          // item.batchNo = item.children[0].batchNo;
+          item.customerName = item.nodes[0].customerName;
+          item.fabricName = item.nodes[0].fabricName;
+          item.custCode = item.nodes[0].custCode;
+          item.fabName = item.nodes[0].fabName;
+          item.colorCode = item.nodes[0].colorCode;
+          item.colorName = item.nodes[0].colorName;
           if (!item.weight) item.weight = 0;
           if (!item.stock) item.stock = 0;
-
-          item.children.forEach((child, j) => {
+          item.nodes.forEach((child, j) => {
             child.index = item.index + "-" + (j + 1);
             child.weight = child.weight ? child.weight.toFixed(2) : 0;
             child.stock = child.stock ? child.stock.toFixed(2) : 0;
@@ -338,7 +347,6 @@ export default {
             item.weight += Number(child.weight) || Number(child.stock);
             item.clothWeight += Number(child.clothWeight || 0);
           });
-
           item.weight = item.weight.toFixed(2);
           item.stock = item.weight;
           item.clothWeight = item.clothWeight.toFixed(2);
@@ -348,6 +356,7 @@ export default {
           item.index = i + 1;
         });
       }).finally(() => {
+        if(this.crud.length) this.$refs.materialsCrud.setCurrentRow(this.crud[0]);
         this.loading = false;
       })
     },
@@ -389,8 +398,20 @@ export default {
         const exlBuf = await JSZipUtils.getBinaryContent(this.typeObj.outAdr);
         var template = new XlsxTemplate(exlBuf);
         var sheetNumber = "Sheet1";
-        let data = JSON.parse(JSON.stringify(this.outData)) ;
+        let data = [];
+        // if (this.form.type == "WJ") {
+        //   data = this.crud;
+        // }else{
+          this.crud.forEach((item, i) => {
+            item.nodes.forEach((node) =>{
+              node.$weightUnit = item.$weightUnit;
+            })
+            data = data.concat(JSON.parse(JSON.stringify(item.nodes)));
+          });
+        // }
         data.forEach((item, i) => {
+          item.$yinStatus =  item.yinStatus == '1' ?  "合格" : " 不合格",
+          item.$weightUnit =   item.$weightUnit || item.weightUnit,
           item.chemicalId =
             item.accessoriesId ||
             item.chemicalId ||
@@ -419,6 +440,7 @@ export default {
           };
           fun1().then((res) => {
             setTimeout(() => {
+              data = null;
               this.$tip.success("导出成功!");
               this.loading = false
             }, 500);
@@ -467,25 +489,28 @@ export default {
     },
     cellClick(val) {
       this.chooseData = val;
-      if (this.form.type == "WJ") {
-        let param = {
-          batchNo: val.batchNo,
-          materialNum: val.accessoriesId
-        };
-        getViewHardwareStockDetails(param).then((res) => {
-          this.wjDlt = res.data;
-          this.wjDlt.map((e, i) => {
-            e.index = i + 1;
-          })
-        })
-      }
+      // if (this.form.type == "WJ") {
+      //   let param = {
+      //     batchNo: val.batchNo,
+      //     materialNum: val.accessoriesId
+      //   };
+      //   getViewHardwareStockDetails(param).then((res) => {
+      //     this.wjDlt = res.data;
+      //     this.wjDlt.map((e, i) => {
+      //       e.index = i + 1;
+      //     })
+      //   })
+      // }
     },
   },
-  created() { },
+  created() {
+   
+  },
   updated() {
     this.$nextTick(() => {
       if (this.crud.length) {
-        this.$refs["crud"].doLayout();
+        this.$refs["materialsCrud"].doLayout();
+        this.$refs["materialsItyCrud"].doLayout();
       }
     });
   },

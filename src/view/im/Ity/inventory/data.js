@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-24 14:21:15
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-24 08:00:05
+ * @LastEditTime: 2022-09-05 15:42:21
  * @Description:
  */
 
@@ -10,6 +10,7 @@ import { getDIC, getXDicT, getDicT, postDicT, getDbDicT } from "@/config/index";
 
 let kindId = getDIC("bas_censorshipVarieties");
 let matUnit = getDIC("bas_matUnit");
+
 export function formOp(_this) {
   return {
     submitBtn: false,
@@ -25,19 +26,6 @@ export function formOp(_this) {
         dicData: kindId,
         change: val => {
           _this.$nextTick(() => {
-            // if (val.value == "CPB") {
-            //   _this.formOp.column[4].display = true;
-            //   _this.formOp.column[5].display = false;
-            //   _this.formOp.column[6].display = false;
-            // } else if (val.value == "PB") {
-            //   _this.formOp.column[4].display = false;
-            //   _this.formOp.column[5].display = true;
-            //   _this.formOp.column[6].display = true;
-            // } else {
-            //   _this.formOp.column[4].display = false;
-            //   _this.formOp.column[5].display = false;
-            //   _this.formOp.column[6].display = false;
-            // }
             _this.type = val.value;
             _this.formOp = formOp(_this);
             if (!_this.loading) {
@@ -114,6 +102,7 @@ export function formOp(_this) {
     ]
   };
 }
+
 export function formTemOp(_this) {
   return {
     submitBtn: false,
@@ -178,20 +167,20 @@ export function formTemOp(_this) {
     ]
   };
 }
+
 export function crudOp(_this) {
   return {
     menu: false,
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 285px)",
+    height: "calc(100vh - 287px)",
     refreshBtn: false,
     columnBtn: false,
     showOverflowTooltip: true,
     excelBtn: true,
     showSummary: true,
-    tree: true,
-    rowKey: "index",
+    index: true,
     sumColumnList: [
       {
         label: " ",
@@ -201,20 +190,6 @@ export function crudOp(_this) {
     ],
     page: true,
     column: [
-      {
-        label: "#",
-        prop: "index",
-        width: 50,
-        align: "left",
-        overHidden: true
-      },
-      // {
-      //   label: "材料种类",
-      //   prop: "kindId",
-      //   width: 100,
-      //   type: "select",
-      //   dicData: kindId
-      // },
       {
         label: _this.$t("whseField.clbh"),
         prop: "chemicalIds",
@@ -226,13 +201,6 @@ export function crudOp(_this) {
         type: "select",
         overHidden: true,
         width: 400
-      },
-      {
-        label: _this.$t("whseField.ph"),
-        prop: "batchNo",
-        cell: false,
-        overHidden: true,
-        width: 180
       },
       {
         label: "库存数量",
@@ -249,22 +217,6 @@ export function crudOp(_this) {
         type: "select",
         dicData: matUnit
       },
-      {
-        label: _this.$t("whseField.hwm"),
-        prop: "storageNo",
-        cell: false,
-        width: 120
-      },
-      {
-        label: _this.$t("whseField.jyzt"),
-        prop: "yinStatus",
-        span: 6,
-        placeholder: " ",
-        width: 100,
-        type: "select",
-        dicData: getDIC("whse_yinStatus"),
-        disabled: true
-      }
     ]
   };
 }
@@ -322,6 +274,7 @@ export function crudTemOp(_this) {
     ]
   };
 }
+
 export function finishedCrud(_this) {
   return {
     menu: false,
@@ -331,7 +284,6 @@ export function finishedCrud(_this) {
     delBtn: false,
     menuWidth: 80,
     border: true,
-    index: false,
     highlightCurrentRow: true,
     height: "calc(100vh - 285px)",
     refreshBtn: false,
@@ -340,10 +292,7 @@ export function finishedCrud(_this) {
     labelWidth: 100,
     selection: false,
     menuTitle: "称重",
-    rowKey: "index",
-    tree: true,
-    defaultExpandAll: false,
-    expandLevel: 2,
+    index: true,
     showSummary: true,
     sumColumnList: [
       {
@@ -359,14 +308,14 @@ export function finishedCrud(_this) {
       }
     ],
     column: [
-      {
-        label: "#",
-        prop: "index",
-        width: 80,
-        align: "left",
-        display: false,
-        overHidden: true
-      },
+      // {
+      //   label: "#",
+      //   prop: "index",
+      //   width: 80,
+      //   align: "left",
+      //   display: false,
+      //   overHidden: true
+      // },
       {
         label: "客戶名称",
         prop: "custCode",
@@ -421,26 +370,7 @@ export function finishedCrud(_this) {
         sortable: true
       },
 
-      {
-        label: "码卡编号",
-        prop: "productNo",
-        width: 170,
-        span: 6,
-        placeholder: " ",
-        disabled: true,
-        overHidden: true
-      },
-
-      {
-        label: "匹号",
-        prop: "pidNo",
-        width: 80,
-        align: "right",
-        sortable: true,
-        span: 6,
-        type: "number",
-        precision: 0
-      },
+      
       {
         label: "重量",
         prop: "weight",
@@ -463,23 +393,6 @@ export function finishedCrud(_this) {
         type: "select",
         dicData: matUnit
       },
-      {
-        label: "载具编号",
-        prop: "storeLoadCode",
-        span: 8,
-        placeholder: " ",
-        cell: true,
-        overHidden: true,
-        sortable: true,
-        width: 120
-      },
-      {
-        label: "货位码",
-        prop: "locationCode",
-        cell: true,
-        width: 120,
-        placeholder: " "
-      }
     ]
   };
 }
@@ -490,14 +403,15 @@ export function sxOp(_this) {
     addBtn: false,
     border: true,
     highlightCurrentRow: true,
-    height: "calc(100vh - 285px)",
+    height: "calc(100vh - 317px)",
     refreshBtn: false,
     columnBtn: false,
     showOverflowTooltip: true,
     excelBtn: true,
     showSummary: true,
-    tree: true,
-    rowKey: "index",
+    index: true,
+    tree: false,
+    rowKey: "batchNo",
     sumColumnList: [
       {
         label: " ",
@@ -507,14 +421,6 @@ export function sxOp(_this) {
     ],
     page: true,
     column: [
-      {
-        label: "#",
-        prop: "index",
-        width: 80,
-        overHidden: true,
-        align: "left",
-        fixed: true
-      },
       {
         label: _this.$t("whseField.clbh"),
         prop: "chemicalIds",
@@ -527,27 +433,6 @@ export function sxOp(_this) {
         type: "select",
         overHidden: true,
         width: 400
-      },
-      {
-        label: "纱牌",
-        prop: "yarnsCard",
-        cell: false,
-        width: 120,
-        overHidden: true
-      },
-      {
-        label: "供应商批号",
-        prop: "batId",
-        cell: false,
-        width: 180,
-        overHidden: true
-      },
-      {
-        label: _this.$t("whseField.ph"),
-        prop: "batchNo",
-        cell: false,
-        width: 120,
-        overHidden: true
       },
       {
         label: "库存数量",
@@ -566,22 +451,22 @@ export function sxOp(_this) {
         type: "select",
         dicData: matUnit
       },
-      {
-        label: _this.$t("whseField.hwm"),
-        prop: "locationCode",
-        cell: false,
-        width: 120
-      },
-      {
-        label: _this.$t("whseField.jyzt"),
-        prop: "yinStatus",
-        span: 6,
-        placeholder: " ",
-        width: 100,
-        type: "select",
-        dicData: getDIC("whse_yinStatus"),
-        disabled: true
-      }
+      // {
+      //   label: _this.$t("whseField.hwm"),
+      //   prop: "locationCode",
+      //   cell: false,
+      //   width: 120
+      // },
+      // {
+      //   label: _this.$t("whseField.jyzt"),
+      //   prop: "yinStatus",
+      //   span: 6,
+      //   placeholder: " ",
+      //   width: 100,
+      //   type: "select",
+      //   dicData: getDIC("whse_yinStatus"),
+      //   disabled: true
+      // }
     ]
   };
 }
@@ -595,7 +480,6 @@ export function noteCrud(_this) {
     delBtn: false,
     menuWidth: 80,
     border: true,
-    index: false,
     highlightCurrentRow: true,
     height: "calc(100vh - 267px)",
     refreshBtn: false,
@@ -604,8 +488,7 @@ export function noteCrud(_this) {
     labelWidth: 100,
     selection: false,
     showSummary: true,
-    tree: true,
-    rowKey: "index",
+    index: true,
     sumColumnList: [
       {
         label: " ",
@@ -615,21 +498,13 @@ export function noteCrud(_this) {
     ],
     column: [
       {
-        label: "#",
-        prop: "index",
-        width: 80,
-        overHidden: true,
-        align: "left",
-        fixed: true
-      },
-      {
         label: "客戶名称",
         prop: "customerName",
         width: 140,
         disabled: true,
         placeholder: " ",
         span: 6,
-        display: false,
+        // display: false,
         overHidden: true,
         type: "select",
         dicData: getDicT("basCustomer", "custName", "custCode")
@@ -656,26 +531,7 @@ export function noteCrud(_this) {
         overHidden: true
       },
 
-      {
-        label: "疋号",
-        prop: "eachNumber",
-        width: 105,
-        align: "right",
-        // sortable: true,
-        span: 6,
-        type: "number",
-        precision: 0
-      },
-      {
-        label: "布飞编号",
-        prop: "noteCode",
-        width: 170,
-        disabled: true,
-        placeholder: " ",
-        span: 6,
-        // sortable: true,
-        overHidden: true
-      },
+      
       {
         label: _this.$t("whseField.zl"),
         prop: "clothWeight",
@@ -698,16 +554,7 @@ export function noteCrud(_this) {
         dicData: matUnit
       },
 
-      {
-        label: "载具编号",
-        prop: "storeLoadCode",
-        span: 8,
-        placeholder: " ",
-        cell: true,
-        overHidden: true,
-        sortable: true,
-        width: 140
-      },
+      
       {
         label: "货位码",
         prop: "storeSiteCode",
@@ -810,11 +657,9 @@ export function wjDetailcrudOp(_this) {
     highlightCurrentRow: true,
     refreshBtn: false,
     columnBtn: false,
-    showOverflowTooltip: true,
+    // showOverflowTooltip: true,
     excelBtn: false,
-    rowKey: "index",
-    tree: true,
-    height: "calc(100vh - 315px)",
+    height: "calc(100vh - 325px)",
     showSummary: false,
     page: false,
     column: [
@@ -822,7 +667,6 @@ export function wjDetailcrudOp(_this) {
         label: "#",
         prop: "index",
         width: 50,
-        align: "left",
         overHidden: true,
         align: 'center'
       },
@@ -855,3 +699,187 @@ export function wjDetailcrudOp(_this) {
     ]
   };
 }
+
+
+export function materialsItyCrudOp(_this) {
+  return {
+    menu: false,
+    addBtn: false,
+    border: true,
+    highlightCurrentRow: true,
+    height: "calc(100vh - 280px)",
+    refreshBtn: false,
+    columnBtn: false,
+    excelBtn: true,
+    showSummary: true,
+    sumColumnList: [
+      {
+        label: " ",
+        name: "weight",
+        type: "sum"
+      },
+      {
+        label: " ",
+        name: "clothWeight",
+        type: "sum"
+      },
+      {
+        label: " ",
+        name: "stock",
+        type: "sum"
+      },
+      {
+        label: " ",
+        name: "noteCode",
+        type: "count"
+      },
+      {
+        label: " ",
+        name: "productNo",
+        type: "count"
+      },
+      {
+        label: " ",
+        name: "batchNo",
+        type: "count"
+      }
+    ],
+    page: false,
+    column: [
+      {
+        label: "#",
+        prop: "index",
+        width: 50,
+        align: "center",
+        overHidden: true
+      },
+      
+      {
+        label: "布飞编号",
+        prop: "noteCode",
+        width: 180,
+        disabled: true,
+        placeholder: " ",
+        hide: _this.type == 'PB' ? false : true,
+        span: 6,
+        overHidden: true
+      },
+      {
+        label: "码卡编号",
+        prop: "productNo",
+        width: 170,
+        span: 6,
+        placeholder: " ",
+        disabled: true,
+        overHidden: true,
+        hide: _this.type == 'CPB' ? false : true,
+      },
+      {
+        label: "疋号",
+        prop: "eachNumber",
+        width: 105,
+        align: "right",
+        span: 6,
+        type: "number",
+        hide: _this.type == 'PB' ? false : true,
+        precision: 0
+      },
+      {
+        label: "匹号",
+        prop: "pidNo",
+        width: 80,
+        align: "right",
+        sortable: true,
+        span: 6,
+        type: "number",
+        precision: 0,
+        hide: _this.type == 'CPB' ? false : true,
+      },
+      
+      {
+        label: _this.$t("whseField.ph"),
+        prop: "batchNo",
+        cell: false,
+        overHidden: true,
+        width: 140,
+        hide: _this.type != 'PB' && _this.type != 'CPB' ? false : true,
+      },
+      {
+        label: "库存数量",
+        prop: "clothWeight",
+        cell: false,
+        width: 120,
+        align: "right",
+        hide: _this.type == 'PB' ? false : true,
+      },
+      {
+        label: "库存数量",
+        prop: "weight",
+        cell: false,
+        width: 120,
+        align: "right",
+        hide: _this.type == 'SX' ? false : true,
+      },
+      {
+        label: "库存数量",
+        prop: "stock",
+        cell: false,
+        width: 120,
+        align: "right",
+        hide: _this.type == 'WJ' || _this.type == 'RLL' || _this.type == 'SB' ||   _this.type == 'RHL' || _this.type == 'FL' || _this.type == 'XZ' ? false : true,
+      },
+      {
+        label: _this.$t("whseField.dw"),
+        prop: "weightUnit",
+        cell: false,
+        width: 80,
+        type: "select",
+        dicData: matUnit
+      },
+      {
+        label: "载具编号",
+        prop: "storeLoadCode",
+        hide: _this.type == 'PB' || _this.type == 'CPB' ? false : true,
+        span: 8,
+        placeholder: " ",
+        cell: true,
+        overHidden: true,
+        sortable: true,
+        width: 140
+      },
+       {
+        label: _this.$t("whseField.hwm"),
+        prop: "storageNo",
+        cell: false,
+        width: 120,
+        hide: _this.type == 'WJ' || _this.type == 'RLL' || _this.type == 'SB' || _this.type == 'RHL' || _this.type == 'FL' || _this.type == 'XZ' ? false : true,
+      },
+      {
+        label: _this.$t("whseField.hwm"),
+        prop: "locationCode",
+        cell: false,
+        width: 120,
+        hide: _this.type == 'SX' || _this.type == 'CPB' ? false : true,
+      },
+      {
+        label: _this.$t("whseField.hwm"),
+        prop: "storeSiteCode",
+        cell: false,
+        width: 120,
+        hide: _this.type == 'PB' ? false : true,
+      },
+      {
+        label: _this.$t("whseField.jyzt"),
+        prop: "yinStatus",
+        span: 6,
+        placeholder: " ",
+        width: 100,
+        type: "select",
+        dicData: getDIC("whse_yinStatus"),
+        disabled: true,
+        hide: _this.type != 'SB' && _this.type != 'PB' && _this.type != 'CPB' ? false : true,
+      }
+    ]
+  };
+}
+
