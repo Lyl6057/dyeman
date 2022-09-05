@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
- * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-06-28 10:34:58
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-09-05 07:52:51
  * @Description:
 -->
 <template>
@@ -126,7 +126,7 @@ export default {
                 cItem.preCalicoWeight = cItem.clothWeight;
                 cItem.clothWeight = ''
               })
-            };
+            }
             return item;
           })
       }).finally(_ => {
@@ -144,16 +144,4 @@ export default {
 };
 </script>
 <style lang='stylus'>
-#clothFlyWeight
-  .el-table
-    overflow visible !important
-  .el-tag--mini
-    display none !important
-#normal_Dlg
-  .el-dialog__header
-    padding 20px !important
-    text-align center
-  .el-dialog__body
-    padding 10px !important
-    text-align center
 </style>

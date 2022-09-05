@@ -1,12 +1,12 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
- * @LastEditors: pmp
- * @LastEditTime: 2022-07-09 09:18:01
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-09-05 08:25:22
  * @Description:
 -->
 <template>
-  <div id="clothFlyWeight" :element-loading-text="$t('public.loading')" v-loading="wLoading">
+  <div id="codeCard" :element-loading-text="$t('public.loading')" v-loading="wLoading">
     <view-container title="成品码卡信息">
       <el-row class="btnList">
         <el-button type="primary" @click="dialogVisible = true" :disabled="!detail.cardId">{{ this.$t("public.update")
@@ -20,57 +20,20 @@
           <el-option label="SPOWER 通用模板" value="1" />
           <el-option label="KANE TOP 定制码卡" value="2" />
         </el-select>
-        <!-- <el-button type="danger" @click="del" :disabled="!selectList.length">{{
-          this.$t("public.del")
-        }}</el-button> -->
-        <!-- <el-button type="primary" @click="outExcel1">导出</el-button> -->
-        <!-- <el-button type="primary" @click="outExcel">导出明细表</el-button> -->
-        <!-- <el-dropdown
-          split-button
-          type="primary"
-          @click="outExcel(1)"
-          style="margin-left: 10px"
-        >
-          导出QC明细
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item @click.native="outExcel(1)"
-              >公斤(KG)</el-dropdown-item
-            >
-            <el-dropdown-item @click.native="outExcel(0)"
-              >磅(LBS)</el-dropdown-item
-            >
-          </el-dropdown-menu>
-        </el-dropdown>
-        <el-dropdown
-          split-button
-          type="primary"
-          @click="outQaExcel(1)"
-          style="margin-left: 10px"
-        >
-          导出QA明细
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item @click.native="outQaExcel(1)"
-              >公斤(KG)</el-dropdown-item
-            >
-            <el-dropdown-item @click.native="outQaExcel(0)"
-              >磅(LBS)</el-dropdown-item
-            >
-          </el-dropdown-menu>
-        </el-dropdown> -->
       </el-row>
       <el-row class="formBox">
         <avue-form ref="form" :option="formOp" v-model="form"> </avue-form>
       </el-row>
       <el-row class="crudBox">
-        <avue-crud ref="crud" :option="crudOp" :data="crud" :page.sync="page" v-loading="loading" @on-load="query"
-          @row-dblclick="handleRowDBLClick" @current-row-change="cellClick" @selection-change="selectionChange">
-          <!--  @sort-change="sortChange" -->
-          <!-- :summary-method="summaryMethod" -->
-          <!-- <template slot="menu">
-            <el-button size="small" type="primary" @click="weighing"
-              >称重</el-button
-            >
-          </template> -->
+        <avue-crud ref="crud" 
+          :option="crudOp" 
+          :data="crud" 
+          :page.sync="page" 
+          v-loading="loading" 
+          @on-load="query"
+          @row-dblclick="handleRowDBLClick" 
+          @current-row-change="cellClick" 
+          @selection-change="selectionChange">
         </avue-crud>
       </el-row>
       <el-dialog id="colorMng_Dlg" :visible.sync="dialogVisible" width="70%" append-to-body
@@ -106,9 +69,6 @@
             </div>
           </el-tab-pane>
         </el-tabs>
-        <!-- <view-container title="修改">
-          
-        </view-container> -->
       </el-dialog>
       <el-dialog id="normal_Dlg" title="请输入新的载具编号" :visible.sync="loadDialogVisible" width="30%" center append-to-body
         style="text-align: center">
@@ -124,17 +84,11 @@
 </template>
 <script>
 import { mainForm, mainCrud, dlgForm, dlgCrud } from "./data";
-import { webSocket } from "@/config/index.js";
 import {
   get,
-  add,
   update,
   del,
-  getJob,
   updateNote,
-  addInWhse,
-  addInDtla,
-  addInDtlb,
   getRevolve,
   getNotPage,
   getCodeHistory,
@@ -199,7 +153,6 @@ export default {
   methods: {
     query() {
       this.wLoading = true;
-      // let { prop, order } = this.sort;
       for (let key in this.form) {
         if (!this.form[key]) {
           delete this.form[key];
@@ -235,22 +188,14 @@ export default {
           return a.pidNo > b.pidNo ? 1 : -1;
         });
         this.crud.forEach((item, i) => {
-          // item.$cellEdit = true;
           item.index = i + 1;
         });
-        // this.form.vatNo = this.form.vatNo.replace(/[!^%]/g, "");
-        // this.form.clothChecker = this.form.clothChecker.replace(/[!^%]/g, "");
-        // this.form.storeLoadCode = this.form.storeLoadCode.replace(/[!^%]/g, "");
         this.page.total = res.data.total;
-        // console.log(this.form);
-        // if (this.form.productNo.indexOf("!^%") != -1) {
-        //   this.form.productNo = this.form.productNo.split("!^%")[0] || "";
-        // }
-        setTimeout(() => {
-          this.$refs.crud.setCurrentRow(this.crud[0] || {});
-          this.wLoading = false;
-        }, 200);
-      });
+        this.$refs.crud.setCurrentRow(this.crud[0] || {});
+          
+      }).finally((_) =>{
+        this.wLoading = false;
+      })
     },
     handleRowDBLClick(val) {
       this.detail = val;
@@ -338,29 +283,6 @@ export default {
         });
       });
     },
-    group(arr, type) {
-      var map = {},
-        dest = [];
-      for (var i = 0; i < arr.length; i++) {
-        var ai = arr[i];
-        if (!map[ai[type]]) {
-          dest.push({
-            [type]: ai[type],
-            data: [ai],
-          });
-          map[ai[type]] = ai;
-        } else {
-          for (var j = 0; j < dest.length; j++) {
-            var dj = dest[j];
-            if (dj[type] == ai[type]) {
-              dj.data.push(ai);
-              break;
-            }
-          }
-        }
-      }
-      return dest;
-    },
     cellClick(val) {
       this.detail = val;
       if (this.detail.weightUnit == "KG") {
@@ -373,14 +295,10 @@ export default {
       if (this.detail.cardId != null) {
         getCodeHistory({
           productCardFk: this.detail.cardId,
-          // rows: this.historyPage.pageSize,
-          // start: this.historyPage.currentPage,
-          // pages: this.historyPage.currentPage,
         }).then((res) => {
           this.history = res.data.sort((a, b) => {
             return a.clothCheckTime > b.clothCheckTime ? -1 : 1;
           });
-          // this.historyPage.total = res.data.total;
         });
       }
     },
@@ -439,25 +357,6 @@ export default {
     selectionChange(list) {
       this.selectList = list;
     },
-    // summaryMethod({ columns, data }) {
-    //   const sums = [];
-    //   if (columns.length > 0) {
-    //     columns.forEach((column, index) => {
-    //       if (index == 0) {
-    //         sums[index] = "合計";
-    //       }
-    //       if (index == 2) {
-    //         let num = 0;
-    //         this.selectList.forEach((item) => {
-    //           num += Number(item.netWeight);
-    //         });
-    //         sums[index] = "選中重量：" + num.toFixed(1);
-    //         this.checkSum = num.toFixed(1);
-    //       }
-    //     });
-    //   }
-    //   return sums;
-    // },
     async outExcel(type) {
       if (!this.form.vatNo) {
         this.$tip.warning("请先输入缸号!");
@@ -509,48 +408,12 @@ export default {
                     : data[j].netWeightLbs;
 
                   if (i == data[j].pidNo - 1 && i < lineNum) {
-                    // if (
-                    //   data[j].storeLoadCode &&
-                    //   load1.indexOf(data[j].storeLoadCode) == -1
-                    // ) {
-                    //   load1 += data[j].storeLoadCode + ",";
-                    // }
-                    // if (
-                    //   data[j].storeSiteCode &&
-                    //   h1.indexOf(data[j].storeSiteCode) == -1
-                    // ) {
-                    //   h1 += data[j].storeSiteCode + ",";
-                    // }
                     arr1[i] = data[j];
                     break;
                   } else if (i == data[j].pidNo - 1 && i < lineNum * 2) {
-                    // if (
-                    //   data[j].storeLoadCode &&
-                    //   load2.indexOf(data[j].storeLoadCode) == -1
-                    // ) {
-                    //   load2 += data[j].storeLoadCode + ",";
-                    // }
-                    // if (
-                    //   data[j].storeSiteCode &&
-                    //   h2.indexOf(data[j].storeSiteCode) == -1
-                    // ) {
-                    //   h2 += data[j].storeSiteCode + ",";
-                    // }
                     arr2[i - lineNum] = data[j];
                     break;
                   } else if (i == data[j].pidNo - 1 && i < lineNum * 3) {
-                    // if (
-                    //   data[j].storeLoadCode &&
-                    //   load3.indexOf(data[j].storeLoadCode) == -1
-                    // ) {
-                    //   load3 += data[j].storeLoadCode + ",";
-                    // }
-                    // if (
-                    //   data[j].storeSiteCode &&
-                    //   h3.indexOf(data[j].storeSiteCode) == -1
-                    // ) {
-                    //   h3 += data[j].storeSiteCode + ",";
-                    // }
                     arr3[i - lineNum * 2] = data[j];
                     break;
                   }
@@ -583,18 +446,6 @@ export default {
                 this.output.weightKg += item.netWeight;
                 this.output.weightLbs += item.netWeightLbs;
               });
-              // data.forEach((item, index) => {
-              //   this.output.weightKg += item.netWeight;
-              //   this.output.weightLbs += item.netWeightLbs;
-              //   item.weight = type ? item.netWeight : item.netWeightLbs;
-              //   if (item.pidNo <= 20) {
-              //     arr1.push(item);
-              //   } else if (item.pidNo <= 40) {
-              //     arr2.push(item);
-              //   } else if (item.pidNo <= 60) {
-              //     arr3.push(item);
-              //   }
-              // });
               this.output.num = data.length;
               this.output.weightKg = this.output.weightKg.toFixed(2);
               this.output.weightLbs = this.output.weightLbs.toFixed(2);
@@ -782,103 +633,6 @@ export default {
                 this.output.weightLbs += item.netWeightLbs;
                 this.output.lengthSum += item.yardLength;
               });
-              // data.forEach((item, index) => {
-              //   this.output.weightKg += item.netWeight;
-              //   this.output.weightLbs += item.netWeightLbs;
-              //   this.output.lengthSum += item.yardLength;
-              //   item.weight = type ? item.netWeight : item.netWeightLbs;
-              //   // for (let i = 1; i <= 60; i++) {
-              //   //   if (item.pidNo == i && i <= 20) {
-              //   //     if (
-              //   //       item.storeLoadCode &&
-              //   //       load1.indexOf(item.storeLoadCode) == -1
-              //   //     ) {
-              //   //       load1 += item.storeLoadCode + ",";
-              //   //     }
-              //   //     if (
-              //   //       item.storeSiteCode &&
-              //   //       h1.indexOf(item.storeSiteCode) == -1
-              //   //     ) {
-              //   //       h1 += item.storeSiteCode + ",";
-              //   //     }
-              //   //     arr1.push(item);
-              //   //     break;
-              //   //   } else if (item.pidNo == i && i <= 40) {
-              //   //     if (
-              //   //       item.storeLoadCode &&
-              //   //       load2.indexOf(item.storeLoadCode) == -1
-              //   //     ) {
-              //   //       load2 += item.storeLoadCode + ",";
-              //   //     }
-              //   //     if (
-              //   //       item.storeSiteCode &&
-              //   //       h2.indexOf(item.storeSiteCode) == -1
-              //   //     ) {
-              //   //       h2 += item.storeSiteCode + ",";
-              //   //     }
-              //   //     arr2.push(item);
-              //   //     break;
-              //   //   } else if (item.pidNo == i && i <= 60) {
-              //   //     if (
-              //   //       item.storeLoadCode &&
-              //   //       load3.indexOf(item.storeLoadCode) == -1
-              //   //     ) {
-              //   //       load3 += item.storeLoadCode + ",";
-              //   //     }
-              //   //     if (
-              //   //       item.storeSiteCode &&
-              //   //       h3.indexOf(item.storeSiteCode) == -1
-              //   //     ) {
-              //   //       h3 += item.storeSiteCode + ",";
-              //   //     }
-              //   //     arr3.push(item);
-              //   //     break;
-              //   //   }
-              //   // }
-              //   if (item.pidNo <= 20) {
-              //     if (
-              //       item.storeLoadCode &&
-              //       load1.indexOf(item.storeLoadCode) == -1
-              //     ) {
-              //       load1 += item.storeLoadCode + ",";
-              //     }
-              //     if (
-              //       item.storeSiteCode &&
-              //       h1.indexOf(item.storeSiteCode) == -1
-              //     ) {
-              //       h1 += item.storeSiteCode + ",";
-              //     }
-              //     // arr1.push(item);
-              //   } else if (item.pidNo <= 40) {
-              //     if (
-              //       item.storeLoadCode &&
-              //       load2.indexOf(item.storeLoadCode) == -1
-              //     ) {
-              //       load2 += item.storeLoadCode + ",";
-              //     }
-              //     if (
-              //       item.storeSiteCode &&
-              //       h2.indexOf(item.storeSiteCode) == -1
-              //     ) {
-              //       h2 += item.storeSiteCode + ",";
-              //     }
-              //     // arr2.push(item);
-              //   } else if (item.pidNo <= 60) {
-              //     if (
-              //       item.storeLoadCode &&
-              //       load3.indexOf(item.storeLoadCode) == -1
-              //     ) {
-              //       load3 += item.storeLoadCode + ",";
-              //     }
-              //     if (
-              //       item.storeSiteCode &&
-              //       h3.indexOf(item.storeSiteCode) == -1
-              //     ) {
-              //       h3 += item.storeSiteCode + ",";
-              //     }
-              //     // arr3.push(item);
-              //   }
-              // });
               this.output.load1 = load1.substr(0, load1.length - 1);
               this.output.load2 = load2.substr(0, load2.length - 1);
               this.output.load3 = load3.substr(0, load3.length - 1);
@@ -1004,7 +758,7 @@ export default {
 };
 </script>
 <style lang='stylus'>
-#clothFlyWeight
+#codeCard
   .el-table
     overflow visible !important
   .el-tag--mini

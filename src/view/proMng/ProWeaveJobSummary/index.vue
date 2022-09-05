@@ -1,8 +1,8 @@
 <!--
  * @Author: Symbol_Yang
  * @Date: 2022-06-14 10:25:49
- * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-06-20 08:30:12
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-09-05 07:49:52
  * @Description:
 -->
 <template>
@@ -112,16 +112,4 @@ export default {
 };
 </script>
 <style lang='stylus'>
-#clothFlyWeight
-  .el-table
-    overflow visible !important
-  .el-tag--mini
-    display none !important
-#normal_Dlg
-  .el-dialog__header
-    padding 20px !important
-    text-align center
-  .el-dialog__body
-    padding 10px !important
-    text-align center
 </style>

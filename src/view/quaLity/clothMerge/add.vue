@@ -1,8 +1,8 @@
 <!--
  * @Author: PMP
  * @Date: 2022-07-13 12:55:12
- * @LastEditors: 
- * @LastEditTime: 
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-09-05 07:51:29
  * @Description:
 -->
 <template>
@@ -331,7 +331,7 @@ export default {
                     })
 
                 })
-            };
+            }
 
 
         },
@@ -504,7 +504,7 @@ export default {
     display: inline-block;
     width: 130px;
   }
-#clothFlyWeight
+#clothMerge
   .el-table
     overflow visible !important
   .el-tag--mini

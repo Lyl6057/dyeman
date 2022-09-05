@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-08-07 07:57:44
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-22 08:00:45
+ * @LastEditTime: 2022-09-05 08:28:00
  * @Description: 
 -->
 <template>
@@ -85,18 +85,11 @@ import {
   get,
   add,
   update,
-  del,
-  print,
-  getBleadye,
   getRevolve,
-  getBleadyeByPage,
   getRevolvePage,
   getTem,
-  getWeave,
   getCheckItem,
 } from "./api";
-// import tem from "./temDlg";
-import { webSocket } from "@/config/index.js";
 import printTem from "./printTem.vue";
 import { addStorageLog, getStorageLog } from "../scan/api";
 import { getCodeValue } from "@/api/index"
