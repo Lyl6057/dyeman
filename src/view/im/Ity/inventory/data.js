@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-24 14:21:15
  * @LastEditors: Lyl
- * @LastEditTime: 2022-09-06 08:47:39
+ * @LastEditTime: 2022-09-06 15:44:18
  * @Description:
  */
 
@@ -369,8 +369,6 @@ export function finishedCrud(_this) {
         overHidden: true,
         sortable: true
       },
-
-      
       {
         label: "重量",
         prop: "weight",
@@ -555,18 +553,7 @@ export function noteCrud(_this) {
       },
 
       
-      {
-        label: "货位码",
-        prop: "storeSiteCode",
-        cell: true,
-        width: 140,
-        placeholder: " ",
-        type: "select",
-        props: {
-          label: "locationCode",
-          value: "locationCode"
-        }
-      }
+      
     ]
   };
 }

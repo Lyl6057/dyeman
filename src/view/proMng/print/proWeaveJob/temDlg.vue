@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-09-06 17:19:34
+ * @LastEditTime: 2022-09-06 17:31:00
  * @Description: 
 -->
 <template>
@@ -347,8 +347,8 @@ export default {
               this.form.calicoShap = "1";
               this.form.breadthUnit = "INCH";
               this.form.gramWeightUnit = "G/M2";
-              this.form.breadthAcceptUnit = " %";
-              this.form.gmAcceptUnit = " %";
+              this.form.breadthAcceptUnit = "%";
+              this.form.gmAcceptUnit = "%";
               this.code = res.data.data;
             }
             this.form.weaveJobId = "";

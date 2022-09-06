@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-09-06 08:11:37
+ * @LastEditTime: 2022-09-06 11:31:13
  * @Description:
  */
 
@@ -598,8 +598,8 @@ export function mainCrud(_this, audit) {
         type: "select",
         dicData: [
           {
-            label: " %",
-            value: " %"
+            label: "%",
+            value: "%"
           }
         ],
         placeholder: " ",
@@ -726,8 +726,8 @@ export function mainCrud(_this, audit) {
         type: "select",
         dicData: [
           {
-            label: " %",
-            value: " %"
+            label: "%",
+            value: "%"
           }
         ],
         placeholder: " ",
