@@ -46,13 +46,7 @@
             !form.runJobId || form.auditState != 1 || form.runState == 0
           ">打印</el-button>
         </el-tooltip>
-        <el-button
-          type="primary"
-          :disabled=" !form.runJobId"
-          @click="exhaustPrint"
-          :loading="wLoading"
-          >排缸咭</el-button
-        >
+        <el-button type="primary" :disabled="!form.runJobId" @click="exhaustPrint" :loading="wLoading">排缸咭</el-button>
         <el-button v-if="audit" type="primary" @click="auditHandle(form.auditState ? 0 : 1)">{{ form.auditState ? "取消审核"
             : "审核"
         }}</el-button>
@@ -66,6 +60,9 @@
           <el-button type="primary" @click="dialogVisible = true" :disabled="!fk">收单日志</el-button>
         </el-tooltip>
 
+        <el-tooltip class="item" effect="dark" content="In đơn xuất kho" placement="top-start">
+          <el-button type="success" @click="printClothNote">打印胚布</el-button>
+        </el-tooltip>
         <el-tooltip class="item" effect="dark" content="đóng" placement="top-start">
           <el-button type="warning" @click="close">{{
               this.$t("public.close")
@@ -79,10 +76,11 @@
             <!-- <div
               class="btnList"
               style="font-size: 24px; color: #409eff; cursor: pointer"
-            >
-              <i class="el-icon-circle-plus-outline" @click="add"></i>
-              <i class="el-icon-remove-outline" @click="del('bf')"></i>
-            </div> -->
+            > -->
+            <!-- <i class="el-icon-circle-plus-outline" @click="add"></i>
+              <i class="el-icon-remove-outline" @click="del('bf')"></i> -->
+            <!-- </div> -->
+
             <avue-crud ref="bf" id="bf" :option="bfOp" :data="form.bf" v-loading="bfLoading"
               @current-row-change="cellBfClick"></avue-crud>
           </view-container>
@@ -101,13 +99,13 @@
                   </el-select>
                 </template>
 
-              <!-- 2022.07.28 + -->
-              <template  slot="colorName">
-                <el-input v-model="form.colorName">
+                <!-- 2022.07.28 + -->
+                <template slot="colorName">
+                  <el-input v-model="form.colorName">
                     <el-button v-if="showColSelBtn" slot="append" icon="el-icon-search" @click="handleOpenColSel" />
-                </el-input>
-              </template>
-              </avue-form>  
+                  </el-input>
+                </template>
+              </avue-form>
               <el-row>
                 <el-col :span="14">
                   <view-container title="测试标准 Yêu cầu kiểm tra">
@@ -178,7 +176,7 @@
       @close="closeChoice" v-if="choiceV"></choice>
 
     <!-- 2022.07.28 + -->
-    <color-select  ref="colSelRef" :dataList="colSelData" @select="handleColSelCb"  />
+    <color-select ref="colSelRef" :dataList="colSelData" @select="handleColSelCb" />
   </div>
 </template>
 <script>
@@ -522,14 +520,14 @@ export default {
 
     },
     // 获取颜色选择数据
-    getColSelData(){
-      fetchColorSelectData({weaveJobCode:this.form.weaveJobCode}).then(res => {
+    getColSelData() {
+      fetchColorSelectData({ weaveJobCode: this.form.weaveJobCode }).then(res => {
         this.colSelData = res.data;
         this.showColSelBtn = res.data.length > 0;
 
         // 存在颜色可抽取数据时，置空某些栏位
-        if(this.showColSelBtn){
-          Object.assign(this.form,{
+        if (this.showColSelBtn) {
+          Object.assign(this.form, {
             colorName: "",
             compVatNo: "",
             specParam: "",
@@ -540,20 +538,20 @@ export default {
       })
     },
     // 开启颜色选择面板
-    handleOpenColSel(){
+    handleOpenColSel() {
       this.$refs.colSelRef.visible = true;
     },
     // 颜色选择回调
-    handleColSelCb(row){ 
+    handleColSelCb(row) {
       // 容错处理
-      let props = ["colorName","colorNo","okLd","okGh","light","oneRem","twoRem","thrRem","fourRem"]
+      let props = ["colorName", "colorNo", "okLd", "okGh", "light", "oneRem", "twoRem", "thrRem", "fourRem"]
       props.forEach(key => {
-        if(!row[key]){
+        if (!row[key]) {
           row[key] = ""
         }
       })
-      
-      Object.assign(this.form,{
+
+      Object.assign(this.form, {
         colorName: row.colorName,
         compVatNo: `${row.colorNo}-${row.okLd}`,
         colorCode: `${row.colorNo}-${row.okLd}`,
@@ -563,9 +561,9 @@ export default {
       });
     },
     // 获取测试标准
-    getTestStandard(){
-      fetchTestStandardData({poNo: this.form.salPoNo}).then(res => {
-        this.form.test = (res.data || []).map((item,index) => {
+    getTestStandard() {
+      fetchTestStandardData({ poNo: this.form.salPoNo }).then(res => {
+        this.form.test = (res.data || []).map((item, index) => {
           return {
             testItemCode: item.itemName,
             testName: item.itemContent,
@@ -738,7 +736,7 @@ export default {
                     }).then((pres) => {
                       pres.data.forEach((item) => {
                         item.proBleadyeJobFk = adye.data.data;
-                        addDyeProject(item).then((pro) => {});
+                        addDyeProject(item).then((pro) => { });
                       });
                     });
                     // 新增测试要求
@@ -747,7 +745,7 @@ export default {
                     }).then((pres) => {
                       pres.data.forEach((item) => {
                         item.proBleadyeJobFk = adye.data.data;
-                        addDyeTest(item).then((pro) => {});
+                        addDyeTest(item).then((pro) => { });
                       });
                     });
                   });
@@ -783,7 +781,7 @@ export default {
                 itemName: item.paramName,
                 proBleadyeJobFk: dyeId,
                 sn: washIndex++,
-              }).then((res) => {});
+              }).then((res) => { });
             } else if (item.paramType === "dyevat") {
               // 染缸
               addDyes({
@@ -792,7 +790,7 @@ export default {
                 dataStyle: item.paramValueType,
                 sn: dyeIndex++,
                 proBleadyeJobFk: dyeId,
-              }).then((res) => {});
+              }).then((res) => { });
             }
             if (index == res.data.length - 1) {
               this.form.auditState = 1;
@@ -1019,7 +1017,7 @@ export default {
                 updateNote({
                   noteId: this["choose" + type + "Data"].clothNoteId,
                   clothState: 2,
-                }).then((res) => {});
+                }).then((res) => { });
               }
               if (res.data.code === 200) {
                 this.getSublist();
@@ -1058,10 +1056,10 @@ export default {
         if (data.firstOrOther == "1") {
           const nReg = /^头缸/;
           if (!nReg.test(data.remark)) addText += "头缸,";
-        }else if(data.firstOrOther == "2") {
+        } else if (data.firstOrOther == "2") {
           const nReg = /^缸差/;
           if (!nReg.test(data.remark)) addText += "缸差,";
-        }else{
+        } else {
           const nReg = /^翻单头缸/;
           if (!nReg.test(data.remark)) addText += "翻单头缸,";
         }
@@ -1434,7 +1432,15 @@ export default {
         "/api/proBleadyeRunJob/createBleadyeRunJobPdf?id=" +
         this.form.runJobId;
     },
-    exhaustPrint(){
+    printClothNote() {
+      this.pdfDlg = true;
+      this.isExhaust = true;
+      this.pdfUrl =
+        process.env.API_HOST +
+        "/api/proBleadyeRunJobCalico/fineCode?id=" +
+        this.form.runJobId;
+    },
+    exhaustPrint() {
       this.pdfDlg = true;
       this.isExhaust = true;
       this.pdfUrl =
@@ -1531,7 +1537,7 @@ export default {
   mounted() {
     this.getData();
   },
-  beforeDestroy() {},
+  beforeDestroy() { },
 };
 </script>
 <style lang='stylus'>
