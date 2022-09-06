@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-09-06 11:00:59
+ * @LastEditTime: 2022-09-06 11:11:02
  * @Description: 
 -->
 <template>
@@ -579,16 +579,6 @@ export default {
       await this.$nextTick();
       this.$refs.useYarns.initData();
     },
-    checkCalico() {
-      this.tabs = "洗後規格";
-      this.crudOp = calicoCrud(this);
-      this.visible = true;
-    },
-    checkstrain() {
-      this.tabs = "輸送張力";
-      this.crudOp = strainCrud(this);
-      this.visible = true;
-    },
     add() {
       if (this.tabs == "用紗明细") {
         this.choiceV = true;
@@ -609,9 +599,6 @@ export default {
       // } else {
       //   this.choiceV = true;
       // }
-    },
-    addDtl() {
-      this.choiceV = true;
     },
     del() {
       if (
@@ -666,63 +653,6 @@ export default {
           this.$tip.warning(this.$t("public.qxcz"));
         });
     },
-    delDtl() {
-      if (Object.keys(this.chooseDtlData).length == 0) {
-        this.$tip.warning("請選擇要刪除的數據!");
-        return;
-      }
-      if (!this.chooseDtlData.useYarnId) {
-        this.chooseData.list.splice(this.chooseDtlData.index - 1, 1);
-        // this.chooseDtlData = {};
-        this.chooseData.list.forEach((item, i) => {
-          item.index = i + 1;
-        });
-        if (this.chooseData.list.length > 0) {
-          this.$refs.yarnCrud.setCurrentRow(this.chooseData.list[0]);
-        }
-        return;
-      }
-      getBf({ proWeaveJobGroupFk: this.chooseDtlData.proWeaveJobGroupFk }).then(
-        (bf) => {
-          if (bf.data.length) {
-            this.$tip.warning("請用紗明細存在布票信息,無法刪除!");
-            return;
-          }
-          this.$tip
-            .cofirm("是否确定删除選中的數據?", this, {})
-            .then(() => {
-              delYarn(this.chooseDtlData.useYarnId)
-                .then((res) => {
-                  if (res.data.code === 200) {
-                    // this.query();
-                    this.chooseData.list.splice(
-                      this.chooseDtlData.index - 1,
-                      1
-                    );
-                    // this.chooseDtlData = {};
-                    this.chooseData.list.forEach((item, i) => {
-                      item.index = i + 1;
-                    });
-                    if (this.chooseData.list.length > 0) {
-                      this.$refs.yarnCrud.setCurrentRow(
-                        this.chooseData.list[0]
-                      );
-                    }
-                    this.$tip.success(this.$t("public.sccg"));
-                  } else {
-                    this.$tip.error(this.$t("public.scsb"));
-                  }
-                })
-                .catch((err) => {
-                  this.$tip.error(this.$t("public.scsb"));
-                });
-            })
-            .catch((err) => {
-              this.$tip.warning(this.$t("public.qxcz"));
-            });
-        }
-      );
-    },
     handleRowDBLClick(val) {
       this.chooseData = val;
       this.check();
@@ -731,9 +661,6 @@ export default {
     cellClick(val) {
       this.chooseData = val;
       this.chooseDtlData = {};
-    },
-    cellDtlClick(val) {
-      this.chooseDtlData = val;
     },
     check() {
       if (this.tabs === "選擇訂單") {
