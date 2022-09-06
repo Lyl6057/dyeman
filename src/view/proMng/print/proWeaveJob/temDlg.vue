@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
- * @LastEditors: Lyl
- * @LastEditTime: 2022-08-29 09:38:40
+ * @LastEditors: Symbol_Yang
+ * @LastEditTime: 2022-09-06 17:19:34
  * @Description: 
 -->
 <template>
@@ -420,6 +420,7 @@ export default {
         colorNameEnum[item.colorDept] = true
         return Object.assign({}, item, {
           weavePoQty: weavePoQty,
+          poColorNo: item.colorNo,
           $cellEdit: true,
           proWeaveJobGstpodetailoid: v1(),
         });

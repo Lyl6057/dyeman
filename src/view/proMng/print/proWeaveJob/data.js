@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
- * @LastEditors: Lyl
- * @LastEditTime: 2022-09-01 15:15:40
+ * @LastEditors: Symbol_Yang
+ * @LastEditTime: 2022-09-06 16:42:27
  * @Description:
  */
 
@@ -2143,6 +2143,12 @@ export function weaveDtlCrudOp(_this) {
       {
         prop: "fabConst",
         label: "布类成份",
+        overHidden: true,
+      },
+      {
+        prop: "poColorNo",
+        label: "本厂色号",
+        width: 100,
         overHidden: true,
       },
       {

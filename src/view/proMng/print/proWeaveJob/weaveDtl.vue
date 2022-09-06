@@ -4,7 +4,7 @@
  * @Author: Symbol_Yang
  * @Date: 2022-07-11 08:22:07
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-08-22 14:16:25
+ * @LastEditTime: 2022-09-06 17:19:42
 -->
 <template>
     <div id="weave-dlt-container" >
@@ -58,7 +58,7 @@ export default {
         // 保存织单明细数据
         saveWeaveDltData(proWeaveJobId, isCreateId = false){
             let reulstData = this.crudData.map(item => {
-                let { proWeaveJobGstpodetailoid, poNo, bomId, fabCode, fabName, fabConst, colorEngName, colorChnName, weavePoQty} = item;
+                let { proWeaveJobGstpodetailoid, poNo, bomId, fabCode, fabName, fabConst, poColorNo, colorEngName, colorChnName, weavePoQty} = item;
                 let targetItem = {
                     proWeaveJobGstpodetailoid: isCreateId ? v1() : proWeaveJobGstpodetailoid, 
                     poNo, 
@@ -66,6 +66,7 @@ export default {
                     fabCode, 
                     fabName, 
                     fabConst, 
+                    poColorNo: poColorNo,
                     colorEngName, 
                     colorChnName, 
                     weavePoQty,
