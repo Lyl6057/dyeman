@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-24 14:15:12
  * @LastEditors: Lyl
- * @LastEditTime: 2022-09-05 15:39:14
+ * @LastEditTime: 2022-09-06 09:07:25
  * @Description: 
 -->
 <template>
@@ -26,7 +26,7 @@
         <el-col :span="14" :element-loading-text="loadLabel" v-loading="loading">
           <view-container title="材料信息" >
               <avue-crud ref="materialsCrud" :option="crudOp" :data="crud" :page.sync="page" @on-load="getData"
-                @row-dblclick="handleRowDBLClick" @current-row-change="cellClick"></avue-crud>
+                 @current-row-change="cellClick"></avue-crud>
           </view-container>
         </el-col>
         <!-- <el-col :span="10" v-if="form.type == 'WJ'">
@@ -50,7 +50,7 @@
         </el-col> -->
         <el-col :span="10">
           <view-container title="库存信息">
-            <avue-crud ref="materialsItyCrud" :option="materialsItyOp" :data="chooseData.nodes"></avue-crud>
+            <avue-crud ref="materialsItyCrud" @row-dblclick="handleRowDBLClick" :option="materialsItyOp" :data="chooseData.nodes"></avue-crud>
           </view-container>
         </el-col>
       </el-row>
@@ -456,8 +456,6 @@ export default {
       this.dialogVisible = true;
     },
     async handleRowDBLClick(row) {
-      let idxs = row.index.toString().split("-");
-      if (idxs.length == 1) return;
       let type = this.form.type;
       if (!["SX", "RHL", "RLL", "WJ", "FL", "SB"].includes(type)) return;
       this.drawerVisible = true;
@@ -466,7 +464,7 @@ export default {
       switch (type) {
         case "SX":
           params = {
-            yarnsId: this.crud[idxs[0] - 1].yarnsId,
+            yarnsId: row.yarnsId,
             yarnsCard: row.yarnsCard,
             batchNo: row.batchNo,
             batId: row.batId,
@@ -474,12 +472,36 @@ export default {
           };
           break;
         case "RHL":
+          params = {
+            materialId: row.chemicalId,
+            batchNo: row.batchNo,
+            storageNo: row.storageNo,
+          };
+          break;
         case "RLL":
+          params = {
+            materialId: row.chemicalId,
+            batchNo: row.batchNo,
+            storageNo: row.storageNo,
+          };
+          break;
         case "WJ":
+          params = {
+            materialId: row.accessoriesId,
+            batchNo: row.batchNo,
+            storageNo: row.storageNo,
+          };
+          break;
         case "FL":
+          params = {
+            materialId: row.chemicalId,
+            batchNo: row.batchNo,
+            storageNo: row.storageNo,
+          };
+          break;
         case "SB":
           params = {
-            materialId: this.crud[idxs[0] - 1].chemicalId,
+            materialId: row.chemicalId,
             storageNo: row.storageNo,
             batchNo: row.batchNo
           }

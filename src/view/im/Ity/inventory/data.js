@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-24 14:21:15
  * @LastEditors: Lyl
- * @LastEditTime: 2022-09-05 15:42:21
+ * @LastEditTime: 2022-09-06 08:47:39
  * @Description:
  */
 
@@ -795,7 +795,23 @@ export function materialsItyCrudOp(_this) {
         precision: 0,
         hide: _this.type == 'CPB' ? false : true,
       },
-      
+      {
+        label: "纱牌",
+        prop: "yarnsCard",
+        cell: false,
+        placeholder: " ",
+        span: 6,
+        hide: _this.type == "SX" ? false : true
+      },
+      {
+        label: "供应商批号",
+        prop: "batId",
+        cell: false,
+        placeholder: " ",
+        width: 140,
+        overHidden: true,
+        hide: _this.type == "SX" || _this.type == "RLL" ||  _this.type == "RHL" ? false : true,
+      },
       {
         label: _this.$t("whseField.ph"),
         prop: "batchNo",
