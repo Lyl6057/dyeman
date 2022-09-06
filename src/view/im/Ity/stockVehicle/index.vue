@@ -51,7 +51,7 @@ export default {
       },
       formOp: formOp(this),
       form: {
-        type: 1
+        type: 2
       },
       crudOp: crudOp(this),
       crud: [],
