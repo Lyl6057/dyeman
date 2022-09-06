@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-24 14:15:12
  * @LastEditors: Lyl
- * @LastEditTime: 2022-09-06 14:55:52
+ * @LastEditTime: 2022-09-06 15:40:43
  * @Description: 
 -->
 <template>
@@ -91,7 +91,8 @@ export default {
       this.getData();
       try {
         //获得Excel模板的buffer对象
-        const exlBuf = await JSZipUtils.getBinaryContent("./static/xlxsTemplate/vehicles_in_stock.xlsx");
+        let type = this.form.type == 1 ? 'cloth_vehicles_in_stock' : 'finished_vehicles_in_stock';
+        const exlBuf = await JSZipUtils.getBinaryContent("./static/xlxsTemplate/" + type + ".xlsx");
         var template = new XlsxTemplate(exlBuf);
         var sheetNumber = "Sheet1";
         let params = {
@@ -102,7 +103,7 @@ export default {
           rows: 9999,
           start: 1,
         };
-        let resData =  await (this.form.type == 1 ? fetchNoteStockVehicleByPage : fetchStockVehicleByPage)(params)
+        let resData =  await (this.form.type == 1 ? fetchNoteStockVehicleByPage : fetchStockVehicleByPage)(params);
         var values = {
           arr: resData.data.records,
         };
@@ -118,6 +119,7 @@ export default {
             });
           };
           fun1().then((res) => {
+              resData = null
               this.$tip.success("导出成功!");
               this.loading = false
           });

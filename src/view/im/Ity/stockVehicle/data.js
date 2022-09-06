@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-24 14:21:15
  * @LastEditors: Lyl
- * @LastEditTime: 2022-09-06 14:05:24
+ * @LastEditTime: 2022-09-06 15:56:00
  * @Description:
  */
 
@@ -271,15 +271,8 @@ export function crudOp(_this) {
 export function noteOp(_this) {
   return {
     ...crudCommConfig,
+    index: true,
     column: [
-      {
-        label: "#",
-        prop: "index",
-        width: 50,
-        align: "center",
-        display: false,
-        fixed: true
-      },
       {
         label: "载具编号",
         prop: "palletCode",
@@ -324,24 +317,7 @@ export function noteOp(_this) {
         overHidden: true,
         placeholder: " "
       },
-      {
-        label: "客人訂單號",
-        prop: "custPoNo",
-        width: 120,
-        span: 6,
-        placeholder: " ",
-        disabled: true,
-        overHidden: true
-      },
-      {
-        label: "本厂訂單號",
-        prop: "salPoNo",
-        width: 120,
-        span: 6,
-        placeholder: " ",
-        disabled: true,
-        overHidden: true
-      },
+      
       {
         label: "客戶",
         prop: "custCode",
@@ -376,6 +352,24 @@ export function noteOp(_this) {
         placeholder: " ",
         span: 6,
         width: 120,
+        overHidden: true
+      },
+      {
+        label: "客人訂單號",
+        prop: "custPoNo",
+        width: 120,
+        span: 6,
+        placeholder: " ",
+        disabled: true,
+        overHidden: true
+      },
+      {
+        label: "本厂訂單號",
+        prop: "salPoNo",
+        width: 120,
+        span: 6,
+        placeholder: " ",
+        disabled: true,
         overHidden: true
       },
       {
