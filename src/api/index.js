@@ -2,10 +2,30 @@
  * @Author: Lyl
  * @Date: 2021-03-10 13:20:43
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-23 10:21:51
+ * @LastEditTime: 2022-09-06 10:03:01
  * @Description:
  */
 import axios from "axios";
+
+export function fetchBaseWorkStepData(data) {
+  return axios({
+    url: "/api/baseWorkStep",
+    method: "get",
+    params: data
+  });
+}
+
+
+// 新增收发单信息
+export function createProDptReciveLogData(data) {
+  return axios({
+    url: "/api/proDptReciveLog",
+    method: "post",
+    params: data
+  });
+}
+
+
 // 用户组织信息
 export function getLoginOrg(params) {
   return axios({

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-31 16:02:22
+ * @LastEditTime: 2022-09-06 10:11:09
  * @Description:
 -->
 <template>
@@ -62,7 +62,7 @@
 import { mainForm, mainCrud } from "./data";
 import { get, update, del, delDye, getDye } from "../../revolve/api";
 import tem from "./temDlg";
-import sendandreceiveOrder from "../../revolve/sendAndreceive-order"
+import sendandreceiveOrder from "@/components/sendAndreceive-order"
 export default {
   name: "developRunJob",
   components: {

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-22 10:09:13
+ * @LastEditTime: 2022-09-05 07:52:29
  * @Description:
 -->
 <template>
@@ -380,16 +380,4 @@ export default {
 };
 </script>
 <style lang='stylus'>
-#clothFlyWeight
-  .el-table
-    overflow visible !important
-  .el-tag--mini
-    display none !important
-#normal_Dlg
-  .el-dialog__header
-    padding 20px !important
-    text-align center
-  .el-dialog__body
-    padding 10px !important
-    text-align center
 </style>

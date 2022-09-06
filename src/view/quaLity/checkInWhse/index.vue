@@ -1,15 +1,14 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
- * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-08-03 09:51:08
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-09-05 08:04:06
  * @Description:
 -->
 <template>
-  <div id="clothFlyWeight" :element-loading-text="$t('public.loading')" v-loading="wLoading">
+  <div id="checkInWhse" :element-loading-text="$t('public.loading')" v-loading="wLoading">
     <view-container title="胚布信息">
       <el-row class="btnList">
-        <!-- <el-button type="success" @click="pass" :disabled="!selectList.length || this.form.clothState === 2">审核</el-button> -->
         <el-button type="primary" @click="query">{{
           this.$t("public.query")
         }}</el-button>
@@ -29,9 +28,6 @@
       </el-row>
       <el-row class="crudBox">
         <avue-crud ref="crud" :option="crudOp" :data="crud" :page.sync="page" v-loading="loading" @on-load="query" @row-dblclick="handleRowDBLClick" @current-row-change="cellClick" :summary-method="summaryMethod" @selection-change="selectionChange" @sort-change="sortChange">
-          <!-- <template slot="menu">
-            <el-button size="small" type="primary" @click="passOne" :disabled="this.form.clothState != '1'">通过</el-button>
-          </template> -->
         </avue-crud>
       </el-row>
     </view-container>
@@ -41,11 +37,8 @@
 import { mainForm, mainCrud } from "./data";
 import {
   get,
-  add,
   update,
-  del,
   getJob,
-  updateNote,
   addInWhse,
   addInDtla,
   addInDtlb,
@@ -144,24 +137,7 @@ export default {
           item.eachNumber = Number(item.eachNumber);
         });
         this.page.total = res.data.total;
-        //  if (this.form.storeLoadCode.indexOf("%") != -1) {
-        //   this.form.storeLoadCode = this.form.storeLoadCode.split("%")[1] || "";
-        // }
-        // if (this.form.clothCheckTime.indexOf("%") != -1) {
-        //   this.form.clothCheckTime = this.form.clothCheckTime.split("%")[1] || "";
-        // }
-        if (this.form.weaveJobCode.indexOf("%") != -1) {
-          this.form.weaveJobCode = this.form.weaveJobCode.split("%")[1] || "";
-        }
-        if (this.form.noteCode.indexOf("%") != -1) {
-          this.form.noteCode = this.form.noteCode.split("%")[1] || "";
-        }
-        this.$nextTick(() => {
-          setTimeout(() => {
-            this.wLoading = false;
-          }, 500);
-        });
-      });
+      }).finally((_) =>{ this.wLoading = false; })
     },
     handleRowDBLClick(val) {
       this.detail = val;
@@ -175,8 +151,6 @@ export default {
             update(item).then((res) => {
               if (i == this.selectList.length - 1) {
                 this.setInWhse();
-                // this.query();
-                // this.$tip.success("审核成功!");
               }
             });
           });
@@ -348,7 +322,7 @@ export default {
   },
   updated() {
     this.$nextTick(() => {
-      this.$refs["crud"].doLayout();
+      if(this.crud.length) this.$refs["crud"].doLayout();
     });
   },
   created() {},
@@ -357,7 +331,7 @@ export default {
 };
 </script>
 <style lang='stylus'>
-#clothFlyWeight {
+#checkInWhse {
   .el-table {
     overflow: visible !important;
   }

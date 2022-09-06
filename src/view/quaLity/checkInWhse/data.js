@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-27 08:14:07
+ * @LastEditTime: 2022-09-05 08:01:16
  * @Description:
  */
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
@@ -151,13 +151,6 @@ export function mainCrud(_this) {
       }
     ],
     column: [
-      // {
-      //   label: "#",
-      //   prop: "index",
-      //   width: 50,
-      //   align: "center",
-      //   display: false
-      // },
       {
         label: "载具编号(Mã lồng thép)",
         prop: "storeLoadCode",
@@ -166,7 +159,7 @@ export function mainCrud(_this) {
         cell: true,
         overHidden: true,
         sortable: true,
-        width: 160
+        width: 120
       },
       {
         label: "織單號(MS đơn sản xuất bp Dệt)",
@@ -185,15 +178,6 @@ export function mainCrud(_this) {
         overHidden: true,
 
       },
-      // {
-      //   label: "訂單號(Số đơn hàng)",
-      //   prop: "poNo",
-      //   width: 150,
-      //   span: 6,
-      //   placeholder: " ",
-      //   disabled: true,
-      //   overHidden: true
-      // },
       {
         label: "布票號(Mã vải)",
         prop: "noteCode",
@@ -204,15 +188,6 @@ export function mainCrud(_this) {
         // sortable: true,
         overHidden: true
       },
-      // {
-      //   label: "客戶",
-      //   prop: "customerName",
-      //   width: 150,
-      //   disabled: true, placeholder: " ",
-      //   span: 6,
-      //   display: false,
-      //   overHidden: true
-      // },
       {
         label: "布类名称(Tên loại vải)",
         prop: "fabricName",
@@ -223,40 +198,6 @@ export function mainCrud(_this) {
         overHidden: true,
         hide: true
       },
-      // {
-      //   label: "顏色(Màu sắc)",
-      //   prop: "proColor",
-      //   disabled: true, placeholder: " ",
-      //   span: 6,
-      //   width: 120,
-      //   overHidden: true,
-      //   hide: true
-      // },
-
-      // {
-      //   label: "纱批(Lô sợi)",
-      //   prop: "spi",
-      //   width: 90,
-      //   hide: true,
-      //   span: 6,
-      // },
-
-      // {
-      //   label: "纱牌(Nhãn hiệu sợi)",
-      //   prop: "sp",
-      //   width: 90,
-      //   hide: true,
-      //   span: 6,
-      // },
-      // {
-      //   label: "机台編號",
-      //   prop: "machineCode",
-      //   width: 110,
-      //   hide: false,
-      //   span: 6,
-      //   disabled: true,
-
-      // },
       {
         label: "机号(Mã máy)",
         prop: "loomNo",
@@ -278,15 +219,15 @@ export function mainCrud(_this) {
         prop: "workNo",
         span: 8,
         placeholder: " ",
-        width: 150,
+        width: 160,
         overHidden: true
       },
       {
-        label: "验布员工号(Số thẻ người đứng máy)",
+        label: "员工号(Số thẻ người đứng máy)",
         prop: "clothChecker",
         span: 8,
         placeholder: " ",
-        width: 180,
+        width: 160,
         sortable: true,
         overHidden: true
       },

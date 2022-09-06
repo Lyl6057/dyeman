@@ -7,7 +7,7 @@
 -->
 <template>
   <div
-    id="clothFlyWeight"
+    class="rcbpWeight"
     :element-loading-text="$t('public.loading')"
     v-loading="wLoading"
   >
@@ -242,7 +242,7 @@ export default {
 };
 </script>
 <style lang='stylus'>
-#clothFlyWeight {
+.rcbpWeight {
   .el-table {
     overflow: visible !important;
   }

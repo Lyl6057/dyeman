@@ -2,16 +2,16 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-27 08:14:47
+ * @LastEditTime: 2022-09-05 08:09:42
  * @Description:
  */
-import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
+import { getDIC, getDicT } from "@/config";
 
 export function mainForm(_this) {
   return {
     submitBtn: false,
     emptyBtn: false,
-    labelWidth: 120,
+    labelWidth: 100,
     column: [
       {
         label: "織單號",
@@ -358,7 +358,7 @@ export function mainCrud(_this) {
         prop: "remark",
         width: 250,
         placeholder: " ",
-        // overHidden: true,
+        overHidden: true,
         cell: true,
         type: "select",
         filterable: true,

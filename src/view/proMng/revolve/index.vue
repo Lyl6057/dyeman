@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-30 11:12:56
+ * @LastEditTime: 2022-09-06 09:58:46
  * @Description:
 -->
 <template>
@@ -69,7 +69,7 @@ import { mainForm, mainCrud } from "./data";
 import { get, update, del, delDye, getDye } from "./api";
 import tem from "./temDlg";
 import scheduleDetail from "./schedule-detail.vue";
-import sendandreceiveOrder from "./sendAndreceive-order.vue";
+import sendandreceiveOrder from "@/components/sendAndreceive-order.vue";
 export default {
   name: "runJob",
   components: {

@@ -7,7 +7,7 @@
 -->
 <template>
   <div
-    id="clothFlyWeight"
+    id="orderReview"
     :element-loading-text="$t('public.loading')"
     v-loading="wLoading"
   >
@@ -570,7 +570,7 @@ export default {
 };
 </script>
 <style lang='stylus'>
-#clothFlyWeight
+#orderReview
   .el-table
     overflow visible !important
   .el-tag--mini

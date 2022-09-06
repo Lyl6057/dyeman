@@ -1,13 +1,13 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
- * @LastEditors: PMP
- * @LastEditTime: 2022-07-011 12:00:23
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-09-05 08:18:24
  * @Description: 
 -->
 <template>
-  <div id="clothFlyWeight" :element-loading-text="$t('public.loading')" v-loading="wLoading">
-    <view-container title="称重记录">
+  <div id="qualityWeight" :element-loading-text="$t('public.loading')" v-loading="wLoading">
+    <view-container title="胚布台账">
       <el-row class="btnList">
         <el-button type="success" @click="saveAll" :disabled="form.clothState == 3">{{ this.$t("public.save") }}
         </el-button>
@@ -18,29 +18,26 @@
         }}</el-button>
         <el-button type="primary" @click="print">打印</el-button>
         <el-button type="primary" @click="outExcel">导出</el-button>
-
         <el-tooltip class="item" effect="dark" content="同步勾选数据的储存位置,值为第一条勾选的数据" placement="right-start">
           <el-button type="primary" @click="syncLoc" :disabled="selectList.length < 2">同步储存位置</el-button>
         </el-tooltip>
         <span v-if="crud.length && weightSum > 0" style="float: right; margin-right: 10px">【 {{ crud[0].weaveJobCode }}
           】 总重量: {{ weightSum }} KG</span>
-
-        <!-- <el-button type="warning" @click="close">{{
-          this.$t("public.close")
-        }}</el-button> -->
       </el-row>
       <el-row class="formBox">
         <avue-form ref="form" :option="formOp" v-model="form"> </avue-form>
       </el-row>
       <el-row class="crudBox">
-        <avue-crud ref="crud" :option="crudOp" :data="crud" :page.sync="page" v-loading="loading" @on-load="query"
-          @row-dblclick="handleRowDBLClick" @current-row-change="cellClick" :summary-method="summaryMethod"
-          @selection-change="selectionChange" @sort-change="sortChange">
-          <!-- <template slot="menu" v-if="form.clothState != 3">
-            <el-button size="small" type="primary" @click="weighing"
-              >称重</el-button
-            >
-          </template> -->
+        <avue-crud ref="crud" 
+          v-loading="loading" 
+          :option="crudOp" 
+          :data="crud" 
+          :page.sync="page" 
+          :summary-method="summaryMethod"
+          @on-load="query"
+          @row-dblclick="handleRowDBLClick" 
+          @current-row-change="cellClick" 
+          @selection-change="selectionChange">
         </avue-crud>
       </el-row>
     </view-container>
@@ -81,8 +78,13 @@
             </el-tooltip>
           </div>
           <div class="formBox">
-            <avue-crud ref="dlgCrud" :option="historyOp" :data="history" @current-row-change="historyCellClick"
-              v-loading="loading" @selection-change="selectionChange" :page.sync="historyPage"/>
+            <avue-crud ref="dlgCrud" 
+              v-loading="loading"
+              :option="historyOp" 
+              :data="history" 
+              :page.sync="historyPage"
+              @current-row-change="historyCellClick"
+              @selection-change="selectionChange"/>
           </div>
         </el-tab-pane>
       </el-tabs>
@@ -90,25 +92,15 @@
     <el-dialog id="colorMng_Dlg" :visible.sync="pdfDlg" fullscreen width="100%" append-to-body
       :close-on-click-modal="false" :close-on-press-escape="false">
       <view-container title="打印預覽">
-        <!-- <div class="btnList">
-            <el-button type="warning" @click="pdfDlg = false">{{
-              this.$t("public.close")
-            }}</el-button>
-            <el-button type="primary" @click="print2">打印</el-button>
-          </div> -->
-        <!--startprint-->
         <embed id="pdf" style="width: 100vw; height: calc(100vh - 80px)" :src="pdfUrl" />
-        <!--endprint-->
       </view-container>
     </el-dialog>
   </div>
 </template>
 <script>
 import { mainForm, mainCrud, dlgForm, dlgCrud } from "./data";
-import { webSocket } from "@/config/index.js";
 import { get, add, update, del, getJob, updateNote, getNowWeight, recover, getHistory } from "./api";
 import qs from "qs";
-import { error } from "../../../config/seal";
 export default {
   name: "",
   components: {},
@@ -168,28 +160,22 @@ export default {
       if (type) {
         this.crud = [];
       }
-      let { prop, order } = this.sort;
-      // order
-      //   ? (this.form.sort = prop + (order == "descending" ? ",1" : ",0"))
-      //   : delete this.form["sort"];
       let r_clothCheckTime_r = "";
       if (this.form.clothCheckTime && this.form.clothCheckTime.length) {
-        // this.form.clothCheckTime.forEach((item) =>{
         r_clothCheckTime_r = `!%5E%5B${this.form.clothCheckTime[0]} 07:30:00~${this.form.clothCheckTime[1]} 07:30:00%5D`;
-        // })
       } else {
         r_clothCheckTime_r = "!%5E";
       }
-      this.form.noteCode = "%" + (this.form.noteCode ? this.form.noteCode : "");
-      this.form.poNo = "%" + (this.form.poNo ? this.form.poNo : "");
-      // this.form.clothCheckTime = "%" + (this.form.clothCheckTime ? this.form.clothCheckTime : "");
-      // this.form.storeLoadCode = "%" + (this.form.storeLoadCode ? this.form.storeLoadCode : "");
-      this.form.weaveJobCode =
-        "%" + (this.form.weaveJobCode ? this.form.weaveJobCode : "");
-      let data = JSON.parse(JSON.stringify(this.form));
-      data.clothCheckTime = null;
+      let params = { 
+        noteCode: "%" + (this.form.noteCode || ''),
+        poNo: "%" + (this.form.poNo || ''),
+        weaveJobCode: "%" + (this.form.weaveJobCode || ''),
+        storeLoadCode: this.form.storeLoadCode,
+        clothState: this.form.clothState,
+        outworkFlag: this.form.outworkFlag,
+      }
       get(
-        Object.assign(data, {
+        Object.assign(params, {
           rows: this.page.pageSize,
           start: this.page.currentPage,
           // isPrinted: true,
@@ -199,7 +185,6 @@ export default {
         r_clothCheckTime_r
       )
         .then((res) => {
-          // this.crud = _.concat(res.data.records, this.crud);
           this.crud = res.data.records;
           if (this.crud.length) {
             getNowWeight(this.crud[0].weaveJobCode).then((res) => {
@@ -216,36 +201,11 @@ export default {
               this.weightSum = 0;
             });
           }
-          // this.crud.sort((a, b) => {
-          //   return a.printedTime < b.printedTime ? 1 : -1;
-          // });
-          // if (this.crud.length > 0) {
-          //   this.$refs.crud.setCurrentRow(this.crud[0]);
-          // }
-          // this.crud.forEach((item, i) => {
-          //   item.index = i + 1;
-          //   item.eachNumber = Number(item.eachNumber);
-          // });
-          // if (this.form.storeLoadCode.indexOf("%") != -1) {
-          //   this.form.storeLoadCode = this.form.storeLoadCode.split("%")[1] || "";
-          // }
-          if (this.form.poNo.indexOf("%") != -1) {
-            this.form.poNo = this.form.poNo.split("%")[1] || "";
-          }
-          //  if (this.form.clothCheckTime.indexOf("%") != -1) {
-          //   this.form.clothCheckTime = this.form.clothCheckTime.split("%")[1] || "";
-          // }
-          if (this.form.weaveJobCode.indexOf("%") != -1) {
-            this.form.weaveJobCode = this.form.weaveJobCode.split("%")[1] || "";
-          }
-          if (this.form.noteCode.indexOf("%") != -1) {
-            this.form.noteCode = this.form.noteCode.split("%")[1] || "";
-          }
           this.page.total = res.data.total;
-          setTimeout(() => {
-            this.wLoading = false;
-          }, 500);
         })
+        .finally((_)=>{
+          this.wLoading = false;
+        } )
         .catch((e) => {
           this.wLoading = false;
         });
@@ -293,7 +253,6 @@ export default {
       let _this = this;
       _this.spowerClient.onmessage = function (e) {
         let _weight = Number(e.data.split("weight=")[1].split(":")[0])
-        // let weight = e.data.indexOf(":") != -1 ? Number(e.data.replace(/[^\d.]/g, "")) : e.data;
         if (_this.useWeight) {
           _this.detail.clothWeight = (_weight > 0) ? _weight : 0;
         } else {
@@ -309,9 +268,6 @@ export default {
       } else {
         this.czsocket.send("weight");
       }
-      // setTimeout(() => {
-      //   this.detail.clothWeight = this.weight;
-      // }, 200);
     },
     saveAll() {
       this.wLoading = true;
@@ -330,7 +286,6 @@ export default {
     },
     save() {
       this.wLoading = true;
-      // this.crud.forEach((item, i) => {
       if (this.detail.clothWeight > 0 && this.detail.clothState === 0) {
         this.detail.clothCheckTime = this.$getNowTime("datetime");
         this.detail.clothState = 1;
@@ -339,7 +294,6 @@ export default {
         this.query();
         this.$tip.success(this.$t("public.bccg"));
       });
-      // });
     },
     syncLoc() {
       this.selectList.forEach((item) => {
@@ -360,7 +314,7 @@ export default {
           "&start=" +
           this.page.currentPage +
           "&isPrinted=true&userName=" + username;
-        ;
+        
       } else {
         this.$tip.error("请先選擇布飞信息!");
         return;
@@ -368,14 +322,6 @@ export default {
     },
     outExcel() {
       this.$refs.crud.rowExcel();
-    },
-    sortChange(val) {
-      this.sort = val;
-      // this.page.currentPage = 1;
-      // this.crud = [];
-      // this.$nextTick(() => {
-      this.query();
-      // });
     },
     cellClick(val) {
       if (this.ctrKey && this.checkLabel) {
@@ -385,25 +331,6 @@ export default {
       if (!this.detail.paperTube) {
         this.detail.paperTube = 0
       }
-      // this.oldData.$cellEdit = false;
-      // // val.$cellEdit = true;
-      // this.$set(val, "$cellEdit", true);
-      // this.oldData = val;
-    },
-    remoteMethod(val) {
-      if (!val) {
-        return;
-      }
-      getJob({
-        weaveJobCode: val,
-        rows: 10,
-        start: 1,
-      }).then((res) => {
-        this.options = res.data.records;
-      });
-    },
-    close() {
-      document.getElementsByClassName("el-dialog__headerbtn")[0].click();
     },
     selectionChange(list) {
       this.selectList = list;
@@ -506,25 +433,12 @@ export default {
         _this.ctrKey = false;
       }
     });
-    // this.$nextTick(() => {
-    //   setTimeout(() => {
-    //     let _this = this;
-    //     let dom = document.getElementsByClassName("el-table__body-wrapper")[0];
-    //     // console.log(dom);
-    //     dom.addEventListener("scroll", function () {
-    //       if (dom.scrollHeight <= dom.clientHeight + dom.scrollTop) {
-    //         _this.page.currentPage++;
-    //         _this.query();
-    //       }
-    //     });
-    //   }, 200);
-    // });
   },
   beforeDestroy() { },
 };
 </script>
 <style lang='stylus'>
-#clothFlyWeight {
+#qualityWeight {
   .el-table {
     overflow: visible !important;
   }

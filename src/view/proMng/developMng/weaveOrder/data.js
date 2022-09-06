@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-31 10:28:11
+ * @LastEditTime: 2022-09-06 08:11:37
  * @Description:
  */
 
@@ -651,7 +651,7 @@ export function mainCrud(_this, audit) {
         // minRows: 0,
         hide: true,
         span: 4,
-        type: "number",
+        // type: "number",
         placeholder: " ",
         change: () =>{
           _this.handleBreathChange();
@@ -772,6 +772,9 @@ export function mainCrud(_this, audit) {
         tip: "Yêu cầu khác",
         placeholder: " ",
         hide: true,
+        type: "textarea",
+        maxRows: 2,
+        minRows: 2,
         span: 12
       },
       {

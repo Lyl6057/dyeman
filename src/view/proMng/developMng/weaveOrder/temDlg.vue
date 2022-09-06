@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-09-01 14:39:45
+ * @LastEditTime: 2022-09-06 11:11:02
  * @Description: 
 -->
 <template>
@@ -244,6 +244,7 @@ export default {
           return;
         } 
         this.form = weaveData[0];
+        // !this.form.breadthValue && (this.form.breadthValue = this.form.breadth);
         await this.getAllYarn();
         await this.getMachineList();
           if (this.form.weaveState == "1") {
@@ -328,6 +329,7 @@ export default {
               }
             }
             this.form.weaveJobCode = this.form.weaveJobCode.replace(/\s/g, "");
+            isNaN(Number(this.form.breadthValue)) && (this.form.breadthValue = 0);
             this.form.jobType = 1;
             if (this.form.weaveJobId) {
               // update
@@ -429,11 +431,6 @@ export default {
             this.crud = res.data.rows;
           } else {
             this.crud = res.data.records;
-            if (this.tabs == "用紗明细") {
-              this.crud.sort((a, b) => {
-                return a.sn - b.sn;
-              });
-            }
             if (this.tabs == "機號信息") {
               this.crud.sort((a, b) => {
                 return a.recordTime > b.recordTime ? -1 : 1;
@@ -455,10 +452,6 @@ export default {
     },
     saveOther() {
       if (this.crud.length == 0) {
-        return;
-      }
-      if (this.tabs == "用紗明细") {
-        this.saveYarn();
         return;
       }
       for (let i = 0; i < this.crud.length; i++) {
@@ -530,70 +523,6 @@ export default {
         }
       });
     },
-    saveYarn() {
-      for (let i = 0; i < this.crud.length; i++) {
-        if (this.tabs == "用紗明细" && !this.crud[i].amount) {
-          this.$tip.error("数量不能為空!");
-          return;
-        }
-      }
-      this.dlgLoading = true;
-      // 判断是否存在分组
-      if (this.form.groupId) {
-        // 存在分组，直接保存
-        // for (let i = 0; i < this.crud.length; i++) {
-        //   if (!this.crud[i].yarnRatio) {
-        //     this.$tip.error("用纱比例不能為空!");
-        //     this.dlgLoading = false;
-        //     return;
-        //   }
-        // }
-        this.crud.forEach((item, i) => {
-          item.proWeaveJobGroupFk = this.form.groupId;
-          item.proWeaveJobFk = this.form.weaveJobId;
-          if (!item.useYarnId) {
-            addYarn(item).then((res) => {
-              item.useYarnId = res.data.data;
-            });
-          } else {
-            updateYarn(item).then((res) => {});
-          }
-          if (i == this.crud.length - 1) {
-            this.$tip.success("保存成功!");
-            this.dlgLoading = false;
-          }
-        });
-      } else {
-        // for (let i = 0; i < this.crud.length; i++) {
-        //   if (!this.crud[i].yarnRatio) {
-        //     this.$tip.error("用纱比例不能為空!");
-        //     this.dlgLoading = false;
-        //     return;
-        //   }
-        // }
-        this.func
-          .add({
-            proWeaveJobFk: this.form.weaveJobId,
-            sn: 1,
-            groupName: "01",
-            changeBatchTime: this.$getNowTime("datetime"),
-          })
-          .then((res) => {
-            this.form.groupId = res.data.data;
-            this.crud.forEach((item, i) => {
-              item.proWeaveJobGroupFk = res.data.data;
-              item.proWeaveJobFk = this.form.weaveJobId;
-              addYarn(item).then((res1) => {
-                item.useYarnId = res1.data.data;
-              });
-              if (i == this.crud.length - 1) {
-                this.$tip.success("保存成功!");
-                this.dlgLoading = false;
-              }
-            });
-          });
-      }
-    },
     async addEquipmentSchedule(row) {
       let equRes = await fetchEquipmentInfo({ equipmentCode: row.mathineCode });
       if (!equRes.data.length) return;
@@ -631,6 +560,7 @@ export default {
     async handleBreathChange(){
       await this.$nextTick();
       let { breadthValue, breadthUpper, breadthLower, breadthAcceptUnit } = this.form;
+      breadthValue && ( this.form.breadth = breadthValue );
       if(!breadthValue || !breadthUpper || !breadthLower  || breadthLower == 'undefined'  || breadthValue == 'undefined' || breadthUpper == 'undefined') return;
       let breadth = this.form.breadthValue;
       breadthUpper == breadthLower ?
@@ -648,16 +578,6 @@ export default {
       this.$refs.useYarns.visible = true;
       await this.$nextTick();
       this.$refs.useYarns.initData();
-    },
-    checkCalico() {
-      this.tabs = "洗後規格";
-      this.crudOp = calicoCrud(this);
-      this.visible = true;
-    },
-    checkstrain() {
-      this.tabs = "輸送張力";
-      this.crudOp = strainCrud(this);
-      this.visible = true;
     },
     add() {
       if (this.tabs == "用紗明细") {
@@ -679,9 +599,6 @@ export default {
       // } else {
       //   this.choiceV = true;
       // }
-    },
-    addDtl() {
-      this.choiceV = true;
     },
     del() {
       if (
@@ -736,63 +653,6 @@ export default {
           this.$tip.warning(this.$t("public.qxcz"));
         });
     },
-    delDtl() {
-      if (Object.keys(this.chooseDtlData).length == 0) {
-        this.$tip.warning("請選擇要刪除的數據!");
-        return;
-      }
-      if (!this.chooseDtlData.useYarnId) {
-        this.chooseData.list.splice(this.chooseDtlData.index - 1, 1);
-        // this.chooseDtlData = {};
-        this.chooseData.list.forEach((item, i) => {
-          item.index = i + 1;
-        });
-        if (this.chooseData.list.length > 0) {
-          this.$refs.yarnCrud.setCurrentRow(this.chooseData.list[0]);
-        }
-        return;
-      }
-      getBf({ proWeaveJobGroupFk: this.chooseDtlData.proWeaveJobGroupFk }).then(
-        (bf) => {
-          if (bf.data.length) {
-            this.$tip.warning("請用紗明細存在布票信息,無法刪除!");
-            return;
-          }
-          this.$tip
-            .cofirm("是否确定删除選中的數據?", this, {})
-            .then(() => {
-              delYarn(this.chooseDtlData.useYarnId)
-                .then((res) => {
-                  if (res.data.code === 200) {
-                    // this.query();
-                    this.chooseData.list.splice(
-                      this.chooseDtlData.index - 1,
-                      1
-                    );
-                    // this.chooseDtlData = {};
-                    this.chooseData.list.forEach((item, i) => {
-                      item.index = i + 1;
-                    });
-                    if (this.chooseData.list.length > 0) {
-                      this.$refs.yarnCrud.setCurrentRow(
-                        this.chooseData.list[0]
-                      );
-                    }
-                    this.$tip.success(this.$t("public.sccg"));
-                  } else {
-                    this.$tip.error(this.$t("public.scsb"));
-                  }
-                })
-                .catch((err) => {
-                  this.$tip.error(this.$t("public.scsb"));
-                });
-            })
-            .catch((err) => {
-              this.$tip.warning(this.$t("public.qxcz"));
-            });
-        }
-      );
-    },
     handleRowDBLClick(val) {
       this.chooseData = val;
       this.check();
@@ -801,9 +661,6 @@ export default {
     cellClick(val) {
       this.chooseData = val;
       this.chooseDtlData = {};
-    },
-    cellDtlClick(val) {
-      this.chooseDtlData = val;
     },
     check() {
       if (this.tabs === "選擇訂單") {

@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-19 16:51:28
+ * @LastEditTime: 2022-09-06 10:54:17
  * @Description: 
 -->
 <template>
@@ -24,6 +24,7 @@
               <el-tooltip class="item" effect="dark" content="copy" placement="top-start">
                   <el-button type="primary" @click="handleCopy" :loading="wloading" :disabled="!detail.weaveJobId">复制</el-button>
               </el-tooltip>
+              <el-button type="primary" @click="handleSendOrderClick" :loading="wloading">发单</el-button>
               <el-tooltip class="item" effect="dark" content="tìm kiếm" placement="top-start">
                   <el-button type="primary" @click="handleQuery"> {{ this.$t("public.query") }} </el-button>
               </el-tooltip>
@@ -46,16 +47,20 @@
               </view-container>
           </el-dialog>
       </view-container>
+      <!-- 收发单 -->
+      <sendandreceive-order ref="sendandreceiveOrder" :typechangeable="false" :remote="{ key: 'weaveJobId', value: 'weaveJobId', label: 'weaveJobCode', fetchApi: fetchWeaveOrderByPage }" dispathReceive="2" :runJobInfo="detail"></sendandreceive-order>
   </div>
 </template>
 <script>
 import { mainForm, mainCrud } from "./data";
 import { fetchWeaveOrderByPage, removeWeaveOrder } from "./api";
 import tem from "./temDlg";
+import sendandreceiveOrder from "@/components/sendAndreceive-order.vue"
 export default {
   name: "developMng-weaveOrder",
   components: {
     temDlg: tem,
+    sendandreceiveOrder
   },
   data() {
     return {
@@ -78,7 +83,7 @@ export default {
       pdfUrl: "",
       isCopy: false,
       hasFuzzy: true,
-
+      fetchWeaveOrderByPage,
     };
   },
   watch: {},
@@ -114,6 +119,14 @@ export default {
       }).finally(() =>{
         this.loading = false;
       })
+    },
+    // 发单
+    async handleSendOrderClick() {
+      this.loading = true;
+      this.$refs.sendandreceiveOrder.dialogVisible = true;
+      await this.$nextTick();
+      this.$refs.sendandreceiveOrder.initData(); // 初始化发单信息
+      this.loading = false;
     },
     handlePrint() {
       this.pdfDlg = true;
