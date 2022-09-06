@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-24 14:21:15
  * @LastEditors: Lyl
- * @LastEditTime: 2022-07-06 14:10:37
+ * @LastEditTime: 2022-09-06 14:05:24
  * @Description:
  */
 
@@ -83,7 +83,7 @@ export function formOp(_this) {
         prop: "storageId",
         span: 6,
         placeholder: " "
-      }
+      },
     ]
   };
 }
@@ -91,15 +91,9 @@ export function formOp(_this) {
 export function crudOp(_this) {
   return {
     ...crudCommConfig,
+    index: true,
     column: [
-      {
-        label: "#",
-        prop: "index",
-        width: 50,
-        align: "center",
-        display: false,
-        fixed: true
-      },
+      
       {
         label: "载具编号",
         prop: "palletCode",
@@ -137,12 +131,38 @@ export function crudOp(_this) {
         placeholder: " "
       },
       {
-        label: "存储位置",
+        label: "货位码",
         prop: "storageId",
         cell: false,
         width: 120,
         overHidden: true,
         placeholder: " "
+      },
+      {
+        label: "客戶",
+        prop: "custCode",
+        width: 120,
+        disabled: true,
+        placeholder: " ",
+        span: 6,
+        display: false,
+        overHidden: true
+      },
+      {
+        label: "布料名称",
+        prop: "fabName",
+        width: 250,
+        overHidden: true,
+        span: 6
+      },
+      {
+        label: "顏色",
+        prop: "colorName",
+        disabled: true,
+        placeholder: " ",
+        span: 6,
+        width: 120,
+        overHidden: true
       },
       {
         label: "客人訂單號",
@@ -162,14 +182,14 @@ export function crudOp(_this) {
         disabled: true,
         overHidden: true
       },
+      
       {
-        label: "客戶",
-        prop: "custCode",
-        width: 120,
+        label: "色号",
+        prop: "colorCode",
         disabled: true,
         placeholder: " ",
         span: 6,
-        display: false,
+        width: 120,
         overHidden: true
       },
       {
@@ -201,13 +221,7 @@ export function crudOp(_this) {
         // sortable: true,
         span: 6
       },
-      {
-        label: "布料名称",
-        prop: "fabName",
-        width: 250,
-        overHidden: true,
-        span: 6
-      },
+      
 
       {
         label: "头缸/缸差",
@@ -229,24 +243,7 @@ export function crudOp(_this) {
         placeholder: " "
       },
 
-      {
-        label: "顏色",
-        prop: "colorName",
-        disabled: true,
-        placeholder: " ",
-        span: 6,
-        width: 120,
-        overHidden: true
-      },
-      {
-        label: "色号",
-        prop: "colorCode",
-        disabled: true,
-        placeholder: " ",
-        span: 6,
-        width: 120,
-        overHidden: true
-      },
+     
       {
         label: "克重",
         prop: "gramWeight",
