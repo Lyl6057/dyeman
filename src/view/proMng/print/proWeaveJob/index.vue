@@ -1,14 +1,14 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
- * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-11 10:50:11
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-09-06 09:54:01
  * @Description: 
 -->
 <template>
   <div id="pro-weave-job-container">
     <el-tabs v-model="tabName" type="border-card">
-        <el-tab-pane name="print" label="織造通知單打印">
+        <el-tab-pane name="print" label="織造通知單">
           <weave-job-list ref="weaveJobListRef" @refresh-unCreate="handleRefreshUnCreate" />
         </el-tab-pane>
         <el-tab-pane name="unCreate" label="待生成的織造通知單">

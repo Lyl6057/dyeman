@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-09-06 08:34:04
+ * @LastEditTime: 2022-09-06 11:00:59
  * @Description: 
 -->
 <template>
@@ -329,7 +329,7 @@ export default {
               }
             }
             this.form.weaveJobCode = this.form.weaveJobCode.replace(/\s/g, "");
-            typeof(this.form.breadthValue) != 'number' && (this.form.breadthValue = 0);
+            isNaN(Number(this.form.breadthValue)) && (this.form.breadthValue = 0);
             this.form.jobType = 1;
             if (this.form.weaveJobId) {
               // update

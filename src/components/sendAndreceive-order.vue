@@ -2,15 +2,14 @@
  * @Author: Lyl
  * @Date: 2022-08-22 10:24:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-30 14:32:12
- * @FilePath: \iot.vue\src\view\proMng\revolve\sendAndreceive-order.vue
+ * @LastEditTime: 2022-09-06 10:45:23
+ * @FilePath: \iot.vue\src\components\sendAndreceive-order.vue
  * @Description:  收发单
 -->
 <template>
   <div class="sendAndReceive">
-    <el-dialog append-to-body  :visible.sync="dialogVisible" :element-loading-text="$t('public.loading')"
-      v-loading="wLoading" width="80%" :close-on-click-modal="false" :close-on-press-escape="false">
-      <view-container title="染单发单信息">
+    <el-dialog append-to-body  :visible.sync="dialogVisible"  width="80%" :close-on-click-modal="false" :close-on-press-escape="false">
+      <view-container title="染单发单信息" :element-loading-text="$t('public.loading')" v-loading="wLoading">
         <div class="btnList">
           <el-tooltip effect="dark" content="Bảo tồn" placement="top-start">
             <el-button type="success" @click="handleSave" :loading="wLoading">{{ $t("public.save") }}</el-button>
@@ -42,8 +41,8 @@
 </template>
 
 <script>
-import { dispathReceiveForm } from "./data";
-import { getLoginOrg, getDptWorkProcess, getBaseWorkStep, add as createProDptReciveLogData } from "../dptReciveLog/api"
+import { dispathReceiveForm } from "@/const/proMng.js";
+import { fetchBaseWorkStepData, createProDptReciveLogData } from "@/api/index"
 export default {
   components: {
   },
@@ -73,7 +72,6 @@ export default {
       wLoading: true,
       remoteLoading: false,
       dialogVisible: false,
-      crudLoading: true,
       dispathReceiveFormData: {},
       dispathReceiveCrudOp: dispathReceiveForm(this),
       dispathReceiveCrudData: [],
@@ -86,7 +84,7 @@ export default {
   },
   computed: {},
   created () {
-    getBaseWorkStep().then((res) => {
+    fetchBaseWorkStepData().then((res) => {
         let data = res.data;
         data.map((e, i) => {
           this.dataSelect.push({
@@ -99,18 +97,18 @@ export default {
   mounted () { },
   methods: {
     async initData () {
-      this.crudLoading = true;
+      this.wLoading = true;
       this.dispathReceiveCrudData = [];
       let nowDate = this.$getNowTime("datetime");
-      let { vatNo, runJobId, clothWeight } = this.runJobInfo;
-      this.handleRemoteMethod(vatNo);
+      let { clothWeight, amount } = this.runJobInfo;
+      this.handleRemoteMethod(this.runJobInfo[this.remote.label]);
       await this.fetchUserDp();
       this.dispathReceiveFormData = {
         dispathReceive: Number(this.dispathReceive), // 类型
-        vatNo,
-        runJobFk: runJobId,
-        planOutput: clothWeight,
-        realOutput: clothWeight,
+        vatNo: this.runJobInfo[this.remote.label],
+        runJobFk: this.runJobInfo[this.remote.key],
+        planOutput: clothWeight || amount,
+        realOutput: clothWeight || amount,
         priorityId: "1",
         acceptDesc: '',
         acceptDate:  this.dispathReceive == 1 ? nowDate : '',
@@ -120,8 +118,7 @@ export default {
         sendStaff: this.dispathReceive == 2 ? parent.userID : '',
         sendProcessFk: this.dispathReceive == 2 ? this.userDp : '' ,
       };
-      this.remoteMethodCX();
-      this.crudLoading = false;
+      await this.remoteMethodCX();
       this.wLoading = false;
     },
     fetchUserDp(){
@@ -153,7 +150,7 @@ export default {
     },
     async remoteMethodCX(val) {
       await this.$nextTick();
-      getBaseWorkStep({
+      fetchBaseWorkStepData({
         stepName: "%" + (val || ''),
         orgCodes: "%" +  (this.dispathReceive == 1 ? this.dispathReceiveFormData.dptworkProcessFk : this.dispathReceiveFormData.sendProcessFk)
       }).then((res) => {
@@ -176,7 +173,6 @@ export default {
         this.remoteLoading = false;
       })
     },
-
     handleRemoteChange(val){
       if(!val) return;
       let params = {
@@ -192,7 +188,6 @@ export default {
     handleSave () {
       this.$refs.dispathReceiveForm.validate(async (valid, done) => {
         if (!valid) {
-          done();
           this.$tip.warning("请补充发单信息!");
           return;
         }

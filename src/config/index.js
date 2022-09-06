@@ -413,7 +413,7 @@ export function unique(arr, val) {
 /* @arr 数组
    @type 分组的属性
 */
-export function group(arr, type) {
+export function group(arr, type, children = 'children' ) {
   let map = {},
     dest = [];
   for (var i = 0; i < arr.length; i++) {
@@ -421,14 +421,14 @@ export function group(arr, type) {
     if (!map[ai[type]]) {
       dest.push({
         [type]: ai[type],
-        children: [ai]
+        [children]: [ai]
       });
       map[ai[type]] = ai;
     } else {
       for (var j = 0; j < dest.length; j++) {
         var dj = dest[j];
         if (dj[type] == ai[type]) {
-          dj.children.push(ai);
+          dj[children].push(ai);
           break;
         }
       }

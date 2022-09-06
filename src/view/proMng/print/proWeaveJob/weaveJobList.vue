@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
- * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-08-23 08:44:55
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-09-06 10:28:51
  * @Description: 
 -->
 <template>
@@ -28,6 +28,7 @@
         <el-tooltip class="item" effect="dark" content="拆单" placement="top-start">
           <el-button type="primary" @click="splitWeave" :loading="wloading">拆单</el-button>
         </el-tooltip>
+        <el-button type="primary" @click="handleSendOrderClick" :loading="wloading">发单</el-button>
         <el-button type="primary" @click="handleFinish" :disabled="detail.weaveState == 2" >已織完</el-button>
         <el-tooltip class="item" effect="dark" content="tìm kiếm" placement="top-start">
           <el-button type="primary" @click="query">{{
@@ -38,9 +39,6 @@
           模糊查询 <el-switch v-model="hasFuzzy" active-text="开" inactive-text="关">
           </el-switch>
         </div>
-        <!-- <el-button type="warning" @click="close">{{
-          this.$t("public.close")
-        }}</el-button> -->
       </el-row>
       <el-row class="formBox">
         <avue-form ref="form" :option="formOp" v-model="form"></avue-form>
@@ -56,16 +54,20 @@
         <embed id="pdf" style="width: 100vw; height: calc(100vh - 80px)" :src="pdfUrl" />
       </view-container>
     </el-dialog>
+    <!-- 收发单 -->
+    <sendandreceive-order ref="sendandreceiveOrder" :typechangeable="false" :remote="{ key: 'weaveJobId', value: 'weaveJobId', label: 'weaveJobCode', fetchApi: get }" dispathReceive="2" :runJobInfo="detail"></sendandreceive-order>
   </div>
 </template>
 <script>
 import { mainForm, mainCrud } from "./data";
 import { get, add, update, del, print, fetchUpdateWeaveState } from "./api";
 import tem from "./temDlg";
+import sendandreceiveOrder from "@/components/sendAndreceive-order.vue"
 export default {
   name: "",
   components: {
     temDlg: tem,
+    sendandreceiveOrder
   },
   data() {
     return {
@@ -96,11 +98,19 @@ export default {
       // 数据抽取
       isExtract: false,
       extractRows: [],
-
+      get
     };
   },
   watch: {},
   methods: {
+    // 发单
+    async handleSendOrderClick() {
+      this.loading = true;
+      this.$refs.sendandreceiveOrder.dialogVisible = true;
+      await this.$nextTick();
+      this.$refs.sendandreceiveOrder.initData(); // 初始化发单信息
+      this.loading = false;
+    },
     // 已织完
     handleFinish(){
       // this.detail
