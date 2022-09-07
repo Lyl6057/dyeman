@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-09-06 10:28:51
+ * @LastEditTime: 2022-09-07 08:04:22
  * @Description: 
 -->
 <template>
@@ -140,7 +140,7 @@ export default {
         params.weaveJobCode =
           "%" + (params.weaveJobCode ? params.weaveJobCode : "");
         params.salPoNo = "%" + (params.salPoNo ? params.salPoNo : "");
-        params.colorCode = "%" + (params.colorCode ? params.colorCode : "");
+        params.fabricDesc = "%" + (params.fabricDesc || "");
       }
       get(
         Object.assign(params, {

@@ -1109,7 +1109,7 @@ export default {
             data.item = null;
             data.poAmountLb = Number((data.poAmountKg * 2.204623).toFixed(2));
             data.vatNo = data.vatNo.replace(/\s/g, "");
-            // data.pidCount = this.form.bf.length || 0;
+            isNaN(data.pidCount) ? data.pidCount = 0 : data.pidCount;
             if (data.runJobId) {
               // update
               data.modifiDate = this.$getNowTime("datetime");

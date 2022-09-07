@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-31 16:51:20
+ * @LastEditTime: 2022-09-07 14:30:01
  * @Description:
 -->
 <template>
@@ -770,6 +770,7 @@ export default {
             data.item = null;
             data.poAmountLb = Number((data.poAmountKg * 2.204623).toFixed(2));
             data.vatNo = data.vatNo.replace(/\s/g, "");
+            isNaN(data.pidCount) ? data.pidCount = 0 : data.pidCount;
             if (data.runJobId) {
               // update
               data.modifiDate = this.$getNowTime("datetime");

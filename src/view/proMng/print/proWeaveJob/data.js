@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
- * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-09-06 16:42:27
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-09-07 08:05:02
  * @Description:
  */
 
@@ -48,10 +48,11 @@ export function mainForm(_this) {
         tip: "Sắp xếp ngày dệt"
       },
       {
-        label: "色號",
-        prop: "colorCode",
+        label: "布類描述",
+        prop: "fabricDesc",
         span: 6,
-        tip: "color number"
+        placeholder: "请選擇布類描述",
+        tip: "Loại vải "
       },
       {
         label: "機號",
@@ -349,6 +350,41 @@ export function mainCrud(_this, audit, isExtract = false) {
         ]
       },
       {
+        label: "布类代码",
+        prop: "custFabricCode",
+        span: 6,
+        width: 120,
+        placeholder: " ",
+        tip: "Fabric Code",
+        disabled: audit
+          ? false
+          : _this.detail.auditState && !_this.isAdd
+            ? true
+            : false,
+        hide: true
+      },
+      {
+        label: "布類描述",
+        prop: "fabricDesc",
+        overHidden: true,
+        disabled: audit
+          ? false
+          : _this.detail.auditState && !_this.isAdd
+            ? true
+            : false,
+        width: 250,
+        span: 12,
+        placeholder: "请選擇布類描述",
+        rules: [
+          {
+            required: true,
+            message: "请選擇布類描述",
+            trigger: "blur"
+          }
+        ],
+        tip: "Loại vải "
+      },
+      {
         label: "顏色名稱",
         prop: "colorName",
         disabled: audit
@@ -385,21 +421,7 @@ export function mainCrud(_this, audit, isExtract = false) {
         // row: true
       },
 
-      {
-        label: "布类代码",
-        prop: "custFabricCode",
-        span: 6,
-        width: 120,
-        placeholder: " ",
-        tip: "Fabric Code",
-        disabled: audit
-          ? false
-          : _this.detail.auditState && !_this.isAdd
-            ? true
-            : false,
-        hide: true
-      },
-
+      
       {
         label: "合同数量",
         prop: "contractAmount",
@@ -491,30 +513,7 @@ export function mainCrud(_this, audit, isExtract = false) {
             : false,
         hide: true
       },
-
-
-
-      {
-        label: "布類描述",
-        prop: "fabricDesc",
-        overHidden: true,
-        disabled: audit
-          ? false
-          : _this.detail.auditState && !_this.isAdd
-            ? true
-            : false,
-        width: 250,
-        span: 12,
-        placeholder: "请選擇布類描述",
-        rules: [
-          {
-            required: true,
-            message: "请選擇布類描述",
-            trigger: "blur"
-          }
-        ],
-        tip: "Loại vải "
-      },
+     
 
       {
         label: "克重",
