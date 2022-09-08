@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-24 14:21:15
  * @LastEditors: Lyl
- * @LastEditTime: 2022-09-08 09:02:27
+ * @LastEditTime: 2022-09-08 09:37:16
  * @Description:
  */
 
@@ -740,7 +740,6 @@ export function materialsItyCrudOp(_this) {
         align: "center",
         overHidden: true
       },
-      
       {
         label: "布飞编号",
         prop: "noteCode",

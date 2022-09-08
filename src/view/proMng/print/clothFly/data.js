@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-07-01 14:39:38
+ * @LastEditTime: 2022-09-07 15:29:52
  * @Description:
  */
 
@@ -215,13 +215,13 @@ export function mainCrud(_this) {
         disabled: true,
         hide: true,
         span: 6,
-        rules: [
-          {
-            required: true,
-            message: "请输入克重",
-            trigger: "blur"
-          }
-        ]
+        // rules: [
+        //   {
+        //     required: true,
+        //     message: "请输入克重",
+        //     trigger: "blur"
+        //   }
+        // ]
       },
       // {
       //   label: "纱批",

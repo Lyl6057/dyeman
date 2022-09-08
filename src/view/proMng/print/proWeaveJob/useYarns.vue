@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2022-08-31 08:20:31
  * @LastEditors: Lyl
- * @LastEditTime: 2022-09-01 16:15:29
+ * @LastEditTime: 2022-09-07 15:39:58
  * @FilePath: \iot.vue\src\view\proMng\print\proWeaveJob\useYarns.vue
  * @Description: 
 -->
@@ -36,7 +36,7 @@
         <view-container title="纱线实际分配信息">
           <el-row class="btnList">
             <el-tooltip class="item" effect="dark" content="thêm mới " placement="top-start">
-              <el-button @click="handleAdd(1)" type="primary">{{ $t("public.add") }}</el-button>
+              <el-button @click="handleAdd" type="primary">{{ $t("public.add") }}</el-button>
             </el-tooltip>
             <el-tooltip class="item" effect="dark" content="xóa" placement="top-start">
               <el-button @click="handleDelYarnAllot" type="danger">{{ $t("public.del") }}</el-button>
@@ -208,7 +208,7 @@ export default {
       }
       return true
     },
-    handleAdd(sgin) {
+    handleAdd() {
       if (!this.rowSelectData.yarnCode) {
         this.$tip.warning("请先选择用纱资料!")
         return;
@@ -306,7 +306,8 @@ export default {
             yarnBatch: item.batId,
             yarnBrand: item.yarnsCard,
             factoryYarnBatch: item.batchNo,
-            realAmount: 0
+            realAmount: 0,
+            unit: this.rowSelectData.unit || 'KG'
           });
         });
       }else{
@@ -319,7 +320,7 @@ export default {
             realAmount: 0,
             lossRate: 0,
             yarnRatio: 0,
-            unit: item.weightUnit
+            unit: "KG"
           });
         });
       }

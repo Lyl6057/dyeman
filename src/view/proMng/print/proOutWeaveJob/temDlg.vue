@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-09-01 14:38:14
+ * @LastEditTime: 2022-09-08 11:18:33
  * @Description: 
 -->
 <template>
@@ -335,6 +335,7 @@ export default {
           this.form.includeTaxe = false;
           this.form.creator = parent.userID;
           this.form.weaveJobId = "";
+          this.form.auditState = 1;
           this.form.startDate = this.$getNowTime("datetime");
           this.code = res.data.data;
         });
