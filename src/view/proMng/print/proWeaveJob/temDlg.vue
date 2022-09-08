@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-09-06 17:31:00
+ * @LastEditTime: 2022-09-08 11:27:28
  * @Description: 
 -->
 <template>
@@ -169,7 +169,8 @@ import {
   get,
   addProEquipmentSchedule,
   fetchEquipmentInfo,
-  saveFlatknitByUnCreate
+  saveFlatknitByUnCreate,
+  fetchYarnOrderNosByWeaveCode
 } from "./api";
 import { baseCodeSupplyEx, baseCodeSupply } from "@/api/index";
 import preview from "./preview";
@@ -399,7 +400,7 @@ export default {
       this.$refs.weaveDtlRef.getWeaveDtlData(weaveJobId)
     },
     // 解析抽取到的数据
-    analysisExtractData() {
+    async analysisExtractData() {
 
       let poNoMap = {};
       let contractAmount = 0;
@@ -432,6 +433,9 @@ export default {
 
       let poNos = Object.keys(poNoMap).join(",");
       let itemData = this.extractRows[0];
+
+      // 抽取订纱单号数据
+      let yarnOrderNos = await fetchYarnOrderNosByWeaveCode(poNos).then(res => res.data.data);
       this.formOp = mainCrud(this, false, true);
       Object.assign(this.form, {
         salPoNo: poNos,
@@ -450,7 +454,8 @@ export default {
         breadthLower: itemData.fabWidth14,
         horizonShrink: itemData.shrinkHorizontal,
         verticalShrink: itemData.shrinkVertical,
-        creator: parent.userID || "ADMIN"
+        creator: parent.userID || "ADMIN",
+        yarnOrderNos: yarnOrderNos
       })
       this.$refs.weaveDtlRef.crudData = dtlCrudData;
       this.xiaLanDtls = xiaLanDtls;
