@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-24 14:21:15
  * @LastEditors: Lyl
- * @LastEditTime: 2022-09-06 15:44:18
+ * @LastEditTime: 2022-09-08 09:02:27
  * @Description:
  */
 
@@ -787,6 +787,7 @@ export function materialsItyCrudOp(_this) {
         prop: "yarnsCard",
         cell: false,
         placeholder: " ",
+        overHidden: true,
         span: 6,
         hide: _this.type == "SX" ? false : true
       },
@@ -870,6 +871,19 @@ export function materialsItyCrudOp(_this) {
         cell: false,
         width: 120,
         hide: _this.type == 'PB' ? false : true,
+      },
+      {
+        label: "入库日期",
+        prop: "yinData",
+        width: 160,
+        hide: _this.type == 'SX' ? false : true,
+        overHidden: true
+      },
+      {
+        label: "在库时长",
+        prop: "storageDays",
+        width: 100,
+        hide: _this.type == 'SX' ? false : true,
       },
       {
         label: _this.$t("whseField.jyzt"),

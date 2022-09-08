@@ -6,36 +6,27 @@
  * @Description: 
 -->
 <template>
-  <div
-    id="clothFlyScan"
-    :element-loading-text="$t('public.loading')"
-    v-loading="wLoading"
-  >
+  <div id="clothFlyScan" :element-loading-text="$t('public.loading')" v-loading="wLoading">
     <view-container title="生产备布">
       <div class="btnList">
-        <el-button
-          type="primary"
-          :disabled="!form.vatNo || !history.length || !queryCtr"
-          @click="submit"
-          >开始出仓</el-button
-        >
+        <el-button type="primary" :disabled="!form.vatNo || !history.length || !queryCtr" @click="submit">开始出仓
+        </el-button>
+        <el-button type="success" :disabled="!form.vatNo || !history.length" @click="printCN">打印明细
+        </el-button>
       </div>
       <el-row class="formBox" style="margin-top: 5px">
         <avue-form ref="form" :option="formOp" v-model="form">
           <template slot="button">
-              <el-button type="primary" style="margin: 10px 0 0 -10px" @click="handleChooseNote">
-                选择胚布
-              </el-button>
+            <el-button type="primary" style="margin: 10px 0 0 -10px" @click="handleChooseNote">
+              选择胚布
+            </el-button>
           </template>
         </avue-form>
       </el-row>
       <el-row class="crudBox">
         <el-col :span="14">
           <view-container title="胚布信息">
-            <el-card
-              class="box-card"
-              style="height: calc(100vh - 280px); overflow: auto"
-            >
+            <el-card class="box-card" style="height: calc(100vh - 280px); overflow: auto">
               <!-- <div slot="header" class="clearfix">
               <span>布票信息</span>
             </div> -->
@@ -80,31 +71,18 @@
         </el-col>
         <el-col :span="10">
           <view-container title="已选胚布">
-            <el-card
-              class="border-card"
-              style="height: calc(100vh - 365px); overflow: auto"
-              id="history"
-            >
-              <div
-                class="text item"
-                v-for="item in history"
-                :key="item.noteId"
-                style="border-bottom: 1px solid #eee"
-              >
+            <el-card class="border-card" style="height: calc(100vh - 365px); overflow: auto" id="history">
+              <div class="text item" v-for="item in history" :key="item.noteId" style="border-bottom: 1px solid #eee">
                 <div class="history">
                   <span>布票号: {{ item.noteCode }}</span>
                   <span> 重量: {{ item.clothWeight }}</span>
                   <span> 位置: {{ item.storeSiteCode }}</span>
-                  <span
-                    style="
+                  <span style="
                       float: right;
                       margin: 0 10px 0 0;
                       font-size: 18px;
                       color: red;
-                    "
-                    @click="cancelNote(item)"
-                    >X</span
-                  >
+                    " @click="cancelNote(item)">X</span>
                   <!-- <span>验布员工号: {{ item.clothChecker }}</span> -->
                 </div>
 
@@ -112,50 +90,27 @@
               </div>
             </el-card>
             <div style="text-align: left; padding: 5px; font-size: 22px">
-              <span>疋数: {{ history.length }}, </span
-              ><span>合计重量: {{ weight }}</span>
+              <span>疋数: {{ history.length }}, </span><span>合计重量: {{ weight }}</span>
             </div>
           </view-container>
         </el-col>
       </el-row>
     </view-container>
-    <el-dialog
-      :visible.sync="dialogVisible"
-      width="60%"
-      append-to-body
-      :close-on-click-modal="false"
-      :close-on-press-escape="false"
-      :element-loading-text="$t('public.loading')"
-      v-loading="dLoading"
-      v-if="dialogVisible"
-    >
+    <el-dialog :visible.sync="dialogVisible" width="60%" append-to-body :close-on-click-modal="false"
+      :close-on-press-escape="false" :element-loading-text="$t('public.loading')" v-loading="dLoading"
+      v-if="dialogVisible">
       <view-container title="胚布裁剪">
         <div class="btnList">
           <el-button type="success" @click="save2">保存</el-button>
           <!-- <el-button type="primary">裁剪</el-button> -->
-          <el-button type="warning" @click="dialogVisible = false"
-            >关闭</el-button
-          >
+          <el-button type="warning" @click="dialogVisible = false">关闭</el-button>
         </div>
         <div class="formBox">
           <avue-form ref="dlgForm" :option="dlgFormOp" v-model="dlgForm">
             <template slot="noteCode" slot-scope="scope">
-              <el-select
-                v-model="scope.row.noteCode"
-                placeholder="请选择"
-                filterable
-                allow-create
-                default-first-option
-                clearable
-                class="customize-select"
-                @change="selectChange(scope.row)"
-              >
-                <el-option
-                  v-for="item in history"
-                  :key="item.noteCode"
-                  :label="item.noteCode"
-                  :value="item.noteCode"
-                >
+              <el-select v-model="scope.row.noteCode" placeholder="请选择" filterable allow-create default-first-option
+                clearable class="customize-select" @change="selectChange(scope.row)">
+                <el-option v-for="item in history" :key="item.noteCode" :label="item.noteCode" :value="item.noteCode">
                   <span style="float: left"> {{ item.noteCode }}</span>
                 </el-option>
               </el-select>
@@ -164,26 +119,20 @@
         </div>
         <view-container title="裁剪后出仓胚布">
           <div class="crudBox">
-            <avue-crud
-              ref="dlgCrud"
-              :option="dlgCrudOp"
-              :data="dlgCrud"
-              v-loading="loading"
-            ></avue-crud>
+            <avue-crud ref="dlgCrud" :option="dlgCrudOp" :data="dlgCrud" v-loading="loading"></avue-crud>
           </div>
         </view-container>
       </view-container>
     </el-dialog>
-    <choice 
-      :choiceV="choiceV" 
-      :choiceTle="choiceTle" 
-      :choiceQ="choiceQ" 
-      dlgWidth="100%" 
-      @choiceData="choiceData" 
-      @close="choiceV = false;" 
-      v-if="choiceV"
-    >
+    <choice :choiceV="choiceV" :choiceTle="choiceTle" :choiceQ="choiceQ" dlgWidth="100%" @choiceData="choiceData"
+      @close="choiceV = false;" v-if="choiceV">
     </choice>
+    <el-dialog id="colorMng_Dlg" :visible.sync="pdfDlg" fullscreen width="100%" append-to-body
+      :close-on-click-modal="false" :close-on-press-escape="false" @close="pdfClose">
+      <view-container title="打印預覽">
+        <embed id="pdf" style="width: 100vw; height: calc(100vh - 80px)" :src="pdfUrl" />
+      </view-container>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -210,7 +159,7 @@ import {
 import { baseCodeSupplyEx, baseCodeSupply } from "@/api/index";
 export default {
   name: "",
-  components:{
+  components: {
     choice
   },
   data() {
@@ -243,8 +192,11 @@ export default {
       choiceTle: '选择胚布信息',
       choiceQ: {
         clothState: 2
-      }
-      
+      },
+      pdfDlg: false,
+      pdfUrl: "",
+
+
     };
   },
   watch: {
@@ -374,6 +326,14 @@ export default {
         }
       });
     },
+    printCN() {
+      this.pdfDlg = true;
+      this.isExhaust = true;
+      this.pdfUrl =
+        process.env.API_HOST +
+        "/api/proBleadyeRunJobCalico/fineCode?id=" +
+        this.form.runJobId;
+    },
     save2() {
       if (!this.history.length) {
         this.$tip.warning("请扫描布票!");
@@ -392,9 +352,9 @@ export default {
           sysCreatedby: this.$store.state.userOid,
           retBatch: this.form.vatNo
         }).then((res) => {
-          baseCodeSupply({ code: "whse_out" }).then((res) => {});
+          baseCodeSupply({ code: "whse_out" }).then((res) => { });
           baseCodeSupplyEx({ code: "pb_out_whse" }).then((outPh) => {
-            baseCodeSupply({ code: "pb_out_whse" }).then((res) => {});
+            baseCodeSupply({ code: "pb_out_whse" }).then((res) => { });
             whseId = res.data.data;
             addOutWhseDla({
               calicoId: this.form.weaveJobCode,
@@ -454,7 +414,7 @@ export default {
                 (this.dlgForm.outWeight /
                   (this.dlgCrud[0].clothWeight + this.dlgForm.outWeight)) *
                 clothLengthValue,
-            }).then((res) => {}); //1.修改原布票重量
+            }).then((res) => { }); //1.修改原布票重量
             // getInwhse({ custTicket: item.noteCode }).then((res) => {
             //   if (res.data.length > 0) {
             //     // 有入仓记录,重量全部出完
@@ -475,8 +435,9 @@ export default {
             }
           } else {
             updateNote({ noteId: item.noteId, clothState: 3 }).then(
-              (res) => {}
-            ); //1.布票状态为出仓
+              (res) => { }
+            );
+            //1.布票状态为出仓
             // getInwhse({ custTicket: item.noteCode }).then((res) => {
             //   if (res.data.length > 0) {
             //     // 有入仓记录,重量全部出完
@@ -523,9 +484,9 @@ export default {
           sysCreatedby: this.$store.state.userOid,
           retBatch: this.form.vatNo
         }).then((res) => {
-          baseCodeSupply({ code: "whse_out" }).then((res) => {});
+          baseCodeSupply({ code: "whse_out" }).then((res) => { });
           baseCodeSupplyEx({ code: "pb_out_whse" }).then((outPh) => {
-            baseCodeSupply({ code: "pb_out_whse" }).then((res) => {});
+            baseCodeSupply({ code: "pb_out_whse" }).then((res) => { });
             whseId = res.data.data;
             addOutWhseDla({
               calicoId: this.form.weaveJobCode,
@@ -545,8 +506,9 @@ export default {
             });
           });
         });
+
         this.history.forEach((item, i) => {
-          updateNote({ noteId: item.noteId, clothState: 3 }).then((res) => {}); //1.布票状态为出仓
+          updateNote({ noteId: item.noteId, clothState: 3 }).then((res) => { }); //1.布票状态为出仓
           // getInwhse({ custTicket: item.noteCode }).then((res) => { // 入仓记录不改变重量
           //   if (res.data.length > 0) {
           //     // 有入仓记录,重量全部出完
@@ -627,7 +589,7 @@ export default {
         }
       );
     },
-    handleChooseNote(){
+    handleChooseNote() {
       if (!this.form.vatNo || !this.form.weaveJobCode) {
         this.$tip.warning("请先输入缸号信息")
         return
@@ -636,13 +598,13 @@ export default {
       this.choiceQ.weaveJobFk = this.form.weaveJobId
       this.choiceV = true;
     },
-    choiceData(val){
-      if(val.length == 0){
+    choiceData(val) {
+      if (val.length == 0) {
         this.choiceV = false;
         return;
       }
-      val.forEach((item) =>{
-        item.clothWeight = item.clothWeight ? item.clothWeight  : item.realWeight
+      val.forEach((item) => {
+        item.clothWeight = item.clothWeight ? item.clothWeight : item.realWeight
       })
       this.history = this.history.concat(val)
       this.history = this.$unique(this.history, "noteId");
@@ -655,7 +617,7 @@ export default {
       this.detail = val;
     },
   },
-  created() {},
+  created() { },
   mounted() {
     let self = this;
     document.onkeydown = function (e) {
