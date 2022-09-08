@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-03-24 14:21:15
  * @LastEditors: Lyl
- * @LastEditTime: 2022-09-06 15:56:00
+ * @LastEditTime: 2022-09-08 08:02:05
  * @Description:
  */
 
@@ -123,9 +123,26 @@ export function crudOp(_this) {
         placeholder: " "
       },
       {
+        label: "总重量",
+        prop: "sumWeight",
+        width: 80,
+        span: 6,
+        align: "right",
+        placeholder: " "
+      },
+      {
         label: "疋号",
         prop: "pidNos",
         width: 160,
+        span: 6,
+        overHidden: true,
+        placeholder: " "
+      },
+      
+      {
+        label: "疋重量",
+        prop: "pidWeight",
+        width: 200,
         span: 6,
         overHidden: true,
         placeholder: " "
@@ -137,6 +154,48 @@ export function crudOp(_this) {
         width: 120,
         overHidden: true,
         placeholder: " "
+      },
+      {
+        label: "WMS状态",
+        prop: "status",
+        cell: false,
+        width: 100,
+        overHidden: true,
+        type: "select",
+        dicData: [
+          {
+            value: 1,
+            label: "组盘中"
+          },
+          {
+            value: 2,
+            label: "组盘完成"
+          },
+          {
+            value: 3,
+            label: "入库中"
+          },
+          {
+            value: 4,
+            label: "出库中"
+          },
+          {
+            value: 5,
+            label: "移库中"
+          },
+          {
+            value: 6,
+            label: "盘点中"
+          },
+          {
+            value: 7,
+            label: "在库"
+          },
+          {
+            value: 8,
+            label: "不在库"
+          }
+        ]
       },
       {
         label: "客戶",

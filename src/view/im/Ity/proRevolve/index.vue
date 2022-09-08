@@ -242,7 +242,7 @@ export default {
       choiceV: false,
       choiceTle: '选择胚布信息',
       choiceQ: {
-        clothState: 2
+        // clothState: 2
       }
       
     };

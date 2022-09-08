@@ -844,15 +844,15 @@ export default {
               icon: "el-icon-thumb",
               color: "#409EFF",
             },
-            {
-              id: "2-9",
-              click: () => {
-                 this.toView("cc_prepCloth", this.$t("iaoMng.pb") + "_0");
-              },
-              title: this.$t("iaoMng.bbcc") + "(NEW)",
-              icon: "el-icon-thumb",
-              color: "#409EFF",
-            },
+            // {
+            //   id: "2-9",
+            //   click: () => {
+            //      this.toView("cc_prepCloth", this.$t("iaoMng.pb") + "_0");
+            //   },
+            //   title: this.$t("iaoMng.bbcc") + "(NEW)",
+            //   icon: "el-icon-thumb",
+            //   color: "#409EFF",
+            // },
           ],
         },
         {
