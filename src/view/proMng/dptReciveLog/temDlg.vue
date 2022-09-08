@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-02-02 09:00:25
  * @LastEditors: Lyl
- * @LastEditTime: 2022-09-06 11:13:35
+ * @LastEditTime: 2022-09-08 10:25:50
  * @Description: 
 -->
 <template>
@@ -172,7 +172,8 @@ export default {
     },
     remoteMethodCX(val) {
       getBaseWorkStep({
-        stepName: "%" + val
+        stepName: "%" + ( val || ''),
+        orgCodes: "%" +  (this.form.dispathReceive == 1 ? this.form.dptworkProcessFk : this.form.sendProcessFk)
       }).then((res) => {
         this.dataSelect = [];
         res.data.map((e, i) => {

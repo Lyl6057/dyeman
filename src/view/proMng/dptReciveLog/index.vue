@@ -1,8 +1,8 @@
 <!--
  * @Author: Lyl
  * @Date: 2022-01-27 14:37:25
- * @LastEditors: Symbol_Yang
- * @LastEditTime: 2022-07-16 11:36:49
+ * @LastEditors: Lyl
+ * @LastEditTime: 2022-09-08 10:33:36
  * @FilePath: \iot.vue\src\view\proMng\dptReciveLog\index.vue
  * @Description: 
 -->
@@ -184,7 +184,6 @@ export default {
       }).then((res) => {
         this.jd = res.data;
         this.sloading = false;
-        // this.detail = val;
       });
     },
   },

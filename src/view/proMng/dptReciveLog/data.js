@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-29 11:14:51
+ * @LastEditTime: 2022-09-08 10:35:08
  * @Description:
  */
 var baseUrl = "http://192.168.5.1:91";
@@ -211,7 +211,13 @@ export function dlgForm(_this) {
             trigger: "blur"
           }
         ],
-        cascader: ["stepId"]
+        change: () =>{
+          _this.$nextTick(() =>{
+            if(_this.form.dispathReceive == 2 ){
+              _this.remoteMethodCX();
+            }
+          })
+        },
       },
       // {
       //   label: "发单人",
@@ -242,7 +248,13 @@ export function dlgForm(_this) {
             trigger: "blur"
           }
         ],
-        cascader: ["stepId"]
+        change: () =>{
+          _this.$nextTick(() =>{
+            if(_this.form.dispathReceive == 1){
+              _this.remoteMethodCX();
+            }
+          })
+        },
       },
       // {
       //   label: "收单人",
@@ -449,11 +461,11 @@ export function dlgCrud(_this) {
           label: "stepName",
           value: "stepId"
         },
-        dicUrl: `${baseUrl}/api/baseWorkStep/parent?parentId=2A88BB439A7E4B4EBB899E0D2E10742F%2C0D315AE933AE43C1B6963B6E84989827`
+        dicUrl: `${baseUrl}/api/baseWorkStep`
       },
       {
         label: "发单部门",
-        prop: "sendProcessFk",
+        prop: "sendProcessFk", 
         tipPlacement: "right",
         span: 6,
         tip: "bộ phận gửi đơn",
@@ -461,7 +473,8 @@ export function dlgCrud(_this) {
         type: "select",
         overHidden: true,
         dicData: getDicT("proDptworkProcess", "dptName", "dptCode", {}, "sn"),
-        width: 120
+        width: 120,
+        
       },
       {
         label: "发单人",
@@ -495,7 +508,7 @@ export function dlgCrud(_this) {
             trigger: "blur"
           }
         ],
-        cascader: ["stepId"]
+       
       },
       {
         label: "收单人",
