@@ -1,12 +1,21 @@
 /*
  * @Author: Lyl
  * @Date: 2021-02-01 14:06:25
- * @LastEditors: Lyl
- * @LastEditTime: 2022-09-01 11:31:37
+ * @LastEditors: Symbol_Yang
+ * @LastEditTime: 2022-09-08 10:41:40
  * @Description:
  */
 
 import axios from "axios";
+
+// 通过生产通知单号获取订纱单数据
+export function fetchYarnOrderNosByWeaveCode(weaveCode){
+  return axios({
+    url: "/api/proWeaveJob/yarnOrderNos/" + weaveCode,
+    method: "get",
+  });
+}
+
 
 // 查询实际用纱
 export function fetchProWeaveJobYarnallotData(params){

@@ -1,8 +1,8 @@
 /*
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
- * @LastEditors: Lyl
- * @LastEditTime: 2022-09-07 08:05:02
+ * @LastEditors: Symbol_Yang
+ * @LastEditTime: 2022-09-08 11:46:29
  * @Description:
  */
 
@@ -736,8 +736,17 @@ export function mainCrud(_this, audit, isExtract = false) {
         // minRows: 0,
         hide: true,
         span: 4,
-        row: true,
+        // row: true,
         type: "number",
+        placeholder: " "
+      },
+      {
+        label: "订纱单",
+        tip: "thứ tự sợi",
+        disabled: true,
+        prop: "yarnOrderNos",
+        span: 12,
+        hide: true,
         placeholder: " "
       },
       {
@@ -762,7 +771,7 @@ export function mainCrud(_this, audit, isExtract = false) {
         ],
         hide: true,
         placeholder: " ",
-        span: 6
+        span: 6,
       },
       {
         label: "製單人",
@@ -789,7 +798,7 @@ export function mainCrud(_this, audit, isExtract = false) {
         tip: "Yêu cầu khác",
         placeholder: " ",
         hide: true,
-        span: 12
+        span: 18
       },
     ],
     group: [
