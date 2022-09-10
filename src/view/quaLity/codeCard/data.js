@@ -803,6 +803,36 @@ export function dlgForm(_this) {
         placeholder: " "
       },
       {
+        label: "实际实用幅宽",
+        prop: "actualBreadth",
+        span: 8,
+        placeholder: " ",
+        cell: false,
+        overHidden: true,
+        sortable: true,
+        width: 120
+      },
+      {
+        label: "连边实际布封",
+        prop: "actualSideBreadth",
+        span: 8,
+        placeholder: " ",
+        cell: false,
+        overHidden: true,
+        sortable: true,
+        width: 120
+      },
+      {
+        label: "实际克重",
+        prop: "actualGramWeight",
+        span: 8,
+        placeholder: " ",
+        cell: false,
+        overHidden: true,
+        sortable: true,
+        width: 120
+      },
+      {
         label: "载具编号",
         prop: "storeLoadCode",
         span: 8,
