@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-08-27 08:46:11
+ * @LastEditTime: 2022-09-10 09:01:37
  * @Description:
  */
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
@@ -576,7 +576,7 @@ export function dlgForm(_this) {
         align: "right",
         span: 8,
         placeholder: " ",
-        disabled: false,
+        disabled: true,
         type: "number",
         tip: "Số cây vải"
       },
@@ -587,6 +587,7 @@ export function dlgForm(_this) {
         width: 100,
         span: 8,
         type: "select",
+        disabled: true,
         // dicData: matUnit,
         dicData: [
           {
@@ -666,6 +667,7 @@ export function dlgForm(_this) {
         precision: 1,
         align: "left",
         placeholder: " ",
+        disabled: true,
         change: () => {
           _this.$nextTick(() => {
             if (_this.detail.weightUnit == "LBS") {

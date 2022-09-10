@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-09-08 10:35:08
+ * @LastEditTime: 2022-09-09 07:53:33
  * @Description:
  */
 var baseUrl = "http://192.168.5.1:91";
@@ -450,19 +450,25 @@ export function dlgCrud(_this) {
         ]
       },
       {
-        label: "工序",
-        prop: "stepId",
-        overHidden: true,
-        span: 16,
-        width: 120,
-        placeholder: " ",
-        type: "select",
-        props: {
-          label: "stepName",
-          value: "stepId"
-        },
-        dicUrl: `${baseUrl}/api/baseWorkStep`
+        label: "工序名称",
+        prop: "stepName",
+        width: 160,
+        overHidden: true
       },
+      // {
+      //   label: "工序",
+      //   prop: "stepId",
+      //   overHidden: true,
+      //   span: 16,
+      //   width: 120,
+      //   placeholder: " ",
+      //   type: "select",
+      //   props: {
+      //     label: "stepName",
+      //     value: "stepId"
+      //   },
+      //   dicUrl: `${baseUrl}/api/baseWorkStep`
+      // },
       {
         label: "发单部门",
         prop: "sendProcessFk", 
