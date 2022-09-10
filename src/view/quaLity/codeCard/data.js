@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:55:22
  * @LastEditors: Lyl
- * @LastEditTime: 2022-09-10 09:01:37
+ * @LastEditTime: 2022-09-10 14:43:19
  * @Description:
  */
 import { getDIC, getDicT, getXDicT, postDicT } from "@/config";
@@ -24,13 +24,6 @@ export function mainForm(_this) {
         // type: "select",
         tip: "MS đơn sản xuất bp Dệt"
       },
-      // {
-      //   label: "訂單號",
-      //   prop: "poNo",
-      //   span: 6,
-      //   placeholder: " ",
-      //   tip: "Số đơn hàng"
-      // },
       {
         label: "客戶",
         prop: "custCode",
@@ -116,18 +109,6 @@ export function mainForm(_this) {
           });
         }
       }
-      // {
-      //   label: "验布时间",
-      //   prop: "clothCheckTime",
-      //   type: "date",
-      //   format: "yyyy-MM-dd",
-      //   valueFormat: "yyyy-MM-dd",
-      //   span: 6,
-      //   tip: "thời gian in",
-      //   placeholder: " ",
-      //   align: "center",
-      //   width: 180
-      // }
     ]
   };
 }
@@ -189,14 +170,6 @@ export function mainCrud(_this) {
       }
     ],
     column: [
-      // {
-      //   label: "#",
-      //   prop: "index",
-      //   width: 50,
-      //   align: "center",
-      //   display: false
-      // },
-
       {
         label: "缸号(Số lô nhuộm)",
         prop: "vatNo",
@@ -246,33 +219,6 @@ export function mainCrud(_this) {
         overHidden: true,
         hide: true
       },
-      // {
-      //   label: "客布代码",
-      //   // tip: "Số màu",
-      //   prop: "guestFabId",
-      //   width: 150,
-      //   span: 8,
-      //   overHidden: true,
-      //   placeholder: " "
-      // },
-      // {
-      //   label: "成份要求",
-      //   // tip: "Tổng cộng(KG)",
-      //   prop: "guestComponents",
-      //   width: 100,
-      //   span: 16,
-      //   placeholder: " ",
-      //   hide: true
-      // },
-      // {
-      //   label: "款号",
-      //   // tip: "Số màu",
-      //   prop: "styleNo",
-      //   width: 150,
-      //   span: 8,
-      //   overHidden: true,
-      //   placeholder: " "
-      // },
       {
         label: "顏色(Màu sắc)",
         prop: "colorName",
@@ -306,13 +252,11 @@ export function mainCrud(_this) {
       },
       {
         label: "码长(Chiều dài sợi)",
-        // tip: "Tổng cộng(KG)",
         prop: "yardLength",
         width: 100,
         span: 8,
         type: "number",
         align: "right",
-        // precision: 1,
         minRows: 0,
         placeholder: " "
       },
@@ -327,9 +271,6 @@ export function mainCrud(_this) {
         minRows: 0,
         precision: 1,
         placeholder: " "
-        // change: () => {}
-        // type: "number",
-        // precision: 1
       },
       {
         label: "浮重(trọng lượng bì LBS)",
@@ -470,65 +411,6 @@ export function mainCrud(_this) {
         placeholder: " ",
         overHidden: true
       },
-
-      // {
-      //   label: "單位",
-      //   prop: "weightUnit",
-      //   width: 80,
-      //   display: false,
-      //   placeholder: " ",
-      //   span: 6,
-      //   type: "select",
-      //   dicData: matUnit
-      // },
-      // {
-      //   label: "長度",
-      //   prop: "clothLength",
-      //   width: 80,
-      //   display: false
-      // },
-
-      // {
-      //   label: "單位",
-      //   prop: "lenUnit",
-      //   width: 80,
-      //   display: false,
-      //   placeholder: " ",
-      //   span: 6,
-      //   type: "select",
-      //   dicData: matUnit
-      // },
-
-      // {
-      //   label: "已打印",
-      //   prop: "isPrinted",
-      //   type: "select",
-      //   disabled: true,
-      //   dicData: [
-      //     {
-      //       value: true,
-      //       label: "是"
-      //     },
-      //     {
-      //       value: false,
-      //       label: "否"
-      //     }
-      //   ],
-      //   span: 6,
-      // },
-
-      // {
-      //   label: "打印时间(thời gian in)",
-      //   prop: "printedTime",
-      //   type: "date",
-      //   format: "yyyy-MM-dd HH:mm:ss",
-      //   valueFormat: "yyyy-MM-dd HH:mm:ss",
-      //   span: 6,
-      //   align: "center",
-      //   sortable: true,
-      //   width: 200
-      // },
-
       {
         label: "验布员工号(Số thẻ người đứng máy)",
         prop: "clothChecker",
@@ -770,28 +652,26 @@ export function dlgForm(_this) {
           });
         }
       },
-      // {
-      //   label: "克重",
-      //   tip: "Trọng lượng trước giặt",
-      //   prop: "realGramWeight",
-      //   width: 100,
-      //   span: 8,
-      //   type: "number",
-      //   align: "left",
-      //   minRows: 0,
-      //   placeholder: " "
-      // },
-      // {
-      //   label: "幅宽",
-      //   tip: "Khổ rộng vải mộc",
-      //   prop: "clothWidth",
-      //   width: 100,
-      //   span: 8,
-      //   type: "number",
-      //   align: "left",
-      //   minRows: 0,
-      //   placeholder: " "
-      // },
+      {
+        label: "实际布封",
+        prop: "actualSideBreadth",
+        span: 8,
+        placeholder: " ",
+        cell: false,
+        overHidden: true,
+        sortable: true,
+        width: 120
+      },
+      {
+        label: "实际克重",
+        prop: "realGramWeight",
+        span: 8,
+        placeholder: " ",
+        cell: false,
+        overHidden: true,
+        sortable: true,
+        width: 120
+      },
       {
         label: "码长",
         tip: "Chiều dài sợi",
@@ -803,36 +683,6 @@ export function dlgForm(_this) {
         minRows: 0,
         disabled: true,
         placeholder: " "
-      },
-      {
-        label: "实际实用幅宽",
-        prop: "actualBreadth",
-        span: 8,
-        placeholder: " ",
-        cell: false,
-        overHidden: true,
-        sortable: true,
-        width: 120
-      },
-      {
-        label: "连边实际布封",
-        prop: "actualSideBreadth",
-        span: 8,
-        placeholder: " ",
-        cell: false,
-        overHidden: true,
-        sortable: true,
-        width: 120
-      },
-      {
-        label: "实际克重",
-        prop: "actualGramWeight",
-        span: 8,
-        placeholder: " ",
-        cell: false,
-        overHidden: true,
-        sortable: true,
-        width: 120
       },
       {
         label: "载具编号",
@@ -965,54 +815,6 @@ export function dlgCrud(_this) {
         align: "left",
         placeholder: " "
       },
-      // {
-      //   label: "纸管重量(Trọng lượng thoi giấy)",
-      //   prop: "paperTube",
-      //   width: 180,
-      //   align: "right",
-      //   minRows: 0,
-      //   span: 6,
-      //   cell: true,
-      //   placeholder: " ",
-      //   type: "number",
-      //   precision: 1
-      // },
-
-      // {
-      //   label: "QC扣减数量(Số lượng QC cắt giảm)",
-      //   prop: "qcTakeOut",
-      //   width: 160,
-      //   align: "right",
-      //   span: 6,
-      //   cell: true,
-      //   placeholder: " ",
-      //   type: "number",
-      //   minRows: 0,
-      //   precision: 1
-      // },
-      // {
-      //   label: "载具编号(Mã lồng thép)",
-      //   prop: "storeLoadCode",
-      //   span: 8,
-      //   placeholder: " ",
-      //   cell: true,
-      //   overHidden: true,
-      //   sortable: true,
-      //   width: 160
-      // },
-      // {
-      //   label: "存储位置(Vị trí lưu trữ)",
-      //   prop: "storeSiteCode",
-      //   cell: true,
-      //   width: 220,
-      //   placeholder: " ",
-      //   type: "select",
-      //   filterable: true,
-      //   allowCreate: true,
-      //   defaultFirstOption: true,
-      //   dicData: getDicT("whseLocation", "locationCode", "locationCode")
-      // },
-
       {
         label: "克重(Trọng lượng trước giặt)",
         // tip: "Tổng cộng(KG)",

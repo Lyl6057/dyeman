@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-09-05 08:25:22
+ * @LastEditTime: 2022-09-10 15:03:04
  * @Description:
 -->
 <template>
@@ -38,7 +38,7 @@
       </el-row>
       <el-dialog id="colorMng_Dlg" :visible.sync="dialogVisible" width="70%" append-to-body
         :close-on-click-modal="false" :close-on-press-escape="false">
-        <el-tabs type="border-card" v-model="tabs">
+        <el-tabs type="border-card" v-model="tabs" v-loading="historyLoading">
           <el-tab-pane label="修改" name="update">
             <div class="btnList">
               <el-button type="success" @click="save" :disabled="detail.clothState == 9 || detail.whseVouch == 9">{{
@@ -64,8 +64,7 @@
               }}</el-button>
             </div>
             <div class="formBox">
-              <avue-crud ref="dlgCrud" :option="historyOp" :data="history" @current-row-change="historyCellClick"
-                v-loading="loading" @selection-change="selectionChange" />
+              <avue-crud ref="dlgCrud" :option="historyOp" :data="history" @current-row-change="historyCellClick"/>
             </div>
           </el-tab-pane>
         </el-tabs>
@@ -89,14 +88,9 @@ import {
   update,
   del,
   updateNote,
-  getRevolve,
-  getNotPage,
   getCodeHistory,
 } from "./api";
 import { getCheckItem } from "../finalCard/api";
-import XlsxTemplate from "xlsx-template";
-import JSZipUtils from "jszip-utils";
-import saveAs from "file-saver";
 export default {
   name: "",
   components: {},
@@ -146,65 +140,77 @@ export default {
       loadDialogVisible: false,
       newLoad: "",
       weighData: {},
-      useWeight: false
+      useWeight: false,
+      historyLoading: false
     };
   },
   watch: {},
   methods: {
     query() {
       this.wLoading = true;
-      for (let key in this.form) {
-        if (!this.form[key]) {
-          delete this.form[key];
-        }
-      }
-      let data = JSON.parse(JSON.stringify(this.form));
+      this.crud = [];
       let r_clothCheckTime_r = "";
-      if (data.clothCheckTime && data.clothCheckTime.length) {
-        r_clothCheckTime_r = `!%5E%5b${data.clothCheckTime[0]} 07:30:00~${data.clothCheckTime[1]} 07:30:00%5d`;
+      if (this.form.clothCheckTime && this.form.clothCheckTime.length) {
+        r_clothCheckTime_r = `!%5E%5b${this.form.clothCheckTime[0]} 07:30:00~${this.form.clothCheckTime[1]} 07:30:00%5d`;
       } else {
         r_clothCheckTime_r = "!%5E";
       }
-      data.vatNo = "%" + (data.vatNo ? data.vatNo : "");
-      data.storeLoadCode = "%" + (data.storeLoadCode ? data.storeLoadCode : "");
-      data.clothChecker = "%" + (data.clothChecker ? data.clothChecker : "");
-      data.clothCheckTime = null;
+      let params = {
+        vatNo: "%" + (this.form.vatNo || ''),
+        storeLoadCode: "%" + (this.form.storeLoadCode || ''),
+        clothChecker: "%" + (this.form.clothChecker || ''),
+        custCode: this.form.custCode || '',
+        pidNo: this.form.pidNo || '',
+        clothState: this.form.clothState || '',
+      }
       get(
-        Object.assign(data, {
+        Object.assign(params, {
           rows: this.page.pageSize,
           start: this.page.currentPage,
           isPrinted: true,
-          // clothState: this.form.clothState,
           cardType: 1,
           delFlag: false,
         }),
         r_clothCheckTime_r
       ).then((res) => {
         this.crud = res.data.records;
-        if (this.crud.length > 0) {
-          this.$refs.crud.setCurrentRow(this.crud[0]);
-        }
-        this.crud.sort((a, b) => {
-          return a.pidNo > b.pidNo ? 1 : -1;
-        });
-        this.crud.forEach((item, i) => {
-          item.index = i + 1;
-        });
         this.page.total = res.data.total;
-        this.$refs.crud.setCurrentRow(this.crud[0] || {});
-          
-      }).finally((_) =>{
-        this.wLoading = false;
+      }).finally(async (_) =>{
+        setTimeout(() => {
+          this.wLoading = false;
+        }, 200);
       })
     },
-    handleRowDBLClick(val) {
+    async handleRowDBLClick(val) {
+      this.historyLoading = true;
       this.detail = val;
-      this.weightUnit = val.weightUnit;
       this.dialogVisible = true;
+      this.weightUnit = val.weightUnit;
+      if (this.detail.weightUnit == "KG") {
+        this.dlgOp.column[4].disabled = false;
+        this.dlgOp.column[7].disabled = true;
+      } else {
+        this.dlgOp.column[4].disabled = true;
+        this.dlgOp.column[7].disabled = false;
+      }
+      if (this.detail.cardId != null) {
+        this.historyLoading = true;
+        getCodeHistory({
+          productCardFk: this.detail.cardId,
+        }).then((res) => {
+          this.history = res.data.sort((a, b) => {
+            return a.clothCheckTime > b.clothCheckTime ? -1 : 1;
+          });
+        }).finally((_) =>{
+          
+        })
+      }
+      await this.$nextTick();
+      setTimeout(() => {
+        this.historyLoading = false;
+      }, 200);
     },
-    outExcel1() {
-      this.$refs.crud.rowExcel();
-    },
+
     weighing() {
       if (!this.spowerClient || this.spowerClient.readyState == 3) {
         this.$tip.error("称重应用未启动，请启动后重新进入此页面!");
@@ -226,14 +232,12 @@ export default {
       this.wLoading = true;
       this.detail.productNo =
         this.detail.vatNo + this.$preFixInt(this.detail.pidNo, 3);
-      update(this.detail).then((res) => {
+      update(this.detail).then(async (res) => {
         if (res.data.code == 200) {
-          setTimeout(() => {
-            this.dialogVisible = false;
+            await this.query();
             this.wLoading = false;
-            this.query();
+            this.dialogVisible = false;
             this.$tip.success(this.$t("public.bccg"));
-          }, 200);
         } else {
           this.wLoading = false;
           this.$tip.error(res.data.msg);
@@ -285,22 +289,7 @@ export default {
     },
     cellClick(val) {
       this.detail = val;
-      if (this.detail.weightUnit == "KG") {
-        this.dlgOp.column[4].disabled = false;
-        this.dlgOp.column[7].disabled = true;
-      } else {
-        this.dlgOp.column[4].disabled = true;
-        this.dlgOp.column[7].disabled = false;
-      }
-      if (this.detail.cardId != null) {
-        getCodeHistory({
-          productCardFk: this.detail.cardId,
-        }).then((res) => {
-          this.history = res.data.sort((a, b) => {
-            return a.clothCheckTime > b.clothCheckTime ? -1 : 1;
-          });
-        });
-      }
+     
     },
     historyCellClick(val) {
       this.historyCheck = val;
@@ -350,347 +339,15 @@ export default {
         Number(weight / gramWeight / breadth) * 1.0936
       );
     },
-    sortChange(val) {
-      this.sort = val;
-      this.query();
-    },
+    
     selectionChange(list) {
       this.selectList = list;
     },
-    async outExcel(type) {
-      if (!this.form.vatNo) {
-        this.$tip.warning("请先输入缸号!");
-        return;
-      }
-      this.wLoading = true;
-      try {
-        //获得Excel模板的buffer对象
-        const exlBuf = await JSZipUtils.getBinaryContent(
-          "./static/xlxsTemplate/finished_warehousing.xlsx"
-        );
-        // Create a template
-        var template = new XlsxTemplate(exlBuf);
-        // Replacements take place on first sheet
-        var sheetNumber = "Sheet1";
-        // 处理数据
-        getRevolve({ vatNo: this.form.vatNo }).then((res) => {
-          if (res.data.length) {
-            this.output = res.data[0];
-            this.output.sumWeight = type
-              ? this.output.clothWeight
-              : (this.output.clothWeight * 2.2046).toFixed(2);
-            this.output.date = this.$getNowTime("date");
-            this.output.type = type;
-            getNotPage({ vatNo: this.form.vatNo, cardType: 1 }).then((list) => {
-              let data = list.data.sort((a, b) => {
-                return a.pidNo - b.pidNo;
-              });
-              if (!list.data.length) {
-                this.$tip.warning("暂无此缸号数据!");
-                this.wLoading = false;
-                return;
-              }
-              let arr1 = [],
-                arr2 = [],
-                arr3 = [];
-              this.output.unit = type ? "KG" : "LBS";
-              this.output.weightKg = 0;
-              this.output.weightLbs = 0;
-              data = this.$unique(data, "pidNo");
-              // const lineNum = Math.ceil(
-              //   Number(data[data.length - 1].pidNo) / 3
-              // ); // 行数
-              const lineNum = 20;
-              for (let i = 0; i < lineNum * 3; i++) {
-                for (let j = 0; j <= data.length - 1; j++) {
-                  data[j].weight = type
-                    ? data[j].netWeight
-                    : data[j].netWeightLbs;
 
-                  if (i == data[j].pidNo - 1 && i < lineNum) {
-                    arr1[i] = data[j];
-                    break;
-                  } else if (i == data[j].pidNo - 1 && i < lineNum * 2) {
-                    arr2[i - lineNum] = data[j];
-                    break;
-                  } else if (i == data[j].pidNo - 1 && i < lineNum * 3) {
-                    arr3[i - lineNum * 2] = data[j];
-                    break;
-                  }
-
-                  if (j == data.length - 1) {
-                    // 没有找到索引对应的数据，空数据
-                    if (i < lineNum) {
-                      arr1[i] = {
-                        pidNo: i + 1,
-                        weight: "",
-                        yardLength: "",
-                      };
-                    } else if (i < lineNum * 2) {
-                      arr2[i - lineNum] = {
-                        pidNo: i + 1,
-                        weight: "",
-                        yardLength: "",
-                      };
-                    } else {
-                      arr3[i - lineNum * 2] = {
-                        pidNo: i + 1,
-                        weight: "",
-                        yardLength: "",
-                      };
-                    }
-                  }
-                }
-              }
-              data.forEach((item) => {
-                this.output.weightKg += item.netWeight;
-                this.output.weightLbs += item.netWeightLbs;
-              });
-              this.output.num = data.length;
-              this.output.weightKg = this.output.weightKg.toFixed(2);
-              this.output.weightLbs = this.output.weightLbs.toFixed(2);
-              this.output.loss =
-                (
-                  (this.output.weightKg / this.output.clothWeight - 1) *
-                  100
-                ).toFixed(2) + "%";
-              let values = {
-                output: this.output,
-                arr1,
-                arr2,
-                arr3,
-              };
-              this.$nextTick(() => {
-                template.substitute(sheetNumber, values);
-                // Get binary data.
-                var out = template.generate({ type: "blob" });
-                let _this = this;
-                let outE = function () {
-                  return new Promise((resolve, reject) => {
-                    let xlsxName =
-                      "成品和胚布入仓明细表 " +
-                      _this.output.custCode +
-                      " bảng chi tiết nhập kho";
-                    saveAs(out, xlsxName + ".xlsx");
-                    resolve();
-                  });
-                };
-                outE().then((res) => {
-                  setTimeout(() => {
-                    this.$tip.success("导出成功!");
-                    this.wLoading = false;
-                    // this.getData();
-                  }, 1000);
-                });
-              });
-            });
-          } else {
-            this.wLoading = false;
-            this.$tip.warning("暂无此缸号数据!");
-            return;
-          }
-        });
-      } catch (e) {
-        console.log(e);
-      }
-    },
-    async outQaExcel(type) {
-      if (!this.form.vatNo) {
-        this.$tip.warning("请先输入缸号!");
-        return;
-      }
-      // this.wLoading = true;
-      try {
-        //获得Excel模板的buffer对象
-        const exlBuf = await JSZipUtils.getBinaryContent(
-          "./static/xlxsTemplate/finished_qa_warehousing.xlsx"
-        );
-        // Create a template
-        var template = new XlsxTemplate(exlBuf);
-        // Replacements take place on first sheet
-        var sheetNumber = "Sheet1";
-        // 处理数据
-        getRevolve({ vatNo: this.form.vatNo }).then((res) => {
-          if (res.data.length) {
-            this.output = res.data[0];
-            this.output.sumWeight = type
-              ? this.output.clothWeight
-              : (this.output.clothWeight * 2.2046).toFixed(2);
-            this.output.date = this.$getNowTime("date");
-            this.output.type = type;
-            getNotPage({ vatNo: this.form.vatNo, cardType: 1 }).then((list) => {
-              let data = list.data.sort((a, b) => {
-                return a.pidNo - b.pidNo;
-              });
-              if (!list.data.length) {
-                this.$tip.warning("暂无此缸号数据!");
-                this.wLoading = false;
-                return;
-              }
-              let arr1 = [],
-                arr2 = [],
-                arr3 = [];
-              this.output.unit = type ? "KG" : "LBS";
-              this.output.weightKg = 0;
-              this.output.weightLbs = 0;
-              this.output.lengthSum = 0;
-              this.output.pidSum = data.length;
-              this.output.length1 = 0;
-              this.output.length2 = 0;
-              this.output.length3 = 0;
-              let load1 = "",
-                load2 = "",
-                load3 = "",
-                h1 = "",
-                h2 = "",
-                h3 = "";
-              data = this.$unique(data, "pidNo");
-              // const lineNum = Math.ceil(
-              //   Number(data[data.length - 1].pidNo) / 3
-              // ); // 行数
-              const lineNum = 20;
-              for (let i = 0; i < lineNum * 3; i++) {
-                for (let j = 0; j <= data.length - 1; j++) {
-                  data[j].weight = type
-                    ? data[j].netWeight
-                    : data[j].netWeightLbs;
-                  if (i == data[j].pidNo - 1 && i < lineNum) {
-                    if (
-                      data[j].storeLoadCode &&
-                      load1.indexOf(data[j].storeLoadCode) == -1
-                    ) {
-                      load1 += data[j].storeLoadCode + ",";
-                    }
-                    if (
-                      data[j].storeSiteCode &&
-                      h1.indexOf(data[j].storeSiteCode) == -1
-                    ) {
-                      h1 += data[j].storeSiteCode + ",";
-                    }
-                    arr1[i] = data[j];
-                    this.output.length1++;
-                    break;
-                  } else if (i == data[j].pidNo - 1 && i < lineNum * 2) {
-                    if (
-                      data[j].storeLoadCode &&
-                      load2.indexOf(data[j].storeLoadCode) == -1
-                    ) {
-                      load2 += data[j].storeLoadCode + ",";
-                    }
-                    if (
-                      data[j].storeSiteCode &&
-                      h2.indexOf(data[j].storeSiteCode) == -1
-                    ) {
-                      h2 += data[j].storeSiteCode + ",";
-                    }
-                    arr2[i - lineNum] = data[j];
-                    this.output.length2++;
-                    break;
-                  } else if (i == data[j].pidNo - 1 && i < lineNum * 3) {
-                    if (
-                      data[j].storeLoadCode &&
-                      load3.indexOf(data[j].storeLoadCode) == -1
-                    ) {
-                      load3 += data[j].storeLoadCode + ",";
-                    }
-                    if (
-                      data[j].storeSiteCode &&
-                      h3.indexOf(data[j].storeSiteCode) == -1
-                    ) {
-                      h3 += data[j].storeSiteCode + ",";
-                    }
-                    arr3[i - lineNum * 2] = data[j];
-                    this.output.length3++;
-                    break;
-                  }
-
-                  if (j == data.length - 1) {
-                    // 没有找到索引对应的数据，空数据
-                    if (i < lineNum) {
-                      arr1[i] = {
-                        pidNo: i + 1,
-                        weight: "",
-                        yardLength: "",
-                      };
-                    } else if (i < lineNum * 2) {
-                      arr2[i - lineNum] = {
-                        pidNo: i + 1,
-                        weight: "",
-                        yardLength: "",
-                      };
-                    } else {
-                      arr3[i - lineNum * 2] = {
-                        pidNo: i + 1,
-                        weight: "",
-                        yardLength: "",
-                      };
-                    }
-                  }
-                }
-              }
-              data.forEach((item) => {
-                this.output.weightKg += item.netWeight;
-                this.output.weightLbs += item.netWeightLbs;
-                this.output.lengthSum += item.yardLength;
-              });
-              this.output.load1 = load1.substr(0, load1.length - 1);
-              this.output.load2 = load2.substr(0, load2.length - 1);
-              this.output.load3 = load3.substr(0, load3.length - 1);
-              this.output.h1 = h1.substr(0, h1.length - 1);
-              this.output.h2 = h2.substr(0, h2.length - 1);
-              this.output.h3 = h3.substr(0, h3.length - 1);
-
-              this.output.num = data.length;
-              this.output.weightKg = this.output.weightKg.toFixed(2);
-              this.output.weightLbs = this.output.weightLbs.toFixed(2);
-              this.output.loss =
-                (
-                  (this.output.weightKg / this.output.clothWeight - 1) *
-                  100
-                ).toFixed(2) + "%";
-              let values = {
-                output: this.output,
-                arr1,
-                arr2,
-                arr3,
-              };
-              this.$nextTick(() => {
-                template.substitute(sheetNumber, values);
-                // Get binary data.
-                var out = template.generate({ type: "blob" });
-                let _this = this;
-                let outE = function () {
-                  return new Promise((resolve, reject) => {
-                    let xlsxName =
-                      "入仓明细表 " +
-                      _this.output.custCode +
-                      " bảng chi tiết nhập kho";
-                    saveAs(out, xlsxName + ".xlsx");
-                    resolve();
-                  });
-                };
-                outE().then((res) => {
-                  setTimeout(() => {
-                    this.$tip.success("导出成功!");
-                    this.wLoading = false;
-                    // this.getData();
-                  }, 1000);
-                });
-              });
-            });
-          } else {
-            this.wLoading = false;
-            this.$tip.warning("暂无此缸号数据!");
-            return;
-          }
-        });
-      } catch (e) {
-        console.log(e);
-      }
-    },
     batchEdit() {
       this.loadDialogVisible = true;
     },
+    
     loadSubmit() {
       if (!this.newLoad) {
         this.$tip.error("新载具编号不能为空!");
@@ -751,7 +408,7 @@ export default {
       let data = res.data.filter((item) => {
         return item.checkType != 2;
       });
-      this.dlgOp.column[12].dicData = data;
+      this.dlgOp.column[this.dlgOp.column.length - 1].dicData = data;
     });
   },
   beforeDestroy() { },
