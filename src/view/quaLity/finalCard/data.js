@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-06-07 07:56:01
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-29 13:54:06
+ * @LastEditTime: 2022-09-12 09:44:29
  * @Description:
  */
 
@@ -304,6 +304,7 @@ export function mainCrud(_this) {
             minRows: 0,
             align: "left",
             placeholder: " ",
+            clearable: false,
             rules: [
               {
                 required: true,
@@ -313,6 +314,9 @@ export function mainCrud(_this) {
             ],
             change: () => {
               _this.$nextTick(() => {
+                if (_this.form.weightUnit == "KG") {
+                  _this.weightChange();
+                }
                 _this.codeLength();
               });
             }
@@ -328,7 +332,13 @@ export function mainCrud(_this) {
             type: "number",
             precision: 1,
             align: "left",
-            placeholder: " "
+            clearable: false,
+            placeholder: " ",
+            change: () => {
+              if (_this.form.weightUnit != "KG") {
+                _this.weightChange();
+              }
+            }
           },
           {
             label: "纸筒重量",
@@ -341,7 +351,10 @@ export function mainCrud(_this) {
             type: "number",
             precision: 1,
             align: "left",
-            placeholder: " "
+            placeholder: " ",
+            change: () => {
+                _this.weightChange();
+            }
           },
           {
             label: "QC扣减数",
@@ -354,7 +367,10 @@ export function mainCrud(_this) {
             cell: true,
             placeholder: " ",
             type: "number",
-            precision: 1
+            precision: 1,
+            change: () => {
+              _this.weightChange();
+            }
           },
           {
             label: "浮重(KG)",
@@ -367,7 +383,8 @@ export function mainCrud(_this) {
             type: "number",
             precision: 1,
             align: "left",
-            placeholder: " "
+            placeholder: " ",
+            disabled: true
           },
           {
             label: "浮重(LBS)",
@@ -381,7 +398,7 @@ export function mainCrud(_this) {
             precision: 1,
             align: "left",
             placeholder: " ",
-            change: () => {}
+            disabled: true
           },
 
           {
@@ -456,6 +473,7 @@ export function mainCrud(_this) {
             tip: "đơn vị trọng lượng",
             prop: "weightUnit",
             width: 100,
+            clearable: false,
             span: 6,
             tipPlacement: "right",
             type: "select",

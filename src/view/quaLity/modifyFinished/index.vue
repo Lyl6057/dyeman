@@ -2,7 +2,7 @@
  * @Author: Lyl
  * @Date: 2021-01-30 10:05:32
  * @LastEditors: Lyl
- * @LastEditTime: 2022-06-18 08:30:30
+ * @LastEditTime: 2022-09-10 15:26:58
  * @Description:
 -->
 <template>
@@ -274,7 +274,6 @@ export default {
         this.$tip.cofirm("是否确定恢复选中的数据?").then(() => {
           this.wLoading = true;
           this.selectList.forEach((item, i) => {
-            console.log(item);
             item.delFlag = false;
             updateFinishedRCV(item).then((res) => {
               if (i == this.selectList.length - 1) {
